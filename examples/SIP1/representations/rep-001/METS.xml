@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<mets xmlns:ext="ExtensionMETS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.loc.gov/METS/" PROFILE="http://www.ra.ee/METS/v01/IP.xml" TYPE="SIP" OBJID="placeholder123" LABEL="METS file describing the SIP matching the OBJID." xsi:schemaLocation="http://www.loc.gov/METS/ schemas/IP.xsd ExtensionMETS schemas/ExtensionMETS.xsd http://www.w3.org/1999/xlink schemas/xlink.xsd">
+  <metsHdr RECORDSTATUS="NEW" CREATEDATE="2015-11-17T10:34:06">
+    <agent TYPE="ORGANIZATION" ROLE="ARCHIVIST">
+      <name>Institution</name>
+      <note>Note</note>
+    </agent>
+    <agent TYPE="OTHER" ROLE="ARCHIVIST">
+      <name>Institution</name>
+      <note>Note</note>
+    </agent>
+    <agent TYPE="ORGANIZATION" ROLE="CREATOR">
+      <name>Institution</name>
+      <note>Note</note>
+    </agent>
+    <agent TYPE="OTHER" ROLE="CREATOR" OTHERTYPE="SOFTWARE">
+      <name>E-ARK SIP Creator</name>
+      <note>VERSION=0.0.1</note>
+    </agent>
+    <agent TYPE="ORGANIZATION" ROLE="PRESERVATION">
+      <name>Institution</name>
+      <note>Note</note>
+    </agent>
+    <metsDocumentID>METS.xml</metsDocumentID>
+  </metsHdr>
+  <dmdSec ID="ID58a25f0a-8d0e-11e5-acb4-f8cab80470db"/>
+  <amdSec ID="ID58a2b9e6-8d0e-11e5-acb4-f8cab80470db">
+    <techMD ID="ID58a30e32-8d0e-11e5-acb4-f8cab80470db"/>
+  </amdSec>
+  <fileSec>
+    <fileGrp USE="general filegroup" ID="ID58a31652-8d0e-11e5-acb4-f8cab80470db">
+      <file MIMETYPE="text/plain" USE="Datafile" CHECKSUMTYPE="SHA-256" CREATED="2015-11-17T10:33:44" CHECKSUM="06b5dacd5cb1bc148af8ceaaf8764d0a49dbf36024041c33e95c8848445ae866" ID="ID58a32c14-8d0e-11e5-acb4-f8cab80470db" SIZE="62">
+        <FLocat xlink:href="file://./data/data.txt" xlink:type="simple" LOCTYPE="URL"/>
+      </file>
+      <file MIMETYPE="image/gif" USE="Datafile" CHECKSUMTYPE="SHA-256" CREATED="2015-11-17T10:33:41" CHECKSUM="e3259161e3b99a748d8cccfd53822cd27d2a366fbaff939c661207cd330a1270" ID="ID58a39974-8d0e-11e5-acb4-f8cab80470db" SIZE="575432">
+        <FLocat xlink:href="file://./data/bike.gif" xlink:type="simple" LOCTYPE="URL"/>
+      </file>
+      <file MIMETYPE="application/xml" USE="Datafile" CHECKSUMTYPE="SHA-256" CREATED="2015-11-17T10:34:06" CHECKSUM="49ee91823601ac1a9a5e683428abeb2feea5630f6d93ba16865d73e9911aa4fd" ID="ID58a3a662-8d0e-11e5-acb4-f8cab80470db" SIZE="3195">
+        <FLocat xlink:href="file://./metadata/preservation/premis.xml" xlink:type="simple" LOCTYPE="URL"/>
+      </file>
+      <file MIMETYPE="text/plain" USE="Datafile" CHECKSUMTYPE="SHA-256" CREATED="2015-11-17T10:34:03" CHECKSUM="1d6e7633efd3310fa0f4a48d526936891252aee87500087978e90e96a829e3dc" ID="ID58a3b7ba-8d0e-11e5-acb4-f8cab80470db" SIZE="157">
+        <FLocat xlink:href="file://./../../metadata/earkweb.log" xlink:type="simple" LOCTYPE="URL"/>
+      </file>
+      <file MIMETYPE="text/plain" USE="Datafile" CHECKSUMTYPE="SHA-256" CREATED="2015-11-17T10:33:51" CHECKSUM="2566163dd24af7b1586240c3bb55e2b525943b42f2da3b107cdd6a6ee2a3180e" ID="ID58a3c016-8d0e-11e5-acb4-f8cab80470db" SIZE="66">
+        <FLocat xlink:href="file://./../../metadata/descriptive/descriptive.txt" xlink:type="simple" LOCTYPE="URL"/>
+      </file>
+    </fileGrp>
+    <fileGrp USE="schema group">
+      <file MIMETYPE="text/plain" USE="Datafile" CHECKSUMTYPE="SHA-256" CREATED="2015-11-17T10:33:48" CHECKSUM="be0751ef7c55c262f17dbede964e563d38190ab11cbcada29f08b5cf341b19e5" ID="ID58a3aed2-8d0e-11e5-acb4-f8cab80470db" SIZE="66">
+        <FLocat xlink:href="file://./schemas/schema.txt" xlink:type="simple" LOCTYPE="URL"/>
+      </file>
+      <file MIMETYPE="application/xml" USE="Datafile" CHECKSUMTYPE="SHA-256" CREATED="2015-11-17T10:33:32" CHECKSUM="dc8133202b61715fa2e52229bda041aed4e586f4b3b21109a40222391ac614f8" ID="ID58a3eba4-8d0e-11e5-acb4-f8cab80470db" SIZE="145430">
+        <FLocat xlink:href="file://./../../schemas/IP.xsd" xlink:type="simple" LOCTYPE="URL"/>
+      </file>
+      <file MIMETYPE="application/xml" USE="Datafile" CHECKSUMTYPE="SHA-256" CREATED="2015-11-17T10:33:32" CHECKSUM="bdfe8d36b44d658d0e3a65f921435e656162e881e19d39d386bb085866c7ec1a" ID="ID58a40170-8d0e-11e5-acb4-f8cab80470db" SIZE="65161">
+        <FLocat xlink:href="file://./../../schemas/premis-v2-2.xsd" xlink:type="simple" LOCTYPE="URL"/>
+      </file>
+      <file MIMETYPE="application/xml" USE="Datafile" CHECKSUMTYPE="SHA-256" CREATED="2015-11-17T10:33:32" CHECKSUM="f1f5bb6003165cdd8f6c1fcc32f8fd1f965e1681010f3b9806d9460bcffa8a3c" ID="ID58a409d6-8d0e-11e5-acb4-f8cab80470db" SIZE="3180">
+        <FLocat xlink:href="file://./../../schemas/xlink.xsd" xlink:type="simple" LOCTYPE="URL"/>
+      </file>
+    </fileGrp>
+  </fileSec>
+  <structMap TYPE="logical" LABEL="Simple SIP structuring">
+    <div ADMID="" DMDID="" LABEL="Package">
+      <div LABEL="Content">
+        <fptr FILEID="ID58a32c14-8d0e-11e5-acb4-f8cab80470db"/>
+        <fptr FILEID="ID58a39974-8d0e-11e5-acb4-f8cab80470db"/>
+      </div>
+      <div LABEL="Metadata">
+        <fptr FILEID="ID58a3a662-8d0e-11e5-acb4-f8cab80470db"/>
+        <fptr FILEID="ID58a3b7ba-8d0e-11e5-acb4-f8cab80470db"/>
+        <fptr FILEID="ID58a3c016-8d0e-11e5-acb4-f8cab80470db"/>
+      </div>
+      <div LABEL="Schemas">
+        <fptr FILEID="ID58a3aed2-8d0e-11e5-acb4-f8cab80470db"/>
+        <fptr FILEID="ID58a3eba4-8d0e-11e5-acb4-f8cab80470db"/>
+        <fptr FILEID="ID58a40170-8d0e-11e5-acb4-f8cab80470db"/>
+        <fptr FILEID="ID58a409d6-8d0e-11e5-acb4-f8cab80470db"/>
+      </div>
+    </div>
+  </structMap>
+</mets>
