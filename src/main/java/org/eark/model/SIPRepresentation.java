@@ -65,6 +65,25 @@ public class SIPRepresentation {
 	public void setPreservationMetadata(List<SIPMetadata> preservationMetadata) {
 		this.preservationMetadata = preservationMetadata;
 	}
+	public void addAgent(SIPAgent agent) {
+		if(agents==null){
+			agents.add(agent);
+		}		
+	}
+	public void addData(Path data2) {
+		if(data==null){
+			data=new ArrayList<Path>();
+		}
+		data.add(data2);
+		
+	}
+	public void addPreservationMetadata(SIPMetadata preservationMetadata2) {
+		if(preservationMetadata==null){
+			preservationMetadata = new ArrayList<SIPMetadata>();
+		}
+		preservationMetadata.add(preservationMetadata2);
+		
+	}
 	
 	
 	

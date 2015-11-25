@@ -14,6 +14,8 @@ import org.eark.mets.beans.DivType;
 import org.eark.mets.beans.DivType.Mptr;
 import org.eark.mets.beans.FileType;
 import org.eark.mets.beans.FileType.FLocat;
+import org.eark.mets.beans.MdSecType;
+import org.eark.mets.beans.MdSecType.MdRef;
 import org.eark.mets.beans.Mets;
 import org.eark.mets.beans.MetsType.FileSec;
 import org.eark.mets.beans.MetsType.FileSec.FileGrp;
@@ -62,15 +64,16 @@ public class EARKValidator implements Validator {
 								if (m.getHref().startsWith("file://./")) {
 									Path representationMets = sip.resolve(m.getHref().replace("file://./", ""));
 									if (Files.exists(representationMets)) {
-										System.out.println("Exists!");
 										ValidationReport representationReport = isRepresentationValid(
 												representationMets.getParent());
-										if(!representationReport.isValid()){
+										if (!representationReport.isValid()) {
 											report.setValid(false);
 										}
-										if(representationReport.getIssues()!=null && representationReport.getIssues().size()>0){
-											for(ValidationIssue vi : representationReport.getIssues()){
-												report = ValidationUtils.addIssue(report, vi.getMessage(), vi.getLevel(), vi.getDescription(), vi.getRelatedItem());
+										if (representationReport.getIssues() != null
+												&& representationReport.getIssues().size() > 0) {
+											for (ValidationIssue vi : representationReport.getIssues()) {
+												report = ValidationUtils.addIssue(report, vi.getMessage(),
+														vi.getLevel(), vi.getDescription(), vi.getRelatedItem());
 											}
 										}
 									} else {
@@ -83,6 +86,46 @@ public class EARKValidator implements Validator {
 							}
 						}
 					}
+					if (mainMets.getDmdSec() != null && mainMets.getDmdSec().size() > 0) {
+						for (MdSecType mdsec : mainMets.getDmdSec()) {
+							MdRef mdref = mdsec.getMdRef();
+							if (mdref != null) {
+								String checksum = mdref.getCHECKSUM();
+								String checksumType = mdref.getCHECKSUMTYPE();
+								if (mdref.getHref() == null) {
+									report = ValidationUtils.addIssue(report, ValidationErrors.NO_HREF_IN_MDREF,
+											ValidationIssue.LEVEL.ERROR, "MDREF ID: " + mdref.getID(), null);
+								} else {
+									String href = mdref.getHref();
+									if (href.startsWith("/")) {
+										href = href.substring(1);
+									}
+									Path filePath = sip.resolve(href);
+									try {
+										String fileChecksum = Utils.calculateChecksum(Files.newInputStream(filePath),
+												checksumType);
+										if (!fileChecksum.equalsIgnoreCase(checksum)) {
+											report = ValidationUtils.addIssue(report, ValidationErrors.BAD_CHECKSUM,
+													ValidationIssue.LEVEL.ERROR,
+													"File: " + filePath.toString() + " Mets checksum:" + checksum
+															+ "; calculated checksum:" + fileChecksum,
+													Arrays.asList(filePath));
+										}
+									} catch (NoSuchAlgorithmException nsae) {
+										report = ValidationUtils.addIssue(report,
+												ValidationErrors.ERROR_COMPUTING_CHECKSUM_NO_SUCH_ALGORYTHM,
+												ValidationIssue.LEVEL.ERROR, null, Arrays.asList(filePath));
+									} catch (IOException e) {
+										e.printStackTrace();
+										report = ValidationUtils.addIssue(report,
+												ValidationErrors.ERROR_COMPUTING_CHECKSUM, ValidationIssue.LEVEL.ERROR,
+												e.getMessage(), Arrays.asList(filePath));
+									}
+								}
+							}
+						}
+					}
+
 				}
 			} catch (JAXBException jax) {
 				report = ValidationUtils.addIssue(report, ValidationErrors.MAIN_METS_NOT_VALID,
@@ -122,11 +165,14 @@ public class EARKValidator implements Validator {
 										Path filePath = representationPath
 												.resolve(locat.getHref().replace("file://./", ""));
 										try {
-											String fileChecksum = Utils.calculateChecksum(
-													Files.newInputStream(filePath), checksumType);
+											String fileChecksum = Utils
+													.calculateChecksum(Files.newInputStream(filePath), checksumType);
 											if (!fileChecksum.equalsIgnoreCase(checksum)) {
 												report = ValidationUtils.addIssue(report, ValidationErrors.BAD_CHECKSUM,
-														ValidationIssue.LEVEL.ERROR, "File: "+filePath.toString()+ " Mets checksum:"+checksum+"; calculated checksum:"+fileChecksum, Arrays.asList(filePath));
+														ValidationIssue.LEVEL.ERROR,
+														"File: " + filePath.toString() + " Mets checksum:" + checksum
+																+ "; calculated checksum:" + fileChecksum,
+														Arrays.asList(filePath));
 											}
 										} catch (NoSuchAlgorithmException nsae) {
 											report = ValidationUtils.addIssue(report,

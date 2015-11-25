@@ -20,6 +20,6 @@ public interface SIP {
 
 	void addPreservationToRepresentation(String representationID, SIPMetadata preservationMetadata) throws SIPException;
 
-	Path createZip();
+	Path createZip() throws SIPException;
 
 }
