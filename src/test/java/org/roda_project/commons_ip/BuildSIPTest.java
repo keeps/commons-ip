@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.roda_project.commons_ip.model.SIP;
@@ -31,6 +32,7 @@ import org.roda_project.commons_ip.validation.model.ValidationReport;
  * Unit test for simple App.
  */
 public class BuildSIPTest {
+  private static Path zip;
 
   @Test
   public void buildEARKSIP() throws Exception {
@@ -66,7 +68,7 @@ public class BuildSIPTest {
     sip.addPreservationToRepresentation("rep1", premis);
     SIPAgent agent = new SIPAgent("AgentName2", "ROLE2", CreatorType.INDIVIDUAL, "OTHER ROLE2", "OTHER TYPE2");
     sip.addAgentToRepresentation("rep1", agent);
-    Path zip = sip.build();
+    zip = sip.build();
 
     // validate SIP
     Validator validator = new EARKValidator();
@@ -79,8 +81,13 @@ public class BuildSIPTest {
         System.out.println(issue.getLevel().toString() + " - " + issue.getMessage());
       }
     }
+  }
 
+  @AfterClass
+  public static void cleanup() throws Exception {
     // clean up
-    Files.delete(zip);
+    if (Files.exists(zip)) {
+      Files.delete(zip);
+    }
   }
 }

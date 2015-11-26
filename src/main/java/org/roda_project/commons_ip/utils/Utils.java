@@ -57,7 +57,8 @@ import org.xml.sax.SAXParseException;
 public class Utils {
   private static FileSystem createZipFileSystem(Path zip, boolean create) throws IOException {
 
-    final URI uri = URI.create("jar:file:" + zip.toUri().getPath());
+    // final URI uri = URI.create("jar:file:" + zip.toUri().getPath());
+    final URI uri = URI.create("jar:file:" + zip.toUri().getPath().replaceAll(" ", "%20"));
 
     final Map<String, String> env = new HashMap<String, String>();
     if (create) {
