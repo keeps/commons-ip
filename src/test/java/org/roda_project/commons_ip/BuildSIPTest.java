@@ -7,6 +7,7 @@
  */
 package org.roda_project.commons_ip;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -33,6 +34,7 @@ public class BuildSIPTest {
 
   @Test
   public void buildEARKSIP() throws Exception {
+    // build SIP
     SIP sip = new EARKSIP("objectID", "profile", "type");
 
     SIPMetadata logMetadata = new SIPMetadata(Paths.get("src/test/resources/data/earkweb.log"), null);
@@ -66,6 +68,7 @@ public class BuildSIPTest {
     sip.addAgentToRepresentation("rep1", agent);
     Path zip = sip.build();
 
+    // validate SIP
     Validator validator = new EARKValidator();
     ValidationReport report = validator.isSIPValid(zip);
     Assert.assertTrue(report.isValid());
@@ -76,5 +79,8 @@ public class BuildSIPTest {
         System.out.println(issue.getLevel().toString() + " - " + issue.getMessage());
       }
     }
+
+    // clean up
+    Files.delete(zip);
   }
 }
