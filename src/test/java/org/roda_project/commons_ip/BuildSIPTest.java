@@ -76,7 +76,6 @@ public class BuildSIPTest {
 
     zip = sip.build();
 
-    Files.copy(zip, Paths.get("/home/sleroux/Desktop/ZZZZZZZZz.zip"), StandardCopyOption.REPLACE_EXISTING);
 
     // validate SIP
     Validator validator = new EARKValidator();
