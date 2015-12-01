@@ -71,7 +71,6 @@ public class Utils {
 
     // if the destination doesn't exist, create it
     if (Files.notExists(dest)) {
-      System.out.println(dest + " does not exist. Creating...");
       Files.createDirectories(dest);
     }
 

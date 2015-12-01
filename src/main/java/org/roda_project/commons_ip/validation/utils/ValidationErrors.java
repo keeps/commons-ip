@@ -25,6 +25,10 @@ public final class ValidationErrors {
   public static final String NO_LOCAT_FOR_FILE = "File specified in filegroup have no FLocat element";
   public static final String REPRESENTATION_METS_NOT_VALID = "The METS of the representation is not valid";
   public static final String UNABLE_TO_UNZIP_SIP = "The path provided is a file, but this tool is unable to extract it";
-  public static final String NO_HREF_IN_MDREF = "The is no href attribute associated to the mdref";
+  public static final String NO_HREF_IN_MDREF = "There is no href attribute associated to the mdref";
+  public static final String DMDSEC_WITHOUT_MDREF = "There is a dmdsec without a mdref element";
+  public static final String NO_VALID_LOCAT = "No valid locat found";
+  public static final String BAD_HREF = "The href associated with the file is not in the format file://.XXXX";
+  public static final String NO_MDREF_IN_DMDSEC = "There is no mdref in dmdsec";
 
 }

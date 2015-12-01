@@ -8,17 +8,16 @@
 package org.roda_project.commons_ip.validation.impl;
 
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
-import org.roda_project.commons_ip.mets_v1_11.beans.DivType;
-import org.roda_project.commons_ip.mets_v1_11.beans.DivType.Mptr;
+import org.roda_project.commons_ip.mets_v1_11.beans.AmdSecType;
+import org.roda_project.commons_ip.mets_v1_11.beans.FileGrpType;
 import org.roda_project.commons_ip.mets_v1_11.beans.FileType;
 import org.roda_project.commons_ip.mets_v1_11.beans.FileType.FLocat;
 import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType;
@@ -26,7 +25,8 @@ import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType.MdRef;
 import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec.FileGrp;
-import org.roda_project.commons_ip.mets_v1_11.beans.StructMapType;
+import org.roda_project.commons_ip.model.impl.METSUtils;
+import org.roda_project.commons_ip.utils.METSEnums;
 import org.roda_project.commons_ip.utils.Utils;
 import org.roda_project.commons_ip.validation.Validator;
 import org.roda_project.commons_ip.validation.model.ValidationIssue;
@@ -57,142 +57,161 @@ public class EARKValidator implements Validator {
         Arrays.asList(mainMETSFile));
     } else {
       try {
-        Mets mainMets = processMetsXML(mainMETSFile);
-        if (mainMets.getStructMap() == null || mainMets.getStructMap().size() == 0) {
-          report = ValidationUtils.addIssue(report, ValidationErrors.NO_STRUCT_MAP, ValidationIssue.LEVEL.ERROR, null,
-            Arrays.asList(mainMETSFile));
-        } else {
-          StructMapType structMap = mainMets.getStructMap().get(0);
-          DivType packageDiv = structMap.getDiv();
-          if (packageDiv.getDiv() != null) {
-            DivType representationDiv = packageDiv.getDiv().get(0);
-            if (representationDiv.getMptr() != null) {
-              for (Mptr m : representationDiv.getMptr()) {
-                if (m.getHref().startsWith("file://./")) {
-                  Path representationMets = sip.resolve(m.getHref().replace("file://./", ""));
-                  if (Files.exists(representationMets)) {
-                    ValidationReport representationReport = isRepresentationValid(representationMets.getParent());
-                    if (!representationReport.isValid()) {
-                      report.setValid(false);
-                    }
-                    if (representationReport.getIssues() != null && representationReport.getIssues().size() > 0) {
-                      for (ValidationIssue vi : representationReport.getIssues()) {
-                        report = ValidationUtils.addIssue(report, vi.getMessage(), vi.getLevel(), vi.getDescription(),
-                          vi.getRelatedItem());
-                      }
-                    }
-                  } else {
-                    System.out.println("Doesn't exist...");
-                  }
-                } else {
-                  System.out.println("Doesn't start...");
-                }
+        report = validateMets(mainMETSFile, report);
 
-              }
+        Path representationsPath = sip.resolve("representations");
+
+        if (Files.exists(representationsPath)) {
+          DirectoryStream.Filter<Path> filter = new DirectoryStream.Filter<Path>() {
+            @Override
+            public boolean accept(Path file) throws IOException {
+              return (Files.isDirectory(file));
             }
-          }
-          if (mainMets.getDmdSec() != null && mainMets.getDmdSec().size() > 0) {
-            for (MdSecType mdsec : mainMets.getDmdSec()) {
-              MdRef mdref = mdsec.getMdRef();
-              if (mdref != null) {
-                String checksum = mdref.getCHECKSUM();
-                String checksumType = mdref.getCHECKSUMTYPE();
-                if (mdref.getHref() == null) {
-                  report = ValidationUtils.addIssue(report, ValidationErrors.NO_HREF_IN_MDREF,
-                    ValidationIssue.LEVEL.ERROR, "MDREF ID: " + mdref.getID(), null);
-                } else {
-                  String href = mdref.getHref();
-                  if (href.startsWith("/")) {
-                    href = href.substring(1);
-                  }
-                  Path filePath = sip.resolve(href);
-                  try {
-                    String fileChecksum = Utils.calculateChecksum(Files.newInputStream(filePath), checksumType);
-                    if (!fileChecksum.equalsIgnoreCase(checksum)) {
-                      report = ValidationUtils.addIssue(report,
-                        ValidationErrors.BAD_CHECKSUM, ValidationIssue.LEVEL.ERROR, "File: " + filePath.toString()
-                          + " Mets checksum:" + checksum + "; calculated checksum:" + fileChecksum,
-                        Arrays.asList(filePath));
-                    }
-                  } catch (NoSuchAlgorithmException nsae) {
-                    report = ValidationUtils.addIssue(report,
-                      ValidationErrors.ERROR_COMPUTING_CHECKSUM_NO_SUCH_ALGORYTHM, ValidationIssue.LEVEL.ERROR, null,
-                      Arrays.asList(filePath));
-                  } catch (IOException e) {
-                    e.printStackTrace();
-                    report = ValidationUtils.addIssue(report, ValidationErrors.ERROR_COMPUTING_CHECKSUM,
-                      ValidationIssue.LEVEL.ERROR, e.getMessage(), Arrays.asList(filePath));
+          };
+          try (DirectoryStream<Path> stream = Files.newDirectoryStream(representationsPath, filter)) {
+            for (Path path : stream) {
+              Path representationMets = path.resolve("METS.xml");
+              if (Files.exists(representationMets)) {
+                ValidationReport representationReport = new ValidationReport();
+                representationReport.setValid(true);
+                representationReport = validateMets(representationMets, representationReport);
+
+                if (!representationReport.isValid()) {
+                  report.setValid(false);
+                }
+                if (representationReport.getIssues() != null && representationReport.getIssues().size() > 0) {
+                  for (ValidationIssue issue : representationReport.getIssues()) {
+                    report.addIssue(issue);
                   }
                 }
               }
             }
+          } catch (IOException e) {
+            e.printStackTrace();
           }
-
         }
-      } catch (JAXBException jax) {
+
+      } catch (JAXBException je) {
         report = ValidationUtils.addIssue(report, ValidationErrors.MAIN_METS_NOT_VALID, ValidationIssue.LEVEL.ERROR,
-          jax.getMessage(), Arrays.asList(mainMETSFile));
+          null, Arrays.asList(mainMETSFile));
       }
 
     }
     return report;
   }
 
-  private Mets processMetsXML(Path mainMETSFile) throws JAXBException {
-    JAXBContext jaxbContext = JAXBContext.newInstance(Mets.class);
-    Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-    return (Mets) jaxbUnmarshaller.unmarshal(mainMETSFile.toFile());
+  private ValidationReport validateMets(Path metsPath, ValidationReport report) throws JAXBException {
+    Mets mets = METSUtils.processMetsXML(metsPath);
+    if (mets.getAmdSec() != null && mets.getAmdSec().size() > 0) {
+      for (AmdSecType amdsec : mets.getAmdSec()) {
+        report = validateAmdSec(amdsec, metsPath.getParent(), report);
+      }
+    }
+    if (mets.getDmdSec() != null && mets.getDmdSec().size() > 0) {
+      for (MdSecType dmdsec : mets.getDmdSec()) {
+        report = validateMdSecType(dmdsec, metsPath.getParent(), report);
+      }
+    }
+    if (mets.getFileSec() != null) {
+      report = validateFilesec(mets.getFileSec(), metsPath.getParent(), report);
+    }
+    return report;
   }
 
-  private ValidationReport isRepresentationValid(Path representationPath) {
-    ValidationReport report = new ValidationReport();
-    report.setValid(true);
-    Path representationMetsPath = representationPath.resolve("METS.xml");
-    try {
-      Mets representationMets = processMetsXML(representationMetsPath);
-      FileSec filesec = representationMets.getFileSec();
-      if (filesec.getFileGrp() != null && filesec.getFileGrp().size() > 0) {
-        for (FileGrp fileGrp : filesec.getFileGrp()) {
-          if (fileGrp.getFile() != null && fileGrp.getFile().size() > 0) {
-            for (FileType ft : fileGrp.getFile()) {
-              String checksum = ft.getCHECKSUM();
-              String checksumType = ft.getCHECKSUMTYPE();
-              if (ft.getFLocat() == null || ft.getFLocat().size() == 0) {
-                System.out.println("No FLocat");
-                report = ValidationUtils.addIssue(report, ValidationErrors.NO_LOCAT_FOR_FILE,
-                  ValidationIssue.LEVEL.ERROR, "ID: " + ft.getID(), null);
-              } else {
-                for (FLocat locat : ft.getFLocat()) {
-                  if (locat.getHref().startsWith("file://./")) {
-                    Path filePath = representationPath.resolve(locat.getHref().replace("file://./", ""));
-                    try {
-                      String fileChecksum = Utils.calculateChecksum(Files.newInputStream(filePath), checksumType);
-                      if (!fileChecksum.equalsIgnoreCase(checksum)) {
-                        report = ValidationUtils.addIssue(report,
-                          ValidationErrors.BAD_CHECKSUM, ValidationIssue.LEVEL.ERROR, "File: " + filePath.toString()
-                            + " Mets checksum:" + checksum + "; calculated checksum:" + fileChecksum,
-                          Arrays.asList(filePath));
-                      }
-                    } catch (NoSuchAlgorithmException nsae) {
-                      report = ValidationUtils.addIssue(report,
-                        ValidationErrors.ERROR_COMPUTING_CHECKSUM_NO_SUCH_ALGORYTHM, ValidationIssue.LEVEL.ERROR, null,
-                        Arrays.asList(filePath));
-                    } catch (IOException e) {
-                      e.printStackTrace();
-                      report = ValidationUtils.addIssue(report, ValidationErrors.ERROR_COMPUTING_CHECKSUM,
-                        ValidationIssue.LEVEL.ERROR, e.getMessage(), Arrays.asList(filePath));
-                    }
-                  }
-                }
-              }
+  private ValidationReport validateFilesec(FileSec fileSec, Path base, ValidationReport report) {
+    if (fileSec.getFileGrp() != null && fileSec.getFileGrp().size() > 0) {
+      for (FileGrp fileGrp : fileSec.getFileGrp()) {
+        report = validateFileGrpType(fileGrp, base, report);
+      }
+    }
+    return report;
+  }
 
+  private ValidationReport validateFileGrpType(FileGrpType fileGrp, Path base, ValidationReport report) {
+    if (fileGrp.getFile() != null && fileGrp.getFile().size() > 0) {
+      for (FileType file : fileGrp.getFile()) {
+        report = validateFileType(file, base, report);
+      }
+    }
+    if (fileGrp.getFileGrp() != null && fileGrp.getFileGrp().size() > 0) {
+      for (FileGrpType fg2 : fileGrp.getFileGrp()) {
+        report = validateFileGrpType(fg2, base, report);
+      }
+    }
+    return report;
+  }
+
+  private ValidationReport validateFileType(FileType file, Path base, ValidationReport report) {
+    String checksumType = file.getCHECKSUMTYPE();
+    String checksum = file.getCHECKSUM();
+    if (file.getFLocat() != null && file.getFLocat().size() > 0) {
+      boolean locatFound = false;
+      for (FLocat locat : file.getFLocat()) {
+        if (locat.getType() != null && locat.getType().equalsIgnoreCase("simple") && locat.getLOCTYPE() != null
+          && locat.getLOCTYPE().equalsIgnoreCase(METSEnums.LocType.URL.toString())) {
+          locatFound = true;
+          if (locat.getHref() != null && locat.getHref().startsWith("file://.")) {
+            try {
+              Path filePath = base.resolve(locat.getHref().replace("file://.", ""));
+              String fileChecksum = Utils.calculateChecksum(Files.newInputStream(filePath), checksumType);
+              if (!fileChecksum.equalsIgnoreCase(checksum)) {
+                report = ValidationUtils.addIssue(report, ValidationErrors.BAD_CHECKSUM, ValidationIssue.LEVEL.ERROR,
+                  "FILE_ID: " + file.getID(), null);
+              }
+            } catch (NoSuchAlgorithmException | IOException e) {
+              report = ValidationUtils.addIssue(report, ValidationErrors.ERROR_COMPUTING_CHECKSUM,
+                ValidationIssue.LEVEL.ERROR, "FILE_ID: " + file.getID(), null);
             }
+
+          } else {
+            report = ValidationUtils.addIssue(report, ValidationErrors.BAD_HREF, ValidationIssue.LEVEL.ERROR,
+              "FILE_ID: " + file.getID(), null);
           }
         }
       }
-    } catch (JAXBException jax) {
-      report = ValidationUtils.addIssue(report, ValidationErrors.REPRESENTATION_METS_NOT_VALID,
-        ValidationIssue.LEVEL.ERROR, "", Arrays.asList(representationMetsPath));
+      if (!locatFound) {
+        report = ValidationUtils.addIssue(report, ValidationErrors.NO_VALID_LOCAT, ValidationIssue.LEVEL.ERROR,
+          "FILE_ID: " + file.getID(), null);
+      }
+    } else {
+      report = ValidationUtils.addIssue(report, ValidationErrors.NO_LOCAT_FOR_FILE, ValidationIssue.LEVEL.ERROR,
+        "FILE_ID: " + file.getID(), null);
+    }
+    return report;
+  }
+
+  private ValidationReport validateMdSecType(MdSecType dmdsec, Path base, ValidationReport report) {
+    MdRef mdref = dmdsec.getMdRef();
+    if (mdref != null) {
+      String checksumType = mdref.getCHECKSUMTYPE();
+      String checksum = mdref.getCHECKSUM();
+      if (mdref.getHref() != null && mdref.getHref().startsWith("file://.")) {
+        try {
+          Path filePath = base.resolve(mdref.getHref().replace("file://.", ""));
+          String fileChecksum = Utils.calculateChecksum(Files.newInputStream(filePath), checksumType);
+          if (!fileChecksum.equalsIgnoreCase(checksum)) {
+            report = ValidationUtils.addIssue(report, ValidationErrors.BAD_CHECKSUM, ValidationIssue.LEVEL.ERROR,
+              "MDREF_ID: " + mdref.getID(), null);
+          }
+        } catch (NoSuchAlgorithmException | IOException e) {
+          report = ValidationUtils.addIssue(report, ValidationErrors.ERROR_COMPUTING_CHECKSUM,
+            ValidationIssue.LEVEL.ERROR, "MDREF_ID: " + mdref.getID(), null);
+        }
+
+      } else {
+        report = ValidationUtils.addIssue(report, ValidationErrors.BAD_HREF, ValidationIssue.LEVEL.ERROR,
+          "MDREF_ID: " + mdref.getID(), null);
+      }
+
+    }
+    return report;
+  }
+
+  private ValidationReport validateAmdSec(AmdSecType amdsec, Path base, ValidationReport report) {
+    if (amdsec.getDigiprovMD() != null && amdsec.getDigiprovMD().size() > 0) {
+      for (MdSecType digiprov : amdsec.getDigiprovMD()) {
+        report = validateMdSecType(digiprov, base, report);
+      }
     }
     return report;
   }

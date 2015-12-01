@@ -7,6 +7,7 @@
  */
 package org.roda_project.commons_ip.model.impl;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,28 +15,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.roda_project.commons_ip.mets_v1_11.beans.AmdSecType;
-import org.roda_project.commons_ip.mets_v1_11.beans.DivType;
 import org.roda_project.commons_ip.mets_v1_11.beans.DivType.Mptr;
 import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
-import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec;
-import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.MetsHdr;
-import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.MetsHdr.MetsDocumentID;
-import org.roda_project.commons_ip.mets_v1_11.beans.StructMapType;
 import org.roda_project.commons_ip.model.SIP;
 import org.roda_project.commons_ip.model.SIPAgent;
 import org.roda_project.commons_ip.model.SIPDescriptiveMetadata;
 import org.roda_project.commons_ip.model.SIPMetadata;
 import org.roda_project.commons_ip.model.SIPRepresentation;
+import org.roda_project.commons_ip.utils.EARKEnums;
+import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.METSEnums.LocType;
-import org.roda_project.commons_ip.utils.METSUtils;
 import org.roda_project.commons_ip.utils.SIPException;
 import org.roda_project.commons_ip.utils.Utils;
 import org.roda_project.commons_ip.utils.ZIPUtils;
@@ -43,20 +36,37 @@ import org.roda_project.commons_ip.utils.ZIPUtils;
 public class EARKSIP implements SIP {
   private String objectID;
   private String profile;
-  private String type;
+  private EARKEnums.Type type;
+  private String label;
+  private EARKEnums.ContentType contentType;
   private Map<String, SIPRepresentation> representations;
   private List<SIPAgent> agents;
-  private List<SIPMetadata> metadata;
   private List<SIPDescriptiveMetadata> descriptiveMetadata;
+  private List<SIPMetadata> administrativeMetadata;
+  private List<SIPMetadata> otherMetadata;
+  private List<Path> documentation;
 
-  public EARKSIP(String objectID, String profile, String type) throws SIPException {
-    this.objectID = objectID;
-    this.profile = profile;
-    this.type = type;
-    representations = new HashMap<String, SIPRepresentation>();
-    agents = new ArrayList<SIPAgent>();
-    metadata = new ArrayList<SIPMetadata>();
-    descriptiveMetadata = new ArrayList<SIPDescriptiveMetadata>();
+  public EARKSIP(String sipName, EARKEnums.ContentType contentType, String creator) throws SIPException {
+    this.objectID = sipName;
+    this.profile = "UNDEFINED";
+    this.type = EARKEnums.Type.SIP;
+    this.contentType = contentType;
+
+    this.representations = new HashMap<String, SIPRepresentation>();
+    this.agents = new ArrayList<SIPAgent>();
+
+    this.descriptiveMetadata = new ArrayList<SIPDescriptiveMetadata>();
+    this.administrativeMetadata = new ArrayList<SIPMetadata>();
+    this.otherMetadata = new ArrayList<SIPMetadata>();
+    this.documentation = new ArrayList<Path>();
+
+    SIPAgent creatorAgent = new SIPAgent(creator, "CREATOR", CreatorType.OTHER, null, "SOFTWARE");
+    this.agents.add(creatorAgent);
+  }
+
+  public SIP setDescription(String description) {
+    this.label = description;
+    return this;
   }
 
   @Override
@@ -66,8 +76,14 @@ public class EARKSIP implements SIP {
   }
 
   @Override
-  public SIP addMetadata(SIPMetadata sipMetadata) throws SIPException {
-    metadata.add(sipMetadata);
+  public SIP addAdministrativeMetadata(SIPMetadata sipMetadata) throws SIPException {
+    administrativeMetadata.add(sipMetadata);
+    return this;
+  }
+
+  @Override
+  public SIP addOtherMetadata(SIPMetadata sipMetadata) throws SIPException {
+    otherMetadata.add(sipMetadata);
     return this;
   }
 
@@ -111,13 +127,13 @@ public class EARKSIP implements SIP {
   }
 
   @Override
-  public SIP addPreservationToRepresentation(String representationID, SIPMetadata preservationMetadata)
+  public SIP addAdministrativeMetadataToRepresentation(String representationID, SIPMetadata administrativeMetadata)
     throws SIPException {
     if (!representations.containsKey(representationID)) {
       throw new SIPException("Representation doesn't exist", null);
     }
     SIPRepresentation rep = representations.get(representationID);
-    rep.addPreservationMetadata(preservationMetadata);
+    rep.addAdministrativeMetadata(administrativeMetadata);
     representations.put(representationID, rep);
     return this;
   }
@@ -125,61 +141,39 @@ public class EARKSIP implements SIP {
   @Override
   public Path build() throws SIPException {
 
-    Path zipPath = Paths.get(UUID.randomUUID().toString() + ".zip");
-
-    Mets mainMets = new Mets();
-    mainMets.setOBJID(objectID);
-    mainMets.setPROFILE(profile);
-    mainMets.setTYPE(type);
-    MetsHdr header = new MetsHdr();
+    Path zipPath = Paths.get(objectID + ".zip");
     try {
-      XMLGregorianCalendar cal = Utils.getCurrentCalendar();
-      header.setCREATEDATE(cal);
-      header.setLASTMODDATE(cal);
-    } catch (DatatypeConfigurationException dce) {
-      throw new SIPException("Error getting current calendar", dce);
+      if (Files.exists(zipPath)) {
+        Files.delete(zipPath);
+      }
+    } catch (IOException ioe) {
+      throw new SIPException("Error deleting existing zip", ioe);
     }
-    MetsDocumentID metsID = new MetsDocumentID();
-    metsID.setValue("METS.xml");
-    header.setMetsDocumentID(metsID);
+    Mets mainMets = METSUtils.getMetsFromSIP(this);
 
-    mainMets.setMetsHdr(header);
-    if (agents != null && agents.size() > 0) {
-      mainMets = METSUtils.addAgentsToMets(mainMets, agents);
-    }
-
-    // empty amdsec
-    AmdSecType amdsec = new AmdSecType();
-    amdsec.setID(UUID.randomUUID().toString());
-    mainMets.getAmdSec().add(amdsec);
-
-    // empty filesec
-    FileSec filesec = new FileSec();
-    filesec.setID(UUID.randomUUID().toString());
-    mainMets.setFileSec(filesec);
-
-    StructMapType structMap = new StructMapType();
-    DivType packageDiv = new DivType();
-    packageDiv.setLabel("Package");
-    packageDiv.setID("packageDiv");
-    DivType representationMetadataDiv = new DivType();
-    representationMetadataDiv.setID("representationMetadataDiv");
-    representationMetadataDiv.setLabel("Representation Metadata");
-    packageDiv.getDiv().add(representationMetadataDiv);
-    structMap.setDiv(packageDiv);
-    mainMets.getStructMap().add(structMap);
-
-    if (metadata != null && metadata.size() > 0) {
-      for (SIPMetadata dm : metadata) {
-        ZIPUtils.addMetadataToZip(zipPath, dm);
+    if (otherMetadata != null && otherMetadata.size() > 0) {
+      for (SIPMetadata om : otherMetadata) {
+        String otherMetadataPath = "/metadata/other/" + om.getMetadata().getFileName().toString();
+        ZIPUtils.addMetadataToZip(zipPath, om, otherMetadataPath);
+        otherMetadataPath = "metadata/other/" + om.getMetadata().getFileName().toString();
+        mainMets = METSUtils.addOtherMetadataToMets(mainMets, otherMetadataPath, om);
       }
     }
+    if (administrativeMetadata != null && administrativeMetadata.size() > 0) {
+      for (SIPMetadata am : administrativeMetadata) {
+        String path = "/metadata/administrative/" + am.getMetadata().getFileName().toString();
+        ZIPUtils.addMetadataToZip(zipPath, am, path);
+        path = "metadata/administrative/" + am.getMetadata().getFileName().toString();
+        mainMets = METSUtils.addPreservationToMets(mainMets, path, am);
+      }
+    }
+
     if (descriptiveMetadata != null && descriptiveMetadata.size() > 0) {
       for (SIPDescriptiveMetadata dm : descriptiveMetadata) {
         String descriptiveMetadataPath = "/metadata/descriptive/" + dm.getMetadata().getFileName().toString();
-        ZIPUtils.addDescriptiveMetadataToZip(zipPath, dm, descriptiveMetadataPath);
+        ZIPUtils.addMetadataToZip(zipPath, dm, descriptiveMetadataPath);
+        descriptiveMetadataPath = "metadata/descriptive/" + dm.getMetadata().getFileName().toString();
         mainMets = METSUtils.addDescriptiveMetadataToMets(mainMets, dm, descriptiveMetadataPath);
-
       }
     }
     if (representations != null && representations.size() > 0) {
@@ -190,22 +184,43 @@ public class EARKSIP implements SIP {
           METSUtils.addAgentsToMets(representationMETS, entry.getValue().getAgents());
         }
         if (entry.getValue().getData() != null && entry.getValue().getData().size() > 0) {
-
           for (Path dataFile : entry.getValue().getData()) {
             String dataFilePath = "/representations/" + entry.getKey() + "/data/" + dataFile.getFileName().toString();
             ZIPUtils.addDataToRepresentation(zipPath, dataFile, dataFilePath);
+            dataFilePath = "data/" + dataFile.getFileName().toString();
             representationMETS = METSUtils.addDataToMets(representationMETS, dataFilePath, dataFile);
 
           }
         }
-        if (entry.getValue().getPreservationMetadata() != null
-          && entry.getValue().getPreservationMetadata().size() > 0) {
-          for (SIPMetadata metadata : entry.getValue().getPreservationMetadata()) {
-
-            String preservationFilePath = "/representations/" + entry.getKey() + "/metadata/preservation/"
+        if (entry.getValue().getAdministrativeMetadata() != null
+          && entry.getValue().getAdministrativeMetadata().size() > 0) {
+          for (SIPMetadata metadata : entry.getValue().getAdministrativeMetadata()) {
+            String administrativeFilePath = "/representations/" + entry.getKey() + "/metadata/administrative/"
               + metadata.getMetadata().getFileName().toString();
-            ZIPUtils.addPreservationMetadataToRepresentation(zipPath, preservationFilePath, metadata);
-            representationMETS = METSUtils.addPreservationToMets(representationMETS, preservationFilePath, metadata);
+            ZIPUtils.addMetadataToZip(zipPath, metadata, administrativeFilePath);
+            administrativeFilePath = "metadata/administrative/" + metadata.getMetadata().getFileName().toString();
+            representationMETS = METSUtils.addPreservationToMets(representationMETS, administrativeFilePath, metadata);
+
+          }
+        }
+        if (entry.getValue().getOtherMetadata() != null && entry.getValue().getOtherMetadata().size() > 0) {
+          for (SIPMetadata metadata : entry.getValue().getOtherMetadata()) {
+            String otherMetadataPath = "/representations/" + entry.getKey() + "/metadata/other/"
+              + metadata.getMetadata().getFileName().toString();
+            ZIPUtils.addMetadataToZip(zipPath, metadata, otherMetadataPath);
+            otherMetadataPath = "metadata/other/" + metadata.getMetadata().getFileName().toString();
+            representationMETS = METSUtils.addOtherMetadataToMets(representationMETS, otherMetadataPath, metadata);
+          }
+        }
+        if (entry.getValue().getDescriptiveMetadata() != null && entry.getValue().getDescriptiveMetadata().size() > 0) {
+          for (SIPDescriptiveMetadata metadata : entry.getValue().getDescriptiveMetadata()) {
+
+            String descriptiveFilePath = "/representations/" + entry.getKey() + "/metadata/descriptive/"
+              + metadata.getMetadata().getFileName().toString();
+            ZIPUtils.addMetadataToZip(zipPath, metadata, descriptiveFilePath);
+            descriptiveFilePath = "metadata/descriptive/" + metadata.getMetadata().getFileName().toString();
+            representationMETS = METSUtils.addDescriptiveMetadataToMets(representationMETS, metadata,
+              descriptiveFilePath);
 
           }
         }
@@ -237,5 +252,50 @@ public class EARKSIP implements SIP {
       throw new SIPException(e.getMessage(), e);
     }
     return zipPath;
+  }
+
+  @Override
+  public SIP addDescriptiveMetadataToRepresentation(String representationID, SIPDescriptiveMetadata descriptiveMetadata)
+    throws SIPException {
+    if (!representations.containsKey(representationID)) {
+      throw new SIPException("Representation doesn't exist", null);
+    }
+    SIPRepresentation rep = representations.get(representationID);
+    rep.addDescriptiveMetadata(descriptiveMetadata);
+    representations.put(representationID, rep);
+    return this;
+  }
+
+  @Override
+  public SIP addOtherMetadataToRepresentation(String representationID, SIPMetadata otherMetadata) throws SIPException {
+    if (!representations.containsKey(representationID)) {
+      throw new SIPException("Representation doesn't exist", null);
+    }
+    SIPRepresentation rep = representations.get(representationID);
+    rep.addOtherMetadata(otherMetadata);
+    representations.put(representationID, rep);
+    return this;
+  }
+
+  @Override
+  public SIP addDocumentation(Path documentationPath) {
+    documentation.add(documentationPath);
+    return this;
+  }
+
+  public String getObjectID() {
+    return objectID;
+  }
+
+  public String getProfile() {
+    return profile;
+  }
+
+  public String getType() {
+    return type.toString();
+  }
+
+  public String getLabel() {
+    return label;
   }
 }

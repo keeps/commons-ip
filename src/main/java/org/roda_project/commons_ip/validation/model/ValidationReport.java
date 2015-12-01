@@ -7,6 +7,7 @@
  */
 package org.roda_project.commons_ip.validation.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +38,14 @@ public class ValidationReport {
 
   public void setDate(Date date) {
     this.date = date;
+  }
+
+  public void addIssue(ValidationIssue issue) {
+    if (issues == null) {
+      issues = new ArrayList<ValidationIssue>();
+    }
+    issues.add(issue);
+
   }
 
 }

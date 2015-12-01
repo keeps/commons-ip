@@ -15,7 +15,9 @@ public interface SIP {
 
   SIP addAgent(SIPAgent sipAgent);
 
-  SIP addMetadata(SIPMetadata sipMetadata) throws SIPException;
+  SIP addAdministrativeMetadata(SIPMetadata sipMetadata) throws SIPException;
+
+  SIP addOtherMetadata(SIPMetadata sipMetadata) throws SIPException;
 
   SIP addDescriptiveMetadata(SIPDescriptiveMetadata descriptiveMetadata) throws SIPException;
 
@@ -25,7 +27,15 @@ public interface SIP {
 
   SIP addDataToRepresentation(String representationID, Path data) throws SIPException;
 
-  SIP addPreservationToRepresentation(String representationID, SIPMetadata preservationMetadata) throws SIPException;
+  SIP addAdministrativeMetadataToRepresentation(String representationID, SIPMetadata preservationMetadata)
+    throws SIPException;
+
+  SIP addDescriptiveMetadataToRepresentation(String representationID, SIPDescriptiveMetadata descriptiveMetadata)
+    throws SIPException;
+
+  SIP addOtherMetadataToRepresentation(String representationID, SIPMetadata otherMetadata) throws SIPException;
+
+  SIP addDocumentation(Path documentationPath);
 
   Path build() throws SIPException;
 

@@ -14,28 +14,24 @@ import java.util.List;
 public class SIPRepresentation {
   private String representationID;
   private String objectID;
-  private String profile;
-  private String type;
   private List<SIPAgent> agents;
   private List<Path> data;
-  private List<SIPMetadata> preservationMetadata;
+  private List<SIPMetadata> administrativeMetadata;
+  private List<SIPMetadata> otherMetadata;
+  private List<SIPDescriptiveMetadata> descriptiveMetadata;
 
-  public SIPRepresentation(String representationID, String objectID, String profile, String type) {
+  public SIPRepresentation(String representationID) {
     this.representationID = representationID;
-    this.objectID = objectID;
-    this.profile = profile;
-    this.type = type;
+    this.objectID = representationID;
     this.agents = new ArrayList<SIPAgent>();
     this.data = new ArrayList<Path>();
-    this.preservationMetadata = new ArrayList<SIPMetadata>();
+    this.administrativeMetadata = new ArrayList<SIPMetadata>();
+    this.otherMetadata = new ArrayList<SIPMetadata>();
+    this.descriptiveMetadata = new ArrayList<SIPDescriptiveMetadata>();
   }
 
   public String getRepresentationID() {
     return representationID;
-  }
-
-  public void setRepresentationID(String representationID) {
-    this.representationID = representationID;
   }
 
   public String getObjectID() {
@@ -46,66 +42,44 @@ public class SIPRepresentation {
     this.objectID = objectID;
   }
 
-  public String getProfile() {
-    return profile;
-  }
-
-  public void setProfile(String profile) {
-    this.profile = profile;
-  }
-
-  public String getType() {
-    return type;
-  }
-
-  public void setType(String type) {
-    this.type = type;
-  }
-
   public List<SIPAgent> getAgents() {
     return agents;
-  }
-
-  public void setAgents(List<SIPAgent> agents) {
-    this.agents = agents;
   }
 
   public List<Path> getData() {
     return data;
   }
 
-  public void setData(List<Path> data) {
-    this.data = data;
-  }
-
-  public List<SIPMetadata> getPreservationMetadata() {
-    return preservationMetadata;
-  }
-
-  public void setPreservationMetadata(List<SIPMetadata> preservationMetadata) {
-    this.preservationMetadata = preservationMetadata;
-  }
-
   public void addAgent(SIPAgent agent) {
-    if (agents == null) {
-      agents.add(agent);
-    }
+    agents.add(agent);
   }
 
-  public void addData(Path data2) {
-    if (data == null) {
-      data = new ArrayList<Path>();
-    }
-    data.add(data2);
-
+  public void addData(Path d) {
+    data.add(d);
   }
 
-  public void addPreservationMetadata(SIPMetadata preservationMetadata2) {
-    if (preservationMetadata == null) {
-      preservationMetadata = new ArrayList<SIPMetadata>();
-    }
-    preservationMetadata.add(preservationMetadata2);
+  public void addAdministrativeMetadata(SIPMetadata metadata) {
+    administrativeMetadata.add(metadata);
+  }
 
+  public void addOtherMetadata(SIPMetadata metadata) {
+    otherMetadata.add(metadata);
+  }
+
+  public void addDescriptiveMetadata(SIPDescriptiveMetadata metadata) {
+    descriptiveMetadata.add(metadata);
+  }
+
+  public List<SIPMetadata> getAdministrativeMetadata() {
+    return administrativeMetadata;
+  }
+
+  public List<SIPMetadata> getOtherMetadata() {
+    return otherMetadata;
+  }
+
+  public List<SIPDescriptiveMetadata> getDescriptiveMetadata() {
+    return descriptiveMetadata;
   }
 
 }
