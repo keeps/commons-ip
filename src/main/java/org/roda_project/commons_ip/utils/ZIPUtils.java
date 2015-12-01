@@ -14,7 +14,10 @@ import java.nio.file.StandardCopyOption;
 
 import org.roda_project.commons_ip.model.SIPMetadata;
 
-public class ZIPUtils {
+public final class ZIPUtils {
+
+  private ZIPUtils() {
+  }
 
   public static void addMetadataToZip(Path zipPath, SIPMetadata dm, String metadataPath) throws SIPException {
     try {
@@ -31,7 +34,7 @@ public class ZIPUtils {
       }
       Utils.addFileToZip(zipPath, dm.getMetadata(), metadataPath);
     } catch (IOException e) {
-      throw new SIPException("Error adding metadata to SIP: " + e.getMessage(), e);
+      throw new SIPException("Error adding metadata to SIP", e);
     }
 
   }

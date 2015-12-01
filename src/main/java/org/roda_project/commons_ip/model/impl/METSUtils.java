@@ -41,7 +41,12 @@ import org.roda_project.commons_ip.utils.METSEnums.LocType;
 import org.roda_project.commons_ip.utils.SIPException;
 import org.roda_project.commons_ip.utils.Utils;
 
-public class METSUtils {
+public final class METSUtils {
+
+  private METSUtils() {
+
+  }
+
   public static Mets processMetsXML(Path mainMETSFile) throws JAXBException {
     JAXBContext jaxbContext = JAXBContext.newInstance(Mets.class);
     Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -71,10 +76,10 @@ public class METSUtils {
     MdRef mdref = new MdRef();
     try {
       mdref.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(dm.getMetadata()), "SHA-256"));
-    } catch (NoSuchAlgorithmException nsae) {
-      throw new SIPException("Error calculating checskum: the algorithm provided is not recognized", nsae);
-    } catch (IOException ioe) {
-      throw new SIPException("Error calculation checksum", ioe);
+    } catch (NoSuchAlgorithmException e) {
+      throw new SIPException("Error calculating checskum: the algorithm provided is not recognized", e);
+    } catch (IOException e) {
+      throw new SIPException("Error calculating checksum", e);
     }
     mdref.setCHECKSUMTYPE("SHA-256");
     try {
@@ -255,7 +260,7 @@ public class METSUtils {
     try {
       ft.setMIMETYPE(Files.probeContentType(dataFile));
     } catch (IOException e) {
-      throw new SIPException("Error probing content-type(" + dataFile.toString() + ")", e);
+      throw new SIPException("Error probing content-type (" + dataFile.toString() + ")", e);
     }
     try {
       ft.setCREATED(Utils.getCurrentCalendar());

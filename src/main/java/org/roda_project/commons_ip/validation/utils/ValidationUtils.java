@@ -15,7 +15,11 @@ import org.roda_project.commons_ip.validation.model.ValidationIssue;
 import org.roda_project.commons_ip.validation.model.ValidationIssue.LEVEL;
 import org.roda_project.commons_ip.validation.model.ValidationReport;
 
-public class ValidationUtils {
+public final class ValidationUtils {
+
+  private ValidationUtils() {
+  }
+
   public static ValidationReport addIssue(ValidationReport report, String message, LEVEL level, String description,
     List<Path> relatedPath) {
     ValidationIssue issue = new ValidationIssue();

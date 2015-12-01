@@ -23,8 +23,12 @@ import org.roda_project.commons_ip.model.impl.METSUtils;
 import org.roda_project.commons_ip.utils.Utils;
 import org.roda_project.commons_ip.validation.impl.EARKValidator;
 import org.roda_project.commons_ip.validation.model.ValidationReport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EARKSIPToRODAAIP implements Migrator {
+  private static final Logger LOGGER = LoggerFactory.getLogger(EARKSIPToRODAAIP.class);
+
   public Path convert(Path source) throws MigrationException {
     EARKValidator validator = new EARKValidator();
     ValidationReport report = validator.isSIPValid(source);
@@ -33,7 +37,7 @@ public class EARKSIPToRODAAIP implements Migrator {
       Path converted = earkSipToRodaAip(source);
       return converted;
     } catch (JAXBException | IOException e) {
-      throw new MigrationException(e.getMessage(), e);
+      throw new MigrationException("Error converting E-ARK SIP to RODA AIP", e);
     }
     // } else {
     // throw new MigrationException();
@@ -50,7 +54,7 @@ public class EARKSIPToRODAAIP implements Migrator {
         Utils.unzip(source, uncompressed);
         source = uncompressed;
       } catch (IOException e) {
-        System.out.println("Error unzipping file: " + e.getMessage());
+        LOGGER.error("Error unzipping file", e);
       }
     }
     Path mainMETSFile = source.resolve("METS.xml");
@@ -65,7 +69,7 @@ public class EARKSIPToRODAAIP implements Migrator {
         }
         Path filePath = source.resolve(href);
         RODAUtils.addDescriptiveMetadata(dst, filePath);
-        System.out.println("Processing metadata: " + filePath.toString());
+        LOGGER.info("Processing metadata: " + filePath.toString());
       }
     }
     if (mainMets.getAmdSec() != null && mainMets.getAmdSec().size() > 0) {
@@ -79,7 +83,7 @@ public class EARKSIPToRODAAIP implements Migrator {
             }
             Path filePath = source.resolve(href);
             RODAUtils.addPreservationMetadata(dst, filePath);
-            System.out.println("Processing metadata: " + filePath.toString());
+            LOGGER.info("Processing metadata: " + filePath.toString());
           }
         }
       }
@@ -94,12 +98,12 @@ public class EARKSIPToRODAAIP implements Migrator {
       };
       try (DirectoryStream<Path> stream = Files.newDirectoryStream(representationsPath, filter)) {
         for (Path path : stream) {
-          System.out.println("Processing: " + path.toString());
+          LOGGER.info("Processing: " + path.toString());
           Path representationMets = path.resolve("METS.xml");
           processRepresentation(dst, representationMets, path.getFileName().toString());
         }
       } catch (IOException e) {
-        e.printStackTrace();
+        LOGGER.error("Error opening directory stream", e);
       }
     }
     return dst;
@@ -107,7 +111,7 @@ public class EARKSIPToRODAAIP implements Migrator {
 
   private void processRepresentation(Path dst, Path representationMetsPath, String representationID)
     throws JAXBException {
-    System.out.println("Processing representation: " + representationMetsPath.toAbsolutePath().toString());
+    LOGGER.info("Processing representation: " + representationMetsPath.toAbsolutePath().toString());
     Path representationPath = representationMetsPath.getParent();
     try {
       Mets representationMets = METSUtils.processMetsXML(representationMetsPath);
@@ -121,7 +125,7 @@ public class EARKSIPToRODAAIP implements Migrator {
                 for (Fptr f : dt.getFptr()) {
                   FileType ft = (FileType) f.getFILEID();
                   Path p = extractPathFromFile(ft, representationPath);
-                  System.out.println("DATA:" + p.toString());
+                  LOGGER.debug("DATA:" + p.toString());
                   RODAUtils.addRepresentationData(dst, p, representationID);
                 }
               }
@@ -130,7 +134,7 @@ public class EARKSIPToRODAAIP implements Migrator {
                 for (Fptr f : dt.getFptr()) {
                   FileType ft = (FileType) f.getFILEID();
                   Path p = extractPathFromFile(ft, representationPath);
-                  System.out.println("SCHEMA:" + p.toString());
+                  LOGGER.debug("SCHEMA:" + p.toString());
                   RODAUtils.addRepresentationSchema(dst, p, representationID);
                 }
               }
@@ -139,7 +143,7 @@ public class EARKSIPToRODAAIP implements Migrator {
                 for (Fptr f : dt.getFptr()) {
                   FileType ft = (FileType) f.getFILEID();
                   Path p = extractPathFromFile(ft, representationPath);
-                  System.out.println("P:" + p.toString());
+                  LOGGER.debug("P:" + p.toString());
                   RODAUtils.addRepresentationMetadata(dst, p, representationID);
                 }
               }
@@ -147,25 +151,25 @@ public class EARKSIPToRODAAIP implements Migrator {
           }
         }
       }
-    } catch (Exception e) {
-      e.printStackTrace();
+    } catch (IOException e) {
+      LOGGER.error("Error processing representation", e);
     }
   }
 
   private Path extractPathFromFile(FileType ft, Path representationPath) {
-    Path p = null;
+    Path path = null;
     if (ft.getFLocat() != null && ft.getFLocat().size() > 0) {
       for (FLocat flocat : ft.getFLocat()) {
-        System.out.println("LOCAT: " + flocat.getHref());
+        LOGGER.debug("LOCAT: " + flocat.getHref());
         if (flocat.getHref() != null && flocat.getHref().startsWith("file://.")) {
           String href = flocat.getHref();
           href = href.substring(7);
-          p = representationPath.resolve(flocat.getHref().replace("file://.", ""));
-          System.out.println("FP: " + p.toString());
+          path = representationPath.resolve(flocat.getHref().replace("file://.", ""));
+          LOGGER.debug("FP: " + path.toString());
         }
       }
     }
-    return p;
+    return path;
   }
 
 }

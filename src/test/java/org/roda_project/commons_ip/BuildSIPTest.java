@@ -10,7 +10,6 @@ package org.roda_project.commons_ip;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 
 import org.junit.AfterClass;
 import org.junit.Test;
@@ -29,11 +28,15 @@ import org.roda_project.commons_ip.validation.Validator;
 import org.roda_project.commons_ip.validation.impl.EARKValidator;
 import org.roda_project.commons_ip.validation.model.ValidationIssue;
 import org.roda_project.commons_ip.validation.model.ValidationReport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Unit test for simple App.
  */
 public class BuildSIPTest {
+  private static final Logger LOGGER = LoggerFactory.getLogger(BuildSIPTest.class);
+
   private static Path zip;
 
   @Test
@@ -76,23 +79,22 @@ public class BuildSIPTest {
 
     zip = sip.build();
 
-
     // validate SIP
     Validator validator = new EARKValidator();
     ValidationReport report = validator.isSIPValid(zip);
     // Assert.assertTrue(report.isValid());
 
-    System.out.println("Valid: " + report.isValid());
+    LOGGER.info("Valid: " + report.isValid());
     if (report.getIssues() != null && report.getIssues().size() > 0) {
       for (ValidationIssue issue : report.getIssues()) {
-        System.out.println(issue.getLevel().toString() + " - " + issue.getMessage());
+        LOGGER.info(issue.getLevel().toString() + " - " + issue.getMessage());
       }
     }
 
     Migrator toRoda = new EARKSIPToRODAAIP();
     Path converted = toRoda.convert(zip);
 
-    System.out.println("CONVERTED: " + converted.toString());
+    LOGGER.info("CONVERTED: " + converted.toString());
 
   }
 

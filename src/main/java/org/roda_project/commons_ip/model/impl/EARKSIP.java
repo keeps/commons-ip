@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import org.roda_project.commons_ip.mets_v1_11.beans.DivType.Mptr;
@@ -151,7 +152,7 @@ public class EARKSIP implements SIP {
     }
     Mets mainMets = METSUtils.getMetsFromSIP(this);
 
-    if (otherMetadata != null && otherMetadata.size() > 0) {
+    if (otherMetadata != null && !otherMetadata.isEmpty()) {
       for (SIPMetadata om : otherMetadata) {
         String otherMetadataPath = "/metadata/other/" + om.getMetadata().getFileName().toString();
         ZIPUtils.addMetadataToZip(zipPath, om, otherMetadataPath);
@@ -159,7 +160,7 @@ public class EARKSIP implements SIP {
         mainMets = METSUtils.addOtherMetadataToMets(mainMets, otherMetadataPath, om);
       }
     }
-    if (administrativeMetadata != null && administrativeMetadata.size() > 0) {
+    if (administrativeMetadata != null && !administrativeMetadata.isEmpty()) {
       for (SIPMetadata am : administrativeMetadata) {
         String path = "/metadata/administrative/" + am.getMetadata().getFileName().toString();
         ZIPUtils.addMetadataToZip(zipPath, am, path);
@@ -168,7 +169,7 @@ public class EARKSIP implements SIP {
       }
     }
 
-    if (descriptiveMetadata != null && descriptiveMetadata.size() > 0) {
+    if (descriptiveMetadata != null && !descriptiveMetadata.isEmpty()) {
       for (SIPDescriptiveMetadata dm : descriptiveMetadata) {
         String descriptiveMetadataPath = "/metadata/descriptive/" + dm.getMetadata().getFileName().toString();
         ZIPUtils.addMetadataToZip(zipPath, dm, descriptiveMetadataPath);
@@ -176,14 +177,14 @@ public class EARKSIP implements SIP {
         mainMets = METSUtils.addDescriptiveMetadataToMets(mainMets, dm, descriptiveMetadataPath);
       }
     }
-    if (representations != null && representations.size() > 0) {
+    if (representations != null && !representations.isEmpty()) {
       for (Map.Entry<String, SIPRepresentation> entry : representations.entrySet()) {
         ZIPUtils.createRepresentationFolder(zipPath, entry.getKey());
         Mets representationMETS = METSUtils.getMetsFromRepresentation(entry.getKey(), entry.getValue());
-        if (entry.getValue().getAgents() != null && entry.getValue().getAgents().size() > 0) {
+        if (entry.getValue().getAgents() != null && !entry.getValue().getAgents().isEmpty()) {
           METSUtils.addAgentsToMets(representationMETS, entry.getValue().getAgents());
         }
-        if (entry.getValue().getData() != null && entry.getValue().getData().size() > 0) {
+        if (entry.getValue().getData() != null && !entry.getValue().getData().isEmpty()) {
           for (Path dataFile : entry.getValue().getData()) {
             String dataFilePath = "/representations/" + entry.getKey() + "/data/" + dataFile.getFileName().toString();
             ZIPUtils.addDataToRepresentation(zipPath, dataFile, dataFilePath);
@@ -193,7 +194,7 @@ public class EARKSIP implements SIP {
           }
         }
         if (entry.getValue().getAdministrativeMetadata() != null
-          && entry.getValue().getAdministrativeMetadata().size() > 0) {
+          && !entry.getValue().getAdministrativeMetadata().isEmpty()) {
           for (SIPMetadata metadata : entry.getValue().getAdministrativeMetadata()) {
             String administrativeFilePath = "/representations/" + entry.getKey() + "/metadata/administrative/"
               + metadata.getMetadata().getFileName().toString();
@@ -203,7 +204,7 @@ public class EARKSIP implements SIP {
 
           }
         }
-        if (entry.getValue().getOtherMetadata() != null && entry.getValue().getOtherMetadata().size() > 0) {
+        if (entry.getValue().getOtherMetadata() != null && !entry.getValue().getOtherMetadata().isEmpty()) {
           for (SIPMetadata metadata : entry.getValue().getOtherMetadata()) {
             String otherMetadataPath = "/representations/" + entry.getKey() + "/metadata/other/"
               + metadata.getMetadata().getFileName().toString();
@@ -212,7 +213,7 @@ public class EARKSIP implements SIP {
             representationMETS = METSUtils.addOtherMetadataToMets(representationMETS, otherMetadataPath, metadata);
           }
         }
-        if (entry.getValue().getDescriptiveMetadata() != null && entry.getValue().getDescriptiveMetadata().size() > 0) {
+        if (entry.getValue().getDescriptiveMetadata() != null && !entry.getValue().getDescriptiveMetadata().isEmpty()) {
           for (SIPDescriptiveMetadata metadata : entry.getValue().getDescriptiveMetadata()) {
 
             String descriptiveFilePath = "/representations/" + entry.getKey() + "/metadata/descriptive/"
@@ -235,8 +236,8 @@ public class EARKSIP implements SIP {
           mptr.setLOCTYPE(LocType.URL.toString());
           mptr.setHref("file://." + representationMetsPath);
           mainMets.getStructMap().get(0).getDiv().getDiv().get(0).getMptr().add(mptr);
-        } catch (Throwable t) {
-          throw new SIPException("Error saving representation METS: " + t.getMessage(), t);
+        } catch (JAXBException | IOException e) {
+          throw new SIPException("Error saving representation METS", e);
         }
       }
     }
@@ -248,7 +249,7 @@ public class EARKSIP implements SIP {
       m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
       m.marshal(mainMets, Files.newOutputStream(temp));
       Utils.addFileToZip(zipPath, temp, "/METS.xml");
-    } catch (Throwable e) {
+    } catch (JAXBException | IOException e) {
       throw new SIPException(e.getMessage(), e);
     }
     return zipPath;

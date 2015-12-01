@@ -5,7 +5,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
-public class RODAUtils {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public final class RODAUtils {
+  private static final Logger LOGGER = LoggerFactory.getLogger(RODAUtils.class);
+
+  private RODAUtils() {
+  }
+
   public static void addDescriptiveMetadata(Path base, Path metadata) throws IOException {
     Path metadataDirectoryPath = base.resolve("metadata/descriptive");
     if (!Files.exists(metadataDirectoryPath)) {
@@ -34,7 +42,7 @@ public class RODAUtils {
   }
 
   public static void addRepresentationData(Path dst, Path path, String representationID) throws IOException {
-    System.out.println("Add data " + path + " to representation " + representationID);
+    LOGGER.info("Adding data " + path + " to representation " + representationID);
     Path representationDirectoryPath = dst.resolve("data/" + representationID);
     if (!Files.exists(representationDirectoryPath)) {
       Files.createDirectories(representationDirectoryPath);
@@ -43,17 +51,15 @@ public class RODAUtils {
   }
 
   public static void addRepresentationSchema(Path dst, Path path, String representationID) {
-    System.out.println("Add schema " + path + " to representation " + representationID);
-
+    LOGGER.info("Adding schema " + path + " to representation " + representationID);
   }
 
   public static void addRepresentationMetadata(Path dst, Path path, String representationID) throws IOException {
-    System.out.println("Add data " + path + " to representation " + representationID);
+    LOGGER.info("Adding data " + path + " to representation " + representationID);
     Path representationDirectoryPath = dst.resolve("metadata/preservation/" + representationID);
     if (!Files.exists(representationDirectoryPath)) {
       Files.createDirectories(representationDirectoryPath);
     }
     Files.copy(path, representationDirectoryPath.resolve(path.getFileName()), StandardCopyOption.REPLACE_EXISTING);
-
   }
 }

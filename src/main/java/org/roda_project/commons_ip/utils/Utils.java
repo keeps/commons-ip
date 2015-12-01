@@ -39,7 +39,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
@@ -50,11 +49,18 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-public class Utils {
+public final class Utils {
+  private static final Logger LOGGER = LoggerFactory.getLogger(Utils.class);
+
+  private Utils() {
+  }
+
   private static FileSystem createZipFileSystem(Path zip, boolean create) throws IOException {
 
     // final URI uri = URI.create("jar:file:" + zip.toUri().getPath());
@@ -95,8 +101,8 @@ public class Utils {
           return FileVisitResult.CONTINUE;
         }
       });
-    } catch (Exception e) {
-      e.printStackTrace();
+    } catch (IOException e) {
+      LOGGER.error("Error unzipping file", e);
     }
   }
 
@@ -122,9 +128,9 @@ public class Utils {
     validator.setErrorHandler(errorHandler);
     try {
       validator.validate(xmlSource);
-      List<SAXParseException> errors = errorHandler.getErrors();
-    } catch (SAXException se) {
-
+    } catch (SAXException e) {
+      // TODO add error message
+      LOGGER.error("", e);
     }
     List<String> errors = new ArrayList<String>();
     if (errorHandler.getErrors().size() > 0) {
@@ -138,8 +144,8 @@ public class Utils {
   public static XMLGregorianCalendar getCurrentCalendar() throws DatatypeConfigurationException {
     GregorianCalendar gcal = new GregorianCalendar();
     gcal.setTime(new Date());
-    XMLGregorianCalendar xgcal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
-    return xgcal;
+    XMLGregorianCalendar calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
+    return calendar;
   }
 
   public static void addSchemaLocationToPath(Path metadata, String schemaLocation) {
@@ -154,18 +160,10 @@ public class Utils {
       TransformerFactory.newInstance().newTransformer().transform(xmlSource, outputTarget);
       InputStream is = new ByteArrayInputStream(outputStream.toByteArray());
       Files.copy(is, metadata, StandardCopyOption.REPLACE_EXISTING);
-    } catch (SAXException e) {
-      e.printStackTrace();
-    } catch (ParserConfigurationException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (TransformerConfigurationException e) {
-      e.printStackTrace();
-    } catch (TransformerException e) {
-      e.printStackTrace();
-    } catch (TransformerFactoryConfigurationError e) {
-      e.printStackTrace();
+    } catch (SAXException | TransformerException | TransformerFactoryConfigurationError | IOException
+      | ParserConfigurationException e) {
+      // TODO add error message
+      LOGGER.error("", e);
     }
   }
 

@@ -33,8 +33,11 @@ import org.roda_project.commons_ip.validation.model.ValidationIssue;
 import org.roda_project.commons_ip.validation.model.ValidationReport;
 import org.roda_project.commons_ip.validation.utils.ValidationErrors;
 import org.roda_project.commons_ip.validation.utils.ValidationUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EARKValidator implements Validator {
+  private static final Logger LOGGER = LoggerFactory.getLogger(EARKValidator.class);
 
   @Override
   public ValidationReport isSIPValid(Path sip) {
@@ -79,7 +82,7 @@ public class EARKValidator implements Validator {
                 if (!representationReport.isValid()) {
                   report.setValid(false);
                 }
-                if (representationReport.getIssues() != null && representationReport.getIssues().size() > 0) {
+                if (representationReport.getIssues() != null && !representationReport.getIssues().isEmpty()) {
                   for (ValidationIssue issue : representationReport.getIssues()) {
                     report.addIssue(issue);
                   }
@@ -87,7 +90,8 @@ public class EARKValidator implements Validator {
               }
             }
           } catch (IOException e) {
-            e.printStackTrace();
+            // TODO add error message
+            LOGGER.error("", e);
           }
         }
 
@@ -102,12 +106,12 @@ public class EARKValidator implements Validator {
 
   private ValidationReport validateMets(Path metsPath, ValidationReport report) throws JAXBException {
     Mets mets = METSUtils.processMetsXML(metsPath);
-    if (mets.getAmdSec() != null && mets.getAmdSec().size() > 0) {
+    if (mets.getAmdSec() != null && !mets.getAmdSec().isEmpty()) {
       for (AmdSecType amdsec : mets.getAmdSec()) {
         report = validateAmdSec(amdsec, metsPath.getParent(), report);
       }
     }
-    if (mets.getDmdSec() != null && mets.getDmdSec().size() > 0) {
+    if (mets.getDmdSec() != null && !mets.getDmdSec().isEmpty()) {
       for (MdSecType dmdsec : mets.getDmdSec()) {
         report = validateMdSecType(dmdsec, metsPath.getParent(), report);
       }
@@ -119,7 +123,7 @@ public class EARKValidator implements Validator {
   }
 
   private ValidationReport validateFilesec(FileSec fileSec, Path base, ValidationReport report) {
-    if (fileSec.getFileGrp() != null && fileSec.getFileGrp().size() > 0) {
+    if (fileSec.getFileGrp() != null && !fileSec.getFileGrp().isEmpty()) {
       for (FileGrp fileGrp : fileSec.getFileGrp()) {
         report = validateFileGrpType(fileGrp, base, report);
       }
@@ -128,12 +132,12 @@ public class EARKValidator implements Validator {
   }
 
   private ValidationReport validateFileGrpType(FileGrpType fileGrp, Path base, ValidationReport report) {
-    if (fileGrp.getFile() != null && fileGrp.getFile().size() > 0) {
+    if (fileGrp.getFile() != null && !fileGrp.getFile().isEmpty()) {
       for (FileType file : fileGrp.getFile()) {
         report = validateFileType(file, base, report);
       }
     }
-    if (fileGrp.getFileGrp() != null && fileGrp.getFileGrp().size() > 0) {
+    if (fileGrp.getFileGrp() != null && !fileGrp.getFileGrp().isEmpty()) {
       for (FileGrpType fg2 : fileGrp.getFileGrp()) {
         report = validateFileGrpType(fg2, base, report);
       }
@@ -144,7 +148,7 @@ public class EARKValidator implements Validator {
   private ValidationReport validateFileType(FileType file, Path base, ValidationReport report) {
     String checksumType = file.getCHECKSUMTYPE();
     String checksum = file.getCHECKSUM();
-    if (file.getFLocat() != null && file.getFLocat().size() > 0) {
+    if (file.getFLocat() != null && !file.getFLocat().isEmpty()) {
       boolean locatFound = false;
       for (FLocat locat : file.getFLocat()) {
         if (locat.getType() != null && locat.getType().equalsIgnoreCase("simple") && locat.getLOCTYPE() != null
@@ -208,7 +212,7 @@ public class EARKValidator implements Validator {
   }
 
   private ValidationReport validateAmdSec(AmdSecType amdsec, Path base, ValidationReport report) {
-    if (amdsec.getDigiprovMD() != null && amdsec.getDigiprovMD().size() > 0) {
+    if (amdsec.getDigiprovMD() != null && !amdsec.getDigiprovMD().isEmpty()) {
       for (MdSecType digiprov : amdsec.getDigiprovMD()) {
         report = validateMdSecType(digiprov, base, report);
       }
