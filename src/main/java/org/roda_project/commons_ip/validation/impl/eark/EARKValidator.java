@@ -5,7 +5,7 @@
  *
  * https://github.com/keeps/commons-ip
  */
-package org.roda_project.commons_ip.validation.impl;
+package org.roda_project.commons_ip.validation.impl.eark;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -25,14 +25,14 @@ import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType.MdRef;
 import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec.FileGrp;
-import org.roda_project.commons_ip.model.impl.METSUtils;
+import org.roda_project.commons_ip.model.ValidationIssue;
+import org.roda_project.commons_ip.model.ValidationReport;
+import org.roda_project.commons_ip.model.impl.eark.METSUtils;
 import org.roda_project.commons_ip.utils.METSEnums;
 import org.roda_project.commons_ip.utils.Utils;
+import org.roda_project.commons_ip.utils.ValidationErrors;
+import org.roda_project.commons_ip.utils.ValidationUtils;
 import org.roda_project.commons_ip.validation.Validator;
-import org.roda_project.commons_ip.validation.model.ValidationIssue;
-import org.roda_project.commons_ip.validation.model.ValidationReport;
-import org.roda_project.commons_ip.validation.utils.ValidationErrors;
-import org.roda_project.commons_ip.validation.utils.ValidationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -154,17 +154,20 @@ public class EARKValidator implements Validator {
         if (locat.getType() != null && locat.getType().equalsIgnoreCase("simple") && locat.getLOCTYPE() != null
           && locat.getLOCTYPE().equalsIgnoreCase(METSEnums.LocType.URL.toString())) {
           locatFound = true;
-          if (locat.getHref() != null && locat.getHref().startsWith("file://.")) {
+          if (locat.getHref() != null && locat.getHref().startsWith("file://./")) {
             try {
-              Path filePath = base.resolve(locat.getHref().replace("file://.", ""));
+              Path filePath = base.resolve(locat.getHref().replace("file://./", ""));
               String fileChecksum = Utils.calculateChecksum(Files.newInputStream(filePath), checksumType);
               if (!fileChecksum.equalsIgnoreCase(checksum)) {
                 report = ValidationUtils.addIssue(report, ValidationErrors.BAD_CHECKSUM, ValidationIssue.LEVEL.ERROR,
-                  "FILE_ID: " + file.getID(), null);
+                  "FILE_ID:" + file.getID() + " METS_CHECKSUM:" + checksum + " COMPUTED_CHECKSUM:" + fileChecksum,
+                  null);
               }
             } catch (NoSuchAlgorithmException | IOException e) {
-              report = ValidationUtils.addIssue(report, ValidationErrors.ERROR_COMPUTING_CHECKSUM,
-                ValidationIssue.LEVEL.ERROR, "FILE_ID: " + file.getID(), null);
+              e.printStackTrace();
+              report = ValidationUtils.addIssue(report,
+                ValidationErrors.ERROR_COMPUTING_CHECKSUM + ": " + e.getMessage(), ValidationIssue.LEVEL.ERROR,
+                "FILE_ID: " + file.getID(), null);
             }
 
           } else {
@@ -189,16 +192,17 @@ public class EARKValidator implements Validator {
     if (mdref != null) {
       String checksumType = mdref.getCHECKSUMTYPE();
       String checksum = mdref.getCHECKSUM();
-      if (mdref.getHref() != null && mdref.getHref().startsWith("file://.")) {
+      if (mdref.getHref() != null && mdref.getHref().startsWith("file://./")) {
         try {
-          Path filePath = base.resolve(mdref.getHref().replace("file://.", ""));
+          Path filePath = base.resolve(mdref.getHref().replace("file://./", ""));
           String fileChecksum = Utils.calculateChecksum(Files.newInputStream(filePath), checksumType);
           if (!fileChecksum.equalsIgnoreCase(checksum)) {
             report = ValidationUtils.addIssue(report, ValidationErrors.BAD_CHECKSUM, ValidationIssue.LEVEL.ERROR,
-              "MDREF_ID: " + mdref.getID(), null);
+              "MDREF_ID:" + mdref.getID() + " METS_CHECKSUM:" + checksum + " COMPUTED_CHECKSUM:" + fileChecksum, null);
           }
         } catch (NoSuchAlgorithmException | IOException e) {
-          report = ValidationUtils.addIssue(report, ValidationErrors.ERROR_COMPUTING_CHECKSUM,
+          e.printStackTrace();
+          report = ValidationUtils.addIssue(report, ValidationErrors.ERROR_COMPUTING_CHECKSUM + ": " + e.getMessage(),
             ValidationIssue.LEVEL.ERROR, "MDREF_ID: " + mdref.getID(), null);
         }
 

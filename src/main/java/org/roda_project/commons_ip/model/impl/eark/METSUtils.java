@@ -5,7 +5,7 @@
  *
  * https://github.com/keeps/commons-ip
  */
-package org.roda_project.commons_ip.model.impl;
+package org.roda_project.commons_ip.model.impl.eark;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -95,7 +95,7 @@ public final class METSUtils {
     } catch (IOException e) {
       throw new SIPException("Error calculating file size", e);
     }
-    mdref.setHref("file://." + descriptiveMetadataPath);
+    mdref.setHref("file://./" + descriptiveMetadataPath);
     mdref.setType("simple");
 
     MdSecType dmdsec = new MdSecType();
@@ -276,7 +276,7 @@ public final class METSUtils {
     FLocat locat = new FLocat();
     locat.setType("simple");
     locat.setLOCTYPE(METSEnums.LocType.URL.toString());
-    locat.setHref("file://." + dataFilePath);
+    locat.setHref("file://./" + dataFilePath);
     ft.getFLocat().add(locat);
     representationMETS.getFileSec().getFileGrp().get(0).getFile().add(ft);
 
@@ -318,7 +318,7 @@ public final class METSUtils {
     FLocat locat = new FLocat();
     locat.setType("simple");
     locat.setLOCTYPE(METSEnums.LocType.URL.toString());
-    locat.setHref("file://." + preservationFilePath);
+    locat.setHref("file://./" + preservationFilePath);
     ft.getFLocat().add(locat);
     representationMETS.getFileSec().getFileGrp().get(0).getFile().add(ft);
 

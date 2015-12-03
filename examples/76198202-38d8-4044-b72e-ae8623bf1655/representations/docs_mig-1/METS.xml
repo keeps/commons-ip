@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<mets xmlns:ext="ExtensionMETS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.loc.gov/METS/" PROFILE="http://www.ra.ee/METS/v01/IP.xml" TYPE="AIP" OBJID="docs_mig-1" LABEL="METS file describing the AIP matching the OBJID." xsi:schemaLocation="http://www.loc.gov/METS/ schemas/IP.xsd ExtensionMETS schemas/ExtensionMETS.xsd http://www.w3.org/1999/xlink schemas/xlink.xsd">
+  <metsHdr RECORDSTATUS="NEW" CREATEDATE="2015-12-02T14:02:03">
+    <metsDocumentID>METS.xml</metsDocumentID>
+  </metsHdr>
+  <dmdSec ID="ID635b091c-656f-45d2-aaaf-7da72fcb0bd2"/>
+  <amdSec ID="ID9c1a7bfa-4f59-4da6-aaa3-870506ee3f77">
+    <digiprovMD ID="IDfc776cae-6758-4001-a2d3-a450d55ce962">
+      <mdRef MIMETYPE="application/xml" xlink:href="file://./metadata/preservation/premis.xml" LOCTYPE="URL" CREATED="2015-12-02T14:02:03" CHECKSUM="8ff1396f81486673727033262d73576151791991922f24aed80075372dcea4d4" xlink:type="simple" ID="ID97cde63d-6194-4446-9f3e-fb529b51613f" MDTYPE="PREMIS" CHECKSUMTYPE="SHA-256"/>
+    </digiprovMD>
+  </amdSec>
+  <fileSec>
+    <fileGrp USE="general filegroup" ID="IDff2ff947-ad35-4f34-b082-1ceb069ccf2d">
+      <file MIMETYPE="application/pdf" USE="Datafile" CHECKSUMTYPE="SHA-256" CREATED="2015-12-02T14:01:36" CHECKSUM="b06281c69e82ddd7c54bcd488759210c2999a53883a9ceb2546c1765b362a221" ID="ID1953b0b3-aaa3-479a-bdfe-e11605e7dc18" SIZE="654613">
+        <FLocat xlink:href="file://./data/History of special relativity.pdf" xlink:type="simple" LOCTYPE="URL"/>
+      </file>
+    </fileGrp>
+  </fileSec>
+  <structMap TYPE="logical" LABEL="Simple AIP structuring">
+    <div LABEL="Package structure">
+      <div LABEL="metadata files">
+        <fptr FILEID="ID97cde63d-6194-4446-9f3e-fb529b51613f"/>
+      </div>
+      <div LABEL="schema files"/>
+      <div LABEL="files from /data">
+        <fptr FILEID="ID1953b0b3-aaa3-479a-bdfe-e11605e7dc18"/>
+      </div>
+    </div>
+  </structMap>
+  <structMap TYPE="logical" LABEL="representations">
+    <div TYPE="type" LABEL="representations"/>
+  </structMap>
+</mets>

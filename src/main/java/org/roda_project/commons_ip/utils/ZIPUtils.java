@@ -28,7 +28,7 @@ public final class ZIPUtils {
         Utils.addFileToZip(zipPath, dm.getSchema(), schemaPath);
         Path temp = Files.createTempFile("temp", ".xml");
         Files.copy(dm.getMetadata(), temp, StandardCopyOption.REPLACE_EXISTING);
-        //Utils.addSchemaLocationToPath(temp, ".." + schemaPath);
+        // Utils.addSchemaLocationToPath(temp, ".." + schemaPath);
         Files.copy(temp, source, StandardCopyOption.REPLACE_EXISTING);
         dm.setMetadata(source);
       }

@@ -5,7 +5,7 @@
  *
  * https://github.com/keeps/commons-ip
  */
-package org.roda_project.commons_ip.validation.model;
+package org.roda_project.commons_ip.model;
 
 import java.nio.file.Path;
 import java.util.List;

@@ -5,7 +5,7 @@
  *
  * https://github.com/keeps/commons-ip
  */
-package org.roda_project.commons_ip.model.impl;
+package org.roda_project.commons_ip.model.impl.eark;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -234,7 +234,7 @@ public class EARKSIP implements SIP {
           Utils.addFileToZip(zipPath, temp, representationMetsPath);
           Mptr mptr = new Mptr();
           mptr.setLOCTYPE(LocType.URL.toString());
-          mptr.setHref("file://." + representationMetsPath);
+          mptr.setHref("file://./" + representationMetsPath);
           mainMets.getStructMap().get(0).getDiv().getDiv().get(0).getMptr().add(mptr);
         } catch (JAXBException | IOException e) {
           throw new SIPException("Error saving representation METS", e);

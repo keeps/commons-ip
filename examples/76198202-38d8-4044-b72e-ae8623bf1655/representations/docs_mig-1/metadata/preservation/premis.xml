@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<premis xmlns="info:lc/xmlns/premis-v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0" xsi:schemaLocation="info:lc/xmlns/premis-v2 ../../schemas/premis-v2-2.xsd">
+  <object xmlID="IDceb4ee37-2f85-4227-ae35-c3e79802d252" xsi:type="representation">
+    <objectIdentifier>
+      <objectIdentifierType>repository</objectIdentifierType>
+      <objectIdentifierValue>package-id-goes-here-?</objectIdentifierValue>
+    </objectIdentifier>
+  </object>
+  <object xmlID="IDd23dfbee-bf18-48de-955f-e5809f7581fa" xsi:type="file">
+    <objectIdentifier>
+      <objectIdentifierType>filepath</objectIdentifierType>
+      <objectIdentifierValue>file://./data/History of special relativity.pdf</objectIdentifierValue>
+    </objectIdentifier>
+    <objectCharacteristics>
+      <compositionLevel>0</compositionLevel>
+      <fixity>
+        <messageDigestAlgorithm>SHA-256</messageDigestAlgorithm>
+        <messageDigest>b06281c69e82ddd7c54bcd488759210c2999a53883a9ceb2546c1765b362a221</messageDigest>
+        <messageDigestOriginator>hashlib</messageDigestOriginator>
+      </fixity>
+      <size>654613</size>
+      <format>
+        <formatRegistry>
+          <formatRegistryName>PRONOM</formatRegistryName>
+          <formatRegistryKey>fmt/19</formatRegistryKey>
+          <formatRegistryRole>identification</formatRegistryRole>
+        </formatRegistry>
+      </format>
+    </objectCharacteristics>
+    <relationship>
+      <relationshipType>derivation</relationshipType>
+      <relationshipSubType>has source</relationshipSubType>
+      <relatedObjectIdentification>
+        <relatedObjectIdentifierType>filepath</relatedObjectIdentifierType>
+        <relatedObjectIdentifierValue>file://./../../submission/representations/docs/data/History of special relativity.pdf</relatedObjectIdentifierValue>
+        <relatedObjectSequence>0</relatedObjectSequence>
+      </relatedObjectIdentification>
+      <relatedEventIdentification>
+        <relatedEventIdentifierType>local</relatedEventIdentifierType>
+        <relatedEventIdentifierValue>IDe1e7a809-e0b0-4329-b8b8-171774a479be</relatedEventIdentifierValue>
+        <relatedEventSequence>1</relatedEventSequence>
+      </relatedEventIdentification>
+    </relationship>
+  </object>
+  <event>
+    <eventIdentifier>
+      <eventIdentifierType>local</eventIdentifierType>
+      <eventIdentifierValue>IDe1e7a809-e0b0-4329-b8b8-171774a479be</eventIdentifierValue>
+    </eventIdentifier>
+    <eventType>migration</eventType>
+    <eventDateTime>2015-12-02T14:01:32</eventDateTime>
+    <eventOutcomeInformation>
+      <eventOutcome>success</eventOutcome>
+    </eventOutcomeInformation>
+    <linkingAgentIdentifier>
+      <linkingAgentIdentifierType>software</linkingAgentIdentifierType>
+      <linkingAgentIdentifierValue>should probably come from migrations.xml</linkingAgentIdentifierValue>
+    </linkingAgentIdentifier>
+    <linkingObjectIdentifier>
+      <linkingObjectIdentifierType>filepath</linkingObjectIdentifierType>
+      <linkingObjectIdentifierValue>file://./data/History of special relativity.pdf</linkingObjectIdentifierValue>
+    </linkingObjectIdentifier>
+  </event>
+  <agent>
+    <agentIdentifier>
+      <agentIdentifierType>LOCAL</agentIdentifierType>
+      <agentIdentifierValue>earkweb</agentIdentifierValue>
+    </agentIdentifier>
+    <agentName>E-ARK AIP to DIP Converter</agentName>
+    <agentType>Software</agentType>
+  </agent>
+</premis>

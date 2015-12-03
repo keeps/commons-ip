@@ -5,15 +5,15 @@
  *
  * https://github.com/keeps/commons-ip
  */
-package org.roda_project.commons_ip.validation.utils;
+package org.roda_project.commons_ip.utils;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.roda_project.commons_ip.validation.model.ValidationIssue;
-import org.roda_project.commons_ip.validation.model.ValidationIssue.LEVEL;
-import org.roda_project.commons_ip.validation.model.ValidationReport;
+import org.roda_project.commons_ip.model.ValidationIssue;
+import org.roda_project.commons_ip.model.ValidationIssue.LEVEL;
+import org.roda_project.commons_ip.model.ValidationReport;
 
 public final class ValidationUtils {
 

@@ -9,7 +9,7 @@ package org.roda_project.commons_ip.validation;
 
 import java.nio.file.Path;
 
-import org.roda_project.commons_ip.validation.model.ValidationReport;
+import org.roda_project.commons_ip.model.ValidationReport;
 
 public interface Validator {
   ValidationReport isSIPValid(Path sipPath);

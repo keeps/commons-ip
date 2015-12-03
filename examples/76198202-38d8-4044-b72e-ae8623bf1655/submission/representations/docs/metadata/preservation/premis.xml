@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<premis xmlns="info:lc/xmlns/premis-v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0" xsi:schemaLocation="info:lc/xmlns/premis-v2 ../../schemas/premis-v2-2.xsd">
+  <object xmlID="IDd79919e5-5548-46d7-b0cf-1a79976949c6" xsi:type="representation">
+    <objectIdentifier>
+      <objectIdentifierType>repository</objectIdentifierType>
+      <objectIdentifierValue>package-id-goes-here-?</objectIdentifierValue>
+    </objectIdentifier>
+  </object>
+  <object xmlID="ID0f8aa58a-0ec4-47a8-bcd0-a03cc75a9bde" xsi:type="file">
+    <objectIdentifier>
+      <objectIdentifierType>filepath</objectIdentifierType>
+      <objectIdentifierValue>file://./data/History of special relativity.pdf</objectIdentifierValue>
+    </objectIdentifier>
+    <objectCharacteristics>
+      <compositionLevel>0</compositionLevel>
+      <fixity>
+        <messageDigestAlgorithm>SHA-256</messageDigestAlgorithm>
+        <messageDigest>0d0c46436759ac7d70614b9c61e85a0795f5e3c85ec4bbba27d85d86fd03cd5d</messageDigest>
+        <messageDigestOriginator>hashlib</messageDigestOriginator>
+      </fixity>
+      <size>548801</size>
+      <format>
+        <formatRegistry>
+          <formatRegistryName>PRONOM</formatRegistryName>
+          <formatRegistryKey>fmt/19</formatRegistryKey>
+          <formatRegistryRole>identification</formatRegistryRole>
+        </formatRegistry>
+      </format>
+    </objectCharacteristics>
+  </object>
+  <object xmlID="ID613ae2c7-f68a-40d8-a35b-c2dd4fb6d934" xsi:type="file">
+    <objectIdentifier>
+      <objectIdentifierType>filepath</objectIdentifierType>
+      <objectIdentifierValue>file://./data/General relativity.odt</objectIdentifierValue>
+    </objectIdentifier>
+    <objectCharacteristics>
+      <compositionLevel>0</compositionLevel>
+      <fixity>
+        <messageDigestAlgorithm>SHA-256</messageDigestAlgorithm>
+        <messageDigest>5c1f788e8fd2c20035a5c0e56fa511f6ee39e31c8e01ce22277ea67b2d7df03b</messageDigest>
+        <messageDigestOriginator>hashlib</messageDigestOriginator>
+      </fixity>
+      <size>74094</size>
+      <format>
+        <formatRegistry>
+          <formatRegistryName>PRONOM</formatRegistryName>
+          <formatRegistryKey>fmt/290</formatRegistryKey>
+          <formatRegistryRole>identification</formatRegistryRole>
+        </formatRegistry>
+      </format>
+    </objectCharacteristics>
+  </object>
+  <agent>
+    <agentIdentifier>
+      <agentIdentifierType>LOCAL</agentIdentifierType>
+      <agentIdentifierValue>earkweb</agentIdentifierValue>
+    </agentIdentifier>
+    <agentName>E-ARK AIP to DIP Converter</agentName>
+    <agentType>Software</agentType>
+  </agent>
+</premis>

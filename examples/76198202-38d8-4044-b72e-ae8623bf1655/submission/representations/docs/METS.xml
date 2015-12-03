@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<mets xmlns:ext="ExtensionMETS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.loc.gov/METS/" PROFILE="http://www.ra.ee/METS/v01/IP.xml" TYPE="SIP" OBJID="18391d85-4d98-4ff6-a48b-17d269dda7e6" LABEL="METS file describing the AIP matching the OBJID." xsi:schemaLocation="http://www.loc.gov/METS/ schemas/IP.xsd ExtensionMETS schemas/ExtensionMETS.xsd http://www.w3.org/1999/xlink schemas/xlink.xsd">
+  <metsHdr RECORDSTATUS="NEW" CREATEDATE="2015-12-02T14:00:55">
+    <metsDocumentID>METS.xml</metsDocumentID>
+  </metsHdr>
+  <dmdSec ID="ID1e8d37e5-ba03-403f-ac67-4b0e6d059100"/>
+  <amdSec ID="ID91b15a1c-837e-4aa1-a6fd-deea107cbd00">
+    <digiprovMD ID="IDeb3f07ad-e992-45b3-adb4-766e20a292c6">
+      <mdRef MIMETYPE="application/xml" xlink:href="file://./metadata/preservation/premis.xml" LOCTYPE="URL" CREATED="2015-12-02T14:00:55" CHECKSUM="d32f7df79a60183e805e0555ec7d6e2b9a0b9764aafebf35b4220c65c8961de8" xlink:type="simple" ID="ID4271be06-1b2f-49fb-994f-d771716a90e4" MDTYPE="PREMIS" CHECKSUMTYPE="SHA-256"/>
+    </digiprovMD>
+  </amdSec>
+  <fileSec>
+    <fileGrp USE="general filegroup" ID="ID58d99865-9214-46fa-b476-41425910f7f3">
+      <file MIMETYPE="application/pdf" USE="Datafile" CHECKSUMTYPE="SHA-256" CREATED="2015-12-02T14:00:37" CHECKSUM="0d0c46436759ac7d70614b9c61e85a0795f5e3c85ec4bbba27d85d86fd03cd5d" ID="ID3ff91ab0-32c4-4834-a9bf-a8b0ac0052b3" SIZE="548801">
+        <FLocat xlink:href="file://./data/History of special relativity.pdf" xlink:type="simple" LOCTYPE="URL"/>
+      </file>
+      <file MIMETYPE="application/vnd.oasis.opendocument.text" USE="Datafile" CHECKSUMTYPE="SHA-256" CREATED="2015-12-02T14:00:40" CHECKSUM="5c1f788e8fd2c20035a5c0e56fa511f6ee39e31c8e01ce22277ea67b2d7df03b" ID="ID1d5b69be-10d3-4970-a0f4-370a5e883ff7" SIZE="74094">
+        <FLocat xlink:href="file://./data/General relativity.odt" xlink:type="simple" LOCTYPE="URL"/>
+      </file>
+    </fileGrp>
+  </fileSec>
+  <structMap TYPE="logical" LABEL="Simple AIP structuring">
+    <div LABEL="Package structure">
+      <div LABEL="metadata files">
+        <fptr FILEID="ID4271be06-1b2f-49fb-994f-d771716a90e4"/>
+      </div>
+      <div LABEL="schema files"/>
+      <div LABEL="files from /data">
+        <fptr FILEID="ID3ff91ab0-32c4-4834-a9bf-a8b0ac0052b3"/>
+        <fptr FILEID="ID1d5b69be-10d3-4970-a0f4-370a5e883ff7"/>
+      </div>
+    </div>
+  </structMap>
+  <structMap TYPE="logical" LABEL="representations">
+    <div TYPE="type" LABEL="representations"/>
+  </structMap>
+</mets>

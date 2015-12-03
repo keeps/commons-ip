@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<premis xmlns="info:lc/xmlns/premis-v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0" xsi:schemaLocation="info:lc/xmlns/premis-v2 ../../schemas/premis-v2-2.xsd">
+  <object xmlID="ID703a0fe0-f042-4a43-a75d-e3ea721c23af" xsi:type="representation">
+    <objectIdentifier>
+      <objectIdentifierType>repository</objectIdentifierType>
+      <objectIdentifierValue>package-id-goes-here-?</objectIdentifierValue>
+    </objectIdentifier>
+  </object>
+  <object xmlID="IDd8cb0c85-f243-458b-a8ac-89df3aee3829" xsi:type="file">
+    <objectIdentifier>
+      <objectIdentifierType>filepath</objectIdentifierType>
+      <objectIdentifierValue>file://./data/Einstein_1921_by_F_Schmutzer_-_restoration.tiff</objectIdentifierValue>
+    </objectIdentifier>
+    <objectCharacteristics>
+      <compositionLevel>0</compositionLevel>
+      <fixity>
+        <messageDigestAlgorithm>SHA-256</messageDigestAlgorithm>
+        <messageDigest>de5b66908e017a6e5c625e8a47b9e7c8fc11d90b132d77bed8261c3c69bf4fe7</messageDigest>
+        <messageDigestOriginator>hashlib</messageDigestOriginator>
+      </fixity>
+      <size>49740</size>
+      <format>
+        <formatRegistry>
+          <formatRegistryName>PRONOM</formatRegistryName>
+          <formatRegistryKey>fmt/353</formatRegistryKey>
+          <formatRegistryRole>identification</formatRegistryRole>
+        </formatRegistry>
+      </format>
+    </objectCharacteristics>
+    <relationship>
+      <relationshipType>derivation</relationshipType>
+      <relationshipSubType>has source</relationshipSubType>
+      <relatedObjectIdentification>
+        <relatedObjectIdentifierType>filepath</relatedObjectIdentifierType>
+        <relatedObjectIdentifierValue>file://./../../submission/representations/imgs/data/Einstein_1921_by_F_Schmutzer_-_restoration.gif</relatedObjectIdentifierValue>
+        <relatedObjectSequence>0</relatedObjectSequence>
+      </relatedObjectIdentification>
+      <relatedEventIdentification>
+        <relatedEventIdentifierType>local</relatedEventIdentifierType>
+        <relatedEventIdentifierValue>IDa19b10d1-f727-4a14-a87d-714ecfa15709</relatedEventIdentifierValue>
+        <relatedEventSequence>1</relatedEventSequence>
+      </relatedEventIdentification>
+    </relationship>
+  </object>
+  <event>
+    <eventIdentifier>
+      <eventIdentifierType>local</eventIdentifierType>
+      <eventIdentifierValue>IDa19b10d1-f727-4a14-a87d-714ecfa15709</eventIdentifierValue>
+    </eventIdentifier>
+    <eventType>migration</eventType>
+    <eventDateTime>2015-12-02T14:01:32</eventDateTime>
+    <eventOutcomeInformation>
+      <eventOutcome>success</eventOutcome>
+    </eventOutcomeInformation>
+    <linkingAgentIdentifier>
+      <linkingAgentIdentifierType>software</linkingAgentIdentifierType>
+      <linkingAgentIdentifierValue>should probably come from migrations.xml</linkingAgentIdentifierValue>
+    </linkingAgentIdentifier>
+    <linkingObjectIdentifier>
+      <linkingObjectIdentifierType>filepath</linkingObjectIdentifierType>
+      <linkingObjectIdentifierValue>file://./data/Einstein_1921_by_F_Schmutzer_-_restoration.tiff</linkingObjectIdentifierValue>
+    </linkingObjectIdentifier>
+  </event>
+  <agent>
+    <agentIdentifier>
+      <agentIdentifierType>LOCAL</agentIdentifierType>
+      <agentIdentifierValue>earkweb</agentIdentifierValue>
+    </agentIdentifier>
+    <agentName>E-ARK AIP to DIP Converter</agentName>
+    <agentType>Software</agentType>
+  </agent>
+</premis>

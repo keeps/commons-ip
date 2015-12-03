@@ -38,7 +38,7 @@
       <file MIMETYPE="application/xml" USE="Datafile" CHECKSUMTYPE="SHA-256" CREATED="2015-11-17T10:34:06" CHECKSUM="49ee91823601ac1a9a5e683428abeb2feea5630f6d93ba16865d73e9911aa4fd" ID="ID58a3a662-8d0e-11e5-acb4-f8cab80470db" SIZE="3195">
         <FLocat xlink:href="file://./metadata/preservation/premis.xml" xlink:type="simple" LOCTYPE="URL"/>
       </file>
-      <file MIMETYPE="text/plain" USE="Datafile" CHECKSUMTYPE="SHA-256" CREATED="2015-11-17T10:34:03" CHECKSUM="1d6e7633efd3310fa0f4a48d526936891252aee87500087978e90e96a829e3dc" ID="ID58a3b7ba-8d0e-11e5-acb4-f8cab80470db" SIZE="157">
+      <file MIMETYPE="text/plain" USE="Datafile" CHECKSUMTYPE="SHA-256" CREATED="2015-11-17T10:34:03" CHECKSUM="8AA278038DBAD54BBF142E7D72B493E2598A94946EA1304DC82A79C6B4BAC3D5" ID="ID58a3b7ba-8d0e-11e5-acb4-f8cab80470db" SIZE="157">
         <FLocat xlink:href="file://./../../metadata/earkweb.log" xlink:type="simple" LOCTYPE="URL"/>
       </file>
       <file MIMETYPE="text/plain" USE="Datafile" CHECKSUMTYPE="SHA-256" CREATED="2015-11-17T10:33:51" CHECKSUM="2566163dd24af7b1586240c3bb55e2b525943b42f2da3b107cdd6a6ee2a3180e" ID="ID58a3c016-8d0e-11e5-acb4-f8cab80470db" SIZE="66">

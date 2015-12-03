@@ -1,0 +1,66 @@
+2015-12-02 14:01:14 INFO SIPDeliveryValidation task 3652c65c-094c-4ced-84f9-81afc54ea1ab
+2015-12-02 14:01:14 INFO Processing package 18391d85-4d98-4ff6-a48b-17d269dda7e6
+2015-12-02 14:01:14 INFO Package file: <Element {http://www.loc.gov/METS/}file at 0x5921c68>
+2015-12-02 14:01:14 INFO Delivery XML file: /var/data/earkweb/work/18391d85-4d98-4ff6-a48b-17d269dda7e6/EINSTEIN.003.xml
+2015-12-02 14:01:14 INFO Schema file: /opt/python_wsgi_apps/earkweb/earkresources/schemas/mets_1_11.xsd
+2015-12-02 14:01:14 INFO Extracted file reference: file://./EINSTEIN.003.tar
+2015-12-02 14:01:14 INFO Computing checksum for file: /var/data/earkweb/work/18391d85-4d98-4ff6-a48b-17d269dda7e6/./EINSTEIN.003.tar
+2015-12-02 14:01:14 INFO Checksum is valid.
+2015-12-02 14:01:18 INFO IdentifierAssignment task 6d8e888a-e67c-4891-92ca-6779b9e05f7c
+2015-12-02 14:01:18 INFO Processing package 18391d85-4d98-4ff6-a48b-17d269dda7e6
+2015-12-02 14:01:18 INFO New identifier assigned: 76198202-38d8-4044-b72e-ae8623bf1655
+2015-12-02 14:01:22 INFO SIPExtraction task 09d84629-bcfd-4979-9dfa-e1663bbbd742
+2015-12-02 14:01:22 INFO Processing package 18391d85-4d98-4ff6-a48b-17d269dda7e6
+2015-12-02 14:01:22 INFO Tar files found: [u'/var/data/earkweb/work/18391d85-4d98-4ff6-a48b-17d269dda7e6/EINSTEIN.003.tar']
+2015-12-02 14:01:25 INFO SIPRestructuring task 58e6d5dc-224e-4749-b72e-1c7d5a3ffa78
+2015-12-02 14:01:25 INFO Processing package 18391d85-4d98-4ff6-a48b-17d269dda7e6
+2015-12-02 14:01:25 INFO Tar files found: [u'/var/data/earkweb/work/18391d85-4d98-4ff6-a48b-17d269dda7e6/EINSTEIN.003.tar']
+2015-12-02 14:01:25 INFO Restructuring content of package: /var/data/earkweb/work/18391d85-4d98-4ff6-a48b-17d269dda7e6/EINSTEIN.003
+2015-12-02 14:01:25 INFO Move SIP folder '/var/data/earkweb/work/18391d85-4d98-4ff6-a48b-17d269dda7e6/EINSTEIN.003/representations' to '/var/data/earkweb/work/18391d85-4d98-4ff6-a48b-17d269dda7e6/submission
+2015-12-02 14:01:25 INFO Move SIP folder '/var/data/earkweb/work/18391d85-4d98-4ff6-a48b-17d269dda7e6/EINSTEIN.003/schemas' to '/var/data/earkweb/work/18391d85-4d98-4ff6-a48b-17d269dda7e6/submission
+2015-12-02 14:01:25 INFO Move SIP folder '/var/data/earkweb/work/18391d85-4d98-4ff6-a48b-17d269dda7e6/EINSTEIN.003/METS.xml' to '/var/data/earkweb/work/18391d85-4d98-4ff6-a48b-17d269dda7e6/submission
+2015-12-02 14:01:25 INFO Move SIP folder '/var/data/earkweb/work/18391d85-4d98-4ff6-a48b-17d269dda7e6/EINSTEIN.003/state.xml' to '/var/data/earkweb/work/18391d85-4d98-4ff6-a48b-17d269dda7e6/submission
+2015-12-02 14:01:25 INFO Move SIP folder '/var/data/earkweb/work/18391d85-4d98-4ff6-a48b-17d269dda7e6/EINSTEIN.003/metadata' to '/var/data/earkweb/work/18391d85-4d98-4ff6-a48b-17d269dda7e6/submission
+2015-12-02 14:01:28 INFO SIPValidation task a2441b69-b51c-411a-a40c-ec7565d09f74
+2015-12-02 14:01:28 INFO Processing package 18391d85-4d98-4ff6-a48b-17d269dda7e6
+2015-12-02 14:01:28 INFO SIP METS file found: /var/data/earkweb/work/18391d85-4d98-4ff6-a48b-17d269dda7e6/submission/METS.xml
+2015-12-02 14:01:32 INFO AIPMigrations task 6774351c-1457-4f6b-be75-8f0e706f0279
+2015-12-02 14:01:32 INFO Processing package 18391d85-4d98-4ff6-a48b-17d269dda7e6
+2015-12-02 14:01:32 INFO File Einstein_1921_by_F_Schmutzer_-_restoration.gif is queued for migration to TIFF.
+2015-12-02 14:01:32 INFO Migration queued for Einstein_1921_by_F_Schmutzer_-_restoration.gif.
+2015-12-02 14:01:32 INFO File History of special relativity.pdf is queued for migration to PDF/A.
+2015-12-02 14:01:32 INFO Migration queued for History of special relativity.pdf.
+2015-12-02 14:01:33 INFO Unclassified file General relativity.odt, fido result: fmt/290. This file will NOT be migrated.
+2015-12-02 14:01:33 INFO 2 migrations have been queued, please check the progress with the task AIPCheckMigrationProgress.
+2015-12-02 14:01:33 INFO MigrationProcess task 686e8b7c-bfc6-4803-bc9d-46e3f05afd9b
+2015-12-02 14:01:33 INFO Processing package 18391d85-4d98-4ff6-a48b-17d269dda7e6
+2015-12-02 14:01:33 INFO Migration task started for file: Einstein_1921_by_F_Schmutzer_-_restoration.gif
+2015-12-02 14:01:33 INFO Successfully migrated file Einstein_1921_by_F_Schmutzer_-_restoration.gif.
+2015-12-02 14:01:33 INFO MigrationProcess task a8e188eb-9528-4617-8a49-f01eda74e496
+2015-12-02 14:01:33 INFO Processing package 18391d85-4d98-4ff6-a48b-17d269dda7e6
+2015-12-02 14:01:33 INFO Migration task started for file: History of special relativity.pdf
+2015-12-02 14:01:36 INFO Successfully migrated file History of special relativity.pdf.
+2015-12-02 14:01:53 INFO AIPCheckMigrationProgress task eb6b30bb-b25b-43a2-8f6a-c37a550a3a75
+2015-12-02 14:01:53 INFO Processing package 18391d85-4d98-4ff6-a48b-17d269dda7e6
+2015-12-02 14:01:53 INFO From a total of 2 migrations, 2 have been successful and 0 failed. Not yet completed: 0 migrations.
+2015-12-02 14:01:53 INFO All migrations have been successful.
+2015-12-02 14:01:53 INFO MigrationsComplete task d5b94be8-2165-440b-b2f0-930025b99a85
+2015-12-02 14:01:53 INFO Processing package 18391d85-4d98-4ff6-a48b-17d269dda7e6
+2015-12-02 14:01:53 INFO All migration processes are completed, now allowing Mets creation.
+2015-12-02 14:01:58 INFO CreatePremisAfterMigration task a684aa04-d058-44bb-8560-e7fe2d142aab
+2015-12-02 14:01:58 INFO Processing package 18391d85-4d98-4ff6-a48b-17d269dda7e6
+2015-12-02 14:01:58 INFO Generated a Premis file for the representation docs_mig-1.
+2015-12-02 14:01:58 INFO Generated a Premis file for the representation imgs_mig-1.
+2015-12-02 14:02:03 INFO AIPRepresentationMetsCreation task 94fcbe7d-1452-4322-829e-65d131f89678
+2015-12-02 14:02:03 INFO Processing package 18391d85-4d98-4ff6-a48b-17d269dda7e6
+2015-12-02 14:02:03 INFO Generated a Mets file for representation docs_mig-1.
+2015-12-02 14:02:03 INFO Generated a Mets file for representation imgs_mig-1.
+2015-12-02 14:02:07 INFO AIPPackageMetsCreation task d96cb95f-6fd8-4212-8cb2-6255f418deee
+2015-12-02 14:02:07 INFO Processing package 18391d85-4d98-4ff6-a48b-17d269dda7e6
+2015-12-02 14:02:07 INFO METS updated with AIP content.
+2015-12-02 14:02:12 INFO AIPValidation task 02b0e56b-db18-41df-b588-ea5d32a543b0
+2015-12-02 14:02:12 INFO Processing package 18391d85-4d98-4ff6-a48b-17d269dda7e6
+2015-12-02 14:02:12 INFO Validation result for METS.xml is True.
+2015-12-02 14:02:12 INFO Validation for the docs_mig-1 Mets file is True.
+2015-12-02 14:02:12 INFO Validation for the imgs_mig-1 Mets file is True.
+2015-12-02 14:02:12 INFO Validation for the submission Mets file is True.

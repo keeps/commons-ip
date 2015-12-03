@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<mets xmlns:ext="ExtensionMETS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.loc.gov/METS/" PROFILE="http://www.ra.ee/METS/v01/IP.xml" TYPE="AIP" OBJID="imgs_mig-1" LABEL="METS file describing the AIP matching the OBJID." xsi:schemaLocation="http://www.loc.gov/METS/ schemas/IP.xsd ExtensionMETS schemas/ExtensionMETS.xsd http://www.w3.org/1999/xlink schemas/xlink.xsd">
+  <metsHdr RECORDSTATUS="NEW" CREATEDATE="2015-12-02T14:02:03">
+    <metsDocumentID>METS.xml</metsDocumentID>
+  </metsHdr>
+  <dmdSec ID="IDdb0fa5b5-d3b9-44d9-bce2-29819b6d2176"/>
+  <amdSec ID="ID8714e740-dea8-43bd-af16-e8d5f392ef3b">
+    <digiprovMD ID="ID2ca80868-8d3f-468e-9b2b-c20aa02366e7">
+      <mdRef MIMETYPE="application/xml" xlink:href="file://./metadata/preservation/premis.xml" LOCTYPE="URL" CREATED="2015-12-02T14:02:03" CHECKSUM="8cc5a2eaad0a26de225bd69b894bd3643fdac2a32b32430efbb3373d603d31f1" xlink:type="simple" ID="ID9ada8c00-f52a-4290-9f25-267f0326c54d" MDTYPE="PREMIS" CHECKSUMTYPE="SHA-256"/>
+    </digiprovMD>
+  </amdSec>
+  <fileSec>
+    <fileGrp USE="general filegroup" ID="ID71bb5406-d8d2-4ece-b600-57d896544bc9">
+      <file MIMETYPE="image/tiff" USE="Datafile" CHECKSUMTYPE="SHA-256" CREATED="2015-12-02T14:01:33" CHECKSUM="de5b66908e017a6e5c625e8a47b9e7c8fc11d90b132d77bed8261c3c69bf4fe7" ID="IDe62a9d1d-3160-42f0-abf5-684511ae9e50" SIZE="49740">
+        <FLocat xlink:href="file://./data/Einstein_1921_by_F_Schmutzer_-_restoration.tiff" xlink:type="simple" LOCTYPE="URL"/>
+      </file>
+    </fileGrp>
+  </fileSec>
+  <structMap TYPE="logical" LABEL="Simple AIP structuring">
+    <div LABEL="Package structure">
+      <div LABEL="metadata files">
+        <fptr FILEID="ID9ada8c00-f52a-4290-9f25-267f0326c54d"/>
+      </div>
+      <div LABEL="schema files"/>
+      <div LABEL="files from /data">
+        <fptr FILEID="IDe62a9d1d-3160-42f0-abf5-684511ae9e50"/>
+      </div>
+    </div>
+  </structMap>
+  <structMap TYPE="logical" LABEL="representations">
+    <div TYPE="type" LABEL="representations"/>
+  </structMap>
+</mets>

@@ -5,7 +5,7 @@
  *
  * https://github.com/keeps/commons-ip
  */
-package org.roda_project.commons_ip.validation.utils;
+package org.roda_project.commons_ip.utils;
 
 public final class ValidationErrors {
   public static final String NO_DATA_FOLDER = "No 'data' folder in SIP";
