@@ -19,7 +19,7 @@ import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec;
 import org.roda_project.commons_ip.migration.Migrator;
 import org.roda_project.commons_ip.model.MigrationException;
 import org.roda_project.commons_ip.model.ValidationReport;
-import org.roda_project.commons_ip.model.impl.eark.METSUtils;
+import org.roda_project.commons_ip.model.impl.eark.EARKMETSUtils;
 import org.roda_project.commons_ip.utils.METSEnums;
 import org.roda_project.commons_ip.utils.Utils;
 import org.roda_project.commons_ip.validation.impl.eark.EARKValidator;
@@ -57,7 +57,7 @@ public class EARKSIPToRODAAIP implements Migrator {
       }
     }
     Path mainMETSFile = source.resolve("METS.xml");
-    Mets mainMets = METSUtils.processMetsXML(mainMETSFile);
+    Mets mainMets = EARKMETSUtils.processMetsXML(mainMETSFile);
     Path dst = Files.createTempDirectory(mainMets.getOBJID());
 
     if (mainMets.getDmdSec() != null && mainMets.getDmdSec().size() > 0) {
@@ -113,7 +113,7 @@ public class EARKSIPToRODAAIP implements Migrator {
     throws JAXBException {
     Path representationPath = representationMetsPath.getParent();
     try {
-      Mets representationMets = METSUtils.processMetsXML(representationMetsPath);
+      Mets representationMets = EARKMETSUtils.processMetsXML(representationMetsPath);
       if (representationMets.getDmdSec() != null && representationMets.getDmdSec().size() > 0) {
         for (MdSecType mdsec : representationMets.getDmdSec()) {
           if (mdsec != null && mdsec.getMdRef() != null) {

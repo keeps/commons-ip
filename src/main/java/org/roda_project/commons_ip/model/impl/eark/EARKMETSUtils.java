@@ -41,9 +41,9 @@ import org.roda_project.commons_ip.utils.METSEnums.LocType;
 import org.roda_project.commons_ip.utils.SIPException;
 import org.roda_project.commons_ip.utils.Utils;
 
-public final class METSUtils {
+public final class EARKMETSUtils {
 
-  private METSUtils() {
+  private EARKMETSUtils() {
 
   }
 

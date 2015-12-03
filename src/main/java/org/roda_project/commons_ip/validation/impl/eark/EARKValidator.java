@@ -27,7 +27,7 @@ import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec.FileGrp;
 import org.roda_project.commons_ip.model.ValidationIssue;
 import org.roda_project.commons_ip.model.ValidationReport;
-import org.roda_project.commons_ip.model.impl.eark.METSUtils;
+import org.roda_project.commons_ip.model.impl.eark.EARKMETSUtils;
 import org.roda_project.commons_ip.utils.METSEnums;
 import org.roda_project.commons_ip.utils.Utils;
 import org.roda_project.commons_ip.utils.ValidationErrors;
@@ -105,7 +105,7 @@ public class EARKValidator implements Validator {
   }
 
   private ValidationReport validateMets(Path metsPath, ValidationReport report) throws JAXBException {
-    Mets mets = METSUtils.processMetsXML(metsPath);
+    Mets mets = EARKMETSUtils.processMetsXML(metsPath);
     if (mets.getAmdSec() != null && !mets.getAmdSec().isEmpty()) {
       for (AmdSecType amdsec : mets.getAmdSec()) {
         report = validateAmdSec(amdsec, metsPath.getParent(), report);
