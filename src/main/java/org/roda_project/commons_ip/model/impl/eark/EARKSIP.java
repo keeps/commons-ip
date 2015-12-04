@@ -200,7 +200,8 @@ public class EARKSIP implements SIP {
               + metadata.getMetadata().getFileName().toString();
             ZIPUtils.addMetadataToZip(zipPath, metadata, administrativeFilePath);
             administrativeFilePath = "metadata/administrative/" + metadata.getMetadata().getFileName().toString();
-            representationMETS = EARKMETSUtils.addPreservationToMets(representationMETS, administrativeFilePath, metadata);
+            representationMETS = EARKMETSUtils.addPreservationToMets(representationMETS, administrativeFilePath,
+              metadata);
 
           }
         }
@@ -299,4 +300,30 @@ public class EARKSIP implements SIP {
   public String getLabel() {
     return label;
   }
+
+  @Override
+  public List<SIPAgent> getAgents() {
+    return agents;
+  }
+
+  @Override
+  public List<SIPDescriptiveMetadata> getDescriptiveMetadata() {
+    return descriptiveMetadata;
+  }
+
+  @Override
+  public List<SIPMetadata> getAdministrativeMetadata() {
+    return administrativeMetadata;
+  }
+
+  @Override
+  public List<SIPMetadata> getOtherMetadata() {
+    return otherMetadata;
+  }
+
+  @Override
+  public List<SIPRepresentation> getRepresentations() {
+    return new ArrayList<SIPRepresentation>(representations.values());
+  }
+
 }

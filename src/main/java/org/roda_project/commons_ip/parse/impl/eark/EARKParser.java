@@ -1,10 +1,9 @@
-package org.roda_project.commons_ip.migration.impl.eark;
+package org.roda_project.commons_ip.parse.impl.eark;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import javax.xml.bind.JAXBException;
 
@@ -16,27 +15,35 @@ import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType;
 import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType.MdRef;
 import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec;
-import org.roda_project.commons_ip.migration.Migrator;
 import org.roda_project.commons_ip.model.MigrationException;
+import org.roda_project.commons_ip.model.SIP;
+import org.roda_project.commons_ip.model.SIPDescriptiveMetadata;
+import org.roda_project.commons_ip.model.SIPMetadata;
+import org.roda_project.commons_ip.model.SIPRepresentation;
 import org.roda_project.commons_ip.model.ValidationReport;
 import org.roda_project.commons_ip.model.impl.eark.EARKMETSUtils;
+import org.roda_project.commons_ip.model.impl.eark.EARKSIP;
+import org.roda_project.commons_ip.parse.Parser;
+import org.roda_project.commons_ip.utils.EARKEnums.ContentType;
 import org.roda_project.commons_ip.utils.METSEnums;
+import org.roda_project.commons_ip.utils.METSEnums.MetadataType;
+import org.roda_project.commons_ip.utils.SIPException;
 import org.roda_project.commons_ip.utils.Utils;
 import org.roda_project.commons_ip.validation.impl.eark.EARKValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EARKSIPToRODAAIP implements Migrator {
-  private static final Logger LOGGER = LoggerFactory.getLogger(EARKSIPToRODAAIP.class);
+public class EARKParser implements Parser {
+  private static final Logger LOGGER = LoggerFactory.getLogger(EARKParser.class);
 
-  public Path convert(Path source) throws MigrationException {
+  public SIP parse(Path source) throws MigrationException {
     EARKValidator validator = new EARKValidator();
     ValidationReport report = validator.isSIPValid(source);
     // if (report.isValid()) {
     try {
-      Path converted = earkSipToRodaAip(source);
+      SIP converted = earkSipToRodaAip(source);
       return converted;
-    } catch (JAXBException | IOException e) {
+    } catch (JAXBException | IOException | SIPException e) {
       throw new MigrationException("Error converting E-ARK SIP to RODA AIP", e);
     }
     // } else {
@@ -45,8 +52,7 @@ public class EARKSIPToRODAAIP implements Migrator {
 
   }
 
-  private Path earkSipToRodaAip(Path source) throws JAXBException, IOException {
-
+  private SIP earkSipToRodaAip(Path source) throws JAXBException, IOException, SIPException {
     if (!Files.isDirectory(source)) {
       try {
         Path uncompressed = Files.createTempDirectory("unzipped");
@@ -58,7 +64,7 @@ public class EARKSIPToRODAAIP implements Migrator {
     }
     Path mainMETSFile = source.resolve("METS.xml");
     Mets mainMets = EARKMETSUtils.processMetsXML(mainMETSFile);
-    Path dst = Files.createTempDirectory(mainMets.getOBJID());
+    SIP sip = new EARKSIP("ID", ContentType.mixed, "RODA");
 
     if (mainMets.getDmdSec() != null && mainMets.getDmdSec().size() > 0) {
       for (MdSecType mdsec : mainMets.getDmdSec()) {
@@ -69,7 +75,8 @@ public class EARKSIPToRODAAIP implements Migrator {
             href = href.replace("file://./", "");
           }
           Path filePath = source.resolve(href);
-          RODAUtils.addDescriptiveMetadata(dst, Paths.get(href), Files.newInputStream(filePath));
+          SIPDescriptiveMetadata sdm = new SIPDescriptiveMetadata(filePath, null, MetadataType.OTHER);
+          sip.addDescriptiveMetadata(sdm);
         }
       }
     }
@@ -83,7 +90,8 @@ public class EARKSIPToRODAAIP implements Migrator {
               href = href.replace("file://./", "");
             }
             Path filePath = source.resolve(href);
-            RODAUtils.addPreservationMetadata(dst, Paths.get(href), Files.newInputStream(filePath));
+            SIPMetadata sdm = new SIPMetadata(filePath, null);
+            sip.addAdministrativeMetadata(sdm);
           }
         }
       }
@@ -98,20 +106,20 @@ public class EARKSIPToRODAAIP implements Migrator {
       };
       try (DirectoryStream<Path> stream = Files.newDirectoryStream(representationsPath, filter)) {
         for (Path path : stream) {
-          LOGGER.info("Processing: " + path.toString());
           Path representationMets = path.resolve("METS.xml");
-          processRepresentation(dst, representationMets, path.getFileName().toString());
+          sip = processRepresentation(sip, representationMets, path.getFileName().toString());
         }
       } catch (IOException e) {
         LOGGER.error("Error opening directory stream", e);
       }
     }
-    return dst;
+    return sip;
   }
 
-  private void processRepresentation(Path dst, Path representationMetsPath, String representationID)
-    throws JAXBException {
+  private SIP processRepresentation(SIP sip, Path representationMetsPath, String representationID)
+    throws JAXBException, SIPException {
     Path representationPath = representationMetsPath.getParent();
+    sip.addRepresentation(new SIPRepresentation(representationID));
     try {
       Mets representationMets = EARKMETSUtils.processMetsXML(representationMetsPath);
       if (representationMets.getDmdSec() != null && representationMets.getDmdSec().size() > 0) {
@@ -123,8 +131,8 @@ public class EARKSIPToRODAAIP implements Migrator {
               href = href.replace("file://./", "");
             }
             Path filePath = representationPath.resolve(href);
-            RODAUtils.addDescriptiveMetadataToRepresentation(dst, representationID, Paths.get(href),
-              Files.newInputStream(filePath));
+            SIPDescriptiveMetadata sdm = new SIPDescriptiveMetadata(filePath, null, MetadataType.OTHER);
+            sip.addDescriptiveMetadataToRepresentation(representationID, sdm);
           }
         }
       }
@@ -139,8 +147,8 @@ public class EARKSIPToRODAAIP implements Migrator {
                   href = href.replace("file://./", "");
                 }
                 Path filePath = representationPath.resolve(href);
-                RODAUtils.addPreservationMetadataToRepresentation(dst, representationID, Paths.get(href),
-                  Files.newInputStream(filePath));
+                SIPMetadata sm = new SIPMetadata(filePath, null);
+                sip.addAdministrativeMetadataToRepresentation(representationID, sm);
               }
             }
           }
@@ -150,31 +158,33 @@ public class EARKSIPToRODAAIP implements Migrator {
         FileSec representationFileSec = representationMets.getFileSec();
         if (representationFileSec.getFileGrp() != null && representationFileSec.getFileGrp().size() > 0) {
           for (FileGrpType gr : representationFileSec.getFileGrp()) {
-            addFilesFromFileGrpToRepresentation(dst, representationID, representationPath, gr);
+            sip = addFilesFromFileGrpToRepresentation(sip, representationID, representationPath, gr);
           }
         }
       }
-    } catch (IOException e) {
+    } catch (IOException | SIPException e) {
       LOGGER.error("Error processing representation", e);
     }
+    return sip;
   }
 
-  private void addFilesFromFileGrpToRepresentation(Path dst, String representationID, Path representationPath,
-    FileGrpType fileGroup) throws IOException {
+  private SIP addFilesFromFileGrpToRepresentation(SIP sip, String representationID, Path representationPath,
+    FileGrpType fileGroup) throws IOException, SIPException {
     if (fileGroup.getFile() != null && fileGroup.getFile().size() > 0) {
       for (FileType ft : fileGroup.getFile()) {
-        addFilesFromFileToRepresentation(dst, representationID, representationPath, ft);
+        sip = addFilesFromFileToRepresentation(sip, representationID, representationPath, ft);
       }
     }
     if (fileGroup.getFileGrp() != null && fileGroup.getFileGrp().size() > 0) {
       for (FileGrpType g : fileGroup.getFileGrp()) {
-        addFilesFromFileGrpToRepresentation(dst, representationID, representationPath, g);
+        sip = addFilesFromFileGrpToRepresentation(sip, representationID, representationPath, g);
       }
     }
+    return sip;
   }
 
-  private void addFilesFromFileToRepresentation(Path dst, String representationID, Path representationPath,
-    FileType file) throws IOException {
+  private SIP addFilesFromFileToRepresentation(SIP sip, String representationID, Path representationPath, FileType file)
+    throws IOException, SIPException {
     if (file.getFLocat() != null && !file.getFLocat().isEmpty()) {
       for (FLocat locat : file.getFLocat()) {
         if (locat.getType() != null && locat.getType().equalsIgnoreCase("simple") && locat.getLOCTYPE() != null
@@ -182,12 +192,12 @@ public class EARKSIPToRODAAIP implements Migrator {
           if (locat.getHref() != null && locat.getHref().startsWith("file://./")) {
             String relativePath = locat.getHref().replace("file://./", "");
             Path filePath = representationPath.resolve(relativePath);
-            RODAUtils.addDataToRepresentation(dst, representationID, Paths.get(relativePath),
-              Files.newInputStream(filePath));
+            sip.addDataToRepresentation(representationID, filePath);
           }
         }
       }
     }
+    return sip;
   }
 
 }

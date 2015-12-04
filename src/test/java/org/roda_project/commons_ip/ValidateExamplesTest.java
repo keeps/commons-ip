@@ -12,8 +12,6 @@ import java.nio.file.Paths;
 
 import org.junit.AfterClass;
 import org.junit.Test;
-import org.roda_project.commons_ip.migration.Migrator;
-import org.roda_project.commons_ip.migration.impl.eark.EARKSIPToRODAAIP;
 import org.roda_project.commons_ip.model.MigrationException;
 import org.roda_project.commons_ip.model.SIP;
 import org.roda_project.commons_ip.model.SIPAgent;
@@ -23,6 +21,8 @@ import org.roda_project.commons_ip.model.SIPRepresentation;
 import org.roda_project.commons_ip.model.ValidationIssue;
 import org.roda_project.commons_ip.model.ValidationReport;
 import org.roda_project.commons_ip.model.impl.eark.EARKSIP;
+import org.roda_project.commons_ip.parse.Parser;
+import org.roda_project.commons_ip.parse.impl.eark.EARKParser;
 import org.roda_project.commons_ip.utils.EARKEnums.ContentType;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.METSEnums.MetadataType;
@@ -41,9 +41,9 @@ public class ValidateExamplesTest {
   @Test
   public void buildEARKSIP() throws Exception {
 
-    validateAndConvertExample1();
+    // validateAndConvertExample1();
 
-    validateAndConvertExample2();
+    // validateAndConvertExample2();
 
     createValidateAndConvert();
 
@@ -61,8 +61,8 @@ public class ValidateExamplesTest {
       }
     }
 
-    Migrator toRoda = new EARKSIPToRODAAIP();
-    Path converted2 = toRoda.convert(example);
+    Parser toRoda = new EARKParser();
+    SIP converted2 = toRoda.parse(example);
     LOGGER.info("CONVERTED: " + converted2.toString());
 
   }
@@ -78,8 +78,8 @@ public class ValidateExamplesTest {
         LOGGER.info(issue.getLevel().toString() + " - " + issue.getMessage() + " - " + issue.getDescription());
       }
     }
-    Migrator toRoda = new EARKSIPToRODAAIP();
-    Path converted1 = toRoda.convert(example);
+    Parser toRoda = new EARKParser();
+    SIP converted1 = toRoda.parse(example);
     LOGGER.info("CONVERTED: " + converted1.toString());
   }
 
@@ -122,6 +122,8 @@ public class ValidateExamplesTest {
 
       Path zip = sip.build();
 
+      LOGGER.error("ZIPP: " + zip.toString());
+
       // validate SIP
       Validator validator = new EARKValidator();
       ValidationReport report = validator.isSIPValid(zip);
@@ -134,8 +136,8 @@ public class ValidateExamplesTest {
         }
       }
 
-      Migrator toRoda = new EARKSIPToRODAAIP();
-      Path converted = toRoda.convert(zip);
+      Parser toRoda = new EARKParser();
+      SIP converted = toRoda.parse(zip);
 
       LOGGER.info("CONVERTED: " + converted.toString());
     } catch (SIPException | MigrationException s) {

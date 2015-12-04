@@ -8,6 +8,7 @@
 package org.roda_project.commons_ip.model;
 
 import java.nio.file.Path;
+import java.util.List;
 
 import org.roda_project.commons_ip.utils.SIPException;
 
@@ -38,5 +39,15 @@ public interface SIP {
   SIP addDocumentation(Path documentationPath);
 
   Path build() throws SIPException;
+
+  List<SIPAgent> getAgents();
+
+  List<SIPDescriptiveMetadata> getDescriptiveMetadata();
+
+  List<SIPMetadata> getAdministrativeMetadata();
+
+  List<SIPMetadata> getOtherMetadata();
+
+  List<SIPRepresentation> getRepresentations();
 
 }
