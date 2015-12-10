@@ -85,7 +85,7 @@ public class ValidateExamplesTest {
 
   private void createValidateAndConvert() {
     try {
-      SIP sip = new EARKSIP("ID", ContentType.mixed, "RODA");
+      SIP sip = new EARKSIP("ID_INVALID", ContentType.mixed, "RODA");
 
       SIPMetadata metadata1 = new SIPMetadata(Paths.get("src/test/resources/data/earkweb.log"), null);
       SIPDescriptiveMetadata descriptiveMetadata1 = new SIPDescriptiveMetadata(
@@ -102,7 +102,7 @@ public class ValidateExamplesTest {
       sip.addAgent(agent2);
       sip.addDescriptiveMetadata(descriptiveMetadata1);
       sip.addDocumentation(Paths.get("src/test/resources/data/eark.pdf"));
-      sip.addOtherMetadata(metadata3);
+      //sip.addOtherMetadata(metadata3);
 
       SIPRepresentation representation1 = new SIPRepresentation("rep1");
       sip.addRepresentation(representation1);

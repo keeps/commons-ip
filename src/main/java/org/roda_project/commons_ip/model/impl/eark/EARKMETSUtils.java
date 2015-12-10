@@ -328,8 +328,35 @@ public final class EARKMETSUtils {
     return representationMETS;
   }
 
-  public static Mets addOtherMetadataToMets(Mets representationMETS, String otherMetadataPath, SIPMetadata metadata) {
-    // TODO Auto-generated method stub
-    return representationMETS;
+  public static Mets addOtherMetadataToMets(Mets mainMETS, String otherMetadataPath, SIPMetadata om) throws SIPException {
+    MdRef mdref = new MdRef();
+    try {
+      mdref.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(om.getMetadata()), "SHA-256"));
+    } catch (NoSuchAlgorithmException e) {
+      throw new SIPException("Error calculating checskum: the algorithm provided is not recognized", e);
+    } catch (IOException e) {
+      throw new SIPException("Error calculating checksum", e);
+    }
+    mdref.setCHECKSUMTYPE("SHA-256");
+    try {
+      mdref.setCREATED(Utils.getCurrentCalendar());
+    } catch (DatatypeConfigurationException dce) {
+      throw new SIPException("Error getting current calendar", dce);
+    }
+    mdref.setLOCTYPE(LocType.URL.toString());
+    mdref.setMIMETYPE("text/xml");
+    try {
+      mdref.setSIZE(Files.size(om.getMetadata()));
+    } catch (IOException e) {
+      throw new SIPException("Error calculating file size", e);
+    }
+    mdref.setHref("file://./" + otherMetadataPath);
+    mdref.setType("simple");
+
+    MdSecType dmdsec = new MdSecType();
+    dmdsec.setID("DMD" + mainMETS.getDmdSec().size());
+    dmdsec.setMdRef(mdref);
+    mainMETS.getDmdSec().add(dmdsec);
+    return mainMETS;
   }
 }
