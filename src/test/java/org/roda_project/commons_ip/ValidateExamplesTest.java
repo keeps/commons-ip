@@ -120,11 +120,9 @@ public class ValidateExamplesTest {
       sip.addDescriptiveMetadataToRepresentation("rep2", descriptiveMetadata2);
       sip.addOtherMetadataToRepresentation("rep2", metadata1);
       
-      sip.setParent("RODA:1");
+      sip.setParent("b6f24059-8973-4582-932d-eb0b2cb48f28");
 
       Path zip = sip.build();
-
-      LOGGER.error("ZIPP: " + zip.toString());
 
       // validate SIP
       Validator validator = new EARKValidator();
