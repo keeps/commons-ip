@@ -102,7 +102,7 @@ public class ValidateExamplesTest {
       sip.addAgent(agent2);
       sip.addDescriptiveMetadata(descriptiveMetadata1);
       sip.addDocumentation(Paths.get("src/test/resources/data/eark.pdf"));
-      //sip.addOtherMetadata(metadata3);
+      // sip.addOtherMetadata(metadata3);
 
       SIPRepresentation representation1 = new SIPRepresentation("rep1");
       sip.addRepresentation(representation1);
@@ -119,7 +119,7 @@ public class ValidateExamplesTest {
       sip.addDataToRepresentation("rep2", Paths.get("src/test/resources/data/bike.gif"));
       sip.addDescriptiveMetadataToRepresentation("rep2", descriptiveMetadata2);
       sip.addOtherMetadataToRepresentation("rep2", metadata1);
-      
+
       sip.setParent("b6f24059-8973-4582-932d-eb0b2cb48f28");
 
       Path zip = sip.build();

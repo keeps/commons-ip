@@ -65,7 +65,7 @@ public class EARKParser implements Parser {
     }
     Path mainMETSFile = source.resolve("METS.xml");
     Mets mainMets = EARKMETSUtils.processMetsXML(mainMETSFile);
-    
+
     SIP sip = new EARKSIP("ID", ContentType.mixed, "RODA");
 
     if (mainMets.getDmdSec() != null && mainMets.getDmdSec().size() > 0) {
@@ -77,7 +77,15 @@ public class EARKParser implements Parser {
             href = href.replace("file://./", "");
           }
           Path filePath = source.resolve(href);
-          SIPDescriptiveMetadata sdm = new SIPDescriptiveMetadata(filePath, null, MetadataType.OTHER);
+          SIPDescriptiveMetadata sdm;
+          try{
+            MetadataType mt = MetadataType.valueOf(mdref.getMDTYPE().toUpperCase());
+            LOGGER.debug("Metadata type valid: "+mt.toString());
+            sdm = new SIPDescriptiveMetadata(filePath, null, mt);
+          }catch(NullPointerException | IllegalArgumentException t){
+            sdm = new SIPDescriptiveMetadata(filePath, null, MetadataType.OTHER);
+          }
+          
           sip.addDescriptiveMetadata(sdm);
         }
       }
@@ -115,13 +123,12 @@ public class EARKParser implements Parser {
         LOGGER.error("Error opening directory stream", e);
       }
     }
-    
-    
-    if(mainMets.getStructMap()!=null && mainMets.getStructMap().size()>0){
-      for(StructMapType smt : mainMets.getStructMap()){
-        if(smt.getStructMapTypeLabel()!=null && smt.getStructMapTypeLabel().equalsIgnoreCase("Parent")){
+
+    if (mainMets.getStructMap() != null && mainMets.getStructMap().size() > 0) {
+      for (StructMapType smt : mainMets.getStructMap()) {
+        if (smt.getStructMapTypeLabel() != null && smt.getStructMapTypeLabel().equalsIgnoreCase("Parent")) {
           String parentID = EARKMETSUtils.extractParentID(smt);
-          if(parentID!=null){
+          if (parentID != null) {
             sip.setParent(parentID);
           }
         }
