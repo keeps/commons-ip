@@ -119,6 +119,8 @@ public class ValidateExamplesTest {
       sip.addDataToRepresentation("rep2", Paths.get("src/test/resources/data/bike.gif"));
       sip.addDescriptiveMetadataToRepresentation("rep2", descriptiveMetadata2);
       sip.addOtherMetadataToRepresentation("rep2", metadata1);
+      
+      sip.setParent("RODA:1");
 
       Path zip = sip.build();
 

@@ -22,6 +22,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import org.roda_project.commons_ip.mets_v1_11.beans.AmdSecType;
 import org.roda_project.commons_ip.mets_v1_11.beans.DivType;
 import org.roda_project.commons_ip.mets_v1_11.beans.DivType.Fptr;
+import org.roda_project.commons_ip.mets_v1_11.beans.DivType.Mptr;
 import org.roda_project.commons_ip.mets_v1_11.beans.FileType;
 import org.roda_project.commons_ip.mets_v1_11.beans.FileType.FLocat;
 import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType;
@@ -172,6 +173,22 @@ public final class EARKMETSUtils {
     packageDivRep.getDiv().add(documentationDiv);
     structMapRep.setDiv(packageDivRep);
     sipMets.getStructMap().add(structMapRep);
+    
+    if(sip.getParentID()!=null){
+      StructMapType structMapParent = new StructMapType();
+      structMapParent.setStructMapTypeLabel("Parent");
+      DivType divParent = new DivType();
+      divParent.setLabel("Parent");
+      divParent.setTYPE("AIP Parent Link");
+      Mptr mptrParent = new Mptr();
+      mptrParent.setLOCTYPE("HANDLE");
+      mptrParent.setType("simple");
+      mptrParent.setHref(sip.getParentID());
+      mptrParent.setLOCTYPE(LocType.HANDLE.toString());
+      divParent.getMptr().add(mptrParent);
+      structMapParent.setDiv(divParent);
+      sipMets.getStructMap().add(structMapParent);
+    }
     return sipMets;
   }
 
@@ -358,5 +375,21 @@ public final class EARKMETSUtils {
     dmdsec.setMdRef(mdref);
     mainMETS.getDmdSec().add(dmdsec);
     return mainMETS;
+  }
+
+  public static String extractParentID(StructMapType smt) {
+    String parentID = null;
+    if(smt.getDiv()!=null){
+      DivType dt = smt.getDiv();
+      if(dt.getMptr()!=null && dt.getMptr().size()>0){
+        for(Mptr m : dt.getMptr()){
+          if(m.getHref()!=null){
+            parentID = m.getHref();
+            break;
+          }
+        }
+      }
+    }
+    return parentID;
   }
 }

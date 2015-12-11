@@ -35,6 +35,7 @@ import org.roda_project.commons_ip.utils.Utils;
 import org.roda_project.commons_ip.utils.ZIPUtils;
 
 public class EARKSIP implements SIP {
+  private String parentID;
   private String objectID;
   private String profile;
   private EARKEnums.Type type;
@@ -326,4 +327,14 @@ public class EARKSIP implements SIP {
     return new ArrayList<SIPRepresentation>(representations.values());
   }
 
+  @Override
+  public SIP setParent(String parentID) {
+    this.parentID = parentID;
+    return this;
+  }
+
+  @Override
+  public String getParentID(){
+    return this.parentID;
+  }
 }

@@ -13,6 +13,10 @@ import java.util.List;
 import org.roda_project.commons_ip.utils.SIPException;
 
 public interface SIP {
+  
+  SIP setParent(String parentID);
+  
+  String getParentID();
 
   SIP addAgent(SIPAgent sipAgent);
 

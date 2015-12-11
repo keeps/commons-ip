@@ -15,6 +15,7 @@ import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType;
 import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType.MdRef;
 import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec;
+import org.roda_project.commons_ip.mets_v1_11.beans.StructMapType;
 import org.roda_project.commons_ip.model.MigrationException;
 import org.roda_project.commons_ip.model.SIP;
 import org.roda_project.commons_ip.model.SIPDescriptiveMetadata;
@@ -64,6 +65,7 @@ public class EARKParser implements Parser {
     }
     Path mainMETSFile = source.resolve("METS.xml");
     Mets mainMets = EARKMETSUtils.processMetsXML(mainMETSFile);
+    
     SIP sip = new EARKSIP("ID", ContentType.mixed, "RODA");
 
     if (mainMets.getDmdSec() != null && mainMets.getDmdSec().size() > 0) {
@@ -111,6 +113,18 @@ public class EARKParser implements Parser {
         }
       } catch (IOException e) {
         LOGGER.error("Error opening directory stream", e);
+      }
+    }
+    
+    
+    if(mainMets.getStructMap()!=null && mainMets.getStructMap().size()>0){
+      for(StructMapType smt : mainMets.getStructMap()){
+        if(smt.getStructMapTypeLabel()!=null && smt.getStructMapTypeLabel().equalsIgnoreCase("Parent")){
+          String parentID = EARKMETSUtils.extractParentID(smt);
+          if(parentID!=null){
+            sip.setParent(parentID);
+          }
+        }
       }
     }
     return sip;
