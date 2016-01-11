@@ -152,7 +152,15 @@ public class EARKParser implements Parser {
               href = href.replace("file://./", "");
             }
             Path filePath = representationPath.resolve(href);
-            SIPDescriptiveMetadata sdm = new SIPDescriptiveMetadata(filePath, null, MetadataType.OTHER);
+            
+            SIPDescriptiveMetadata sdm;
+            try{
+              MetadataType mt = MetadataType.valueOf(mdref.getMDTYPE().toUpperCase());
+              LOGGER.debug("Metadata type valid: "+mt.toString());
+              sdm = new SIPDescriptiveMetadata(filePath, null, mt);
+            }catch(NullPointerException | IllegalArgumentException t){
+              sdm = new SIPDescriptiveMetadata(filePath, null, MetadataType.OTHER);
+            }
             sip.addDescriptiveMetadataToRepresentation(representationID, sdm);
           }
         }
