@@ -90,6 +90,7 @@ public final class EARKMETSUtils {
     }
     mdref.setLOCTYPE(LocType.URL.toString());
     mdref.setMDTYPE(dm.getMetadataType().toString());
+    mdref.setMDTYPEVERSION(dm.getMetadataVersion());
     mdref.setMIMETYPE("text/xml");
     try {
       mdref.setSIZE(Files.size(dm.getMetadata()));
@@ -173,8 +174,8 @@ public final class EARKMETSUtils {
     packageDivRep.getDiv().add(documentationDiv);
     structMapRep.setDiv(packageDivRep);
     sipMets.getStructMap().add(structMapRep);
-    
-    if(sip.getParentID()!=null){
+
+    if (sip.getParentID() != null) {
       StructMapType structMapParent = new StructMapType();
       structMapParent.setStructMapTypeLabel("Parent");
       DivType divParent = new DivType();
@@ -345,7 +346,8 @@ public final class EARKMETSUtils {
     return representationMETS;
   }
 
-  public static Mets addOtherMetadataToMets(Mets mainMETS, String otherMetadataPath, SIPMetadata om) throws SIPException {
+  public static Mets addOtherMetadataToMets(Mets mainMETS, String otherMetadataPath, SIPMetadata om)
+    throws SIPException {
     MdRef mdref = new MdRef();
     try {
       mdref.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(om.getMetadata()), "SHA-256"));
@@ -379,11 +381,11 @@ public final class EARKMETSUtils {
 
   public static String extractParentID(StructMapType smt) {
     String parentID = null;
-    if(smt.getDiv()!=null){
+    if (smt.getDiv() != null) {
       DivType dt = smt.getDiv();
-      if(dt.getMptr()!=null && dt.getMptr().size()>0){
-        for(Mptr m : dt.getMptr()){
-          if(m.getHref()!=null){
+      if (dt.getMptr() != null && dt.getMptr().size() > 0) {
+        for (Mptr m : dt.getMptr()) {
+          if (m.getHref() != null) {
             parentID = m.getHref();
             break;
           }

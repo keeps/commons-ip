@@ -13,12 +13,22 @@ import org.roda_project.commons_ip.utils.METSEnums.MetadataType;
 
 public class SIPDescriptiveMetadata extends SIPMetadata {
 
-  public SIPDescriptiveMetadata(Path metadata, Path schema, MetadataType metadataType) {
+  public SIPDescriptiveMetadata(Path metadata, Path schema, MetadataType metadataType, String metadataVersion) {
     super(metadata, schema);
     this.metadataType = metadataType;
+    this.metadataVersion = metadataVersion;
   }
 
   private MetadataType metadataType;
+  private String metadataVersion;
+
+  public String getMetadataVersion() {
+    return metadataVersion;
+  }
+
+  public void setMetadataVersion(String metadataVersion) {
+    this.metadataVersion = metadataVersion;
+  }
 
   public MetadataType getMetadataType() {
     return metadataType;

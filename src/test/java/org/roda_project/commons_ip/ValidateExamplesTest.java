@@ -89,9 +89,10 @@ public class ValidateExamplesTest {
 
       SIPMetadata metadata1 = new SIPMetadata(Paths.get("src/test/resources/data/earkweb.log"), null);
       SIPDescriptiveMetadata descriptiveMetadata1 = new SIPDescriptiveMetadata(
-        Paths.get("src/test/resources/data/dc.xml"), Paths.get("src/test/resources/data/dc.xsd"), MetadataType.DC);
+        Paths.get("src/test/resources/data/dc.xml"), Paths.get("src/test/resources/data/dc.xsd"), MetadataType.DC,
+        null);
       SIPDescriptiveMetadata descriptiveMetadata2 = new SIPDescriptiveMetadata(
-        Paths.get("src/test/resources/data/descriptive.txt"), null, MetadataType.TEXTMD);
+        Paths.get("src/test/resources/data/descriptive.txt"), null, MetadataType.TEXTMD, null);
       SIPMetadata metadata3 = new SIPMetadata(Paths.get("src/test/resources/data/premis.xml"),
         Paths.get("src/test/resources/data/premis-v2-2.xsd"));
       SIPAgent agent1 = new SIPAgent("AgentName", "ROLE", CreatorType.INDIVIDUAL, "OTHER ROLE", "OTHER TYPE");
@@ -108,7 +109,7 @@ public class ValidateExamplesTest {
       sip.addRepresentation(representation1);
       sip.addAdministrativeMetadataToRepresentation("rep1", metadata1);
       sip.addAgentToRepresentation("rep1", agent1);
-      sip.addDataToRepresentation("rep1", Paths.get("src/test/resources/data/bike.gif"));
+      sip.addDataToRepresentation("rep1", Paths.get("src/test/resources/data/eark.pdf"));
       sip.addDescriptiveMetadataToRepresentation("rep1", descriptiveMetadata1);
       sip.addOtherMetadataToRepresentation("rep1", metadata3);
 
@@ -116,7 +117,7 @@ public class ValidateExamplesTest {
       sip.addRepresentation(representation2);
       sip.addAdministrativeMetadataToRepresentation("rep2", metadata3);
       sip.addAgentToRepresentation("rep2", agent2);
-      sip.addDataToRepresentation("rep2", Paths.get("src/test/resources/data/bike.gif"));
+      sip.addDataToRepresentation("rep2", Paths.get("src/test/resources/data/eark.pdf"));
       sip.addDescriptiveMetadataToRepresentation("rep2", descriptiveMetadata2);
       sip.addOtherMetadataToRepresentation("rep2", metadata1);
 
