@@ -66,9 +66,10 @@ public final class Utils {
     // final URI uri = URI.create("jar:file:" + zip.toUri().getPath());
     final URI uri = URI.create("jar:file:" + zip.toUri().getPath().replaceAll(" ", "%20"));
 
-    final Map<String, String> env = new HashMap<String, String>();
+    final Map<String, Object> env = new HashMap<String, Object>();
     if (create) {
       env.put("create", "true");
+      env.put("useTempFile", Boolean.TRUE);
     }
     return FileSystems.newFileSystem(uri, env);
   }
@@ -170,8 +171,9 @@ public final class Utils {
   public static void addFileToZip(Path zipPath, Path path, String internalPath) throws IOException {
     URI p = zipPath.toUri();
     URI uri = URI.create("jar:" + p);
-    Map<String, String> env = new HashMap<>();
+    Map<String, Object> env = new HashMap<>();
     env.put("create", Files.exists(zipPath) ? "false" : "true");
+    env.put("useTempFile", Boolean.TRUE);
     try (FileSystem zipfs = FileSystems.newFileSystem(uri, env)) {
       Path internalTargetPath = zipfs.getPath(internalPath);
       Files.createDirectories(internalTargetPath.getParent());
@@ -183,8 +185,9 @@ public final class Utils {
     Path copy = Files.createTempFile("schema", ".xsd");
     URI p = zipPath.toUri();
     URI uri = URI.create("jar:" + p);
-    Map<String, String> env = new HashMap<>();
+    Map<String, Object> env = new HashMap<>();
     env.put("create", Files.exists(zipPath) ? "false" : "true");
+    env.put("useTempFile", Boolean.TRUE);
     try (FileSystem zipfs = FileSystems.newFileSystem(uri, env)) {
       Files.copy(zipfs.getPath(path), copy, StandardCopyOption.REPLACE_EXISTING);
     }
