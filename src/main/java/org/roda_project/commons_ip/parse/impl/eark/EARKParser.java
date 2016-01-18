@@ -28,7 +28,6 @@ import org.roda_project.commons_ip.model.SIP;
 import org.roda_project.commons_ip.model.SIPDescriptiveMetadata;
 import org.roda_project.commons_ip.model.SIPMetadata;
 import org.roda_project.commons_ip.model.SIPRepresentation;
-import org.roda_project.commons_ip.model.ValidationReport;
 import org.roda_project.commons_ip.model.impl.eark.EARKMETSUtils;
 import org.roda_project.commons_ip.model.impl.eark.EARKSIP;
 import org.roda_project.commons_ip.parse.Parser;
@@ -37,7 +36,6 @@ import org.roda_project.commons_ip.utils.METSEnums;
 import org.roda_project.commons_ip.utils.METSEnums.MetadataType;
 import org.roda_project.commons_ip.utils.SIPException;
 import org.roda_project.commons_ip.utils.Utils;
-import org.roda_project.commons_ip.validation.impl.eark.EARKValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,19 +43,12 @@ public class EARKParser implements Parser {
   private static final Logger LOGGER = LoggerFactory.getLogger(EARKParser.class);
 
   public SIP parse(Path source) throws MigrationException {
-    EARKValidator validator = new EARKValidator();
-    ValidationReport report = validator.isSIPValid(source);
-    // if (report.isValid()) {
     try {
       SIP converted = earkSipToRodaAip(source);
       return converted;
     } catch (JAXBException | IOException | SIPException e) {
       throw new MigrationException("Error converting E-ARK SIP to RODA AIP", e);
     }
-    // } else {
-    // throw new MigrationException();
-    // }
-
   }
 
   private SIP earkSipToRodaAip(Path source) throws JAXBException, IOException, SIPException {

@@ -44,6 +44,12 @@ import org.roda_project.commons_ip.utils.Utils;
 
 public final class EARKMETSUtils {
 
+  private static final String METADATA_ID_PREFIX = "DMD";
+  private static final String SIMPLE_REF_TYPE = "simple";
+  private static final String XML_MIMETYPE = "text/xml";
+  private static final String URI_BASE_PATH = "file://.";
+  private static final String CHECKSUM_ALGORITHM = "SHA-256";
+
   private EARKMETSUtils() {
 
   }
@@ -76,13 +82,13 @@ public final class EARKMETSUtils {
     String descriptiveMetadataPath) throws SIPException {
     MdRef mdref = new MdRef();
     try {
-      mdref.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(dm.getMetadata()), "SHA-256"));
+      mdref.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(dm.getMetadata()), CHECKSUM_ALGORITHM));
     } catch (NoSuchAlgorithmException e) {
       throw new SIPException("Error calculating checskum: the algorithm provided is not recognized", e);
     } catch (IOException e) {
       throw new SIPException("Error calculating checksum", e);
     }
-    mdref.setCHECKSUMTYPE("SHA-256");
+    mdref.setCHECKSUMTYPE(CHECKSUM_ALGORITHM);
     try {
       mdref.setCREATED(Utils.getCurrentCalendar());
     } catch (DatatypeConfigurationException dce) {
@@ -91,17 +97,17 @@ public final class EARKMETSUtils {
     mdref.setLOCTYPE(LocType.URL.toString());
     mdref.setMDTYPE(dm.getMetadataType().toString());
     mdref.setMDTYPEVERSION(dm.getMetadataVersion());
-    mdref.setMIMETYPE("text/xml");
+    mdref.setMIMETYPE(XML_MIMETYPE);
     try {
       mdref.setSIZE(Files.size(dm.getMetadata()));
     } catch (IOException e) {
       throw new SIPException("Error calculating file size", e);
     }
-    mdref.setHref("file://./" + descriptiveMetadataPath);
-    mdref.setType("simple");
+    mdref.setHref(URI_BASE_PATH + descriptiveMetadataPath);
+    mdref.setType(SIMPLE_REF_TYPE);
 
     MdSecType dmdsec = new MdSecType();
-    dmdsec.setID("DMD" + mainMets.getDmdSec().size());
+    dmdsec.setID(METADATA_ID_PREFIX + mainMets.getDmdSec().size());
     dmdsec.setMdRef(mdref);
     mainMets.getDmdSec().add(dmdsec);
     return mainMets;
@@ -183,7 +189,7 @@ public final class EARKMETSUtils {
       divParent.setTYPE("AIP Parent Link");
       Mptr mptrParent = new Mptr();
       mptrParent.setLOCTYPE("HANDLE");
-      mptrParent.setType("simple");
+      mptrParent.setType(SIMPLE_REF_TYPE);
       mptrParent.setHref(sip.getParentID());
       mptrParent.setLOCTYPE(LocType.HANDLE.toString());
       divParent.getMptr().add(mptrParent);
@@ -268,13 +274,13 @@ public final class EARKMETSUtils {
   public static Mets addDataToMets(Mets representationMETS, String dataFilePath, Path dataFile) throws SIPException {
     FileType ft = new FileType();
     try {
-      ft.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(dataFile), "SHA-256"));
+      ft.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(dataFile), CHECKSUM_ALGORITHM));
     } catch (IOException e) {
       throw new SIPException("Error calculating checksum for file" + dataFile.toString(), e);
     } catch (NoSuchAlgorithmException e) {
       throw new SIPException("Error calculating checksum for file " + dataFile.toString() + " (no such algorithm)", e);
     }
-    ft.setCHECKSUMTYPE("SHA-256");
+    ft.setCHECKSUMTYPE(CHECKSUM_ALGORITHM);
     try {
       ft.setMIMETYPE(Files.probeContentType(dataFile));
     } catch (IOException e) {
@@ -292,9 +298,9 @@ public final class EARKMETSUtils {
     }
     ft.setID(UUID.randomUUID().toString());
     FLocat locat = new FLocat();
-    locat.setType("simple");
+    locat.setType(SIMPLE_REF_TYPE);
     locat.setLOCTYPE(METSEnums.LocType.URL.toString());
-    locat.setHref("file://./" + dataFilePath);
+    locat.setHref(URI_BASE_PATH + dataFilePath);
     ft.getFLocat().add(locat);
     representationMETS.getFileSec().getFileGrp().get(0).getFile().add(ft);
 
@@ -308,7 +314,7 @@ public final class EARKMETSUtils {
     throws SIPException {
     FileType ft = new FileType();
     try {
-      ft.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(metadata.getMetadata()), "SHA-256"));
+      ft.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(metadata.getMetadata()), CHECKSUM_ALGORITHM));
     } catch (IOException e) {
       throw new SIPException("Error calculating checksum for representation preservation metadata", e);
     } catch (NoSuchAlgorithmException e) {
@@ -316,7 +322,7 @@ public final class EARKMETSUtils {
         e);
 
     }
-    ft.setCHECKSUMTYPE("SHA-256");
+    ft.setCHECKSUMTYPE(CHECKSUM_ALGORITHM);
     try {
       ft.setMIMETYPE(Files.probeContentType(metadata.getMetadata()));
     } catch (IOException e) {
@@ -334,9 +340,9 @@ public final class EARKMETSUtils {
     }
     ft.setID(UUID.randomUUID().toString());
     FLocat locat = new FLocat();
-    locat.setType("simple");
+    locat.setType(SIMPLE_REF_TYPE);
     locat.setLOCTYPE(METSEnums.LocType.URL.toString());
-    locat.setHref("file://./" + preservationFilePath);
+    locat.setHref(URI_BASE_PATH + preservationFilePath);
     ft.getFLocat().add(locat);
     representationMETS.getFileSec().getFileGrp().get(0).getFile().add(ft);
 
@@ -350,30 +356,30 @@ public final class EARKMETSUtils {
     throws SIPException {
     MdRef mdref = new MdRef();
     try {
-      mdref.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(om.getMetadata()), "SHA-256"));
+      mdref.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(om.getMetadata()), CHECKSUM_ALGORITHM));
     } catch (NoSuchAlgorithmException e) {
       throw new SIPException("Error calculating checskum: the algorithm provided is not recognized", e);
     } catch (IOException e) {
       throw new SIPException("Error calculating checksum", e);
     }
-    mdref.setCHECKSUMTYPE("SHA-256");
+    mdref.setCHECKSUMTYPE(CHECKSUM_ALGORITHM);
     try {
       mdref.setCREATED(Utils.getCurrentCalendar());
     } catch (DatatypeConfigurationException dce) {
       throw new SIPException("Error getting current calendar", dce);
     }
     mdref.setLOCTYPE(LocType.URL.toString());
-    mdref.setMIMETYPE("text/xml");
+    mdref.setMIMETYPE(XML_MIMETYPE);
     try {
       mdref.setSIZE(Files.size(om.getMetadata()));
     } catch (IOException e) {
       throw new SIPException("Error calculating file size", e);
     }
-    mdref.setHref("file://./" + otherMetadataPath);
-    mdref.setType("simple");
+    mdref.setHref(URI_BASE_PATH + otherMetadataPath);
+    mdref.setType(SIMPLE_REF_TYPE);
 
     MdSecType dmdsec = new MdSecType();
-    dmdsec.setID("DMD" + mainMETS.getDmdSec().size());
+    dmdsec.setID(METADATA_ID_PREFIX + mainMETS.getDmdSec().size());
     dmdsec.setMdRef(mdref);
     mainMETS.getDmdSec().add(dmdsec);
     return mainMETS;
