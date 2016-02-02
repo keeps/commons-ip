@@ -12,6 +12,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
@@ -59,6 +60,47 @@ public final class Utils {
   private static final Logger LOGGER = LoggerFactory.getLogger(Utils.class);
 
   private Utils() {
+  }
+
+  /**
+   * Deletes a directory/file
+   * 
+   * @param path
+   *          path to the directory/file that will be deleted. in case of a
+   *          directory, if not empty, everything in it will be deleted as well.
+   *
+   * @throws IOException
+   */
+  public static void deletePath(Path path) throws IOException {
+    if (path == null) {
+      return;
+    }
+
+    try {
+      Files.delete(path);
+
+    } catch (DirectoryNotEmptyException e) {
+      try {
+        Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+          @Override
+          public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+            Files.delete(file);
+            return FileVisitResult.CONTINUE;
+          }
+
+          @Override
+          public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+            Files.delete(dir);
+            return FileVisitResult.CONTINUE;
+          }
+
+        });
+      } catch (IOException e1) {
+        throw e1;
+      }
+    } catch (IOException e) {
+      throw e;
+    }
   }
 
   private static FileSystem createZipFileSystem(Path zip, boolean create) throws IOException {
@@ -115,6 +157,8 @@ public final class Utils {
     while ((length = is.read(block)) > 0) {
       digester.update(block, 0, length);
     }
+    
+    is.close();
 
     return DatatypeConverter.printHexBinary(digester.digest());
   }

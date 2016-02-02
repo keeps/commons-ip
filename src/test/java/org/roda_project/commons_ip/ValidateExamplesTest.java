@@ -7,10 +7,13 @@
  */
 package org.roda_project.commons_ip;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.roda_project.commons_ip.model.MigrationException;
 import org.roda_project.commons_ip.model.SIP;
@@ -27,6 +30,7 @@ import org.roda_project.commons_ip.utils.EARKEnums.ContentType;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.METSEnums.MetadataType;
 import org.roda_project.commons_ip.utils.SIPException;
+import org.roda_project.commons_ip.utils.Utils;
 import org.roda_project.commons_ip.validation.Validator;
 import org.roda_project.commons_ip.validation.impl.eark.EARKValidator;
 import org.slf4j.Logger;
@@ -37,6 +41,8 @@ import org.slf4j.LoggerFactory;
  */
 public class ValidateExamplesTest {
   private static final Logger LOGGER = LoggerFactory.getLogger(ValidateExamplesTest.class);
+
+  private static Path tempFolder;
 
   @Test
   public void buildEARKSIP() throws Exception {
@@ -123,7 +129,7 @@ public class ValidateExamplesTest {
 
       sip.setParent("b6f24059-8973-4582-932d-eb0b2cb48f28");
 
-      Path zip = sip.build();
+      Path zip = sip.build(tempFolder);
 
       // validate SIP
       Validator validator = new EARKValidator();
@@ -147,8 +153,13 @@ public class ValidateExamplesTest {
 
   }
 
+  @BeforeClass
+  public static void setup() throws IOException {
+    tempFolder = Files.createTempDirectory("temp");
+  }
+
   @AfterClass
   public static void cleanup() throws Exception {
-
+    Utils.deletePath(tempFolder);
   }
 }

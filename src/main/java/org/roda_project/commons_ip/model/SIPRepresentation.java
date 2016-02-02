@@ -11,11 +11,13 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.roda_project.commons_ip.utils.Pair;
+
 public class SIPRepresentation {
   private String representationID;
   private String objectID;
   private List<SIPAgent> agents;
-  private List<Path> data;
+  private List<Pair<Path, List<String>>> data;
   private List<SIPMetadata> administrativeMetadata;
   private List<SIPMetadata> otherMetadata;
   private List<SIPDescriptiveMetadata> descriptiveMetadata;
@@ -24,7 +26,7 @@ public class SIPRepresentation {
     this.representationID = representationID;
     this.objectID = representationID;
     this.agents = new ArrayList<SIPAgent>();
-    this.data = new ArrayList<Path>();
+    this.data = new ArrayList<Pair<Path, List<String>>>();
     this.administrativeMetadata = new ArrayList<SIPMetadata>();
     this.otherMetadata = new ArrayList<SIPMetadata>();
     this.descriptiveMetadata = new ArrayList<SIPDescriptiveMetadata>();
@@ -46,7 +48,7 @@ public class SIPRepresentation {
     return agents;
   }
 
-  public List<Path> getData() {
+  public List<Pair<Path, List<String>>> getData() {
     return data;
   }
 
@@ -55,7 +57,11 @@ public class SIPRepresentation {
   }
 
   public void addData(Path d) {
-    data.add(d);
+    data.add(new Pair<Path, List<String>>(d, new ArrayList<>()));
+  }
+
+  public void addData(Path d, List<String> folders) {
+    data.add(new Pair<Path, List<String>>(d, folders));
   }
 
   public void addAdministrativeMetadata(SIPMetadata metadata) {

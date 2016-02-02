@@ -10,7 +10,6 @@ package org.roda_project.commons_ip.model.impl.eark;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,9 +29,10 @@ import org.roda_project.commons_ip.model.SIPRepresentation;
 import org.roda_project.commons_ip.utils.EARKEnums;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.METSEnums.LocType;
+import org.roda_project.commons_ip.utils.Pair;
 import org.roda_project.commons_ip.utils.SIPException;
-import org.roda_project.commons_ip.utils.Utils;
 import org.roda_project.commons_ip.utils.ZIPUtils;
+import org.roda_project.commons_ip.utils.ZipEntryInfo;
 
 public class EARKSIP implements SIP {
   public static final String URI_BASE_PATH = "file://.";
@@ -150,9 +150,9 @@ public class EARKSIP implements SIP {
   }
 
   @Override
-  public Path build() throws SIPException {
+  public Path build(Path destinationDirectory) throws SIPException {
 
-    Path zipPath = Paths.get(objectID + FILE_EXTENSION);
+    Path zipPath = destinationDirectory.resolve(objectID + FILE_EXTENSION);
     try {
       if (Files.exists(zipPath)) {
         Files.delete(zipPath);
@@ -162,85 +162,99 @@ public class EARKSIP implements SIP {
     }
     Mets mainMets = EARKMETSUtils.getMetsFromSIP(this);
 
-    if (otherMetadata != null && !otherMetadata.isEmpty()) {
-      for (SIPMetadata om : otherMetadata) {
-        String otherMetadataPath = METADATA_OTHER_PATH + om.getMetadata().getFileName().toString();
-        ZIPUtils.addMetadataToZip(zipPath, om, otherMetadataPath);
-        mainMets = EARKMETSUtils.addOtherMetadataToMets(mainMets, otherMetadataPath, om);
-      }
-    }
-    if (administrativeMetadata != null && !administrativeMetadata.isEmpty()) {
-      for (SIPMetadata am : administrativeMetadata) {
-        String path = METADATA_ADMINISTRATIVE_PATH + am.getMetadata().getFileName().toString();
-        ZIPUtils.addMetadataToZip(zipPath, am, path);
-        path = METADATA_ADMINISTRATIVE_PATH + am.getMetadata().getFileName().toString();
-        mainMets = EARKMETSUtils.addPreservationToMets(mainMets, path, am);
-      }
-    }
+    List<ZipEntryInfo> zipEntries = new ArrayList<ZipEntryInfo>();
 
+    // descriptive metadata
     if (descriptiveMetadata != null && !descriptiveMetadata.isEmpty()) {
       for (SIPDescriptiveMetadata dm : descriptiveMetadata) {
         String descriptiveMetadataPath = METADATA_DESCRIPTIVE_PATH + dm.getMetadata().getFileName().toString();
-        ZIPUtils.addMetadataToZip(zipPath, dm, descriptiveMetadataPath);
+        zipEntries = ZIPUtils.addMetadataToZip(zipEntries, dm, descriptiveMetadataPath);
         mainMets = EARKMETSUtils.addDescriptiveMetadataToMets(mainMets, dm, descriptiveMetadataPath);
       }
     }
+
+    // administrative metadata
+    if (administrativeMetadata != null && !administrativeMetadata.isEmpty()) {
+      for (SIPMetadata am : administrativeMetadata) {
+        String administrativeMetadataPath = METADATA_ADMINISTRATIVE_PATH + am.getMetadata().getFileName().toString();
+        zipEntries = ZIPUtils.addMetadataToZip(zipEntries, am, administrativeMetadataPath);
+        administrativeMetadataPath = METADATA_ADMINISTRATIVE_PATH + am.getMetadata().getFileName().toString();
+        mainMets = EARKMETSUtils.addPreservationToMets(mainMets, administrativeMetadataPath, am);
+      }
+    }
+
+    // other metadata
+    if (otherMetadata != null && !otherMetadata.isEmpty()) {
+      for (SIPMetadata om : otherMetadata) {
+        String otherMetadataPath = METADATA_OTHER_PATH + om.getMetadata().getFileName().toString();
+        zipEntries = ZIPUtils.addMetadataToZip(zipEntries, om, otherMetadataPath);
+        mainMets = EARKMETSUtils.addOtherMetadataToMets(mainMets, otherMetadataPath, om);
+      }
+    }
+
+    // representations
     if (representations != null && !representations.isEmpty()) {
       for (Map.Entry<String, SIPRepresentation> entry : representations.entrySet()) {
-        ZIPUtils.createRepresentationFolder(zipPath, entry.getKey());
-        Mets representationMETS = EARKMETSUtils.getMetsFromRepresentation(entry.getKey(), entry.getValue());
-        if (entry.getValue().getAgents() != null && !entry.getValue().getAgents().isEmpty()) {
-          EARKMETSUtils.addAgentsToMets(representationMETS, entry.getValue().getAgents());
+        String representationId = entry.getKey();
+        SIPRepresentation representation = entry.getValue();
+
+        Mets representationMETS = EARKMETSUtils.getMetsFromRepresentation(representationId, representation);
+        if (representation.getAgents() != null && !representation.getAgents().isEmpty()) {
+          EARKMETSUtils.addAgentsToMets(representationMETS, representation.getAgents());
         }
-        if (entry.getValue().getData() != null && !entry.getValue().getData().isEmpty()) {
-          for (Path dataFile : entry.getValue().getData()) {
-            String dataFilePath = REPRESENTATIONS_PATH + entry.getKey() + DATA_PATH + dataFile.getFileName().toString();
-            ZIPUtils.addDataToRepresentation(zipPath, dataFile, dataFilePath);
-            dataFilePath = DATA_PATH + dataFile.getFileName().toString();
+        if (representation.getData() != null && !representation.getData().isEmpty()) {
+          for (Pair<Path, List<String>> data : representation.getData()) {
+            Path dataFile = data.getFirst();
+
+            String dataFilePath = DATA_PATH + getFoldersFromList(data.getSecond()) + "/"
+              + dataFile.getFileName().toString();
             representationMETS = EARKMETSUtils.addDataToMets(representationMETS, dataFilePath, dataFile);
 
+            dataFilePath = REPRESENTATIONS_PATH + representationId + dataFilePath;
+            zipEntries = ZIPUtils.addDataToRepresentation(zipEntries, dataFile, dataFilePath);
           }
         }
-        if (entry.getValue().getAdministrativeMetadata() != null
-          && !entry.getValue().getAdministrativeMetadata().isEmpty()) {
-          for (SIPMetadata metadata : entry.getValue().getAdministrativeMetadata()) {
-            String administrativeFilePath = REPRESENTATIONS_PATH + entry.getKey() + METADATA_ADMINISTRATIVE_PATH
+        if (representation.getAdministrativeMetadata() != null
+          && !representation.getAdministrativeMetadata().isEmpty()) {
+          for (SIPMetadata metadata : representation.getAdministrativeMetadata()) {
+            String administrativeFilePath = REPRESENTATIONS_PATH + representationId + METADATA_ADMINISTRATIVE_PATH
               + metadata.getMetadata().getFileName().toString();
-            ZIPUtils.addMetadataToZip(zipPath, metadata, administrativeFilePath);
+            ZIPUtils.addMetadataToZip(zipEntries, metadata, administrativeFilePath);
             administrativeFilePath = METADATA_ADMINISTRATIVE_PATH + metadata.getMetadata().getFileName().toString();
             representationMETS = EARKMETSUtils.addPreservationToMets(representationMETS, administrativeFilePath,
               metadata);
 
           }
         }
-        if (entry.getValue().getOtherMetadata() != null && !entry.getValue().getOtherMetadata().isEmpty()) {
-          for (SIPMetadata metadata : entry.getValue().getOtherMetadata()) {
-            String otherMetadataPath = REPRESENTATIONS_PATH + entry.getKey() + METADATA_OTHER_PATH
+        if (representation.getOtherMetadata() != null && !representation.getOtherMetadata().isEmpty()) {
+          for (SIPMetadata metadata : representation.getOtherMetadata()) {
+            String otherMetadataPath = REPRESENTATIONS_PATH + representationId + METADATA_OTHER_PATH
               + metadata.getMetadata().getFileName().toString();
-            ZIPUtils.addMetadataToZip(zipPath, metadata, otherMetadataPath);
+            ZIPUtils.addMetadataToZip(zipEntries, metadata, otherMetadataPath);
             otherMetadataPath = METADATA_OTHER_PATH + metadata.getMetadata().getFileName().toString();
             representationMETS = EARKMETSUtils.addOtherMetadataToMets(representationMETS, otherMetadataPath, metadata);
           }
         }
-        if (entry.getValue().getDescriptiveMetadata() != null && !entry.getValue().getDescriptiveMetadata().isEmpty()) {
-          for (SIPDescriptiveMetadata metadata : entry.getValue().getDescriptiveMetadata()) {
+        if (representation.getDescriptiveMetadata() != null && !representation.getDescriptiveMetadata().isEmpty()) {
+          for (SIPDescriptiveMetadata metadata : representation.getDescriptiveMetadata()) {
 
-            String descriptiveFilePath = REPRESENTATIONS_PATH + entry.getKey() + METADATA_DESCRIPTIVE_PATH
+            String descriptiveFilePath = REPRESENTATIONS_PATH + representationId + METADATA_DESCRIPTIVE_PATH
               + metadata.getMetadata().getFileName().toString();
-            ZIPUtils.addMetadataToZip(zipPath, metadata, descriptiveFilePath);
+            ZIPUtils.addMetadataToZip(zipEntries, metadata, descriptiveFilePath);
             descriptiveFilePath = METADATA_DESCRIPTIVE_PATH + metadata.getMetadata().getFileName().toString();
             representationMETS = EARKMETSUtils.addDescriptiveMetadataToMets(representationMETS, metadata,
               descriptiveFilePath);
 
           }
         }
+
         try {
           JAXBContext context = JAXBContext.newInstance(Mets.class);
           Marshaller m = context.createMarshaller();
-          String representationMetsPath = REPRESENTATIONS_PATH + entry.getKey() + METS_PATH;
+          String representationMetsPath = REPRESENTATIONS_PATH + representationId + METS_PATH;
           Path temp = Files.createTempFile("METS", ".xml");
           m.marshal(representationMETS, Files.newOutputStream(temp));
-          Utils.addFileToZip(zipPath, temp, representationMetsPath);
+          ZIPUtils.addFileToZip(zipEntries, temp, representationMetsPath);
           Mptr mptr = new Mptr();
           mptr.setLOCTYPE(LocType.URL.toString());
           mptr.setHref(URI_BASE_PATH + representationMetsPath);
@@ -257,11 +271,29 @@ public class EARKSIP implements SIP {
       Path temp = Files.createTempFile("METS", ".xml");
       m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
       m.marshal(mainMets, Files.newOutputStream(temp));
-      Utils.addFileToZip(zipPath, temp, METS_PATH);
+      ZIPUtils.addFileToZip(zipEntries, temp, METS_PATH);
     } catch (JAXBException | IOException e) {
       throw new SIPException(e.getMessage(), e);
     }
+
+    try {
+      ZIPUtils.zip(zipEntries, Files.newOutputStream(zipPath));
+    } catch (IOException e) {
+      throw new SIPException("Error generating E-ARK SIP ZIP file", e);
+    }
+
     return zipPath;
+  }
+
+  private String getFoldersFromList(List<String> folders) {
+    StringBuilder sb = new StringBuilder();
+    for (String folder : folders) {
+      if (sb.length() > 0) {
+        sb.append("/");
+      }
+      sb.append(folder);
+    }
+    return sb.toString();
   }
 
   @Override

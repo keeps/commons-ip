@@ -13,9 +13,9 @@ import java.util.List;
 import org.roda_project.commons_ip.utils.SIPException;
 
 public interface SIP {
-  
+
   SIP setParent(String parentID);
-  
+
   String getParentID();
 
   SIP addAgent(SIPAgent sipAgent);
@@ -42,7 +42,11 @@ public interface SIP {
 
   SIP addDocumentation(Path documentationPath);
 
-  Path build() throws SIPException;
+  /**
+   * @param destinationDirectory
+   *          directory where the SIP will be placed into
+   */
+  Path build(Path destinationDirectory) throws SIPException;
 
   List<SIPAgent> getAgents();
 
