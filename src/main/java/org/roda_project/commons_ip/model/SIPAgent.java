@@ -16,7 +16,7 @@ public class SIPAgent {
   private String otherRole;
   private String otherType;
 
-  public SIPAgent(String name, String role, CreatorType type, String otherRole, String otherType) {
+  public SIPAgent(String name, String role, String otherRole, CreatorType type, String otherType) {
     this.name = name;
     this.role = role;
     this.type = type;
@@ -63,4 +63,11 @@ public class SIPAgent {
   public void setOtherType(String otherType) {
     this.otherType = otherType;
   }
+
+  @Override
+  public String toString() {
+    return "SIPAgent [name=" + name + ", role=" + role + ", type=" + type + ", otherRole=" + otherRole + ", otherType="
+      + otherType + "]";
+  }
+
 }

@@ -222,7 +222,7 @@ public class EARKParser implements Parser {
           if (locat.getHref() != null && locat.getHref().startsWith("file://./")) {
             String relativePath = locat.getHref().replace("file://./", "");
             Path filePath = representationPath.resolve(relativePath);
-            sip.addDataToRepresentation(representationID, filePath,
+            sip.addFileToRepresentation(representationID, filePath,
               getRepresentationFileFolderList(representationPath, filePath));
           }
         }

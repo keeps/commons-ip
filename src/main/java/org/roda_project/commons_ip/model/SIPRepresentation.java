@@ -17,19 +17,24 @@ public class SIPRepresentation {
   private String representationID;
   private String objectID;
   private List<SIPAgent> agents;
-  private List<Pair<Path, List<String>>> data;
+  private List<SIPDescriptiveMetadata> descriptiveMetadata;
   private List<SIPMetadata> administrativeMetadata;
   private List<SIPMetadata> otherMetadata;
-  private List<SIPDescriptiveMetadata> descriptiveMetadata;
+  // FIXME hsilva 20160203 using pair is ugly and very limiting
+  private List<Pair<Path, List<String>>> data;
+  private List<Path> schemas;
+  private List<Path> documentation;
 
   public SIPRepresentation(String representationID) {
     this.representationID = representationID;
     this.objectID = representationID;
     this.agents = new ArrayList<SIPAgent>();
-    this.data = new ArrayList<Pair<Path, List<String>>>();
+    this.descriptiveMetadata = new ArrayList<SIPDescriptiveMetadata>();
     this.administrativeMetadata = new ArrayList<SIPMetadata>();
     this.otherMetadata = new ArrayList<SIPMetadata>();
-    this.descriptiveMetadata = new ArrayList<SIPDescriptiveMetadata>();
+    this.data = new ArrayList<Pair<Path, List<String>>>();
+    this.schemas = new ArrayList<Path>();
+    this.documentation = new ArrayList<Path>();
   }
 
   public String getRepresentationID() {
@@ -56,8 +61,12 @@ public class SIPRepresentation {
     agents.add(agent);
   }
 
-  public void addData(Path d, List<String> folders) {
-    data.add(new Pair<Path, List<String>>(d, folders));
+  public void addFile(Path filePath, List<String> folders) {
+    data.add(new Pair<Path, List<String>>(filePath, folders));
+  }
+
+  public void addDescriptiveMetadata(SIPDescriptiveMetadata metadata) {
+    descriptiveMetadata.add(metadata);
   }
 
   public void addAdministrativeMetadata(SIPMetadata metadata) {
@@ -68,8 +77,8 @@ public class SIPRepresentation {
     otherMetadata.add(metadata);
   }
 
-  public void addDescriptiveMetadata(SIPDescriptiveMetadata metadata) {
-    descriptiveMetadata.add(metadata);
+  public List<SIPDescriptiveMetadata> getDescriptiveMetadata() {
+    return descriptiveMetadata;
   }
 
   public List<SIPMetadata> getAdministrativeMetadata() {
@@ -80,8 +89,20 @@ public class SIPRepresentation {
     return otherMetadata;
   }
 
-  public List<SIPDescriptiveMetadata> getDescriptiveMetadata() {
-    return descriptiveMetadata;
+  public void addDocumentation(Path documentationPath) {
+    documentation.add(documentationPath);
+  }
+
+  public void addSchema(Path schemaPath) {
+    schemas.add(schemaPath);
+  }
+
+  @Override
+  public String toString() {
+    return "SIPRepresentation [representationID=" + representationID + ", objectID=" + objectID + ", agents=" + agents
+      + ", descriptiveMetadata=" + descriptiveMetadata + ", administrativeMetadata=" + administrativeMetadata
+      + ", otherMetadata=" + otherMetadata + ", data=" + data + ", schemas=" + schemas + ", documentation="
+      + documentation + "]";
   }
 
 }

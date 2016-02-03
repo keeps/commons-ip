@@ -45,7 +45,11 @@ public class ValidationReport {
       issues = new ArrayList<ValidationIssue>();
     }
     issues.add(issue);
+  }
 
+  @Override
+  public String toString() {
+    return "ValidationReport [valid=" + valid + ", issues=" + issues + ", date=" + date + "]";
   }
 
 }

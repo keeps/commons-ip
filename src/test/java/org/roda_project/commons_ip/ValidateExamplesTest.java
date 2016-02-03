@@ -104,8 +104,8 @@ public class ValidateExamplesTest {
         Paths.get("src/test/resources/data/descriptive.txt"), null, MetadataType.TEXTMD, null);
       SIPMetadata metadata3 = new SIPMetadata(Paths.get("src/test/resources/data/premis.xml"),
         Paths.get("src/test/resources/data/premis-v2-2.xsd"));
-      SIPAgent agent1 = new SIPAgent("AgentName", "ROLE", CreatorType.INDIVIDUAL, "OTHER ROLE", "OTHER TYPE");
-      SIPAgent agent2 = new SIPAgent("AgentName2", "ROLE2", CreatorType.INDIVIDUAL, "OTHER ROLE2", "OTHER TYPE2");
+      SIPAgent agent1 = new SIPAgent("AgentName", "ROLE", "OTHER ROLE", CreatorType.INDIVIDUAL, "OTHER TYPE");
+      SIPAgent agent2 = new SIPAgent("AgentName2", "ROLE2", "OTHER ROLE2", CreatorType.INDIVIDUAL, "OTHER TYPE2");
 
       sip.addAdministrativeMetadata(metadata1);
       sip.addAgent(agent1);
@@ -118,7 +118,7 @@ public class ValidateExamplesTest {
       sip.addRepresentation(representation1);
       sip.addAdministrativeMetadataToRepresentation("rep1", metadata1);
       sip.addAgentToRepresentation("rep1", agent1);
-      sip.addDataToRepresentation("rep1", Paths.get("src/test/resources/data/eark.pdf"), new ArrayList<>());
+      sip.addFileToRepresentation("rep1", Paths.get("src/test/resources/data/eark.pdf"), new ArrayList<>());
       sip.addDescriptiveMetadataToRepresentation("rep1", descriptiveMetadata1);
       sip.addOtherMetadataToRepresentation("rep1", metadata3);
 
@@ -126,7 +126,7 @@ public class ValidateExamplesTest {
       sip.addRepresentation(representation2);
       sip.addAdministrativeMetadataToRepresentation("rep2", metadata3);
       sip.addAgentToRepresentation("rep2", agent2);
-      sip.addDataToRepresentation("rep2", Paths.get("src/test/resources/data/eark.pdf"), new ArrayList<>());
+      sip.addFileToRepresentation("rep2", Paths.get("src/test/resources/data/eark.pdf"), new ArrayList<>());
       sip.addDescriptiveMetadataToRepresentation("rep2", descriptiveMetadata2);
       sip.addOtherMetadataToRepresentation("rep2", metadata1);
 
@@ -163,6 +163,6 @@ public class ValidateExamplesTest {
 
   @AfterClass
   public static void cleanup() throws Exception {
-    Utils.deletePath(tempFolder);
+    // Utils.deletePath(tempFolder);
   }
 }

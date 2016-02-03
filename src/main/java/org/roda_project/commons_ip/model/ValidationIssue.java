@@ -51,4 +51,11 @@ public class ValidationIssue {
   public void setRelatedItem(List<Path> relatedItem) {
     this.relatedItem = relatedItem;
   }
+
+  @Override
+  public String toString() {
+    return "ValidationIssue [level=" + level + ", message=" + message + ", description=" + description
+      + ", relatedItem=" + relatedItem + "]";
+  }
+
 }

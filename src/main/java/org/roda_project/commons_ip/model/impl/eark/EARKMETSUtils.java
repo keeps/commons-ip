@@ -18,6 +18,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.roda_project.commons_ip.mets_v1_11.beans.AmdSecType;
 import org.roda_project.commons_ip.mets_v1_11.beans.DivType;
@@ -66,16 +67,21 @@ public final class EARKMETSUtils {
       hdr = new MetsHdr();
     }
     for (SIPAgent sipAgent : agents) {
-      Agent agent = new Agent();
-      agent.setROLE(sipAgent.getRole());
-      agent.setTYPE(sipAgent.getType().toString());
-      agent.setName(sipAgent.getName());
-      agent.setOTHERROLE(sipAgent.getOtherRole());
-      agent.setOTHERTYPE(sipAgent.getOtherType());
-      hdr.getAgent().add(agent);
+      hdr.getAgent().add(createMETSAgent(sipAgent));
     }
     mets.setMetsHdr(hdr);
     return mets;
+  }
+
+  private static Agent createMETSAgent(SIPAgent sipAgent) {
+    Agent agent = new Agent();
+    agent.setROLE(sipAgent.getRole());
+    agent.setTYPE(sipAgent.getType().toString());
+    agent.setName(sipAgent.getName());
+    agent.setOTHERROLE(sipAgent.getOtherRole());
+    agent.setOTHERTYPE(sipAgent.getOtherType());
+
+    return agent;
   }
 
   public static Mets addDescriptiveMetadataToMets(Mets mainMets, SIPDescriptiveMetadata dm,
@@ -113,21 +119,30 @@ public final class EARKMETSUtils {
     return mainMets;
   }
 
-  public static Mets getMetsFromSIP(EARKSIP sip) throws SIPException {
+  public static Mets getMETSFromSIP(EARKSIP sip) throws SIPException {
     Mets sipMets = new Mets();
+    // basic attributes
     sipMets.setOBJID(sip.getObjectID());
     sipMets.setPROFILE(sip.getProfile());
     sipMets.setTYPE(sip.getType());
     sipMets.setMetsTypeLabel(sip.getLabel());
-    MetsHdr representationHeader = new MetsHdr();
-    try {
-      representationHeader.setCREATEDATE(Utils.getCurrentCalendar());
-      representationHeader.setLASTMODDATE(Utils.getCurrentCalendar());
-    } catch (DatatypeConfigurationException dce) {
-      throw new SIPException("Error getting current calendar", dce);
-    }
-    sipMets.setMetsHdr(representationHeader);
 
+    // header
+    MetsHdr header = new MetsHdr();
+    try {
+      XMLGregorianCalendar currentDate = Utils.getCurrentCalendar();
+      header.setCREATEDATE(currentDate);
+      header.setLASTMODDATE(currentDate);
+    } catch (DatatypeConfigurationException e) {
+      throw new SIPException("Error getting current calendar", e);
+    }
+    // header/agent
+    for (SIPAgent sipAgent : sip.getAgents()) {
+      header.getAgent().add(createMETSAgent(sipAgent));
+    }
+    sipMets.setMetsHdr(header);
+
+    // administrative section
     AmdSecType amdsecRep = new AmdSecType();
     amdsecRep.setID(UUID.randomUUID().toString());
     sipMets.getAmdSec().add(amdsecRep);
@@ -310,7 +325,7 @@ public final class EARKMETSUtils {
     return representationMETS;
   }
 
-  public static Mets addPreservationToMets(Mets representationMETS, String preservationFilePath, SIPMetadata metadata)
+  public static Mets addPreservationToMets(Mets mets, String preservationFilePath, SIPMetadata metadata)
     throws SIPException {
     FileType ft = new FileType();
     try {
@@ -320,7 +335,6 @@ public final class EARKMETSUtils {
     } catch (NoSuchAlgorithmException e) {
       throw new SIPException("Error calculating checksum for representation preservation metadata (no such algorithm)",
         e);
-
     }
     ft.setCHECKSUMTYPE(CHECKSUM_ALGORITHM);
     try {
@@ -344,12 +358,12 @@ public final class EARKMETSUtils {
     locat.setLOCTYPE(METSEnums.LocType.URL.toString());
     locat.setHref(URI_BASE_PATH + preservationFilePath);
     ft.getFLocat().add(locat);
-    representationMETS.getFileSec().getFileGrp().get(0).getFile().add(ft);
+    mets.getFileSec().getFileGrp().get(0).getFile().add(ft);
 
     Fptr fptr = new Fptr();
     fptr.setFILEID(ft);
-    representationMETS.getStructMap().get(0).getDiv().getDiv().get(1).getDiv().get(2).getFptr().add(fptr);
-    return representationMETS;
+    mets.getStructMap().get(0).getDiv().getDiv().get(1).getDiv().get(2).getFptr().add(fptr);
+    return mets;
   }
 
   public static Mets addOtherMetadataToMets(Mets mainMETS, String otherMetadataPath, SIPMetadata om)

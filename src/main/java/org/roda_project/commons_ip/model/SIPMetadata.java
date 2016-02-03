@@ -34,4 +34,9 @@ public class SIPMetadata {
     this.schema = schema;
   }
 
+  @Override
+  public String toString() {
+    return "SIPMetadata [metadata=" + metadata + ", schema=" + schema + "]";
+  }
+
 }

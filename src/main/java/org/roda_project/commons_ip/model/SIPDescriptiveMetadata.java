@@ -13,14 +13,14 @@ import org.roda_project.commons_ip.utils.METSEnums.MetadataType;
 
 public class SIPDescriptiveMetadata extends SIPMetadata {
 
+  private MetadataType metadataType;
+  private String metadataVersion;
+
   public SIPDescriptiveMetadata(Path metadata, Path schema, MetadataType metadataType, String metadataVersion) {
     super(metadata, schema);
     this.metadataType = metadataType;
     this.metadataVersion = metadataVersion;
   }
-
-  private MetadataType metadataType;
-  private String metadataVersion;
 
   public String getMetadataVersion() {
     return metadataVersion;
@@ -37,4 +37,11 @@ public class SIPDescriptiveMetadata extends SIPMetadata {
   public void setMetadataType(MetadataType metadataType) {
     this.metadataType = metadataType;
   }
+
+  @Override
+  public String toString() {
+    return "SIPDescriptiveMetadata [metadataType=" + metadataType + ", metadataVersion=" + metadataVersion
+      + ", getMetadata()=" + getMetadata() + ", getSchema()=" + getSchema() + "]";
+  }
+
 }

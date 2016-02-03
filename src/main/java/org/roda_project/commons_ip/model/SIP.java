@@ -20,27 +20,33 @@ public interface SIP {
 
   SIP addAgent(SIPAgent sipAgent);
 
+  SIP addDescriptiveMetadata(SIPDescriptiveMetadata descriptiveMetadata) throws SIPException;
+
   SIP addAdministrativeMetadata(SIPMetadata sipMetadata) throws SIPException;
 
   SIP addOtherMetadata(SIPMetadata sipMetadata) throws SIPException;
 
-  SIP addDescriptiveMetadata(SIPDescriptiveMetadata descriptiveMetadata) throws SIPException;
-
   SIP addRepresentation(SIPRepresentation sipRepresentation) throws SIPException;
 
+  SIP addSchema(Path schemaPath);
+
+  SIP addDocumentation(Path documentationPath);
+
   SIP addAgentToRepresentation(String representationID, SIPAgent agent) throws SIPException;
-
-  SIP addDataToRepresentation(String representationID, Path data, List<String> folders) throws SIPException;
-
-  SIP addAdministrativeMetadataToRepresentation(String representationID, SIPMetadata preservationMetadata)
-    throws SIPException;
 
   SIP addDescriptiveMetadataToRepresentation(String representationID, SIPDescriptiveMetadata descriptiveMetadata)
     throws SIPException;
 
+  SIP addAdministrativeMetadataToRepresentation(String representationID, SIPMetadata preservationMetadata)
+    throws SIPException;
+
   SIP addOtherMetadataToRepresentation(String representationID, SIPMetadata otherMetadata) throws SIPException;
 
-  SIP addDocumentation(Path documentationPath);
+  SIP addFileToRepresentation(String representationID, Path file, List<String> folders) throws SIPException;
+
+  SIP addDocumentationToRepresentation(String representationID, Path documentationPath) throws SIPException;
+
+  SIP addSchemaToRepresentation(String representationID, Path schemaPath) throws SIPException;
 
   /**
    * @param destinationDirectory
@@ -57,5 +63,9 @@ public interface SIP {
   List<SIPMetadata> getOtherMetadata();
 
   List<SIPRepresentation> getRepresentations();
+
+  List<Path> getSchemas();
+
+  List<Path> getDocumentation();
 
 }
