@@ -30,7 +30,7 @@ public interface SIP {
 
   SIP addAgentToRepresentation(String representationID, SIPAgent agent) throws SIPException;
 
-  SIP addDataToRepresentation(String representationID, Path data) throws SIPException;
+  SIP addDataToRepresentation(String representationID, Path data, List<String> folders) throws SIPException;
 
   SIP addAdministrativeMetadataToRepresentation(String representationID, SIPMetadata preservationMetadata)
     throws SIPException;

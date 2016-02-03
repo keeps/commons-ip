@@ -28,7 +28,7 @@ public final class ZIPUtils {
 
     if (dm.getSchema() != null) {
       // FIXME this is not right!!!
-      addFileToZip(zipEntries, dm.getSchema(), metadataPath);
+      // addFileToZip(zipEntries, dm.getSchema(), metadataPath);
     }
 
     addFileToZip(zipEntries, dm.getMetadata(), metadataPath);
@@ -46,6 +46,10 @@ public final class ZIPUtils {
 
   public static List<ZipEntryInfo> addFileToZip(List<ZipEntryInfo> zipEntries, Path filePath, String zipPath)
     throws SIPException {
+
+    if (zipPath.startsWith("/")) {
+      zipPath = zipPath.substring(1);
+    }
 
     zipEntries.add(new ZipEntryInfo(zipPath, filePath));
 

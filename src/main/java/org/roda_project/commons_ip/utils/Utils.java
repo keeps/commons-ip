@@ -9,8 +9,10 @@ package org.roda_project.commons_ip.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.FileSystem;
@@ -30,6 +32,8 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -50,6 +54,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -118,6 +123,56 @@ public final class Utils {
 
   public static void unzip(Path zip, final Path dest) throws IOException {
 
+    ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zip.toFile()));
+
+    ZipEntry zipEntry = zipInputStream.getNextEntry();
+
+    if (zipEntry == null) {
+      // No entries in ZIP
+
+      zipInputStream.close();
+
+      throw new IOException("No files inside ZIP");
+
+    } else {
+
+      while (zipEntry != null) {
+
+        // for each entry to be extracted
+        String entryName = zipEntry.getName();
+
+        Path newFile = dest.resolve(entryName);
+
+        if (zipEntry.isDirectory()) {
+
+          Files.createDirectories(newFile);
+
+        } else {
+
+          if (!Files.exists(newFile.getParent())) {
+            Files.createDirectories(newFile.getParent());
+          }
+
+          OutputStream newFileOutputStream = Files.newOutputStream(newFile);
+
+          IOUtils.copyLarge(zipInputStream, newFileOutputStream);
+
+          newFileOutputStream.close();
+          zipInputStream.closeEntry();
+
+        }
+
+        zipEntry = zipInputStream.getNextEntry();
+
+      } // end while
+
+      zipInputStream.close();
+    }
+
+  }
+
+  public static void unzipTODELETE(Path zip, final Path dest) throws IOException {
+
     // if the destination doesn't exist, create it
     if (Files.notExists(dest)) {
       Files.createDirectories(dest);
@@ -157,7 +212,7 @@ public final class Utils {
     while ((length = is.read(block)) > 0) {
       digester.update(block, 0, length);
     }
-    
+
     is.close();
 
     return DatatypeConverter.printHexBinary(digester.digest());

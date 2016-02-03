@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -29,6 +31,7 @@ import org.roda_project.commons_ip.parse.impl.eark.EARKParser;
 import org.roda_project.commons_ip.utils.EARKEnums.ContentType;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.METSEnums.MetadataType;
+import org.roda_project.commons_ip.utils.Pair;
 import org.roda_project.commons_ip.utils.SIPException;
 import org.roda_project.commons_ip.utils.Utils;
 import org.roda_project.commons_ip.validation.Validator;
@@ -115,7 +118,7 @@ public class ValidateExamplesTest {
       sip.addRepresentation(representation1);
       sip.addAdministrativeMetadataToRepresentation("rep1", metadata1);
       sip.addAgentToRepresentation("rep1", agent1);
-      sip.addDataToRepresentation("rep1", Paths.get("src/test/resources/data/eark.pdf"));
+      sip.addDataToRepresentation("rep1", Paths.get("src/test/resources/data/eark.pdf"), new ArrayList<>());
       sip.addDescriptiveMetadataToRepresentation("rep1", descriptiveMetadata1);
       sip.addOtherMetadataToRepresentation("rep1", metadata3);
 
@@ -123,7 +126,7 @@ public class ValidateExamplesTest {
       sip.addRepresentation(representation2);
       sip.addAdministrativeMetadataToRepresentation("rep2", metadata3);
       sip.addAgentToRepresentation("rep2", agent2);
-      sip.addDataToRepresentation("rep2", Paths.get("src/test/resources/data/eark.pdf"));
+      sip.addDataToRepresentation("rep2", Paths.get("src/test/resources/data/eark.pdf"), new ArrayList<>());
       sip.addDescriptiveMetadataToRepresentation("rep2", descriptiveMetadata2);
       sip.addOtherMetadataToRepresentation("rep2", metadata1);
 

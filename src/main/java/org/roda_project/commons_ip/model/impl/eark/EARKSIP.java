@@ -127,12 +127,12 @@ public class EARKSIP implements SIP {
   }
 
   @Override
-  public SIP addDataToRepresentation(String representationID, Path data) throws SIPException {
+  public SIP addDataToRepresentation(String representationID, Path data, List<String> folders) throws SIPException {
     if (!representations.containsKey(representationID)) {
       throw new SIPException("Representation doesn't exist", null);
     }
     SIPRepresentation rep = representations.get(representationID);
-    rep.addData(data);
+    rep.addData(data, folders);
     representations.put(representationID, rep);
     return this;
   }
@@ -202,6 +202,7 @@ public class EARKSIP implements SIP {
         if (representation.getAgents() != null && !representation.getAgents().isEmpty()) {
           EARKMETSUtils.addAgentsToMets(representationMETS, representation.getAgents());
         }
+        // representation data
         if (representation.getData() != null && !representation.getData().isEmpty()) {
           for (Pair<Path, List<String>> data : representation.getData()) {
             Path dataFile = data.getFirst();
@@ -214,6 +215,8 @@ public class EARKSIP implements SIP {
             zipEntries = ZIPUtils.addDataToRepresentation(zipEntries, dataFile, dataFilePath);
           }
         }
+
+        // representation administrative metadata
         if (representation.getAdministrativeMetadata() != null
           && !representation.getAdministrativeMetadata().isEmpty()) {
           for (SIPMetadata metadata : representation.getAdministrativeMetadata()) {
@@ -226,6 +229,8 @@ public class EARKSIP implements SIP {
 
           }
         }
+
+        // representation other metadata
         if (representation.getOtherMetadata() != null && !representation.getOtherMetadata().isEmpty()) {
           for (SIPMetadata metadata : representation.getOtherMetadata()) {
             String otherMetadataPath = REPRESENTATIONS_PATH + representationId + METADATA_OTHER_PATH
@@ -235,6 +240,8 @@ public class EARKSIP implements SIP {
             representationMETS = EARKMETSUtils.addOtherMetadataToMets(representationMETS, otherMetadataPath, metadata);
           }
         }
+
+        // representation descriptive metadata
         if (representation.getDescriptiveMetadata() != null && !representation.getDescriptiveMetadata().isEmpty()) {
           for (SIPDescriptiveMetadata metadata : representation.getDescriptiveMetadata()) {
 

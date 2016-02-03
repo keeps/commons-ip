@@ -56,10 +56,6 @@ public class SIPRepresentation {
     agents.add(agent);
   }
 
-  public void addData(Path d) {
-    data.add(new Pair<Path, List<String>>(d, new ArrayList<>()));
-  }
-
   public void addData(Path d, List<String> folders) {
     data.add(new Pair<Path, List<String>>(d, folders));
   }

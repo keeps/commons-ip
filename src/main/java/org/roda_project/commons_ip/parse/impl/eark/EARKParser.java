@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
@@ -219,12 +222,25 @@ public class EARKParser implements Parser {
           if (locat.getHref() != null && locat.getHref().startsWith("file://./")) {
             String relativePath = locat.getHref().replace("file://./", "");
             Path filePath = representationPath.resolve(relativePath);
-            sip.addDataToRepresentation(representationID, filePath);
+            sip.addDataToRepresentation(representationID, filePath,
+              getRepresentationFileFolderList(representationPath, filePath));
           }
         }
       }
     }
     return sip;
+  }
+
+  private List<String> getRepresentationFileFolderList(Path representationPath, Path filePath) {
+    List<String> res = new ArrayList<>();
+    Path relativize = representationPath.resolve("data").relativize(filePath).getParent();
+    if (relativize != null) {
+      Iterator<Path> iterator = relativize.iterator();
+      while (iterator.hasNext()) {
+        res.add(iterator.next().toString());
+      }
+    }
+    return res;
   }
 
 }
