@@ -25,6 +25,7 @@ import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType.MdRef;
 import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec.FileGrp;
+import org.roda_project.commons_ip.model.IPConstants;
 import org.roda_project.commons_ip.model.ValidationIssue;
 import org.roda_project.commons_ip.model.ValidationReport;
 import org.roda_project.commons_ip.model.impl.eark.EARKMETSUtils;
@@ -32,6 +33,7 @@ import org.roda_project.commons_ip.utils.METSEnums;
 import org.roda_project.commons_ip.utils.Utils;
 import org.roda_project.commons_ip.utils.ValidationErrors;
 import org.roda_project.commons_ip.utils.ValidationUtils;
+import org.roda_project.commons_ip.utils.ZIPUtils;
 import org.roda_project.commons_ip.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,14 +49,14 @@ public class EARKValidator implements Validator {
     if (!Files.isDirectory(sip)) {
       try {
         Path uncompressed = Files.createTempDirectory("unzipped");
-        Utils.unzip(sip, uncompressed);
+        ZIPUtils.unzip(sip, uncompressed);
         sip = uncompressed;
       } catch (IOException e) {
         report = ValidationUtils.addIssue(report, ValidationErrors.UNABLE_TO_UNZIP_SIP, ValidationIssue.LEVEL.ERROR,
           null, Arrays.asList(sip));
       }
     }
-    Path mainMETSFile = sip.resolve("METS.xml");
+    Path mainMETSFile = sip.resolve(IPConstants.METS_FILE);
     if (!Files.exists(mainMETSFile)) {
       report = ValidationUtils.addIssue(report, ValidationErrors.NO_MAIN_METS_FILE, ValidationIssue.LEVEL.ERROR, null,
         Arrays.asList(mainMETSFile));
@@ -62,18 +64,18 @@ public class EARKValidator implements Validator {
       try {
         report = validateMets(mainMETSFile, report);
 
-        Path representationsPath = sip.resolve("representations");
+        Path representationsPath = sip.resolve(IPConstants.REPRESENTATIONS);
 
         if (Files.exists(representationsPath)) {
           DirectoryStream.Filter<Path> filter = new DirectoryStream.Filter<Path>() {
             @Override
             public boolean accept(Path file) throws IOException {
-              return (Files.isDirectory(file));
+              return Files.isDirectory(file);
             }
           };
           try (DirectoryStream<Path> stream = Files.newDirectoryStream(representationsPath, filter)) {
             for (Path path : stream) {
-              Path representationMets = path.resolve("METS.xml");
+              Path representationMets = path.resolve(IPConstants.METS_FILE);
               if (Files.exists(representationMets)) {
                 ValidationReport representationReport = new ValidationReport();
                 representationReport.setValid(true);
@@ -105,7 +107,7 @@ public class EARKValidator implements Validator {
   }
 
   private ValidationReport validateMets(Path metsPath, ValidationReport report) throws JAXBException {
-    Mets mets = EARKMETSUtils.processMetsXML(metsPath);
+    Mets mets = EARKMETSUtils.instantiateMETSFromFile(metsPath);
     if (mets.getAmdSec() != null && !mets.getAmdSec().isEmpty()) {
       for (AmdSecType amdsec : mets.getAmdSec()) {
         report = validateAmdSec(amdsec, metsPath.getParent(), report);
@@ -151,12 +153,12 @@ public class EARKValidator implements Validator {
     if (file.getFLocat() != null && !file.getFLocat().isEmpty()) {
       boolean locatFound = false;
       for (FLocat locat : file.getFLocat()) {
-        if (locat.getType() != null && locat.getType().equalsIgnoreCase("simple") && locat.getLOCTYPE() != null
-          && locat.getLOCTYPE().equalsIgnoreCase(METSEnums.LocType.URL.toString())) {
+        if (locat.getType() != null && locat.getType().equalsIgnoreCase(IPConstants.METS_TYPE_SIMPLE)
+          && locat.getLOCTYPE() != null && locat.getLOCTYPE().equalsIgnoreCase(METSEnums.LocType.URL.toString())) {
           locatFound = true;
-          if (locat.getHref() != null && locat.getHref().startsWith("file://./")) {
+          if (locat.getHref() != null && locat.getHref().startsWith(IPConstants.METS_FILE_URI_PREFIX)) {
             try {
-              Path filePath = base.resolve(locat.getHref().replace("file://./", ""));
+              Path filePath = base.resolve(locat.getHref().replace(IPConstants.METS_FILE_URI_PREFIX, ""));
               String fileChecksum = Utils.calculateChecksum(Files.newInputStream(filePath), checksumType);
               if (!fileChecksum.equalsIgnoreCase(checksum)) {
                 report = ValidationUtils.addIssue(report, ValidationErrors.BAD_CHECKSUM, ValidationIssue.LEVEL.ERROR,
@@ -192,9 +194,9 @@ public class EARKValidator implements Validator {
     if (mdref != null) {
       String checksumType = mdref.getCHECKSUMTYPE();
       String checksum = mdref.getCHECKSUM();
-      if (mdref.getHref() != null && mdref.getHref().startsWith("file://./")) {
+      if (mdref.getHref() != null && mdref.getHref().startsWith(IPConstants.METS_FILE_URI_PREFIX)) {
         try {
-          Path filePath = base.resolve(mdref.getHref().replace("file://./", ""));
+          Path filePath = base.resolve(mdref.getHref().replace(IPConstants.METS_FILE_URI_PREFIX, ""));
           String fileChecksum = Utils.calculateChecksum(Files.newInputStream(filePath), checksumType);
           if (!fileChecksum.equalsIgnoreCase(checksum)) {
             report = ValidationUtils.addIssue(report, ValidationErrors.BAD_CHECKSUM, ValidationIssue.LEVEL.ERROR,

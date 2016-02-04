@@ -8,14 +8,16 @@
 package org.roda_project.commons_ip.model.impl.eark;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.UUID;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -24,6 +26,7 @@ import org.roda_project.commons_ip.mets_v1_11.beans.AmdSecType;
 import org.roda_project.commons_ip.mets_v1_11.beans.DivType;
 import org.roda_project.commons_ip.mets_v1_11.beans.DivType.Fptr;
 import org.roda_project.commons_ip.mets_v1_11.beans.DivType.Mptr;
+import org.roda_project.commons_ip.mets_v1_11.beans.FileGrpType;
 import org.roda_project.commons_ip.mets_v1_11.beans.FileType;
 import org.roda_project.commons_ip.mets_v1_11.beans.FileType.FLocat;
 import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType;
@@ -34,98 +37,42 @@ import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec.FileGrp;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.MetsHdr;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.MetsHdr.Agent;
 import org.roda_project.commons_ip.mets_v1_11.beans.StructMapType;
-import org.roda_project.commons_ip.model.SIPAgent;
-import org.roda_project.commons_ip.model.SIPDescriptiveMetadata;
-import org.roda_project.commons_ip.model.SIPMetadata;
-import org.roda_project.commons_ip.model.SIPRepresentation;
-import org.roda_project.commons_ip.utils.METSEnums;
+import org.roda_project.commons_ip.model.IPAgent;
+import org.roda_project.commons_ip.model.IPConstants;
+import org.roda_project.commons_ip.model.IPDescriptiveMetadata;
+import org.roda_project.commons_ip.model.IPMetadata;
+import org.roda_project.commons_ip.model.MetsWrapper;
+import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.METSEnums.LocType;
 import org.roda_project.commons_ip.utils.SIPException;
 import org.roda_project.commons_ip.utils.Utils;
+import org.roda_project.commons_ip.utils.ZIPUtils;
+import org.roda_project.commons_ip.utils.ZipEntryInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class EARKMETSUtils {
-
-  private static final String METADATA_ID_PREFIX = "DMD";
-  private static final String SIMPLE_REF_TYPE = "simple";
-  private static final String XML_MIMETYPE = "text/xml";
-  private static final String URI_BASE_PATH = "file://.";
-  private static final String CHECKSUM_ALGORITHM = "SHA-256";
+  private static final Logger LOGGER = LoggerFactory.getLogger(EARKMETSUtils.class);
 
   private EARKMETSUtils() {
 
   }
 
-  public static Mets processMetsXML(Path mainMETSFile) throws JAXBException {
-    JAXBContext jaxbContext = JAXBContext.newInstance(Mets.class);
-    Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-    return (Mets) jaxbUnmarshaller.unmarshal(mainMETSFile.toFile());
-  }
+  /**
+   * @param rootMETS
+   *          boolean stating if the generated mets belongs to root/sip or
+   *          representation
+   */
+  public static MetsWrapper generateMETS(String objectId, String label, String type, String profile,
+    List<IPAgent> ipAgents, boolean rootMETS, String parentId) throws SIPException {
+    Mets mets = new Mets();
+    MetsWrapper metsWrapper = new MetsWrapper(mets);
 
-  public static Mets addAgentsToMets(Mets mets, List<SIPAgent> agents) {
-    MetsHdr hdr = mets.getMetsHdr();
-    if (hdr == null) {
-      hdr = new MetsHdr();
-    }
-    for (SIPAgent sipAgent : agents) {
-      hdr.getAgent().add(createMETSAgent(sipAgent));
-    }
-    mets.setMetsHdr(hdr);
-    return mets;
-  }
-
-  private static Agent createMETSAgent(SIPAgent sipAgent) {
-    Agent agent = new Agent();
-    agent.setROLE(sipAgent.getRole());
-    agent.setTYPE(sipAgent.getType().toString());
-    agent.setName(sipAgent.getName());
-    agent.setOTHERROLE(sipAgent.getOtherRole());
-    agent.setOTHERTYPE(sipAgent.getOtherType());
-
-    return agent;
-  }
-
-  public static Mets addDescriptiveMetadataToMets(Mets mainMets, SIPDescriptiveMetadata dm,
-    String descriptiveMetadataPath) throws SIPException {
-    MdRef mdref = new MdRef();
-    try {
-      mdref.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(dm.getMetadata()), CHECKSUM_ALGORITHM));
-    } catch (NoSuchAlgorithmException e) {
-      throw new SIPException("Error calculating checskum: the algorithm provided is not recognized", e);
-    } catch (IOException e) {
-      throw new SIPException("Error calculating checksum", e);
-    }
-    mdref.setCHECKSUMTYPE(CHECKSUM_ALGORITHM);
-    try {
-      mdref.setCREATED(Utils.getCurrentCalendar());
-    } catch (DatatypeConfigurationException dce) {
-      throw new SIPException("Error getting current calendar", dce);
-    }
-    mdref.setLOCTYPE(LocType.URL.toString());
-    mdref.setMDTYPE(dm.getMetadataType().toString());
-    mdref.setMDTYPEVERSION(dm.getMetadataVersion());
-    mdref.setMIMETYPE(XML_MIMETYPE);
-    try {
-      mdref.setSIZE(Files.size(dm.getMetadata()));
-    } catch (IOException e) {
-      throw new SIPException("Error calculating file size", e);
-    }
-    mdref.setHref(URI_BASE_PATH + descriptiveMetadataPath);
-    mdref.setType(SIMPLE_REF_TYPE);
-
-    MdSecType dmdsec = new MdSecType();
-    dmdsec.setID(METADATA_ID_PREFIX + mainMets.getDmdSec().size());
-    dmdsec.setMdRef(mdref);
-    mainMets.getDmdSec().add(dmdsec);
-    return mainMets;
-  }
-
-  public static Mets getMETSFromSIP(EARKSIP sip) throws SIPException {
-    Mets sipMets = new Mets();
     // basic attributes
-    sipMets.setOBJID(sip.getObjectID());
-    sipMets.setPROFILE(sip.getProfile());
-    sipMets.setTYPE(sip.getType());
-    sipMets.setMetsTypeLabel(sip.getLabel());
+    mets.setOBJID(objectId);
+    mets.setPROFILE(profile);
+    mets.setTYPE(type);
+    mets.setLABEL(label);
 
     // header
     MetsHdr header = new MetsHdr();
@@ -137,281 +84,443 @@ public final class EARKMETSUtils {
       throw new SIPException("Error getting current calendar", e);
     }
     // header/agent
-    for (SIPAgent sipAgent : sip.getAgents()) {
+    for (IPAgent sipAgent : ipAgents) {
       header.getAgent().add(createMETSAgent(sipAgent));
     }
-    sipMets.setMetsHdr(header);
+    mets.setMetsHdr(header);
 
     // administrative section
-    AmdSecType amdsecRep = new AmdSecType();
-    amdsecRep.setID(UUID.randomUUID().toString());
-    sipMets.getAmdSec().add(amdsecRep);
+    AmdSecType amdSec = new AmdSecType();
+    amdSec.setID(Utils.generateRandomId());
+    mets.getAmdSec().add(amdSec);
 
-    FileSec filesecRep = new FileSec();
-    filesecRep.setID(UUID.randomUUID().toString());
+    // file section
+    FileSec fileSec = new FileSec();
+    fileSec.setID(Utils.generateRandomId());
+    FileGrp mainFileGroup = rootMETS ? createFileGroup(IPConstants.E_ARK_FILES_ROOT)
+      : createFileGroup(IPConstants.E_ARK_FILES_REPRESENTATION + objectId);
 
-    FileGrp generalFileGroup = new FileGrp();
-    generalFileGroup.setUSE("general filegroup");
-    generalFileGroup.setID(UUID.randomUUID().toString());
-    filesecRep.getFileGrp().add(generalFileGroup);
-    FileGrp schemaFileGroup = new FileGrp();
-    schemaFileGroup.setUSE("schema group");
-    schemaFileGroup.setID(UUID.randomUUID().toString());
-    filesecRep.getFileGrp().add(schemaFileGroup);
+    FileGrpType representationsFileGroup = createFileGroupType(IPConstants.REPRESENTATIONS);
+    mainFileGroup.getFileGrp().add(representationsFileGroup);
+    metsWrapper.setRepresentationsFileGroup(representationsFileGroup);
+    FileGrpType dataFileGroup = createFileGroupType(IPConstants.DATA);
+    mainFileGroup.getFileGrp().add(dataFileGroup);
+    metsWrapper.setDataFileGroup(dataFileGroup);
+    FileGrpType schemasFileGroup = createFileGroupType(IPConstants.SCHEMAS);
+    mainFileGroup.getFileGrp().add(schemasFileGroup);
+    metsWrapper.setSchemasFileGroup(schemasFileGroup);
+    FileGrpType documentationFileGroup = createFileGroupType(IPConstants.DOCUMENTATION);
+    mainFileGroup.getFileGrp().add(documentationFileGroup);
+    metsWrapper.setDocumentationFileGroup(documentationFileGroup);
 
-    sipMets.setFileSec(filesecRep);
+    fileSec.getFileGrp().add(mainFileGroup);
+    mets.setFileSec(fileSec);
 
-    StructMapType structMapRep = new StructMapType();
-    DivType packageDivRep = new DivType();
-    packageDivRep.setLabel("Package");
-    packageDivRep.setID("packageDiv");
-    DivType contentDiv = new DivType();
-    contentDiv.setID("contentDiv");
-    contentDiv.setDivTypeLabel("Content");
-    packageDivRep.getDiv().add(contentDiv);
-    DivType metadataDiv = new DivType();
-    metadataDiv.setID("metadataDiv");
-    metadataDiv.setDivTypeLabel("Metadata");
-    DivType descriptiveMetadataDiv = new DivType();
-    descriptiveMetadataDiv.setID("descriptive");
-    descriptiveMetadataDiv.setDivTypeLabel("Descriptive");
+    // E-ARK struct map
+    StructMapType structMap = new StructMapType();
+    structMap.setID(Utils.generateRandomId());
+    structMap.setTYPE(IPConstants.METS_TYPE_PHYSICAL);
+    structMap.setLABEL(IPConstants.E_ARK_STRUCTURAL_MAP);
+
+    DivType mainDiv = createDivForStructMap(objectId);
+    // metadata
+    DivType metadataDiv = createDivForStructMap(IPConstants.METADATA);
+    // metadata/descriptive
+    DivType descriptiveMetadataDiv = createDivForStructMap(IPConstants.DESCRIPTIVE);
     metadataDiv.getDiv().add(descriptiveMetadataDiv);
-    DivType administrativeMetadataDiv = new DivType();
-    administrativeMetadataDiv.setID("administrative");
-    administrativeMetadataDiv.setDivTypeLabel("Administrative");
-    metadataDiv.getDiv().add(administrativeMetadataDiv);
-    DivType otherMetadataDiv = new DivType();
-    otherMetadataDiv.setID("other");
-    otherMetadataDiv.setDivTypeLabel("Other");
+    metsWrapper.setDescriptiveMetadataDiv(descriptiveMetadataDiv);
+    // metadata/preservation
+    DivType preservationMetadataDiv = createDivForStructMap(IPConstants.PRESERVATION);
+    metadataDiv.getDiv().add(preservationMetadataDiv);
+    metsWrapper.setPreservationMetadataDiv(preservationMetadataDiv);
+    // metadata/other
+    DivType otherMetadataDiv = createDivForStructMap(IPConstants.OTHER);
     metadataDiv.getDiv().add(otherMetadataDiv);
-    packageDivRep.getDiv().add(metadataDiv);
-    DivType schemasDiv = new DivType();
-    schemasDiv.setID("schemasDiv");
-    schemasDiv.setDivTypeLabel("Schemas");
-    packageDivRep.getDiv().add(schemasDiv);
-    DivType documentationDiv = new DivType();
-    documentationDiv.setID("documentationDiv");
-    documentationDiv.setDivTypeLabel("Documentation");
-    packageDivRep.getDiv().add(documentationDiv);
-    structMapRep.setDiv(packageDivRep);
-    sipMets.getStructMap().add(structMapRep);
+    metsWrapper.setOtherMetadataDiv(otherMetadataDiv);
+    mainDiv.getDiv().add(metadataDiv);
 
-    if (sip.getParentID() != null) {
-      StructMapType structMapParent = new StructMapType();
-      structMapParent.setStructMapTypeLabel("Parent");
-      DivType divParent = new DivType();
-      divParent.setLabel("Parent");
-      divParent.setTYPE("AIP Parent Link");
-      Mptr mptrParent = new Mptr();
-      mptrParent.setLOCTYPE("HANDLE");
-      mptrParent.setType(SIMPLE_REF_TYPE);
-      mptrParent.setHref(sip.getParentID());
-      mptrParent.setLOCTYPE(LocType.HANDLE.toString());
-      divParent.getMptr().add(mptrParent);
-      structMapParent.setDiv(divParent);
-      sipMets.getStructMap().add(structMapParent);
+    // representations
+    DivType representationsDiv = createDivForStructMap(IPConstants.REPRESENTATIONS);
+    mainDiv.getDiv().add(representationsDiv);
+    metsWrapper.setRepresentationsDiv(representationsDiv);
+    // data
+    DivType dataDiv = createDivForStructMap(IPConstants.DATA);
+    metsWrapper.setDataDiv(dataDiv);
+    mainDiv.getDiv().add(dataDiv);
+    // schemas
+    DivType schemasDiv = createDivForStructMap(IPConstants.SCHEMAS);
+    metsWrapper.setSchemasDiv(schemasDiv);
+    mainDiv.getDiv().add(schemasDiv);
+    // documentation
+    DivType documentationDiv = createDivForStructMap(IPConstants.DOCUMENTATION);
+    metsWrapper.setDocumentationDiv(documentationDiv);
+    mainDiv.getDiv().add(documentationDiv);
+
+    structMap.setDiv(mainDiv);
+    mets.getStructMap().add(structMap);
+
+    // RODA struct map
+    if (parentId != null) {
+      StructMapType structMapParent = generateParentIDStructMap(parentId);
+      mets.getStructMap().add(structMapParent);
     }
-    return sipMets;
+    return metsWrapper;
   }
 
-  public static Mets getMetsFromRepresentation(String representationID, SIPRepresentation representation)
-    throws SIPException {
-    Mets representationMETS = new Mets();
-    representationMETS.setOBJID(representation.getObjectID());
-    MetsHdr representationHeader = new MetsHdr();
+  private static FileGrpType createFileGroupType(String use) {
+    FileGrpType fileGroup = new FileGrpType();
+    fileGroup.setID(Utils.generateRandomId());
+    fileGroup.setUSE(use);
+    return fileGroup;
+  }
+
+  private static FileGrp createFileGroup(String use) {
+    FileGrp fileGroup = new FileGrp();
+    fileGroup.setID(Utils.generateRandomId());
+    fileGroup.setUSE(use);
+    return fileGroup;
+  }
+
+  private static DivType createDivForStructMap(String label) {
+    DivType div = new DivType();
+    div.setID(Utils.generateRandomId());
+    div.setLABEL(label);
+    return div;
+  }
+
+  public static void addMainMETSToZip(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper, String metsPath,
+    Path buildDir) throws SIPException {
     try {
-      representationHeader.setCREATEDATE(Utils.getCurrentCalendar());
-      representationHeader.setLASTMODDATE(Utils.getCurrentCalendar());
-    } catch (DatatypeConfigurationException dce) {
-      throw new SIPException("Error getting current calendar", dce);
+      marshallMETSandAddToZip(zipEntries, metsWrapper, metsPath, buildDir, true);
+    } catch (JAXBException | IOException e) {
+      throw new SIPException(e.getMessage(), e);
     }
-    representationMETS.setMetsHdr(representationHeader);
+  }
 
-    AmdSecType amdsecRep = new AmdSecType();
-    amdsecRep.setID(UUID.randomUUID().toString());
-    representationMETS.getAmdSec().add(amdsecRep);
+  public static void addRepresentationMETSToZipAndToMainMETS(List<ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper,
+    String representationId, MetsWrapper representationMETSWrapper, String representationMetsPath, Path buildDir)
+      throws SIPException {
+    try {
+      marshallMETSandAddToZip(zipEntries, representationMETSWrapper, representationMetsPath, buildDir, false);
+      Mptr mptr = new Mptr();
+      mptr.setLOCTYPE(LocType.URL.toString());
+      mptr.setType(IPConstants.METS_TYPE_SIMPLE);
+      mptr.setHref(IPConstants.METS_FILE_URI_PREFIX + representationMetsPath);
+      DivType representationDiv = createDivForStructMap(representationId);
+      representationDiv.getMptr().add(mptr);
+      mainMETSWrapper.getRepresentationsDiv().getDiv().add(representationDiv);
+    } catch (JAXBException | IOException e) {
+      throw new SIPException("Error saving representation METS", e);
+    }
+  }
 
-    MdSecType mdSec = new MdSecType();
-    mdSec.setID(UUID.randomUUID().toString());
-    representationMETS.getDmdSec().add(mdSec);
+  private static void marshallMETSandAddToZip(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper, String metsPath,
+    Path buildDir, boolean rootMETS) throws JAXBException, IOException, PropertyException, SIPException {
+    JAXBContext context = JAXBContext.newInstance(Mets.class);
+    Marshaller m = context.createMarshaller();
+    Path temp = Files.createTempFile(buildDir, IPConstants.METS_FILE_NAME, IPConstants.METS_FILE_EXTENSION);
+    m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+    if (rootMETS) {
+      m.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,
+        "http://www.loc.gov/METS/ schemas/IP.xsd http://www.w3.org/1999/xlink schemas/xlink.xsd");
+    } else {
+      m.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,
+        "http://www.loc.gov/METS/ ../../schemas/IP.xsd http://www.w3.org/1999/xlink ../../schemas/xlink.xsd");
+    }
+    Mets mets = metsWrapper.getMets();
+    OutputStream metsOutputStream = Files.newOutputStream(temp);
+    m.marshal(mets, metsOutputStream);
+    metsOutputStream.close();
 
-    FileSec filesecRep = new FileSec();
-    filesecRep.setID(UUID.randomUUID().toString());
+    ZIPUtils.addFileToZip(zipEntries, temp, metsPath);
+  }
 
-    FileGrp generalFileGroup = new FileGrp();
-    generalFileGroup.setUSE("general filegroup");
-    generalFileGroup.setID(UUID.randomUUID().toString());
-    filesecRep.getFileGrp().add(generalFileGroup);
-    FileGrp schemaFileGroup = new FileGrp();
-    schemaFileGroup.setUSE("schema group");
-    schemaFileGroup.setID(UUID.randomUUID().toString());
-    filesecRep.getFileGrp().add(schemaFileGroup);
+  public static Mets instantiateMETSFromFile(Path metsFile) throws JAXBException {
+    JAXBContext jaxbContext = JAXBContext.newInstance(Mets.class);
+    Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+    return (Mets) jaxbUnmarshaller.unmarshal(metsFile.toFile());
+  }
 
-    representationMETS.setFileSec(filesecRep);
+  private static Agent createMETSAgent(IPAgent ipAgent) {
+    Agent agent = new Agent();
+    agent.setName(ipAgent.getName());
+    agent.setROLE(ipAgent.getRole());
+    agent.setOTHERROLE(ipAgent.getOtherRole());
+    agent.setTYPE(ipAgent.getType().toString());
+    agent.setOTHERTYPE(ipAgent.getOtherType());
 
-    StructMapType structMapRep = new StructMapType();
-    DivType packageDivRep = new DivType();
-    packageDivRep.setLabel("Package");
-    packageDivRep.setID("packageDiv");
-    DivType contentDiv = new DivType();
-    contentDiv.setID("contentDiv");
-    contentDiv.setDivTypeLabel("Content");
-    packageDivRep.getDiv().add(contentDiv);
-    DivType metadataDiv = new DivType();
-    metadataDiv.setID("metadataDiv");
-    metadataDiv.setDivTypeLabel("Metadata");
-    DivType descriptiveMetadataDiv = new DivType();
-    descriptiveMetadataDiv.setID("descriptive");
-    descriptiveMetadataDiv.setDivTypeLabel("Descriptive");
-    metadataDiv.getDiv().add(descriptiveMetadataDiv);
-    DivType administrativeMetadataDiv = new DivType();
-    administrativeMetadataDiv.setID("administrative");
-    administrativeMetadataDiv.setDivTypeLabel("Administrative");
-    metadataDiv.getDiv().add(administrativeMetadataDiv);
-    DivType otherMetadataDiv = new DivType();
-    otherMetadataDiv.setID("other");
-    otherMetadataDiv.setDivTypeLabel("Other");
-    metadataDiv.getDiv().add(otherMetadataDiv);
-    packageDivRep.getDiv().add(metadataDiv);
-    DivType schemasDiv = new DivType();
-    schemasDiv.setID("schemasDiv");
-    schemasDiv.setDivTypeLabel("Schemas");
-    packageDivRep.getDiv().add(schemasDiv);
-    DivType documentationDiv = new DivType();
-    documentationDiv.setID("documentationDiv");
-    documentationDiv.setDivTypeLabel("Documentation");
-    packageDivRep.getDiv().add(documentationDiv);
-    structMapRep.setDiv(packageDivRep);
-    representationMETS.getStructMap().add(structMapRep);
+    return agent;
+  }
+
+  public static IPAgent createIPAgent(Agent agent) {
+    IPAgent ipAgent = new IPAgent();
+    CreatorType agentType;
+    try {
+      agentType = CreatorType.valueOf(agent.getTYPE());
+    } catch (IllegalArgumentException e) {
+      agentType = CreatorType.OTHER;
+      LOGGER.debug("Setting agent type to {}", agentType);
+    }
+    ipAgent.setName(agent.getName()).setRole(agent.getROLE()).setOtherRole(agent.getOTHERROLE()).setType(agentType)
+      .setOtherType(agent.getOTHERTYPE());
+
+    return ipAgent;
+  }
+
+  public static MetsWrapper addDescriptiveMetadataToMETS(MetsWrapper metsWrapper,
+    IPDescriptiveMetadata descriptiveMetadata, String descriptiveMetadataPath) throws SIPException {
+    return addMetadataToMETS(metsWrapper, descriptiveMetadata, descriptiveMetadataPath,
+      descriptiveMetadata.getMetadataType().toString(), descriptiveMetadata.getMetadataVersion(), true);
+  }
+
+  public static MetsWrapper addOtherMetadataToMETS(MetsWrapper metsWrapper, IPMetadata otherMetadata,
+    String otherMetadataPath) throws SIPException {
+    return addMetadataToMETS(metsWrapper, otherMetadata, otherMetadataPath, null, null, false);
+  }
+
+  private static MetsWrapper addMetadataToMETS(MetsWrapper metsWrapper, IPMetadata metadata, String metadataPath,
+    String mdType, String mdTypeVersion, boolean isDescriptive) throws SIPException {
+    MdSecType dmdSec = new MdSecType();
+    dmdSec.setID(Utils.generateRandomId());
+
+    MdRef mdRef = createMdRef(metadataPath);
+    mdRef.setMDTYPE(mdType);
+    mdRef.setMDTYPEVERSION(mdTypeVersion);
+
+    // set checksum, mimetype, etc.
+    setFileBasicInformation(metadata.getMetadata().getPath(), mdRef);
+
+    // structural map info.
+    Fptr fptr = new Fptr();
+    fptr.setFILEID(mdRef);
+    if (isDescriptive) {
+      metsWrapper.getDescriptiveMetadataDiv().getFptr().add(fptr);
+    } else {
+      metsWrapper.getOtherMetadataDiv().getFptr().add(fptr);
+    }
+
+    dmdSec.setMdRef(mdRef);
+    metsWrapper.getMets().getDmdSec().add(dmdSec);
+    return metsWrapper;
+  }
+
+  public static MetsWrapper addPreservationMetadataToMETS(MetsWrapper metsWrapper, IPMetadata preservationMetadata,
+    String preservationMetadataPath) throws SIPException {
+    MdSecType digiprovMD = new MdSecType();
+    digiprovMD.setID(Utils.generateRandomId());
+
+    MdRef mdRef = createMdRef(preservationMetadataPath);
+
+    // set checksum, mimetype, etc.
+    setFileBasicInformation(preservationMetadata.getMetadata().getPath(), mdRef);
+
+    // structural map info.
+    Fptr fptr = new Fptr();
+    fptr.setFILEID(mdRef);
+    metsWrapper.getPreservationMetadataDiv().getFptr().add(fptr);
+
+    digiprovMD.setMdRef(mdRef);
+    metsWrapper.getMets().getAmdSec().get(0).getDigiprovMD().add(digiprovMD);
+    return metsWrapper;
+  }
+
+  private static MdRef createMdRef(String metadataPath) {
+    MdRef mdRef = new MdRef();
+    mdRef.setID(Utils.generateRandomId());
+    mdRef.setType(IPConstants.METS_TYPE_SIMPLE);
+    mdRef.setLOCTYPE(LocType.URL.toString());
+    mdRef.setHref(IPConstants.METS_FILE_URI_PREFIX + metadataPath);
+    return mdRef;
+  }
+
+  public static MetsWrapper addDataFileToMETS(MetsWrapper representationMETS, String dataFilePath, Path dataFile)
+    throws SIPException {
+    FileType file = new FileType();
+    file.setID(Utils.generateRandomId());
+
+    // set checksum, mimetype, etc.
+    setFileBasicInformation(dataFile, file);
+
+    // add to file section
+    FLocat fileLocation = createFileLocation(dataFilePath);
+    file.getFLocat().add(fileLocation);
+    representationMETS.getDataFileGroup().getFile().add(file);
+
+    // add to struct map
+    Fptr fptr = new Fptr();
+    fptr.setFILEID(file);
+    representationMETS.getDataDiv().getFptr().add(fptr);
     return representationMETS;
   }
 
-  public static Mets addDataToMets(Mets representationMETS, String dataFilePath, Path dataFile) throws SIPException {
-    FileType ft = new FileType();
+  private static MdRef setFileBasicInformation(Path file, MdRef mdRef) throws SIPException {
+    // checksum info.
     try {
-      ft.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(dataFile), CHECKSUM_ALGORITHM));
+      mdRef.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(file), IPConstants.CHECKSUM_ALGORITHM));
     } catch (IOException e) {
-      throw new SIPException("Error calculating checksum for file" + dataFile.toString(), e);
+      throw new SIPException("Error calculating checksum for file" + file, e);
     } catch (NoSuchAlgorithmException e) {
-      throw new SIPException("Error calculating checksum for file " + dataFile.toString() + " (no such algorithm)", e);
+      throw new SIPException("Error calculating checksum for file " + file + " (no such algorithm)", e);
     }
-    ft.setCHECKSUMTYPE(CHECKSUM_ALGORITHM);
+    mdRef.setCHECKSUMTYPE(IPConstants.CHECKSUM_ALGORITHM);
+
+    // mimetype info.
     try {
-      ft.setMIMETYPE(Files.probeContentType(dataFile));
+      mdRef.setMIMETYPE(Files.probeContentType(file));
     } catch (IOException e) {
-      throw new SIPException("Error probing content-type (" + dataFile.toString() + ")", e);
+      throw new SIPException("Error probing file content (" + file + ")", e);
     }
+
+    // date creation info.
     try {
-      ft.setCREATED(Utils.getCurrentCalendar());
+      mdRef.setCREATED(Utils.getCurrentCalendar());
     } catch (DatatypeConfigurationException e) {
-      throw new SIPException("Error getting curent calendar (" + dataFile.toString() + ")", e);
+      throw new SIPException("Error getting current calendar", e);
     }
-    try {
-      ft.setSIZE(Files.size(dataFile));
-    } catch (IOException e) {
-      throw new SIPException("Error getting file size (" + dataFile.toString() + ")", e);
-    }
-    ft.setID(UUID.randomUUID().toString());
-    FLocat locat = new FLocat();
-    locat.setType(SIMPLE_REF_TYPE);
-    locat.setLOCTYPE(METSEnums.LocType.URL.toString());
-    locat.setHref(URI_BASE_PATH + dataFilePath);
-    ft.getFLocat().add(locat);
-    representationMETS.getFileSec().getFileGrp().get(0).getFile().add(ft);
 
-    Fptr fptr = new Fptr();
-    fptr.setFILEID(ft);
-    representationMETS.getStructMap().get(0).getDiv().getDiv().get(0).getFptr().add(fptr);
-    return representationMETS;
+    // size info.
+    try {
+      mdRef.setSIZE(Files.size(file));
+    } catch (IOException e) {
+      throw new SIPException("Error getting file size (" + file + ")", e);
+    }
+
+    return mdRef;
   }
 
-  public static Mets addPreservationToMets(Mets mets, String preservationFilePath, SIPMetadata metadata)
-    throws SIPException {
-    FileType ft = new FileType();
+  private static void setFileBasicInformation(Path file, FileType fileType) throws SIPException {
+    // checksum info.
     try {
-      ft.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(metadata.getMetadata()), CHECKSUM_ALGORITHM));
+      fileType.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(file), IPConstants.CHECKSUM_ALGORITHM));
     } catch (IOException e) {
-      throw new SIPException("Error calculating checksum for representation preservation metadata", e);
+      throw new SIPException("Error calculating checksum for file" + file, e);
     } catch (NoSuchAlgorithmException e) {
-      throw new SIPException("Error calculating checksum for representation preservation metadata (no such algorithm)",
-        e);
+      throw new SIPException("Error calculating checksum for file " + file + " (no such algorithm)", e);
     }
-    ft.setCHECKSUMTYPE(CHECKSUM_ALGORITHM);
-    try {
-      ft.setMIMETYPE(Files.probeContentType(metadata.getMetadata()));
-    } catch (IOException e) {
-      throw new SIPException("Error probing file content (" + metadata.getMetadata().toString() + ")", e);
-    }
-    try {
-      ft.setCREATED(Utils.getCurrentCalendar());
-    } catch (DatatypeConfigurationException dce) {
-      throw new SIPException("Error getting current calendar", dce);
-    }
-    try {
-      ft.setSIZE(Files.size(metadata.getMetadata()));
-    } catch (IOException e) {
-      throw new SIPException("Error getting file size (" + metadata.getMetadata().toString() + ")", e);
-    }
-    ft.setID(UUID.randomUUID().toString());
-    FLocat locat = new FLocat();
-    locat.setType(SIMPLE_REF_TYPE);
-    locat.setLOCTYPE(METSEnums.LocType.URL.toString());
-    locat.setHref(URI_BASE_PATH + preservationFilePath);
-    ft.getFLocat().add(locat);
-    mets.getFileSec().getFileGrp().get(0).getFile().add(ft);
+    fileType.setCHECKSUMTYPE(IPConstants.CHECKSUM_ALGORITHM);
 
-    Fptr fptr = new Fptr();
-    fptr.setFILEID(ft);
-    mets.getStructMap().get(0).getDiv().getDiv().get(1).getDiv().get(2).getFptr().add(fptr);
-    return mets;
+    // mimetype info.
+    try {
+      fileType.setMIMETYPE(Files.probeContentType(file));
+    } catch (IOException e) {
+      throw new SIPException("Error probing content-type (" + file.toString() + ")", e);
+    }
+
+    // date creation info.
+    try {
+      fileType.setCREATED(Utils.getCurrentCalendar());
+    } catch (DatatypeConfigurationException e) {
+      throw new SIPException("Error getting curent calendar (" + file.toString() + ")", e);
+    }
+
+    // size info.
+    try {
+      fileType.setSIZE(Files.size(file));
+    } catch (IOException e) {
+      throw new SIPException("Error getting file size (" + file.toString() + ")", e);
+    }
   }
 
-  public static Mets addOtherMetadataToMets(Mets mainMETS, String otherMetadataPath, SIPMetadata om)
+  public static MetsWrapper addSchemaFileToMETS(MetsWrapper metsWrapper, String schemaFilePath, Path schemaFile)
     throws SIPException {
-    MdRef mdref = new MdRef();
-    try {
-      mdref.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(om.getMetadata()), CHECKSUM_ALGORITHM));
-    } catch (NoSuchAlgorithmException e) {
-      throw new SIPException("Error calculating checskum: the algorithm provided is not recognized", e);
-    } catch (IOException e) {
-      throw new SIPException("Error calculating checksum", e);
-    }
-    mdref.setCHECKSUMTYPE(CHECKSUM_ALGORITHM);
-    try {
-      mdref.setCREATED(Utils.getCurrentCalendar());
-    } catch (DatatypeConfigurationException dce) {
-      throw new SIPException("Error getting current calendar", dce);
-    }
-    mdref.setLOCTYPE(LocType.URL.toString());
-    mdref.setMIMETYPE(XML_MIMETYPE);
-    try {
-      mdref.setSIZE(Files.size(om.getMetadata()));
-    } catch (IOException e) {
-      throw new SIPException("Error calculating file size", e);
-    }
-    mdref.setHref(URI_BASE_PATH + otherMetadataPath);
-    mdref.setType(SIMPLE_REF_TYPE);
+    FileType file = new FileType();
+    file.setID(Utils.generateRandomId());
 
-    MdSecType dmdsec = new MdSecType();
-    dmdsec.setID(METADATA_ID_PREFIX + mainMETS.getDmdSec().size());
-    dmdsec.setMdRef(mdref);
-    mainMETS.getDmdSec().add(dmdsec);
-    return mainMETS;
+    // set checksum, mimetype, etc.
+    setFileBasicInformation(schemaFile, file);
+
+    // add to file section
+    FLocat fileLocation = createFileLocation(schemaFilePath);
+    file.getFLocat().add(fileLocation);
+    metsWrapper.getSchemasFileGroup().getFile().add(file);
+
+    // add to struct map
+    Fptr fptr = new Fptr();
+    fptr.setFILEID(file);
+    metsWrapper.getSchemasDiv().getFptr().add(fptr);
+    return metsWrapper;
   }
 
-  public static String extractParentID(StructMapType smt) {
+  public static MetsWrapper addDocumentationFileToMETS(MetsWrapper metsWrapper, String documentationFilePath,
+    Path documentationFile) throws SIPException {
+    FileType file = new FileType();
+    file.setID(Utils.generateRandomId());
+
+    // set checksum, mimetype, etc.
+    setFileBasicInformation(documentationFile, file);
+
+    // add to file section
+    FLocat fileLocation = createFileLocation(documentationFilePath);
+    file.getFLocat().add(fileLocation);
+    metsWrapper.getDocumentationFileGroup().getFile().add(file);
+
+    // add to struct map
+    Fptr fptr = new Fptr();
+    fptr.setFILEID(file);
+    metsWrapper.getDocumentationDiv().getFptr().add(fptr);
+
+    return metsWrapper;
+  }
+
+  private static FLocat createFileLocation(String filePath) {
+    FLocat fileLocation = new FLocat();
+    fileLocation.setType(IPConstants.METS_TYPE_SIMPLE);
+    fileLocation.setLOCTYPE(LocType.URL.toString());
+    fileLocation.setHref(IPConstants.METS_FILE_URI_PREFIX + filePath);
+
+    return fileLocation;
+  }
+
+  private static StructMapType generateParentIDStructMap(String parentId) {
+    StructMapType structMap = new StructMapType();
+    structMap.setID(Utils.generateRandomId());
+    structMap.setLABEL("RODA structural map");
+
+    DivType mainDiv = createDivForStructMap("RODA");
+    DivType parentIdDiv = createDivForStructMap("Parent ID");
+
+    Mptr mptrParent = new Mptr();
+    mptrParent.setType(IPConstants.METS_TYPE_SIMPLE);
+    mptrParent.setHref(parentId);
+    mptrParent.setLOCTYPE(LocType.HANDLE.toString());
+    parentIdDiv.getMptr().add(mptrParent);
+
+    mainDiv.getDiv().add(parentIdDiv);
+    structMap.setDiv(mainDiv);
+    return structMap;
+  }
+
+  public static String extractParentIDFromStructMap(Mets mets) {
     String parentID = null;
-    if (smt.getDiv() != null) {
-      DivType dt = smt.getDiv();
-      if (dt.getMptr() != null && dt.getMptr().size() > 0) {
-        for (Mptr m : dt.getMptr()) {
-          if (m.getHref() != null) {
-            parentID = m.getHref();
-            break;
+    boolean found = false;
+
+    for (StructMapType structMap : mets.getStructMap()) {
+      if (structMap.getLABEL() != null && "RODA structural map".equalsIgnoreCase(structMap.getLABEL())
+        && structMap.getDiv() != null) {
+        DivType mainDiv = structMap.getDiv();
+
+        if ("RODA".equalsIgnoreCase(mainDiv.getLABEL()) && mainDiv.getDiv() != null) {
+          for (DivType div : mainDiv.getDiv()) {
+            if ("Parent ID".equalsIgnoreCase(div.getLABEL()) && div.getMptr() != null) {
+              for (Mptr m : div.getMptr()) {
+                if (m.getHref() != null) {
+                  parentID = m.getHref();
+                  found = true;
+                  break;
+                }
+              }
+            }
+            if (found) {
+              break;
+            }
           }
         }
       }
+      if (found) {
+        break;
+      }
     }
+
     return parentID;
   }
 }

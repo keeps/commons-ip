@@ -13,40 +13,47 @@ import java.util.List;
 import org.roda_project.commons_ip.utils.SIPException;
 
 public interface SIP {
-
   SIP setParent(String parentID);
 
   String getParentID();
 
-  SIP addAgent(SIPAgent sipAgent);
+  SIP setBasePath(Path basePath);
 
-  SIP addDescriptiveMetadata(SIPDescriptiveMetadata descriptiveMetadata) throws SIPException;
+  Path getBasePath();
 
-  SIP addAdministrativeMetadata(SIPMetadata sipMetadata) throws SIPException;
+  SIP setDescription(String description);
 
-  SIP addOtherMetadata(SIPMetadata sipMetadata) throws SIPException;
+  String getDescription();
 
-  SIP addRepresentation(SIPRepresentation sipRepresentation) throws SIPException;
+  SIP addAgent(IPAgent agent);
 
-  SIP addSchema(Path schemaPath);
+  SIP addDescriptiveMetadata(IPDescriptiveMetadata descriptiveMetadata) throws SIPException;
 
-  SIP addDocumentation(Path documentationPath);
+  SIP addPreservationMetadata(IPMetadata preservationMetadata) throws SIPException;
 
-  SIP addAgentToRepresentation(String representationID, SIPAgent agent) throws SIPException;
+  SIP addOtherMetadata(IPMetadata otherMetadata) throws SIPException;
 
-  SIP addDescriptiveMetadataToRepresentation(String representationID, SIPDescriptiveMetadata descriptiveMetadata)
+  SIP addRepresentation(IPRepresentation representation) throws SIPException;
+
+  SIP addSchema(IPFile schema);
+
+  SIP addDocumentation(IPFile documentation);
+
+  SIP addAgentToRepresentation(String representationID, IPAgent agent) throws SIPException;
+
+  SIP addDescriptiveMetadataToRepresentation(String representationID, IPDescriptiveMetadata descriptiveMetadata)
     throws SIPException;
 
-  SIP addAdministrativeMetadataToRepresentation(String representationID, SIPMetadata preservationMetadata)
+  SIP addPreservationMetadataToRepresentation(String representationID, IPMetadata preservationMetadata)
     throws SIPException;
 
-  SIP addOtherMetadataToRepresentation(String representationID, SIPMetadata otherMetadata) throws SIPException;
+  SIP addOtherMetadataToRepresentation(String representationID, IPMetadata otherMetadata) throws SIPException;
 
-  SIP addFileToRepresentation(String representationID, Path file, List<String> folders) throws SIPException;
+  SIP addFileToRepresentation(String representationID, IPFile file) throws SIPException;
 
-  SIP addDocumentationToRepresentation(String representationID, Path documentationPath) throws SIPException;
+  SIP addSchemaToRepresentation(String representationID, IPFile schema) throws SIPException;
 
-  SIP addSchemaToRepresentation(String representationID, Path schemaPath) throws SIPException;
+  SIP addDocumentationToRepresentation(String representationID, IPFile documentation) throws SIPException;
 
   /**
    * @param destinationDirectory
@@ -54,18 +61,18 @@ public interface SIP {
    */
   Path build(Path destinationDirectory) throws SIPException;
 
-  List<SIPAgent> getAgents();
+  List<IPAgent> getAgents();
 
-  List<SIPDescriptiveMetadata> getDescriptiveMetadata();
+  List<IPDescriptiveMetadata> getDescriptiveMetadata();
 
-  List<SIPMetadata> getAdministrativeMetadata();
+  List<IPMetadata> getPreservationMetadata();
 
-  List<SIPMetadata> getOtherMetadata();
+  List<IPMetadata> getOtherMetadata();
 
-  List<SIPRepresentation> getRepresentations();
+  List<IPRepresentation> getRepresentations();
 
-  List<Path> getSchemas();
+  List<IPFile> getSchemas();
 
-  List<Path> getDocumentation();
+  List<IPFile> getDocumentation();
 
 }

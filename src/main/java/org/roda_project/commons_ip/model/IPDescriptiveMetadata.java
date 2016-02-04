@@ -7,17 +7,18 @@
  */
 package org.roda_project.commons_ip.model;
 
-import java.nio.file.Path;
+import java.io.Serializable;
 
 import org.roda_project.commons_ip.utils.METSEnums.MetadataType;
 
-public class SIPDescriptiveMetadata extends SIPMetadata {
+public class IPDescriptiveMetadata extends IPMetadata implements Serializable {
+  private static final long serialVersionUID = 8499877557153068472L;
 
   private MetadataType metadataType;
   private String metadataVersion;
 
-  public SIPDescriptiveMetadata(Path metadata, Path schema, MetadataType metadataType, String metadataVersion) {
-    super(metadata, schema);
+  public IPDescriptiveMetadata(IPFile metadata, MetadataType metadataType, String metadataVersion) {
+    super(metadata);
     this.metadataType = metadataType;
     this.metadataVersion = metadataVersion;
   }
@@ -40,8 +41,8 @@ public class SIPDescriptiveMetadata extends SIPMetadata {
 
   @Override
   public String toString() {
-    return "SIPDescriptiveMetadata [metadataType=" + metadataType + ", metadataVersion=" + metadataVersion
-      + ", getMetadata()=" + getMetadata() + ", getSchema()=" + getSchema() + "]";
+    return "IPDescriptiveMetadata [metadataType=" + metadataType + ", metadataVersion=" + metadataVersion
+      + ", getMetadata()=" + getMetadata() + "]";
   }
 
 }

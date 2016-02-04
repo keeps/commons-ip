@@ -7,6 +7,7 @@
  */
 package org.roda_project.commons_ip.utils;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -14,42 +15,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import org.roda_project.commons_ip.model.SIPMetadata;
+import org.apache.commons.io.IOUtils;
 
 public final class ZIPUtils {
 
   private ZIPUtils() {
   }
 
-  public static List<ZipEntryInfo> addMetadataToZip(List<ZipEntryInfo> zipEntries, SIPMetadata dm, String metadataPath)
-    throws SIPException {
-
-    if (dm.getSchema() != null) {
-      // FIXME this is not right!!!
-      // addFileToZip(zipEntries, dm.getSchema(), metadataPath);
-    }
-
-    addFileToZip(zipEntries, dm.getMetadata(), metadataPath);
-
-    return zipEntries;
-  }
-
-  public static List<ZipEntryInfo> addDataToRepresentation(List<ZipEntryInfo> zipEntries, Path dataFile,
-    String dataFilePath) throws SIPException {
-
-    addFileToZip(zipEntries, dataFile, dataFilePath);
-
-    return zipEntries;
-  }
-
   public static List<ZipEntryInfo> addFileToZip(List<ZipEntryInfo> zipEntries, Path filePath, String zipPath)
     throws SIPException {
-
-    if (zipPath.startsWith("/")) {
-      zipPath = zipPath.substring(1);
-    }
 
     zipEntries.add(new ZipEntryInfo(zipPath, filePath));
 
@@ -69,26 +46,63 @@ public final class ZIPUtils {
     for (ZipEntryInfo file : files) {
       ZipEntry entry = new ZipEntry(file.getName());
       zos.putNextEntry(entry);
-      sendToZip(Files.newInputStream(file.getFilePath()), zos);
+      InputStream inputStream = Files.newInputStream(file.getFilePath());
+      IOUtils.copyLarge(inputStream, zos);
       zos.closeEntry();
+      inputStream.close();
     }
 
     zos.close();
     out.close();
   }
 
-  private static void sendToZip(InputStream in, ZipOutputStream zos) throws IOException {
-    byte[] buffer = new byte[4096];
-    int retval;
+  public static void unzip(Path zip, final Path dest) throws IOException {
 
-    do {
-      retval = in.read(buffer, 0, 4096);
-      if (retval != -1) {
-        zos.write(buffer, 0, retval);
-      }
-    } while (retval != -1);
+    ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zip.toFile()));
 
-    in.close();
+    ZipEntry zipEntry = zipInputStream.getNextEntry();
+
+    if (zipEntry == null) {
+      // No entries in ZIP
+
+      zipInputStream.close();
+
+      throw new IOException("No files inside ZIP");
+
+    } else {
+
+      while (zipEntry != null) {
+
+        // for each entry to be extracted
+        String entryName = zipEntry.getName();
+
+        Path newFile = dest.resolve(entryName);
+
+        if (zipEntry.isDirectory()) {
+
+          Files.createDirectories(newFile);
+
+        } else {
+
+          if (!Files.exists(newFile.getParent())) {
+            Files.createDirectories(newFile.getParent());
+          }
+
+          OutputStream newFileOutputStream = Files.newOutputStream(newFile);
+
+          IOUtils.copyLarge(zipInputStream, newFileOutputStream);
+
+          newFileOutputStream.close();
+          zipInputStream.closeEntry();
+
+        }
+
+        zipEntry = zipInputStream.getNextEntry();
+
+      } // end while
+
+      zipInputStream.close();
+    }
 
   }
 

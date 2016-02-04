@@ -5,7 +5,7 @@
 	<groupId>org.roda-project</groupId>
 	<artifactId>commons-ip</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.0-alpha3</version>
+	<version>1.0.0-alpha4</version>
 	<name>RODA Commons IP - Library to manipulate Information Packages of different types: RODA, E-ARK, etc.</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -73,6 +73,11 @@
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>

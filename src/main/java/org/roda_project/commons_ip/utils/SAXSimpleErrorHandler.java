@@ -21,24 +21,27 @@ public class SAXSimpleErrorHandler extends DefaultHandler {
     errors = new ArrayList<SAXParseException>();
   }
 
-  public void warning(SAXParseException e) throws SAXException {
-    errors.add(e);
-  }
-
-  public void error(SAXParseException e) throws SAXException {
-    errors.add(e);
-  }
-
-  public void fatalError(SAXParseException e) throws SAXException {
-    errors.add(e);
-  }
-
   public List<SAXParseException> getErrors() {
     return errors;
   }
 
   public void setErrors(List<SAXParseException> errors) {
     this.errors = errors;
+  }
+
+  @Override
+  public void warning(SAXParseException e) throws SAXException {
+    errors.add(e);
+  }
+
+  @Override
+  public void error(SAXParseException e) throws SAXException {
+    errors.add(e);
+  }
+
+  @Override
+  public void fatalError(SAXParseException e) throws SAXException {
+    errors.add(e);
   }
 
 }

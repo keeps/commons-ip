@@ -7,16 +7,28 @@
  */
 package org.roda_project.commons_ip.model;
 
+import java.io.Serializable;
+
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 
-public class SIPAgent {
+public class IPAgent implements Serializable {
+  private static final long serialVersionUID = 8060509412626688269L;
+
   private String name;
   private String role;
   private CreatorType type;
   private String otherRole;
   private String otherType;
 
-  public SIPAgent(String name, String role, String otherRole, CreatorType type, String otherType) {
+  public IPAgent() {
+    this.name = "";
+    this.role = "";
+    this.type = CreatorType.OTHER;
+    this.otherRole = "";
+    this.otherType = "";
+  }
+
+  public IPAgent(String name, String role, String otherRole, CreatorType type, String otherType) {
     this.name = name;
     this.role = role;
     this.type = type;
@@ -28,45 +40,50 @@ public class SIPAgent {
     return name;
   }
 
-  public void setName(String name) {
+  public IPAgent setName(String name) {
     this.name = name;
+    return this;
   }
 
   public String getRole() {
     return role;
   }
 
-  public void setRole(String role) {
+  public IPAgent setRole(String role) {
     this.role = role;
+    return this;
   }
 
   public CreatorType getType() {
     return type;
   }
 
-  public void setType(CreatorType type) {
+  public IPAgent setType(CreatorType type) {
     this.type = type;
+    return this;
   }
 
   public String getOtherRole() {
     return otherRole;
   }
 
-  public void setOtherRole(String otherRole) {
+  public IPAgent setOtherRole(String otherRole) {
     this.otherRole = otherRole;
+    return this;
   }
 
   public String getOtherType() {
     return otherType;
   }
 
-  public void setOtherType(String otherType) {
+  public IPAgent setOtherType(String otherType) {
     this.otherType = otherType;
+    return this;
   }
 
   @Override
   public String toString() {
-    return "SIPAgent [name=" + name + ", role=" + role + ", type=" + type + ", otherRole=" + otherRole + ", otherType="
+    return "IPAgent [name=" + name + ", role=" + role + ", type=" + type + ", otherRole=" + otherRole + ", otherType="
       + otherType + "]";
   }
 

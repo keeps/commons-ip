@@ -8,6 +8,7 @@
 package org.roda_project.commons_ip.utils;
 
 public final class ValidationErrors {
+
   public static final String NO_DATA_FOLDER = "No 'data' folder in SIP";
   public static final String NO_METADATA_FOLDER = "No 'metadata' folder in SIP";
   public static final String UNKNOWN_METADATA_FOLDER = "Unknown metadata folder in SIP";
@@ -30,5 +31,10 @@ public final class ValidationErrors {
   public static final String NO_VALID_LOCAT = "No valid locat found";
   public static final String BAD_HREF = "The href associated with the file is not in the format file://.XXXX";
   public static final String NO_MDREF_IN_DMDSEC = "There is no mdref in dmdsec";
+
+  /** Private empty constructor */
+  private ValidationErrors() {
+
+  }
 
 }

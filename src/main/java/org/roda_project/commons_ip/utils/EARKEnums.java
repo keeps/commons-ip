@@ -7,7 +7,13 @@
  */
 package org.roda_project.commons_ip.utils;
 
-public class EARKEnums {
+public final class EARKEnums {
+
+  /** Private empty constructor */
+  private EARKEnums() {
+
+  }
+
   public static enum Type {
     SIP("SIP"), DIP("DIP"), AIP("AIP");
     private final String stringValue;
@@ -16,6 +22,7 @@ public class EARKEnums {
       stringValue = s;
     }
 
+    @Override
     public String toString() {
       return stringValue;
     }
@@ -29,6 +36,7 @@ public class EARKEnums {
       stringValue = s;
     }
 
+    @Override
     public String toString() {
       return stringValue;
     }
@@ -42,6 +50,7 @@ public class EARKEnums {
       stringValue = s;
     }
 
+    @Override
     public String toString() {
       return stringValue;
     }

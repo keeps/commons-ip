@@ -8,7 +8,6 @@
 package org.roda_project.commons_ip.parse.impl.eark;
 
 import java.io.IOException;
-import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -17,223 +16,349 @@ import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
-import org.roda_project.commons_ip.mets_v1_11.beans.AmdSecType;
-import org.roda_project.commons_ip.mets_v1_11.beans.FileGrpType;
+import org.apache.commons.lang3.StringUtils;
+import org.roda_project.commons_ip.mets_v1_11.beans.DivType;
+import org.roda_project.commons_ip.mets_v1_11.beans.DivType.Fptr;
+import org.roda_project.commons_ip.mets_v1_11.beans.DivType.Mptr;
 import org.roda_project.commons_ip.mets_v1_11.beans.FileType;
 import org.roda_project.commons_ip.mets_v1_11.beans.FileType.FLocat;
-import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType;
 import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType.MdRef;
 import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
-import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec;
+import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.MetsHdr.Agent;
 import org.roda_project.commons_ip.mets_v1_11.beans.StructMapType;
-import org.roda_project.commons_ip.model.MigrationException;
+import org.roda_project.commons_ip.model.IPConstants;
+import org.roda_project.commons_ip.model.IPDescriptiveMetadata;
+import org.roda_project.commons_ip.model.IPFile;
+import org.roda_project.commons_ip.model.IPMetadata;
+import org.roda_project.commons_ip.model.IPRepresentation;
+import org.roda_project.commons_ip.model.MetsWrapper;
+import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.model.SIP;
-import org.roda_project.commons_ip.model.SIPDescriptiveMetadata;
-import org.roda_project.commons_ip.model.SIPMetadata;
-import org.roda_project.commons_ip.model.SIPRepresentation;
 import org.roda_project.commons_ip.model.impl.eark.EARKMETSUtils;
 import org.roda_project.commons_ip.model.impl.eark.EARKSIP;
 import org.roda_project.commons_ip.parse.Parser;
-import org.roda_project.commons_ip.utils.EARKEnums.ContentType;
-import org.roda_project.commons_ip.utils.METSEnums;
 import org.roda_project.commons_ip.utils.METSEnums.MetadataType;
 import org.roda_project.commons_ip.utils.SIPException;
 import org.roda_project.commons_ip.utils.Utils;
+import org.roda_project.commons_ip.utils.ZIPUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class EARKParser implements Parser {
   private static final Logger LOGGER = LoggerFactory.getLogger(EARKParser.class);
 
-  public SIP parse(Path source) throws MigrationException {
+  @Override
+  public SIP parse(Path source) throws ParseException {
     try {
-      SIP converted = earkSipToRodaAip(source);
-      return converted;
+      return parseEARKSIP(source);
     } catch (JAXBException | IOException | SIPException e) {
-      throw new MigrationException("Error converting E-ARK SIP to RODA AIP", e);
+      throw new ParseException("Error parsing E-ARK SIP", e);
     }
   }
 
-  private SIP earkSipToRodaAip(Path source) throws JAXBException, IOException, SIPException {
+  private SIP parseEARKSIP(final Path source) throws JAXBException, IOException, SIPException, ParseException {
+    Path sipPath = extractSIPIfInZipFormat(source);
+
+    Path mainMETSFile = sipPath.resolve(IPConstants.METS_FILE);
+    Mets mainMets = EARKMETSUtils.instantiateMETSFromFile(mainMETSFile);
+
+    SIP sip = instantiateSIP(sipPath, mainMets);
+
+    StructMapType structMap = getEARKStructMap(mainMets);
+
+    MetsWrapper metsWrapper = preProcessStructMap(mainMets, structMap);
+
+    processDescriptiveMetadata(metsWrapper, sip, null, sip.getBasePath());
+
+    processOtherMetadata(metsWrapper, sip, null, sip.getBasePath());
+
+    processPreservationMetadata(metsWrapper, sip, null, sip.getBasePath());
+
+    processRepresentations(metsWrapper, sip, sip.getBasePath());
+
+    processSchemasMetadata(metsWrapper, sip, sip.getBasePath());
+
+    processDocumentationMetadata(metsWrapper, sip, sip.getBasePath());
+
+    processParentId(metsWrapper, sip);
+
+    return sip;
+  }
+
+  private Path extractSIPIfInZipFormat(final Path source) {
+    Path sipPath = source;
     if (!Files.isDirectory(source)) {
       try {
         Path uncompressed = Files.createTempDirectory("unzipped");
-        Utils.unzip(source, uncompressed);
-        source = uncompressed;
+        ZIPUtils.unzip(source, uncompressed);
+        sipPath = uncompressed;
       } catch (IOException e) {
         LOGGER.error("Error unzipping file", e);
       }
     }
-    Path mainMETSFile = source.resolve("METS.xml");
-    Mets mainMets = EARKMETSUtils.processMetsXML(mainMETSFile);
 
-    SIP sip = new EARKSIP("ID", ContentType.mixed, "RODA");
+    return sipPath;
+  }
 
-    if (mainMets.getDmdSec() != null && mainMets.getDmdSec().size() > 0) {
-      for (MdSecType mdsec : mainMets.getDmdSec()) {
-        if (mdsec.getMdRef() != null) {
-          MdRef mdref = mdsec.getMdRef();
-          String href = mdref.getHref();
-          if (href.startsWith("file://./")) {
-            href = href.replace("file://./", "");
+  private SIP instantiateSIP(Path sipPath, Mets mets) throws SIPException {
+    SIP sip = new EARKSIP(mets.getOBJID());
+    addAgentsToMETS(mets, sip, null);
+    sip.setBasePath(sipPath);
+    return sip;
+  }
+
+  private Mets addAgentsToMETS(Mets mets, SIP sip, IPRepresentation representation) {
+    if (mets.getMetsHdr() != null && mets.getMetsHdr().getAgent() != null) {
+      for (Agent agent : mets.getMetsHdr().getAgent()) {
+        if (representation == null) {
+          sip.addAgent(EARKMETSUtils.createIPAgent(agent));
+        } else {
+          representation.addAgent(EARKMETSUtils.createIPAgent(agent));
+        }
+      }
+    }
+
+    return mets;
+  }
+
+  private StructMapType getEARKStructMap(Mets mets) throws ParseException {
+    StructMapType res = null;
+    for (StructMapType structMap : mets.getStructMap()) {
+      if (StringUtils.equals(structMap.getLABEL(), IPConstants.E_ARK_STRUCTURAL_MAP)) {
+        res = structMap;
+        break;
+      }
+    }
+    if (res == null) {
+      throw new ParseException("Cannot find EARK structural map");
+    }
+    return res;
+  }
+
+  private MetsWrapper preProcessStructMap(Mets mets, StructMapType structMap) throws SIPException {
+    MetsWrapper metsWrapper = new MetsWrapper(mets);
+
+    DivType sipDiv = structMap.getDiv();
+    if (sipDiv.getDiv() != null) {
+      for (DivType firstLevel : sipDiv.getDiv()) {
+        if (IPConstants.METADATA.equalsIgnoreCase(firstLevel.getLABEL()) && firstLevel.getDiv() != null) {
+          for (DivType secondLevel : firstLevel.getDiv()) {
+            if (IPConstants.DESCRIPTIVE.equalsIgnoreCase(secondLevel.getLABEL())) {
+              metsWrapper.setDescriptiveMetadataDiv(secondLevel);
+            } else if (IPConstants.PRESERVATION.equalsIgnoreCase(secondLevel.getLABEL())) {
+              metsWrapper.setPreservationMetadataDiv(secondLevel);
+            } else if (IPConstants.OTHER.equalsIgnoreCase(secondLevel.getLABEL())) {
+              metsWrapper.setOtherMetadataDiv(secondLevel);
+            }
           }
-          Path filePath = source.resolve(href);
-          SIPDescriptiveMetadata sdm;
+        } else if (IPConstants.REPRESENTATIONS.equalsIgnoreCase(firstLevel.getLABEL())) {
+          metsWrapper.setRepresentationsDiv(firstLevel);
+        } else if (IPConstants.DATA.equalsIgnoreCase(firstLevel.getLABEL())) {
+          metsWrapper.setDataDiv(firstLevel);
+        } else if (IPConstants.SCHEMAS.equalsIgnoreCase(firstLevel.getLABEL())) {
+          metsWrapper.setSchemasDiv(firstLevel);
+        } else if (IPConstants.DOCUMENTATION.equalsIgnoreCase(firstLevel.getLABEL())) {
+          metsWrapper.setDocumentationDiv(firstLevel);
+        }
+      }
+    }
+
+    return metsWrapper;
+  }
+
+  private SIP processDescriptiveMetadata(MetsWrapper metsWrapper, SIP sip, IPRepresentation representation,
+    Path basePath) throws SIPException {
+
+    return processMetadata(sip, representation, metsWrapper.getDescriptiveMetadataDiv(), IPConstants.DESCRIPTIVE,
+      basePath);
+  }
+
+  private SIP processOtherMetadata(MetsWrapper metsWrapper, SIP sip, IPRepresentation representation, Path basePath)
+    throws SIPException {
+
+    return processMetadata(sip, representation, metsWrapper.getOtherMetadataDiv(), IPConstants.OTHER, basePath);
+  }
+
+  private SIP processPreservationMetadata(MetsWrapper metsWrapper, SIP sip, IPRepresentation representation,
+    Path basePath) throws SIPException {
+
+    return processMetadata(sip, representation, metsWrapper.getPreservationMetadataDiv(), IPConstants.PRESERVATION,
+      basePath);
+  }
+
+  private SIP processMetadata(SIP sip, IPRepresentation representation, DivType div, String metadataType, Path basePath)
+    throws SIPException {
+    if (div != null && div.getFptr() != null) {
+      for (Fptr fptr : div.getFptr()) {
+        MdRef mdRef = (MdRef) fptr.getFILEID();
+        String href = Utils.extractedRelativePathFromHref(mdRef);
+        Path filePath = basePath.resolve(href);
+        List<String> fileRelativeFolders = getFileRelativeFolders(
+          basePath.resolve(IPConstants.METADATA).resolve(metadataType), filePath);
+
+        if (IPConstants.DESCRIPTIVE.equalsIgnoreCase(metadataType)) {
+          MetadataType dmdType = MetadataType.OTHER;
+          String dmdVersion = null;
           try {
-            MetadataType mt = MetadataType.valueOf(mdref.getMDTYPE().toUpperCase());
-            LOGGER.debug("Metadata type valid: " + mt.toString());
-            sdm = new SIPDescriptiveMetadata(filePath, null, mt, mdref.getMDTYPEVERSION());
-          } catch (NullPointerException | IllegalArgumentException t) {
-            sdm = new SIPDescriptiveMetadata(filePath, null, MetadataType.OTHER, null);
+            dmdType = MetadataType.valueOf(mdRef.getMDTYPE().toUpperCase());
+            dmdVersion = mdRef.getMDTYPEVERSION();
+            LOGGER.debug("Metadata type valid: " + dmdType.toString());
+          } catch (NullPointerException | IllegalArgumentException e) {
+            // do nothing and use already defined values for metadataType &
+            // metadataVersion
+            LOGGER.debug("Setting metadata type to {}", dmdType);
           }
 
-          sip.addDescriptiveMetadata(sdm);
-        }
-      }
-    }
-    if (mainMets.getAmdSec() != null && mainMets.getAmdSec().size() > 0) {
-      for (AmdSecType amdsec : mainMets.getAmdSec()) {
-        if (amdsec.getDigiprovMD() != null && amdsec.getDigiprovMD().size() > 0) {
-          for (MdSecType digiProv : amdsec.getDigiprovMD()) {
-            MdRef mdref = digiProv.getMdRef();
-            String href = mdref.getHref();
-            if (href.startsWith("file://./")) {
-              href = href.replace("file://./", "");
-            }
-            Path filePath = source.resolve(href);
-            SIPMetadata sdm = new SIPMetadata(filePath, null);
-            sip.addAdministrativeMetadata(sdm);
+          IPDescriptiveMetadata descriptiveMetadata = new IPDescriptiveMetadata(
+            new IPFile(filePath, fileRelativeFolders), dmdType, dmdVersion);
+          if (representation == null) {
+            sip.addDescriptiveMetadata(descriptiveMetadata);
+          } else {
+            representation.addDescriptiveMetadata(descriptiveMetadata);
+          }
+        } else if (IPConstants.PRESERVATION.equalsIgnoreCase(metadataType)) {
+          IPMetadata preservationMetadata = new IPMetadata(new IPFile(filePath, fileRelativeFolders));
+          if (representation == null) {
+            sip.addPreservationMetadata(preservationMetadata);
+          } else {
+            representation.addPreservationMetadata(preservationMetadata);
+          }
+        } else if (IPConstants.OTHER.equalsIgnoreCase(metadataType)) {
+          IPMetadata otherMetadata = new IPMetadata(new IPFile(filePath, fileRelativeFolders));
+          if (representation == null) {
+            sip.addOtherMetadata(otherMetadata);
+          } else {
+            representation.addOtherMetadata(otherMetadata);
           }
         }
-      }
-    }
-    Path representationsPath = source.resolve("representations");
-    if (Files.exists(representationsPath)) {
-      DirectoryStream.Filter<Path> filter = new DirectoryStream.Filter<Path>() {
-        @Override
-        public boolean accept(Path file) throws IOException {
-          return (Files.isDirectory(file));
-        }
-      };
-      try (DirectoryStream<Path> stream = Files.newDirectoryStream(representationsPath, filter)) {
-        for (Path path : stream) {
-          Path representationMets = path.resolve("METS.xml");
-          sip = processRepresentation(sip, representationMets, path.getFileName().toString());
-        }
-      } catch (IOException e) {
-        LOGGER.error("Error opening directory stream", e);
       }
     }
 
-    if (mainMets.getStructMap() != null && mainMets.getStructMap().size() > 0) {
-      for (StructMapType smt : mainMets.getStructMap()) {
-        if (smt.getStructMapTypeLabel() != null && smt.getStructMapTypeLabel().equalsIgnoreCase("Parent")) {
-          String parentID = EARKMETSUtils.extractParentID(smt);
-          if (parentID != null) {
-            sip.setParent(parentID);
-          }
-        }
-      }
-    }
     return sip;
   }
 
-  private SIP processRepresentation(SIP sip, Path representationMetsPath, String representationID)
-    throws JAXBException, SIPException {
-    Path representationPath = representationMetsPath.getParent();
-    sip.addRepresentation(new SIPRepresentation(representationID));
-    try {
-      Mets representationMets = EARKMETSUtils.processMetsXML(representationMetsPath);
-      if (representationMets.getDmdSec() != null && representationMets.getDmdSec().size() > 0) {
-        for (MdSecType mdsec : representationMets.getDmdSec()) {
-          if (mdsec != null && mdsec.getMdRef() != null) {
-            MdRef mdref = mdsec.getMdRef();
-            String href = mdref.getHref();
-            if (href.startsWith("file://./")) {
-              href = href.replace("file://./", "");
-            }
-            Path filePath = representationPath.resolve(href);
+  private SIP processFile(SIP sip, DivType div, String folder, Path basePath) throws SIPException {
+    if (div != null && div.getFptr() != null) {
+      for (Fptr fptr : div.getFptr()) {
+        FileType fileType = (FileType) fptr.getFILEID();
 
-            SIPDescriptiveMetadata sdm;
-            try {
-              MetadataType mt = MetadataType.valueOf(mdref.getMDTYPE().toUpperCase());
-              LOGGER.debug("Metadata type valid: " + mt.toString());
-              sdm = new SIPDescriptiveMetadata(filePath, null, mt, mdref.getMDTYPEVERSION());
-            } catch (NullPointerException | IllegalArgumentException t) {
-              sdm = new SIPDescriptiveMetadata(filePath, null, MetadataType.OTHER, null);
-            }
-            sip.addDescriptiveMetadataToRepresentation(representationID, sdm);
+        if (fileType.getFLocat() != null) {
+          FLocat fLocat = fileType.getFLocat().get(0);
+          String href = Utils.extractedRelativePathFromHref(fLocat.getHref());
+          Path filePath = basePath.resolve(href);
+          List<String> fileRelativeFolders = getFileRelativeFolders(basePath.resolve(folder), filePath);
+
+          if (IPConstants.SCHEMAS.equalsIgnoreCase(folder)) {
+            sip.addSchema(new IPFile(filePath, fileRelativeFolders));
+          } else if (IPConstants.DOCUMENTATION.equalsIgnoreCase(folder)) {
+            sip.addDocumentation(new IPFile(filePath, fileRelativeFolders));
           }
         }
       }
-      if (representationMets.getAmdSec() != null && representationMets.getAmdSec().size() > 0) {
-        for (AmdSecType amdsec : representationMets.getAmdSec()) {
-          if (amdsec != null) {
-            if (amdsec.getDigiprovMD() != null && amdsec.getDigiprovMD().size() > 0) {
-              for (MdSecType digiProv : amdsec.getDigiprovMD()) {
-                MdRef mdref = digiProv.getMdRef();
-                String href = mdref.getHref();
-                if (href.startsWith("file://./")) {
-                  href = href.replace("file://./", "");
-                }
-                Path filePath = representationPath.resolve(href);
-                SIPMetadata sm = new SIPMetadata(filePath, null);
-                sip.addAdministrativeMetadataToRepresentation(representationID, sm);
-              }
-            }
-          }
-        }
-      }
-      if (representationMets.getFileSec() != null) {
-        FileSec representationFileSec = representationMets.getFileSec();
-        if (representationFileSec.getFileGrp() != null && representationFileSec.getFileGrp().size() > 0) {
-          for (FileGrpType gr : representationFileSec.getFileGrp()) {
-            sip = addFilesFromFileGrpToRepresentation(sip, representationID, representationPath, gr);
-          }
-        }
-      }
-    } catch (IOException | SIPException e) {
-      LOGGER.error("Error processing representation", e);
     }
+
     return sip;
   }
 
-  private SIP addFilesFromFileGrpToRepresentation(SIP sip, String representationID, Path representationPath,
-    FileGrpType fileGroup) throws IOException, SIPException {
-    if (fileGroup.getFile() != null && fileGroup.getFile().size() > 0) {
-      for (FileType ft : fileGroup.getFile()) {
-        sip = addFilesFromFileToRepresentation(sip, representationID, representationPath, ft);
-      }
-    }
-    if (fileGroup.getFileGrp() != null && fileGroup.getFileGrp().size() > 0) {
-      for (FileGrpType g : fileGroup.getFileGrp()) {
-        sip = addFilesFromFileGrpToRepresentation(sip, representationID, representationPath, g);
-      }
-    }
-    return sip;
-  }
+  private SIP processRepresentations(MetsWrapper metsWrapper, SIP sip, Path basePath)
+    throws JAXBException, SIPException, ParseException {
 
-  private SIP addFilesFromFileToRepresentation(SIP sip, String representationID, Path representationPath, FileType file)
-    throws IOException, SIPException {
-    if (file.getFLocat() != null && !file.getFLocat().isEmpty()) {
-      for (FLocat locat : file.getFLocat()) {
-        if (locat.getType() != null && locat.getType().equalsIgnoreCase("simple") && locat.getLOCTYPE() != null
-          && locat.getLOCTYPE().equalsIgnoreCase(METSEnums.LocType.URL.toString())) {
-          if (locat.getHref() != null && locat.getHref().startsWith("file://./")) {
-            String relativePath = locat.getHref().replace("file://./", "");
-            Path filePath = representationPath.resolve(relativePath);
-            sip.addFileToRepresentation(representationID, filePath,
-              getRepresentationFileFolderList(representationPath, filePath));
-          }
+    if (metsWrapper.getRepresentationsDiv() != null && metsWrapper.getRepresentationsDiv().getDiv() != null) {
+      for (DivType representationDiv : metsWrapper.getRepresentationsDiv().getDiv()) {
+        if (representationDiv.getMptr() != null) {
+          // we can assume one and only one mets for each representation div
+          Mptr mptr = representationDiv.getMptr().get(0);
+          String href = Utils.extractedRelativePathFromHref(mptr.getHref());
+          Path metsFilePath = basePath.resolve(href);
+          Mets representationMets = EARKMETSUtils.instantiateMETSFromFile(metsFilePath);
+          Path representationBasePath = metsFilePath.getParent();
+
+          StructMapType representationStructMap = getEARKStructMap(representationMets);
+          MetsWrapper representationMETSWrapper = preProcessStructMap(representationMets, representationStructMap);
+
+          IPRepresentation representation = new IPRepresentation(representationDiv.getLABEL());
+          sip.addRepresentation(representation);
+
+          // process representation agents
+          processRepresentationAgents(representationMETSWrapper, representation);
+
+          // process files
+          processRepresentationFiles(representationMETSWrapper, representation, representationBasePath);
+
+          // process descriptive metadata
+          processDescriptiveMetadata(representationMETSWrapper, sip, representation, representationBasePath);
+
+          // process preservation metadata
+          processPreservationMetadata(representationMETSWrapper, sip, representation, representationBasePath);
+
+          // process other metadata
+          processOtherMetadata(representationMETSWrapper, sip, representation, representationBasePath);
+
+          // process schemas
+          processSchemasMetadata(representationMETSWrapper, sip, representationBasePath);
+
+          // process documentation
+          processDocumentationMetadata(representationMETSWrapper, sip, representationBasePath);
+
         }
       }
     }
+
+    return sip;
+
+  }
+
+  private void processRepresentationAgents(MetsWrapper representationMETSWrapper, IPRepresentation representation) {
+
+    addAgentsToMETS(representationMETSWrapper.getMets(), null, representation);
+  }
+
+  private void processRepresentationFiles(MetsWrapper representationMETSWrapper, IPRepresentation representation,
+    Path representationBasePath) throws SIPException {
+
+    if (representationMETSWrapper.getDataDiv() != null && representationMETSWrapper.getDataDiv().getFptr() != null) {
+      for (Fptr fptr : representationMETSWrapper.getDataDiv().getFptr()) {
+        FileType fileType = (FileType) fptr.getFILEID();
+
+        if (fileType.getFLocat() != null) {
+          FLocat fLocat = fileType.getFLocat().get(0);
+          String href = Utils.extractedRelativePathFromHref(fLocat.getHref());
+          Path filePath = representationBasePath.resolve(href);
+          List<String> fileRelativeFolders = getFileRelativeFolders(representationBasePath.resolve(IPConstants.DATA),
+            filePath);
+
+          representation.addFile(new IPFile(filePath, fileRelativeFolders));
+        }
+      }
+    }
+
+  }
+
+  private SIP processSchemasMetadata(MetsWrapper metsWrapper, SIP sip, Path basePath) throws SIPException {
+
+    return processFile(sip, metsWrapper.getSchemasDiv(), IPConstants.SCHEMAS, basePath);
+  }
+
+  private SIP processDocumentationMetadata(MetsWrapper metsWrapper, SIP sip, Path basePath) throws SIPException {
+
+    return processFile(sip, metsWrapper.getDocumentationDiv(), IPConstants.DOCUMENTATION, basePath);
+  }
+
+  private SIP processParentId(MetsWrapper metsWrapper, SIP sip) {
+    Mets mets = metsWrapper.getMets();
+    if (mets.getStructMap() != null && !mets.getStructMap().isEmpty()) {
+      String parentID = EARKMETSUtils.extractParentIDFromStructMap(mets);
+      if (parentID != null) {
+        sip.setParent(parentID);
+      }
+    }
+
     return sip;
   }
 
-  private List<String> getRepresentationFileFolderList(Path representationPath, Path filePath) {
+  private List<String> getFileRelativeFolders(Path basePath, Path filePath) {
     List<String> res = new ArrayList<>();
-    Path relativize = representationPath.resolve("data").relativize(filePath).getParent();
+    Path relativize = basePath.relativize(filePath).getParent();
     if (relativize != null) {
       Iterator<Path> iterator = relativize.iterator();
       while (iterator.hasNext()) {
