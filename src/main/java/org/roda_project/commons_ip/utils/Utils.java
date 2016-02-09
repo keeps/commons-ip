@@ -9,6 +9,7 @@ package org.roda_project.commons_ip.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -26,6 +27,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.commons.io.IOUtils;
 import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType.MdRef;
 import org.roda_project.commons_ip.model.IPConstants;
 import org.slf4j.Logger;
@@ -39,6 +41,17 @@ public final class Utils {
 
   public static String generateRandomId() {
     return UUID.randomUUID().toString();
+  }
+
+  public static Path copyResourceFromClasspathToDir(Class<?> resourceClass, Path dir, String resourceTempSuffix,
+    String resourcePath) throws IOException {
+    Path resource = Files.createTempFile(dir, "", resourceTempSuffix);
+    InputStream inputStream = resourceClass.getResourceAsStream(resourcePath);
+    OutputStream outputStream = Files.newOutputStream(resource);
+    IOUtils.copy(inputStream, outputStream);
+    inputStream.close();
+    outputStream.close();
+    return resource;
   }
 
   public static String extractedRelativePathFromHref(MdRef mdref) {

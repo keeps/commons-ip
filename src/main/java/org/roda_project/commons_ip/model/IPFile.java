@@ -33,6 +33,13 @@ public class IPFile implements Serializable {
     this.relativeFolders = relativeFolders;
   }
 
+  public IPFile(Path path, String renameTo) {
+    super();
+    this.path = path;
+    this.renameTo = renameTo;
+    this.relativeFolders = new ArrayList<>();
+  }
+
   public IPFile(Path path, List<String> relativeFolders, String renameTo) {
     super();
     this.path = path;

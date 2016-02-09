@@ -10,7 +10,6 @@ package org.roda_project.commons_ip.model.impl.eark;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,8 +30,12 @@ import org.roda_project.commons_ip.utils.SIPException;
 import org.roda_project.commons_ip.utils.Utils;
 import org.roda_project.commons_ip.utils.ZIPUtils;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EARKSIP implements SIP {
+  private static final Logger LOGGER = LoggerFactory.getLogger(EARKSIP.class);
+
   private static final String SIP_TEMP_DIR = "EARKSIP";
   private static final String SIP_FILE_EXTENSION = ".zip";
 
@@ -308,7 +311,7 @@ public class EARKSIP implements SIP {
 
       addRepresentationsToZipAndMETS(zipEntries, mainMETSWrapper, buildDir);
 
-      addDefaultSchemas();
+      addDefaultSchemas(buildDir);
 
       addSchemasToZipAndMETS(zipEntries, mainMETSWrapper, schemas, null);
 
@@ -322,11 +325,6 @@ public class EARKSIP implements SIP {
     } finally {
       deleteBuildDir(buildDir);
     }
-  }
-
-  private void addDefaultSchemas() {
-    schemas.add(new IPFile(Paths.get("src/main/resources/schemas/mets1_11.xsd"), new ArrayList<>(), "mets.xsd"));
-    schemas.add(new IPFile(Paths.get("src/main/resources/schemas/xlink.xsd")));
   }
 
   private Path createBuildDir() throws SIPException {
@@ -474,6 +472,19 @@ public class EARKSIP implements SIP {
           + dataFilePath;
         ZIPUtils.addFileToZip(zipEntries, file.getPath(), dataFilePath);
       }
+    }
+  }
+
+  private void addDefaultSchemas(Path buildDir) {
+    try {
+      Path metsSchema = Utils.copyResourceFromClasspathToDir(EARKSIP.class, buildDir, "mets.xsd",
+        "/schemas/mets1_11.xsd");
+      schemas.add(new IPFile(metsSchema, "mets.xsd"));
+      Path xlinkSchema = Utils.copyResourceFromClasspathToDir(EARKSIP.class, buildDir, "xlink.xsd",
+        "/schemas/xlink.xsd");
+      schemas.add(new IPFile(xlinkSchema, "xlink.xsd"));
+    } catch (IOException e) {
+      LOGGER.error("Error while trying to add default schemas", e);
     }
   }
 
