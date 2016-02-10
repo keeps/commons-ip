@@ -19,6 +19,7 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.IOUtils;
+import org.roda_project.commons_ip.model.SIP;
 
 public final class ZIPUtils {
 
@@ -38,11 +39,13 @@ public final class ZIPUtils {
    * 
    * @param files
    * @param out
+   * @param earksip
    * @throws IOException
    */
-  public static void zip(List<ZipEntryInfo> files, OutputStream out) throws IOException {
+  public static void zip(List<ZipEntryInfo> files, OutputStream out, SIP earksip) throws IOException {
     ZipOutputStream zos = new ZipOutputStream(out);
 
+    int i = 0;
     for (ZipEntryInfo file : files) {
       ZipEntry entry = new ZipEntry(file.getName());
       zos.putNextEntry(entry);
@@ -50,6 +53,8 @@ public final class ZIPUtils {
       IOUtils.copyLarge(inputStream, zos);
       zos.closeEntry();
       inputStream.close();
+      i++;
+      earksip.notifySipBuildUpdated(i);
     }
 
     zos.close();

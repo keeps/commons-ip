@@ -7,72 +7,64 @@
  */
 package org.roda_project.commons_ip.model;
 
-import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.roda_project.commons_ip.utils.SIPException;
+import org.roda_project.commons_ip.utils.EARKEnums.ContentType;
+import org.roda_project.commons_ip.utils.EARKEnums.Type;
+import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 
-public interface SIP {
-  SIP setParent(String parentID);
+public abstract class SIP extends IP {
+  private final List<SIPObserver> observers;
 
-  String getParentID();
+  public SIP() {
+    super();
+    observers = new ArrayList<SIPObserver>();
+  }
 
-  SIP setBasePath(Path basePath);
+  public SIP(String sipName) {
+    super();
+    setId(sipName);
+    setType(Type.SIP);
 
-  Path getBasePath();
+    observers = new ArrayList<SIPObserver>();
+  }
 
-  SIP setDescription(String description);
+  public SIP(String sipName, ContentType contentType, String creator) {
+    super();
+    setId(sipName);
+    setType(Type.SIP);
+    setContentType(contentType);
+    IPAgent creatorAgent = new IPAgent(creator, "CREATOR", null, CreatorType.OTHER, "SOFTWARE");
+    getAgents().add(creatorAgent);
 
-  String getDescription();
+    observers = new ArrayList<SIPObserver>();
+  }
 
-  SIP addAgent(IPAgent agent);
+  public void addObserver(SIPObserver observer) {
+    observers.add(observer);
+  }
 
-  SIP addDescriptiveMetadata(IPDescriptiveMetadata descriptiveMetadata) throws SIPException;
+  public void removeObserver(SIPObserver observer) {
+    observers.remove(observer);
+  }
 
-  SIP addPreservationMetadata(IPMetadata preservationMetadata) throws SIPException;
+  public void notifySipBuildStarted(int totalNumberOfFiles) {
+    for (SIPObserver sipObserver : observers) {
+      sipObserver.sipBuildStarted(totalNumberOfFiles);
+    }
+  }
 
-  SIP addOtherMetadata(IPMetadata otherMetadata) throws SIPException;
+  public void notifySipBuildUpdated(int numberOfFilesAlreadyProcessed) {
+    for (SIPObserver sipObserver : observers) {
+      sipObserver.sipBuildCurrentStatus(numberOfFilesAlreadyProcessed);
+    }
+  }
 
-  SIP addRepresentation(IPRepresentation representation) throws SIPException;
-
-  SIP addSchema(IPFile schema);
-
-  SIP addDocumentation(IPFile documentation);
-
-  SIP addAgentToRepresentation(String representationID, IPAgent agent) throws SIPException;
-
-  SIP addDescriptiveMetadataToRepresentation(String representationID, IPDescriptiveMetadata descriptiveMetadata)
-    throws SIPException;
-
-  SIP addPreservationMetadataToRepresentation(String representationID, IPMetadata preservationMetadata)
-    throws SIPException;
-
-  SIP addOtherMetadataToRepresentation(String representationID, IPMetadata otherMetadata) throws SIPException;
-
-  SIP addFileToRepresentation(String representationID, IPFile file) throws SIPException;
-
-  SIP addSchemaToRepresentation(String representationID, IPFile schema) throws SIPException;
-
-  SIP addDocumentationToRepresentation(String representationID, IPFile documentation) throws SIPException;
-
-  /**
-   * @param destinationDirectory
-   *          directory where the SIP will be placed into
-   */
-  Path build(Path destinationDirectory) throws SIPException;
-
-  List<IPAgent> getAgents();
-
-  List<IPDescriptiveMetadata> getDescriptiveMetadata();
-
-  List<IPMetadata> getPreservationMetadata();
-
-  List<IPMetadata> getOtherMetadata();
-
-  List<IPRepresentation> getRepresentations();
-
-  List<IPFile> getSchemas();
-
-  List<IPFile> getDocumentation();
+  public void notifySipBuildEnded() {
+    for (SIPObserver sipObserver : observers) {
+      sipObserver.sipBuildEnded();
+    }
+  }
 
 }

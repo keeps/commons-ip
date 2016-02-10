@@ -120,7 +120,7 @@ public class EARKTest {
     // 2) parse zip file to obtain an SIP
     SIP sip = earkParser.parse(zipSIP);
 
-    LOGGER.info("SIP with id '{}' parsed with success!", sip);
+    LOGGER.info("SIP with id '{}' parsed with success!", sip.getId());
   }
 
   private void validateAndConvertExample2() throws ParseException {

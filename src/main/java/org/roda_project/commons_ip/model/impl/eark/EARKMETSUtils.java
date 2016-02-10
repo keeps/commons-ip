@@ -358,7 +358,7 @@ public final class EARKMETSUtils {
     try {
       mdRef.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(file), IPConstants.CHECKSUM_ALGORITHM));
     } catch (IOException e) {
-      throw new SIPException("Error calculating checksum for file" + file, e);
+      throw new SIPException("Error calculating checksum for file " + file, e);
     } catch (NoSuchAlgorithmException e) {
       throw new SIPException("Error calculating checksum for file " + file + " (no such algorithm)", e);
     }
@@ -393,7 +393,7 @@ public final class EARKMETSUtils {
     try {
       fileType.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(file), IPConstants.CHECKSUM_ALGORITHM));
     } catch (IOException e) {
-      throw new SIPException("Error calculating checksum for file" + file, e);
+      throw new SIPException("Error calculating checksum for file " + file, e);
     } catch (NoSuchAlgorithmException e) {
       throw new SIPException("Error calculating checksum for file " + file + " (no such algorithm)", e);
     }
