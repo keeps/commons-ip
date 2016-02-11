@@ -31,11 +31,11 @@ The RODA Commons IP provides an API to manipulate Information Packages of differ
   <dependency>
     <groupId>org.roda-project</groupId>
     <artifactId>commons-ip</artifactId>
-    <version>1.0.0-alpha4</version>
+    <version>1.0.0-alpha5</version>
   </dependency>
   ```
 
-* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha4/commons-ip-1.0.0-alpha4.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
+* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha5/commons-ip-1.0.0-alpha5.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
 
 
 ### Write some code
@@ -96,6 +96,30 @@ representation1.addFile(representationFile2);
 // 2) build SIP, providing an output directory
 Path zipSIP = sip.build(tempFolder);
 ```
+**Note:** SIP implements the Observer Pattern. This way, if one wants to be notified of SIP build progress, one just needs to implement SIPObserver interface and register itself in the SIP. Something like:
+```java
+public class WhoWantsToBuildSIPAndBeNotified implements SIPObserver{
+
+  public void buildSIP(){
+    ...
+    SIP sip = new EARKSIP("SIP_1", ContentType.mixed, "RODA Commons IP");
+    sip.addObserver(this);
+    ...
+  }
+  
+  @Override
+  public void sipBuildStarted(int totalNumberOfFiles) {
+    ...
+  }
+  
+  @Override
+  public void sipBuildCurrentStatus(int numberOfFilesAlreadyProcessed) {
+    ...
+  }
+}
+```
+
+
 
 * Parse a full E-ARK SIP
 ```java
@@ -115,7 +139,19 @@ SIP sip = earkParser.parse(zipSIP);
 
 ## History
 
-TODO: Write history
+### Alpha 5 (2016-02-11)
+
+* Refactored code to better use inheritance and interfaces
+* Now SIP implements the Observer Pattern (SIP is observable and SIPObserver, well, you can figure that out)
+
+### Alpha 4 (2016-02-09)
+
+* Almost 100 % done with EARKSIP.build (SIP to ZIP) and EARKParser.parse (ZIP to SIP) Common Specification v0.13 compliant
+
+### Alpha 3 (2016-02-03)
+
+* Going towards getting the commons-ip compliant with E-ARK Common Specification v0.13
+* Bug fixes (file leaks, etc.)
 
 ## Credits
 

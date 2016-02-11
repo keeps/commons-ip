@@ -39,10 +39,10 @@ public final class ZIPUtils {
    * 
    * @param files
    * @param out
-   * @param earksip
+   * @param sip
    * @throws IOException
    */
-  public static void zip(List<ZipEntryInfo> files, OutputStream out, SIP earksip) throws IOException {
+  public static void zip(List<ZipEntryInfo> files, OutputStream out, SIP sip) throws IOException {
     ZipOutputStream zos = new ZipOutputStream(out);
 
     int i = 0;
@@ -54,7 +54,7 @@ public final class ZIPUtils {
       zos.closeEntry();
       inputStream.close();
       i++;
-      earksip.notifySipBuildUpdated(i);
+      sip.notifySipBuildUpdated(i);
     }
 
     zos.close();
