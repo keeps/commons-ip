@@ -296,6 +296,10 @@ public abstract class IP implements IPInterface {
     }
   }
 
+  public static IP parse(Path source) throws ParseException {
+    throw new ParseException("One must implement static method parse in a concrete class");
+  }
+
   @Override
   public String toString() {
     return "IP [id=" + id + ", profile=" + profile + ", type=" + type + ", contentType=" + contentType + ", basePath="

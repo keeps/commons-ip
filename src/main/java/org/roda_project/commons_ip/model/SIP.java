@@ -7,6 +7,7 @@
  */
 package org.roda_project.commons_ip.model;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +66,10 @@ public abstract class SIP extends IP {
     for (SIPObserver sipObserver : observers) {
       sipObserver.sipBuildEnded();
     }
+  }
+
+  public static SIP parse(Path source) throws ParseException {
+    throw new ParseException("One must implement static method parse in a concrete class");
   }
 
 }

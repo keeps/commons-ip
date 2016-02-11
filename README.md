@@ -1,6 +1,6 @@
 # RODA Commons IP 
 
-The RODA Commons IP provides an API to manipulate Information Packages of different types: RODA, E-ARK, etc.
+The RODA Commons IP provides an API to manipulate Information Packages of different formats: RODA, E-ARK, etc.
 
 ## Installation
 
@@ -31,11 +31,11 @@ The RODA Commons IP provides an API to manipulate Information Packages of differ
   <dependency>
     <groupId>org.roda-project</groupId>
     <artifactId>commons-ip</artifactId>
-    <version>1.0.0-alpha5</version>
+    <version>1.0.0-alpha6</version>
   </dependency>
   ```
 
-* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha5/commons-ip-1.0.0-alpha5.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
+* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha6/commons-ip-1.0.0-alpha6.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
 
 
 ### Write some code
@@ -123,10 +123,8 @@ public class WhoWantsToBuildSIPAndBeNotified implements SIPObserver{
 
 * Parse a full E-ARK SIP
 ```java
-// 1) instantiate E-ARK parser
-Parser earkParser = new EARKParser();
-// 2) parse zip file to obtain an SIP
-SIP sip = earkParser.parse(zipSIP);
+// 1) invoke static method parse and that's it
+SIP earkSIP = EARKSIP.parse(zipSIP);
 ```
 
 ## Contributing
@@ -138,6 +136,10 @@ SIP sip = earkParser.parse(zipSIP);
 5. Submit a pull request :D
 
 ## History
+
+### Alpha 6 (2016-02-11)
+
+* Removed Parser interface and EARKParser implementation: now this must be done in a concrete SIP class as the IP interface has a static method _parse_. This way, both _build_ and _parse_ code are located in the same class (take EARKSIP as an example).
 
 ### Alpha 5 (2016-02-11)
 

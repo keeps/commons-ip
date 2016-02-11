@@ -94,4 +94,8 @@ public interface IPInterface {
    */
   Path build(Path destinationDirectory) throws SIPException;
 
+  static IP parse(Path source) throws ParseException {
+    throw new ParseException("One must implement static method parse in a concrete class");
+  }
+
 }
