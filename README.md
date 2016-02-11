@@ -31,11 +31,11 @@ The RODA Commons IP provides an API to manipulate Information Packages of differ
   <dependency>
     <groupId>org.roda-project</groupId>
     <artifactId>commons-ip</artifactId>
-    <version>1.0.0-alpha6</version>
+    <version>1.0.0-alpha7</version>
   </dependency>
   ```
 
-* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha6/commons-ip-1.0.0-alpha6.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
+* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha7/commons-ip-1.0.0-alpha7.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
 
 
 ### Write some code
@@ -137,23 +137,27 @@ SIP earkSIP = EARKSIP.parse(zipSIP);
 
 ## History
 
+### Alpha 7 (2016-02-11)
+
+* Added more events to SIPObserver (events related to representations/representation processing which are done before SIP packaging, i.e., calculate checksum and other operations that might take awhile).
+
 ### Alpha 6 (2016-02-11)
 
 * Removed Parser interface and EARKParser implementation: now this must be done in a concrete SIP class as the IP interface has a static method _parse_. This way, both _build_ and _parse_ code are located in the same class (take EARKSIP as an example).
 
 ### Alpha 5 (2016-02-11)
 
-* Refactored code to better use inheritance and interfaces
-* Now SIP implements the Observer Pattern (SIP is observable and SIPObserver, well, you can figure that out)
+* Refactored code to better use inheritance and interfaces.
+* Now SIP implements the Observer Pattern (SIP is observable and SIPObserver, well, you can figure that out).
 
 ### Alpha 4 (2016-02-09)
 
-* Almost 100 % done with EARKSIP.build (SIP to ZIP) and EARKParser.parse (ZIP to SIP) Common Specification v0.13 compliant
+* Almost 100 % done with EARKSIP.build (SIP to ZIP) and EARKParser.parse (ZIP to SIP) Common Specification v0.13 compliant.
 
 ### Alpha 3 (2016-02-03)
 
-* Going towards getting the commons-ip compliant with E-ARK Common Specification v0.13
-* Bug fixes (file leaks, etc.)
+* Going towards getting the commons-ip compliant with E-ARK Common Specification v0.13.
+* Bug fixes (file leaks, etc.).
 
 ## Credits
 

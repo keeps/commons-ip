@@ -196,6 +196,7 @@ public class EARKSIP extends SIP {
     throws SIPException {
     // representations
     if (getRepresentations() != null && !getRepresentations().isEmpty()) {
+      this.notifySipBuildRepresentationsProcessingStarted(getRepresentations().size());
       for (IPRepresentation representation : getRepresentations()) {
         String representationId = representation.getObjectID();
 
@@ -234,6 +235,7 @@ public class EARKSIP extends SIP {
             + IPConstants.ZIP_PATH_SEPARATOR + IPConstants.METS_FILE,
           buildDir);
       }
+      this.notifySipBuildRepresentationsProcessingEnded();
     }
   }
 
@@ -241,6 +243,8 @@ public class EARKSIP extends SIP {
     MetsWrapper representationMETSWrapper, IPRepresentation representation, String representationId)
       throws SIPException {
     if (representation.getData() != null && !representation.getData().isEmpty()) {
+      this.notifySipBuildRepresentationProcessingStarted(representation.getData().size());
+      int i = 0;
       for (IPFile file : representation.getData()) {
 
         String dataFilePath = IPConstants.DATA_FOLDER + getFoldersFromList(file.getRelativeFolders())
@@ -250,7 +254,11 @@ public class EARKSIP extends SIP {
         dataFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
           + dataFilePath;
         ZIPUtils.addFileToZip(zipEntries, file.getPath(), dataFilePath);
+
+        i++;
+        this.notifySipBuildRepresentationProcessingCurrentStatus(i);
       }
+      this.notifySipBuildRepresentationProcessingEnded();
     }
   }
 
@@ -310,12 +318,12 @@ public class EARKSIP extends SIP {
 
   private void createZipFile(List<ZipEntryInfo> zipEntries, Path zipPath) throws SIPException {
     try {
-      notifySipBuildStarted(zipEntries.size());
+      notifySipBuildPackagingStarted(zipEntries.size());
       ZIPUtils.zip(zipEntries, Files.newOutputStream(zipPath), this);
     } catch (IOException e) {
       throw new SIPException("Error generating E-ARK SIP ZIP file. Reason: " + e.getMessage(), e);
     } finally {
-      notifySipBuildEnded();
+      notifySipBuildPackagingEnded();
     }
   }
 

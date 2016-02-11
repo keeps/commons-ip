@@ -54,7 +54,7 @@ public final class ZIPUtils {
       zos.closeEntry();
       inputStream.close();
       i++;
-      sip.notifySipBuildUpdated(i);
+      sip.notifySipBuildPackagingCurrentStatus(i);
     }
 
     zos.close();

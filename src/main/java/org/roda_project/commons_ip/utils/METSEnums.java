@@ -9,7 +9,7 @@ package org.roda_project.commons_ip.utils;
 
 public class METSEnums {
 
-  public static enum LocType {
+  public enum LocType {
     ARK("ARK"), URN("URN"), URL("URL"), PURL("PURL"), HANDLE("HANDLE"), DOI("DOI"), OTHER("OTHER");
     private final String stringValue;
 
@@ -22,7 +22,7 @@ public class METSEnums {
     }
   }
 
-  public static enum MetadataType {
+  public enum MetadataType {
     MARC("MARC"), MODS("MODS"), EAD("EAD"), DC("DC"), NISOIMG("NISOIMG"), LCAV("LC-AV"), VRA("VRA"), TEIHDR("TEIHDR"),
     DDI("DDI"), FGDC("FGDC"), LOM("LOM"), PREMIS("PREMIS"), PREMISOBJECT("PREMIS:OBJECT"), PREMISAGENT("PREMIS:AGENT"),
     PREMISRIGHTS("PREMIS:RIGHTS"), PREMISEVENT("PREMIS:EVENT"), TEXTMD("TEXTMD"), METSRIGHTS("METSRIGHTS"),
@@ -38,7 +38,7 @@ public class METSEnums {
     }
   }
 
-  public static enum CreatorType {
+  public enum CreatorType {
     INDIVIDUAL("INDIVIDUAL"), ORGANIZATION("ORGANIZATION"), OTHER("OTHER");
     private final String stringValue;
 

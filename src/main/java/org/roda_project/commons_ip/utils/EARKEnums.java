@@ -14,7 +14,7 @@ public final class EARKEnums {
 
   }
 
-  public static enum Type {
+  public enum Type {
     SIP("SIP"), DIP("DIP"), AIP("AIP");
     private final String stringValue;
 
@@ -28,7 +28,7 @@ public final class EARKEnums {
     }
   }
 
-  public static enum ContentType {
+  public enum ContentType {
     ERMS("ERMS"), SIARD("SIARD"), SMURF("SMURF"), other("other"), mixed("mixed");
     private final String stringValue;
 
@@ -42,7 +42,7 @@ public final class EARKEnums {
     }
   }
 
-  public static enum ContentTypeRepresentation {
+  public enum ContentTypeRepresentation {
     ERMS("ERMS"), SIARD("SIARD"), SMURF("SMURF"), other("other");
     private final String stringValue;
 

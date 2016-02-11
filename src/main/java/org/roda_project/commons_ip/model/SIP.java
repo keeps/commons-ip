@@ -50,21 +50,51 @@ public abstract class SIP extends IP {
     observers.remove(observer);
   }
 
-  public void notifySipBuildStarted(int totalNumberOfFiles) {
+  public void notifySipBuildRepresentationsProcessingStarted(int totalNumberOfRepresentations) {
     for (SIPObserver sipObserver : observers) {
-      sipObserver.sipBuildStarted(totalNumberOfFiles);
+      sipObserver.sipBuildRepresentationsProcessingStarted(totalNumberOfRepresentations);
     }
   }
 
-  public void notifySipBuildUpdated(int numberOfFilesAlreadyProcessed) {
+  public void notifySipBuildRepresentationProcessingStarted(int totalNumberOfFiles) {
     for (SIPObserver sipObserver : observers) {
-      sipObserver.sipBuildCurrentStatus(numberOfFilesAlreadyProcessed);
+      sipObserver.sipBuildRepresentationProcessingStarted(totalNumberOfFiles);
     }
   }
 
-  public void notifySipBuildEnded() {
+  public void notifySipBuildRepresentationProcessingCurrentStatus(int numberOfFilesAlreadyProcessed) {
     for (SIPObserver sipObserver : observers) {
-      sipObserver.sipBuildEnded();
+      sipObserver.sipBuildRepresentationProcessingCurrentStatus(numberOfFilesAlreadyProcessed);
+    }
+  }
+
+  public void notifySipBuildRepresentationProcessingEnded() {
+    for (SIPObserver sipObserver : observers) {
+      sipObserver.sipBuildRepresentationProcessingEnded();
+    }
+  }
+
+  public void notifySipBuildRepresentationsProcessingEnded() {
+    for (SIPObserver sipObserver : observers) {
+      sipObserver.sipBuildRepresentationsProcessingEnded();
+    }
+  }
+
+  public void notifySipBuildPackagingStarted(int totalNumberOfFiles) {
+    for (SIPObserver sipObserver : observers) {
+      sipObserver.sipBuildPackagingStarted(totalNumberOfFiles);
+    }
+  }
+
+  public void notifySipBuildPackagingCurrentStatus(int numberOfFilesAlreadyProcessed) {
+    for (SIPObserver sipObserver : observers) {
+      sipObserver.sipBuildPackagingCurrentStatus(numberOfFilesAlreadyProcessed);
+    }
+  }
+
+  public void notifySipBuildPackagingEnded() {
+    for (SIPObserver sipObserver : observers) {
+      sipObserver.sipBuildPackagingEnded();
     }
   }
 
