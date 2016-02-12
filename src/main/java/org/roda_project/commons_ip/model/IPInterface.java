@@ -91,10 +91,15 @@ public interface IPInterface {
   /**
    * @param destinationDirectory
    *          directory where the SIP will be placed into
+   * @throws InterruptedException
    */
-  Path build(Path destinationDirectory) throws SIPException;
+  Path build(Path destinationDirectory) throws SIPException, InterruptedException;
 
   static IP parse(Path source) throws ParseException {
+    throw new ParseException("One must implement static method parse in a concrete class");
+  }
+
+  static SIP parse(Path source, Path destinationDirectory) throws ParseException {
     throw new ParseException("One must implement static method parse in a concrete class");
   }
 

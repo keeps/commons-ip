@@ -31,11 +31,11 @@ The RODA Commons IP provides an API to manipulate Information Packages of differ
   <dependency>
     <groupId>org.roda-project</groupId>
     <artifactId>commons-ip</artifactId>
-    <version>1.0.0-alpha7</version>
+    <version>1.0.0-alpha8</version>
   </dependency>
   ```
 
-* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha7/commons-ip-1.0.0-alpha7.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
+* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha8/commons-ip-1.0.0-alpha8.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
 
 
 ### Write some code
@@ -136,6 +136,10 @@ SIP earkSIP = EARKSIP.parse(zipSIP);
 5. Submit a pull request :D
 
 ## History
+
+### Alpha 8 (2016-02-12)
+
+* The __SIP.build__ method now throws _InterruptedException_ and correctly handles, in the rights places in the code, interruptions made to the thread executing the method. And, in that case, unneeded files are properly cleaned up/deleted.
 
 ### Alpha 7 (2016-02-11)
 

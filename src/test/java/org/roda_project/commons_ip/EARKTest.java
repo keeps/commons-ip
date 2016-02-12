@@ -51,7 +51,7 @@ public class EARKTest {
   }
 
   @Test
-  public void buildAndParseEARKSIP() throws SIPException, ParseException {
+  public void buildAndParseEARKSIP() throws SIPException, ParseException, InterruptedException {
 
     Path zipSIP = createFullEARKSIP();
 
@@ -61,7 +61,7 @@ public class EARKTest {
 
   }
 
-  private Path createFullEARKSIP() throws SIPException {
+  private Path createFullEARKSIP() throws SIPException, InterruptedException {
 
     // 1) instantiate E-ARK SIP object
     SIP sip = new EARKSIP("SIP_1", ContentType.mixed, "RODA Commons IP");
@@ -123,7 +123,7 @@ public class EARKTest {
   private void parseFullEARKSIP(Path zipSIP) throws ParseException {
 
     // 1) invoke static method parse and that's it
-    SIP earkSIP = EARKSIP.parse(zipSIP);
+    SIP earkSIP = EARKSIP.parse(zipSIP, tempFolder);
 
     LOGGER.info("SIP with id '{}' parsed with success!", earkSIP.getId());
   }

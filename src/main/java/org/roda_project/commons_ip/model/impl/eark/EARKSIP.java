@@ -8,6 +8,7 @@
 package org.roda_project.commons_ip.model.impl.eark;
 
 import java.io.IOException;
+import java.nio.channels.ClosedByInterruptException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -75,10 +76,11 @@ public class EARKSIP extends SIP {
    * _________________________________________________________________________
    */
   @Override
-  public Path build(Path destinationDirectory) throws SIPException {
+  public Path build(Path destinationDirectory) throws SIPException, InterruptedException {
     Path buildDir = createBuildDir();
+    Path zipPath = null;
     try {
-      Path zipPath = getZipPath(destinationDirectory);
+      zipPath = getZipPath(destinationDirectory);
       List<ZipEntryInfo> zipEntries = new ArrayList<ZipEntryInfo>();
       MetsWrapper mainMETSWrapper = EARKMETSUtils.generateMETS(this.getId(), this.getDescription(),
         this.getType() + ":" + this.getContentType(), this.getProfile(), this.getAgents(), true, this.getParentID());
@@ -102,6 +104,9 @@ public class EARKSIP extends SIP {
       createZipFile(zipEntries, zipPath);
 
       return zipPath;
+    } catch (InterruptedException e) {
+      cleanUpUponInterrupt(zipPath);
+      throw e;
     } finally {
       deleteBuildDir(buildDir);
     }
@@ -112,6 +117,16 @@ public class EARKSIP extends SIP {
       return Files.createTempDirectory(SIP_TEMP_DIR);
     } catch (IOException e) {
       throw new SIPException("Unable to create temporary directory to hold SIP files", e);
+    }
+  }
+
+  private void cleanUpUponInterrupt(Path zipPath) {
+    if (zipPath != null && Files.exists(zipPath)) {
+      try {
+        Utils.deletePath(zipPath);
+      } catch (IOException e) {
+        LOGGER.error("Error while cleaning up unneeded files", e);
+      }
     }
   }
 
@@ -136,9 +151,13 @@ public class EARKSIP extends SIP {
   }
 
   public void addDescriptiveMetadataToZipAndMETS(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-    List<IPDescriptiveMetadata> descriptiveMetadata, String representationId) throws SIPException {
+    List<IPDescriptiveMetadata> descriptiveMetadata, String representationId)
+      throws SIPException, InterruptedException {
     if (descriptiveMetadata != null && !descriptiveMetadata.isEmpty()) {
       for (IPDescriptiveMetadata dm : descriptiveMetadata) {
+        if (Thread.interrupted()) {
+          throw new InterruptedException();
+        }
         IPFile file = dm.getMetadata();
 
         String descriptiveFilePath = IPConstants.DESCRIPTIVE_FOLDER + getFoldersFromList(file.getRelativeFolders())
@@ -155,9 +174,12 @@ public class EARKSIP extends SIP {
   }
 
   public void addPreservationMetadataToZipAndMETS(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-    List<IPMetadata> preservationMetadata, String representationId) throws SIPException {
+    List<IPMetadata> preservationMetadata, String representationId) throws SIPException, InterruptedException {
     if (preservationMetadata != null && !preservationMetadata.isEmpty()) {
       for (IPMetadata pm : preservationMetadata) {
+        if (Thread.interrupted()) {
+          throw new InterruptedException();
+        }
         IPFile file = pm.getMetadata();
 
         String preservationMetadataPath = IPConstants.PRESERVATION_FOLDER
@@ -174,9 +196,12 @@ public class EARKSIP extends SIP {
   }
 
   public void addOtherMetadataToZipAndMETS(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-    List<IPMetadata> otherMetadata, String representationId) throws SIPException {
+    List<IPMetadata> otherMetadata, String representationId) throws SIPException, InterruptedException {
     if (otherMetadata != null && !otherMetadata.isEmpty()) {
       for (IPMetadata om : otherMetadata) {
+        if (Thread.interrupted()) {
+          throw new InterruptedException();
+        }
         IPFile file = om.getMetadata();
 
         String otherMetadataPath = IPConstants.OTHER_FOLDER + getFoldersFromList(file.getRelativeFolders())
@@ -193,11 +218,14 @@ public class EARKSIP extends SIP {
   }
 
   public void addRepresentationsToZipAndMETS(List<ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper, Path buildDir)
-    throws SIPException {
+    throws SIPException, InterruptedException {
     // representations
     if (getRepresentations() != null && !getRepresentations().isEmpty()) {
       this.notifySipBuildRepresentationsProcessingStarted(getRepresentations().size());
       for (IPRepresentation representation : getRepresentations()) {
+        if (Thread.interrupted()) {
+          throw new InterruptedException();
+        }
         String representationId = representation.getObjectID();
 
         // FIXME how to set label and profile for the representations
@@ -241,11 +269,14 @@ public class EARKSIP extends SIP {
 
   private void addRepresentationDataFilesToZipAndMETS(List<ZipEntryInfo> zipEntries,
     MetsWrapper representationMETSWrapper, IPRepresentation representation, String representationId)
-      throws SIPException {
+      throws SIPException, InterruptedException {
     if (representation.getData() != null && !representation.getData().isEmpty()) {
       this.notifySipBuildRepresentationProcessingStarted(representation.getData().size());
       int i = 0;
       for (IPFile file : representation.getData()) {
+        if (Thread.interrupted()) {
+          throw new InterruptedException();
+        }
 
         String dataFilePath = IPConstants.DATA_FOLDER + getFoldersFromList(file.getRelativeFolders())
           + file.getFileName();
@@ -262,8 +293,11 @@ public class EARKSIP extends SIP {
     }
   }
 
-  private void addDefaultSchemas(Path buildDir) {
+  private void addDefaultSchemas(Path buildDir) throws InterruptedException {
     try {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
       Path metsSchema = Utils.copyResourceFromClasspathToDir(EARKSIP.class, buildDir, "mets.xsd",
         "/schemas/mets1_11.xsd");
       getSchemas().add(new IPFile(metsSchema, "mets.xsd"));
@@ -276,9 +310,12 @@ public class EARKSIP extends SIP {
   }
 
   public void addSchemasToZipAndMETS(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper, List<IPFile> schemas,
-    String representationId) throws SIPException {
+    String representationId) throws SIPException, InterruptedException {
     if (schemas != null && !schemas.isEmpty()) {
       for (IPFile schema : schemas) {
+        if (Thread.interrupted()) {
+          throw new InterruptedException();
+        }
 
         String schemaFilePath = IPConstants.SCHEMAS_FOLDER + getFoldersFromList(schema.getRelativeFolders())
           + schema.getFileName();
@@ -294,9 +331,12 @@ public class EARKSIP extends SIP {
   }
 
   public void addDocumentationToZipAndMETS(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-    List<IPFile> documentation, String representationId) throws SIPException {
+    List<IPFile> documentation, String representationId) throws SIPException, InterruptedException {
     if (documentation != null && !documentation.isEmpty()) {
       for (IPFile doc : documentation) {
+        if (Thread.interrupted()) {
+          throw new InterruptedException();
+        }
 
         String documentationFilePath = IPConstants.DOCUMENTATION_FOLDER + getFoldersFromList(doc.getRelativeFolders())
           + doc.getFileName();
@@ -316,10 +356,12 @@ public class EARKSIP extends SIP {
     EARKMETSUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, IPConstants.METS_FILE, buildDir);
   }
 
-  private void createZipFile(List<ZipEntryInfo> zipEntries, Path zipPath) throws SIPException {
+  private void createZipFile(List<ZipEntryInfo> zipEntries, Path zipPath) throws SIPException, InterruptedException {
     try {
       notifySipBuildPackagingStarted(zipEntries.size());
       ZIPUtils.zip(zipEntries, Files.newOutputStream(zipPath), this);
+    } catch (ClosedByInterruptException e) {
+      throw new InterruptedException();
     } catch (IOException e) {
       throw new SIPException("Error generating E-ARK SIP ZIP file. Reason: " + e.getMessage(), e);
     } finally {
@@ -344,16 +386,25 @@ public class EARKSIP extends SIP {
    * _________________________________________________________________________
    */
 
-  public static SIP parse(Path source) throws ParseException {
+  public static SIP parse(Path source, Path destinationDirectory) throws ParseException {
     try {
-      return parseEARKSIP(source);
+      return parseEARKSIP(source, destinationDirectory);
     } catch (JAXBException | IOException | SIPException e) {
       throw new ParseException("Error parsing E-ARK SIP", e);
     }
   }
 
-  private static SIP parseEARKSIP(final Path source) throws JAXBException, IOException, SIPException, ParseException {
-    Path sipPath = extractSIPIfInZipFormat(source);
+  public static SIP parse(Path source) throws ParseException {
+    try {
+      return parse(source, Files.createTempDirectory("unzipped"));
+    } catch (IOException e) {
+      throw new ParseException("Error parsing E-ARK SIP", e);
+    }
+  }
+
+  private static SIP parseEARKSIP(final Path source, final Path destinationDirectory)
+    throws JAXBException, IOException, SIPException, ParseException {
+    Path sipPath = extractSIPIfInZipFormat(source, destinationDirectory);
 
     Path mainMETSFile = sipPath.resolve(IPConstants.METS_FILE);
     Mets mainMets = EARKMETSUtils.instantiateMETSFromFile(mainMETSFile);
@@ -381,12 +432,19 @@ public class EARKSIP extends SIP {
     return sip;
   }
 
-  private static Path extractSIPIfInZipFormat(final Path source) {
+  /**
+   * @param source
+   *          SIP
+   * @param destinationDirectory
+   *          this path is only used if unzipping the SIP, otherwise source will
+   *          be used
+   */
+  private static Path extractSIPIfInZipFormat(final Path source, Path destinationDirectory) {
     Path sipPath = source;
     if (!Files.isDirectory(source)) {
       try {
-        Path tempDir = Files.createTempDirectory("unzipped");
-        sipPath = tempDir.resolve(source.getFileName().toString().replaceFirst(SIP_FILE_EXTENSION + "$", ""));
+        sipPath = destinationDirectory
+          .resolve(source.getFileName().toString().replaceFirst(SIP_FILE_EXTENSION + "$", ""));
         ZIPUtils.unzip(source, sipPath);
       } catch (IOException e) {
         LOGGER.error("Error unzipping file", e);

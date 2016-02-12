@@ -9,6 +9,7 @@ package org.roda_project.commons_ip.model.impl.eark;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.channels.ClosedByInterruptException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
@@ -199,8 +200,11 @@ public final class EARKMETSUtils {
 
   public static void addRepresentationMETSToZipAndToMainMETS(List<ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper,
     String representationId, MetsWrapper representationMETSWrapper, String representationMetsPath, Path buildDir)
-      throws SIPException {
+      throws SIPException, InterruptedException {
     try {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
       marshallMETSandAddToZip(zipEntries, representationMETSWrapper, representationMetsPath, buildDir, false);
       Mptr mptr = new Mptr();
       mptr.setLOCTYPE(LocType.URL.toString());
@@ -268,18 +272,19 @@ public final class EARKMETSUtils {
   }
 
   public static MetsWrapper addDescriptiveMetadataToMETS(MetsWrapper metsWrapper,
-    IPDescriptiveMetadata descriptiveMetadata, String descriptiveMetadataPath) throws SIPException {
+    IPDescriptiveMetadata descriptiveMetadata, String descriptiveMetadataPath)
+      throws SIPException, InterruptedException {
     return addMetadataToMETS(metsWrapper, descriptiveMetadata, descriptiveMetadataPath,
       descriptiveMetadata.getMetadataType().toString(), descriptiveMetadata.getMetadataVersion(), true);
   }
 
   public static MetsWrapper addOtherMetadataToMETS(MetsWrapper metsWrapper, IPMetadata otherMetadata,
-    String otherMetadataPath) throws SIPException {
+    String otherMetadataPath) throws SIPException, InterruptedException {
     return addMetadataToMETS(metsWrapper, otherMetadata, otherMetadataPath, null, null, false);
   }
 
   private static MetsWrapper addMetadataToMETS(MetsWrapper metsWrapper, IPMetadata metadata, String metadataPath,
-    String mdType, String mdTypeVersion, boolean isDescriptive) throws SIPException {
+    String mdType, String mdTypeVersion, boolean isDescriptive) throws SIPException, InterruptedException {
     MdSecType dmdSec = new MdSecType();
     dmdSec.setID(Utils.generateRandomId());
 
@@ -305,7 +310,7 @@ public final class EARKMETSUtils {
   }
 
   public static MetsWrapper addPreservationMetadataToMETS(MetsWrapper metsWrapper, IPMetadata preservationMetadata,
-    String preservationMetadataPath) throws SIPException {
+    String preservationMetadataPath) throws SIPException, InterruptedException {
     MdSecType digiprovMD = new MdSecType();
     digiprovMD.setID(Utils.generateRandomId());
 
@@ -334,7 +339,7 @@ public final class EARKMETSUtils {
   }
 
   public static MetsWrapper addDataFileToMETS(MetsWrapper representationMETS, String dataFilePath, Path dataFile)
-    throws SIPException {
+    throws SIPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomId());
 
@@ -353,10 +358,12 @@ public final class EARKMETSUtils {
     return representationMETS;
   }
 
-  private static MdRef setFileBasicInformation(Path file, MdRef mdRef) throws SIPException {
+  private static MdRef setFileBasicInformation(Path file, MdRef mdRef) throws SIPException, InterruptedException {
     // checksum info.
     try {
       mdRef.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(file), IPConstants.CHECKSUM_ALGORITHM));
+    } catch (ClosedByInterruptException e) {
+      throw new InterruptedException();
     } catch (IOException e) {
       throw new SIPException("Error calculating checksum for file " + file, e);
     } catch (NoSuchAlgorithmException e) {
@@ -388,10 +395,12 @@ public final class EARKMETSUtils {
     return mdRef;
   }
 
-  private static void setFileBasicInformation(Path file, FileType fileType) throws SIPException {
+  private static void setFileBasicInformation(Path file, FileType fileType) throws SIPException, InterruptedException {
     // checksum info.
     try {
       fileType.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(file), IPConstants.CHECKSUM_ALGORITHM));
+    } catch (ClosedByInterruptException e) {
+      throw new InterruptedException();
     } catch (IOException e) {
       throw new SIPException("Error calculating checksum for file " + file, e);
     } catch (NoSuchAlgorithmException e) {
@@ -422,7 +431,7 @@ public final class EARKMETSUtils {
   }
 
   public static MetsWrapper addSchemaFileToMETS(MetsWrapper metsWrapper, String schemaFilePath, Path schemaFile)
-    throws SIPException {
+    throws SIPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomId());
 
@@ -442,7 +451,7 @@ public final class EARKMETSUtils {
   }
 
   public static MetsWrapper addDocumentationFileToMETS(MetsWrapper metsWrapper, String documentationFilePath,
-    Path documentationFile) throws SIPException {
+    Path documentationFile) throws SIPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomId());
 

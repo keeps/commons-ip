@@ -41,12 +41,16 @@ public final class ZIPUtils {
    * @param out
    * @param sip
    * @throws IOException
+   * @throws InterruptedException
    */
-  public static void zip(List<ZipEntryInfo> files, OutputStream out, SIP sip) throws IOException {
+  public static void zip(List<ZipEntryInfo> files, OutputStream out, SIP sip) throws IOException, InterruptedException {
     ZipOutputStream zos = new ZipOutputStream(out);
 
     int i = 0;
     for (ZipEntryInfo file : files) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
       ZipEntry entry = new ZipEntry(file.getName());
       zos.putNextEntry(entry);
       InputStream inputStream = Files.newInputStream(file.getFilePath());

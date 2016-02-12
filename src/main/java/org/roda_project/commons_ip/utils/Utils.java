@@ -10,6 +10,7 @@ package org.roda_project.commons_ip.utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.channels.ClosedByInterruptException;
 import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -44,14 +45,18 @@ public final class Utils {
   }
 
   public static Path copyResourceFromClasspathToDir(Class<?> resourceClass, Path dir, String resourceTempSuffix,
-    String resourcePath) throws IOException {
-    Path resource = Files.createTempFile(dir, "", resourceTempSuffix);
-    InputStream inputStream = resourceClass.getResourceAsStream(resourcePath);
-    OutputStream outputStream = Files.newOutputStream(resource);
-    IOUtils.copy(inputStream, outputStream);
-    inputStream.close();
-    outputStream.close();
-    return resource;
+    String resourcePath) throws IOException, InterruptedException {
+    try {
+      Path resource = Files.createTempFile(dir, "", resourceTempSuffix);
+      InputStream inputStream = resourceClass.getResourceAsStream(resourcePath);
+      OutputStream outputStream = Files.newOutputStream(resource);
+      IOUtils.copy(inputStream, outputStream);
+      inputStream.close();
+      outputStream.close();
+      return resource;
+    } catch (ClosedByInterruptException e) {
+      throw new InterruptedException();
+    }
   }
 
   public static String extractedRelativePathFromHref(MdRef mdref) {
