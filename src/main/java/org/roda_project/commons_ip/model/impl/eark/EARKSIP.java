@@ -556,6 +556,9 @@ public class EARKSIP extends SIP {
           try {
             dmdType = MetadataType.valueOf(mdRef.getMDTYPE().toUpperCase());
             dmdVersion = mdRef.getMDTYPEVERSION();
+            if (StringUtils.isNotBlank(mdRef.getOTHERMDTYPE())) {
+              dmdType.setOtherType(mdRef.getOTHERMDTYPE());
+            }
             LOGGER.debug("Metadata type valid: " + dmdType.toString());
           } catch (NullPointerException | IllegalArgumentException e) {
             // do nothing and use already defined values for metadataType &

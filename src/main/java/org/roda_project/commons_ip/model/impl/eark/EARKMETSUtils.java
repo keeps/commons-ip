@@ -23,6 +23,7 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip.mets_v1_11.beans.AmdSecType;
 import org.roda_project.commons_ip.mets_v1_11.beans.DivType;
 import org.roda_project.commons_ip.mets_v1_11.beans.DivType.Fptr;
@@ -275,21 +276,26 @@ public final class EARKMETSUtils {
     IPDescriptiveMetadata descriptiveMetadata, String descriptiveMetadataPath)
       throws SIPException, InterruptedException {
     return addMetadataToMETS(metsWrapper, descriptiveMetadata, descriptiveMetadataPath,
-      descriptiveMetadata.getMetadataType().toString(), descriptiveMetadata.getMetadataVersion(), true);
+      descriptiveMetadata.getMetadataType().getType(), descriptiveMetadata.getMetadataType().getOtherType(),
+      descriptiveMetadata.getMetadataVersion(), true);
   }
 
   public static MetsWrapper addOtherMetadataToMETS(MetsWrapper metsWrapper, IPMetadata otherMetadata,
     String otherMetadataPath) throws SIPException, InterruptedException {
-    return addMetadataToMETS(metsWrapper, otherMetadata, otherMetadataPath, null, null, false);
+    return addMetadataToMETS(metsWrapper, otherMetadata, otherMetadataPath, null, null, null, false);
   }
 
   private static MetsWrapper addMetadataToMETS(MetsWrapper metsWrapper, IPMetadata metadata, String metadataPath,
-    String mdType, String mdTypeVersion, boolean isDescriptive) throws SIPException, InterruptedException {
+    String mdType, String mdOtherType, String mdTypeVersion, boolean isDescriptive)
+      throws SIPException, InterruptedException {
     MdSecType dmdSec = new MdSecType();
     dmdSec.setID(Utils.generateRandomId());
 
     MdRef mdRef = createMdRef(metadataPath);
     mdRef.setMDTYPE(mdType);
+    if (StringUtils.isNotBlank(mdOtherType)) {
+      mdRef.setOTHERMDTYPE(mdOtherType);
+    }
     mdRef.setMDTYPEVERSION(mdTypeVersion);
 
     // set checksum, mimetype, etc.
