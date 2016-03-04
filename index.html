@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>EARK IP manipulation java library by keeps</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">EARK IP manipulation java library</h1>
+      <h2 class="project-tagline">Library to generate SIP, AIP or DIP in EARK formats</h2>
+      <a href="https://github.com/keeps/commons-ip" class="btn">View on GitHub</a>
+      <a href="https://github.com/keeps/commons-ip/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/keeps/commons-ip/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="eark-ip-manipulation-java-library" class="anchor" href="#eark-ip-manipulation-java-library" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>EARK IP manipulation java library</h1>
+
+<p>API to manipulate Information Packages of different formats: RODA, E-ARK, etc.</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+
+<h3>
+<a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Requirements</h3>
+
+<ul>
+<li>Java (&gt;= 1.8)</li>
+<li>Maven (&gt;= 2.2)</li>
+</ul>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
+
+<h3>
+<a id="add-commons-ip-to-your-java-project" class="anchor" href="#add-commons-ip-to-your-java-project" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Add Commons IP to your Java project</h3>
+
+<ul>
+<li><p>Using maven</p></li>
+</ul>
+
+<ol>
+<li>
+<p>Add the following repository</p>
+
+<pre><code>&lt;repository&gt;
+  &lt;id&gt;KEEPS-Artifacts&lt;/id&gt;
+  &lt;name&gt;KEEP Artifacts-releases&lt;/name&gt;
+  &lt;url&gt;http://artifactory.keep.pt/keep&lt;/url&gt;
+&lt;/repository&gt;
+</code></pre>
+</li>
+<li>
+<p>Add the following dependency</p>
+
+<pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;org.roda-project&lt;/groupId&gt;
+  &lt;artifactId&gt;commons-ip&lt;/artifactId&gt;
+  &lt;version&gt;1.0.0-alpha9&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+</li>
+</ol>
+
+<ul>
+<li>Not using maven, download <a href="http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha9/commons-ip-1.0.0-alpha9.jar">Commons IP latest jar</a>, each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.</li>
+</ul>
+
+<h3>
+<a id="write-some-code" class="anchor" href="#write-some-code" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Write some code</h3>
+
+<ul>
+<li>Create a full E-ARK SIP</li>
+</ul>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-c">// 1) instantiate E-ARK SIP object</span>
+<span class="pl-smi">SIP</span> sip <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">EARKSIP</span>(<span class="pl-s"><span class="pl-pds">"</span>SIP_1<span class="pl-pds">"</span></span>, <span class="pl-smi">ContentType</span><span class="pl-k">.</span>mixed, <span class="pl-s"><span class="pl-pds">"</span>RODA Commons IP<span class="pl-pds">"</span></span>);
+
+<span class="pl-c">// 1.1) set optional human-readable description</span>
+sip<span class="pl-k">.</span>setDescription(<span class="pl-s"><span class="pl-pds">"</span>A full E-ARK SIP<span class="pl-pds">"</span></span>);
+
+<span class="pl-c">// 1.2) add descriptive metadata (SIP level)</span>
+<span class="pl-smi">IPDescriptiveMetadata</span> metadataDescriptiveDC <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">IPDescriptiveMetadata</span>(
+<span class="pl-k">new</span> <span class="pl-smi">IPFile</span>(<span class="pl-smi">Paths</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>src/test/resources/eark/metadata_descriptive_dc.xml<span class="pl-pds">"</span></span>)), <span class="pl-smi">MetadataType</span><span class="pl-c1"><span class="pl-k">.</span>DC</span>, <span class="pl-c1">null</span>);
+sip<span class="pl-k">.</span>addDescriptiveMetadata(metadataDescriptiveDC);
+
+<span class="pl-c">// 1.3) add preservation metadata (SIP level)</span>
+<span class="pl-smi">IPMetadata</span> metadataPreservation <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">IPMetadata</span>(
+<span class="pl-k">new</span> <span class="pl-smi">IPFile</span>(<span class="pl-smi">Paths</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>src/test/resources/eark/metadata_preservation_premis.xml<span class="pl-pds">"</span></span>)));
+sip<span class="pl-k">.</span>addPreservationMetadata(metadataPreservation);
+
+<span class="pl-c">// 1.4) add other metadata (SIP level)</span>
+<span class="pl-smi">IPFile</span> metadataOtherFile <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">IPFile</span>(<span class="pl-smi">Paths</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>src/test/resources/eark/metadata_other.txt<span class="pl-pds">"</span></span>));
+<span class="pl-c">// 1.4.1) optionally one may rename file final name</span>
+metadataOtherFile<span class="pl-k">.</span>setRenameTo(<span class="pl-s"><span class="pl-pds">"</span>metadata_other_renamed.txt<span class="pl-pds">"</span></span>);
+<span class="pl-smi">IPMetadata</span> metadataOther <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">IPMetadata</span>(metadataOtherFile);
+sip<span class="pl-k">.</span>addOtherMetadata(metadataOther);
+
+<span class="pl-c">// 1.5) add xml schema (SIP level)</span>
+sip<span class="pl-k">.</span>addSchema(<span class="pl-k">new</span> <span class="pl-smi">IPFile</span>(<span class="pl-smi">Paths</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>src/test/resources/eark/schema.xsd<span class="pl-pds">"</span></span>)));
+
+<span class="pl-c">// 1.6) add documentation (SIP level)</span>
+sip<span class="pl-k">.</span>addDocumentation(<span class="pl-k">new</span> <span class="pl-smi">IPFile</span>(<span class="pl-smi">Paths</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>src/test/resources/eark/documentation.pdf<span class="pl-pds">"</span></span>)));
+
+<span class="pl-c">// 1.7) set optional RODA related information parent id</span>
+sip<span class="pl-k">.</span>setParent(<span class="pl-s"><span class="pl-pds">"</span>b6f24059-8973-4582-932d-eb0b2cb48f28<span class="pl-pds">"</span></span>);
+
+<span class="pl-c">// 1.8) add an agent (SIP level)</span>
+<span class="pl-smi">IPAgent</span> agent <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">IPAgent</span>(<span class="pl-s"><span class="pl-pds">"</span>Agent Name<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>ROLE<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>OTHER ROLE<span class="pl-pds">"</span></span>, <span class="pl-smi">CreatorType</span><span class="pl-c1"><span class="pl-k">.</span>INDIVIDUAL</span>, <span class="pl-s"><span class="pl-pds">"</span>OTHER TYPE<span class="pl-pds">"</span></span>);
+sip<span class="pl-k">.</span>addAgent(agent);
+
+<span class="pl-c">// 1.9) add a representation</span>
+<span class="pl-smi">IPRepresentation</span> representation1 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">IPRepresentation</span>(<span class="pl-s"><span class="pl-pds">"</span>representation 1<span class="pl-pds">"</span></span>);
+sip<span class="pl-k">.</span>addRepresentation(representation1);
+
+<span class="pl-c">// 1.9.1) add a file to the representation</span>
+<span class="pl-smi">IPFile</span> representationFile <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">IPFile</span>(<span class="pl-smi">Paths</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>src/test/resources/eark/documentation.pdf<span class="pl-pds">"</span></span>));
+representationFile<span class="pl-k">.</span>setRenameTo(<span class="pl-s"><span class="pl-pds">"</span>data.pdf<span class="pl-pds">"</span></span>);
+representation1<span class="pl-k">.</span>addFile(representationFile);
+
+<span class="pl-c">// 1.9.2) add a file to the representation and put it inside a folder</span>
+<span class="pl-c">// called 'abc' which has a folder inside called 'def'</span>
+<span class="pl-smi">IPFile</span> representationFile2 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">IPFile</span>(<span class="pl-smi">Paths</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>src/test/resources/eark/documentation.pdf<span class="pl-pds">"</span></span>));
+representationFile2<span class="pl-k">.</span>setRelativeFolders(<span class="pl-smi">Arrays</span><span class="pl-k">.</span>asList(<span class="pl-s"><span class="pl-pds">"</span>abc<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>def<span class="pl-pds">"</span></span>));
+representation1<span class="pl-k">.</span>addFile(representationFile2);
+
+<span class="pl-c">// 2) build SIP, providing an output directory</span>
+<span class="pl-smi">Path</span> zipSIP <span class="pl-k">=</span> sip<span class="pl-k">.</span>build(tempFolder);</pre></div>
+
+<p><strong>Note:</strong> SIP implements the Observer Pattern. This way, if one wants to be notified of SIP build progress, one just needs to implement SIPObserver interface and register itself in the SIP. Something like (just presenting some of the events):</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">WhoWantsToBuildSIPAndBeNotified</span> <span class="pl-k">implements</span> <span class="pl-e">SIPObserver</span>{
+
+  <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">buildSIP</span>(){
+    <span class="pl-c1">...</span>
+    <span class="pl-smi">SIP</span> sip <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">EARKSIP</span>(<span class="pl-s"><span class="pl-pds">"</span>SIP_1<span class="pl-pds">"</span></span>, <span class="pl-smi">ContentType</span><span class="pl-k">.</span>mixed, <span class="pl-s"><span class="pl-pds">"</span>RODA Commons IP<span class="pl-pds">"</span></span>);
+    sip<span class="pl-k">.</span>addObserver(<span class="pl-v">this</span>);
+    <span class="pl-c1">...</span>
+  }
+
+  <span class="pl-k">@Override</span>
+  <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">sipBuildPackagingStarted</span>(<span class="pl-k">int</span> <span class="pl-v">totalNumberOfFiles</span>) {
+    <span class="pl-c1">...</span>
+  }
+
+  <span class="pl-k">@Override</span>
+  <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">sipBuildPackagingCurrentStatus</span>(<span class="pl-k">int</span> <span class="pl-v">numberOfFilesAlreadyProcessed</span>) {
+    <span class="pl-c1">...</span>
+  }
+}</pre></div>
+
+<ul>
+<li>Parse a full E-ARK SIP</li>
+</ul>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-c">// 1) invoke static method parse and that's it</span>
+<span class="pl-smi">SIP</span> earkSIP <span class="pl-k">=</span> <span class="pl-c1">EARKSIP</span><span class="pl-k">.</span>parse(zipSIP);</pre></div>
+
+<h2>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributing</h2>
+
+<ol>
+<li>Fork it! </li>
+<li>Create your feature branch: <code>git checkout -b my-new-feature</code>
+</li>
+<li>Commit your changes: <code>git commit -am 'Add some feature'</code>
+</li>
+<li>Push to the branch: <code>git push origin my-new-feature</code>
+</li>
+<li>Submit a pull request :D</li>
+</ol>
+
+<h2>
+<a id="history" class="anchor" href="#history" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>History</h2>
+
+<h3>
+<a id="alpha-9-2016-02-25" class="anchor" href="#alpha-9-2016-02-25" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 9 (2016-02-25)</h3>
+
+<ul>
+<li>
+<strong>MetadataType</strong> enum now has support for other type (which will be set in OTHERMDTYPE METS attribute; can be used when selecting <strong>MetadataType.OTHER</strong> enum value).</li>
+</ul>
+
+<h3>
+<a id="alpha-8-2016-02-12" class="anchor" href="#alpha-8-2016-02-12" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 8 (2016-02-12)</h3>
+
+<ul>
+<li>The <strong>SIP.build</strong> method now throws <em>InterruptedException</em> and correctly handles, in the rights places in the code, interruptions made to the thread executing the method. And, in that case, unneeded files are properly cleaned up/deleted.</li>
+</ul>
+
+<h3>
+<a id="alpha-7-2016-02-11" class="anchor" href="#alpha-7-2016-02-11" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 7 (2016-02-11)</h3>
+
+<ul>
+<li>Added more events to SIPObserver (events related to representations/representation processing which are done before SIP packaging, i.e., calculate checksum and other operations that might take awhile).</li>
+</ul>
+
+<h3>
+<a id="alpha-6-2016-02-11" class="anchor" href="#alpha-6-2016-02-11" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 6 (2016-02-11)</h3>
+
+<ul>
+<li>Removed Parser interface and EARKParser implementation: now this must be done in a concrete SIP class as the IP interface has a static method <em>parse</em>. This way, both <em>build</em> and <em>parse</em> code are located in the same class (take EARKSIP as an example).</li>
+</ul>
+
+<h3>
+<a id="alpha-5-2016-02-11" class="anchor" href="#alpha-5-2016-02-11" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 5 (2016-02-11)</h3>
+
+<ul>
+<li>Refactored code to better use inheritance and interfaces.</li>
+<li>Now SIP implements the Observer Pattern (SIP is observable and SIPObserver, well, you can figure that out).</li>
+</ul>
+
+<h3>
+<a id="alpha-4-2016-02-09" class="anchor" href="#alpha-4-2016-02-09" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 4 (2016-02-09)</h3>
+
+<ul>
+<li>Almost 100 % done with EARKSIP.build (SIP to ZIP) and EARKParser.parse (ZIP to SIP) Common Specification v0.13 compliant.</li>
+</ul>
+
+<h3>
+<a id="alpha-3-2016-02-03" class="anchor" href="#alpha-3-2016-02-03" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 3 (2016-02-03)</h3>
+
+<ul>
+<li>Going towards getting the commons-ip compliant with E-ARK Common Specification v0.13.</li>
+<li>Bug fixes (file leaks, etc.).</li>
+</ul>
+
+<h2>
+<a id="credits" class="anchor" href="#credits" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Credits</h2>
+
+<p>TODO: Write credits</p>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
+
+<p>LGPLv3</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/keeps/commons-ip">EARK IP manipulation java library</a> is maintained by <a href="https://github.com/keeps">keeps</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
