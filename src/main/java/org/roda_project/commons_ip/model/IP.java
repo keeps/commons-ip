@@ -33,6 +33,7 @@ public abstract class IP implements IPInterface {
   private List<IPDescriptiveMetadata> descriptiveMetadata;
   private List<IPMetadata> preservationMetadata;
   private List<IPMetadata> otherMetadata;
+  private List<String> representationIds;
   private Map<String, IPRepresentation> representations;
   private List<IPFile> schemas;
   private List<IPFile> documentation;
@@ -47,6 +48,7 @@ public abstract class IP implements IPInterface {
     this.descriptiveMetadata = new ArrayList<IPDescriptiveMetadata>();
     this.preservationMetadata = new ArrayList<IPMetadata>();
     this.otherMetadata = new ArrayList<IPMetadata>();
+    this.representationIds = new ArrayList<String>();
     this.representations = new HashMap<String, IPRepresentation>();
     this.schemas = new ArrayList<IPFile>();
     this.documentation = new ArrayList<IPFile>();
@@ -170,10 +172,12 @@ public abstract class IP implements IPInterface {
 
   @Override
   public IP addRepresentation(IPRepresentation sipRepresentation) throws SIPException {
-    if (representations.containsKey(sipRepresentation.getRepresentationID())) {
+    String representationId = sipRepresentation.getRepresentationID();
+    if (representations.containsKey(representationId)) {
       throw new SIPException("Representation already exists");
     } else {
-      representations.put(sipRepresentation.getRepresentationID(), sipRepresentation);
+      representationIds.add(representationId);
+      representations.put(representationId, sipRepresentation);
       return this;
     }
   }
@@ -277,7 +281,11 @@ public abstract class IP implements IPInterface {
 
   @Override
   public List<IPRepresentation> getRepresentations() {
-    return new ArrayList<IPRepresentation>(representations.values());
+    List<IPRepresentation> representations = new ArrayList<IPRepresentation>();
+    for (String representationId : representationIds) {
+      representations.add(this.representations.get(representationId));
+    }
+    return representations;
   }
 
   @Override
