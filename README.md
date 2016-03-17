@@ -18,7 +18,7 @@ The RODA Commons IP provides an API to manipulate Information Packages of differ
 
 1. Add the following repository
   
-  ```
+  ```xml
   <repository>
     <id>KEEPS-Artifacts</id>
     <name>KEEP Artifacts-releases</name>
@@ -27,15 +27,15 @@ The RODA Commons IP provides an API to manipulate Information Packages of differ
   ```
 1. Add the following dependency
   
-  ```
+  ```xml
   <dependency>
     <groupId>org.roda-project</groupId>
     <artifactId>commons-ip</artifactId>
-    <version>1.0.0-alpha9</version>
+    <version>1.0.0-alpha10</version>
   </dependency>
   ```
 
-* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha9/commons-ip-1.0.0-alpha9.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
+* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha10/commons-ip-1.0.0-alpha10.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
 
 
 ### Write some code
@@ -137,32 +137,36 @@ SIP earkSIP = EARKSIP.parse(zipSIP);
 
 ## History
 
-### Alpha 9 (2016-02-25)
+#### Alpha 10 (2016-03-04)
+
+* Now representations are ordered (i.e. when exporting into E-ARK SIP the order by which a representation was added to the SIP is respected).
+
+#### Alpha 9 (2016-02-25)
 
 * __MetadataType__ enum now has support for other type (which will be set in OTHERMDTYPE METS attribute; can be used when selecting __MetadataType.OTHER__ enum value).
 
-### Alpha 8 (2016-02-12)
+#### Alpha 8 (2016-02-12)
 
 * The __SIP.build__ method now throws _InterruptedException_ and correctly handles, in the rights places in the code, interruptions made to the thread executing the method. And, in that case, unneeded files are properly cleaned up/deleted.
 
-### Alpha 7 (2016-02-11)
+#### Alpha 7 (2016-02-11)
 
 * Added more events to SIPObserver (events related to representations/representation processing which are done before SIP packaging, i.e., calculate checksum and other operations that might take awhile).
 
-### Alpha 6 (2016-02-11)
+#### Alpha 6 (2016-02-11)
 
 * Removed Parser interface and EARKParser implementation: now this must be done in a concrete SIP class as the IP interface has a static method _parse_. This way, both _build_ and _parse_ code are located in the same class (take EARKSIP as an example).
 
-### Alpha 5 (2016-02-11)
+#### Alpha 5 (2016-02-11)
 
 * Refactored code to better use inheritance and interfaces.
 * Now SIP implements the Observer Pattern (SIP is observable and SIPObserver, well, you can figure that out).
 
-### Alpha 4 (2016-02-09)
+#### Alpha 4 (2016-02-09)
 
 * Almost 100 % done with EARKSIP.build (SIP to ZIP) and EARKParser.parse (ZIP to SIP) Common Specification v0.13 compliant.
 
-### Alpha 3 (2016-02-03)
+#### Alpha 3 (2016-02-03)
 
 * Going towards getting the commons-ip compliant with E-ARK Common Specification v0.13.
 * Bug fixes (file leaks, etc.).
