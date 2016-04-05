@@ -7,6 +7,18 @@
 		</encoder>
 	</appender>
 
+	<!-- <logger name="org.roda_project.commons_ip.model.impl.eark.EARKMETSUtils"
+		additivity="false">
+		<level value="DEBUG" />
+		<appender-ref ref="STDOUT" />
+	</logger>
+
+	<logger name="org.roda_project.commons_ip.utils.ZIPUtils"
+		additivity="false">
+		<level value="DEBUG" />
+		<appender-ref ref="STDOUT" />
+	</logger>-->
+
 	<root level="INFO">
 		<appender-ref ref="STDOUT" />
 	</root>

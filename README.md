@@ -31,11 +31,11 @@ The RODA Commons IP provides an API to manipulate Information Packages of differ
   <dependency>
     <groupId>org.roda-project</groupId>
     <artifactId>commons-ip</artifactId>
-    <version>1.0.0-alpha10</version>
+    <version>1.0.0-alpha11</version>
   </dependency>
   ```
 
-* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha10/commons-ip-1.0.0-alpha10.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
+* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha11/commons-ip-1.0.0-alpha11.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
 
 
 ### Write some code
@@ -136,6 +136,10 @@ SIP earkSIP = EARKSIP.parse(zipSIP);
 5. Submit a pull request :D
 
 ## History
+
+#### Alpha 11 (2016-04-05)
+
+* Improved E-ARK SIP generation time by doing checksum calculation during ZIP creation.
 
 #### Alpha 10 (2016-03-04)
 

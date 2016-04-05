@@ -7,14 +7,14 @@
  */
 package org.roda_project.commons_ip.utils;
 
-public class SIPException extends IPException {
-  private static final long serialVersionUID = 2567723210648034434L;
+public class IPException extends Exception {
+  private static final long serialVersionUID = 6925675286696076482L;
 
-  public SIPException(String message) {
+  public IPException(String message) {
     super(message);
   }
 
-  public SIPException(String message, Throwable t) {
+  public IPException(String message, Throwable t) {
     super(message, t);
   }
 }

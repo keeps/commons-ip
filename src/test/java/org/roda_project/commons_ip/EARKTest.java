@@ -52,12 +52,17 @@ public class EARKTest {
 
   @Test
   public void buildAndParseEARKSIP() throws SIPException, ParseException, InterruptedException {
-
+    LOGGER.info("Creating full E-ARK SIP");
     Path zipSIP = createFullEARKSIP();
+    LOGGER.info("Done creating full E-ARK SIP");
 
+    LOGGER.info("Parsing before generated full E-ARK SIP");
     parseFullEARKSIP(zipSIP);
+    LOGGER.info("Done parsing before generated full E-ARK SIP");
 
+    LOGGER.info("Validating before generated full E-ARK SIP");
     validateEARKSIP(zipSIP);
+    LOGGER.info("Done validating before generated full E-ARK SIP");
 
   }
 

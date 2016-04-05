@@ -36,6 +36,7 @@ import org.roda_project.commons_ip.model.MetsWrapper;
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.model.SIP;
 import org.roda_project.commons_ip.utils.EARKEnums.ContentType;
+import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.METSEnums.MetadataType;
 import org.roda_project.commons_ip.utils.SIPException;
 import org.roda_project.commons_ip.utils.Utils;
@@ -49,6 +50,10 @@ public class EARKSIP extends SIP {
 
   private static final String SIP_TEMP_DIR = "EARKSIP";
   private static final String SIP_FILE_EXTENSION = ".zip";
+
+  // controls if checksum is calculated during processing or in a latter moment
+  // (e.g. zipping files)
+  private boolean calculateChecksumDuringProcessing = false;
 
   public EARKSIP() {
     super();
@@ -107,6 +112,8 @@ public class EARKSIP extends SIP {
     } catch (InterruptedException e) {
       cleanUpUponInterrupt(zipPath);
       throw e;
+    } catch (IPException e) {
+      throw new SIPException(e.getMessage(), e);
     } finally {
       deleteBuildDir(buildDir);
     }
@@ -162,13 +169,14 @@ public class EARKSIP extends SIP {
 
         String descriptiveFilePath = IPConstants.DESCRIPTIVE_FOLDER + getFoldersFromList(file.getRelativeFolders())
           + file.getFileName();
-        EARKMETSUtils.addDescriptiveMetadataToMETS(metsWrapper, dm, descriptiveFilePath);
+        MdRef mdRef = EARKMETSUtils.addDescriptiveMetadataToMETS(metsWrapper, dm, descriptiveFilePath,
+          calculateChecksumDuringProcessing);
 
         if (representationId != null) {
           descriptiveFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
             + descriptiveFilePath;
         }
-        ZIPUtils.addFileToZip(zipEntries, file.getPath(), descriptiveFilePath);
+        ZIPUtils.addMdRefFileToZip(zipEntries, file.getPath(), descriptiveFilePath, mdRef);
       }
     }
   }
@@ -184,13 +192,14 @@ public class EARKSIP extends SIP {
 
         String preservationMetadataPath = IPConstants.PRESERVATION_FOLDER
           + getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
-        EARKMETSUtils.addPreservationMetadataToMETS(metsWrapper, pm, preservationMetadataPath);
+        MdRef mdRef = EARKMETSUtils.addPreservationMetadataToMETS(metsWrapper, pm, preservationMetadataPath,
+          calculateChecksumDuringProcessing);
 
         if (representationId != null) {
           preservationMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId
             + IPConstants.ZIP_PATH_SEPARATOR + preservationMetadataPath;
         }
-        ZIPUtils.addFileToZip(zipEntries, file.getPath(), preservationMetadataPath);
+        ZIPUtils.addMdRefFileToZip(zipEntries, file.getPath(), preservationMetadataPath, mdRef);
       }
     }
   }
@@ -206,13 +215,14 @@ public class EARKSIP extends SIP {
 
         String otherMetadataPath = IPConstants.OTHER_FOLDER + getFoldersFromList(file.getRelativeFolders())
           + file.getFileName();
-        EARKMETSUtils.addOtherMetadataToMETS(metsWrapper, om, otherMetadataPath);
+        MdRef mdRef = EARKMETSUtils.addOtherMetadataToMETS(metsWrapper, om, otherMetadataPath,
+          calculateChecksumDuringProcessing);
 
         if (representationId != null) {
           otherMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
             + otherMetadataPath;
         }
-        ZIPUtils.addFileToZip(zipEntries, file.getPath(), otherMetadataPath);
+        ZIPUtils.addMdRefFileToZip(zipEntries, file.getPath(), otherMetadataPath, mdRef);
       }
     }
   }
@@ -280,11 +290,12 @@ public class EARKSIP extends SIP {
 
         String dataFilePath = IPConstants.DATA_FOLDER + getFoldersFromList(file.getRelativeFolders())
           + file.getFileName();
-        EARKMETSUtils.addDataFileToMETS(representationMETSWrapper, dataFilePath, file.getPath());
+        FileType fileType = EARKMETSUtils.addDataFileToMETS(representationMETSWrapper, dataFilePath, file.getPath(),
+          calculateChecksumDuringProcessing);
 
         dataFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
           + dataFilePath;
-        ZIPUtils.addFileToZip(zipEntries, file.getPath(), dataFilePath);
+        ZIPUtils.addFileTypeFileToZip(zipEntries, file.getPath(), dataFilePath, fileType);
 
         i++;
         this.notifySipBuildRepresentationProcessingCurrentStatus(i);
@@ -319,13 +330,14 @@ public class EARKSIP extends SIP {
 
         String schemaFilePath = IPConstants.SCHEMAS_FOLDER + getFoldersFromList(schema.getRelativeFolders())
           + schema.getFileName();
-        EARKMETSUtils.addSchemaFileToMETS(metsWrapper, schemaFilePath, schema.getPath());
+        FileType fileType = EARKMETSUtils.addSchemaFileToMETS(metsWrapper, schemaFilePath, schema.getPath(),
+          calculateChecksumDuringProcessing);
 
         if (representationId != null) {
           schemaFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
             + schemaFilePath;
         }
-        ZIPUtils.addFileToZip(zipEntries, schema.getPath(), schemaFilePath);
+        ZIPUtils.addFileTypeFileToZip(zipEntries, schema.getPath(), schemaFilePath, fileType);
       }
     }
   }
@@ -340,13 +352,14 @@ public class EARKSIP extends SIP {
 
         String documentationFilePath = IPConstants.DOCUMENTATION_FOLDER + getFoldersFromList(doc.getRelativeFolders())
           + doc.getFileName();
-        EARKMETSUtils.addDocumentationFileToMETS(metsWrapper, documentationFilePath, doc.getPath());
+        FileType fileType = EARKMETSUtils.addDocumentationFileToMETS(metsWrapper, documentationFilePath, doc.getPath(),
+          calculateChecksumDuringProcessing);
 
         if (representationId != null) {
           documentationFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
             + documentationFilePath;
         }
-        ZIPUtils.addFileToZip(zipEntries, doc.getPath(), documentationFilePath);
+        ZIPUtils.addFileTypeFileToZip(zipEntries, doc.getPath(), documentationFilePath, fileType);
       }
     }
   }
@@ -356,10 +369,10 @@ public class EARKSIP extends SIP {
     EARKMETSUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, IPConstants.METS_FILE, buildDir);
   }
 
-  private void createZipFile(List<ZipEntryInfo> zipEntries, Path zipPath) throws SIPException, InterruptedException {
+  private void createZipFile(List<ZipEntryInfo> zipEntries, Path zipPath) throws IPException, InterruptedException {
     try {
       notifySipBuildPackagingStarted(zipEntries.size());
-      ZIPUtils.zip(zipEntries, Files.newOutputStream(zipPath), this);
+      ZIPUtils.zip(zipEntries, Files.newOutputStream(zipPath), this, calculateChecksumDuringProcessing);
     } catch (ClosedByInterruptException e) {
       throw new InterruptedException();
     } catch (IOException e) {
@@ -559,7 +572,7 @@ public class EARKSIP extends SIP {
             if (StringUtils.isNotBlank(mdRef.getOTHERMDTYPE())) {
               dmdType.setOtherType(mdRef.getOTHERMDTYPE());
             }
-            LOGGER.debug("Metadata type valid: " + dmdType.toString());
+            LOGGER.debug("Metadata type valid: {}", dmdType);
           } catch (NullPointerException | IllegalArgumentException e) {
             // do nothing and use already defined values for metadataType &
             // metadataVersion
@@ -622,7 +635,7 @@ public class EARKSIP extends SIP {
 
     if (metsWrapper.getRepresentationsDiv() != null && metsWrapper.getRepresentationsDiv().getDiv() != null) {
       for (DivType representationDiv : metsWrapper.getRepresentationsDiv().getDiv()) {
-        if (representationDiv.getMptr() != null) {
+        if (representationDiv.getMptr() != null && !representationDiv.getMptr().isEmpty()) {
           // we can assume one and only one mets for each representation div
           Mptr mptr = representationDiv.getMptr().get(0);
           String href = Utils.extractedRelativePathFromHref(mptr.getHref());

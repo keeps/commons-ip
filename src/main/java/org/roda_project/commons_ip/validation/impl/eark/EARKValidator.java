@@ -73,6 +73,7 @@ public class EARKValidator implements Validator {
               return Files.isDirectory(file);
             }
           };
+          // FIXME 20160328 hsilva: the following stream leaks
           try (DirectoryStream<Path> stream = Files.newDirectoryStream(representationsPath, filter)) {
             for (Path path : stream) {
               Path representationMets = path.resolve(IPConstants.METS_FILE);

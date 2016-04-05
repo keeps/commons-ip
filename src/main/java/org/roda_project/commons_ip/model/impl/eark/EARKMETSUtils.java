@@ -8,7 +8,6 @@
 package org.roda_project.commons_ip.model.impl.eark;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.channels.ClosedByInterruptException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,7 +16,6 @@ import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -193,7 +191,7 @@ public final class EARKMETSUtils {
   public static void addMainMETSToZip(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper, String metsPath,
     Path buildDir) throws SIPException {
     try {
-      marshallMETSandAddToZip(zipEntries, metsWrapper, metsPath, buildDir, true);
+      addMETSToZip(zipEntries, metsWrapper, metsPath, buildDir, true);
     } catch (JAXBException | IOException e) {
       throw new SIPException(e.getMessage(), e);
     }
@@ -206,7 +204,7 @@ public final class EARKMETSUtils {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
-      marshallMETSandAddToZip(zipEntries, representationMETSWrapper, representationMetsPath, buildDir, false);
+      addMETSToZip(zipEntries, representationMETSWrapper, representationMetsPath, buildDir, false);
       Mptr mptr = new Mptr();
       mptr.setLOCTYPE(LocType.URL.toString());
       mptr.setType(IPConstants.METS_TYPE_SIMPLE);
@@ -219,25 +217,10 @@ public final class EARKMETSUtils {
     }
   }
 
-  private static void marshallMETSandAddToZip(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper, String metsPath,
+  private static void addMETSToZip(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper, String metsPath,
     Path buildDir, boolean rootMETS) throws JAXBException, IOException, PropertyException, SIPException {
-    JAXBContext context = JAXBContext.newInstance(Mets.class);
-    Marshaller m = context.createMarshaller();
     Path temp = Files.createTempFile(buildDir, IPConstants.METS_FILE_NAME, IPConstants.METS_FILE_EXTENSION);
-    m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-    if (rootMETS) {
-      m.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,
-        "http://www.loc.gov/METS/ schemas/IP.xsd http://www.w3.org/1999/xlink schemas/xlink.xsd");
-    } else {
-      m.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,
-        "http://www.loc.gov/METS/ ../../schemas/IP.xsd http://www.w3.org/1999/xlink ../../schemas/xlink.xsd");
-    }
-    Mets mets = metsWrapper.getMets();
-    OutputStream metsOutputStream = Files.newOutputStream(temp);
-    m.marshal(mets, metsOutputStream);
-    metsOutputStream.close();
-
-    ZIPUtils.addFileToZip(zipEntries, temp, metsPath);
+    ZIPUtils.addMETSFileToZip(zipEntries, temp, metsPath, metsWrapper.getMets(), rootMETS);
   }
 
   public static Mets instantiateMETSFromFile(Path metsFile) throws JAXBException {
@@ -272,21 +255,20 @@ public final class EARKMETSUtils {
     return ipAgent;
   }
 
-  public static MetsWrapper addDescriptiveMetadataToMETS(MetsWrapper metsWrapper,
-    IPDescriptiveMetadata descriptiveMetadata, String descriptiveMetadataPath)
-      throws SIPException, InterruptedException {
+  public static MdRef addDescriptiveMetadataToMETS(MetsWrapper metsWrapper, IPDescriptiveMetadata descriptiveMetadata,
+    String descriptiveMetadataPath, boolean calculateChecksum) throws SIPException, InterruptedException {
     return addMetadataToMETS(metsWrapper, descriptiveMetadata, descriptiveMetadataPath,
       descriptiveMetadata.getMetadataType().getType(), descriptiveMetadata.getMetadataType().getOtherType(),
-      descriptiveMetadata.getMetadataVersion(), true);
+      descriptiveMetadata.getMetadataVersion(), true, calculateChecksum);
   }
 
-  public static MetsWrapper addOtherMetadataToMETS(MetsWrapper metsWrapper, IPMetadata otherMetadata,
-    String otherMetadataPath) throws SIPException, InterruptedException {
-    return addMetadataToMETS(metsWrapper, otherMetadata, otherMetadataPath, null, null, null, false);
+  public static MdRef addOtherMetadataToMETS(MetsWrapper metsWrapper, IPMetadata otherMetadata,
+    String otherMetadataPath, boolean calculateChecksum) throws SIPException, InterruptedException {
+    return addMetadataToMETS(metsWrapper, otherMetadata, otherMetadataPath, null, null, null, false, calculateChecksum);
   }
 
-  private static MetsWrapper addMetadataToMETS(MetsWrapper metsWrapper, IPMetadata metadata, String metadataPath,
-    String mdType, String mdOtherType, String mdTypeVersion, boolean isDescriptive)
+  private static MdRef addMetadataToMETS(MetsWrapper metsWrapper, IPMetadata metadata, String metadataPath,
+    String mdType, String mdOtherType, String mdTypeVersion, boolean isDescriptive, boolean calculateChecksum)
       throws SIPException, InterruptedException {
     MdSecType dmdSec = new MdSecType();
     dmdSec.setID(Utils.generateRandomId());
@@ -299,7 +281,7 @@ public final class EARKMETSUtils {
     mdRef.setMDTYPEVERSION(mdTypeVersion);
 
     // set checksum, mimetype, etc.
-    setFileBasicInformation(metadata.getMetadata().getPath(), mdRef);
+    setFileBasicInformation(metadata.getMetadata().getPath(), mdRef, calculateChecksum);
 
     // structural map info.
     Fptr fptr = new Fptr();
@@ -312,18 +294,18 @@ public final class EARKMETSUtils {
 
     dmdSec.setMdRef(mdRef);
     metsWrapper.getMets().getDmdSec().add(dmdSec);
-    return metsWrapper;
+    return mdRef;
   }
 
-  public static MetsWrapper addPreservationMetadataToMETS(MetsWrapper metsWrapper, IPMetadata preservationMetadata,
-    String preservationMetadataPath) throws SIPException, InterruptedException {
+  public static MdRef addPreservationMetadataToMETS(MetsWrapper metsWrapper, IPMetadata preservationMetadata,
+    String preservationMetadataPath, boolean calculateChecksum) throws SIPException, InterruptedException {
     MdSecType digiprovMD = new MdSecType();
     digiprovMD.setID(Utils.generateRandomId());
 
     MdRef mdRef = createMdRef(preservationMetadataPath);
 
     // set checksum, mimetype, etc.
-    setFileBasicInformation(preservationMetadata.getMetadata().getPath(), mdRef);
+    setFileBasicInformation(preservationMetadata.getMetadata().getPath(), mdRef, calculateChecksum);
 
     // structural map info.
     Fptr fptr = new Fptr();
@@ -332,7 +314,7 @@ public final class EARKMETSUtils {
 
     digiprovMD.setMdRef(mdRef);
     metsWrapper.getMets().getAmdSec().get(0).getDigiprovMD().add(digiprovMD);
-    return metsWrapper;
+    return mdRef;
   }
 
   private static MdRef createMdRef(String metadataPath) {
@@ -344,13 +326,13 @@ public final class EARKMETSUtils {
     return mdRef;
   }
 
-  public static MetsWrapper addDataFileToMETS(MetsWrapper representationMETS, String dataFilePath, Path dataFile)
-    throws SIPException, InterruptedException {
+  public static FileType addDataFileToMETS(MetsWrapper representationMETS, String dataFilePath, Path dataFile,
+    boolean calculateChecksum) throws SIPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomId());
 
     // set checksum, mimetype, etc.
-    setFileBasicInformation(dataFile, file);
+    setFileBasicInformation(dataFile, file, calculateChecksum);
 
     // add to file section
     FLocat fileLocation = createFileLocation(dataFilePath);
@@ -361,21 +343,26 @@ public final class EARKMETSUtils {
     Fptr fptr = new Fptr();
     fptr.setFILEID(file);
     representationMETS.getDataDiv().getFptr().add(fptr);
-    return representationMETS;
+    return file;
   }
 
-  private static MdRef setFileBasicInformation(Path file, MdRef mdRef) throws SIPException, InterruptedException {
-    // checksum info.
-    try {
-      mdRef.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(file), IPConstants.CHECKSUM_ALGORITHM));
-    } catch (ClosedByInterruptException e) {
-      throw new InterruptedException();
-    } catch (IOException e) {
-      throw new SIPException("Error calculating checksum for file " + file, e);
-    } catch (NoSuchAlgorithmException e) {
-      throw new SIPException("Error calculating checksum for file " + file + " (no such algorithm)", e);
+  private static MdRef setFileBasicInformation(Path file, MdRef mdRef, boolean calculateChecksum)
+    throws SIPException, InterruptedException {
+    if (calculateChecksum) {
+      // checksum info.
+      try {
+        LOGGER.debug("Calculating checksum {}", file);
+        mdRef.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(file), IPConstants.CHECKSUM_ALGORITHM));
+        LOGGER.debug("Done calculating checksum");
+      } catch (ClosedByInterruptException e) {
+        throw new InterruptedException();
+      } catch (IOException e) {
+        throw new SIPException("Error calculating checksum for file " + file, e);
+      } catch (NoSuchAlgorithmException e) {
+        throw new SIPException("Error calculating checksum for file " + file + " (no such algorithm)", e);
+      }
+      mdRef.setCHECKSUMTYPE(IPConstants.CHECKSUM_ALGORITHM);
     }
-    mdRef.setCHECKSUMTYPE(IPConstants.CHECKSUM_ALGORITHM);
 
     // mimetype info.
     try {
@@ -401,22 +388,29 @@ public final class EARKMETSUtils {
     return mdRef;
   }
 
-  private static void setFileBasicInformation(Path file, FileType fileType) throws SIPException, InterruptedException {
+  private static void setFileBasicInformation(Path file, FileType fileType, boolean calculateChecksum)
+    throws SIPException, InterruptedException {
     // checksum info.
-    try {
-      fileType.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(file), IPConstants.CHECKSUM_ALGORITHM));
-    } catch (ClosedByInterruptException e) {
-      throw new InterruptedException();
-    } catch (IOException e) {
-      throw new SIPException("Error calculating checksum for file " + file, e);
-    } catch (NoSuchAlgorithmException e) {
-      throw new SIPException("Error calculating checksum for file " + file + " (no such algorithm)", e);
+    if (calculateChecksum) {
+      try {
+        LOGGER.debug("Calculating checksum {}", file);
+        fileType.setCHECKSUM(Utils.calculateChecksum(Files.newInputStream(file), IPConstants.CHECKSUM_ALGORITHM));
+        LOGGER.debug("Done calculating checksum");
+      } catch (ClosedByInterruptException e) {
+        throw new InterruptedException();
+      } catch (IOException e) {
+        throw new SIPException("Error calculating checksum for file " + file, e);
+      } catch (NoSuchAlgorithmException e) {
+        throw new SIPException("Error calculating checksum for file " + file + " (no such algorithm)", e);
+      }
+      fileType.setCHECKSUMTYPE(IPConstants.CHECKSUM_ALGORITHM);
     }
-    fileType.setCHECKSUMTYPE(IPConstants.CHECKSUM_ALGORITHM);
 
     // mimetype info.
     try {
+      LOGGER.debug("Setting mimetype {}", file);
       fileType.setMIMETYPE(Files.probeContentType(file));
+      LOGGER.debug("Done setting mimetype");
     } catch (IOException e) {
       throw new SIPException("Error probing content-type (" + file.toString() + ")", e);
     }
@@ -430,19 +424,21 @@ public final class EARKMETSUtils {
 
     // size info.
     try {
+      LOGGER.debug("Setting file size {}", file);
       fileType.setSIZE(Files.size(file));
+      LOGGER.debug("Done setting file size");
     } catch (IOException e) {
       throw new SIPException("Error getting file size (" + file.toString() + ")", e);
     }
   }
 
-  public static MetsWrapper addSchemaFileToMETS(MetsWrapper metsWrapper, String schemaFilePath, Path schemaFile)
-    throws SIPException, InterruptedException {
+  public static FileType addSchemaFileToMETS(MetsWrapper metsWrapper, String schemaFilePath, Path schemaFile,
+    boolean calculateChecksum) throws SIPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomId());
 
     // set checksum, mimetype, etc.
-    setFileBasicInformation(schemaFile, file);
+    setFileBasicInformation(schemaFile, file, calculateChecksum);
 
     // add to file section
     FLocat fileLocation = createFileLocation(schemaFilePath);
@@ -453,16 +449,16 @@ public final class EARKMETSUtils {
     Fptr fptr = new Fptr();
     fptr.setFILEID(file);
     metsWrapper.getSchemasDiv().getFptr().add(fptr);
-    return metsWrapper;
+    return file;
   }
 
-  public static MetsWrapper addDocumentationFileToMETS(MetsWrapper metsWrapper, String documentationFilePath,
-    Path documentationFile) throws SIPException, InterruptedException {
+  public static FileType addDocumentationFileToMETS(MetsWrapper metsWrapper, String documentationFilePath,
+    Path documentationFile, boolean calculateChecksum) throws SIPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomId());
 
     // set checksum, mimetype, etc.
-    setFileBasicInformation(documentationFile, file);
+    setFileBasicInformation(documentationFile, file, calculateChecksum);
 
     // add to file section
     FLocat fileLocation = createFileLocation(documentationFilePath);
@@ -474,7 +470,7 @@ public final class EARKMETSUtils {
     fptr.setFILEID(file);
     metsWrapper.getDocumentationDiv().getFptr().add(fptr);
 
-    return metsWrapper;
+    return file;
   }
 
   private static FLocat createFileLocation(String filePath) {

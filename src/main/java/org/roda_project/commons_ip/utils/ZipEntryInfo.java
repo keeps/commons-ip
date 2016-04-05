@@ -9,38 +9,12 @@ package org.roda_project.commons_ip.utils;
 
 import java.nio.file.Path;
 
-/**
- * Information for zipping
- * 
- * @author Luis Faria
- * 
- */
-public class ZipEntryInfo {
-  private final String name;
+public interface ZipEntryInfo {
 
-  private final Path filePath;
+  String getName();
 
-  public ZipEntryInfo(String name, Path filePath) {
-    this.name = name;
-    this.filePath = filePath;
-  }
+  Path getFilePath();
 
-  /**
-   * Get zip entry name
-   * 
-   * @return the name of the zip entry
-   */
-  public String getName() {
-    return name;
-  }
-
-  public Path getFilePath() {
-    return filePath;
-  }
-
-  @Override
-  public String toString() {
-    return "ZipEntryInfo [name=" + name + ", filePath=" + filePath + "]";
-  }
+  void prepareEntryforZipping() throws IPException;
 
 }
