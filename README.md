@@ -1,6 +1,6 @@
-# RODA Commons IP 
+# E-ARK IP manipulation java library
 
-The RODA Commons IP provides an API to manipulate Information Packages of different formats: RODA, E-ARK, etc.
+API to manipulate Information Packages of different formats: RODA, E-ARK, etc.
 
 ## Installation
 
