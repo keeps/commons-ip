@@ -2,7 +2,7 @@
 <html lang="en-us">
   <head>
     <meta charset="UTF-8">
-    <title>EARK IP manipulation java library by keeps</title>
+    <title>E-ARK IP manipulation java library by keeps</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
@@ -11,8 +11,8 @@
   </head>
   <body>
     <section class="page-header">
-      <h1 class="project-name">EARK IP manipulation java library</h1>
-      <h2 class="project-tagline">Library to generate SIP, AIP or DIP in EARK formats</h2>
+      <h1 class="project-name">E-ARK IP manipulation java library</h1>
+      <h2 class="project-tagline">Library to generate SIP, AIP or DIP in E-ARK formats</h2>
       <a href="https://github.com/keeps/commons-ip" class="btn">View on GitHub</a>
       <a href="https://github.com/keeps/commons-ip/zipball/master" class="btn">Download .zip</a>
       <a href="https://github.com/keeps/commons-ip/tarball/master" class="btn">Download .tar.gz</a>
@@ -20,7 +20,7 @@
 
     <section class="main-content">
       <h1>
-<a id="eark-ip-manipulation-java-library" class="anchor" href="#eark-ip-manipulation-java-library" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>EARK IP manipulation java library</h1>
+<a id="e-ark-ip-manipulation-java-library" class="anchor" href="#e-ark-ip-manipulation-java-library" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>E-ARK IP manipulation java library</h1>
 
 <p>API to manipulate Information Packages of different formats: RODA, E-ARK, etc.</p>
 
@@ -49,27 +49,25 @@
 <li>
 <p>Add the following repository</p>
 
-<pre><code>&lt;repository&gt;
-  &lt;id&gt;KEEPS-Artifacts&lt;/id&gt;
-  &lt;name&gt;KEEP Artifacts-releases&lt;/name&gt;
-  &lt;url&gt;http://artifactory.keep.pt/keep&lt;/url&gt;
-&lt;/repository&gt;
-</code></pre>
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">repository</span>&gt;
+  &lt;<span class="pl-ent">id</span>&gt;KEEPS-Artifacts&lt;/<span class="pl-ent">id</span>&gt;
+  &lt;<span class="pl-ent">name</span>&gt;KEEP Artifacts-releases&lt;/<span class="pl-ent">name</span>&gt;
+  &lt;<span class="pl-ent">url</span>&gt;http://artifactory.keep.pt/keep&lt;/<span class="pl-ent">url</span>&gt;
+&lt;/<span class="pl-ent">repository</span>&gt;</pre></div>
 </li>
 <li>
 <p>Add the following dependency</p>
 
-<pre><code>&lt;dependency&gt;
-  &lt;groupId&gt;org.roda-project&lt;/groupId&gt;
-  &lt;artifactId&gt;commons-ip&lt;/artifactId&gt;
-  &lt;version&gt;1.0.0-alpha9&lt;/version&gt;
-&lt;/dependency&gt;
-</code></pre>
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+  &lt;<span class="pl-ent">groupId</span>&gt;org.roda-project&lt;/<span class="pl-ent">groupId</span>&gt;
+  &lt;<span class="pl-ent">artifactId</span>&gt;commons-ip&lt;/<span class="pl-ent">artifactId</span>&gt;
+  &lt;<span class="pl-ent">version</span>&gt;1.0.0-alpha11&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 </li>
 </ol>
 
 <ul>
-<li>Not using maven, download <a href="http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha9/commons-ip-1.0.0-alpha9.jar">Commons IP latest jar</a>, each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.</li>
+<li>Not using maven, download <a href="http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha11/commons-ip-1.0.0-alpha11.jar">Commons IP latest jar</a>, each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.</li>
 </ul>
 
 <h3>
@@ -179,52 +177,66 @@ representation1<span class="pl-k">.</span>addFile(representationFile2);
 <h2>
 <a id="history" class="anchor" href="#history" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>History</h2>
 
-<h3>
-<a id="alpha-9-2016-02-25" class="anchor" href="#alpha-9-2016-02-25" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 9 (2016-02-25)</h3>
+<h4>
+<a id="alpha-11-2016-04-05" class="anchor" href="#alpha-11-2016-04-05" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 11 (2016-04-05)</h4>
+
+<ul>
+<li>Improved E-ARK SIP generation time by doing checksum calculation during ZIP creation.</li>
+</ul>
+
+<h4>
+<a id="alpha-10-2016-03-04" class="anchor" href="#alpha-10-2016-03-04" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 10 (2016-03-04)</h4>
+
+<ul>
+<li>Now representations are ordered (i.e. when exporting into E-ARK SIP the order by which a representation was added to the SIP is respected).</li>
+</ul>
+
+<h4>
+<a id="alpha-9-2016-02-25" class="anchor" href="#alpha-9-2016-02-25" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 9 (2016-02-25)</h4>
 
 <ul>
 <li>
 <strong>MetadataType</strong> enum now has support for other type (which will be set in OTHERMDTYPE METS attribute; can be used when selecting <strong>MetadataType.OTHER</strong> enum value).</li>
 </ul>
 
-<h3>
-<a id="alpha-8-2016-02-12" class="anchor" href="#alpha-8-2016-02-12" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 8 (2016-02-12)</h3>
+<h4>
+<a id="alpha-8-2016-02-12" class="anchor" href="#alpha-8-2016-02-12" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 8 (2016-02-12)</h4>
 
 <ul>
 <li>The <strong>SIP.build</strong> method now throws <em>InterruptedException</em> and correctly handles, in the rights places in the code, interruptions made to the thread executing the method. And, in that case, unneeded files are properly cleaned up/deleted.</li>
 </ul>
 
-<h3>
-<a id="alpha-7-2016-02-11" class="anchor" href="#alpha-7-2016-02-11" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 7 (2016-02-11)</h3>
+<h4>
+<a id="alpha-7-2016-02-11" class="anchor" href="#alpha-7-2016-02-11" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 7 (2016-02-11)</h4>
 
 <ul>
 <li>Added more events to SIPObserver (events related to representations/representation processing which are done before SIP packaging, i.e., calculate checksum and other operations that might take awhile).</li>
 </ul>
 
-<h3>
-<a id="alpha-6-2016-02-11" class="anchor" href="#alpha-6-2016-02-11" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 6 (2016-02-11)</h3>
+<h4>
+<a id="alpha-6-2016-02-11" class="anchor" href="#alpha-6-2016-02-11" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 6 (2016-02-11)</h4>
 
 <ul>
 <li>Removed Parser interface and EARKParser implementation: now this must be done in a concrete SIP class as the IP interface has a static method <em>parse</em>. This way, both <em>build</em> and <em>parse</em> code are located in the same class (take EARKSIP as an example).</li>
 </ul>
 
-<h3>
-<a id="alpha-5-2016-02-11" class="anchor" href="#alpha-5-2016-02-11" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 5 (2016-02-11)</h3>
+<h4>
+<a id="alpha-5-2016-02-11" class="anchor" href="#alpha-5-2016-02-11" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 5 (2016-02-11)</h4>
 
 <ul>
 <li>Refactored code to better use inheritance and interfaces.</li>
 <li>Now SIP implements the Observer Pattern (SIP is observable and SIPObserver, well, you can figure that out).</li>
 </ul>
 
-<h3>
-<a id="alpha-4-2016-02-09" class="anchor" href="#alpha-4-2016-02-09" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 4 (2016-02-09)</h3>
+<h4>
+<a id="alpha-4-2016-02-09" class="anchor" href="#alpha-4-2016-02-09" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 4 (2016-02-09)</h4>
 
 <ul>
 <li>Almost 100 % done with EARKSIP.build (SIP to ZIP) and EARKParser.parse (ZIP to SIP) Common Specification v0.13 compliant.</li>
 </ul>
 
-<h3>
-<a id="alpha-3-2016-02-03" class="anchor" href="#alpha-3-2016-02-03" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 3 (2016-02-03)</h3>
+<h4>
+<a id="alpha-3-2016-02-03" class="anchor" href="#alpha-3-2016-02-03" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 3 (2016-02-03)</h4>
 
 <ul>
 <li>Going towards getting the commons-ip compliant with E-ARK Common Specification v0.13.</li>
@@ -242,7 +254,7 @@ representation1<span class="pl-k">.</span>addFile(representationFile2);
 <p>LGPLv3</p>
 
       <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/keeps/commons-ip">EARK IP manipulation java library</a> is maintained by <a href="https://github.com/keeps">keeps</a>.</span>
+        <span class="site-footer-owner"><a href="https://github.com/keeps/commons-ip">E-ARK IP manipulation java library</a> is maintained by <a href="https://github.com/keeps">keeps</a>.</span>
 
         <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
