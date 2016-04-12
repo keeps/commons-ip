@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.roda_project.commons_ip.model.IPAgent;
@@ -23,8 +24,8 @@ import org.roda_project.commons_ip.model.IPMetadata;
 import org.roda_project.commons_ip.model.IPRepresentation;
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.model.SIP;
+import org.roda_project.commons_ip.model.impl.eark.EARKEnums.IPContentType;
 import org.roda_project.commons_ip.model.impl.eark.EARKSIP;
-import org.roda_project.commons_ip.utils.EARKEnums.ContentType;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.METSEnums.MetadataType;
 import org.roda_project.commons_ip.utils.SIPException;
@@ -56,20 +57,16 @@ public class EARKTest {
     Path zipSIP = createFullEARKSIP();
     LOGGER.info("Done creating full E-ARK SIP");
 
-    LOGGER.info("Parsing before generated full E-ARK SIP");
-    parseFullEARKSIP(zipSIP);
-    LOGGER.info("Done parsing before generated full E-ARK SIP");
-
-    LOGGER.info("Validating before generated full E-ARK SIP");
-    validateEARKSIP(zipSIP);
-    LOGGER.info("Done validating before generated full E-ARK SIP");
+    LOGGER.info("Parsing (and validating) full E-ARK SIP");
+    parseAndValidateFullEARKSIP(zipSIP);
+    LOGGER.info("Done parsing (and validating) full E-ARK SIP");
 
   }
 
   private Path createFullEARKSIP() throws SIPException, InterruptedException {
 
     // 1) instantiate E-ARK SIP object
-    SIP sip = new EARKSIP("SIP_1", ContentType.mixed, "RODA Commons IP");
+    SIP sip = new EARKSIP("SIP_1", IPContentType.mixed, "RODA Commons IP");
 
     // 1.1) set optional human-readable description
     sip.setDescription("A full E-ARK SIP");
@@ -125,16 +122,15 @@ public class EARKTest {
     return zipSIP;
   }
 
-  private void parseFullEARKSIP(Path zipSIP) throws ParseException {
+  private void parseAndValidateFullEARKSIP(Path zipSIP) throws ParseException {
 
     // 1) invoke static method parse and that's it
     SIP earkSIP = EARKSIP.parse(zipSIP, tempFolder);
 
-    LOGGER.info("SIP with id '{}' parsed with success!", earkSIP.getId());
-  }
+    Assert.assertTrue(earkSIP.getValidationReport().isValid());
 
-  private void validateEARKSIP(Path zipSIP) {
-    // TODO
+    LOGGER.info("SIP with id '{}' parsed with success (valid? {})!", earkSIP.getId(),
+      earkSIP.getValidationReport().isValid());
   }
 
 }

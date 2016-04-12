@@ -16,6 +16,12 @@ public class ValidationReport {
   private List<ValidationIssue> issues;
   private Date date;
 
+  public ValidationReport() {
+    valid = true;
+    issues = new ArrayList<>();
+    date = new Date();
+  }
+
   public boolean isValid() {
     return valid;
   }
@@ -28,22 +34,11 @@ public class ValidationReport {
     return issues;
   }
 
-  public void setIssues(List<ValidationIssue> issues) {
-    this.issues = issues;
-  }
-
   public Date getDate() {
     return date;
   }
 
-  public void setDate(Date date) {
-    this.date = date;
-  }
-
   public void addIssue(ValidationIssue issue) {
-    if (issues == null) {
-      issues = new ArrayList<ValidationIssue>();
-    }
     issues.add(issue);
   }
 

@@ -10,8 +10,8 @@ package org.roda_project.commons_ip.model;
 import java.nio.file.Path;
 import java.util.List;
 
-import org.roda_project.commons_ip.utils.EARKEnums.ContentType;
-import org.roda_project.commons_ip.utils.EARKEnums.Type;
+import org.roda_project.commons_ip.model.impl.eark.EARKEnums.IPContentType;
+import org.roda_project.commons_ip.model.impl.eark.EARKEnums.Type;
 import org.roda_project.commons_ip.utils.SIPException;
 
 public interface IPInterface {
@@ -28,9 +28,9 @@ public interface IPInterface {
 
   String getType();
 
-  IP setContentType(ContentType contentType);
+  IP setContentType(IPContentType contentType);
 
-  ContentType getContentType();
+  IPContentType getContentType();
 
   IP setBasePath(Path basePath);
 

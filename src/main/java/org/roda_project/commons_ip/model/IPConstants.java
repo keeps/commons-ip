@@ -17,6 +17,7 @@ public final class IPConstants {
   public static final String METS_TYPE_SIMPLE = "simple";
   public static final String METS_TYPE_PHYSICAL = "physical";
   public static final String METS_PATH_SEPARATOR = "/";
+  public static final String METS_REPRESENTATION_TYPE_PART_1 = "representation";
 
   // IP structure related
   public static final String METADATA = "metadata";

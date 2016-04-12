@@ -59,12 +59,12 @@ public final class EARKMETSUtils {
   }
 
   /**
-   * @param rootMETS
+   * @param mainMets
    *          boolean stating if the generated mets belongs to root/sip or
    *          representation
    */
   public static MetsWrapper generateMETS(String objectId, String label, String type, String profile,
-    List<IPAgent> ipAgents, boolean rootMETS, String parentId) throws SIPException {
+    List<IPAgent> ipAgents, boolean mainMets, String parentId) throws SIPException {
     Mets mets = new Mets();
     MetsWrapper metsWrapper = new MetsWrapper(mets);
 
@@ -97,7 +97,7 @@ public final class EARKMETSUtils {
     // file section
     FileSec fileSec = new FileSec();
     fileSec.setID(Utils.generateRandomId());
-    FileGrp mainFileGroup = rootMETS ? createFileGroup(IPConstants.E_ARK_FILES_ROOT)
+    FileGrp mainFileGroup = mainMets ? createFileGroup(IPConstants.E_ARK_FILES_ROOT)
       : createFileGroup(IPConstants.E_ARK_FILES_REPRESENTATION + objectId);
 
     FileGrpType representationsFileGroup = createFileGroupType(IPConstants.REPRESENTATIONS);
@@ -218,9 +218,9 @@ public final class EARKMETSUtils {
   }
 
   private static void addMETSToZip(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper, String metsPath,
-    Path buildDir, boolean rootMETS) throws JAXBException, IOException, PropertyException, SIPException {
+    Path buildDir, boolean mainMets) throws JAXBException, IOException, PropertyException, SIPException {
     Path temp = Files.createTempFile(buildDir, IPConstants.METS_FILE_NAME, IPConstants.METS_FILE_EXTENSION);
-    ZIPUtils.addMETSFileToZip(zipEntries, temp, metsPath, metsWrapper.getMets(), rootMETS);
+    ZIPUtils.addMETSFileToZip(zipEntries, temp, metsPath, metsWrapper.getMets(), mainMets);
   }
 
   public static Mets instantiateMETSFromFile(Path metsFile) throws JAXBException {

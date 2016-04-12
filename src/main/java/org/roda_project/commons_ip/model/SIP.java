@@ -11,8 +11,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.roda_project.commons_ip.utils.EARKEnums.ContentType;
-import org.roda_project.commons_ip.utils.EARKEnums.Type;
+import org.roda_project.commons_ip.model.impl.eark.EARKEnums.IPContentType;
+import org.roda_project.commons_ip.model.impl.eark.EARKEnums.Type;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 
 public abstract class SIP extends IP {
@@ -23,17 +23,17 @@ public abstract class SIP extends IP {
     observers = new ArrayList<SIPObserver>();
   }
 
-  public SIP(String sipName) {
+  public SIP(String sipId) {
     super();
-    setId(sipName);
+    setId(sipId);
     setType(Type.SIP);
 
     observers = new ArrayList<SIPObserver>();
   }
 
-  public SIP(String sipName, ContentType contentType, String creator) {
+  public SIP(String sipId, IPContentType contentType, String creator) {
     super();
-    setId(sipName);
+    setId(sipId);
     setType(Type.SIP);
     setContentType(contentType);
     IPAgent creatorAgent = new IPAgent(creator, "CREATOR", null, CreatorType.OTHER, "SOFTWARE");

@@ -11,7 +11,9 @@ import java.io.IOException;
 import java.nio.channels.ClosedByInterruptException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -35,11 +37,14 @@ import org.roda_project.commons_ip.model.IPRepresentation;
 import org.roda_project.commons_ip.model.MetsWrapper;
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.model.SIP;
-import org.roda_project.commons_ip.utils.EARKEnums.ContentType;
+import org.roda_project.commons_ip.model.ValidationIssue;
+import org.roda_project.commons_ip.model.impl.eark.EARKEnums.IPContentType;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.METSEnums.MetadataType;
 import org.roda_project.commons_ip.utils.SIPException;
 import org.roda_project.commons_ip.utils.Utils;
+import org.roda_project.commons_ip.utils.ValidationErrors;
+import org.roda_project.commons_ip.utils.ValidationUtils;
 import org.roda_project.commons_ip.utils.ZIPUtils;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
 import org.slf4j.Logger;
@@ -71,7 +76,7 @@ public class EARKSIP extends SIP {
    * @param sipName
    *          will be used as OBJID in METS (/mets[@OBJID])
    */
-  public EARKSIP(String sipName, ContentType contentType, String creator) {
+  public EARKSIP(String sipName, IPContentType contentType, String creator) {
     super(sipName, contentType, creator);
   }
 
@@ -87,8 +92,17 @@ public class EARKSIP extends SIP {
     try {
       zipPath = getZipPath(destinationDirectory);
       List<ZipEntryInfo> zipEntries = new ArrayList<ZipEntryInfo>();
+      // 20160407 hsilva: as METS does not have an attribute 'otherType', the
+      // other type must be put in the 'type' attribute allowing this way other
+      // values besides the ones in the Enum
+      String contentType = this.getContentType().getType();
+      if (this.getContentType() == IPContentType.OTHER
+        && StringUtils.isNotBlank(this.getContentType().getOtherType())) {
+        contentType = this.getContentType().getOtherType();
+      }
+
       MetsWrapper mainMETSWrapper = EARKMETSUtils.generateMETS(this.getId(), this.getDescription(),
-        this.getType() + ":" + this.getContentType(), this.getProfile(), this.getAgents(), true, this.getParentID());
+        this.getType() + ":" + contentType, this.getProfile(), this.getAgents(), true, this.getParentID());
 
       addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
 
@@ -237,13 +251,18 @@ public class EARKSIP extends SIP {
           throw new InterruptedException();
         }
         String representationId = representation.getObjectID();
-
-        // FIXME how to set label and profile for the representations
-        String representationLabel = "";
+        // 20160407 hsilva: not being used by Common Specification v0.13
         String representationProfile = "";
-        String representationType = "representation";
-        MetsWrapper representationMETSWrapper = EARKMETSUtils.generateMETS(representationId, representationLabel,
-          representationType, representationProfile, representation.getAgents(), false, null);
+        String representationContentType = representation.getContentType().getType();
+        if (this.getContentType() == IPContentType.OTHER
+          && StringUtils.isNotBlank(this.getContentType().getOtherType())) {
+          representationContentType = this.getContentType().getOtherType();
+        }
+
+        MetsWrapper representationMETSWrapper = EARKMETSUtils.generateMETS(representationId,
+          representation.getDescription(),
+          IPConstants.METS_REPRESENTATION_TYPE_PART_1 + ":" + representationContentType, representationProfile,
+          representation.getAgents(), false, null);
 
         // representation data
         addRepresentationDataFilesToZipAndMETS(zipEntries, representationMETSWrapper, representation, representationId);
@@ -395,54 +414,98 @@ public class EARKSIP extends SIP {
 
   /**
    * 
-   * parse and all parse related methods
+   * parse and all parse related methods; during parse, validation is also
+   * conducted and stored inside the SIP
    * _________________________________________________________________________
    */
 
   public static SIP parse(Path source, Path destinationDirectory) throws ParseException {
-    try {
-      return parseEARKSIP(source, destinationDirectory);
-    } catch (JAXBException | IOException | SIPException e) {
-      throw new ParseException("Error parsing E-ARK SIP", e);
-    }
+    return parseEARKSIP(source, destinationDirectory);
   }
 
   public static SIP parse(Path source) throws ParseException {
     try {
       return parse(source, Files.createTempDirectory("unzipped"));
     } catch (IOException e) {
+      throw new ParseException("Error creating temporary directory for E-ARK SIP parse", e);
+    }
+  }
+
+  private static SIP parseEARKSIP(final Path source, final Path destinationDirectory) throws ParseException {
+    try {
+      SIP sip = new EARKSIP();
+
+      Path sipPath = extractSIPIfInZipFormat(source, destinationDirectory);
+      sip.setBasePath(sipPath);
+
+      Mets mainMets = processMainMets(sip, sipPath);
+
+      if (sip.isValid()) {
+
+        StructMapType structMap = getEARKStructMap(mainMets, sip, true);
+
+        if (structMap != null) {
+          MetsWrapper metsWrapper = preProcessStructMap(mainMets, structMap);
+
+          processDescriptiveMetadata(metsWrapper, sip, null, sip.getBasePath());
+
+          processOtherMetadata(metsWrapper, sip, null, sip.getBasePath());
+
+          processPreservationMetadata(metsWrapper, sip, null, sip.getBasePath());
+
+          processRepresentations(metsWrapper, sip, sip.getBasePath());
+
+          processSchemasMetadata(metsWrapper, sip, sip.getBasePath());
+
+          processDocumentationMetadata(metsWrapper, sip, sip.getBasePath());
+
+          processParentId(metsWrapper, sip);
+        }
+      }
+
+      return sip;
+    } catch (SIPException e) {
       throw new ParseException("Error parsing E-ARK SIP", e);
     }
   }
 
-  private static SIP parseEARKSIP(final Path source, final Path destinationDirectory)
-    throws JAXBException, IOException, SIPException, ParseException {
-    Path sipPath = extractSIPIfInZipFormat(source, destinationDirectory);
-
+  private static Mets processMainMets(SIP sip, Path sipPath) {
     Path mainMETSFile = sipPath.resolve(IPConstants.METS_FILE);
-    Mets mainMets = EARKMETSUtils.instantiateMETSFromFile(mainMETSFile);
+    Mets mainMets = null;
+    if (Files.exists(mainMETSFile)) {
+      try {
+        mainMets = EARKMETSUtils.instantiateMETSFromFile(mainMETSFile);
+        sip.setId(mainMets.getOBJID());
+        setSIPContentType(mainMets, sip);
+        addAgentsToMETS(mainMets, sip, null);
+      } catch (JAXBException | ParseException e) {
+        mainMets = null;
+        ValidationUtils.addIssue(sip.getValidationReport(), ValidationErrors.MAIN_METS_NOT_VALID,
+          ValidationIssue.LEVEL.ERROR, Arrays.asList(mainMETSFile));
+      }
+    } else {
+      ValidationUtils.addIssue(sip.getValidationReport(), ValidationErrors.MAIN_METS_FILE_NOT_FOUND,
+        ValidationIssue.LEVEL.ERROR, Arrays.asList(mainMETSFile));
+    }
+    return mainMets;
+  }
 
-    SIP sip = instantiateSIP(sipPath, mainMets);
-
-    StructMapType structMap = getEARKStructMap(mainMets);
-
-    MetsWrapper metsWrapper = preProcessStructMap(mainMets, structMap);
-
-    processDescriptiveMetadata(metsWrapper, sip, null, sip.getBasePath());
-
-    processOtherMetadata(metsWrapper, sip, null, sip.getBasePath());
-
-    processPreservationMetadata(metsWrapper, sip, null, sip.getBasePath());
-
-    processRepresentations(metsWrapper, sip, sip.getBasePath());
-
-    processSchemasMetadata(metsWrapper, sip, sip.getBasePath());
-
-    processDocumentationMetadata(metsWrapper, sip, sip.getBasePath());
-
-    processParentId(metsWrapper, sip);
-
-    return sip;
+  private static Mets processRepresentationMets(SIP sip, Path representationMetsFile, IPRepresentation representation) {
+    Mets representationMets = null;
+    if (Files.exists(representationMetsFile)) {
+      try {
+        representationMets = EARKMETSUtils.instantiateMETSFromFile(representationMetsFile);
+        setRepresentationContentType(representationMets, representation);
+      } catch (JAXBException | ParseException e) {
+        representationMets = null;
+        ValidationUtils.addIssue(sip.getValidationReport(), ValidationErrors.REPRESENTATION_METS_NOT_VALID,
+          ValidationIssue.LEVEL.ERROR, Arrays.asList(representationMetsFile));
+      }
+    } else {
+      ValidationUtils.addIssue(sip.getValidationReport(), ValidationErrors.REPRESENTATION_METS_FILE_NOT_FOUND,
+        ValidationIssue.LEVEL.ERROR, Arrays.asList(representationMetsFile));
+    }
+    return representationMets;
   }
 
   /**
@@ -451,8 +514,9 @@ public class EARKSIP extends SIP {
    * @param destinationDirectory
    *          this path is only used if unzipping the SIP, otherwise source will
    *          be used
+   * @throws SIPException
    */
-  private static Path extractSIPIfInZipFormat(final Path source, Path destinationDirectory) {
+  private static Path extractSIPIfInZipFormat(final Path source, Path destinationDirectory) throws ParseException {
     Path sipPath = source;
     if (!Files.isDirectory(source)) {
       try {
@@ -461,17 +525,67 @@ public class EARKSIP extends SIP {
         ZIPUtils.unzip(source, sipPath);
       } catch (IOException e) {
         LOGGER.error("Error unzipping file", e);
+        throw new ParseException("Error unzipping file", e);
       }
     }
 
     return sipPath;
   }
 
-  private static SIP instantiateSIP(Path sipPath, Mets mets) throws SIPException {
-    SIP sip = new EARKSIP(mets.getOBJID());
-    addAgentsToMETS(mets, sip, null);
-    sip.setBasePath(sipPath);
-    return sip;
+  private static void setSIPContentType(Mets mets, SIP sip) throws ParseException {
+    String metsType = mets.getTYPE();
+
+    if (StringUtils.isBlank(metsType)) {
+      throw new ParseException("METS 'TYPE' attribute does not contain any value");
+    }
+
+    String[] contentTypeParts = metsType.split(":");
+    if (contentTypeParts.length != 2 || StringUtils.isBlank(contentTypeParts[0])
+      || StringUtils.isBlank(contentTypeParts[1])) {
+      throw new ParseException("METS 'TYPE' attribute does not contain a valid value");
+    }
+
+    EARKEnums.Type packageType;
+    try {
+      packageType = EARKEnums.Type.valueOf(contentTypeParts[0]);
+      if (EARKEnums.Type.SIP != packageType) {
+        throw new ParseException("METS 'TYPE' attribute should start with 'SIP:'");
+      }
+    } catch (IllegalArgumentException e) {
+      throw new ParseException("METS 'TYPE' attribute does not contain a valid package type");
+    }
+
+    EARKEnums.IPContentType packageContentType = EARKEnums.IPContentType.OTHER;
+    try {
+      packageContentType = EARKEnums.IPContentType.valueOf(contentTypeParts[1]);
+    } catch (IllegalArgumentException e) {
+      packageContentType.setOtherType(contentTypeParts[1]);
+    }
+
+    sip.setContentType(packageContentType);
+  }
+
+  private static void setRepresentationContentType(Mets mets, IPRepresentation representation) throws ParseException {
+    String metsType = mets.getTYPE();
+
+    if (StringUtils.isBlank(metsType)) {
+      throw new ParseException("METS 'TYPE' attribute does not contain any value");
+    }
+
+    String[] contentTypeParts = metsType.split(":");
+    if (contentTypeParts.length != 2 || StringUtils.isBlank(contentTypeParts[0])
+      || !"representation".equals(contentTypeParts[0]) || StringUtils.isBlank(contentTypeParts[1])) {
+      throw new ParseException("METS 'TYPE' attribute does not contain a valid value");
+    }
+
+    EARKEnums.RepresentationContentType representationContentType = EARKEnums.RepresentationContentType.OTHER;
+    try {
+      representationContentType = EARKEnums.RepresentationContentType.valueOf(contentTypeParts[1]);
+    } catch (IllegalArgumentException e) {
+      representationContentType.setOtherType(contentTypeParts[1]);
+    }
+
+    representation.setContentType(representationContentType);
   }
 
   private static Mets addAgentsToMETS(Mets mets, SIP sip, IPRepresentation representation) {
@@ -488,7 +602,7 @@ public class EARKSIP extends SIP {
     return mets;
   }
 
-  private static StructMapType getEARKStructMap(Mets mets) throws ParseException {
+  private static StructMapType getEARKStructMap(Mets mets, SIP sip, boolean mainMets) {
     StructMapType res = null;
     for (StructMapType structMap : mets.getStructMap()) {
       if (StringUtils.equals(structMap.getLABEL(), IPConstants.E_ARK_STRUCTURAL_MAP)) {
@@ -497,12 +611,13 @@ public class EARKSIP extends SIP {
       }
     }
     if (res == null) {
-      throw new ParseException("Cannot find EARK structural map");
+      ValidationUtils.addIssue(sip.getValidationReport(), mainMets ? ValidationErrors.MAIN_METS_HAS_NO_E_ARK_STRUCT_MAP
+        : ValidationErrors.REPRESENTATION_METS_HAS_NO_E_ARK_STRUCT_MAP, ValidationIssue.LEVEL.ERROR, null);
     }
     return res;
   }
 
-  private static MetsWrapper preProcessStructMap(Mets mets, StructMapType structMap) throws SIPException {
+  private static MetsWrapper preProcessStructMap(Mets mets, StructMapType structMap) {
     MetsWrapper metsWrapper = new MetsWrapper(mets);
 
     DivType sipDiv = structMap.getDiv();
@@ -560,51 +675,102 @@ public class EARKSIP extends SIP {
         MdRef mdRef = (MdRef) fptr.getFILEID();
         String href = Utils.extractedRelativePathFromHref(mdRef);
         Path filePath = basePath.resolve(href);
-        List<String> fileRelativeFolders = getFileRelativeFolders(
-          basePath.resolve(IPConstants.METADATA).resolve(metadataType), filePath);
+        if (Files.exists(filePath)) {
+          List<String> fileRelativeFolders = getFileRelativeFolders(
+            basePath.resolve(IPConstants.METADATA).resolve(metadataType), filePath);
 
-        if (IPConstants.DESCRIPTIVE.equalsIgnoreCase(metadataType)) {
-          MetadataType dmdType = MetadataType.OTHER;
-          String dmdVersion = null;
-          try {
-            dmdType = MetadataType.valueOf(mdRef.getMDTYPE().toUpperCase());
-            dmdVersion = mdRef.getMDTYPEVERSION();
-            if (StringUtils.isNotBlank(mdRef.getOTHERMDTYPE())) {
-              dmdType.setOtherType(mdRef.getOTHERMDTYPE());
-            }
-            LOGGER.debug("Metadata type valid: {}", dmdType);
-          } catch (NullPointerException | IllegalArgumentException e) {
-            // do nothing and use already defined values for metadataType &
-            // metadataVersion
-            LOGGER.debug("Setting metadata type to {}", dmdType);
-          }
-
-          IPDescriptiveMetadata descriptiveMetadata = new IPDescriptiveMetadata(
-            new IPFile(filePath, fileRelativeFolders), dmdType, dmdVersion);
-          if (representation == null) {
-            sip.addDescriptiveMetadata(descriptiveMetadata);
-          } else {
-            representation.addDescriptiveMetadata(descriptiveMetadata);
-          }
-        } else if (IPConstants.PRESERVATION.equalsIgnoreCase(metadataType)) {
-          IPMetadata preservationMetadata = new IPMetadata(new IPFile(filePath, fileRelativeFolders));
-          if (representation == null) {
-            sip.addPreservationMetadata(preservationMetadata);
-          } else {
-            representation.addPreservationMetadata(preservationMetadata);
-          }
-        } else if (IPConstants.OTHER.equalsIgnoreCase(metadataType)) {
-          IPMetadata otherMetadata = new IPMetadata(new IPFile(filePath, fileRelativeFolders));
-          if (representation == null) {
-            sip.addOtherMetadata(otherMetadata);
-          } else {
-            representation.addOtherMetadata(otherMetadata);
-          }
+          processMetadataFile(sip, representation, metadataType, mdRef, filePath, fileRelativeFolders);
+        } else {
+          ValidationUtils.addIssue(sip.getValidationReport(),
+            ValidationErrors.getMetadataFileNotFoundString(metadataType), ValidationIssue.LEVEL.ERROR,
+            Arrays.asList(filePath));
         }
       }
+    } else {
+      // FIXME no fptr issue
     }
 
     return sip;
+  }
+
+  private static void processMetadataFile(SIP sip, IPRepresentation representation, String metadataType, MdRef mdRef,
+    Path filePath, List<String> fileRelativeFolders) throws SIPException {
+    IPFile metadataFile = validateMetadataFile(sip, filePath, mdRef, fileRelativeFolders);
+    if (metadataFile != null) {
+      if (IPConstants.DESCRIPTIVE.equalsIgnoreCase(metadataType)) {
+        MetadataType dmdType = MetadataType.OTHER;
+        String dmdVersion = null;
+        try {
+          dmdType = MetadataType.valueOf(mdRef.getMDTYPE().toUpperCase());
+          dmdVersion = mdRef.getMDTYPEVERSION();
+          if (StringUtils.isNotBlank(mdRef.getOTHERMDTYPE())) {
+            dmdType.setOtherType(mdRef.getOTHERMDTYPE());
+          }
+          LOGGER.debug("Metadata type valid: {}", dmdType);
+        } catch (NullPointerException | IllegalArgumentException e) {
+          // do nothing and use already defined values for metadataType &
+          // metadataVersion
+          LOGGER.debug("Setting metadata type to {}", dmdType);
+          ValidationUtils.addIssue(sip.getValidationReport(), ValidationErrors.UNKNOWN_DESCRIPTIVE_METADATA_TYPE,
+            ValidationIssue.LEVEL.WARNING, "Setting metadata type to " + dmdType, Arrays.asList(filePath));
+        }
+
+        IPDescriptiveMetadata descriptiveMetadata = new IPDescriptiveMetadata(metadataFile, dmdType, dmdVersion);
+        if (representation == null) {
+          sip.addDescriptiveMetadata(descriptiveMetadata);
+        } else {
+          representation.addDescriptiveMetadata(descriptiveMetadata);
+        }
+      } else if (IPConstants.PRESERVATION.equalsIgnoreCase(metadataType)) {
+        IPMetadata preservationMetadata = new IPMetadata(metadataFile);
+        if (representation == null) {
+          sip.addPreservationMetadata(preservationMetadata);
+        } else {
+          representation.addPreservationMetadata(preservationMetadata);
+        }
+      } else if (IPConstants.OTHER.equalsIgnoreCase(metadataType)) {
+        IPMetadata otherMetadata = new IPMetadata(metadataFile);
+        if (representation == null) {
+          sip.addOtherMetadata(otherMetadata);
+        } else {
+          representation.addOtherMetadata(otherMetadata);
+        }
+      }
+    }
+  }
+
+  private static IPFile validateRepresentationFile(SIP sip, Path filePath, FileType fileType,
+    List<String> fileRelativeFolders) {
+    return validateFile(sip, filePath, fileRelativeFolders, fileType.getCHECKSUM(), fileType.getCHECKSUMTYPE(),
+      fileType.getID());
+  }
+
+  private static IPFile validateMetadataFile(SIP sip, Path filePath, MdRef mdRef, List<String> fileRelativeFolders) {
+    return validateFile(sip, filePath, fileRelativeFolders, mdRef.getCHECKSUM(), mdRef.getCHECKSUMTYPE(),
+      mdRef.getID());
+  }
+
+  private static IPFile validateFile(SIP sip, Path filePath, List<String> fileRelativeFolders, String metsChecksum,
+    String metsChecksumAlgorithm, String metsFileId) {
+    IPFile file = null;
+
+    try {
+      String computedChecksum = Utils.calculateChecksum(Files.newInputStream(filePath), metsChecksumAlgorithm);
+      if (computedChecksum.equalsIgnoreCase(metsChecksum)) {
+        file = new IPFile(filePath, fileRelativeFolders).setChecksumAndAlgorithm(metsChecksum, metsChecksumAlgorithm);
+      } else {
+        ValidationUtils.addIssue(sip.getValidationReport(), ValidationErrors.CHECKSUMS_DIFFER,
+          ValidationIssue.LEVEL.ERROR, "METS_FILE_ID:" + metsFileId + " METS_CHECKSUM:" + metsChecksum
+            + " METS_CHECKSUM_TYPE:" + metsChecksumAlgorithm + " COMPUTED_CHECKSUM:" + computedChecksum,
+          Arrays.asList(filePath));
+      }
+    } catch (NoSuchAlgorithmException | IOException e) {
+      ValidationUtils.addIssue(sip.getValidationReport(),
+        ValidationErrors.ERROR_COMPUTING_CHECKSUM + ": " + e.getMessage(), ValidationIssue.LEVEL.ERROR,
+        "FILE_ID: " + metsFileId, Arrays.asList(filePath));
+    }
+
+    return file;
   }
 
   private static SIP processFile(SIP sip, DivType div, String folder, Path basePath) throws SIPException {
@@ -630,8 +796,7 @@ public class EARKSIP extends SIP {
     return sip;
   }
 
-  private static SIP processRepresentations(MetsWrapper metsWrapper, SIP sip, Path basePath)
-    throws JAXBException, SIPException, ParseException {
+  private static SIP processRepresentations(MetsWrapper metsWrapper, SIP sip, Path basePath) throws SIPException {
 
     if (metsWrapper.getRepresentationsDiv() != null && metsWrapper.getRepresentationsDiv().getDiv() != null) {
       for (DivType representationDiv : metsWrapper.getRepresentationsDiv().getDiv()) {
@@ -640,36 +805,40 @@ public class EARKSIP extends SIP {
           Mptr mptr = representationDiv.getMptr().get(0);
           String href = Utils.extractedRelativePathFromHref(mptr.getHref());
           Path metsFilePath = basePath.resolve(href);
-          Mets representationMets = EARKMETSUtils.instantiateMETSFromFile(metsFilePath);
-          Path representationBasePath = metsFilePath.getParent();
-
-          StructMapType representationStructMap = getEARKStructMap(representationMets);
-          MetsWrapper representationMETSWrapper = preProcessStructMap(representationMets, representationStructMap);
-
           IPRepresentation representation = new IPRepresentation(representationDiv.getLABEL());
-          sip.addRepresentation(representation);
+          Mets representationMets = processRepresentationMets(sip, metsFilePath, representation);
 
-          // process representation agents
-          processRepresentationAgents(representationMETSWrapper, representation);
+          if (representationMets != null) {
+            Path representationBasePath = metsFilePath.getParent();
 
-          // process files
-          processRepresentationFiles(representationMETSWrapper, representation, representationBasePath);
+            StructMapType representationStructMap = getEARKStructMap(representationMets, sip, false);
+            if (representationStructMap != null) {
 
-          // process descriptive metadata
-          processDescriptiveMetadata(representationMETSWrapper, sip, representation, representationBasePath);
+              MetsWrapper representationMetsWrapper = preProcessStructMap(representationMets, representationStructMap);
+              sip.addRepresentation(representation);
 
-          // process preservation metadata
-          processPreservationMetadata(representationMETSWrapper, sip, representation, representationBasePath);
+              // process representation agents
+              processRepresentationAgents(representationMetsWrapper, representation);
 
-          // process other metadata
-          processOtherMetadata(representationMETSWrapper, sip, representation, representationBasePath);
+              // process files
+              processRepresentationFiles(sip, representationMetsWrapper, representation, representationBasePath);
 
-          // process schemas
-          processSchemasMetadata(representationMETSWrapper, sip, representationBasePath);
+              // process descriptive metadata
+              processDescriptiveMetadata(representationMetsWrapper, sip, representation, representationBasePath);
 
-          // process documentation
-          processDocumentationMetadata(representationMETSWrapper, sip, representationBasePath);
+              // process preservation metadata
+              processPreservationMetadata(representationMetsWrapper, sip, representation, representationBasePath);
 
+              // process other metadata
+              processOtherMetadata(representationMetsWrapper, sip, representation, representationBasePath);
+
+              // process schemas
+              processSchemasMetadata(representationMetsWrapper, sip, representationBasePath);
+
+              // process documentation
+              processDocumentationMetadata(representationMetsWrapper, sip, representationBasePath);
+            }
+          }
         }
       }
     }
@@ -678,27 +847,38 @@ public class EARKSIP extends SIP {
 
   }
 
-  private static void processRepresentationAgents(MetsWrapper representationMETSWrapper,
+  private static void processRepresentationAgents(MetsWrapper representationMetsWrapper,
     IPRepresentation representation) {
 
-    addAgentsToMETS(representationMETSWrapper.getMets(), null, representation);
+    addAgentsToMETS(representationMetsWrapper.getMets(), null, representation);
   }
 
-  private static void processRepresentationFiles(MetsWrapper representationMETSWrapper, IPRepresentation representation,
-    Path representationBasePath) throws SIPException {
+  private static void processRepresentationFiles(SIP sip, MetsWrapper representationMetsWrapper,
+    IPRepresentation representation, Path representationBasePath) throws SIPException {
 
-    if (representationMETSWrapper.getDataDiv() != null && representationMETSWrapper.getDataDiv().getFptr() != null) {
-      for (Fptr fptr : representationMETSWrapper.getDataDiv().getFptr()) {
+    if (representationMetsWrapper.getDataDiv() != null && representationMetsWrapper.getDataDiv().getFptr() != null) {
+      for (Fptr fptr : representationMetsWrapper.getDataDiv().getFptr()) {
         FileType fileType = (FileType) fptr.getFILEID();
 
         if (fileType.getFLocat() != null) {
           FLocat fLocat = fileType.getFLocat().get(0);
           String href = Utils.extractedRelativePathFromHref(fLocat.getHref());
           Path filePath = representationBasePath.resolve(href);
-          List<String> fileRelativeFolders = getFileRelativeFolders(representationBasePath.resolve(IPConstants.DATA),
-            filePath);
+          if (Files.exists(filePath)) {
+            List<String> fileRelativeFolders = getFileRelativeFolders(representationBasePath.resolve(IPConstants.DATA),
+              filePath);
+            IPFile file = validateRepresentationFile(sip, filePath, fileType, fileRelativeFolders);
 
-          representation.addFile(new IPFile(filePath, fileRelativeFolders));
+            if (file != null) {
+              representation.addFile(file);
+            }
+          } else {
+            ValidationUtils.addIssue(sip.getValidationReport(), ValidationErrors.REPRESENTATION_FILE_NOT_FOUND,
+              ValidationIssue.LEVEL.ERROR, Arrays.asList(filePath));
+          }
+        } else {
+          ValidationUtils.addIssue(sip.getValidationReport(), ValidationErrors.REPRESENTATION_FILE_HAS_NO_FLOCAT,
+            ValidationIssue.LEVEL.ERROR, "FILE_ID: " + fileType.getID(), null);
         }
       }
     }

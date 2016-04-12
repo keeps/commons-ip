@@ -20,6 +20,11 @@ public final class ValidationUtils {
   private ValidationUtils() {
   }
 
+  public static ValidationReport addIssue(ValidationReport report, String message, LEVEL level,
+    List<Path> relatedPath) {
+    return addIssue(report, message, level, "", relatedPath);
+  }
+
   public static ValidationReport addIssue(ValidationReport report, String message, LEVEL level, String description,
     List<Path> relatedPath) {
     ValidationIssue issue = new ValidationIssue();
@@ -27,12 +32,7 @@ public final class ValidationUtils {
     issue.setLevel(level);
     issue.setMessage(message);
     issue.setRelatedItem(relatedPath == null ? (new ArrayList<Path>()) : relatedPath);
-    List<ValidationIssue> issues = report.getIssues();
-    if (issues == null) {
-      issues = new ArrayList<ValidationIssue>();
-    }
-    issues.add(issue);
-    report.setIssues(issues);
+    report.getIssues().add(issue);
     if (level.toString().equalsIgnoreCase(ValidationIssue.LEVEL.ERROR.toString())) {
       report.setValid(false);
     }

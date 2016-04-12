@@ -12,9 +12,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
-import org.roda_project.commons_ip.utils.EARKEnums.ContentType;
-import org.roda_project.commons_ip.utils.EARKEnums.Type;
+import org.roda_project.commons_ip.model.impl.eark.EARKEnums.IPContentType;
+import org.roda_project.commons_ip.model.impl.eark.EARKEnums.Type;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.SIPException;
 
@@ -23,7 +24,7 @@ public abstract class IP implements IPInterface {
   private String id;
   private String profile;
   private Type type;
-  private ContentType contentType;
+  private IPContentType contentType;
 
   private Path basePath;
   private String parentID;
@@ -38,11 +39,13 @@ public abstract class IP implements IPInterface {
   private List<IPFile> schemas;
   private List<IPFile> documentation;
 
+  private ValidationReport validationReport;
+
   public IP() {
-    this.setId("DEFAULT");
+    this.setId("ID" + UUID.randomUUID().toString());
     this.profile = "http://www.eark-project.com/METS/IP.xml";
     this.type = Type.SIP;
-    this.contentType = ContentType.mixed;
+    this.contentType = IPContentType.mixed;
 
     this.agents = new ArrayList<IPAgent>();
     this.descriptiveMetadata = new ArrayList<IPDescriptiveMetadata>();
@@ -53,6 +56,8 @@ public abstract class IP implements IPInterface {
     this.schemas = new ArrayList<IPFile>();
     this.documentation = new ArrayList<IPFile>();
 
+    this.validationReport = new ValidationReport();
+
   }
 
   public IP(String ipName, Type ipType) {
@@ -61,7 +66,7 @@ public abstract class IP implements IPInterface {
     this.type = ipType;
   }
 
-  public IP(String ipName, Type ipType, ContentType contentType, String creator) {
+  public IP(String ipName, Type ipType, IPContentType contentType, String creator) {
     this(ipName, ipType);
     this.contentType = contentType;
 
@@ -103,13 +108,13 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP setContentType(ContentType contentType) {
+  public IP setContentType(IPContentType contentType) {
     this.contentType = contentType;
     return this;
   }
 
   @Override
-  public ContentType getContentType() {
+  public IPContentType getContentType() {
     return contentType;
   }
 
@@ -298,18 +303,18 @@ public abstract class IP implements IPInterface {
     return documentation;
   }
 
+  public ValidationReport getValidationReport() {
+    return validationReport;
+  }
+
+  public boolean isValid() {
+    return validationReport.isValid();
+  }
+
   private void checkIfRepresentationExists(String representationID) throws SIPException {
     if (!representations.containsKey(representationID)) {
       throw new SIPException("Representation doesn't exist");
     }
-  }
-
-  public static IP parse(Path source) throws ParseException {
-    throw new ParseException("One must implement static method parse in a concrete class");
-  }
-
-  public static IP parse(Path source, Path destinationDirectory) throws ParseException {
-    throw new ParseException("One must implement static method parse in a concrete class");
   }
 
   @Override
@@ -319,6 +324,14 @@ public abstract class IP implements IPInterface {
       + ", descriptiveMetadata=" + descriptiveMetadata + ", preservationMetadata=" + preservationMetadata
       + ", otherMetadata=" + otherMetadata + ", representations=" + representations + ", schemas=" + schemas
       + ", documentation=" + documentation + "]";
+  }
+
+  public static IP parse(Path source) throws ParseException {
+    throw new ParseException("One must implement static method parse in a concrete class");
+  }
+
+  public static IP parse(Path source, Path destinationDirectory) throws ParseException {
+    throw new ParseException("One must implement static method parse in a concrete class");
   }
 
 }

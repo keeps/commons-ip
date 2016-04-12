@@ -11,9 +11,13 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.roda_project.commons_ip.model.impl.eark.EARKEnums.RepresentationContentType;
+
 public class IPRepresentation {
   private String representationID;
   private String objectID;
+  private RepresentationContentType contentType;
+  private String description;
   private List<IPAgent> agents;
   private List<IPDescriptiveMetadata> descriptiveMetadata;
   private List<IPMetadata> preservationMetadata;
@@ -25,6 +29,8 @@ public class IPRepresentation {
   public IPRepresentation(String representationID) {
     this.representationID = representationID;
     this.objectID = representationID;
+    this.contentType = RepresentationContentType.OTHER;
+    this.description = "";
     this.agents = new ArrayList<IPAgent>();
     this.descriptiveMetadata = new ArrayList<IPDescriptiveMetadata>();
     this.preservationMetadata = new ArrayList<IPMetadata>();
@@ -44,6 +50,22 @@ public class IPRepresentation {
 
   public void setObjectID(String objectID) {
     this.objectID = objectID;
+  }
+
+  public RepresentationContentType getContentType() {
+    return contentType;
+  }
+
+  public void setContentType(RepresentationContentType contentType) {
+    this.contentType = contentType;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public String getDescription() {
+    return description;
   }
 
   public List<IPAgent> getAgents() {
@@ -108,10 +130,10 @@ public class IPRepresentation {
 
   @Override
   public String toString() {
-    return "IPRepresentation [representationID=" + representationID + ", objectID=" + objectID + ", agents=" + agents
-      + ", descriptiveMetadata=" + descriptiveMetadata + ", preservationMetadata=" + preservationMetadata
-      + ", otherMetadata=" + otherMetadata + ", data=" + data + ", schemas=" + schemas + ", documentation="
-      + documentation + "]";
+    return "IPRepresentation [representationID=" + representationID + ", objectID=" + objectID + ", contentType="
+      + contentType + ", description=" + description + ", agents=" + agents + ", descriptiveMetadata="
+      + descriptiveMetadata + ", preservationMetadata=" + preservationMetadata + ", otherMetadata=" + otherMetadata
+      + ", data=" + data + ", schemas=" + schemas + ", documentation=" + documentation + "]";
   }
 
 }
