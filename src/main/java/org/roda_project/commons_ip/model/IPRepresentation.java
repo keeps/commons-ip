@@ -29,7 +29,7 @@ public class IPRepresentation {
   public IPRepresentation(String representationID) {
     this.representationID = representationID;
     this.objectID = representationID;
-    this.contentType = RepresentationContentType.OTHER;
+    this.contentType = RepresentationContentType.mixed;
     this.description = "";
     this.agents = new ArrayList<IPAgent>();
     this.descriptiveMetadata = new ArrayList<IPDescriptiveMetadata>();

@@ -59,6 +59,7 @@ public class EARKSIP extends SIP {
   // controls if checksum is calculated during processing or in a latter moment
   // (e.g. zipping files)
   private boolean calculateChecksumDuringProcessing = false;
+  private static boolean VALIDATION_FAIL_IF_REPRESENTATION_METS_DOES_NOT_HAVE_TWO_PARTS = false;
 
   public EARKSIP() {
     super();
@@ -173,7 +174,7 @@ public class EARKSIP extends SIP {
 
   public void addDescriptiveMetadataToZipAndMETS(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
     List<IPDescriptiveMetadata> descriptiveMetadata, String representationId)
-      throws SIPException, InterruptedException {
+    throws SIPException, InterruptedException {
     if (descriptiveMetadata != null && !descriptiveMetadata.isEmpty()) {
       for (IPDescriptiveMetadata dm : descriptiveMetadata) {
         if (Thread.interrupted()) {
@@ -298,7 +299,7 @@ public class EARKSIP extends SIP {
 
   private void addRepresentationDataFilesToZipAndMETS(List<ZipEntryInfo> zipEntries,
     MetsWrapper representationMETSWrapper, IPRepresentation representation, String representationId)
-      throws SIPException, InterruptedException {
+    throws SIPException, InterruptedException {
     if (representation.getData() != null && !representation.getData().isEmpty()) {
       this.notifySipBuildRepresentationProcessingStarted(representation.getData().size());
       int i = 0;
@@ -481,7 +482,7 @@ public class EARKSIP extends SIP {
       } catch (JAXBException | ParseException e) {
         mainMets = null;
         ValidationUtils.addIssue(sip.getValidationReport(), ValidationErrors.MAIN_METS_NOT_VALID,
-          ValidationIssue.LEVEL.ERROR, Arrays.asList(mainMETSFile));
+          ValidationIssue.LEVEL.ERROR, e.getMessage(), Arrays.asList(mainMETSFile));
       }
     } else {
       ValidationUtils.addIssue(sip.getValidationReport(), ValidationErrors.MAIN_METS_FILE_NOT_FOUND,
@@ -499,7 +500,7 @@ public class EARKSIP extends SIP {
       } catch (JAXBException | ParseException e) {
         representationMets = null;
         ValidationUtils.addIssue(sip.getValidationReport(), ValidationErrors.REPRESENTATION_METS_NOT_VALID,
-          ValidationIssue.LEVEL.ERROR, Arrays.asList(representationMetsFile));
+          ValidationIssue.LEVEL.ERROR, e.getMessage(), Arrays.asList(representationMetsFile));
       }
     } else {
       ValidationUtils.addIssue(sip.getValidationReport(), ValidationErrors.REPRESENTATION_METS_FILE_NOT_FOUND,
@@ -570,6 +571,15 @@ public class EARKSIP extends SIP {
 
     if (StringUtils.isBlank(metsType)) {
       throw new ParseException("METS 'TYPE' attribute does not contain any value");
+    }
+
+    if ("representation".equals(metsType)) {
+      if (VALIDATION_FAIL_IF_REPRESENTATION_METS_DOES_NOT_HAVE_TWO_PARTS) {
+        throw new ParseException(
+          "METS 'TYPE' attribute is not valid as it should be 'representation:REPRESENTATION_TYPE'");
+      } else {
+        return;
+      }
     }
 
     String[] contentTypeParts = metsType.split(":");
