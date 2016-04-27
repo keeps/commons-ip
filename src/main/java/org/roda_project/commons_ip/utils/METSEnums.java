@@ -7,8 +7,6 @@
  */
 package org.roda_project.commons_ip.utils;
 
-import org.apache.commons.lang3.StringUtils;
-
 public class METSEnums {
 
   public enum LocType {
@@ -21,48 +19,6 @@ public class METSEnums {
 
     public String toString() {
       return stringValue;
-    }
-  }
-
-  public enum MetadataType {
-    MARC("MARC"), MODS("MODS"), EAD("EAD"), DC("DC"), NISOIMG("NISOIMG"), LCAV("LC-AV"), VRA("VRA"), TEIHDR("TEIHDR"),
-    DDI("DDI"), FGDC("FGDC"), LOM("LOM"), PREMIS("PREMIS"), PREMISOBJECT("PREMIS:OBJECT"), PREMISAGENT("PREMIS:AGENT"),
-    PREMISRIGHTS("PREMIS:RIGHTS"), PREMISEVENT("PREMIS:EVENT"), TEXTMD("TEXTMD"), METSRIGHTS("METSRIGHTS"),
-    ISO191152003("ISO 19115:2003"), NAP("NAP"), EACCPF("EAC-CPF"), LIDO("LIDO"), OTHER("OTHER");
-    private final String type;
-    private String otherType;
-
-    private MetadataType(final String type) {
-      this.type = type;
-      this.otherType = "";
-    }
-
-    private MetadataType(final String type, final String otherType) {
-      this.type = type;
-      this.otherType = otherType;
-    }
-
-    public String getType() {
-      return type;
-    }
-
-    public String getOtherType() {
-      return otherType;
-    }
-
-    public MetadataType setOtherType(final String otherType) {
-      this.otherType = otherType;
-      return this;
-    }
-
-    public String toString() {
-      StringBuilder sb = new StringBuilder();
-      sb.append("type: ").append(type);
-      if (StringUtils.isNotBlank(otherType)) {
-        sb.append("; othertype: ").append(otherType);
-      }
-
-      return sb.toString();
     }
   }
 

@@ -9,8 +9,6 @@ package org.roda_project.commons_ip.model;
 
 import java.io.Serializable;
 
-import org.roda_project.commons_ip.utils.METSEnums.MetadataType;
-
 public class IPDescriptiveMetadata extends IPMetadata implements Serializable {
   private static final long serialVersionUID = 8499877557153068472L;
 

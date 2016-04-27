@@ -10,12 +10,18 @@ package org.roda_project.commons_ip.model;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
-import org.roda_project.commons_ip.model.impl.eark.EARKEnums.RepresentationContentType;
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.roda_project.commons_ip.utils.Utils;
 
 public class IPRepresentation {
   private String representationID;
   private String objectID;
+  private Optional<XMLGregorianCalendar> createDate;
+  private Optional<XMLGregorianCalendar> modificationDate;
   private RepresentationContentType contentType;
   private String description;
   private List<IPAgent> agents;
@@ -26,10 +32,11 @@ public class IPRepresentation {
   private List<IPFile> schemas;
   private List<IPFile> documentation;
 
-  public IPRepresentation(String representationID) {
-    this.representationID = representationID;
+  public IPRepresentation() {
+    this.representationID = "ID" + UUID.randomUUID().toString();
     this.objectID = representationID;
-    this.contentType = RepresentationContentType.mixed;
+    this.createDate = Utils.getCurrentTime();
+    this.contentType = RepresentationContentType.getMIXED();
     this.description = "";
     this.agents = new ArrayList<IPAgent>();
     this.descriptiveMetadata = new ArrayList<IPDescriptiveMetadata>();
@@ -38,6 +45,12 @@ public class IPRepresentation {
     this.data = new ArrayList<IPFile>();
     this.schemas = new ArrayList<IPFile>();
     this.documentation = new ArrayList<IPFile>();
+  }
+
+  public IPRepresentation(String representationID) {
+    this();
+    this.representationID = representationID;
+    this.objectID = representationID;
   }
 
   public String getRepresentationID() {
@@ -58,6 +71,22 @@ public class IPRepresentation {
 
   public void setContentType(RepresentationContentType contentType) {
     this.contentType = contentType;
+  }
+
+  public Optional<XMLGregorianCalendar> getCreateDate() {
+    return createDate;
+  }
+
+  public void setCreateDate(XMLGregorianCalendar createDate) {
+    this.createDate = Optional.ofNullable(createDate);
+  }
+
+  public Optional<XMLGregorianCalendar> getModificationDate() {
+    return modificationDate;
+  }
+
+  public void setModificationDate(XMLGregorianCalendar modificationDate) {
+    this.modificationDate = Optional.ofNullable(modificationDate);
   }
 
   public void setDescription(String description) {
@@ -130,10 +159,11 @@ public class IPRepresentation {
 
   @Override
   public String toString() {
-    return "IPRepresentation [representationID=" + representationID + ", objectID=" + objectID + ", contentType="
-      + contentType + ", description=" + description + ", agents=" + agents + ", descriptiveMetadata="
-      + descriptiveMetadata + ", preservationMetadata=" + preservationMetadata + ", otherMetadata=" + otherMetadata
-      + ", data=" + data + ", schemas=" + schemas + ", documentation=" + documentation + "]";
+    return "IPRepresentation [representationID=" + representationID + ", objectID=" + objectID + ", createDate="
+      + createDate + ", modificationDate=" + modificationDate + ", contentType=" + contentType + ", description="
+      + description + ", agents=" + agents + ", descriptiveMetadata=" + descriptiveMetadata + ", preservationMetadata="
+      + preservationMetadata + ", otherMetadata=" + otherMetadata + ", data=" + data + ", schemas=" + schemas
+      + ", documentation=" + documentation + "]";
   }
 
 }

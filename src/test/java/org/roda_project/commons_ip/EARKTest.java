@@ -18,16 +18,17 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.roda_project.commons_ip.model.IPAgent;
+import org.roda_project.commons_ip.model.IPContentType;
 import org.roda_project.commons_ip.model.IPDescriptiveMetadata;
 import org.roda_project.commons_ip.model.IPFile;
 import org.roda_project.commons_ip.model.IPMetadata;
 import org.roda_project.commons_ip.model.IPRepresentation;
+import org.roda_project.commons_ip.model.MetadataType;
+import org.roda_project.commons_ip.model.MetadataType.MetadataTypeEnum;
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.model.SIP;
-import org.roda_project.commons_ip.model.impl.eark.EARKEnums.IPContentType;
 import org.roda_project.commons_ip.model.impl.eark.EARKSIP;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
-import org.roda_project.commons_ip.utils.METSEnums.MetadataType;
 import org.roda_project.commons_ip.utils.SIPException;
 import org.roda_project.commons_ip.utils.Utils;
 import org.slf4j.Logger;
@@ -66,14 +67,15 @@ public class EARKTest {
   private Path createFullEARKSIP() throws SIPException, InterruptedException {
 
     // 1) instantiate E-ARK SIP object
-    SIP sip = new EARKSIP("SIP_1", IPContentType.mixed, "RODA Commons IP");
+    SIP sip = new EARKSIP("SIP_1", IPContentType.getMIXED(), "RODA Commons IP");
 
     // 1.1) set optional human-readable description
     sip.setDescription("A full E-ARK SIP");
 
     // 1.2) add descriptive metadata (SIP level)
     IPDescriptiveMetadata metadataDescriptiveDC = new IPDescriptiveMetadata(
-      new IPFile(Paths.get("src/test/resources/eark/metadata_descriptive_dc.xml")), MetadataType.DC, null);
+      new IPFile(Paths.get("src/test/resources/eark/metadata_descriptive_dc.xml")),
+      new MetadataType(MetadataTypeEnum.DC), null);
     sip.addDescriptiveMetadata(metadataDescriptiveDC);
 
     // 1.3) add preservation metadata (SIP level)

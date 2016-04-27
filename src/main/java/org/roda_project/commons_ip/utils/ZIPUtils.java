@@ -27,6 +27,7 @@ import org.roda_project.commons_ip.mets_v1_11.beans.FileType;
 import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType.MdRef;
 import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
 import org.roda_project.commons_ip.model.IPConstants;
+import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.model.SIP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,33 @@ public final class ZIPUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(ZIPUtils.class);
 
   private ZIPUtils() {
+  }
+
+  /**
+   * @param source
+   *          SIP
+   * @param destinationDirectory
+   *          this path is only used if unzipping the SIP, otherwise source will
+   *          be used
+   * @param sipFileExtension
+   *          file extension (e.g. .zip)
+   * @throws SIPException
+   */
+  public static Path extractSIPIfInZipFormat(final Path source, Path destinationDirectory, String sipFileExtension)
+    throws ParseException {
+    Path sipFolderPath = source;
+    if (!Files.isDirectory(source)) {
+      try {
+        sipFolderPath = destinationDirectory
+          .resolve(source.getFileName().toString().replaceFirst(sipFileExtension + "$", ""));
+        ZIPUtils.unzip(source, sipFolderPath);
+      } catch (IOException e) {
+        LOGGER.error("Error unzipping file", e);
+        throw new ParseException("Error unzipping file", e);
+      }
+    }
+
+    return sipFolderPath;
   }
 
   public static List<ZipEntryInfo> addMdRefFileToZip(List<ZipEntryInfo> zipEntries, Path filePath, String zipPath,

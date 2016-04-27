@@ -16,10 +16,22 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
+import javax.xml.bind.Unmarshaller;
 
 import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
 
 public final class METSUtils {
+
+  private METSUtils() {
+
+  }
+
+  public static Mets instantiateMETSFromFile(Path metsFile) throws JAXBException {
+    JAXBContext jaxbContext = JAXBContext.newInstance(Mets.class);
+    Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+    return (Mets) jaxbUnmarshaller.unmarshal(metsFile.toFile());
+  }
+
   public static Path marshallMETS(Mets mets, Path tempMETSFile, boolean rootMETS)
     throws JAXBException, IOException, PropertyException, SIPException {
     JAXBContext context = JAXBContext.newInstance(Mets.class);

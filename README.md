@@ -31,11 +31,11 @@ API to manipulate Information Packages of different formats: RODA, E-ARK, etc.
   <dependency>
     <groupId>org.roda-project</groupId>
     <artifactId>commons-ip</artifactId>
-    <version>1.0.0-alpha11</version>
+    <version>1.0.0-alpha12</version>
   </dependency>
   ```
 
-* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha11/commons-ip-1.0.0-alpha11.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
+* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha12/commons-ip-1.0.0-alpha12.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
 
 
 ### Write some code
@@ -43,14 +43,14 @@ API to manipulate Information Packages of different formats: RODA, E-ARK, etc.
 * Create a full E-ARK SIP
 ```java
 // 1) instantiate E-ARK SIP object
-SIP sip = new EARKSIP("SIP_1", ContentType.mixed, "RODA Commons IP");
+SIP sip = new EARKSIP("SIP_1", IPContentType.getMIXED(), "RODA Commons IP");
 
 // 1.1) set optional human-readable description
 sip.setDescription("A full E-ARK SIP");
 
 // 1.2) add descriptive metadata (SIP level)
 IPDescriptiveMetadata metadataDescriptiveDC = new IPDescriptiveMetadata(
-new IPFile(Paths.get("src/test/resources/eark/metadata_descriptive_dc.xml")), MetadataType.DC, null);
+new IPFile(Paths.get("src/test/resources/eark/metadata_descriptive_dc.xml")), new MetadataType(MetadataTypeEnum.DC), null);
 sip.addDescriptiveMetadata(metadataDescriptiveDC);
 
 // 1.3) add preservation metadata (SIP level)
@@ -102,7 +102,7 @@ public class WhoWantsToBuildSIPAndBeNotified implements SIPObserver{
 
   public void buildSIP(){
     ...
-    SIP sip = new EARKSIP("SIP_1", ContentType.mixed, "RODA Commons IP");
+    SIP sip = new EARKSIP("SIP_1", IPContentType.getMIXED(), "RODA Commons IP");
     sip.addObserver(this);
     ...
   }
@@ -136,6 +136,13 @@ SIP earkSIP = EARKSIP.parse(zipSIP);
 5. Submit a pull request :D
 
 ## History
+
+#### Alpha 12 (2016-05-04)
+
+* Improved validation report by making possible to add info entries (before only warn and error were the alternatives).
+* Improved E-ARK SIP parsing by filling in validations and more warning/errors.
+* Now IPs and Representations have created and modified date.
+* IPContentType, RepresentationContentType and MetadataType are no longer just an Enum but instead a class (which has an ENUM but also the otherType field).
 
 #### Alpha 11 (2016-04-05)
 

@@ -13,11 +13,13 @@ import java.util.List;
 
 public class ValidationReport {
   private boolean valid;
-  private List<ValidationIssue> issues;
+  private List<ValidationEntry> validations;
+  private List<ValidationEntry> issues;
   private Date date;
 
   public ValidationReport() {
     valid = true;
+    validations = new ArrayList<>();
     issues = new ArrayList<>();
     date = new Date();
   }
@@ -30,7 +32,11 @@ public class ValidationReport {
     this.valid = valid;
   }
 
-  public List<ValidationIssue> getIssues() {
+  public List<ValidationEntry> getValidations() {
+    return validations;
+  }
+
+  public List<ValidationEntry> getIssues() {
     return issues;
   }
 
@@ -38,13 +44,14 @@ public class ValidationReport {
     return date;
   }
 
-  public void addIssue(ValidationIssue issue) {
+  public void addIssue(ValidationEntry issue) {
     issues.add(issue);
   }
 
   @Override
   public String toString() {
-    return "ValidationReport [valid=" + valid + ", issues=" + issues + ", date=" + date + "]";
+    return "ValidationReport [valid=" + valid + ", validations=" + validations + ", issues=" + issues + ", date=" + date
+      + "]";
   }
 
 }

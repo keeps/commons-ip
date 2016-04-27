@@ -19,8 +19,12 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.xml.bind.DatatypeConverter;
@@ -31,6 +35,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.commons.io.IOUtils;
 import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType.MdRef;
 import org.roda_project.commons_ip.model.IPConstants;
+import org.roda_project.commons_ip.model.IPFile;
+import org.roda_project.commons_ip.model.SIP;
+import org.roda_project.commons_ip.model.ValidationEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +45,24 @@ public final class Utils {
   private static final Logger LOGGER = LoggerFactory.getLogger(Utils.class);
 
   private Utils() {
+  }
+
+  public static Optional<XMLGregorianCalendar> getCurrentTime() {
+    Optional<XMLGregorianCalendar> res = Optional.empty();
+    try {
+      GregorianCalendar c = new GregorianCalendar();
+      Optional.of(DatatypeFactory.newInstance().newXMLGregorianCalendar(c));
+    } catch (DatatypeConfigurationException e) {
+      // do nothing & return empty
+    }
+    return res;
+  }
+
+  public static XMLGregorianCalendar getCurrentCalendar() throws DatatypeConfigurationException {
+    GregorianCalendar gcal = new GregorianCalendar();
+    gcal.setTime(new Date());
+    XMLGregorianCalendar calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
+    return calendar;
   }
 
   public static String generateRandomId() {
@@ -130,11 +155,37 @@ public final class Utils {
     return DatatypeConverter.printHexBinary(digester.digest());
   }
 
-  public static XMLGregorianCalendar getCurrentCalendar() throws DatatypeConfigurationException {
-    GregorianCalendar gcal = new GregorianCalendar();
-    gcal.setTime(new Date());
-    XMLGregorianCalendar calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
-    return calendar;
+  public static List<String> getFileRelativeFolders(Path basePath, Path filePath) {
+    List<String> res = new ArrayList<>();
+    Path relativize = basePath.relativize(filePath).getParent();
+    if (relativize != null) {
+      Iterator<Path> iterator = relativize.iterator();
+      while (iterator.hasNext()) {
+        res.add(iterator.next().toString());
+      }
+    }
+    return res;
+  }
+
+  public static IPFile validateFile(SIP sip, Path filePath, List<String> fileRelativeFolders, String metsChecksum,
+    String metsChecksumAlgorithm, String metsElementId) {
+    IPFile file = null;
+
+    try {
+      String computedChecksum = Utils.calculateChecksum(Files.newInputStream(filePath), metsChecksumAlgorithm);
+      if (computedChecksum.equalsIgnoreCase(metsChecksum)) {
+        file = new IPFile(filePath, fileRelativeFolders).setChecksumAndAlgorithm(metsChecksum, metsChecksumAlgorithm);
+      } else {
+        ValidationUtils.addIssue(sip.getValidationReport(), ValidationConstants.CHECKSUMS_DIFFER,
+          ValidationEntry.LEVEL.ERROR, metsElementId, metsChecksum, metsChecksumAlgorithm, computedChecksum,
+          sip.getBasePath(), filePath);
+      }
+    } catch (NoSuchAlgorithmException | IOException e) {
+      ValidationUtils.addIssue(sip.getValidationReport(), ValidationConstants.ERROR_COMPUTING_CHECKSUM,
+        ValidationEntry.LEVEL.ERROR, e, sip.getBasePath(), filePath);
+    }
+
+    return file;
   }
 
 }

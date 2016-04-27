@@ -10,9 +10,9 @@ package org.roda_project.commons_ip.model;
 import java.nio.file.Path;
 import java.util.List;
 
-public class ValidationIssue {
+public class ValidationEntry {
   public enum LEVEL {
-    ERROR, WARNING
+    ERROR, WARNING, INFO
   }
 
   private LEVEL level;

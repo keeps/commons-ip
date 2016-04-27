@@ -1,0 +1,76 @@
+/**
+ * The contents of this file are subject to the license and copyright
+ * detailed in the LICENSE file at the root of the source
+ * tree and available online at
+ *
+ * https://github.com/keeps/commons-ip
+ */
+package org.roda_project.commons_ip.model;
+
+import org.apache.commons.lang3.StringUtils;
+
+public class IPContentType {
+  public enum IPContentTypeEnum {
+    ERMS, RDBMS, SMURF, MIXED, OTHER;
+  }
+
+  private IPContentTypeEnum type;
+  private String otherType;
+
+  /**
+   * Constructs a new object, trying to use 'type' parameter as the 'type' value
+   * and if it does not match any of the enum values, 'othertype' will be set to
+   * 'type' parameter
+   */
+  public IPContentType(final String type) {
+    try {
+      this.type = IPContentTypeEnum.valueOf(type);
+      this.otherType = "";
+    } catch (IllegalArgumentException e) {
+      this.type = IPContentTypeEnum.OTHER;
+      this.otherType = type;
+    }
+  }
+
+  public IPContentType(final IPContentTypeEnum type) {
+    this.type = type;
+    this.otherType = "";
+  }
+
+  public IPContentTypeEnum getType() {
+    return type;
+  }
+
+  public String getOtherType() {
+    return otherType;
+  }
+
+  public IPContentType setOtherType(final String otherType) {
+    this.otherType = otherType;
+    return this;
+  }
+
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("type: ").append(type);
+    if (StringUtils.isNotBlank(otherType)) {
+      sb.append("; othertype: ").append(otherType);
+    }
+
+    return sb.toString();
+  }
+
+  public String asString() {
+    String ret = type.toString();
+    
+    if (type == IPContentTypeEnum.OTHER && StringUtils.isNotBlank(otherType)) {
+      ret = otherType;
+    }
+
+    return ret;
+  }
+
+  public static IPContentType getMIXED() {
+    return new IPContentType(IPContentTypeEnum.MIXED);
+  }
+}

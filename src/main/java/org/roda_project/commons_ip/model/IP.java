@@ -12,18 +12,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
-import org.roda_project.commons_ip.model.impl.eark.EARKEnums.IPContentType;
-import org.roda_project.commons_ip.model.impl.eark.EARKEnums.Type;
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.roda_project.commons_ip.utils.IPEnums.Type;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.SIPException;
+import org.roda_project.commons_ip.utils.Utils;
 
 public abstract class IP implements IPInterface {
 
   private String id;
   private String profile;
   private Type type;
+  private Optional<XMLGregorianCalendar> createDate;
+  private Optional<XMLGregorianCalendar> modificationDate;
   private IPContentType contentType;
 
   private Path basePath;
@@ -45,7 +50,8 @@ public abstract class IP implements IPInterface {
     this.setId("ID" + UUID.randomUUID().toString());
     this.profile = "http://www.eark-project.com/METS/IP.xml";
     this.type = Type.SIP;
-    this.contentType = IPContentType.mixed;
+    this.createDate = Utils.getCurrentTime();
+    this.contentType = IPContentType.getMIXED();
 
     this.agents = new ArrayList<IPAgent>();
     this.descriptiveMetadata = new ArrayList<IPDescriptiveMetadata>();
@@ -105,6 +111,22 @@ public abstract class IP implements IPInterface {
   @Override
   public String getType() {
     return type.toString();
+  }
+
+  public Optional<XMLGregorianCalendar> getCreateDate() {
+    return createDate;
+  }
+
+  public void setCreateDate(XMLGregorianCalendar createDate) {
+    this.createDate = Optional.ofNullable(createDate);
+  }
+
+  public Optional<XMLGregorianCalendar> getModificationDate() {
+    return modificationDate;
+  }
+
+  public void setModificationDate(XMLGregorianCalendar modificationDate) {
+    this.modificationDate = Optional.ofNullable(modificationDate);
   }
 
   @Override
@@ -319,11 +341,12 @@ public abstract class IP implements IPInterface {
 
   @Override
   public String toString() {
-    return "IP [id=" + id + ", profile=" + profile + ", type=" + type + ", contentType=" + contentType + ", basePath="
-      + basePath + ", parentID=" + parentID + ", description=" + description + ", agents=" + agents
-      + ", descriptiveMetadata=" + descriptiveMetadata + ", preservationMetadata=" + preservationMetadata
-      + ", otherMetadata=" + otherMetadata + ", representations=" + representations + ", schemas=" + schemas
-      + ", documentation=" + documentation + "]";
+    return "IP [id=" + id + ", profile=" + profile + ", type=" + type + ", createDate=" + createDate
+      + ", modificationDate=" + modificationDate + ", contentType=" + contentType + ", basePath=" + basePath
+      + ", parentID=" + parentID + ", description=" + description + ", agents=" + agents + ", descriptiveMetadata="
+      + descriptiveMetadata + ", preservationMetadata=" + preservationMetadata + ", otherMetadata=" + otherMetadata
+      + ", representationIds=" + representationIds + ", representations=" + representations + ", schemas=" + schemas
+      + ", documentation=" + documentation + ", validationReport=" + validationReport + "]";
   }
 
   public static IP parse(Path source) throws ParseException {

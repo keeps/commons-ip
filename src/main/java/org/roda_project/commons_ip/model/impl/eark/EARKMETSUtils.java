@@ -14,10 +14,8 @@ import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.PropertyException;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -199,7 +197,7 @@ public final class EARKMETSUtils {
 
   public static void addRepresentationMETSToZipAndToMainMETS(List<ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper,
     String representationId, MetsWrapper representationMETSWrapper, String representationMetsPath, Path buildDir)
-      throws SIPException, InterruptedException {
+    throws SIPException, InterruptedException {
     try {
       if (Thread.interrupted()) {
         throw new InterruptedException();
@@ -221,12 +219,6 @@ public final class EARKMETSUtils {
     Path buildDir, boolean mainMets) throws JAXBException, IOException, PropertyException, SIPException {
     Path temp = Files.createTempFile(buildDir, IPConstants.METS_FILE_NAME, IPConstants.METS_FILE_EXTENSION);
     ZIPUtils.addMETSFileToZip(zipEntries, temp, metsPath, metsWrapper.getMets(), mainMets);
-  }
-
-  public static Mets instantiateMETSFromFile(Path metsFile) throws JAXBException {
-    JAXBContext jaxbContext = JAXBContext.newInstance(Mets.class);
-    Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-    return (Mets) jaxbUnmarshaller.unmarshal(metsFile.toFile());
   }
 
   private static Agent createMETSAgent(IPAgent ipAgent) {
@@ -258,7 +250,7 @@ public final class EARKMETSUtils {
   public static MdRef addDescriptiveMetadataToMETS(MetsWrapper metsWrapper, IPDescriptiveMetadata descriptiveMetadata,
     String descriptiveMetadataPath, boolean calculateChecksum) throws SIPException, InterruptedException {
     return addMetadataToMETS(metsWrapper, descriptiveMetadata, descriptiveMetadataPath,
-      descriptiveMetadata.getMetadataType().getType(), descriptiveMetadata.getMetadataType().getOtherType(),
+      descriptiveMetadata.getMetadataType().getType().getType(), descriptiveMetadata.getMetadataType().getOtherType(),
       descriptiveMetadata.getMetadataVersion(), true, calculateChecksum);
   }
 
@@ -269,7 +261,7 @@ public final class EARKMETSUtils {
 
   private static MdRef addMetadataToMETS(MetsWrapper metsWrapper, IPMetadata metadata, String metadataPath,
     String mdType, String mdOtherType, String mdTypeVersion, boolean isDescriptive, boolean calculateChecksum)
-      throws SIPException, InterruptedException {
+    throws SIPException, InterruptedException {
     MdSecType dmdSec = new MdSecType();
     dmdSec.setID(Utils.generateRandomId());
 
