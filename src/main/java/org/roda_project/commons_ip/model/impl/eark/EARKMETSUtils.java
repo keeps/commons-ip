@@ -62,9 +62,9 @@ public final class EARKMETSUtils {
    *          representation
    */
   public static MetsWrapper generateMETS(String objectId, String label, String type, String profile,
-    List<IPAgent> ipAgents, boolean mainMets, String parentId) throws SIPException {
+    List<IPAgent> ipAgents, boolean mainMets, String parentId, Path metsPath) throws SIPException {
     Mets mets = new Mets();
-    MetsWrapper metsWrapper = new MetsWrapper(mets);
+    MetsWrapper metsWrapper = new MetsWrapper(mets, metsPath);
 
     // basic attributes
     mets.setOBJID(objectId);

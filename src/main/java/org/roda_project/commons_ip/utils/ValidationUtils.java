@@ -23,12 +23,14 @@ public final class ValidationUtils {
   private ValidationUtils() {
   }
 
-  public static ValidationReport addInfo(ValidationReport report, String message, StructMapType structMap) {
-    return addInfo(report, message, getDescription(structMap), null, null);
+  public static ValidationReport addInfo(ValidationReport report, String message, StructMapType structMap, Path ipPath,
+    Path relatedFilePath) {
+    return addInfo(report, message, getDescription(structMap), ipPath, relatedFilePath);
   }
 
-  public static ValidationReport addInfo(ValidationReport report, String message, DivType div) {
-    return addInfo(report, message, getDescription(div), null, null);
+  public static ValidationReport addInfo(ValidationReport report, String message, DivType div, Path ipPath,
+    Path relatedFilePath) {
+    return addInfo(report, message, getDescription(div), ipPath, relatedFilePath);
   }
 
   public static ValidationReport addInfo(ValidationReport report, String message, Path ipPath, Path relatedPath) {
@@ -43,51 +45,50 @@ public final class ValidationUtils {
     validation.setMessage(message);
     validation.setRelatedItem(
       relatedFilePath == null ? (new ArrayList<Path>()) : Arrays.asList(ipPath.relativize(relatedFilePath)));
-    report.getValidations().add(validation);
+    report.getValidationEntries().add(validation);
     return report;
   }
 
-  public static ValidationReport addIssue(ValidationReport report, String message, LEVEL level,
-    StructMapType structMap) {
-    return addIssue(report, message, level, getDescription(structMap), null, null);
+  public static ValidationReport addIssue(ValidationReport report, String message, LEVEL level, StructMapType structMap,
+    Path ipPath, Path relatedFilePath) {
+    return addEntry(report, message, level, getDescription(structMap), ipPath, relatedFilePath);
   }
 
-  public static ValidationReport addIssue(ValidationReport report, String message, LEVEL level, DivType div) {
-    return addIssue(report, message, level, getDescription(div), null, null);
+  public static ValidationReport addIssue(ValidationReport report, String message, LEVEL level, DivType div,
+    Path ipPath, Path relatedFilePath) {
+    return addEntry(report, message, level, getDescription(div), ipPath, relatedFilePath);
   }
 
-  public static ValidationReport addIssue(ValidationReport report, String message, LEVEL level, FileType fptr) {
-    return addIssue(report, message, level, getDescription(fptr), null, null);
+  public static ValidationReport addIssue(ValidationReport report, String message, LEVEL level, FileType fptr,
+    Path ipPath, Path relatedFilePath) {
+    return addEntry(report, message, level, getDescription(fptr), ipPath, relatedFilePath);
   }
 
   public static ValidationReport addIssue(ValidationReport report, String message, LEVEL level, Path ipPath,
     Path relatedFilePath) {
-    return addIssue(report, message, level, "", ipPath, relatedFilePath);
+    return addEntry(report, message, level, "", ipPath, relatedFilePath);
   }
 
   public static ValidationReport addIssue(ValidationReport report, String message, LEVEL level, Exception exception,
     Path ipPath, Path relatedFilePath) {
-    return addIssue(report, message, level, getDescription(exception), ipPath, relatedFilePath);
+    return addEntry(report, message, level, getDescription(exception), ipPath, relatedFilePath);
   }
 
   public static ValidationReport addIssue(ValidationReport report, String message, LEVEL level, String metsElementId,
     String metsChecksum, String metsChecksumAlgorithm, String computedChecksum, Path ipPath, Path relatedFilePath) {
-    return addIssue(report, message, level,
+    return addEntry(report, message, level,
       getDescription(metsElementId, metsChecksum, metsChecksumAlgorithm, computedChecksum), ipPath, relatedFilePath);
   }
 
-  public static ValidationReport addIssue(ValidationReport report, String message, LEVEL level, String description,
+  public static ValidationReport addEntry(ValidationReport report, String message, LEVEL level, String description,
     Path ipPath, Path relatedFilePath) {
-    ValidationEntry issue = new ValidationEntry();
-    issue.setDescription(description);
-    issue.setLevel(level);
-    issue.setMessage(message);
-    issue.setRelatedItem(
+    ValidationEntry entry = new ValidationEntry();
+    entry.setDescription(description);
+    entry.setLevel(level);
+    entry.setMessage(message);
+    entry.setRelatedItem(
       relatedFilePath == null ? (new ArrayList<Path>()) : Arrays.asList(ipPath.relativize(relatedFilePath)));
-    report.getIssues().add(issue);
-    if (level.toString().equalsIgnoreCase(ValidationEntry.LEVEL.ERROR.toString())) {
-      report.setValid(false);
-    }
+    report.addEntry(entry);
     return report;
   }
 

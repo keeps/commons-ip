@@ -9,6 +9,8 @@ package org.roda_project.commons_ip.model;
 
 public final class IPConstants {
 
+  public static final String SYSTEM_LINE_SEP = System.getProperty("line.separator");
+
   // METS related
   public static final String METS_FILE_NAME = "METS";
   public static final String METS_FILE_EXTENSION = ".xml";

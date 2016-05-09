@@ -22,12 +22,14 @@ public final class ValidationConstants {
   public static final String MAIN_METS_FILE_NOT_FOUND = "Main METS.xml file was not found.";
   public static final String MAIN_METS_NOT_VALID = "Main METS.xml file is not valid.";
   public static final String MAIN_METS_IS_VALID = "Main METS.xml file is valid.";
+  public static final String MAIN_METS_NO_REPRESENTATIONS_FOUND = "No representations were found in main METS.xml file.";
 
   // Representation mets related
-  public static final String REPRESENTATION_METS_FILE_FOUND = "Representation METS.xml file was fond.";
-  public static final String REPRESENTATION_METS_FILE_NOT_FOUND = "Representation METS.xml file is referenced in the main METS.xml but was not fond.";
+  public static final String REPRESENTATION_METS_FILE_FOUND = "Representation METS.xml file was found.";
+  public static final String REPRESENTATION_METS_FILE_NOT_FOUND = "Representation METS.xml file is referenced in the main METS.xml but was not found.";
   public static final String REPRESENTATION_METS_NOT_VALID = "Representation METS.xml file is not valid.";
   public static final String REPRESENTATION_METS_IS_VALID = "Representation METS.xml file is valid.";
+  public static final String REPRESENTATION_HAS_NO_FILES = "Representation has no files.";
 
   // Mets structmap related
   public static final String MAIN_METS_HAS_NO_E_ARK_STRUCT_MAP = "Main METS.xml file has no E-ARK structural map.";
@@ -47,7 +49,7 @@ public final class ValidationConstants {
   public static final String UNKNOWN_DESCRIPTIVE_METADATA_TYPE = "Descriptive metadata type is unknown.";
 
   // Mets checksum related
-  public static final String CHECKSUMS_DIFFER = "Checksum in METS.xml doesn't file checksum.";
+  public static final String CHECKSUMS_DIFFER = "Checksum in METS.xml doesn't match file checksum.";
   public static final String ERROR_COMPUTING_CHECKSUM = "Error computing checksum.";
   public static final String ERROR_COMPUTING_CHECKSUM_NO_SUCH_ALGORITHM = "Error computing checksum: the algorithm provided is not recognized.";
 
@@ -55,6 +57,12 @@ public final class ValidationConstants {
   public static final String REPRESENTATION_FILE_FOUND_WITH_MATCHING_CHECKSUMS = "Representation file referenced in METS.xml was found and file checksum matches METS checksum.";
   public static final String REPRESENTATION_FILE_NOT_FOUND = "Representation file referenced in METS.xml not found.";
   public static final String REPRESENTATION_FILE_HAS_NO_FLOCAT = "Representation file referenced in METS.xml has no FLocat element.";
+
+  // Mets schemas and documentation related
+  public static final String SCHEMA_FILE_FOUND_WITH_MATCHING_CHECKSUMS = "Schema file referenced in METS.xml was found and file checksum matches METS checksum.";
+  public static final String SCHEMA_FILE_NOT_FOUND = "Schema file referenced in METS.xml was not found.";
+  public static final String DOCUMENTATION_FILE_FOUND_WITH_MATCHING_CHECKSUMS = "Documentation file referenced in METS.xml was found and file checksum matches METS checksum.";
+  public static final String DOCUMENTATION_FILE_NOT_FOUND = "Documentation file referenced in METS.xml was not found.";
 
   /** Private empty constructor */
   private ValidationConstants() {

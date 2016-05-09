@@ -7,6 +7,8 @@
  */
 package org.roda_project.commons_ip.model;
 
+import java.nio.file.Path;
+
 import org.roda_project.commons_ip.mets_v1_11.beans.DivType;
 import org.roda_project.commons_ip.mets_v1_11.beans.FileGrpType;
 import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
@@ -14,6 +16,7 @@ import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
 public class MetsWrapper {
 
   private Mets mets;
+  private Path metsPath;
   private DivType descriptiveMetadataDiv;
   private DivType preservationMetadataDiv;
   private DivType otherMetadataDiv;
@@ -27,9 +30,10 @@ public class MetsWrapper {
   private FileGrpType documentationFileGroup;
   private FileGrpType dataFileGroup;
 
-  public MetsWrapper(Mets mets) {
+  public MetsWrapper(Mets mets, Path metsPath) {
     super();
     this.mets = mets;
+    this.metsPath = metsPath;
   }
 
   public Mets getMets() {
@@ -38,6 +42,14 @@ public class MetsWrapper {
 
   public void setMets(Mets mets) {
     this.mets = mets;
+  }
+
+  public Path getMetsPath() {
+    return metsPath;
+  }
+
+  public void setMetsPath(Path metsPath) {
+    this.metsPath = metsPath;
   }
 
   public DivType getDescriptiveMetadataDiv() {
