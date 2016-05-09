@@ -61,13 +61,13 @@
 <div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
   &lt;<span class="pl-ent">groupId</span>&gt;org.roda-project&lt;/<span class="pl-ent">groupId</span>&gt;
   &lt;<span class="pl-ent">artifactId</span>&gt;commons-ip&lt;/<span class="pl-ent">artifactId</span>&gt;
-  &lt;<span class="pl-ent">version</span>&gt;1.0.0-alpha11&lt;/<span class="pl-ent">version</span>&gt;
+  &lt;<span class="pl-ent">version</span>&gt;1.0.0-alpha12&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 </li>
 </ol>
 
 <ul>
-<li>Not using maven, download <a href="http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha11/commons-ip-1.0.0-alpha11.jar">Commons IP latest jar</a>, each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.</li>
+<li>Not using maven, download <a href="http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha12/commons-ip-1.0.0-alpha12.jar">Commons IP latest jar</a>, each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.</li>
 </ul>
 
 <h3>
@@ -78,14 +78,14 @@
 </ul>
 
 <div class="highlight highlight-source-java"><pre><span class="pl-c">// 1) instantiate E-ARK SIP object</span>
-<span class="pl-smi">SIP</span> sip <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">EARKSIP</span>(<span class="pl-s"><span class="pl-pds">"</span>SIP_1<span class="pl-pds">"</span></span>, <span class="pl-smi">ContentType</span><span class="pl-k">.</span>mixed, <span class="pl-s"><span class="pl-pds">"</span>RODA Commons IP<span class="pl-pds">"</span></span>);
+<span class="pl-smi">SIP</span> sip <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">EARKSIP</span>(<span class="pl-s"><span class="pl-pds">"</span>SIP_1<span class="pl-pds">"</span></span>, <span class="pl-smi">IPContentType</span><span class="pl-k">.</span>getMIXED(), <span class="pl-s"><span class="pl-pds">"</span>RODA Commons IP<span class="pl-pds">"</span></span>);
 
 <span class="pl-c">// 1.1) set optional human-readable description</span>
 sip<span class="pl-k">.</span>setDescription(<span class="pl-s"><span class="pl-pds">"</span>A full E-ARK SIP<span class="pl-pds">"</span></span>);
 
 <span class="pl-c">// 1.2) add descriptive metadata (SIP level)</span>
 <span class="pl-smi">IPDescriptiveMetadata</span> metadataDescriptiveDC <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">IPDescriptiveMetadata</span>(
-<span class="pl-k">new</span> <span class="pl-smi">IPFile</span>(<span class="pl-smi">Paths</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>src/test/resources/eark/metadata_descriptive_dc.xml<span class="pl-pds">"</span></span>)), <span class="pl-smi">MetadataType</span><span class="pl-c1"><span class="pl-k">.</span>DC</span>, <span class="pl-c1">null</span>);
+<span class="pl-k">new</span> <span class="pl-smi">IPFile</span>(<span class="pl-smi">Paths</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>src/test/resources/eark/metadata_descriptive_dc.xml<span class="pl-pds">"</span></span>)), <span class="pl-k">new</span> <span class="pl-smi">MetadataType</span>(<span class="pl-smi">MetadataTypeEnum</span><span class="pl-c1"><span class="pl-k">.</span>DC</span>), <span class="pl-c1">null</span>);
 sip<span class="pl-k">.</span>addDescriptiveMetadata(metadataDescriptiveDC);
 
 <span class="pl-c">// 1.3) add preservation metadata (SIP level)</span>
@@ -137,7 +137,7 @@ representation1<span class="pl-k">.</span>addFile(representationFile2);
 
   <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">buildSIP</span>(){
     <span class="pl-c1">...</span>
-    <span class="pl-smi">SIP</span> sip <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">EARKSIP</span>(<span class="pl-s"><span class="pl-pds">"</span>SIP_1<span class="pl-pds">"</span></span>, <span class="pl-smi">ContentType</span><span class="pl-k">.</span>mixed, <span class="pl-s"><span class="pl-pds">"</span>RODA Commons IP<span class="pl-pds">"</span></span>);
+    <span class="pl-smi">SIP</span> sip <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">EARKSIP</span>(<span class="pl-s"><span class="pl-pds">"</span>SIP_1<span class="pl-pds">"</span></span>, <span class="pl-smi">IPContentType</span><span class="pl-k">.</span>getMIXED(), <span class="pl-s"><span class="pl-pds">"</span>RODA Commons IP<span class="pl-pds">"</span></span>);
     sip<span class="pl-k">.</span>addObserver(<span class="pl-v">this</span>);
     <span class="pl-c1">...</span>
   }
@@ -176,6 +176,16 @@ representation1<span class="pl-k">.</span>addFile(representationFile2);
 
 <h2>
 <a id="history" class="anchor" href="#history" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>History</h2>
+
+<h4>
+<a id="alpha-12-2016-05-04" class="anchor" href="#alpha-12-2016-05-04" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 12 (2016-05-04)</h4>
+
+<ul>
+<li>Improved validation report by making possible to add info entries (before only warn and error were the alternatives).</li>
+<li>Improved E-ARK SIP parsing by filling in validations and more warning/errors.</li>
+<li>Now IPs and Representations have created and modified date.</li>
+<li>IPContentType, RepresentationContentType and MetadataType are no longer just an Enum but instead a class (which has an ENUM but also the otherType field).</li>
+</ul>
 
 <h4>
 <a id="alpha-11-2016-04-05" class="anchor" href="#alpha-11-2016-04-05" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 11 (2016-04-05)</h4>
