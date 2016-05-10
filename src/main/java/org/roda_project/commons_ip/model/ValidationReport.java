@@ -54,30 +54,51 @@ public class ValidationReport {
   }
 
   public String toHtml() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("<html>");
-    sb.append("<head>");
-    sb.append("<title>Validation report (").append(getDate()).append(")</title>");
-    sb.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />");
-    sb.append(getDefaultCss());
-    sb.append("</head>");
-    sb.append("<body>");
-    sb.append("<h1>Validation report (").append(getDate()).append(")</h1>");
-    // is it valid?
-    sb.append(getDivBeginning("section summary"));
-    sb.append("Is the package valid? ").append(isValid() ? "yes" : "no");
-    sb.append(getDivEnding());
+    return toHtml(true, true, true, true, true);
+  }
 
-    // print validation entries
-    sb.append(getDivBeginning("section validation_entries"));
+  public String toHtml(boolean showInfo, boolean showWarnings, boolean showError, boolean fullHtml,
+    boolean addDefaultCss) {
+
+    StringBuilder sb = new StringBuilder();
+    if (fullHtml) {
+      sb.append("<html>");
+      sb.append("<head>");
+      sb.append("<title>Validation report (").append(getDate()).append(")</title>");
+      sb.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />");
+      if (addDefaultCss) {
+        sb.append(getDefaultCss());
+      }
+      sb.append("</head>");
+      sb.append("<body>");
+      sb.append("<h1>Validation report (").append(getDate()).append(")</h1>");
+    }
+
+    // open report
+    sb.append(getDivBeginning("report"));
+
+    // is it valid?
+    getValidationEntryAttribute(sb, "valid", "Is the package valid?", isValid() ? "yes" : "no");
+
+    // add validation entries
+    sb.append(getDivBeginning("entries"));
     for (ValidationEntry validationEntry : entries) {
-      sb.append(getValidationEntryDiv(validationEntry));
+      if ((validationEntry.getLevel() == ValidationEntry.LEVEL.INFO && showInfo)
+        || (validationEntry.getLevel() == ValidationEntry.LEVEL.WARNING && showWarnings)
+        || (validationEntry.getLevel() == ValidationEntry.LEVEL.ERROR && showError)) {
+        sb.append(getValidationEntryDiv(validationEntry));
+      }
     }
     sb.append(getDivEnding());
 
-    // wrap up
-    sb.append("</body>");
-    sb.append("</html>");
+    // close report
+    sb.append(getDivEnding());
+
+    if (fullHtml) {
+      // wrap up
+      sb.append("</body>");
+      sb.append("</html>");
+    }
     return sb.toString();
   }
 
@@ -85,88 +106,78 @@ public class ValidationReport {
     return String.format("<div class=\"%s\">", classString);
   }
 
-  private String getSpanBeginning(String classString) {
-    return String.format("<span class=\"%s\">", classString);
-  }
-
   private String getDivEnding() {
     return "</div>";
   }
 
-  private String getSpanEnding() {
-    return "</span>";
-  }
-
   private String getValidationEntryDiv(ValidationEntry validationEntry) {
     StringBuilder sb = new StringBuilder();
-    sb.append(getSpanBeginning("issue " + validationEntry.getLevel().toString().toLowerCase()));
+    sb.append(getDivBeginning("entry " + "level_" + validationEntry.getLevel().toString().toLowerCase()));
 
     // level
-    sb.append(getSpanBeginning("level label"));
-    sb.append("Level");
-    sb.append(getSpanEnding());
-    sb.append(getSpanBeginning("level value"));
-    sb.append(validationEntry.getLevel().toString());
-    sb.append(getSpanEnding());
+    getValidationEntryAttribute(sb, "level", "Level", validationEntry.getLevel().toString());
 
     // related
-    sb.append(getSpanBeginning("level label"));
-    sb.append("Related files");
-    sb.append(getSpanEnding());
-    sb.append(getSpanBeginning("related value"));
+    getValidationEntryAttribute(sb, "related", "Related files", validationEntry.getRelatedItem());
+
+    // message
+    getValidationEntryAttribute(sb, "message", "Message", validationEntry.getMessage());
+
+    // description
+    if (StringUtils.isNotBlank(validationEntry.getDescription())) {
+      getValidationEntryAttribute(sb, "description", "Description", validationEntry.getDescription());
+    }
+
+    sb.append(getDivEnding());
+    return sb.toString();
+  }
+
+  private void getValidationEntryAttribute(StringBuilder sb, String attrClass, String label, List<Path> values) {
+    sb.append(getDivBeginning("entry_attr " + attrClass));
+    sb.append(getDivBeginning("label"));
+    sb.append(label);
+    sb.append(getDivEnding());
+    sb.append(getDivBeginning("value"));
     boolean first = true;
-    for (Path path : validationEntry.getRelatedItem()) {
+    for (Path path : values) {
       if (!first) {
         sb.append(" ; ");
         first = false;
       }
       sb.append(path);
     }
-    sb.append(getSpanEnding());
-    sb.append(getSpanBeginning("break"));
-    sb.append(getSpanEnding());
+    sb.append(getDivEnding());
+    sb.append(getDivEnding());
+  }
 
-    // message
-    sb.append(getSpanBeginning("level label"));
-    sb.append("Message");
-    sb.append(getSpanEnding());
-    sb.append(getSpanBeginning("message value"));
-    sb.append(validationEntry.getMessage());
-    sb.append(getSpanEnding());
-    sb.append(getSpanBeginning("break"));
-    sb.append(getSpanEnding());
-
-    // description
-    if (StringUtils.isNotBlank(validationEntry.getDescription())) {
-      sb.append(getSpanBeginning("level label"));
-      sb.append("Description");
-      sb.append(getSpanEnding());
-      sb.append(getSpanBeginning("description value"));
-      sb.append(validationEntry.getDescription());
-      sb.append(getSpanEnding());
-      sb.append(getSpanBeginning("break"));
-      sb.append(getSpanEnding());
-    }
-
-    sb.append(getSpanEnding());
-    return sb.toString();
+  private void getValidationEntryAttribute(StringBuilder sb, String attrClass, String label, String value) {
+    sb.append(getDivBeginning("entry_attr " + attrClass));
+    sb.append(getDivBeginning("label"));
+    sb.append(label);
+    sb.append(getDivEnding());
+    sb.append(getDivBeginning("value"));
+    sb.append(value);
+    sb.append(getDivEnding());
+    sb.append(getDivEnding());
   }
 
   private String getDefaultCss() {
     StringBuilder sb = new StringBuilder();
     sb.append("<style>").append(IPConstants.SYSTEM_LINE_SEP);
     sb.append(
-      ".summary {border-bottom: 1px solid black; border-left: 2px solid black;; margin-bottom: 10px; padding: 5px;}")
+      ".valid {border-bottom: 1px solid black; border-left: 2px solid black;; margin-bottom: 10px; padding: 5px;}")
       .append(IPConstants.SYSTEM_LINE_SEP);
-    sb.append(".issue {display: block; margin-bottom: 10px;}").append(IPConstants.SYSTEM_LINE_SEP);
-    sb.append(".issue span {padding-left: 5px; padding-right: 5px;}").append(IPConstants.SYSTEM_LINE_SEP);
-    sb.append(".info {border-bottom: 1px solid blue; border-left: 2px solid blue;}")
+    sb.append(".entry {display: block; margin-bottom: 10px;}").append(IPConstants.SYSTEM_LINE_SEP);
+    sb.append(".entry div, .valid div {padding-left: 5px; padding-right: 5px;}").append(IPConstants.SYSTEM_LINE_SEP);
+    sb.append(".level_info {border-bottom: 1px solid blue; border-left: 2px solid blue;}")
       .append(IPConstants.SYSTEM_LINE_SEP);
-    sb.append(".warning {border-bottom: 1px solid orange; border-left: 2px solid orange;}")
+    sb.append(".level_warning {border-bottom: 1px solid orange; border-left: 2px solid orange;}")
       .append(IPConstants.SYSTEM_LINE_SEP);
-    sb.append(".error {border-bottom: 1px solid red; border-left: 2px solid red;}").append(IPConstants.SYSTEM_LINE_SEP);
-    sb.append(".issue .label {display: inline; font-weight: bold;}").append(IPConstants.SYSTEM_LINE_SEP);
-    sb.append(".break {display: block; height: 1px; width: 100%;}").append(IPConstants.SYSTEM_LINE_SEP);
+    sb.append(".level_error {border-bottom: 1px solid red; border-left: 2px solid red;}")
+      .append(IPConstants.SYSTEM_LINE_SEP);
+    sb.append(".entry .label, .valid .label {font-weight: bold;}").append(IPConstants.SYSTEM_LINE_SEP);
+    sb.append(".entry .label, .entry .value, .valid .label, .valid .value {display: inline; }")
+      .append(IPConstants.SYSTEM_LINE_SEP);
     sb.append("</style>");
     return sb.toString();
   }
