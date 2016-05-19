@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ValidationEntry {
   public enum LEVEL {
-    ERROR, WARNING, INFO
+    ERROR, WARN, INFO
   }
 
   private LEVEL level;

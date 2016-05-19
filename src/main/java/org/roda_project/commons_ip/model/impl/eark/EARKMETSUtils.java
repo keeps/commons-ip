@@ -56,11 +56,6 @@ public final class EARKMETSUtils {
 
   }
 
-  /**
-   * @param mainMets
-   *          boolean stating if the generated mets belongs to root/sip or
-   *          representation
-   */
   public static MetsWrapper generateMETS(String objectId, String label, String type, String profile,
     List<IPAgent> ipAgents, boolean mainMets, String parentId, Path metsPath) throws SIPException {
     Mets mets = new Mets();
@@ -477,10 +472,10 @@ public final class EARKMETSUtils {
   private static StructMapType generateParentIDStructMap(String parentId) {
     StructMapType structMap = new StructMapType();
     structMap.setID(Utils.generateRandomId());
-    structMap.setLABEL("RODA structural map");
+    structMap.setLABEL(IPConstants.RODA_STRUCTURAL_MAP);
 
-    DivType mainDiv = createDivForStructMap("RODA");
-    DivType parentIdDiv = createDivForStructMap("Parent ID");
+    DivType mainDiv = createDivForStructMap(IPConstants.RODA_DIV_LABEL);
+    DivType parentIdDiv = createDivForStructMap(IPConstants.RODA_PARENT_ID_DIV_LABEL);
 
     Mptr mptrParent = new Mptr();
     mptrParent.setType(IPConstants.METS_TYPE_SIMPLE);
@@ -494,19 +489,19 @@ public final class EARKMETSUtils {
   }
 
   public static String extractParentIDFromStructMap(Mets mets) {
-    String parentID = null;
+    String parentID = "";
     boolean found = false;
 
     for (StructMapType structMap : mets.getStructMap()) {
-      if (structMap.getLABEL() != null && "RODA structural map".equalsIgnoreCase(structMap.getLABEL())
+      if (structMap.getLABEL() != null && IPConstants.RODA_STRUCTURAL_MAP.equalsIgnoreCase(structMap.getLABEL())
         && structMap.getDiv() != null) {
         DivType mainDiv = structMap.getDiv();
 
-        if ("RODA".equalsIgnoreCase(mainDiv.getLABEL()) && mainDiv.getDiv() != null) {
+        if (IPConstants.RODA_DIV_LABEL.equalsIgnoreCase(mainDiv.getLABEL()) && mainDiv.getDiv() != null) {
           for (DivType div : mainDiv.getDiv()) {
-            if ("Parent ID".equalsIgnoreCase(div.getLABEL()) && div.getMptr() != null) {
+            if (IPConstants.RODA_PARENT_ID_DIV_LABEL.equalsIgnoreCase(div.getLABEL()) && div.getMptr() != null) {
               for (Mptr m : div.getMptr()) {
-                if (m.getHref() != null) {
+                if (StringUtils.isNotBlank(m.getHref())) {
                   parentID = m.getHref();
                   found = true;
                   break;

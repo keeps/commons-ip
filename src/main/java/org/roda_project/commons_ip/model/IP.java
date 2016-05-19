@@ -17,7 +17,7 @@ import java.util.UUID;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.roda_project.commons_ip.utils.IPEnums.Type;
+import org.roda_project.commons_ip.utils.IPEnums.IPType;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.SIPException;
 import org.roda_project.commons_ip.utils.Utils;
@@ -26,10 +26,13 @@ public abstract class IP implements IPInterface {
 
   private String id;
   private String profile;
-  private Type type;
+  private IPType type;
   private Optional<XMLGregorianCalendar> createDate;
   private Optional<XMLGregorianCalendar> modificationDate;
   private IPContentType contentType;
+  // FIXME 20160510 hsilva: string or enum??? /metsHdr/@RECORDSTATUS e.g. NEW,
+  // TEST, REPLEACEMENT
+  private String status;
 
   private Path basePath;
   private String parentID;
@@ -49,9 +52,12 @@ public abstract class IP implements IPInterface {
   public IP() {
     this.setId("ID" + UUID.randomUUID().toString());
     this.profile = "http://www.eark-project.com/METS/IP.xml";
-    this.type = Type.SIP;
+    this.type = IPType.SIP;
     this.createDate = Utils.getCurrentTime();
     this.contentType = IPContentType.getMIXED();
+
+    this.parentID = "";
+    this.description = "";
 
     this.agents = new ArrayList<IPAgent>();
     this.descriptiveMetadata = new ArrayList<IPDescriptiveMetadata>();
@@ -66,13 +72,13 @@ public abstract class IP implements IPInterface {
 
   }
 
-  public IP(String ipName, Type ipType) {
+  public IP(String ipName, IPType ipType) {
     super();
     this.setId(ipName);
     this.type = ipType;
   }
 
-  public IP(String ipName, Type ipType, IPContentType contentType, String creator) {
+  public IP(String ipName, IPType ipType, IPContentType contentType, String creator) {
     this(ipName, ipType);
     this.contentType = contentType;
 
@@ -103,7 +109,7 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP setType(Type type) {
+  public IP setType(IPType type) {
     this.type = type;
     return this;
   }
@@ -308,11 +314,11 @@ public abstract class IP implements IPInterface {
 
   @Override
   public List<IPRepresentation> getRepresentations() {
-    List<IPRepresentation> representations = new ArrayList<IPRepresentation>();
+    List<IPRepresentation> representationsList = new ArrayList<IPRepresentation>();
     for (String representationId : representationIds) {
-      representations.add(this.representations.get(representationId));
+      representationsList.add(representations.get(representationId));
     }
-    return representations;
+    return representationsList;
   }
 
   @Override

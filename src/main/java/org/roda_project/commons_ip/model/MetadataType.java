@@ -7,19 +7,22 @@
  */
 package org.roda_project.commons_ip.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class MetadataType {
+public class MetadataType implements Serializable {
+  private static final long serialVersionUID = 9052247527983339112L;
+
   public enum MetadataTypeEnum {
     MARC("MARC"), MODS("MODS"), EAD("EAD"), DC("DC"), NISOIMG("NISOIMG"), LCAV("LC-AV"), VRA("VRA"), TEIHDR("TEIHDR"),
     DDI("DDI"), FGDC("FGDC"), LOM("LOM"), PREMIS("PREMIS"), PREMISOBJECT("PREMIS:OBJECT"), PREMISAGENT("PREMIS:AGENT"),
     PREMISRIGHTS("PREMIS:RIGHTS"), PREMISEVENT("PREMIS:EVENT"), TEXTMD("TEXTMD"), METSRIGHTS("METSRIGHTS"),
     ISO191152003("ISO 19115:2003"), NAP("NAP"), EACCPF("EAC-CPF"), LIDO("LIDO"), OTHER("OTHER");
 
-    public static Map<String, MetadataTypeEnum> typeToEnum = new HashMap<>();
+    protected static final Map<String, MetadataTypeEnum> typeToEnum = new HashMap<>();
     static {
       typeToEnum.put("LC-AV", MetadataTypeEnum.LCAV);
       typeToEnum.put("PREMIS:OBJECT", MetadataTypeEnum.PREMISOBJECT);
@@ -40,6 +43,7 @@ public class MetadataType {
       return type;
     }
 
+    @Override
     public String toString() {
       return type;
     }
@@ -81,6 +85,7 @@ public class MetadataType {
     return this;
   }
 
+  @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("type: ").append(type);

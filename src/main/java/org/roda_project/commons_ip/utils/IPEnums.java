@@ -8,7 +8,7 @@
 package org.roda_project.commons_ip.utils;
 
 public class IPEnums {
-  public enum Type {
+  public enum IPType {
     SIP, AIP, DIP;
   }
 }

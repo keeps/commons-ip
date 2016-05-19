@@ -7,9 +7,13 @@
  */
 package org.roda_project.commons_ip.model;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.StringUtils;
 
-public class IPContentType {
+public class IPContentType implements Serializable {
+  private static final long serialVersionUID = 1191075605637022551L;
+
   public enum IPContentTypeEnum {
     ERMS, RDBMS, SMURF, MIXED, OTHER;
   }
@@ -50,6 +54,7 @@ public class IPContentType {
     return this;
   }
 
+  @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("type: ").append(type);
@@ -62,7 +67,7 @@ public class IPContentType {
 
   public String asString() {
     String ret = type.toString();
-    
+
     if (type == IPContentTypeEnum.OTHER && StringUtils.isNotBlank(otherType)) {
       ret = otherType;
     }

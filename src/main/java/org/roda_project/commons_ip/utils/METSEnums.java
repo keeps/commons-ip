@@ -17,6 +17,7 @@ public class METSEnums {
       stringValue = s;
     }
 
+    @Override
     public String toString() {
       return stringValue;
     }
@@ -30,6 +31,7 @@ public class METSEnums {
       stringValue = s;
     }
 
+    @Override
     public String toString() {
       return stringValue;
     }

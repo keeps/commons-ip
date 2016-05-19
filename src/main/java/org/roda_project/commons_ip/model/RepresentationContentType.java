@@ -7,9 +7,13 @@
  */
 package org.roda_project.commons_ip.model;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.StringUtils;
 
-public class RepresentationContentType {
+public class RepresentationContentType implements Serializable {
+  private static final long serialVersionUID = -5292855152678206771L;
+
   public enum RepresentationContentTypeEnum {
     MOREQ, SIARD, SIARD2, SMURF, OTHER, MIXED;
   }
@@ -50,6 +54,7 @@ public class RepresentationContentType {
     return this;
   }
 
+  @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("type: ").append(type);

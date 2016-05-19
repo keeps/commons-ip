@@ -10,7 +10,7 @@ package org.roda_project.commons_ip.model;
 import java.nio.file.Path;
 import java.util.List;
 
-import org.roda_project.commons_ip.utils.IPEnums.Type;
+import org.roda_project.commons_ip.utils.IPEnums.IPType;
 import org.roda_project.commons_ip.utils.SIPException;
 
 public interface IPInterface {
@@ -23,7 +23,7 @@ public interface IPInterface {
 
   String getProfile();
 
-  IP setType(Type type);
+  IP setType(IPType type);
 
   String getType();
 

@@ -19,6 +19,7 @@ import org.roda_project.commons_ip.model.ValidationEntry.LEVEL;
 import org.roda_project.commons_ip.model.ValidationReport;
 
 public final class ValidationUtils {
+  private static final String UNKNOWN_ID = "UNKNOWN_ID";
 
   private ValidationUtils() {
   }
@@ -93,15 +94,15 @@ public final class ValidationUtils {
   }
 
   private static String getDescription(StructMapType structMap) {
-    return String.format("structMap with id '%s'", structMap != null ? structMap.getID() : "UNKNOWN_ID");
+    return String.format("structMap with id '%s'", structMap != null ? structMap.getID() : UNKNOWN_ID);
   }
 
   private static String getDescription(DivType div) {
-    return String.format("div with id '%s'", div != null ? div.getID() : "UNKNOWN_ID");
+    return String.format("div with id '%s'", div != null ? div.getID() : UNKNOWN_ID);
   }
 
   private static String getDescription(FileType file) {
-    return String.format("file with id '%s'", file != null ? file.getID() : "UNKNOWN_ID");
+    return String.format("file with id '%s'", file != null ? file.getID() : UNKNOWN_ID);
   }
 
   private static String getDescription(Exception exception) {

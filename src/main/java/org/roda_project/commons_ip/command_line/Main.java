@@ -21,7 +21,11 @@ import org.roda_project.commons_ip.model.SIP;
 import org.roda_project.commons_ip.model.impl.eark.EARKSIP;
 import org.roda_project.commons_ip.utils.Utils;
 
-public class Main {
+public final class Main {
+  private Main() {
+
+  }
+
   public static void main(String[] args) throws ParseException, IOException {
     if (args.length == 3) {
       OutputStream outputStream = null;

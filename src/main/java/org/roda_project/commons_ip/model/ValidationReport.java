@@ -57,10 +57,30 @@ public class ValidationReport {
     return toHtml(true, true, true, true, true);
   }
 
-  public String toHtml(boolean showInfo, boolean showWarnings, boolean showError, boolean fullHtml,
-    boolean addDefaultCss) {
-
+  public String toHtml(boolean showInfo, boolean showWarn, boolean showError, boolean fullHtml, boolean addDefaultCss) {
     StringBuilder sb = new StringBuilder();
+
+    // start html (if is to do so)
+    getHtmlStart(sb, fullHtml, addDefaultCss);
+
+    // open report
+    sb.append(getDivBeginning("report"));
+
+    // is it valid?
+    getValidationEntryAttribute(sb, "valid", "Is the package valid?", isValid() ? "yes" : "no");
+
+    // add validation entries
+    getValidationEntries(sb, showInfo, showWarn, showError);
+
+    // close report
+    sb.append(getDivEnding());
+
+    // end html (if is to do so)
+    getHtmlEnd(sb, fullHtml);
+    return sb.toString();
+  }
+
+  private void getHtmlStart(StringBuilder sb, boolean fullHtml, boolean addDefaultCss) {
     if (fullHtml) {
       sb.append("<html>");
       sb.append("<head>");
@@ -73,33 +93,30 @@ public class ValidationReport {
       sb.append("<body>");
       sb.append("<h1>Validation report (").append(getDate()).append(")</h1>");
     }
+  }
 
-    // open report
-    sb.append(getDivBeginning("report"));
-
-    // is it valid?
-    getValidationEntryAttribute(sb, "valid", "Is the package valid?", isValid() ? "yes" : "no");
-
-    // add validation entries
+  private void getValidationEntries(StringBuilder sb, boolean showInfo, boolean showWarnings, boolean showError) {
     sb.append(getDivBeginning("entries"));
     for (ValidationEntry validationEntry : entries) {
-      if ((validationEntry.getLevel() == ValidationEntry.LEVEL.INFO && showInfo)
-        || (validationEntry.getLevel() == ValidationEntry.LEVEL.WARNING && showWarnings)
-        || (validationEntry.getLevel() == ValidationEntry.LEVEL.ERROR && showError)) {
+      if (isToAddEntry(validationEntry, ValidationEntry.LEVEL.INFO, showInfo)
+        || isToAddEntry(validationEntry, ValidationEntry.LEVEL.WARN, showWarnings)
+        || isToAddEntry(validationEntry, ValidationEntry.LEVEL.ERROR, showError)) {
         sb.append(getValidationEntryDiv(validationEntry));
       }
     }
     sb.append(getDivEnding());
+  }
 
-    // close report
-    sb.append(getDivEnding());
+  private boolean isToAddEntry(ValidationEntry validationEntry, ValidationEntry.LEVEL level, boolean isToShow) {
+    return validationEntry.getLevel() == level && isToShow;
+  }
 
+  private void getHtmlEnd(StringBuilder sb, boolean fullHtml) {
     if (fullHtml) {
       // wrap up
       sb.append("</body>");
       sb.append("</html>");
     }
-    return sb.toString();
   }
 
   private String getDivBeginning(String classString) {

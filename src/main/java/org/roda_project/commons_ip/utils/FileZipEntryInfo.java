@@ -23,10 +23,12 @@ public class FileZipEntryInfo implements ZipEntryInfo {
    * 
    * @return the name of the zip entry
    */
+  @Override
   public String getName() {
     return name;
   }
 
+  @Override
   public Path getFilePath() {
     return filePath;
   }

@@ -526,10 +526,10 @@ public class EARKSIP extends SIP {
       throw new ParseException("METS 'TYPE' attribute does not contain a valid value");
     }
 
-    IPEnums.Type packageType;
+    IPEnums.IPType packageType;
     try {
-      packageType = IPEnums.Type.valueOf(contentTypeParts[0]);
-      if (IPEnums.Type.SIP != packageType) {
+      packageType = IPEnums.IPType.valueOf(contentTypeParts[0]);
+      if (IPEnums.IPType.SIP != packageType) {
         throw new ParseException("METS 'TYPE' attribute should start with 'SIP:'");
       }
     } catch (IllegalArgumentException e) {
@@ -632,25 +632,26 @@ public class EARKSIP extends SIP {
   private static SIP processDescriptiveMetadata(MetsWrapper metsWrapper, SIP sip, IPRepresentation representation,
     Path basePath) throws SIPException {
 
-    return processMetadata(sip, representation, metsWrapper.getDescriptiveMetadataDiv(), IPConstants.DESCRIPTIVE,
-      basePath);
+    return processMetadata(sip, metsWrapper, representation, metsWrapper.getDescriptiveMetadataDiv(),
+      IPConstants.DESCRIPTIVE, basePath);
   }
 
   private static SIP processOtherMetadata(MetsWrapper metsWrapper, SIP sip, IPRepresentation representation,
     Path basePath) throws SIPException {
 
-    return processMetadata(sip, representation, metsWrapper.getOtherMetadataDiv(), IPConstants.OTHER, basePath);
+    return processMetadata(sip, metsWrapper, representation, metsWrapper.getOtherMetadataDiv(), IPConstants.OTHER,
+      basePath);
   }
 
   private static SIP processPreservationMetadata(MetsWrapper metsWrapper, SIP sip, IPRepresentation representation,
     Path basePath) throws SIPException {
 
-    return processMetadata(sip, representation, metsWrapper.getPreservationMetadataDiv(), IPConstants.PRESERVATION,
-      basePath);
+    return processMetadata(sip, metsWrapper, representation, metsWrapper.getPreservationMetadataDiv(),
+      IPConstants.PRESERVATION, basePath);
   }
 
-  private static SIP processMetadata(SIP sip, IPRepresentation representation, DivType div, String metadataType,
-    Path basePath) throws SIPException {
+  private static SIP processMetadata(SIP sip, MetsWrapper representationMetsWrapper, IPRepresentation representation,
+    DivType div, String metadataType, Path basePath) throws SIPException {
     if (div != null && div.getFptr() != null) {
       for (Fptr fptr : div.getFptr()) {
         MdRef mdRef = (MdRef) fptr.getFILEID();
@@ -668,7 +669,9 @@ public class EARKSIP extends SIP {
         }
       }
     } else {
-      // FIXME no fptr issue
+      ValidationUtils.addIssue(sip.getValidationReport(),
+        ValidationConstants.getMetadataFileFptrNotFoundString(metadataType), ValidationEntry.LEVEL.ERROR,
+        sip.getBasePath(), representationMetsWrapper.getMetsPath());
     }
 
     return sip;
@@ -695,7 +698,7 @@ public class EARKSIP extends SIP {
           // metadataVersion
           LOGGER.debug("Setting metadata type to {}", dmdType);
           ValidationUtils.addEntry(sip.getValidationReport(), ValidationConstants.UNKNOWN_DESCRIPTIVE_METADATA_TYPE,
-            ValidationEntry.LEVEL.WARNING, "Setting metadata type to " + dmdType, sip.getBasePath(), filePath);
+            ValidationEntry.LEVEL.WARN, "Setting metadata type to " + dmdType, sip.getBasePath(), filePath);
         }
 
         IPDescriptiveMetadata descriptiveMetadata = new IPDescriptiveMetadata(metadataFile, dmdType, dmdVersion);
@@ -819,7 +822,7 @@ public class EARKSIP extends SIP {
       // post-process validations
       if (sip.getRepresentations().isEmpty()) {
         ValidationUtils.addIssue(sip.getValidationReport(), ValidationConstants.MAIN_METS_NO_REPRESENTATIONS_FOUND,
-          ValidationEntry.LEVEL.WARNING, metsWrapper.getRepresentationsDiv(), sip.getBasePath(),
+          ValidationEntry.LEVEL.WARN, metsWrapper.getRepresentationsDiv(), sip.getBasePath(),
           metsWrapper.getMetsPath());
       }
     }
@@ -868,7 +871,7 @@ public class EARKSIP extends SIP {
       // post-process validations
       if (representation.getData().isEmpty()) {
         ValidationUtils.addIssue(sip.getValidationReport(), ValidationConstants.REPRESENTATION_HAS_NO_FILES,
-          ValidationEntry.LEVEL.WARNING, representationMetsWrapper.getDataDiv(), sip.getBasePath(),
+          ValidationEntry.LEVEL.WARN, representationMetsWrapper.getDataDiv(), sip.getBasePath(),
           representationMetsWrapper.getMetsPath());
       }
     }
@@ -887,11 +890,9 @@ public class EARKSIP extends SIP {
 
   private static SIP processParentId(MetsWrapper metsWrapper, SIP sip) {
     Mets mets = metsWrapper.getMets();
+
     if (mets.getStructMap() != null && !mets.getStructMap().isEmpty()) {
-      String parentID = EARKMETSUtils.extractParentIDFromStructMap(mets);
-      if (parentID != null) {
-        sip.setParent(parentID);
-      }
+      sip.setParent(EARKMETSUtils.extractParentIDFromStructMap(mets));
     }
 
     return sip;

@@ -40,12 +40,16 @@ public final class ValidationConstants {
   // Mets metadata related
   public static final String METADATA_FILE_FOUND = "Metadata file was found and file checksum matches METS checksum.";
   public static final String METADATA_FILE_NOT_FOUND = "Metadata file not found.";
+  public static final String METADATA_FPTR_NOT_FOUND = "Metadata has no FPTR.";
   public static final String DESCRIPTIVE_METADATA_FILE_FOUND_WITH_MATCHING_CHECKSUMS = "Descriptive metadata file was found and file checksum matches METS checksum.";
   public static final String DESCRIPTIVE_METADATA_FILE_NOT_FOUND = "Descriptive metadata file not found.";
+  public static final String DESCRIPTIVE_METADATA_FPTR_NOT_FOUND = "Descriptive metadata has no FPTR.";
   public static final String PRESERVATION_METADATA_FILE_FOUND_WITH_MATCHING_CHECKSUMS = "Preservation metadata file was found and file checksum matches METS checksum.";
   public static final String PRESERVATION_METADATA_FILE_NOT_FOUND = "Preservation metadata file not found.";
+  public static final String PRESERVATION_METADATA_FPTR_NOT_FOUND = "Preservation metadata has no FPTR.";
   public static final String OTHER_METADATA_FILE_FOUND_WITH_MATCHING_CHECKSUMS = "Other metadata file was found and file checksum matches METS checksum.";
   public static final String OTHER_METADATA_FILE_NOT_FOUND = "Other metadata file not found.";
+  public static final String OTHER_METADATA_FPTR_NOT_FOUND = "Other metadata has no FPTR.";
   public static final String UNKNOWN_DESCRIPTIVE_METADATA_TYPE = "Descriptive metadata type is unknown.";
 
   // Mets checksum related
@@ -91,6 +95,18 @@ public final class ValidationConstants {
       notFoundString = OTHER_METADATA_FILE_FOUND_WITH_MATCHING_CHECKSUMS;
     }
     return notFoundString;
+  }
+
+  public static String getMetadataFileFptrNotFoundString(String metadataType) {
+    String noFptrString = METADATA_FPTR_NOT_FOUND;
+    if (IPConstants.DESCRIPTIVE.equalsIgnoreCase(metadataType)) {
+      noFptrString = DESCRIPTIVE_METADATA_FPTR_NOT_FOUND;
+    } else if (IPConstants.PRESERVATION.equalsIgnoreCase(metadataType)) {
+      noFptrString = PRESERVATION_METADATA_FPTR_NOT_FOUND;
+    } else if (IPConstants.OTHER.equalsIgnoreCase(metadataType)) {
+      noFptrString = OTHER_METADATA_FPTR_NOT_FOUND;
+    }
+    return noFptrString;
   }
 
 }

@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.roda_project.commons_ip.utils.IPEnums.Type;
+import org.roda_project.commons_ip.utils.IPEnums.IPType;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 
 public abstract class SIP extends IP {
@@ -25,7 +25,7 @@ public abstract class SIP extends IP {
   public SIP(String sipId) {
     super();
     setId(sipId);
-    setType(Type.SIP);
+    setType(IPType.SIP);
 
     observers = new ArrayList<SIPObserver>();
   }
@@ -33,7 +33,7 @@ public abstract class SIP extends IP {
   public SIP(String sipId, IPContentType contentType, String creator) {
     super();
     setId(sipId);
-    setType(Type.SIP);
+    setType(IPType.SIP);
     setContentType(contentType);
     IPAgent creatorAgent = new IPAgent(creator, "CREATOR", null, CreatorType.OTHER, "SOFTWARE");
     getAgents().add(creatorAgent);
