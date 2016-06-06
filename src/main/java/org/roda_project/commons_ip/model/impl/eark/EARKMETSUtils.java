@@ -56,13 +56,13 @@ public final class EARKMETSUtils {
 
   }
 
-  public static MetsWrapper generateMETS(String objectId, String label, String type, String profile,
+  public static MetsWrapper generateMETS(String id, String label, String type, String profile,
     List<IPAgent> ipAgents, boolean mainMets, String parentId, Path metsPath) throws SIPException {
     Mets mets = new Mets();
     MetsWrapper metsWrapper = new MetsWrapper(mets, metsPath);
 
     // basic attributes
-    mets.setOBJID(objectId);
+    mets.setOBJID(id);
     mets.setPROFILE(profile);
     mets.setTYPE(type);
     mets.setLABEL(label);
@@ -91,7 +91,7 @@ public final class EARKMETSUtils {
     FileSec fileSec = new FileSec();
     fileSec.setID(Utils.generateRandomId());
     FileGrp mainFileGroup = mainMets ? createFileGroup(IPConstants.E_ARK_FILES_ROOT)
-      : createFileGroup(IPConstants.E_ARK_FILES_REPRESENTATION + objectId);
+      : createFileGroup(IPConstants.E_ARK_FILES_REPRESENTATION + id);
 
     FileGrpType representationsFileGroup = createFileGroupType(IPConstants.REPRESENTATIONS);
     mainFileGroup.getFileGrp().add(representationsFileGroup);
@@ -115,7 +115,7 @@ public final class EARKMETSUtils {
     structMap.setTYPE(IPConstants.METS_TYPE_PHYSICAL);
     structMap.setLABEL(IPConstants.E_ARK_STRUCTURAL_MAP);
 
-    DivType mainDiv = createDivForStructMap(objectId);
+    DivType mainDiv = createDivForStructMap(id);
     // metadata
     DivType metadataDiv = createDivForStructMap(IPConstants.METADATA);
     // metadata/descriptive

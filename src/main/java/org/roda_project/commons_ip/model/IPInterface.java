@@ -93,6 +93,8 @@ public interface IPInterface {
    * @throws InterruptedException
    */
   Path build(Path destinationDirectory) throws SIPException, InterruptedException;
+  
+  Path build(Path destinationDirectory, String fileNameWithoutExtension) throws SIPException, InterruptedException;
 
   static IP parse(Path source) throws ParseException {
     throw new ParseException("One must implement static method parse in a concrete class");

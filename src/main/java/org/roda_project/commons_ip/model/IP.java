@@ -72,14 +72,14 @@ public abstract class IP implements IPInterface {
 
   }
 
-  public IP(String ipName, IPType ipType) {
+  public IP(String ipId, IPType ipType) {
     super();
-    this.setId(ipName);
+    this.setId(ipId);
     this.type = ipType;
   }
 
-  public IP(String ipName, IPType ipType, IPContentType contentType, String creator) {
-    this(ipName, ipType);
+  public IP(String ipId, IPType ipType, IPContentType contentType, String creator) {
+    this(ipId, ipType);
     this.contentType = contentType;
 
     IPAgent creatorAgent = new IPAgent(creator, "CREATOR", null, CreatorType.OTHER, "SOFTWARE");

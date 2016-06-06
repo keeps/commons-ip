@@ -66,19 +66,19 @@ public class EARKSIP extends SIP {
   }
 
   /**
-   * @param sipName
+   * @param sipId
    *          will be used as OBJID in METS (/mets[@OBJID])
    */
-  public EARKSIP(String sipName) {
-    super(sipName);
+  public EARKSIP(String sipId) {
+    super(sipId);
   }
 
   /**
-   * @param sipName
+   * @param sipId
    *          will be used as OBJID in METS (/mets[@OBJID])
    */
-  public EARKSIP(String sipName, IPContentType contentType, String creator) {
-    super(sipName, contentType, creator);
+  public EARKSIP(String sipId, IPContentType contentType, String creator) {
+    super(sipId, contentType, creator);
   }
 
   /**
@@ -88,10 +88,21 @@ public class EARKSIP extends SIP {
    */
   @Override
   public Path build(Path destinationDirectory) throws SIPException, InterruptedException {
+    return build(destinationDirectory, null);
+  }
+
+  /**
+   * 
+   * build and all build related methods
+   * _________________________________________________________________________
+   */
+  @Override
+  public Path build(Path destinationDirectory, String fileNameWithoutExtension)
+    throws SIPException, InterruptedException {
     Path buildDir = createBuildDir();
     Path zipPath = null;
     try {
-      zipPath = getZipPath(destinationDirectory);
+      zipPath = getZipPath(destinationDirectory, fileNameWithoutExtension);
       List<ZipEntryInfo> zipEntries = new ArrayList<ZipEntryInfo>();
       // 20160407 hsilva: as METS does not have an attribute 'otherType', the
       // other type must be put in the 'type' attribute allowing this way other
@@ -156,8 +167,14 @@ public class EARKSIP extends SIP {
     }
   }
 
-  private Path getZipPath(Path destinationDirectory) throws SIPException {
-    Path zipPath = destinationDirectory.resolve(getId() + SIP_FILE_EXTENSION);
+  private Path getZipPath(Path destinationDirectory, String fileNameWithoutExtension) throws SIPException {
+    Path zipPath;
+    if (fileNameWithoutExtension != null) {
+      zipPath = destinationDirectory.resolve(fileNameWithoutExtension + SIP_FILE_EXTENSION);
+    } else {
+      zipPath = destinationDirectory.resolve(getId() + SIP_FILE_EXTENSION);
+    }
+
     try {
       if (Files.exists(zipPath)) {
         Files.delete(zipPath);
