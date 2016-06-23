@@ -56,8 +56,8 @@ public final class EARKMETSUtils {
 
   }
 
-  public static MetsWrapper generateMETS(String id, String label, String type, String profile,
-    List<IPAgent> ipAgents, boolean mainMets, String parentId, Path metsPath) throws SIPException {
+  public static MetsWrapper generateMETS(String id, String label, String type, String profile, List<IPAgent> ipAgents,
+    boolean mainMets, String parentId, Path metsPath) throws SIPException {
     Mets mets = new Mets();
     MetsWrapper metsWrapper = new MetsWrapper(mets, metsPath);
 
@@ -84,12 +84,12 @@ public final class EARKMETSUtils {
 
     // administrative section
     AmdSecType amdSec = new AmdSecType();
-    amdSec.setID(Utils.generateRandomId());
+    amdSec.setID(Utils.generateRandomAndPrefixedUUID());
     mets.getAmdSec().add(amdSec);
 
     // file section
     FileSec fileSec = new FileSec();
-    fileSec.setID(Utils.generateRandomId());
+    fileSec.setID(Utils.generateRandomAndPrefixedUUID());
     FileGrp mainFileGroup = mainMets ? createFileGroup(IPConstants.E_ARK_FILES_ROOT)
       : createFileGroup(IPConstants.E_ARK_FILES_REPRESENTATION + id);
 
@@ -111,7 +111,7 @@ public final class EARKMETSUtils {
 
     // E-ARK struct map
     StructMapType structMap = new StructMapType();
-    structMap.setID(Utils.generateRandomId());
+    structMap.setID(Utils.generateRandomAndPrefixedUUID());
     structMap.setTYPE(IPConstants.METS_TYPE_PHYSICAL);
     structMap.setLABEL(IPConstants.E_ARK_STRUCTURAL_MAP);
 
@@ -162,21 +162,21 @@ public final class EARKMETSUtils {
 
   private static FileGrpType createFileGroupType(String use) {
     FileGrpType fileGroup = new FileGrpType();
-    fileGroup.setID(Utils.generateRandomId());
+    fileGroup.setID(Utils.generateRandomAndPrefixedUUID());
     fileGroup.setUSE(use);
     return fileGroup;
   }
 
   private static FileGrp createFileGroup(String use) {
     FileGrp fileGroup = new FileGrp();
-    fileGroup.setID(Utils.generateRandomId());
+    fileGroup.setID(Utils.generateRandomAndPrefixedUUID());
     fileGroup.setUSE(use);
     return fileGroup;
   }
 
   private static DivType createDivForStructMap(String label) {
     DivType div = new DivType();
-    div.setID(Utils.generateRandomId());
+    div.setID(Utils.generateRandomAndPrefixedUUID());
     div.setLABEL(label);
     return div;
   }
@@ -251,14 +251,15 @@ public final class EARKMETSUtils {
 
   public static MdRef addOtherMetadataToMETS(MetsWrapper metsWrapper, IPMetadata otherMetadata,
     String otherMetadataPath, boolean calculateChecksum) throws SIPException, InterruptedException {
-    return addMetadataToMETS(metsWrapper, otherMetadata, otherMetadataPath, null, null, null, false, calculateChecksum);
+    return addMetadataToMETS(metsWrapper, otherMetadata, otherMetadataPath, "OTHER", null, null, false,
+      calculateChecksum);
   }
 
   private static MdRef addMetadataToMETS(MetsWrapper metsWrapper, IPMetadata metadata, String metadataPath,
     String mdType, String mdOtherType, String mdTypeVersion, boolean isDescriptive, boolean calculateChecksum)
     throws SIPException, InterruptedException {
     MdSecType dmdSec = new MdSecType();
-    dmdSec.setID(Utils.generateRandomId());
+    dmdSec.setID(Utils.generateRandomAndPrefixedUUID());
 
     MdRef mdRef = createMdRef(metadataPath);
     mdRef.setMDTYPE(mdType);
@@ -287,9 +288,10 @@ public final class EARKMETSUtils {
   public static MdRef addPreservationMetadataToMETS(MetsWrapper metsWrapper, IPMetadata preservationMetadata,
     String preservationMetadataPath, boolean calculateChecksum) throws SIPException, InterruptedException {
     MdSecType digiprovMD = new MdSecType();
-    digiprovMD.setID(Utils.generateRandomId());
+    digiprovMD.setID(Utils.generateRandomAndPrefixedUUID());
 
     MdRef mdRef = createMdRef(preservationMetadataPath);
+    mdRef.setMDTYPE("OTHER");
 
     // set checksum, mimetype, etc.
     setFileBasicInformation(preservationMetadata.getMetadata().getPath(), mdRef, calculateChecksum);
@@ -306,7 +308,7 @@ public final class EARKMETSUtils {
 
   private static MdRef createMdRef(String metadataPath) {
     MdRef mdRef = new MdRef();
-    mdRef.setID(Utils.generateRandomId());
+    mdRef.setID(Utils.generateRandomAndPrefixedUUID());
     mdRef.setType(IPConstants.METS_TYPE_SIMPLE);
     mdRef.setLOCTYPE(LocType.URL.toString());
     mdRef.setHref(IPConstants.METS_FILE_URI_PREFIX + metadataPath);
@@ -316,7 +318,7 @@ public final class EARKMETSUtils {
   public static FileType addDataFileToMETS(MetsWrapper representationMETS, String dataFilePath, Path dataFile,
     boolean calculateChecksum) throws SIPException, InterruptedException {
     FileType file = new FileType();
-    file.setID(Utils.generateRandomId());
+    file.setID(Utils.generateRandomAndPrefixedUUID());
 
     // set checksum, mimetype, etc.
     setFileBasicInformation(dataFile, file, calculateChecksum);
@@ -422,7 +424,7 @@ public final class EARKMETSUtils {
   public static FileType addSchemaFileToMETS(MetsWrapper metsWrapper, String schemaFilePath, Path schemaFile,
     boolean calculateChecksum) throws SIPException, InterruptedException {
     FileType file = new FileType();
-    file.setID(Utils.generateRandomId());
+    file.setID(Utils.generateRandomAndPrefixedUUID());
 
     // set checksum, mimetype, etc.
     setFileBasicInformation(schemaFile, file, calculateChecksum);
@@ -442,7 +444,7 @@ public final class EARKMETSUtils {
   public static FileType addDocumentationFileToMETS(MetsWrapper metsWrapper, String documentationFilePath,
     Path documentationFile, boolean calculateChecksum) throws SIPException, InterruptedException {
     FileType file = new FileType();
-    file.setID(Utils.generateRandomId());
+    file.setID(Utils.generateRandomAndPrefixedUUID());
 
     // set checksum, mimetype, etc.
     setFileBasicInformation(documentationFile, file, calculateChecksum);
@@ -471,7 +473,7 @@ public final class EARKMETSUtils {
 
   private static StructMapType generateParentIDStructMap(String parentId) {
     StructMapType structMap = new StructMapType();
-    structMap.setID(Utils.generateRandomId());
+    structMap.setID(Utils.generateRandomAndPrefixedUUID());
     structMap.setLABEL(IPConstants.RODA_STRUCTURAL_MAP);
 
     DivType mainDiv = createDivForStructMap(IPConstants.RODA_DIV_LABEL);

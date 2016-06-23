@@ -65,8 +65,8 @@ public final class Utils {
     return calendar;
   }
 
-  public static String generateRandomId() {
-    return UUID.randomUUID().toString();
+  public static String generateRandomAndPrefixedUUID() {
+    return METSEnums.ID_PREFIX + UUID.randomUUID().toString().toUpperCase();
   }
 
   public static Path copyResourceFromClasspathToDir(Class<?> resourceClass, Path dir, String resourceTempSuffix,

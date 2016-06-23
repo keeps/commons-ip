@@ -11,7 +11,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -33,7 +32,7 @@ public class IPRepresentation {
   private List<IPFile> documentation;
 
   public IPRepresentation() {
-    this.representationID = "ID" + UUID.randomUUID().toString();
+    this.representationID = Utils.generateRandomAndPrefixedUUID();
     this.objectID = representationID;
     this.createDate = Utils.getCurrentTime();
     this.contentType = RepresentationContentType.getMIXED();

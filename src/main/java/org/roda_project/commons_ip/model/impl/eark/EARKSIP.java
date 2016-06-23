@@ -49,6 +49,7 @@ import org.roda_project.commons_ip.utils.ZIPUtils;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
 public class EARKSIP extends SIP {
   private static final Logger LOGGER = LoggerFactory.getLogger(EARKSIP.class);
@@ -495,7 +496,7 @@ public class EARKSIP extends SIP {
 
         ValidationUtils.addInfo(sip.getValidationReport(), ValidationConstants.MAIN_METS_IS_VALID, sipPath,
           mainMETSFile);
-      } catch (JAXBException | ParseException e) {
+      } catch (JAXBException | ParseException | SAXException e) {
         mainMets = null;
         ValidationUtils.addIssue(sip.getValidationReport(), ValidationConstants.MAIN_METS_NOT_VALID,
           ValidationEntry.LEVEL.ERROR, e, sip.getBasePath(), mainMETSFile);
@@ -518,7 +519,7 @@ public class EARKSIP extends SIP {
         setRepresentationContentType(representationMets, representation);
         ValidationUtils.addInfo(sip.getValidationReport(), ValidationConstants.REPRESENTATION_METS_IS_VALID,
           sip.getBasePath(), representationMetsFile);
-      } catch (JAXBException | ParseException e) {
+      } catch (JAXBException | ParseException | SAXException e) {
         representationMets = null;
         ValidationUtils.addIssue(sip.getValidationReport(), ValidationConstants.REPRESENTATION_METS_NOT_VALID,
           ValidationEntry.LEVEL.ERROR, e, sip.getBasePath(), representationMetsFile);

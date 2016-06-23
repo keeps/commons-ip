@@ -100,7 +100,7 @@ public class EARKTest {
     sip.setParent("b6f24059-8973-4582-932d-eb0b2cb48f28");
 
     // 1.8) add an agent (SIP level)
-    IPAgent agent = new IPAgent("Agent Name", "ROLE", "OTHER ROLE", CreatorType.INDIVIDUAL, "OTHER TYPE");
+    IPAgent agent = new IPAgent("Agent Name", "OTHER", "OTHER ROLE", CreatorType.INDIVIDUAL, "OTHER TYPE");
     sip.addAgent(agent);
 
     // 1.9) add a representation

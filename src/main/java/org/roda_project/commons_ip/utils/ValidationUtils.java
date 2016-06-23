@@ -106,7 +106,11 @@ public final class ValidationUtils {
   }
 
   private static String getDescription(Exception exception) {
-    return exception.getMessage();
+    String message = exception.getMessage();
+    if (message == null) {
+      message = exception.toString();
+    }
+    return message;
   }
 
   private static String getDescription(String metsElementId, String metsChecksum, String metsChecksumAlgorithm,

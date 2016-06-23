@@ -9,6 +9,8 @@ package org.roda_project.commons_ip.utils;
 
 public class METSEnums {
 
+  public static final String ID_PREFIX = "ID";
+
   public enum LocType {
     ARK("ARK"), URN("URN"), URL("URL"), PURL("PURL"), HANDLE("HANDLE"), DOI("DOI"), OTHER("OTHER");
     private final String stringValue;

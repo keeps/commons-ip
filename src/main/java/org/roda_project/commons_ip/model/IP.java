@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -50,7 +49,7 @@ public abstract class IP implements IPInterface {
   private ValidationReport validationReport;
 
   public IP() {
-    this.setId("ID" + UUID.randomUUID().toString());
+    this.setId(Utils.generateRandomAndPrefixedUUID());
     this.profile = "http://www.eark-project.com/METS/IP.xml";
     this.type = IPType.SIP;
     this.createDate = Utils.getCurrentTime();
