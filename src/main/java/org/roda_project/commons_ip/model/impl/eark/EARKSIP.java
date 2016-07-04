@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.xml.bind.JAXBException;
 
@@ -111,7 +112,7 @@ public class EARKSIP extends SIP {
       String contentType = this.getContentType().asString();
 
       MetsWrapper mainMETSWrapper = EARKMETSUtils.generateMETS(this.getId(), this.getDescription(),
-        this.getType() + ":" + contentType, this.getProfile(), this.getAgents(), true, this.getParentID(), null);
+        this.getType() + ":" + contentType, this.getProfile(), this.getAgents(), true, Optional.ofNullable(this.getAncestors()), null);
 
       addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
 
@@ -273,7 +274,7 @@ public class EARKSIP extends SIP {
         MetsWrapper representationMETSWrapper = EARKMETSUtils.generateMETS(representationId,
           representation.getDescription(),
           IPConstants.METS_REPRESENTATION_TYPE_PART_1 + ":" + representationContentType, representationProfile,
-          representation.getAgents(), false, null, null);
+          representation.getAgents(), false, Optional.empty(), null);
 
         // representation data
         addRepresentationDataFilesToZipAndMETS(zipEntries, representationMETSWrapper, representation, representationId);
@@ -470,7 +471,7 @@ public class EARKSIP extends SIP {
 
           processDocumentationMetadata(metsWrapper, sip, sip.getBasePath());
 
-          processParentId(metsWrapper, sip);
+          processAncestors(metsWrapper, sip);
         }
       }
 
@@ -491,6 +492,7 @@ public class EARKSIP extends SIP {
         sip.setId(mainMets.getOBJID());
         sip.setCreateDate(mainMets.getMetsHdr().getCREATEDATE());
         sip.setModificationDate(mainMets.getMetsHdr().getLASTMODDATE());
+        sip.setStatus(IPEnums.IPStatus.valueOf(mainMets.getMetsHdr().getRECORDSTATUS()));
         setSIPContentType(mainMets, sip);
         addAgentsToMETS(mainMets, sip, null);
 
@@ -906,11 +908,11 @@ public class EARKSIP extends SIP {
     return processFile(sip, metsWrapper.getDocumentationDiv(), IPConstants.DOCUMENTATION, basePath);
   }
 
-  private static SIP processParentId(MetsWrapper metsWrapper, SIP sip) {
+  private static SIP processAncestors(MetsWrapper metsWrapper, SIP sip) {
     Mets mets = metsWrapper.getMets();
 
     if (mets.getStructMap() != null && !mets.getStructMap().isEmpty()) {
-      sip.setParent(EARKMETSUtils.extractParentIDFromStructMap(mets));
+      sip.setAncestors(EARKMETSUtils.extractAncestorsFromStructMap(mets));
     }
 
     return sip;

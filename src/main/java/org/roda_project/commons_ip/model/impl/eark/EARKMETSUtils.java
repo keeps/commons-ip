@@ -12,7 +12,9 @@ import java.nio.channels.ClosedByInterruptException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.PropertyException;
@@ -35,6 +37,7 @@ import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec.FileGrp;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.MetsHdr;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.MetsHdr.Agent;
 import org.roda_project.commons_ip.mets_v1_11.beans.StructMapType;
+import org.roda_project.commons_ip.model.IP;
 import org.roda_project.commons_ip.model.IPAgent;
 import org.roda_project.commons_ip.model.IPConstants;
 import org.roda_project.commons_ip.model.IPDescriptiveMetadata;
@@ -57,7 +60,7 @@ public final class EARKMETSUtils {
   }
 
   public static MetsWrapper generateMETS(String id, String label, String type, String profile, List<IPAgent> ipAgents,
-    boolean mainMets, String parentId, Path metsPath) throws SIPException {
+                                         boolean mainMets, Optional<List<String>> ancestors, Path metsPath) throws SIPException {
     Mets mets = new Mets();
     MetsWrapper metsWrapper = new MetsWrapper(mets, metsPath);
 
@@ -153,10 +156,11 @@ public final class EARKMETSUtils {
     mets.getStructMap().add(structMap);
 
     // RODA struct map
-    if (parentId != null) {
-      StructMapType structMapParent = generateParentIDStructMap(parentId);
+    if(ancestors.isPresent() && !ancestors.get().isEmpty()){
+      StructMapType structMapParent = generateAncestorStructMap(ancestors.get());
       mets.getStructMap().add(structMapParent);
     }
+
     return metsWrapper;
   }
 
@@ -471,28 +475,28 @@ public final class EARKMETSUtils {
     return fileLocation;
   }
 
-  private static StructMapType generateParentIDStructMap(String parentId) {
+  private static StructMapType generateAncestorStructMap(List<String> ancestors) {
     StructMapType structMap = new StructMapType();
     structMap.setID(Utils.generateRandomAndPrefixedUUID());
     structMap.setLABEL(IPConstants.RODA_STRUCTURAL_MAP);
 
     DivType mainDiv = createDivForStructMap(IPConstants.RODA_DIV_LABEL);
-    DivType parentIdDiv = createDivForStructMap(IPConstants.RODA_PARENT_ID_DIV_LABEL);
+    DivType ancestorsDiv = createDivForStructMap(IPConstants.RODA_ANCESTORS_DIV_LABEL);
 
-    Mptr mptrParent = new Mptr();
-    mptrParent.setType(IPConstants.METS_TYPE_SIMPLE);
-    mptrParent.setHref(parentId);
-    mptrParent.setLOCTYPE(LocType.HANDLE.toString());
-    parentIdDiv.getMptr().add(mptrParent);
-
-    mainDiv.getDiv().add(parentIdDiv);
+    for(String anc: ancestors) {
+      Mptr mptr = new Mptr();
+      mptr.setType(IPConstants.METS_TYPE_SIMPLE);
+      mptr.setHref(anc);
+      mptr.setLOCTYPE(LocType.HANDLE.toString());
+      ancestorsDiv.getMptr().add(mptr);
+    }
+    mainDiv.getDiv().add(ancestorsDiv);
     structMap.setDiv(mainDiv);
     return structMap;
   }
 
-  public static String extractParentIDFromStructMap(Mets mets) {
-    String parentID = "";
-    boolean found = false;
+  public static List<String> extractAncestorsFromStructMap(Mets mets) {
+    List<String> ancestors = new ArrayList<>();
 
     for (StructMapType structMap : mets.getStructMap()) {
       if (structMap.getLABEL() != null && IPConstants.RODA_STRUCTURAL_MAP.equalsIgnoreCase(structMap.getLABEL())
@@ -501,26 +505,18 @@ public final class EARKMETSUtils {
 
         if (IPConstants.RODA_DIV_LABEL.equalsIgnoreCase(mainDiv.getLABEL()) && mainDiv.getDiv() != null) {
           for (DivType div : mainDiv.getDiv()) {
-            if (IPConstants.RODA_PARENT_ID_DIV_LABEL.equalsIgnoreCase(div.getLABEL()) && div.getMptr() != null) {
+            if (IPConstants.RODA_ANCESTORS_DIV_LABEL.equalsIgnoreCase(div.getLABEL()) && div.getMptr() != null) {
               for (Mptr m : div.getMptr()) {
                 if (StringUtils.isNotBlank(m.getHref())) {
-                  parentID = m.getHref();
-                  found = true;
-                  break;
+                  ancestors.add(m.getHref());
                 }
               }
-            }
-            if (found) {
-              break;
             }
           }
         }
       }
-      if (found) {
-        break;
-      }
     }
 
-    return parentID;
+    return ancestors;
   }
 }

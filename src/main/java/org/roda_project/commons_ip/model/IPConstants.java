@@ -52,7 +52,7 @@ public final class IPConstants {
   // RODA
   public static final String RODA_STRUCTURAL_MAP = "RODA structural map";
   public static final String RODA_DIV_LABEL = "RODA";
-  public static final String RODA_PARENT_ID_DIV_LABEL = "Parent ID";
+  public static final String RODA_ANCESTORS_DIV_LABEL = "Ancestors";
 
   /** Private empty constructor */
   private IPConstants() {
