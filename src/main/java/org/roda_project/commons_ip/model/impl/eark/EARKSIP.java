@@ -112,7 +112,7 @@ public class EARKSIP extends SIP {
       String contentType = this.getContentType().asString();
 
       MetsWrapper mainMETSWrapper = EARKMETSUtils.generateMETS(this.getId(), this.getDescription(),
-        this.getType() + ":" + contentType, this.getProfile(), this.getAgents(), true, Optional.ofNullable(this.getAncestors()), null);
+        this.getType() + ":" + contentType, this.getProfile(), this.getAgents(), true, Optional.ofNullable(this.getAncestors()), null, this.getStatus());
 
       addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
 
@@ -274,7 +274,7 @@ public class EARKSIP extends SIP {
         MetsWrapper representationMETSWrapper = EARKMETSUtils.generateMETS(representationId,
           representation.getDescription(),
           IPConstants.METS_REPRESENTATION_TYPE_PART_1 + ":" + representationContentType, representationProfile,
-          representation.getAgents(), false, Optional.empty(), null);
+          representation.getAgents(), false, Optional.empty(), null, IPEnums.IPStatus.NEW);
 
         // representation data
         addRepresentationDataFilesToZipAndMETS(zipEntries, representationMETSWrapper, representation, representationId);

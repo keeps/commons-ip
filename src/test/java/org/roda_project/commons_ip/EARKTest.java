@@ -96,7 +96,7 @@ public class EARKTest {
     // 1.6) add documentation (SIP level)
     sip.addDocumentation(new IPFile(Paths.get("src/test/resources/eark/documentation.pdf")));
 
-    // 1.7) set optional RODA related information parent id
+    // 1.7) set optional RODA related information ancestors
     sip.setAncestors(Arrays.asList("b6f24059-8973-4582-932d-eb0b2cb48f28"));
 
     // 1.8) add an agent (SIP level)

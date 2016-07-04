@@ -43,6 +43,7 @@ import org.roda_project.commons_ip.model.IPConstants;
 import org.roda_project.commons_ip.model.IPDescriptiveMetadata;
 import org.roda_project.commons_ip.model.IPMetadata;
 import org.roda_project.commons_ip.model.MetsWrapper;
+import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.METSEnums.LocType;
 import org.roda_project.commons_ip.utils.SIPException;
@@ -60,7 +61,7 @@ public final class EARKMETSUtils {
   }
 
   public static MetsWrapper generateMETS(String id, String label, String type, String profile, List<IPAgent> ipAgents,
-                                         boolean mainMets, Optional<List<String>> ancestors, Path metsPath) throws SIPException {
+                                         boolean mainMets, Optional<List<String>> ancestors, Path metsPath, IPEnums.IPStatus status) throws SIPException {
     Mets mets = new Mets();
     MetsWrapper metsWrapper = new MetsWrapper(mets, metsPath);
 
@@ -76,6 +77,7 @@ public final class EARKMETSUtils {
       XMLGregorianCalendar currentDate = Utils.getCurrentCalendar();
       header.setCREATEDATE(currentDate);
       header.setLASTMODDATE(currentDate);
+      header.setRECORDSTATUS(status.toString());
     } catch (DatatypeConfigurationException e) {
       throw new SIPException("Error getting current calendar", e);
     }
