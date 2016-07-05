@@ -31,11 +31,11 @@ API to manipulate Information Packages of different formats: RODA, E-ARK, etc.
   <dependency>
     <groupId>org.roda-project</groupId>
     <artifactId>commons-ip</artifactId>
-    <version>1.0.0-alpha14</version>
+    <version>1.0.0-alpha15</version>
   </dependency>
   ```
 
-* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha14/commons-ip-1.0.0-alpha14.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
+* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha15/commons-ip-1.0.0-alpha15.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
 
 
 ### Write some code
@@ -71,8 +71,8 @@ sip.addSchema(new IPFile(Paths.get("src/test/resources/eark/schema.xsd")));
 // 1.6) add documentation (SIP level)
 sip.addDocumentation(new IPFile(Paths.get("src/test/resources/eark/documentation.pdf")));
 
-// 1.7) set optional RODA related information parent id
-sip.setParent("b6f24059-8973-4582-932d-eb0b2cb48f28");
+// 1.7) set optional RODA related information about ancestors
+sip.setAncestors(Arrays.asList("b6f24059-8973-4582-932d-eb0b2cb48f28"));
 
 // 1.8) add an agent (SIP level)
 IPAgent agent = new IPAgent("Agent Name", "ROLE", "OTHER ROLE", CreatorType.INDIVIDUAL, "OTHER TYPE");
@@ -136,6 +136,11 @@ SIP earkSIP = EARKSIP.parse(zipSIP);
 5. Submit a pull request :D
 
 ## History
+
+#### Alpha 15 (2016-07-05)
+
+* An IP now has a status attribute (which will be stored in /mets/metsHdr/@RECORDSTATUS).
+* IP parent information was replaced by ancestors information (more suitable for information organized hierarchically).
 
 #### Alpha 14 (2016-06-23)
 
