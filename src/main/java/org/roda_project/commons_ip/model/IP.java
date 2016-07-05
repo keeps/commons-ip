@@ -17,6 +17,7 @@ import java.util.Optional;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.roda_project.commons_ip.utils.IPEnums.IPType;
+import org.roda_project.commons_ip.utils.IPEnums.IPStatus;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.SIPException;
 import org.roda_project.commons_ip.utils.Utils;
@@ -30,11 +31,11 @@ public abstract class IP implements IPInterface {
   private Optional<XMLGregorianCalendar> modificationDate;
   private IPContentType contentType;
   // FIXME 20160510 hsilva: string or enum??? /metsHdr/@RECORDSTATUS e.g. NEW,
-  // TEST, REPLEACEMENT
-  private String status;
+  // NEW, UPDATE
+  private IPStatus status;
+  private List<String> ancestors;
 
   private Path basePath;
-  private String parentID;
   private String description;
 
   private List<IPAgent> agents;
@@ -54,8 +55,9 @@ public abstract class IP implements IPInterface {
     this.type = IPType.SIP;
     this.createDate = Utils.getCurrentTime();
     this.contentType = IPContentType.getMIXED();
+    this.status = IPStatus.NEW;
+    this.ancestors = new ArrayList<>();
 
-    this.parentID = "";
     this.description = "";
 
     this.agents = new ArrayList<IPAgent>();
@@ -68,7 +70,6 @@ public abstract class IP implements IPInterface {
     this.documentation = new ArrayList<IPFile>();
 
     this.validationReport = new ValidationReport();
-
   }
 
   public IP(String ipId, IPType ipType) {
@@ -145,6 +146,23 @@ public abstract class IP implements IPInterface {
     return contentType;
   }
 
+  public List<String> getAncestors() {
+    return ancestors;
+  }
+
+  public IP setAncestors(List<String> ancestors) {
+    this.ancestors = ancestors;
+    return this;
+  }
+
+  public IPStatus getStatus() {
+    return status;
+  }
+
+  public void setStatus(IPStatus status) {
+    this.status = status;
+  }
+
   @Override
   public IP setBasePath(Path basePath) {
     this.basePath = basePath;
@@ -154,17 +172,6 @@ public abstract class IP implements IPInterface {
   @Override
   public Path getBasePath() {
     return basePath;
-  }
-
-  @Override
-  public IP setParent(String parentID) {
-    this.parentID = parentID;
-    return this;
-  }
-
-  @Override
-  public String getParentID() {
-    return this.parentID;
   }
 
   @Override
@@ -346,12 +353,27 @@ public abstract class IP implements IPInterface {
 
   @Override
   public String toString() {
-    return "IP [id=" + id + ", profile=" + profile + ", type=" + type + ", createDate=" + createDate
-      + ", modificationDate=" + modificationDate + ", contentType=" + contentType + ", basePath=" + basePath
-      + ", parentID=" + parentID + ", description=" + description + ", agents=" + agents + ", descriptiveMetadata="
-      + descriptiveMetadata + ", preservationMetadata=" + preservationMetadata + ", otherMetadata=" + otherMetadata
-      + ", representationIds=" + representationIds + ", representations=" + representations + ", schemas=" + schemas
-      + ", documentation=" + documentation + ", validationReport=" + validationReport + "]";
+    return "IP{" +
+        "id='" + id + '\'' +
+        ", profile='" + profile + '\'' +
+        ", type=" + type +
+        ", createDate=" + createDate +
+        ", modificationDate=" + modificationDate +
+        ", contentType=" + contentType +
+        ", status=" + status +
+        ", ancestors=" + ancestors +
+        ", basePath=" + basePath +
+        ", description='" + description + '\'' +
+        ", agents=" + agents +
+        ", descriptiveMetadata=" + descriptiveMetadata +
+        ", preservationMetadata=" + preservationMetadata +
+        ", otherMetadata=" + otherMetadata +
+        ", representationIds=" + representationIds +
+        ", representations=" + representations +
+        ", schemas=" + schemas +
+        ", documentation=" + documentation +
+        ", validationReport=" + validationReport +
+        '}';
   }
 
   public static IP parse(Path source) throws ParseException {

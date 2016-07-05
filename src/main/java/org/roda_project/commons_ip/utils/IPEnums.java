@@ -11,4 +11,7 @@ public class IPEnums {
   public enum IPType {
     SIP, AIP, DIP;
   }
+  public enum IPStatus{
+    NEW, UPDATE;
+  }
 }

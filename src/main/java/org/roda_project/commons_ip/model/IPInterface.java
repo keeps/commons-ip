@@ -35,9 +35,9 @@ public interface IPInterface {
 
   Path getBasePath();
 
-  IP setParent(String parentID);
+  IP setAncestors(List<String> ancestors);
 
-  String getParentID();
+  List<String> getAncestors();
 
   IP setDescription(String description);
 
