@@ -106,8 +106,8 @@ sip<span class="pl-k">.</span>addSchema(<span class="pl-k">new</span> <span clas
 <span class="pl-c">// 1.6) add documentation (SIP level)</span>
 sip<span class="pl-k">.</span>addDocumentation(<span class="pl-k">new</span> <span class="pl-smi">IPFile</span>(<span class="pl-smi">Paths</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>src/test/resources/eark/documentation.pdf<span class="pl-pds">"</span></span>)));
 
-<span class="pl-c">// 1.7) set optional RODA related information parent id</span>
-sip<span class="pl-k">.</span>setParent(<span class="pl-s"><span class="pl-pds">"</span>b6f24059-8973-4582-932d-eb0b2cb48f28<span class="pl-pds">"</span></span>);
+<span class="pl-c">// 1.7) set optional RODA related information about ancestors</span>
+sip<span class="pl-k">.</span>setAncestors(<span class="pl-smi">Arrays</span><span class="pl-k">.</span>asList(<span class="pl-s"><span class="pl-pds">"</span>b6f24059-8973-4582-932d-eb0b2cb48f28<span class="pl-pds">"</span></span>));
 
 <span class="pl-c">// 1.8) add an agent (SIP level)</span>
 <span class="pl-smi">IPAgent</span> agent <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">IPAgent</span>(<span class="pl-s"><span class="pl-pds">"</span>Agent Name<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>ROLE<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>OTHER ROLE<span class="pl-pds">"</span></span>, <span class="pl-smi">CreatorType</span><span class="pl-c1"><span class="pl-k">.</span>INDIVIDUAL</span>, <span class="pl-s"><span class="pl-pds">"</span>OTHER TYPE<span class="pl-pds">"</span></span>);
