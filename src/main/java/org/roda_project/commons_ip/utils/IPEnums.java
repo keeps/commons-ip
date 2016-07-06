@@ -11,7 +11,24 @@ public class IPEnums {
   public enum IPType {
     SIP, AIP, DIP;
   }
-  public enum IPStatus{
+
+  public enum IPStatus {
     NEW, UPDATE;
+
+    public static IPStatus parse(String value, IPStatus defaultValue) {
+      IPStatus ret = defaultValue;
+      try {
+        if (value != null) {
+          ret = IPStatus.valueOf(value);
+        }
+      } catch (IllegalArgumentException e) {
+        // do nothing & return default value
+      }
+      return ret;
+    }
+
+    public static IPStatus parse(String value) {
+      return parse(value, NEW);
+    }
   }
 }

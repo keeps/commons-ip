@@ -40,6 +40,7 @@ import org.roda_project.commons_ip.model.RepresentationContentType;
 import org.roda_project.commons_ip.model.SIP;
 import org.roda_project.commons_ip.model.ValidationEntry;
 import org.roda_project.commons_ip.utils.IPEnums;
+import org.roda_project.commons_ip.utils.IPEnums.IPStatus;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.METSUtils;
 import org.roda_project.commons_ip.utils.SIPException;
@@ -112,7 +113,8 @@ public class EARKSIP extends SIP {
       String contentType = this.getContentType().asString();
 
       MetsWrapper mainMETSWrapper = EARKMETSUtils.generateMETS(this.getId(), this.getDescription(),
-        this.getType() + ":" + contentType, this.getProfile(), this.getAgents(), true, Optional.ofNullable(this.getAncestors()), null, this.getStatus());
+        this.getType() + ":" + contentType, this.getProfile(), this.getAgents(), true,
+        Optional.ofNullable(this.getAncestors()), null, this.getStatus());
 
       addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
 
@@ -492,7 +494,7 @@ public class EARKSIP extends SIP {
         sip.setId(mainMets.getOBJID());
         sip.setCreateDate(mainMets.getMetsHdr().getCREATEDATE());
         sip.setModificationDate(mainMets.getMetsHdr().getLASTMODDATE());
-        sip.setStatus(IPEnums.IPStatus.valueOf(mainMets.getMetsHdr().getRECORDSTATUS()));
+        sip.setStatus(IPStatus.parse(mainMets.getMetsHdr().getRECORDSTATUS()));
         setSIPContentType(mainMets, sip);
         addAgentsToMETS(mainMets, sip, null);
 
