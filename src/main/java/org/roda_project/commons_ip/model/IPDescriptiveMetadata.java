@@ -12,12 +12,10 @@ import java.io.Serializable;
 public class IPDescriptiveMetadata extends IPMetadata implements Serializable {
   private static final long serialVersionUID = 8499877557153068472L;
 
-  private MetadataType metadataType;
   private String metadataVersion;
 
   public IPDescriptiveMetadata(IPFile metadata, MetadataType metadataType, String metadataVersion) {
-    super(metadata);
-    this.metadataType = metadataType;
+    super(metadata, metadataType);
     this.metadataVersion = metadataVersion;
   }
 
@@ -29,18 +27,10 @@ public class IPDescriptiveMetadata extends IPMetadata implements Serializable {
     this.metadataVersion = metadataVersion;
   }
 
-  public MetadataType getMetadataType() {
-    return metadataType;
-  }
-
-  public void setMetadataType(MetadataType metadataType) {
-    this.metadataType = metadataType;
-  }
-
   @Override
   public String toString() {
-    return "IPDescriptiveMetadata [metadataType=" + metadataType + ", metadataVersion=" + metadataVersion
-      + ", getMetadata()=" + getMetadata() + "]";
+    return "IPDescriptiveMetadata [metadataVersion=" + metadataVersion + ", getMetadata()=" + getMetadata()
+      + ", getMetadataType()=" + getMetadataType() + "]";
   }
 
 }

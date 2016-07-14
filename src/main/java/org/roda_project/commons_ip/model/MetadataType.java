@@ -106,4 +106,8 @@ public class MetadataType implements Serializable {
     return ret;
   }
 
+  public static MetadataType OTHER() {
+    return new MetadataType(MetadataTypeEnum.OTHER);
+  }
+
 }

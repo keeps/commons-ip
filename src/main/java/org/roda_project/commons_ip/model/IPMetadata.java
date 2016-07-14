@@ -13,6 +13,7 @@ public class IPMetadata implements Serializable {
   private static final long serialVersionUID = 3697420963728707487L;
 
   private IPFile metadata;
+  private MetadataType metadataType;
 
   public IPMetadata() {
     // empty constructor for serialization purposes
@@ -20,6 +21,12 @@ public class IPMetadata implements Serializable {
 
   public IPMetadata(IPFile metadata) {
     this.metadata = metadata;
+    metadataType = MetadataType.OTHER();
+  }
+
+  public IPMetadata(IPFile metadata, MetadataType metadataType) {
+    this.metadata = metadata;
+    this.metadataType = metadataType;
   }
 
   public IPFile getMetadata() {
@@ -30,9 +37,18 @@ public class IPMetadata implements Serializable {
     this.metadata = metadata;
   }
 
+  public MetadataType getMetadataType() {
+    return metadataType;
+  }
+
+  public IPMetadata setMetadataType(MetadataType metadataType) {
+    this.metadataType = metadataType;
+    return this;
+  }
+
   @Override
   public String toString() {
-    return "IPMetadata [metadata=" + metadata + "]";
+    return "IPMetadata [metadata=" + metadata + ", metadataType=" + metadataType + "]";
   }
 
 }

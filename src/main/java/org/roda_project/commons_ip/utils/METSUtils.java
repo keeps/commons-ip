@@ -8,6 +8,7 @@
 package org.roda_project.commons_ip.utils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,6 +19,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
@@ -34,11 +37,10 @@ public final class METSUtils {
     JAXBContext jaxbContext = JAXBContext.newInstance(Mets.class);
     Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
     SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-    Path metsSchema = metsFile.getParent().resolve("schemas").resolve("mets.xsd");
-    if (Files.exists(metsSchema)) {
-      Schema schema = sf.newSchema(metsSchema.toFile());
-      jaxbUnmarshaller.setSchema(schema);
-    }
+    InputStream metsSchemaInputStream = METSUtils.class.getResourceAsStream("/schemas/mets1_11.xsd");
+    Source metsSchemaSource = new StreamSource(metsSchemaInputStream);
+    Schema schema = sf.newSchema(metsSchemaSource);
+    jaxbUnmarshaller.setSchema(schema);
     return (Mets) jaxbUnmarshaller.unmarshal(metsFile.toFile());
   }
 
