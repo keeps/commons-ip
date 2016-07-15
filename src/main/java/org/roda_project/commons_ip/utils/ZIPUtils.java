@@ -190,8 +190,6 @@ public final class ZIPUtils {
 
       zipInputStream.close();
 
-      throw new IOException("No files inside ZIP");
-
     } else {
 
       while (zipEntry != null) {
