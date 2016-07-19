@@ -36,10 +36,11 @@ public final class METSUtils {
   public static Mets instantiateMETSFromFile(Path metsFile) throws JAXBException, SAXException {
     JAXBContext jaxbContext = JAXBContext.newInstance(Mets.class);
     Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-    SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+    SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+    factory.setResourceResolver(new ResourceResolver());
     InputStream metsSchemaInputStream = METSUtils.class.getResourceAsStream("/schemas/mets1_11.xsd");
     Source metsSchemaSource = new StreamSource(metsSchemaInputStream);
-    Schema schema = sf.newSchema(metsSchemaSource);
+    Schema schema = factory.newSchema(metsSchemaSource);
     jaxbUnmarshaller.setSchema(schema);
     return (Mets) jaxbUnmarshaller.unmarshal(metsFile.toFile());
   }
