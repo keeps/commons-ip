@@ -14,14 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 public class RepresentationContentType implements Serializable {
   private static final long serialVersionUID = -5292855152678206771L;
 
-  public static RepresentationContentType getMIXED() {
-    return new RepresentationContentType(RepresentationContentTypeEnum.MIXED);
-  }
-
-  public static RepresentationContentType getOTHER() {
-    return new RepresentationContentType(RepresentationContentTypeEnum.OTHER);
-  }
-
   public enum RepresentationContentTypeEnum {
     MOREQ, SIARD, SIARD2, SMURF, OTHER, MIXED;
   }
@@ -97,6 +89,14 @@ public class RepresentationContentType implements Serializable {
       return false;
     RepresentationContentType other = (RepresentationContentType) obj;
     return this.type == other.getType() && this.otherType.equals(other.getOtherType());
+  }
+
+  public static RepresentationContentType getMIXED() {
+    return new RepresentationContentType(RepresentationContentTypeEnum.MIXED);
+  }
+
+  public static RepresentationContentType getOTHER() {
+    return new RepresentationContentType(RepresentationContentTypeEnum.OTHER);
   }
 
 }

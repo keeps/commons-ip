@@ -1,8 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dc="http://purl.org/dc/elements/1.1/">
-	<dc:title>Example title</dc:title>
-	<dc:creator>Example creator</dc:creator>
-	<dc:subject>Example subject</dc:subject>
-	<dc:description>This is just a test</dc:description>
-	<dc:date>2012-01-01</dc:date>
-</metadata>
+<?xml version="1.0"?>
+<simpledc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../schemas/dc.xsd">
+	<title>A title</title>
+	<identifier>IDf85218de-b94d-4365-9593-a5fd088a1c09</identifier>
+	<creator></creator>
+	<date></date>
+	<date></date>
+	<description></description>
+	<publisher></publisher>
+	<rights></rights>
+	<language>português</language>
+</simpledc>

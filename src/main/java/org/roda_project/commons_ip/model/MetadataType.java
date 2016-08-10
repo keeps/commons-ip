@@ -16,10 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 public class MetadataType implements Serializable {
   private static final long serialVersionUID = 9052247527983339112L;
 
-  public static MetadataType OTHER() {
-    return new MetadataType(MetadataTypeEnum.OTHER);
-  }
-
   public enum MetadataTypeEnum {
     MARC("MARC"), MODS("MODS"), EAD("EAD"), DC("DC"), NISOIMG("NISOIMG"), LCAV("LC-AV"), VRA("VRA"), TEIHDR("TEIHDR"),
     DDI("DDI"), FGDC("FGDC"), LOM("LOM"), PREMIS("PREMIS"), PREMISOBJECT("PREMIS:OBJECT"), PREMISAGENT("PREMIS:AGENT"),
@@ -129,6 +125,10 @@ public class MetadataType implements Serializable {
       return false;
     MetadataType other = (MetadataType) obj;
     return this.type == other.getType() && this.otherType.equals(other.getOtherType());
+  }
+
+  public static MetadataType OTHER() {
+    return new MetadataType(MetadataTypeEnum.OTHER);
   }
 
 }

@@ -14,14 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 public class RepresentationStatus implements Serializable {
   private static final long serialVersionUID = 886952889995803542L;
 
-  public static RepresentationStatus getORIGINAL() {
-    return new RepresentationStatus(RepresentationStatusEnum.ORIGINAL);
-  }
-
-  public static RepresentationStatus getOTHER() {
-    return new RepresentationStatus(RepresentationStatusEnum.OTHER);
-  }
-
   public enum RepresentationStatusEnum {
     ORIGINAL, OTHER;
   }
@@ -100,6 +92,14 @@ public class RepresentationStatus implements Serializable {
     }
     RepresentationStatus other = (RepresentationStatus) obj;
     return this.status == other.getStatus() && this.otherStatus.equals(other.getOtherStatus());
+  }
+
+  public static RepresentationStatus getORIGINAL() {
+    return new RepresentationStatus(RepresentationStatusEnum.ORIGINAL);
+  }
+
+  public static RepresentationStatus getOTHER() {
+    return new RepresentationStatus(RepresentationStatusEnum.OTHER);
   }
 
 }
