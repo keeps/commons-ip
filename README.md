@@ -31,11 +31,11 @@ API to manipulate Information Packages of different formats: RODA, E-ARK, etc.
   <dependency>
     <groupId>org.roda-project</groupId>
     <artifactId>commons-ip</artifactId>
-    <version>1.0.0-alpha15</version>
+    <version>1.0.0-alpha16</version>
   </dependency>
   ```
 
-* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha15/commons-ip-1.0.0-alpha15.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
+* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha16/commons-ip-1.0.0-alpha16.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
 
 
 ### Write some code
@@ -50,7 +50,8 @@ sip.setDescription("A full E-ARK SIP");
 
 // 1.2) add descriptive metadata (SIP level)
 IPDescriptiveMetadata metadataDescriptiveDC = new IPDescriptiveMetadata(
-new IPFile(Paths.get("src/test/resources/eark/metadata_descriptive_dc.xml")), new MetadataType(MetadataTypeEnum.DC), null);
+new IPFile(Paths.get("src/test/resources/eark/metadata_descriptive_dc.xml")),
+new MetadataType(MetadataTypeEnum.DC), null);
 sip.addDescriptiveMetadata(metadataDescriptiveDC);
 
 // 1.3) add preservation metadata (SIP level)
@@ -75,10 +76,11 @@ sip.addDocumentation(new IPFile(Paths.get("src/test/resources/eark/documentation
 sip.setAncestors(Arrays.asList("b6f24059-8973-4582-932d-eb0b2cb48f28"));
 
 // 1.8) add an agent (SIP level)
-IPAgent agent = new IPAgent("Agent Name", "ROLE", "OTHER ROLE", CreatorType.INDIVIDUAL, "OTHER TYPE");
+IPAgent agent = new IPAgent("Agent Name", "OTHER", "OTHER ROLE", CreatorType.INDIVIDUAL, "OTHER TYPE");
 sip.addAgent(agent);
 
-// 1.9) add a representation
+// 1.9) add a representation (status will be set to the default value, i.e.,
+// ORIGINAL)
 IPRepresentation representation1 = new IPRepresentation("representation 1");
 sip.addRepresentation(representation1);
 
@@ -92,6 +94,16 @@ representation1.addFile(representationFile);
 IPFile representationFile2 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
 representationFile2.setRelativeFolders(Arrays.asList("abc", "def"));
 representation1.addFile(representationFile2);
+
+// 1.10) add a representation & define its status
+IPRepresentation representation2 = new IPRepresentation("representation 2");
+representation2.setStatus(new RepresentationStatus(REPRESENTATION_STATUS_NORMALIZED));
+sip.addRepresentation(representation2);
+
+// 1.10.1) add a file to the representation
+IPFile representationFile3 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
+representationFile3.setRenameTo("data3.pdf");
+representation2.addFile(representationFile3);
 
 // 2) build SIP, providing an output directory
 Path zipSIP = sip.build(tempFolder);
@@ -136,6 +148,12 @@ SIP earkSIP = EARKSIP.parse(zipSIP);
 5. Submit a pull request :D
 
 ## History
+
+#### Alpha 16 (2016-08-10)
+
+* Representations now have a status attribute (which will be stored in /mets/structMap[@LABEL="E-ARK structural map"]/div/@TYPE).
+* All classes that extend IPMetadata have a type (MetadataType).
+* Minor fixes.
 
 #### Alpha 15 (2016-07-05)
 

@@ -17,6 +17,7 @@ public class MetsWrapper {
 
   private Mets mets;
   private Path metsPath;
+  private DivType mainDiv;
   private DivType descriptiveMetadataDiv;
   private DivType preservationMetadataDiv;
   private DivType otherMetadataDiv;
@@ -50,6 +51,14 @@ public class MetsWrapper {
 
   public void setMetsPath(Path metsPath) {
     this.metsPath = metsPath;
+  }
+
+  public DivType getMainDiv() {
+    return mainDiv;
+  }
+
+  public void setMainDiv(DivType mainDiv) {
+    this.mainDiv = mainDiv;
   }
 
   public DivType getDescriptiveMetadataDiv() {

@@ -14,6 +14,14 @@ import org.apache.commons.lang3.StringUtils;
 public class RepresentationContentType implements Serializable {
   private static final long serialVersionUID = -5292855152678206771L;
 
+  public static RepresentationContentType getMIXED() {
+    return new RepresentationContentType(RepresentationContentTypeEnum.MIXED);
+  }
+
+  public static RepresentationContentType getOTHER() {
+    return new RepresentationContentType(RepresentationContentTypeEnum.OTHER);
+  }
+
   public enum RepresentationContentTypeEnum {
     MOREQ, SIARD, SIARD2, SMURF, OTHER, MIXED;
   }
@@ -41,17 +49,22 @@ public class RepresentationContentType implements Serializable {
     this.otherType = "";
   }
 
-  public RepresentationContentTypeEnum getType() {
+  private RepresentationContentTypeEnum getType() {
     return type;
   }
 
-  public String getOtherType() {
+  private String getOtherType() {
     return otherType;
   }
 
-  public RepresentationContentType setOtherType(final String otherType) {
-    this.otherType = otherType;
-    return this;
+  public String asString() {
+    String ret = type.toString();
+
+    if (type == RepresentationContentTypeEnum.OTHER && StringUtils.isNotBlank(otherType)) {
+      ret = otherType;
+    }
+
+    return ret;
   }
 
   @Override
@@ -65,21 +78,25 @@ public class RepresentationContentType implements Serializable {
     return sb.toString();
   }
 
-  public String asString() {
-    String ret = type.toString();
-
-    if (type == RepresentationContentTypeEnum.OTHER && StringUtils.isNotBlank(otherType)) {
-      ret = otherType;
-    }
-
-    return ret;
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((otherType == null) ? 0 : otherType.hashCode());
+    result = prime * result + ((type == null) ? 0 : type.hashCode());
+    return result;
   }
 
-  public static RepresentationContentType getMIXED() {
-    return new RepresentationContentType(RepresentationContentTypeEnum.MIXED);
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (!(obj instanceof RepresentationContentType))
+      return false;
+    RepresentationContentType other = (RepresentationContentType) obj;
+    return this.type == other.getType() && this.otherType.equals(other.getOtherType());
   }
 
-  public static RepresentationContentType getOTHER() {
-    return new RepresentationContentType(RepresentationContentTypeEnum.OTHER);
-  }
 }

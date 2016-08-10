@@ -33,8 +33,9 @@ public class IPMetadata implements Serializable {
     return metadata;
   }
 
-  public void setMetadata(IPFile metadata) {
+  public IPMetadata setMetadata(IPFile metadata) {
     this.metadata = metadata;
+    return this;
   }
 
   public MetadataType getMetadataType() {

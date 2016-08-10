@@ -12,7 +12,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 
+import org.hamcrest.core.Is;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -26,6 +28,7 @@ import org.roda_project.commons_ip.model.IPRepresentation;
 import org.roda_project.commons_ip.model.MetadataType;
 import org.roda_project.commons_ip.model.MetadataType.MetadataTypeEnum;
 import org.roda_project.commons_ip.model.ParseException;
+import org.roda_project.commons_ip.model.RepresentationStatus;
 import org.roda_project.commons_ip.model.SIP;
 import org.roda_project.commons_ip.model.impl.eark.EARKSIP;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
@@ -38,6 +41,8 @@ import org.slf4j.LoggerFactory;
  * Unit tests for EARK Information Packages (SIP, AIP and DIP)
  */
 public class EARKTest {
+  private static final String REPRESENTATION_STATUS_NORMALIZED = "NORMALIZED";
+
   private static final Logger LOGGER = LoggerFactory.getLogger(EARKTest.class);
 
   private static Path tempFolder;
@@ -103,7 +108,8 @@ public class EARKTest {
     IPAgent agent = new IPAgent("Agent Name", "OTHER", "OTHER ROLE", CreatorType.INDIVIDUAL, "OTHER TYPE");
     sip.addAgent(agent);
 
-    // 1.9) add a representation
+    // 1.9) add a representation (status will be set to the default value, i.e.,
+    // ORIGINAL)
     IPRepresentation representation1 = new IPRepresentation("representation 1");
     sip.addRepresentation(representation1);
 
@@ -118,6 +124,16 @@ public class EARKTest {
     representationFile2.setRelativeFolders(Arrays.asList("abc", "def"));
     representation1.addFile(representationFile2);
 
+    // 1.10) add a representation & define its status
+    IPRepresentation representation2 = new IPRepresentation("representation 2");
+    representation2.setStatus(new RepresentationStatus(REPRESENTATION_STATUS_NORMALIZED));
+    sip.addRepresentation(representation2);
+
+    // 1.10.1) add a file to the representation
+    IPFile representationFile3 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
+    representationFile3.setRenameTo("data3.pdf");
+    representation2.addFile(representationFile3);
+
     // 2) build SIP, providing an output directory
     Path zipSIP = sip.build(tempFolder);
 
@@ -129,7 +145,17 @@ public class EARKTest {
     // 1) invoke static method parse and that's it
     SIP earkSIP = EARKSIP.parse(zipSIP, tempFolder);
 
+    // general assessment
     Assert.assertTrue(earkSIP.getValidationReport().isValid());
+
+    // assess # of representations
+    List<IPRepresentation> representations = earkSIP.getRepresentations();
+    Assert.assertThat(representations.size(), Is.is(2));
+
+    // assess representations status
+    Assert.assertThat(representations.get(0).getStatus().asString(),
+      Is.is(RepresentationStatus.getORIGINAL().asString()));
+    Assert.assertThat(representations.get(1).getStatus().asString(), Is.is(REPRESENTATION_STATUS_NORMALIZED));
 
     LOGGER.info("SIP with id '{}' parsed with success (valid? {})!", earkSIP.getId(),
       earkSIP.getValidationReport().isValid());

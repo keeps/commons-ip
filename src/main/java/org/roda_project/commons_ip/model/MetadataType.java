@@ -16,6 +16,10 @@ import org.apache.commons.lang3.StringUtils;
 public class MetadataType implements Serializable {
   private static final long serialVersionUID = 9052247527983339112L;
 
+  public static MetadataType OTHER() {
+    return new MetadataType(MetadataTypeEnum.OTHER);
+  }
+
   public enum MetadataTypeEnum {
     MARC("MARC"), MODS("MODS"), EAD("EAD"), DC("DC"), NISOIMG("NISOIMG"), LCAV("LC-AV"), VRA("VRA"), TEIHDR("TEIHDR"),
     DDI("DDI"), FGDC("FGDC"), LOM("LOM"), PREMIS("PREMIS"), PREMISOBJECT("PREMIS:OBJECT"), PREMISAGENT("PREMIS:AGENT"),
@@ -85,6 +89,16 @@ public class MetadataType implements Serializable {
     return this;
   }
 
+  public String asString() {
+    String ret = type.getType();
+
+    if (type == MetadataTypeEnum.OTHER && StringUtils.isNotBlank(otherType)) {
+      ret = otherType;
+    }
+
+    return ret;
+  }
+
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
@@ -96,18 +110,25 @@ public class MetadataType implements Serializable {
     return sb.toString();
   }
 
-  public String asString() {
-    String ret = type.getType();
-
-    if (type == MetadataTypeEnum.OTHER && StringUtils.isNotBlank(otherType)) {
-      ret = otherType;
-    }
-
-    return ret;
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((otherType == null) ? 0 : otherType.hashCode());
+    result = prime * result + ((type == null) ? 0 : type.hashCode());
+    return result;
   }
 
-  public static MetadataType OTHER() {
-    return new MetadataType(MetadataTypeEnum.OTHER);
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (!(obj instanceof MetadataType))
+      return false;
+    MetadataType other = (MetadataType) obj;
+    return this.type == other.getType() && this.otherType.equals(other.getOtherType());
   }
 
 }

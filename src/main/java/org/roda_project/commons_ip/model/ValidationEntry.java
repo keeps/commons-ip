@@ -24,32 +24,36 @@ public class ValidationEntry {
     return level;
   }
 
-  public void setLevel(LEVEL level) {
+  public ValidationEntry setLevel(LEVEL level) {
     this.level = level;
+    return this;
   }
 
   public String getMessage() {
     return message;
   }
 
-  public void setMessage(String message) {
+  public ValidationEntry setMessage(String message) {
     this.message = message;
+    return this;
   }
 
   public String getDescription() {
     return description;
   }
 
-  public void setDescription(String description) {
+  public ValidationEntry setDescription(String description) {
     this.description = description;
+    return this;
   }
 
   public List<Path> getRelatedItem() {
     return relatedItem;
   }
 
-  public void setRelatedItem(List<Path> relatedItem) {
+  public ValidationEntry setRelatedItem(List<Path> relatedItem) {
     this.relatedItem = relatedItem;
+    return this;
   }
 
   @Override

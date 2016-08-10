@@ -37,6 +37,7 @@ import org.roda_project.commons_ip.model.MetadataType;
 import org.roda_project.commons_ip.model.MetsWrapper;
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.model.RepresentationContentType;
+import org.roda_project.commons_ip.model.RepresentationStatus;
 import org.roda_project.commons_ip.model.SIP;
 import org.roda_project.commons_ip.model.ValidationEntry;
 import org.roda_project.commons_ip.utils.IPEnums;
@@ -277,6 +278,7 @@ public class EARKSIP extends SIP {
           representation.getDescription(),
           IPConstants.METS_REPRESENTATION_TYPE_PART_1 + ":" + representationContentType, representationProfile,
           representation.getAgents(), false, Optional.empty(), null, IPEnums.IPStatus.NEW);
+        representationMETSWrapper.getMainDiv().setTYPE(representation.getStatus().asString());
 
         // representation data
         addRepresentationDataFilesToZipAndMETS(zipEntries, representationMETSWrapper, representation, representationId);
@@ -627,6 +629,7 @@ public class EARKSIP extends SIP {
 
     DivType sipDiv = structMap.getDiv();
     if (sipDiv.getDiv() != null) {
+      metsWrapper.setMainDiv(sipDiv);
       for (DivType firstLevel : sipDiv.getDiv()) {
         if (IPConstants.METADATA.equalsIgnoreCase(firstLevel.getLABEL()) && firstLevel.getDiv() != null) {
           for (DivType secondLevel : firstLevel.getDiv()) {
@@ -814,6 +817,7 @@ public class EARKSIP extends SIP {
             if (representationStructMap != null) {
 
               preProcessStructMap(representationMetsWrapper, representationStructMap);
+              representation.setStatus(new RepresentationStatus(representationMetsWrapper.getMainDiv().getTYPE()));
               sip.addRepresentation(representation);
 
               // process representation agents

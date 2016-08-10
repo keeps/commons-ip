@@ -7,70 +7,74 @@
  */
 package org.roda_project.commons_ip.model;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class IPFile implements Serializable {
   private static final long serialVersionUID = -8653651803476080935L;
 
-  private Path path;
+  private transient Path path;
+  private String pathString;
   private String renameTo;
   private List<String> relativeFolders;
-  private Optional<String> checksum;
-  private Optional<String> checksumAlgorithm;
+  private String checksum = "";
+  private String checksumAlgorithm = "";
 
   public IPFile(Path path) {
     super();
     this.path = path;
+    this.pathString = this.path.toAbsolutePath().toString();
     this.renameTo = null;
     this.relativeFolders = new ArrayList<>();
-    this.checksum = Optional.empty();
-    this.checksumAlgorithm = Optional.empty();
   }
 
   public IPFile(Path path, List<String> relativeFolders) {
     super();
     this.path = path;
+    this.pathString = this.path.toAbsolutePath().toString();
     this.renameTo = null;
     this.relativeFolders = relativeFolders;
-    this.checksum = Optional.empty();
-    this.checksumAlgorithm = Optional.empty();
   }
 
   public IPFile(Path path, String renameTo) {
     super();
     this.path = path;
+    this.pathString = this.path.toAbsolutePath().toString();
     this.renameTo = renameTo;
     this.relativeFolders = new ArrayList<>();
-    this.checksum = Optional.empty();
-    this.checksumAlgorithm = Optional.empty();
   }
 
   public Path getPath() {
     return path;
   }
 
-  public void setPath(Path path) {
+  public IPFile setPath(Path path) {
     this.path = path;
+    this.pathString = this.path.toAbsolutePath().toString();
+    return this;
   }
 
   public List<String> getRelativeFolders() {
     return relativeFolders;
   }
 
-  public void setRelativeFolders(List<String> relativeFolders) {
+  public IPFile setRelativeFolders(List<String> relativeFolders) {
     this.relativeFolders = relativeFolders;
+    return this;
   }
 
   public String getRenameTo() {
     return renameTo;
   }
 
-  public void setRenameTo(String renameTo) {
+  public IPFile setRenameTo(String renameTo) {
     this.renameTo = renameTo;
+    return this;
   }
 
   public String getFileName() {
@@ -83,25 +87,27 @@ public class IPFile implements Serializable {
     return filename;
   }
 
-  public Optional<String> getChecksum() {
+  public String getChecksum() {
     return checksum;
   }
 
-  public void setChecksum(Optional<String> checksum) {
+  public IPFile setChecksum(String checksum) {
     this.checksum = checksum;
+    return this;
   }
 
-  public Optional<String> getChecksumAlgorithm() {
+  public String getChecksumAlgorithm() {
     return checksumAlgorithm;
   }
 
-  public void setChecksumAlgorithm(Optional<String> checksumAlgorithm) {
+  public IPFile setChecksumAlgorithm(String checksumAlgorithm) {
     this.checksumAlgorithm = checksumAlgorithm;
+    return this;
   }
 
   public IPFile setChecksumAndAlgorithm(String checksum, String checksumAlgorithm) {
-    this.checksum = Optional.ofNullable(checksum);
-    this.checksumAlgorithm = Optional.ofNullable(checksumAlgorithm);
+    this.checksum = checksum == null ? "" : checksum;
+    this.checksumAlgorithm = checksumAlgorithm == null ? "" : checksumAlgorithm;
     return this;
   }
 
@@ -109,6 +115,11 @@ public class IPFile implements Serializable {
   public String toString() {
     return "IPFile [path=" + path + ", renameTo=" + renameTo + ", relativeFolders=" + relativeFolders + ", checksum="
       + checksum + ", checksumAlgorithm=" + checksumAlgorithm + "]";
+  }
+
+  private void readObject(ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
+    inputStream.defaultReadObject();
+    this.path = Paths.get(this.pathString);
   }
 
 }

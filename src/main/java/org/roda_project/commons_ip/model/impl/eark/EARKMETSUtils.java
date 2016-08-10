@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.PropertyException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -37,7 +36,6 @@ import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec.FileGrp;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.MetsHdr;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.MetsHdr.Agent;
 import org.roda_project.commons_ip.mets_v1_11.beans.StructMapType;
-import org.roda_project.commons_ip.model.IP;
 import org.roda_project.commons_ip.model.IPAgent;
 import org.roda_project.commons_ip.model.IPConstants;
 import org.roda_project.commons_ip.model.IPDescriptiveMetadata;
@@ -61,7 +59,7 @@ public final class EARKMETSUtils {
   }
 
   public static MetsWrapper generateMETS(String id, String label, String type, String profile, List<IPAgent> ipAgents,
-                                         boolean mainMets, Optional<List<String>> ancestors, Path metsPath, IPEnums.IPStatus status) throws SIPException {
+    boolean mainMets, Optional<List<String>> ancestors, Path metsPath, IPEnums.IPStatus status) throws SIPException {
     Mets mets = new Mets();
     MetsWrapper metsWrapper = new MetsWrapper(mets, metsPath);
 
@@ -121,6 +119,7 @@ public final class EARKMETSUtils {
     structMap.setLABEL(IPConstants.E_ARK_STRUCTURAL_MAP);
 
     DivType mainDiv = createDivForStructMap(id);
+    metsWrapper.setMainDiv(mainDiv);
     // metadata
     DivType metadataDiv = createDivForStructMap(IPConstants.METADATA);
     // metadata/descriptive
@@ -158,7 +157,7 @@ public final class EARKMETSUtils {
     mets.getStructMap().add(structMap);
 
     // RODA struct map
-    if(ancestors.isPresent() && !ancestors.get().isEmpty()){
+    if (ancestors.isPresent() && !ancestors.get().isEmpty()) {
       StructMapType structMapParent = generateAncestorStructMap(ancestors.get());
       mets.getStructMap().add(structMapParent);
     }
@@ -217,7 +216,7 @@ public final class EARKMETSUtils {
   }
 
   private static void addMETSToZip(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper, String metsPath,
-    Path buildDir, boolean mainMets) throws JAXBException, IOException, PropertyException, SIPException {
+    Path buildDir, boolean mainMets) throws JAXBException, IOException, SIPException {
     Path temp = Files.createTempFile(buildDir, IPConstants.METS_FILE_NAME, IPConstants.METS_FILE_EXTENSION);
     ZIPUtils.addMETSFileToZip(zipEntries, temp, metsPath, metsWrapper.getMets(), mainMets);
   }
@@ -485,7 +484,7 @@ public final class EARKMETSUtils {
     DivType mainDiv = createDivForStructMap(IPConstants.RODA_DIV_LABEL);
     DivType ancestorsDiv = createDivForStructMap(IPConstants.RODA_ANCESTORS_DIV_LABEL);
 
-    for(String anc: ancestors) {
+    for (String anc : ancestors) {
       Mptr mptr = new Mptr();
       mptr.setType(IPConstants.METS_TYPE_SIMPLE);
       mptr.setHref(anc);

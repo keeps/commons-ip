@@ -16,8 +16,8 @@ import java.util.Optional;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.roda_project.commons_ip.utils.IPEnums.IPType;
 import org.roda_project.commons_ip.utils.IPEnums.IPStatus;
+import org.roda_project.commons_ip.utils.IPEnums.IPType;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.SIPException;
 import org.roda_project.commons_ip.utils.Utils;
@@ -30,8 +30,6 @@ public abstract class IP implements IPInterface {
   private Optional<XMLGregorianCalendar> createDate;
   private Optional<XMLGregorianCalendar> modificationDate;
   private IPContentType contentType;
-  // FIXME 20160510 hsilva: string or enum??? /metsHdr/@RECORDSTATUS e.g. NEW,
-  // NEW, UPDATE
   private IPStatus status;
   private List<String> ancestors;
 
@@ -146,10 +144,12 @@ public abstract class IP implements IPInterface {
     return contentType;
   }
 
+  @Override
   public List<String> getAncestors() {
     return ancestors;
   }
 
+  @Override
   public IP setAncestors(List<String> ancestors) {
     this.ancestors = ancestors;
     return this;
@@ -353,27 +353,13 @@ public abstract class IP implements IPInterface {
 
   @Override
   public String toString() {
-    return "IP{" +
-        "id='" + id + '\'' +
-        ", profile='" + profile + '\'' +
-        ", type=" + type +
-        ", createDate=" + createDate +
-        ", modificationDate=" + modificationDate +
-        ", contentType=" + contentType +
-        ", status=" + status +
-        ", ancestors=" + ancestors +
-        ", basePath=" + basePath +
-        ", description='" + description + '\'' +
-        ", agents=" + agents +
-        ", descriptiveMetadata=" + descriptiveMetadata +
-        ", preservationMetadata=" + preservationMetadata +
-        ", otherMetadata=" + otherMetadata +
-        ", representationIds=" + representationIds +
-        ", representations=" + representations +
-        ", schemas=" + schemas +
-        ", documentation=" + documentation +
-        ", validationReport=" + validationReport +
-        '}';
+    return "IP [id=" + id + ", profile=" + profile + ", type=" + type + ", createDate=" + createDate
+      + ", modificationDate=" + modificationDate + ", contentType=" + contentType + ", status=" + status
+      + ", ancestors=" + ancestors + ", basePath=" + basePath + ", description=" + description + ", agents=" + agents
+      + ", descriptiveMetadata=" + descriptiveMetadata + ", preservationMetadata=" + preservationMetadata
+      + ", otherMetadata=" + otherMetadata + ", representationIds=" + representationIds + ", representations="
+      + representations + ", schemas=" + schemas + ", documentation=" + documentation + ", validationReport="
+      + validationReport + "]";
   }
 
   public static IP parse(Path source) throws ParseException {

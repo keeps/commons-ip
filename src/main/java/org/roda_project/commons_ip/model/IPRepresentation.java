@@ -22,6 +22,7 @@ public class IPRepresentation {
   private Optional<XMLGregorianCalendar> createDate;
   private Optional<XMLGregorianCalendar> modificationDate;
   private RepresentationContentType contentType;
+  private RepresentationStatus status;
   private String description;
   private List<IPAgent> agents;
   private List<IPDescriptiveMetadata> descriptiveMetadata;
@@ -36,6 +37,7 @@ public class IPRepresentation {
     this.objectID = representationID;
     this.createDate = Utils.getCurrentTime();
     this.contentType = RepresentationContentType.getMIXED();
+    this.status = RepresentationStatus.getORIGINAL();
     this.description = "";
     this.agents = new ArrayList<IPAgent>();
     this.descriptiveMetadata = new ArrayList<IPDescriptiveMetadata>();
@@ -60,36 +62,50 @@ public class IPRepresentation {
     return objectID;
   }
 
-  public void setObjectID(String objectID) {
+  public IPRepresentation setObjectID(String objectID) {
     this.objectID = objectID;
+    return this;
   }
 
   public RepresentationContentType getContentType() {
     return contentType;
   }
 
-  public void setContentType(RepresentationContentType contentType) {
+  public IPRepresentation setContentType(RepresentationContentType contentType) {
     this.contentType = contentType;
+    return this;
+  }
+
+  public RepresentationStatus getStatus() {
+    return status;
+  }
+
+  public IPRepresentation setStatus(RepresentationStatus status) {
+    this.status = status;
+    return this;
   }
 
   public Optional<XMLGregorianCalendar> getCreateDate() {
     return createDate;
   }
 
-  public void setCreateDate(XMLGregorianCalendar createDate) {
+  public IPRepresentation setCreateDate(XMLGregorianCalendar createDate) {
     this.createDate = Optional.ofNullable(createDate);
+    return this;
   }
 
   public Optional<XMLGregorianCalendar> getModificationDate() {
     return modificationDate;
   }
 
-  public void setModificationDate(XMLGregorianCalendar modificationDate) {
+  public IPRepresentation setModificationDate(XMLGregorianCalendar modificationDate) {
     this.modificationDate = Optional.ofNullable(modificationDate);
+    return this;
   }
 
-  public void setDescription(String description) {
+  public IPRepresentation setDescription(String description) {
     this.description = description;
+    return this;
   }
 
   public String getDescription() {
@@ -100,69 +116,77 @@ public class IPRepresentation {
     return agents;
   }
 
-  public void addAgent(IPAgent agent) {
+  public IPRepresentation addAgent(IPAgent agent) {
     agents.add(agent);
+    return this;
   }
 
   public List<IPDescriptiveMetadata> getDescriptiveMetadata() {
     return descriptiveMetadata;
   }
 
-  public void addDescriptiveMetadata(IPDescriptiveMetadata metadata) {
+  public IPRepresentation addDescriptiveMetadata(IPDescriptiveMetadata metadata) {
     descriptiveMetadata.add(metadata);
+    return this;
   }
 
   public List<IPMetadata> getPreservationMetadata() {
     return preservationMetadata;
   }
 
-  public void addPreservationMetadata(IPMetadata metadata) {
+  public IPRepresentation addPreservationMetadata(IPMetadata metadata) {
     preservationMetadata.add(metadata);
+    return this;
   }
 
   public List<IPMetadata> getOtherMetadata() {
     return otherMetadata;
   }
 
-  public void addOtherMetadata(IPMetadata metadata) {
+  public IPRepresentation addOtherMetadata(IPMetadata metadata) {
     otherMetadata.add(metadata);
+    return this;
   }
 
   public List<IPFile> getData() {
     return data;
   }
 
-  public void addFile(IPFile ipFile) {
+  public IPRepresentation addFile(IPFile ipFile) {
     data.add(ipFile);
+    return this;
   }
 
-  public void addFile(Path filePath, List<String> folders) {
+  public IPRepresentation addFile(Path filePath, List<String> folders) {
     data.add(new IPFile(filePath, folders));
+    return this;
   }
 
   public List<IPFile> getSchemas() {
     return schemas;
   }
 
-  public void addSchema(IPFile schema) {
+  public IPRepresentation addSchema(IPFile schema) {
     this.schemas.add(schema);
+    return this;
   }
 
   public List<IPFile> getDocumentation() {
     return documentation;
   }
 
-  public void addDocumentation(IPFile documentation) {
+  public IPRepresentation addDocumentation(IPFile documentation) {
     this.documentation.add(documentation);
+    return this;
   }
 
   @Override
   public String toString() {
     return "IPRepresentation [representationID=" + representationID + ", objectID=" + objectID + ", createDate="
-      + createDate + ", modificationDate=" + modificationDate + ", contentType=" + contentType + ", description="
-      + description + ", agents=" + agents + ", descriptiveMetadata=" + descriptiveMetadata + ", preservationMetadata="
-      + preservationMetadata + ", otherMetadata=" + otherMetadata + ", data=" + data + ", schemas=" + schemas
-      + ", documentation=" + documentation + "]";
+      + createDate + ", modificationDate=" + modificationDate + ", contentType=" + contentType + ", status=" + status
+      + ", description=" + description + ", agents=" + agents + ", descriptiveMetadata=" + descriptiveMetadata
+      + ", preservationMetadata=" + preservationMetadata + ", otherMetadata=" + otherMetadata + ", data=" + data
+      + ", schemas=" + schemas + ", documentation=" + documentation + "]";
   }
 
 }
