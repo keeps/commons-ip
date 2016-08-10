@@ -30,7 +30,7 @@ public class RepresentationContentType implements Serializable {
     try {
       this.type = RepresentationContentTypeEnum.valueOf(type);
       this.otherType = "";
-    } catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException | NullPointerException e) {
       this.type = RepresentationContentTypeEnum.OTHER;
       this.otherType = type;
     }

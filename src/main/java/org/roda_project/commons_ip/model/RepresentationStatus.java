@@ -30,7 +30,7 @@ public class RepresentationStatus implements Serializable {
     try {
       this.status = RepresentationStatusEnum.valueOf(status);
       this.otherStatus = "";
-    } catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException | NullPointerException e) {
       this.status = RepresentationStatusEnum.OTHER;
       this.otherStatus = status;
     }

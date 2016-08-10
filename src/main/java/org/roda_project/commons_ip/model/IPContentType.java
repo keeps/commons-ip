@@ -30,7 +30,7 @@ public class IPContentType implements Serializable {
     try {
       this.type = IPContentTypeEnum.valueOf(type);
       this.otherType = "";
-    } catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException | NullPointerException e) {
       this.type = IPContentTypeEnum.OTHER;
       this.otherType = type;
     }

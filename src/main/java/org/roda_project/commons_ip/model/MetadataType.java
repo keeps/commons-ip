@@ -56,7 +56,7 @@ public class MetadataType implements Serializable {
     try {
       this.type = MetadataTypeEnum.valueOf(type);
       this.otherType = "";
-    } catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException | NullPointerException e) {
       if (MetadataTypeEnum.typeToEnum.containsKey(type)) {
         this.type = MetadataTypeEnum.typeToEnum.get(type);
         this.otherType = "";
