@@ -61,13 +61,13 @@
 <div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
   &lt;<span class="pl-ent">groupId</span>&gt;org.roda-project&lt;/<span class="pl-ent">groupId</span>&gt;
   &lt;<span class="pl-ent">artifactId</span>&gt;commons-ip&lt;/<span class="pl-ent">artifactId</span>&gt;
-  &lt;<span class="pl-ent">version</span>&gt;1.0.0-alpha15&lt;/<span class="pl-ent">version</span>&gt;
+  &lt;<span class="pl-ent">version</span>&gt;1.0.0-alpha16.1&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 </li>
 </ol>
 
 <ul>
-<li>Not using maven, download <a href="http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha15/commons-ip-1.0.0-alpha15.jar">Commons IP latest jar</a>, each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.</li>
+<li>Not using maven, download <a href="http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha16.1/commons-ip-1.0.0-alpha16.1.jar">Commons IP latest jar</a>, each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.</li>
 </ul>
 
 <h3>
@@ -85,7 +85,8 @@ sip<span class="pl-k">.</span>setDescription(<span class="pl-s"><span class="pl-
 
 <span class="pl-c">// 1.2) add descriptive metadata (SIP level)</span>
 <span class="pl-smi">IPDescriptiveMetadata</span> metadataDescriptiveDC <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">IPDescriptiveMetadata</span>(
-<span class="pl-k">new</span> <span class="pl-smi">IPFile</span>(<span class="pl-smi">Paths</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>src/test/resources/eark/metadata_descriptive_dc.xml<span class="pl-pds">"</span></span>)), <span class="pl-k">new</span> <span class="pl-smi">MetadataType</span>(<span class="pl-smi">MetadataTypeEnum</span><span class="pl-c1"><span class="pl-k">.</span>DC</span>), <span class="pl-c1">null</span>);
+<span class="pl-k">new</span> <span class="pl-smi">IPFile</span>(<span class="pl-smi">Paths</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>src/test/resources/eark/metadata_descriptive_dc.xml<span class="pl-pds">"</span></span>)),
+<span class="pl-k">new</span> <span class="pl-smi">MetadataType</span>(<span class="pl-smi">MetadataTypeEnum</span><span class="pl-c1"><span class="pl-k">.</span>DC</span>), <span class="pl-c1">null</span>);
 sip<span class="pl-k">.</span>addDescriptiveMetadata(metadataDescriptiveDC);
 
 <span class="pl-c">// 1.3) add preservation metadata (SIP level)</span>
@@ -110,10 +111,11 @@ sip<span class="pl-k">.</span>addDocumentation(<span class="pl-k">new</span> <sp
 sip<span class="pl-k">.</span>setAncestors(<span class="pl-smi">Arrays</span><span class="pl-k">.</span>asList(<span class="pl-s"><span class="pl-pds">"</span>b6f24059-8973-4582-932d-eb0b2cb48f28<span class="pl-pds">"</span></span>));
 
 <span class="pl-c">// 1.8) add an agent (SIP level)</span>
-<span class="pl-smi">IPAgent</span> agent <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">IPAgent</span>(<span class="pl-s"><span class="pl-pds">"</span>Agent Name<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>ROLE<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>OTHER ROLE<span class="pl-pds">"</span></span>, <span class="pl-smi">CreatorType</span><span class="pl-c1"><span class="pl-k">.</span>INDIVIDUAL</span>, <span class="pl-s"><span class="pl-pds">"</span>OTHER TYPE<span class="pl-pds">"</span></span>);
+<span class="pl-smi">IPAgent</span> agent <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">IPAgent</span>(<span class="pl-s"><span class="pl-pds">"</span>Agent Name<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>OTHER<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>OTHER ROLE<span class="pl-pds">"</span></span>, <span class="pl-smi">CreatorType</span><span class="pl-c1"><span class="pl-k">.</span>INDIVIDUAL</span>, <span class="pl-s"><span class="pl-pds">"</span>OTHER TYPE<span class="pl-pds">"</span></span>);
 sip<span class="pl-k">.</span>addAgent(agent);
 
-<span class="pl-c">// 1.9) add a representation</span>
+<span class="pl-c">// 1.9) add a representation (status will be set to the default value, i.e.,</span>
+<span class="pl-c">// ORIGINAL)</span>
 <span class="pl-smi">IPRepresentation</span> representation1 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">IPRepresentation</span>(<span class="pl-s"><span class="pl-pds">"</span>representation 1<span class="pl-pds">"</span></span>);
 sip<span class="pl-k">.</span>addRepresentation(representation1);
 
@@ -127,6 +129,16 @@ representation1<span class="pl-k">.</span>addFile(representationFile);
 <span class="pl-smi">IPFile</span> representationFile2 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">IPFile</span>(<span class="pl-smi">Paths</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>src/test/resources/eark/documentation.pdf<span class="pl-pds">"</span></span>));
 representationFile2<span class="pl-k">.</span>setRelativeFolders(<span class="pl-smi">Arrays</span><span class="pl-k">.</span>asList(<span class="pl-s"><span class="pl-pds">"</span>abc<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>def<span class="pl-pds">"</span></span>));
 representation1<span class="pl-k">.</span>addFile(representationFile2);
+
+<span class="pl-c">// 1.10) add a representation &amp; define its status</span>
+<span class="pl-smi">IPRepresentation</span> representation2 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">IPRepresentation</span>(<span class="pl-s"><span class="pl-pds">"</span>representation 2<span class="pl-pds">"</span></span>);
+representation2<span class="pl-k">.</span>setStatus(<span class="pl-k">new</span> <span class="pl-smi">RepresentationStatus</span>(<span class="pl-c1">REPRESENTATION_STATUS_NORMALIZED</span>));
+sip<span class="pl-k">.</span>addRepresentation(representation2);
+
+<span class="pl-c">// 1.10.1) add a file to the representation</span>
+<span class="pl-smi">IPFile</span> representationFile3 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">IPFile</span>(<span class="pl-smi">Paths</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>src/test/resources/eark/documentation.pdf<span class="pl-pds">"</span></span>));
+representationFile3<span class="pl-k">.</span>setRenameTo(<span class="pl-s"><span class="pl-pds">"</span>data3.pdf<span class="pl-pds">"</span></span>);
+representation2<span class="pl-k">.</span>addFile(representationFile3);
 
 <span class="pl-c">// 2) build SIP, providing an output directory</span>
 <span class="pl-smi">Path</span> zipSIP <span class="pl-k">=</span> sip<span class="pl-k">.</span>build(tempFolder);</pre></div>
@@ -176,6 +188,15 @@ representation1<span class="pl-k">.</span>addFile(representationFile2);
 
 <h2>
 <a id="history" class="anchor" href="#history" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>History</h2>
+
+<h4>
+<a id="alpha-16-2016-08-10" class="anchor" href="#alpha-16-2016-08-10" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 16 (2016-08-10)</h4>
+
+<ul>
+<li>Representations now have a status attribute (which will be stored in /mets/structMap[<a href="https://github.com/LABEL" class="user-mention">@LABEL</a>="E-ARK structural map"]/div/<a href="https://github.com/TYPE" class="user-mention">@TYPE</a>).</li>
+<li>All classes that extend IPMetadata have a type (MetadataType).</li>
+<li>Minor fixes.</li>
+</ul>
 
 <h4>
 <a id="alpha-15-2016-07-05" class="anchor" href="#alpha-15-2016-07-05" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 15 (2016-07-05)</h4>
