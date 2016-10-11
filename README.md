@@ -17,7 +17,7 @@ API to manipulate Information Packages of different formats: RODA, E-ARK, etc.
 * Using maven
 
 1. Add the following repository
-  
+
   ```xml
   <repository>
     <id>KEEPS-Artifacts</id>
@@ -26,16 +26,16 @@ API to manipulate Information Packages of different formats: RODA, E-ARK, etc.
   </repository>
   ```
 1. Add the following dependency
-  
+
   ```xml
   <dependency>
     <groupId>org.roda-project</groupId>
     <artifactId>commons-ip</artifactId>
-    <version>1.0.0-alpha16.1</version>
+    <version>1.0.0-alpha17</version>
   </dependency>
   ```
 
-* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha16.1/commons-ip-1.0.0-alpha16.1.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
+* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha17/commons-ip-1.0.0-alpha17.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
 
 
 ### Write some code
@@ -118,12 +118,12 @@ public class WhoWantsToBuildSIPAndBeNotified implements SIPObserver{
     sip.addObserver(this);
     ...
   }
-  
+
   @Override
   public void sipBuildPackagingStarted(int totalNumberOfFiles) {
     ...
   }
-  
+
   @Override
   public void sipBuildPackagingCurrentStatus(int numberOfFilesAlreadyProcessed) {
     ...
@@ -141,7 +141,7 @@ SIP earkSIP = EARKSIP.parse(zipSIP);
 
 ## Contributing
 
-1. Fork it! 
+1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
 3. Commit your changes: `git commit -am 'Add some feature'`
 4. Push to the branch: `git push origin my-new-feature`
@@ -221,4 +221,3 @@ TODO: Write credits
 ## License
 
 LGPLv3
-
