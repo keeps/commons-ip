@@ -9,6 +9,7 @@ package org.roda_project.commons_ip.model;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,7 @@ import org.roda_project.commons_ip.utils.Utils;
 
 public abstract class IP implements IPInterface {
 
-  private String id;
+  private List<String> ids;
   private String profile;
   private IPType type;
   private Optional<XMLGregorianCalendar> createDate;
@@ -70,14 +71,14 @@ public abstract class IP implements IPInterface {
     this.validationReport = new ValidationReport();
   }
 
-  public IP(String ipId, IPType ipType) {
+  public IP(List<String> ipIds, IPType ipType) {
     super();
-    this.setId(ipId);
+    this.setIds(ipIds);
     this.type = ipType;
   }
 
-  public IP(String ipId, IPType ipType, IPContentType contentType, String creator) {
-    this(ipId, ipType);
+  public IP(List<String> ipIds, IPType ipType, IPContentType contentType, String creator) {
+    this(ipIds, ipType);
     this.contentType = contentType;
 
     IPAgent creatorAgent = new IPAgent(creator, "CREATOR", null, CreatorType.OTHER, "SOFTWARE");
@@ -86,13 +87,24 @@ public abstract class IP implements IPInterface {
 
   @Override
   public IP setId(String id) {
-    this.id = id;
+    this.ids = Arrays.asList(id);
     return this;
   }
 
   @Override
   public String getId() {
-    return id;
+	  return ids.stream().findFirst().orElse("");
+  }
+  
+  @Override
+  public IP setIds(List<String> ids) {
+    this.ids = ids;
+    return this;
+  }
+
+  @Override
+  public List<String> getIds() {
+    return ids;
   }
 
   @Override
@@ -353,7 +365,7 @@ public abstract class IP implements IPInterface {
 
   @Override
   public String toString() {
-    return "IP [id=" + id + ", profile=" + profile + ", type=" + type + ", createDate=" + createDate
+    return "IP [ids=" + ids + ", profile=" + profile + ", type=" + type + ", createDate=" + createDate
       + ", modificationDate=" + modificationDate + ", contentType=" + contentType + ", status=" + status
       + ", ancestors=" + ancestors + ", basePath=" + basePath + ", description=" + description + ", agents=" + agents
       + ", descriptiveMetadata=" + descriptiveMetadata + ", preservationMetadata=" + preservationMetadata

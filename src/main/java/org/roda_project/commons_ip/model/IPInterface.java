@@ -18,6 +18,10 @@ public interface IPInterface {
   IP setId(String id);
 
   String getId();
+  
+  IP setIds(List<String> ids);
+
+  List<String> getIds();
 
   IP setProfile(String profile);
 

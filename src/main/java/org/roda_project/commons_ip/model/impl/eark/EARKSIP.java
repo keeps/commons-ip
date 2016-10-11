@@ -12,6 +12,7 @@ import java.nio.channels.ClosedByInterruptException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -113,7 +114,7 @@ public class EARKSIP extends SIP {
       // values besides the ones in the Enum
       String contentType = this.getContentType().asString();
 
-      MetsWrapper mainMETSWrapper = EARKMETSUtils.generateMETS(this.getId(), this.getDescription(),
+      MetsWrapper mainMETSWrapper = EARKMETSUtils.generateMETS(StringUtils.join(this.getIds()," "), this.getDescription(),
         this.getType() + ":" + contentType, this.getProfile(), this.getAgents(), true,
         Optional.ofNullable(this.getAncestors()), null, this.getStatus());
 
@@ -493,7 +494,7 @@ public class EARKSIP extends SIP {
         mainMETSFile);
       try {
         mainMets = METSUtils.instantiateMETSFromFile(mainMETSFile);
-        sip.setId(mainMets.getOBJID());
+        sip.setIds(Arrays.asList(mainMets.getOBJID().split(" ")));
         sip.setCreateDate(mainMets.getMetsHdr().getCREATEDATE());
         sip.setModificationDate(mainMets.getMetsHdr().getLASTMODDATE());
         sip.setStatus(IPStatus.parse(mainMets.getMetsHdr().getRECORDSTATUS()));
