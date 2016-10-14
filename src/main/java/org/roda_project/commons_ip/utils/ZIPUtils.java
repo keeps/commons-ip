@@ -89,16 +89,7 @@ public final class ZIPUtils {
     return zipEntries;
   }
 
-  public static void zip(List<ZipEntryInfo> files, OutputStream out, SIP sip, boolean calculateChecksumDuringProcessing)
-    throws IOException, InterruptedException, IPException {
-    if (calculateChecksumDuringProcessing) {
-      zip(files, out, sip);
-    } else {
-      zipWhileCalculatingChecksum(files, out, sip);
-    }
-  }
-
-  private static void zipWhileCalculatingChecksum(List<ZipEntryInfo> files, OutputStream out, SIP sip)
+  public static void zipWhileCalculatingChecksum(List<ZipEntryInfo> files, OutputStream out, SIP sip)
     throws IOException, InterruptedException, IPException {
     ZipOutputStream zos = new ZipOutputStream(out);
 

@@ -7,15 +7,18 @@
  */
 package org.roda_project.commons_ip.model;
 
+import java.util.Arrays;
+import java.util.List;
+
 public final class IPConstants {
 
-  public static final String SYSTEM_LINE_SEP = System.getProperty("line.separator");
+  public static final String SYSTEM_LINE_SEP = System.lineSeparator();
 
   // METS related
   public static final String METS_FILE_NAME = "METS";
   public static final String METS_FILE_EXTENSION = ".xml";
   public static final String METS_FILE = METS_FILE_NAME + METS_FILE_EXTENSION;
-  public static final String METS_FILE_URI_PREFIX = "file:";
+  public static final List<String> METS_FILE_PREFIXES_TO_ACCEPT = Arrays.asList("file://./", "file:");
   public static final String METS_TYPE_SIMPLE = "simple";
   public static final String METS_TYPE_PHYSICAL = "physical";
   public static final String METS_PATH_SEPARATOR = "/";

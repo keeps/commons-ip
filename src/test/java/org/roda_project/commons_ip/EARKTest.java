@@ -136,6 +136,7 @@ public class EARKTest {
 
     // 2) build SIP, providing an output directory
     Path zipSIP = sip.build(tempFolder);
+
     return zipSIP;
   }
 

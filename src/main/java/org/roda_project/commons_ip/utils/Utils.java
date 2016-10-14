@@ -90,8 +90,11 @@ public final class Utils {
 
   public static String extractedRelativePathFromHref(String href) {
     String res = href;
-    if (res.startsWith(IPConstants.METS_FILE_URI_PREFIX)) {
-      res = res.replace(IPConstants.METS_FILE_URI_PREFIX, "");
+    for (String prefix : IPConstants.METS_FILE_PREFIXES_TO_ACCEPT) {
+      if (res.startsWith(prefix)) {
+        res = res.replace(prefix, "");
+        break;
+      }
     }
     return res;
   }

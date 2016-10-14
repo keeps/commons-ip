@@ -60,10 +60,6 @@ public class EARKSIP extends SIP {
   private static final String SIP_TEMP_DIR = "EARKSIP";
   private static final String SIP_FILE_EXTENSION = ".zip";
 
-  // controls if checksum is calculated during processing or in a latter
-  // moment
-  // (e.g. zipping files)
-  private boolean calculateChecksumDuringProcessing = false;
   private static boolean VALIDATION_FAIL_IF_REPRESENTATION_METS_DOES_NOT_HAVE_TWO_PARTS = false;
 
   public EARKSIP() {
@@ -110,10 +106,8 @@ public class EARKSIP extends SIP {
       List<ZipEntryInfo> zipEntries = getZipEntries();
       zipPath = getZipPath(destinationDirectory, fileNameWithoutExtension);
 
-      // 20160407 hsilva: as METS does not have an attribute 'otherType',
-      // the
-      // other type must be put in the 'type' attribute allowing this way
-      // other
+      // 20160407 hsilva: as METS does not have an attribute 'otherType', the
+      // other type must be put in the 'type' attribute allowing this way other
       // values besides the ones in the Enum
       String contentType = this.getContentType().asString();
 
@@ -206,8 +200,7 @@ public class EARKSIP extends SIP {
 
         String descriptiveFilePath = IPConstants.DESCRIPTIVE_FOLDER + getFoldersFromList(file.getRelativeFolders())
           + file.getFileName();
-        MdRef mdRef = EARKMETSUtils.addDescriptiveMetadataToMETS(metsWrapper, dm, descriptiveFilePath,
-          calculateChecksumDuringProcessing);
+        MdRef mdRef = EARKMETSUtils.addDescriptiveMetadataToMETS(metsWrapper, dm, descriptiveFilePath);
 
         if (representationId != null) {
           descriptiveFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
@@ -229,8 +222,7 @@ public class EARKSIP extends SIP {
 
         String preservationMetadataPath = IPConstants.PRESERVATION_FOLDER
           + getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
-        MdRef mdRef = EARKMETSUtils.addPreservationMetadataToMETS(metsWrapper, pm, preservationMetadataPath,
-          calculateChecksumDuringProcessing);
+        MdRef mdRef = EARKMETSUtils.addPreservationMetadataToMETS(metsWrapper, pm, preservationMetadataPath);
 
         if (representationId != null) {
           preservationMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId
@@ -252,8 +244,7 @@ public class EARKSIP extends SIP {
 
         String otherMetadataPath = IPConstants.OTHER_FOLDER + getFoldersFromList(file.getRelativeFolders())
           + file.getFileName();
-        MdRef mdRef = EARKMETSUtils.addOtherMetadataToMETS(metsWrapper, om, otherMetadataPath,
-          calculateChecksumDuringProcessing);
+        MdRef mdRef = EARKMETSUtils.addOtherMetadataToMETS(metsWrapper, om, otherMetadataPath);
 
         if (representationId != null) {
           otherMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
@@ -329,8 +320,7 @@ public class EARKSIP extends SIP {
 
         String dataFilePath = IPConstants.DATA_FOLDER + getFoldersFromList(file.getRelativeFolders())
           + file.getFileName();
-        FileType fileType = EARKMETSUtils.addDataFileToMETS(representationMETSWrapper, dataFilePath, file.getPath(),
-          calculateChecksumDuringProcessing);
+        FileType fileType = EARKMETSUtils.addDataFileToMETS(representationMETSWrapper, dataFilePath, file.getPath());
 
         dataFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
           + dataFilePath;
@@ -369,8 +359,7 @@ public class EARKSIP extends SIP {
 
         String schemaFilePath = IPConstants.SCHEMAS_FOLDER + getFoldersFromList(schema.getRelativeFolders())
           + schema.getFileName();
-        FileType fileType = EARKMETSUtils.addSchemaFileToMETS(metsWrapper, schemaFilePath, schema.getPath(),
-          calculateChecksumDuringProcessing);
+        FileType fileType = EARKMETSUtils.addSchemaFileToMETS(metsWrapper, schemaFilePath, schema.getPath());
 
         if (representationId != null) {
           schemaFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
@@ -391,8 +380,7 @@ public class EARKSIP extends SIP {
 
         String documentationFilePath = IPConstants.DOCUMENTATION_FOLDER + getFoldersFromList(doc.getRelativeFolders())
           + doc.getFileName();
-        FileType fileType = EARKMETSUtils.addDocumentationFileToMETS(metsWrapper, documentationFilePath, doc.getPath(),
-          calculateChecksumDuringProcessing);
+        FileType fileType = EARKMETSUtils.addDocumentationFileToMETS(metsWrapper, documentationFilePath, doc.getPath());
 
         if (representationId != null) {
           documentationFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
@@ -411,7 +399,7 @@ public class EARKSIP extends SIP {
   private void createZipFile(List<ZipEntryInfo> zipEntries, Path zipPath) throws IPException, InterruptedException {
     try {
       notifySipBuildPackagingStarted(zipEntries.size());
-      ZIPUtils.zip(zipEntries, Files.newOutputStream(zipPath), this, calculateChecksumDuringProcessing);
+      ZIPUtils.zipWhileCalculatingChecksum(zipEntries, Files.newOutputStream(zipPath), this);
     } catch (ClosedByInterruptException e) {
       throw new InterruptedException();
     } catch (IOException e) {
@@ -723,8 +711,7 @@ public class EARKSIP extends SIP {
           }
           LOGGER.debug("Metadata type valid: {}", dmdType);
         } catch (NullPointerException | IllegalArgumentException e) {
-          // do nothing and use already defined values for
-          // metadataType &
+          // do nothing and use already defined values for metadataType &
           // metadataVersion
           LOGGER.debug("Setting metadata type to {}", dmdType);
           ValidationUtils.addEntry(sip.getValidationReport(), ValidationConstants.UNKNOWN_DESCRIPTIVE_METADATA_TYPE,
@@ -808,8 +795,7 @@ public class EARKSIP extends SIP {
     if (metsWrapper.getRepresentationsDiv() != null && metsWrapper.getRepresentationsDiv().getDiv() != null) {
       for (DivType representationDiv : metsWrapper.getRepresentationsDiv().getDiv()) {
         if (representationDiv.getMptr() != null && !representationDiv.getMptr().isEmpty()) {
-          // we can assume one and only one mets for each
-          // representation div
+          // we can assume one and only one mets for each representation div
           Mptr mptr = representationDiv.getMptr().get(0);
           String href = Utils.extractedRelativePathFromHref(mptr.getHref());
           Path metsFilePath = sip.getBasePath().resolve(href);
