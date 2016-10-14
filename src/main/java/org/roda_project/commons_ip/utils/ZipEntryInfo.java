@@ -17,4 +17,12 @@ public interface ZipEntryInfo {
 
   void prepareEntryforZipping() throws IPException;
 
+  String getChecksum();
+
+  void setChecksum(String checksum);
+
+  String getChecksumAlgorithm();
+
+  void setChecksumAlgorithm(String checksumAlgorithm);
+
 }

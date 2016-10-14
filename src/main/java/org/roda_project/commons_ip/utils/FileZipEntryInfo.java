@@ -12,6 +12,8 @@ import java.nio.file.Path;
 public class FileZipEntryInfo implements ZipEntryInfo {
   private final String name;
   private final Path filePath;
+  private String checksum;
+  private String checksumAlgorithm;
 
   public FileZipEntryInfo(String name, Path filePath) {
     this.name = name;
@@ -42,4 +44,21 @@ public class FileZipEntryInfo implements ZipEntryInfo {
   public String toString() {
     return "FileZipEntryInfo [name=" + name + ", filePath=" + filePath + "]";
   }
+
+  public String getChecksum() {
+    return checksum;
+  }
+
+  public void setChecksum(String checksum) {
+    this.checksum = checksum;
+  }
+
+  public String getChecksumAlgorithm() {
+    return checksumAlgorithm;
+  }
+
+  public void setChecksumAlgorithm(String checksumAlgorithm) {
+    this.checksumAlgorithm = checksumAlgorithm;
+  }
+
 }

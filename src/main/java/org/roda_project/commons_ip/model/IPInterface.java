@@ -12,13 +12,14 @@ import java.util.List;
 
 import org.roda_project.commons_ip.utils.IPEnums.IPType;
 import org.roda_project.commons_ip.utils.SIPException;
+import org.roda_project.commons_ip.utils.ZipEntryInfo;
 
 public interface IPInterface {
 
   IP setId(String id);
 
   String getId();
-  
+
   IP setIds(List<String> ids);
 
   List<String> getIds();
@@ -91,13 +92,15 @@ public interface IPInterface {
 
   List<IPFile> getDocumentation();
 
+  List<ZipEntryInfo> getZipEntries();
+  
   /**
    * @param destinationDirectory
    *          directory where the SIP will be placed into
    * @throws InterruptedException
    */
   Path build(Path destinationDirectory) throws SIPException, InterruptedException;
-  
+
   Path build(Path destinationDirectory, String fileNameWithoutExtension) throws SIPException, InterruptedException;
 
   static IP parse(Path source) throws ParseException {

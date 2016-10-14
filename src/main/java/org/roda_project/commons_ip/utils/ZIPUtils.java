@@ -128,14 +128,18 @@ public final class ZIPUtils {
           }
         } while (numRead != -1);
         LOGGER.debug("Done zipping file");
+        String checksum = DatatypeConverter.printHexBinary(complete.digest());
+        String checksumType = IPConstants.CHECKSUM_ALGORITHM;
+        file.setChecksum(checksum);
+        file.setChecksumAlgorithm(checksumType);
         if (file instanceof METSFileTypeZipEntryInfo) {
           METSFileTypeZipEntryInfo f = (METSFileTypeZipEntryInfo) file;
-          f.getMetsFileType().setCHECKSUM(DatatypeConverter.printHexBinary(complete.digest()));
-          f.getMetsFileType().setCHECKSUMTYPE(IPConstants.CHECKSUM_ALGORITHM);
+          f.getMetsFileType().setCHECKSUM(checksum);
+          f.getMetsFileType().setCHECKSUMTYPE(checksumType);
         } else if (file instanceof METSMdRefZipEntryInfo) {
           METSMdRefZipEntryInfo f = (METSMdRefZipEntryInfo) file;
-          f.getMetsMdRef().setCHECKSUM(DatatypeConverter.printHexBinary(complete.digest()));
-          f.getMetsMdRef().setCHECKSUMTYPE(IPConstants.CHECKSUM_ALGORITHM);
+          f.getMetsMdRef().setCHECKSUM(checksum);
+          f.getMetsMdRef().setCHECKSUMTYPE(checksumType);
         }
       } catch (NoSuchAlgorithmException e) {
         LOGGER.error("Error while zipping files", e);
