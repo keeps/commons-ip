@@ -92,7 +92,7 @@ public final class Utils {
     String res = href;
     for (String prefix : IPConstants.METS_FILE_PREFIXES_TO_ACCEPT) {
       if (res.startsWith(prefix)) {
-        res = res.replace(prefix, "");
+        res = res.replaceFirst(prefix, "");
         break;
       }
     }
