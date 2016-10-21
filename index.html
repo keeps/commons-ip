@@ -61,13 +61,13 @@
 <div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
   &lt;<span class="pl-ent">groupId</span>&gt;org.roda-project&lt;/<span class="pl-ent">groupId</span>&gt;
   &lt;<span class="pl-ent">artifactId</span>&gt;commons-ip&lt;/<span class="pl-ent">artifactId</span>&gt;
-  &lt;<span class="pl-ent">version</span>&gt;1.0.0-alpha16.1&lt;/<span class="pl-ent">version</span>&gt;
+  &lt;<span class="pl-ent">version</span>&gt;1.0.0-alpha21&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 </li>
 </ol>
 
 <ul>
-<li>Not using maven, download <a href="http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha16.1/commons-ip-1.0.0-alpha16.1.jar">Commons IP latest jar</a>, each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.</li>
+<li>Not using maven, download <a href="http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha21/commons-ip-1.0.0-alpha21.jar">Commons IP latest jar</a>, each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.</li>
 </ul>
 
 <h3>
@@ -176,7 +176,7 @@ representation2<span class="pl-k">.</span>addFile(representationFile3);
 <a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributing</h2>
 
 <ol>
-<li>Fork it! </li>
+<li>Fork it!</li>
 <li>Create your feature branch: <code>git checkout -b my-new-feature</code>
 </li>
 <li>Commit your changes: <code>git commit -am 'Add some feature'</code>
@@ -188,6 +188,18 @@ representation2<span class="pl-k">.</span>addFile(representationFile3);
 
 <h2>
 <a id="history" class="anchor" href="#history" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>History</h2>
+
+<h4>
+<a id="alpha-17-18-19-20--21-2016-10-21" class="anchor" href="#alpha-17-18-19-20--21-2016-10-21" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 17, 18, 19, 20 &amp; 21 (2016-10-21)</h4>
+
+<ul>
+<li>Relative paths in METS don't contain anymore any prefix (and, when doing parse, several prefixes are tested for removal in order to ensure backward compatibility).</li>
+<li>Removed unreachable code related to calculating checksums during zip or not (now it is always calculated during).</li>
+<li>Some information about the ZIP generation is available in IPs (e.g. for generating a report after an SIP to ZIP operation).</li>
+<li>Now IPs may have several IDs.</li>
+<li>Dependencies updated.</li>
+<li>Minor fixes.</li>
+</ul>
 
 <h4>
 <a id="alpha-16-2016-08-10" class="anchor" href="#alpha-16-2016-08-10" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 16 (2016-08-10)</h4>
