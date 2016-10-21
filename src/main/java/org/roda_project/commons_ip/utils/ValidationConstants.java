@@ -53,6 +53,8 @@ public final class ValidationConstants {
   public static final String UNKNOWN_DESCRIPTIVE_METADATA_TYPE = "Descriptive metadata type is unknown.";
 
   // Mets checksum related
+  public static final String CHECKSUM_NOT_SET = "Checksum in METS.xml is not set.";
+  public static final String CHECKSUM_ALGORITHM_NOT_SET = "Checksum algorithm in METS.xml is not set.";
   public static final String CHECKSUMS_DIFFER = "Checksum in METS.xml doesn't match file checksum.";
   public static final String ERROR_COMPUTING_CHECKSUM = "Error computing checksum.";
   public static final String ERROR_COMPUTING_CHECKSUM_NO_SUCH_ALGORITHM = "Error computing checksum: the algorithm provided is not recognized.";

@@ -89,7 +89,17 @@ public final class ZIPUtils {
     return zipEntries;
   }
 
+  /**
+   * @deprecated 20161021 hsilva: same as invoking
+   *             {@link #zip(List, OutputStream, SIP)} & therefore this will be
+   *             removed as soon as possible
+   */
   public static void zipWhileCalculatingChecksum(List<ZipEntryInfo> files, OutputStream out, SIP sip)
+    throws IOException, InterruptedException, IPException {
+    zip(files, out, sip);
+  }
+
+  public static void zip(List<ZipEntryInfo> files, OutputStream out, SIP sip)
     throws IOException, InterruptedException, IPException {
     ZipOutputStream zos = new ZipOutputStream(out);
 
@@ -139,34 +149,6 @@ public final class ZIPUtils {
       inputStream.close();
       i++;
 
-      sip.notifySipBuildPackagingCurrentStatus(i);
-    }
-
-    zos.close();
-    out.close();
-  }
-
-  private static void zip(List<ZipEntryInfo> files, OutputStream out, SIP sip)
-    throws IOException, InterruptedException, IPException {
-    ZipOutputStream zos = new ZipOutputStream(out);
-
-    int i = 0;
-    for (ZipEntryInfo file : files) {
-      if (Thread.interrupted()) {
-        throw new InterruptedException();
-      }
-
-      file.prepareEntryforZipping();
-
-      LOGGER.debug("Zipping file {}", file.getFilePath());
-      ZipEntry entry = new ZipEntry(file.getName());
-      zos.putNextEntry(entry);
-      InputStream inputStream = Files.newInputStream(file.getFilePath());
-      IOUtils.copyLarge(inputStream, zos);
-      zos.closeEntry();
-      inputStream.close();
-      LOGGER.debug("Done zipping file");
-      i++;
       sip.notifySipBuildPackagingCurrentStatus(i);
     }
 

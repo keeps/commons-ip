@@ -696,8 +696,8 @@ public class EARKSIP extends SIP {
 
   private static void processMetadataFile(SIP sip, IPRepresentation representation, String metadataType, MdRef mdRef,
     Path filePath, List<String> fileRelativeFolders) throws SIPException {
-    IPFile metadataFile = validateMetadataFile(sip, filePath, mdRef, fileRelativeFolders);
-    if (metadataFile != null) {
+    Optional<IPFile> metadataFile = validateMetadataFile(sip, filePath, mdRef, fileRelativeFolders);
+    if (metadataFile.isPresent()) {
       ValidationUtils.addInfo(sip.getValidationReport(),
         ValidationConstants.getMetadataFileFoundWithMatchingChecksumString(metadataType), sip.getBasePath(), filePath);
 
@@ -718,21 +718,21 @@ public class EARKSIP extends SIP {
             ValidationEntry.LEVEL.WARN, "Setting metadata type to " + dmdType, sip.getBasePath(), filePath);
         }
 
-        IPDescriptiveMetadata descriptiveMetadata = new IPDescriptiveMetadata(metadataFile, dmdType, dmdVersion);
+        IPDescriptiveMetadata descriptiveMetadata = new IPDescriptiveMetadata(metadataFile.get(), dmdType, dmdVersion);
         if (representation == null) {
           sip.addDescriptiveMetadata(descriptiveMetadata);
         } else {
           representation.addDescriptiveMetadata(descriptiveMetadata);
         }
       } else if (IPConstants.PRESERVATION.equalsIgnoreCase(metadataType)) {
-        IPMetadata preservationMetadata = new IPMetadata(metadataFile);
+        IPMetadata preservationMetadata = new IPMetadata(metadataFile.get());
         if (representation == null) {
           sip.addPreservationMetadata(preservationMetadata);
         } else {
           representation.addPreservationMetadata(preservationMetadata);
         }
       } else if (IPConstants.OTHER.equalsIgnoreCase(metadataType)) {
-        IPMetadata otherMetadata = new IPMetadata(metadataFile);
+        IPMetadata otherMetadata = new IPMetadata(metadataFile.get());
         if (representation == null) {
           sip.addOtherMetadata(otherMetadata);
         } else {
@@ -742,12 +742,14 @@ public class EARKSIP extends SIP {
     }
   }
 
-  private static IPFile validateFile(SIP sip, Path filePath, FileType fileType, List<String> fileRelativeFolders) {
+  private static Optional<IPFile> validateFile(SIP sip, Path filePath, FileType fileType,
+    List<String> fileRelativeFolders) {
     return Utils.validateFile(sip, filePath, fileRelativeFolders, fileType.getCHECKSUM(), fileType.getCHECKSUMTYPE(),
       fileType.getID());
   }
 
-  private static IPFile validateMetadataFile(SIP sip, Path filePath, MdRef mdRef, List<String> fileRelativeFolders) {
+  private static Optional<IPFile> validateMetadataFile(SIP sip, Path filePath, MdRef mdRef,
+    List<String> fileRelativeFolders) {
     return Utils.validateFile(sip, filePath, fileRelativeFolders, mdRef.getCHECKSUM(), mdRef.getCHECKSUMTYPE(),
       mdRef.getID());
   }
@@ -764,17 +766,17 @@ public class EARKSIP extends SIP {
 
           if (Files.exists(filePath)) {
             List<String> fileRelativeFolders = Utils.getFileRelativeFolders(basePath.resolve(folder), filePath);
-            IPFile file = validateFile(sip, filePath, fileType, fileRelativeFolders);
+            Optional<IPFile> file = validateFile(sip, filePath, fileType, fileRelativeFolders);
 
-            if (file != null) {
+            if (file.isPresent()) {
               if (IPConstants.SCHEMAS.equalsIgnoreCase(folder)) {
                 ValidationUtils.addInfo(sip.getValidationReport(),
                   ValidationConstants.SCHEMA_FILE_FOUND_WITH_MATCHING_CHECKSUMS, sip.getBasePath(), filePath);
-                sip.addSchema(new IPFile(filePath, fileRelativeFolders));
+                sip.addSchema(file.get());
               } else if (IPConstants.DOCUMENTATION.equalsIgnoreCase(folder)) {
                 ValidationUtils.addInfo(sip.getValidationReport(),
                   ValidationConstants.DOCUMENTATION_FILE_FOUND_WITH_MATCHING_CHECKSUMS, sip.getBasePath(), filePath);
-                sip.addDocumentation(new IPFile(filePath, fileRelativeFolders));
+                sip.addDocumentation(file.get());
               }
             }
           } else {
@@ -869,10 +871,10 @@ public class EARKSIP extends SIP {
           if (Files.exists(filePath)) {
             List<String> fileRelativeFolders = Utils
               .getFileRelativeFolders(representationBasePath.resolve(IPConstants.DATA), filePath);
-            IPFile file = validateFile(sip, filePath, fileType, fileRelativeFolders);
+            Optional<IPFile> file = validateFile(sip, filePath, fileType, fileRelativeFolders);
 
-            if (file != null) {
-              representation.addFile(file);
+            if (file.isPresent()) {
+              representation.addFile(file.get());
               ValidationUtils.addInfo(sip.getValidationReport(),
                 ValidationConstants.REPRESENTATION_FILE_FOUND_WITH_MATCHING_CHECKSUMS, sip.getBasePath(), filePath);
             }

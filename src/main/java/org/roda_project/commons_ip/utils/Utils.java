@@ -33,6 +33,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType.MdRef;
 import org.roda_project.commons_ip.model.IPConstants;
 import org.roda_project.commons_ip.model.IPFile;
@@ -147,13 +148,15 @@ public final class Utils {
   public static String calculateChecksum(InputStream is, String algorithm)
     throws NoSuchAlgorithmException, IOException {
     MessageDigest digester = MessageDigest.getInstance(algorithm);
-    byte[] block = new byte[4096];
-    int length;
-    while ((length = is.read(block)) > 0) {
-      digester.update(block, 0, length);
+    try {
+      byte[] block = new byte[4096];
+      int length;
+      while ((length = is.read(block)) > 0) {
+        digester.update(block, 0, length);
+      }
+    } finally {
+      is.close();
     }
-
-    is.close();
 
     return DatatypeConverter.printHexBinary(digester.digest());
   }
@@ -170,22 +173,38 @@ public final class Utils {
     return res;
   }
 
-  public static IPFile validateFile(SIP sip, Path filePath, List<String> fileRelativeFolders, String metsChecksum,
-    String metsChecksumAlgorithm, String metsElementId) {
-    IPFile file = null;
+  public static Optional<IPFile> validateFile(SIP sip, Path filePath, List<String> fileRelativeFolders,
+    String metsChecksum, String metsChecksumAlgorithm, String metsElementId) {
+    boolean calculateChecksum = true;
+    Optional<IPFile> file = Optional.empty();
 
-    try {
-      String computedChecksum = Utils.calculateChecksum(Files.newInputStream(filePath), metsChecksumAlgorithm);
-      if (computedChecksum.equalsIgnoreCase(metsChecksum)) {
-        file = new IPFile(filePath, fileRelativeFolders).setChecksumAndAlgorithm(metsChecksum, metsChecksumAlgorithm);
-      } else {
-        ValidationUtils.addIssue(sip.getValidationReport(), ValidationConstants.CHECKSUMS_DIFFER,
-          ValidationEntry.LEVEL.ERROR, metsElementId, metsChecksum, metsChecksumAlgorithm, computedChecksum,
-          sip.getBasePath(), filePath);
+    // validate if both mets checksum or mets algorithm are set
+    if (StringUtils.isBlank(metsChecksum)) {
+      ValidationUtils.addIssue(sip.getValidationReport(), ValidationConstants.CHECKSUM_NOT_SET,
+        ValidationEntry.LEVEL.WARN, sip.getBasePath(), filePath);
+      calculateChecksum = false;
+    }
+    if (StringUtils.isBlank(metsChecksumAlgorithm)) {
+      ValidationUtils.addIssue(sip.getValidationReport(), ValidationConstants.CHECKSUM_ALGORITHM_NOT_SET,
+        ValidationEntry.LEVEL.WARN, sip.getBasePath(), filePath);
+      calculateChecksum = false;
+    }
+
+    if (calculateChecksum) {
+      try {
+        String computedChecksum = Utils.calculateChecksum(Files.newInputStream(filePath), metsChecksumAlgorithm);
+        if (computedChecksum.equalsIgnoreCase(metsChecksum)) {
+          file = Optional
+            .of(new IPFile(filePath, fileRelativeFolders).setChecksumAndAlgorithm(metsChecksum, metsChecksumAlgorithm));
+        } else {
+          ValidationUtils.addIssue(sip.getValidationReport(), ValidationConstants.CHECKSUMS_DIFFER,
+            ValidationEntry.LEVEL.ERROR, metsElementId, metsChecksum, metsChecksumAlgorithm, computedChecksum,
+            sip.getBasePath(), filePath);
+        }
+      } catch (NoSuchAlgorithmException | IOException e) {
+        ValidationUtils.addIssue(sip.getValidationReport(), ValidationConstants.ERROR_COMPUTING_CHECKSUM,
+          ValidationEntry.LEVEL.ERROR, e, sip.getBasePath(), filePath);
       }
-    } catch (NoSuchAlgorithmException | IOException e) {
-      ValidationUtils.addIssue(sip.getValidationReport(), ValidationConstants.ERROR_COMPUTING_CHECKSUM,
-        ValidationEntry.LEVEL.ERROR, e, sip.getBasePath(), filePath);
     }
 
     return file;

@@ -31,11 +31,11 @@ API to manipulate Information Packages of different formats: RODA, E-ARK, etc.
   <dependency>
     <groupId>org.roda-project</groupId>
     <artifactId>commons-ip</artifactId>
-    <version>1.0.0-alpha20</version>
+    <version>1.0.0-alpha21</version>
   </dependency>
   ```
 
-* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha20/commons-ip-1.0.0-alpha20.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
+* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha21/commons-ip-1.0.0-alpha21.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
 
 
 ### Write some code
@@ -148,6 +148,15 @@ SIP earkSIP = EARKSIP.parse(zipSIP);
 5. Submit a pull request :D
 
 ## History
+
+#### Alpha 17, 18, 19, 20 & 21 (2016-10-21)
+
+* Relative paths in METS don't contain anymore any prefix (and, when doing parse, several prefixes are tested for removal in order to ensure backward compatibility).
+* Removed unreachable code related to calculating checksums during zip or not (now it is always calculated during).
+* Some information about the ZIP generation is available in IPs (e.g. for generating a report after an SIP to ZIP operation).
+* Now IPs may have several IDs.
+* Dependencies updated.
+* Minor fixes.
 
 #### Alpha 16 (2016-08-10)
 
