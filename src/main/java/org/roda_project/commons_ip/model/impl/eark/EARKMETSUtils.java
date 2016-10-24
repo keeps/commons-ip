@@ -204,7 +204,7 @@ public final class EARKMETSUtils {
       Mptr mptr = new Mptr();
       mptr.setLOCTYPE(LocType.URL.toString());
       mptr.setType(IPConstants.METS_TYPE_SIMPLE);
-      mptr.setHref(representationMetsPath);
+      mptr.setHref(Utils.encode(representationMetsPath));
       DivType representationDiv = createDivForStructMap(representationId);
       representationDiv.getMptr().add(mptr);
       mainMETSWrapper.getRepresentationsDiv().getDiv().add(representationDiv);
@@ -313,7 +313,7 @@ public final class EARKMETSUtils {
     mdRef.setID(Utils.generateRandomAndPrefixedUUID());
     mdRef.setType(IPConstants.METS_TYPE_SIMPLE);
     mdRef.setLOCTYPE(LocType.URL.toString());
-    mdRef.setHref(metadataPath);
+    mdRef.setHref(Utils.encode(metadataPath));
     return mdRef;
   }
 
@@ -434,7 +434,7 @@ public final class EARKMETSUtils {
     FLocat fileLocation = new FLocat();
     fileLocation.setType(IPConstants.METS_TYPE_SIMPLE);
     fileLocation.setLOCTYPE(LocType.URL.toString());
-    fileLocation.setHref(filePath);
+    fileLocation.setHref(Utils.encode(filePath));
 
     return fileLocation;
   }
@@ -450,7 +450,7 @@ public final class EARKMETSUtils {
     for (String anc : ancestors) {
       Mptr mptr = new Mptr();
       mptr.setType(IPConstants.METS_TYPE_SIMPLE);
-      mptr.setHref(anc);
+      mptr.setHref(Utils.encode(anc));
       mptr.setLOCTYPE(LocType.HANDLE.toString());
       ancestorsDiv.getMptr().add(mptr);
     }
@@ -471,8 +471,9 @@ public final class EARKMETSUtils {
           for (DivType div : mainDiv.getDiv()) {
             if (IPConstants.RODA_ANCESTORS_DIV_LABEL.equalsIgnoreCase(div.getLABEL()) && div.getMptr() != null) {
               for (Mptr m : div.getMptr()) {
-                if (StringUtils.isNotBlank(m.getHref())) {
-                  ancestors.add(m.getHref());
+                String href = Utils.decode(m.getHref());
+                if (StringUtils.isNotBlank(href)) {
+                  ancestors.add(href);
                 }
               }
             }

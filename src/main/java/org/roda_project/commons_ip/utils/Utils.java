@@ -10,6 +10,9 @@ package org.roda_project.commons_ip.utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.channels.ClosedByInterruptException;
 import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.FileVisitResult;
@@ -90,7 +93,7 @@ public final class Utils {
   }
 
   public static String extractedRelativePathFromHref(String href) {
-    String res = href;
+    String res = Utils.decode(href);
     for (String prefix : IPConstants.METS_FILE_PREFIXES_TO_ACCEPT) {
       if (res.startsWith(prefix)) {
         res = res.replaceFirst(prefix, "");
@@ -210,4 +213,21 @@ public final class Utils {
     return file;
   }
 
+  public static String decode(String value) {
+    try{
+      value = URLDecoder.decode(value, "UTF-8");
+    }catch(NullPointerException | UnsupportedEncodingException e){
+      // do nothing
+    }
+    return value;
+  }
+  
+  public static String encode(String value) {
+    try{
+      value = URLEncoder.encode(value, "UTF-8");
+    }catch(NullPointerException | UnsupportedEncodingException e){
+      // do nothing
+    }
+    return value;
+  }
 }
