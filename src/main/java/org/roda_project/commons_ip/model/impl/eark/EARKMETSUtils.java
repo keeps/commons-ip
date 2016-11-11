@@ -263,14 +263,13 @@ public final class EARKMETSUtils {
     MdSecType dmdSec = new MdSecType();
     dmdSec.setID(Utils.generateRandomAndPrefixedUUID());
 
-    MdRef mdRef = createMdRef(metadataPath);
+    MdRef mdRef = createMdRef(metadata.getId(), metadataPath);
     mdRef.setMDTYPE(mdType);
     if (StringUtils.isNotBlank(mdOtherType)) {
       mdRef.setOTHERMDTYPE(mdOtherType);
     }
     mdRef.setMDTYPEVERSION(mdTypeVersion);
 
-    mdRef.setID(metadata.getId());
     // set mimetype, date creation, etc.
     setFileBasicInformation(metadata.getMetadata().getPath(), mdRef);
 
@@ -293,9 +292,8 @@ public final class EARKMETSUtils {
     MdSecType digiprovMD = new MdSecType();
     digiprovMD.setID(Utils.generateRandomAndPrefixedUUID());
 
-    MdRef mdRef = createMdRef(preservationMetadataPath);
+    MdRef mdRef = createMdRef(preservationMetadata.getId(), preservationMetadataPath);
     mdRef.setMDTYPE("OTHER");
-    mdRef.setID(preservationMetadata.getId());
 
     // set mimetype, date creation, etc.
     setFileBasicInformation(preservationMetadata.getMetadata().getPath(), mdRef);
@@ -310,9 +308,9 @@ public final class EARKMETSUtils {
     return mdRef;
   }
 
-  private static MdRef createMdRef(String metadataPath) {
+  private static MdRef createMdRef(String id, String metadataPath) {
     MdRef mdRef = new MdRef();
-    mdRef.setID(Utils.generateRandomAndPrefixedUUID());
+    mdRef.setID(id);
     mdRef.setType(IPConstants.METS_TYPE_SIMPLE);
     mdRef.setLOCTYPE(LocType.URL.toString());
     mdRef.setHref(Utils.encode(metadataPath));
