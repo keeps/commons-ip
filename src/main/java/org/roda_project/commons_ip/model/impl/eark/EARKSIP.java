@@ -718,7 +718,8 @@ public class EARKSIP extends SIP {
             ValidationEntry.LEVEL.WARN, "Setting metadata type to " + dmdType, sip.getBasePath(), filePath);
         }
 
-        IPDescriptiveMetadata descriptiveMetadata = new IPDescriptiveMetadata(metadataFile.get(), dmdType, dmdVersion);
+        IPDescriptiveMetadata descriptiveMetadata = new IPDescriptiveMetadata(mdRef.getID(), metadataFile.get(),
+          dmdType, dmdVersion);
         if (representation == null) {
           sip.addDescriptiveMetadata(descriptiveMetadata);
         } else {

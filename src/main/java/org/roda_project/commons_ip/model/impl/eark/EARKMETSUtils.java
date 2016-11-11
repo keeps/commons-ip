@@ -270,6 +270,7 @@ public final class EARKMETSUtils {
     }
     mdRef.setMDTYPEVERSION(mdTypeVersion);
 
+    mdRef.setID(metadata.getId());
     // set mimetype, date creation, etc.
     setFileBasicInformation(metadata.getMetadata().getPath(), mdRef);
 
@@ -294,6 +295,7 @@ public final class EARKMETSUtils {
 
     MdRef mdRef = createMdRef(preservationMetadataPath);
     mdRef.setMDTYPE("OTHER");
+    mdRef.setID(preservationMetadata.getId());
 
     // set mimetype, date creation, etc.
     setFileBasicInformation(preservationMetadata.getMetadata().getPath(), mdRef);

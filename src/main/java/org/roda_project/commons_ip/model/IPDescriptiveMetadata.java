@@ -14,6 +14,11 @@ public class IPDescriptiveMetadata extends IPMetadata implements Serializable {
 
   private String metadataVersion;
 
+  public IPDescriptiveMetadata(String id, IPFile metadata, MetadataType metadataType, String metadataVersion) {
+    super(id, metadata, metadataType);
+    this.metadataVersion = metadataVersion;
+  }
+
   public IPDescriptiveMetadata(IPFile metadata, MetadataType metadataType, String metadataVersion) {
     super(metadata, metadataType);
     this.metadataVersion = metadataVersion;
