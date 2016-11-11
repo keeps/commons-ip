@@ -53,9 +53,16 @@ public final class ZIPUtils {
     Path sipFolderPath = source;
     if (!Files.isDirectory(source)) {
       try {
-        sipFolderPath = destinationDirectory
-          .resolve(source.getFileName().toString().replaceFirst(sipFileExtension + "$", ""));
+        String sipId = source.getFileName().toString().replaceFirst(sipFileExtension + "$", "");
+        sipFolderPath = destinationDirectory.resolve(sipId);
         ZIPUtils.unzip(source, sipFolderPath);
+
+        // 20161111 hsilva: see if the SIP extracted has a folder named sipId
+        // (for being compliant with previous way of creating SIP in ZIP format,
+        // this test/adjustment is needed)
+        if (Files.exists(sipFolderPath.resolve(sipId))) {
+          sipFolderPath = sipFolderPath.resolve(sipId);
+        }
       } catch (IOException e) {
         LOGGER.error("Error unzipping file", e);
         throw new ParseException("Error unzipping file", e);
@@ -112,7 +119,7 @@ public final class ZIPUtils {
       file.prepareEntryforZipping();
 
       LOGGER.debug("Zipping file {}", file.getFilePath());
-      ZipEntry entry = new ZipEntry(file.getName());
+      ZipEntry entry = new ZipEntry(sip.getId() + "/" + file.getName());
       zos.putNextEntry(entry);
       InputStream inputStream = Files.newInputStream(file.getFilePath());
 

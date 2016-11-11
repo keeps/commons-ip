@@ -399,7 +399,7 @@ public class EARKSIP extends SIP {
   private void createZipFile(List<ZipEntryInfo> zipEntries, Path zipPath) throws IPException, InterruptedException {
     try {
       notifySipBuildPackagingStarted(zipEntries.size());
-      ZIPUtils.zipWhileCalculatingChecksum(zipEntries, Files.newOutputStream(zipPath), this);
+      ZIPUtils.zip(zipEntries, Files.newOutputStream(zipPath), this);
     } catch (ClosedByInterruptException e) {
       throw new InterruptedException();
     } catch (IOException e) {
