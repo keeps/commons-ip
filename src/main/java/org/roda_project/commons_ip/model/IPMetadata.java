@@ -8,6 +8,9 @@
 package org.roda_project.commons_ip.model;
 
 import java.io.Serializable;
+import java.util.Optional;
+
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.roda_project.commons_ip.utils.Utils;
 
@@ -15,6 +18,7 @@ public class IPMetadata implements Serializable {
   private static final long serialVersionUID = 3697420963728707487L;
 
   private String id;
+  private Optional<XMLGregorianCalendar> createDate;
   private IPFile metadata;
   private MetadataType metadataType;
 
@@ -24,18 +28,21 @@ public class IPMetadata implements Serializable {
 
   public IPMetadata(IPFile metadata) {
     id = Utils.generateRandomAndPrefixedUUID();
+    createDate = Utils.getCurrentTime();
     this.metadata = metadata;
     metadataType = MetadataType.OTHER();
   }
 
   public IPMetadata(IPFile metadata, MetadataType metadataType) {
     this.id = Utils.generateRandomAndPrefixedUUID();
+    createDate = Utils.getCurrentTime();
     this.metadata = metadata;
     this.metadataType = metadataType;
   }
 
   public IPMetadata(String id, IPFile metadata, MetadataType metadataType) {
     this.id = id;
+    createDate = Utils.getCurrentTime();
     this.metadata = metadata;
     this.metadataType = metadataType;
   }
@@ -46,6 +53,15 @@ public class IPMetadata implements Serializable {
 
   public IPMetadata setId(String id) {
     this.id = id;
+    return this;
+  }
+
+  public Optional<XMLGregorianCalendar> getCreateDate() {
+    return createDate;
+  }
+
+  public IPMetadata setCreateDate(XMLGregorianCalendar createDate) {
+    this.createDate = Optional.ofNullable(createDate);
     return this;
   }
 
@@ -69,7 +85,8 @@ public class IPMetadata implements Serializable {
 
   @Override
   public String toString() {
-    return "IPMetadata [id=" + id + ", metadata=" + metadata + ", metadataType=" + metadataType + "]";
+    return "IPMetadata [id=" + id + ", createDate=" + createDate + ", metadata=" + metadata + ", metadataType="
+      + metadataType + "]";
   }
 
 }

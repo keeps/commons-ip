@@ -720,6 +720,7 @@ public class EARKSIP extends SIP {
 
         IPDescriptiveMetadata descriptiveMetadata = new IPDescriptiveMetadata(mdRef.getID(), metadataFile.get(),
           dmdType, dmdVersion);
+        descriptiveMetadata.setCreateDate(mdRef.getCREATED());
         if (representation == null) {
           sip.addDescriptiveMetadata(descriptiveMetadata);
         } else {
@@ -727,6 +728,7 @@ public class EARKSIP extends SIP {
         }
       } else if (IPConstants.PRESERVATION.equalsIgnoreCase(metadataType)) {
         IPMetadata preservationMetadata = new IPMetadata(metadataFile.get());
+        preservationMetadata.setCreateDate(mdRef.getCREATED());
         if (representation == null) {
           sip.addPreservationMetadata(preservationMetadata);
         } else {
@@ -734,6 +736,7 @@ public class EARKSIP extends SIP {
         }
       } else if (IPConstants.OTHER.equalsIgnoreCase(metadataType)) {
         IPMetadata otherMetadata = new IPMetadata(metadataFile.get());
+        otherMetadata.setCreateDate(mdRef.getCREATED());
         if (representation == null) {
           sip.addOtherMetadata(otherMetadata);
         } else {
