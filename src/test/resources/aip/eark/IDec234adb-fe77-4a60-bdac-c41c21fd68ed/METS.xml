@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" OBJID="IDec234adb-fe77-4a60-bdac-c41c21fd68ed" LABEL="" TYPE="AIP:RDB" PROFILE="http://www.eark-project.com/METS/IP.xml" xsi:schemaLocation="http://www.loc.gov/METS/ schemas/IP.xsd http://www.w3.org/1999/xlink schemas/xlink.xsd">
+    <metsHdr CREATEDATE="2016-10-21T10:55:48.570+01:00" LASTMODDATE="2016-10-21T10:55:48.570+01:00" RECORDSTATUS="NEW">
+        <agent ROLE="CREATOR" TYPE="OTHER" OTHERTYPE="SOFTWARE">
+            <name>RODA-in 2.0.0-alpha.8</name>
+        </agent>
+    </metsHdr>
+    <dmdSec ID="ID9427CB0D-A8A7-4B69-835A-BF2FD181DDD1">
+        <mdRef ID="ID49ADBB5A-C48D-4057-9B60-95C780B6B52A" LOCTYPE="URL" MDTYPE="EAD" MDTYPEVERSION="2002" xlink:type="simple" xlink:href="metadata/descriptive/ead.xml" MIMETYPE="application/xml" SIZE="1037" CREATED="2016-10-21T10:55:48.576+01:00" CHECKSUM="370FE0622299257140B199A4B738FC43F3F91CDEED08E01113B12A9AECAA6A77" CHECKSUMTYPE="SHA-256"/>
+    </dmdSec>
+    <amdSec ID="ID0E057DB4-72EF-47FC-8338-7838036C9AC0"/>
+    <fileSec ID="ID5C26D6FA-8962-4915-A26D-1101FB6E97D3">
+        <fileGrp ID="IDF8F795A0-097D-453A-9FFE-5DCD43FB0E77" USE="E-ARK files root">
+            <fileGrp ID="IDD4CC3FFD-B682-4341-8A50-AA8AC1A71B59" USE="representations"/>
+            <fileGrp ID="ID03591417-FC9D-42DE-BA53-592D418B03E9" USE="data"/>
+            <fileGrp ID="ID0A63D3EB-15B9-45BA-B52E-02167BA67291" USE="schemas">
+                <file ID="ID3991DF69-390D-4B50-8CB2-5E8D0349025A" MIMETYPE="application/xml" SIZE="145430" CREATED="2016-10-21T10:55:48.583+01:00" CHECKSUM="dc8133202b61715fa2e52229bda041aed4e586f4b3b21109a40222391ac614f8" CHECKSUMTYPE="SHA-256">
+                    <FLocat LOCTYPE="URL" xlink:type="simple" xlink:href="schemas/IP.xsd"/>
+                </file>
+                <file ID="ID3991DF69-390D-4B50-8CB2-5E8D0349025F" MIMETYPE="application/xml" SIZE="135096" CREATED="2016-10-21T10:55:48.583+01:00" CHECKSUM="77A6684B3228B1857E0F325C1656A208F2FA12F76AA12A0C9E92853B70EF42C2" CHECKSUMTYPE="SHA-256">
+                    <FLocat LOCTYPE="URL" xlink:type="simple" xlink:href="schemas/mets.xsd"/>
+                </file>
+                <file ID="ID01A06746-E5C5-4199-911C-B43D28F2FF05" MIMETYPE="application/xml" SIZE="3180" CREATED="2016-10-21T10:55:48.584+01:00" CHECKSUM="F1F5BB6003165CDD8F6C1FCC32F8FD1F965E1681010F3B9806D9460BCFFA8A3C" CHECKSUMTYPE="SHA-256">
+                    <FLocat LOCTYPE="URL" xlink:type="simple" xlink:href="schemas/xlink.xsd"/>
+                </file>
+            </fileGrp>
+            <fileGrp ID="ID0080BB37-C2D7-4305-895D-12E4B7BCC9DF" USE="documentation">
+                <file ID="IDF36E0934-AB0F-4E84-ACEC-71E7E9F8D006" MIMETYPE="application/zip" SIZE="50019" CREATED="2016-10-21T10:55:48.584+01:00" CHECKSUM="E5336A36C4A26603DAE0C5752F251A09FDBB8796EA3E4CC1BD9572BFBF366CDA" CHECKSUMTYPE="SHA-256">
+                    <FLocat LOCTYPE="URL" xlink:type="simple" xlink:href="documentation/sakila.mwb"/>
+                </file>
+            </fileGrp>
+        </fileGrp>
+    </fileSec>
+    <structMap ID="IDEFAB5678-4929-4F89-AB35-4DF2DCBFA348" TYPE="physical" LABEL="E-ARK structural map">
+        <div ID="IDC0A6140B-3C2F-4373-86DF-44E79C8C8964" LABEL="IDec234adb-fe77-4a60-bdac-c41c21fd68ed">
+            <div ID="IDBBC99A7A-1B6C-4F7D-9219-83B793034958" LABEL="metadata">
+                <div ID="ID1A95D4BD-FAFB-4DCE-B37D-318C8263FEB0" LABEL="descriptive">
+                    <fptr FILEID="ID49ADBB5A-C48D-4057-9B60-95C780B6B52A"/>
+                </div>
+                <div ID="IDF46E49D6-7BE2-4F2A-87E1-44DB9B44AEDE" LABEL="preservation"/>
+                <div ID="IDBD7BC196-D565-4727-99A0-C1B10BCA62D9" LABEL="other"/>
+            </div>
+            <div ID="IDFACCDEC9-6097-4C37-B056-DC28A51B4F53" LABEL="representations">
+                <div ID="ID37802048-1234-4F76-8FAB-767EC607352C" LABEL="rep1">
+                    <mptr xlink:type="simple" xlink:href="representations/rep1/METS.xml" LOCTYPE="URL"/>
+                </div>
+                <div ID="ID308B7794-46DA-4C00-8CAF-EE984249562B" LABEL="rep2">
+                    <mptr xlink:type="simple" xlink:href="representations/rep2/METS.xml" LOCTYPE="URL"/>
+                </div>
+            </div>
+            <div ID="ID1CB2C8F8-FDC7-4EB4-BA57-2DBED79B3836" LABEL="data"/>
+            <div ID="ID5615DCD3-C8F7-4162-8DBE-721F9AB55597" LABEL="schemas">
+                <fptr FILEID="ID3991DF69-390D-4B50-8CB2-5E8D0349025A"/>
+                <fptr FILEID="ID3991DF69-390D-4B50-8CB2-5E8D0349025F"/>
+                <fptr FILEID="ID01A06746-E5C5-4199-911C-B43D28F2FF05"/>
+            </div>
+            <div ID="ID1D02E358-DB96-4E5A-94C1-63F4C0570DED" LABEL="documentation">
+                <fptr FILEID="IDF36E0934-AB0F-4E84-ACEC-71E7E9F8D006"/>
+            </div>
+        </div>
+    </structMap>
+    <structMap ID="ID040789CF-82D5-4CE0-8AC4-CCF330E33EA3" LABEL="RODA structural map">
+        <div ID="ID0B77A8C7-9BAA-42EA-92F1-765869E5C11E" LABEL="RODA">
+            <div ID="IDF625F1AA-A87E-4EC9-AC17-2BD41CCCEB96" LABEL="Ancestors">
+                <mptr xlink:type="simple" LOCTYPE="HANDLE"/>
+            </div>
+        </div>
+    </structMap>
+</mets>

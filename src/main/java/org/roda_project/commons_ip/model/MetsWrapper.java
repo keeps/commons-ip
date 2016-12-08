@@ -24,6 +24,7 @@ public class MetsWrapper {
   private DivType representationsDiv;
   private DivType dataDiv;
   private DivType schemasDiv;
+  private DivType submissionsDiv;
   private DivType documentationDiv;
 
   private FileGrpType representationsFileGroup;
@@ -149,4 +150,11 @@ public class MetsWrapper {
     this.documentationDiv = documentationDiv;
   }
 
+  public DivType getSubmissionsDiv() {
+    return submissionsDiv;
+  }
+
+  public void setSubmissionsDiv(final DivType submissionsDiv) {
+    this.submissionsDiv = submissionsDiv;
+  }
 }

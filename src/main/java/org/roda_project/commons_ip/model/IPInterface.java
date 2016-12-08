@@ -9,8 +9,8 @@ package org.roda_project.commons_ip.model;
 
 import java.nio.file.Path;
 import java.util.List;
-
 import org.roda_project.commons_ip.utils.IPEnums.IPType;
+import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.SIPException;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
 
@@ -99,9 +99,9 @@ public interface IPInterface {
    *          directory where the SIP will be placed into
    * @throws InterruptedException
    */
-  Path build(Path destinationDirectory) throws SIPException, InterruptedException;
+  Path build(Path destinationDirectory) throws IPException, InterruptedException;
 
-  Path build(Path destinationDirectory, String fileNameWithoutExtension) throws SIPException, InterruptedException;
+  Path build(Path destinationDirectory, String fileNameWithoutExtension) throws IPException, InterruptedException;
 
   static IP parse(Path source) throws ParseException {
     throw new ParseException("One must implement static method parse in a concrete class");

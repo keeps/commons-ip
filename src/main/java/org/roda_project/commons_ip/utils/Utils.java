@@ -38,6 +38,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType.MdRef;
+import org.roda_project.commons_ip.model.AIP;
 import org.roda_project.commons_ip.model.IPConstants;
 import org.roda_project.commons_ip.model.IPFile;
 import org.roda_project.commons_ip.model.SIP;
@@ -207,6 +208,43 @@ public final class Utils {
       } catch (NoSuchAlgorithmException | IOException e) {
         ValidationUtils.addIssue(sip.getValidationReport(), ValidationConstants.ERROR_COMPUTING_CHECKSUM,
           ValidationEntry.LEVEL.ERROR, e, sip.getBasePath(), filePath);
+      }
+    }
+
+    return file;
+  }
+
+  public static Optional<IPFile> validateFile(AIP aip, Path filePath, List<String> fileRelativeFolders,
+      String metsChecksum, String metsChecksumAlgorithm, String metsElementId) {
+    boolean calculateChecksum = true;
+    Optional<IPFile> file = Optional.empty();
+
+    // validate if both mets checksum or mets algorithm are set
+    if (StringUtils.isBlank(metsChecksum)) {
+      ValidationUtils.addIssue(aip.getValidationReport(), ValidationConstants.CHECKSUM_NOT_SET,
+          ValidationEntry.LEVEL.WARN, aip.getBasePath(), filePath);
+      calculateChecksum = false;
+    }
+    if (StringUtils.isBlank(metsChecksumAlgorithm)) {
+      ValidationUtils.addIssue(aip.getValidationReport(), ValidationConstants.CHECKSUM_ALGORITHM_NOT_SET,
+          ValidationEntry.LEVEL.WARN, aip.getBasePath(), filePath);
+      calculateChecksum = false;
+    }
+
+    if (calculateChecksum) {
+      try {
+        String computedChecksum = Utils.calculateChecksum(Files.newInputStream(filePath), metsChecksumAlgorithm);
+        if (computedChecksum.equalsIgnoreCase(metsChecksum)) {
+          file = Optional
+              .of(new IPFile(filePath, fileRelativeFolders).setChecksumAndAlgorithm(metsChecksum, metsChecksumAlgorithm));
+        } else {
+          ValidationUtils.addIssue(aip.getValidationReport(), ValidationConstants.CHECKSUMS_DIFFER,
+              ValidationEntry.LEVEL.ERROR, metsElementId, metsChecksum, metsChecksumAlgorithm, computedChecksum,
+              aip.getBasePath(), filePath);
+        }
+      } catch (NoSuchAlgorithmException | IOException e) {
+        ValidationUtils.addIssue(aip.getValidationReport(), ValidationConstants.ERROR_COMPUTING_CHECKSUM,
+            ValidationEntry.LEVEL.ERROR, e, aip.getBasePath(), filePath);
       }
     }
 

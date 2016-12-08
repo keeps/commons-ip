@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" OBJID="rep2" LABEL="" TYPE="representation:MIXED" PROFILE="" xsi:schemaLocation="http://www.loc.gov/METS/ ../../schemas/IP.xsd http://www.w3.org/1999/xlink ../../schemas/xlink.xsd">
+    <metsHdr CREATEDATE="2016-10-21T10:55:48.581+01:00" LASTMODDATE="2016-10-21T10:55:48.581+01:00" RECORDSTATUS="NEW"/>
+    <amdSec ID="ID5950744A-78EE-4467-8BD3-DDE46A7ECA44"/>
+    <fileSec ID="IDA1CDCCCA-9037-4852-91C0-22F4E790474F">
+        <fileGrp ID="ID99AD6FA8-BE51-4F8F-B950-367D42BA09DB" USE="E-ARK files representation rep2">
+            <fileGrp ID="ID6EACCF15-E951-43EB-AFF8-7EF4E6860191" USE="representations"/>
+            <fileGrp ID="ID1BE175AE-F415-4936-9461-685C803D1AD4" USE="data">
+                <file ID="IDD3656244-DF7F-400D-B67C-35E4C445C8AD" MIMETYPE="application/zip" SIZE="6535874" CREATED="2016-10-21T10:55:48.581+01:00" CHECKSUM="9C1C8D8287CFFC99A3C25F45A0DA4BB9E52CF5C8277C2527E5FC33F9FE469065" CHECKSUMTYPE="SHA-256">
+                    <FLocat LOCTYPE="URL" xlink:type="simple" xlink:href="data/sakila.siard2"/>
+                </file>
+            </fileGrp>
+            <fileGrp ID="ID97C04958-ACAA-4002-A47B-66D45A35F0CB" USE="schemas"/>
+            <fileGrp ID="ID066CD320-780B-4967-8681-A5F645AEC8F4" USE="documentation"/>
+        </fileGrp>
+    </fileSec>
+    <structMap ID="IDA2690D8B-5CFD-4AEE-85E0-685CC67078F5" TYPE="physical" LABEL="E-ARK structural map">
+        <div ID="IDC5DE533F-A6AD-47B7-84C8-9FEA15F69DC6" TYPE="ORIGINAL" LABEL="rep2">
+            <div ID="IDC1019F24-314B-4BEF-A4BA-2B47A742CC1F" LABEL="metadata">
+                <div ID="ID60641310-0044-418B-9085-78651A825F12" LABEL="descriptive"/>
+                <div ID="IDE87A604E-4660-445E-B7F7-CE616E00A515" LABEL="preservation"/>
+                <div ID="ID9ADF1200-637F-47A0-A33F-C4CF04447CF1" LABEL="other"/>
+            </div>
+            <div ID="ID434C2EAD-9201-4DF3-8485-664237AD47AA" LABEL="representations"/>
+            <div ID="ID13144846-7B17-452D-A59A-F9D4A029F7EC" LABEL="data">
+                <fptr FILEID="IDD3656244-DF7F-400D-B67C-35E4C445C8AD"/>
+            </div>
+            <div ID="ID2E4D9945-9110-4DBB-A18A-56E30FF63925" LABEL="schemas"/>
+            <div ID="ID156671CB-63D1-4F69-8206-2C0A75340FC6" LABEL="documentation"/>
+        </div>
+    </structMap>
+</mets>

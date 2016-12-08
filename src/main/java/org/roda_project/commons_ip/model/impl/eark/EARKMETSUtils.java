@@ -409,6 +409,26 @@ public final class EARKMETSUtils {
     return file;
   }
 
+  public static FileType addSubmissionFileToMETS(MetsWrapper metsWrapper, String submissionFilePath, Path submissionFile)
+      throws SIPException, InterruptedException {
+    FileType file = new FileType();
+    file.setID(Utils.generateRandomAndPrefixedUUID());
+
+    // set mimetype, date creation, etc.
+    setFileBasicInformation(submissionFile, file);
+
+    // add to file section
+    FLocat fileLocation = createFileLocation(submissionFilePath);
+    file.getFLocat().add(fileLocation);
+    metsWrapper.getSchemasFileGroup().getFile().add(file);
+
+    // add to struct map
+    Fptr fptr = new Fptr();
+    fptr.setFILEID(file);
+    metsWrapper.getSubmissionsDiv().getFptr().add(fptr);
+    return file;
+  }
+
   public static FileType addDocumentationFileToMETS(MetsWrapper metsWrapper, String documentationFilePath,
     Path documentationFile) throws SIPException, InterruptedException {
     FileType file = new FileType();

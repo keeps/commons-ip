@@ -88,7 +88,7 @@ public class EARKSIP extends SIP {
    * _________________________________________________________________________
    */
   @Override
-  public Path build(Path destinationDirectory) throws SIPException, InterruptedException {
+  public Path build(Path destinationDirectory) throws IPException, InterruptedException {
     return build(destinationDirectory, null);
   }
 
@@ -99,7 +99,7 @@ public class EARKSIP extends SIP {
    */
   @Override
   public Path build(Path destinationDirectory, String fileNameWithoutExtension)
-    throws SIPException, InterruptedException {
+    throws IPException, InterruptedException {
     Path buildDir = createBuildDir();
     Path zipPath = null;
     try {

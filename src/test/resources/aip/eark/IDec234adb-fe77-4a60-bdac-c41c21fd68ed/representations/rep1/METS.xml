@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" OBJID="rep1" LABEL="" TYPE="representation:MIXED" PROFILE="" xsi:schemaLocation="http://www.loc.gov/METS/ ../../schemas/IP.xsd http://www.w3.org/1999/xlink ../../schemas/xlink.xsd">
+    <metsHdr CREATEDATE="2016-10-21T10:55:48.579+01:00" LASTMODDATE="2016-10-21T10:55:48.579+01:00" RECORDSTATUS="NEW"/>
+    <amdSec ID="ID3BCE921F-7229-4C18-810A-68DE6B169975"/>
+    <fileSec ID="ID8003693F-16C9-4413-8546-921658F66052">
+        <fileGrp ID="ID64FEB5A6-748B-45BA-9FCF-5F762EC14884" USE="E-ARK files representation rep1">
+            <fileGrp ID="ID980C222E-05B9-4C60-A194-B2AAC7F98D62" USE="representations"/>
+            <fileGrp ID="ID01FF9B31-8E29-45F0-993D-D1A584B7E1BF" USE="data">
+                <file ID="IDF0DC85A1-4C7F-4566-A7D6-FB758B751F5D" MIMETYPE="application/sql" SIZE="23424" CREATED="2016-10-21T10:55:48.580+01:00" CHECKSUM="4324B46283B8A65F3F317319918C45559EA9BE49AC2007CCF001D3C60E4989A3" CHECKSUMTYPE="SHA-256">
+                    <FLocat LOCTYPE="URL" xlink:type="simple" xlink:href="data/sakila-schema.sql"/>
+                </file>
+                <file ID="IDA195DCA4-D905-4BC8-BEB7-850854CF95F0" MIMETYPE="application/sql" SIZE="3398148" CREATED="2016-10-21T10:55:48.580+01:00" CHECKSUM="C015949C3D06A0C92C7BF72E5CA21E554965A281D42E730C058F981CB0429BDF" CHECKSUMTYPE="SHA-256">
+                    <FLocat LOCTYPE="URL" xlink:type="simple" xlink:href="data/sakila-data.sql"/>
+                </file>
+            </fileGrp>
+            <fileGrp ID="ID1587DBCE-D2E4-42E8-9C46-C6F239D3E216" USE="schemas"/>
+            <fileGrp ID="IDEA921695-07D3-4836-A6B1-30C98555283C" USE="documentation"/>
+        </fileGrp>
+    </fileSec>
+    <structMap ID="ID94D63282-0456-4052-BA46-DD1B755185A2" TYPE="physical" LABEL="E-ARK structural map">
+        <div ID="IDEA355C61-9928-4DA9-BD83-771B00060D86" TYPE="ORIGINAL" LABEL="rep1">
+            <div ID="IDAE8AEFB2-6842-4F12-842C-E55388FE38C4" LABEL="metadata">
+                <div ID="ID366359F9-E09D-479E-910F-5134BF30301D" LABEL="descriptive"/>
+                <div ID="IDF722DBAA-ACE6-4CC8-8E59-3C41679077B5" LABEL="preservation"/>
+                <div ID="IDD41431DB-A09E-4526-B813-161A3E479954" LABEL="other"/>
+            </div>
+            <div ID="ID13F052F2-F571-4C39-8C03-D978D88D9337" LABEL="representations"/>
+            <div ID="ID821E8F5B-A3EB-403B-B0DD-D0EF52AAE21C" LABEL="data">
+                <fptr FILEID="IDF0DC85A1-4C7F-4566-A7D6-FB758B751F5D"/>
+                <fptr FILEID="IDA195DCA4-D905-4BC8-BEB7-850854CF95F0"/>
+            </div>
+            <div ID="IDA537467B-EF13-4C04-A8DF-84B64C11D633" LABEL="schemas"/>
+            <div ID="ID133204D1-3482-4B95-85B1-AAD8722B722C" LABEL="documentation"/>
+        </div>
+    </structMap>
+</mets>

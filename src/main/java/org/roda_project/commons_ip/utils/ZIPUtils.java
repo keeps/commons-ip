@@ -19,13 +19,12 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
-
 import javax.xml.bind.DatatypeConverter;
-
 import org.apache.commons.io.IOUtils;
 import org.roda_project.commons_ip.mets_v1_11.beans.FileType;
 import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType.MdRef;
 import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
+import org.roda_project.commons_ip.model.AIP;
 import org.roda_project.commons_ip.model.IPConstants;
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.model.SIP;
@@ -157,6 +156,65 @@ public final class ZIPUtils {
       i++;
 
       sip.notifySipBuildPackagingCurrentStatus(i);
+    }
+
+    zos.close();
+    out.close();
+  }
+
+  public static void zip(List<ZipEntryInfo> files, OutputStream out, AIP aip)
+      throws IOException, InterruptedException, IPException {
+    ZipOutputStream zos = new ZipOutputStream(out);
+
+    int i = 0;
+    for (ZipEntryInfo file : files) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
+
+      file.prepareEntryforZipping();
+
+      LOGGER.debug("Zipping file {}", file.getFilePath());
+      ZipEntry entry = new ZipEntry(aip.getId() + "/" + file.getName());
+      zos.putNextEntry(entry);
+
+      try (InputStream inputStream = Files.newInputStream(file.getFilePath())) {
+
+        byte[] buffer = new byte[4096];
+        MessageDigest complete;
+        try {
+          complete = MessageDigest.getInstance(IPConstants.CHECKSUM_ALGORITHM);
+          int numRead;
+          do {
+            numRead = inputStream.read(buffer);
+            if (numRead > 0) {
+              complete.update(buffer, 0, numRead);
+              zos.write(buffer, 0, numRead);
+            }
+          } while (numRead != -1);
+          LOGGER.debug("Done zipping file");
+          String checksum = DatatypeConverter.printHexBinary(complete.digest());
+          String checksumType = IPConstants.CHECKSUM_ALGORITHM;
+          file.setChecksum(checksum);
+          file.setChecksumAlgorithm(checksumType);
+          if (file instanceof METSFileTypeZipEntryInfo) {
+            METSFileTypeZipEntryInfo f = (METSFileTypeZipEntryInfo) file;
+            f.getMetsFileType().setCHECKSUM(checksum);
+            f.getMetsFileType().setCHECKSUMTYPE(checksumType);
+          } else if (file instanceof METSMdRefZipEntryInfo) {
+            METSMdRefZipEntryInfo f = (METSMdRefZipEntryInfo) file;
+            f.getMetsMdRef().setCHECKSUM(checksum);
+            f.getMetsMdRef().setCHECKSUMTYPE(checksumType);
+          }
+        } catch (NoSuchAlgorithmException e) {
+          LOGGER.error("Error while zipping files", e);
+        }
+        zos.closeEntry();
+        inputStream.close();
+        i++;
+      }
+
+      //sip.notifySipBuildPackagingCurrentStatus(i);
     }
 
     zos.close();
