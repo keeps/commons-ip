@@ -7,10 +7,10 @@
  */
 package org.roda_project.commons_ip.model;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.roda_project.commons_ip.utils.IPEnums.AIPState;
 import org.roda_project.commons_ip.utils.IPEnums.IPType;
 
 /**
@@ -19,7 +19,12 @@ import org.roda_project.commons_ip.utils.IPEnums.IPType;
  * @author Hélder Silva (hsilva@keep.pt)
  * @author Rui Castro (rui.castro@gmail.com)
  */
-public abstract class AIP extends IP {
+public abstract class AIP extends IP implements AIPInterface {
+
+  /**
+   * The state.
+   */
+  private AIPState state;
 
   /**
    * List of submission files.
@@ -38,24 +43,24 @@ public abstract class AIP extends IP {
   /**
    * Constructor.
    * 
-   * @param aipId
+   * @param id
    *          the ID.
    */
-  public AIP(final String aipId) {
+  public AIP(final String id) {
     this();
-    setId(aipId);
+    setId(id);
   }
 
   /**
    * Constructor.
    * 
-   * @param aipId
+   * @param id
    *          the ID.
    * @param contentType
    *          the {@link IPContentType}.
    */
-  public AIP(final String aipId, final IPContentType contentType) {
-    this(aipId);
+  public AIP(final String id, final IPContentType contentType) {
+    this(id);
     setContentType(contentType);
   }
 
@@ -64,42 +69,25 @@ public abstract class AIP extends IP {
     return "AIP [super=" + super.toString() + ", submissions=" + submissions + "]";
   }
 
-  /**
-   * Get the {@link List} of submission {@link IPFile}.
-   * 
-   * @return a {@link List<IPFile>}.
-   */
+  @Override
+  public void setState(final AIPState state) {
+    this.state = state;
+  }
+
+  @Override
+  public AIPState getState() {
+    return state;
+  }
+
+  @Override
   public List<IPFile> getSubmissions() {
     return submissions;
   }
 
-  /**
-   * Parse an {@link AIP} from the given source {@link Path}.
-   * 
-   * @param source
-   *          the source {@link Path}.
-   * @return the parsed {@link AIP}.
-   * @throws ParseException
-   *           if some error occurred.
-   */
-  public static AIP parse(final Path source) throws ParseException {
-    throw new ParseException("One must implement static method parse in a concrete class");
-  }
-
-  /**
-   * Parse an {@link AIP} from the given source {@link Path} and copy it to the
-   * given destination {@link Path}.
-   *
-   * @param source
-   *          the source {@link Path}.
-   * @param destination
-   *          the destination {@link Path}.
-   * @return the parsed {@link AIP}.
-   * @throws ParseException
-   *           if some error occurred.
-   */
-  public static AIP parse(final Path source, final Path destination) throws ParseException {
-    throw new ParseException("One must implement static method parse in a concrete class");
+  @Override
+  public AIPInterface addSubmission(final IPFile submission) {
+    this.submissions.add(submission);
+    return this;
   }
 
 }

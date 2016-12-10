@@ -19,6 +19,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.roda_project.commons_ip.utils.IPEnums.IPStatus;
 import org.roda_project.commons_ip.utils.IPEnums.IPType;
+import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.SIPException;
 import org.roda_project.commons_ip.utils.Utils;
@@ -134,20 +135,24 @@ public abstract class IP implements IPInterface {
     return type.toString();
   }
 
+  @Override
   public Optional<XMLGregorianCalendar> getCreateDate() {
     return createDate;
   }
 
-  public void setCreateDate(XMLGregorianCalendar createDate) {
-    this.createDate = Optional.ofNullable(createDate);
+  @Override
+  public void setCreateDate(XMLGregorianCalendar date) {
+    this.createDate = Optional.ofNullable(date);
   }
 
+  @Override
   public Optional<XMLGregorianCalendar> getModificationDate() {
     return modificationDate;
   }
 
-  public void setModificationDate(XMLGregorianCalendar modificationDate) {
-    this.modificationDate = Optional.ofNullable(modificationDate);
+  @Override
+  public void setModificationDate(XMLGregorianCalendar date) {
+    this.modificationDate = Optional.ofNullable(date);
   }
 
   @Override
@@ -172,10 +177,12 @@ public abstract class IP implements IPInterface {
     return this;
   }
 
+  @Override
   public IPStatus getStatus() {
     return status;
   }
 
+  @Override
   public void setStatus(IPStatus status) {
     this.status = status;
   }
@@ -221,13 +228,13 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP addDescriptiveMetadata(IPDescriptiveMetadata metadata) throws SIPException {
+  public IP addDescriptiveMetadata(IPDescriptiveMetadata metadata) throws IPException {
     descriptiveMetadata.add(metadata);
     return this;
   }
 
   @Override
-  public IP addRepresentation(IPRepresentation sipRepresentation) throws SIPException {
+  public IP addRepresentation(IPRepresentation sipRepresentation) throws IPException {
     String representationId = sipRepresentation.getRepresentationID();
     if (representations.containsKey(representationId)) {
       throw new SIPException("Representation already exists");
@@ -354,10 +361,12 @@ public abstract class IP implements IPInterface {
     return documentation;
   }
 
+  @Override
   public ValidationReport getValidationReport() {
     return validationReport;
   }
 
+  @Override
   public boolean isValid() {
     return validationReport.isValid();
   }

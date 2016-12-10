@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import org.roda_project.commons_ip.model.AIP;
+import org.roda_project.commons_ip.model.AIPInterface;
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.utils.IPException;
 
@@ -26,7 +26,7 @@ public class EARKAIPTest {
     URI resource = getClass().getResource("/").toURI();
     final Path inputPath = Paths.get(resource).resolve("aip").resolve("eark")
       .resolve("IDec234adb-fe77-4a60-bdac-c41c21fd68ed");
-    AIP aip = EARKAIP.parse(inputPath);
+    AIPInterface aip = EARKAIP.parse(inputPath);
     Assert.assertTrue(aip.isValid());
     Path outputPath = Files.createTempDirectory("aip-output");
     Path aipPath = aip.build(outputPath);

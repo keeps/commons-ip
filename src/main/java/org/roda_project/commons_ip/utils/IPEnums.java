@@ -31,4 +31,9 @@ public class IPEnums {
       return parse(value, NEW);
     }
   }
+
+  public enum AIPState {
+    CREATED, INGEST_PROCESSING, UNDER_APPRAISAL, ACTIVE, DELETED;
+  }
+
 }

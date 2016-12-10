@@ -9,6 +9,11 @@ package org.roda_project.commons_ip.model;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
+
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.roda_project.commons_ip.utils.IPEnums.IPStatus;
 import org.roda_project.commons_ip.utils.IPEnums.IPType;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.SIPException;
@@ -36,6 +41,18 @@ public interface IPInterface {
 
   IPContentType getContentType();
 
+  void setStatus(IPStatus status);
+
+  IPStatus getStatus();
+
+  void setCreateDate(XMLGregorianCalendar date);
+
+  Optional<XMLGregorianCalendar> getCreateDate();
+
+  void setModificationDate(XMLGregorianCalendar date);
+
+  Optional<XMLGregorianCalendar> getModificationDate();
+
   IP setBasePath(Path basePath);
 
   Path getBasePath();
@@ -50,13 +67,13 @@ public interface IPInterface {
 
   IP addAgent(IPAgent agent);
 
-  IP addDescriptiveMetadata(IPDescriptiveMetadata descriptiveMetadata) throws SIPException;
+  IP addDescriptiveMetadata(IPDescriptiveMetadata descriptiveMetadata) throws IPException;
 
-  IP addPreservationMetadata(IPMetadata preservationMetadata) throws SIPException;
+  IP addPreservationMetadata(IPMetadata preservationMetadata) throws IPException;
 
-  IP addOtherMetadata(IPMetadata otherMetadata) throws SIPException;
+  IP addOtherMetadata(IPMetadata otherMetadata) throws IPException;
 
-  IP addRepresentation(IPRepresentation representation) throws SIPException;
+  IP addRepresentation(IPRepresentation representation) throws IPException;
 
   IP addSchema(IPFile schema);
 
@@ -93,7 +110,11 @@ public interface IPInterface {
   List<IPFile> getDocumentation();
 
   List<ZipEntryInfo> getZipEntries();
-  
+
+  ValidationReport getValidationReport();
+
+  boolean isValid();
+
   /**
    * @param destinationDirectory
    *          directory where the SIP will be placed into
@@ -103,11 +124,11 @@ public interface IPInterface {
 
   Path build(Path destinationDirectory, String fileNameWithoutExtension) throws IPException, InterruptedException;
 
-  static IP parse(Path source) throws ParseException {
+  static IPInterface parse(Path source) throws ParseException {
     throw new ParseException("One must implement static method parse in a concrete class");
   }
 
-  static SIP parse(Path source, Path destinationDirectory) throws ParseException {
+  static IPInterface parse(Path source, Path destinationDirectory) throws ParseException {
     throw new ParseException("One must implement static method parse in a concrete class");
   }
 

@@ -24,7 +24,7 @@ import org.apache.commons.io.IOUtils;
 import org.roda_project.commons_ip.mets_v1_11.beans.FileType;
 import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType.MdRef;
 import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
-import org.roda_project.commons_ip.model.AIP;
+import org.roda_project.commons_ip.model.AIPInterface;
 import org.roda_project.commons_ip.model.IPConstants;
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.model.SIP;
@@ -162,7 +162,7 @@ public final class ZIPUtils {
     out.close();
   }
 
-  public static void zip(List<ZipEntryInfo> files, OutputStream out, AIP aip)
+  public static void zip(List<ZipEntryInfo> files, OutputStream out, AIPInterface aip)
       throws IOException, InterruptedException, IPException {
     ZipOutputStream zos = new ZipOutputStream(out);
 

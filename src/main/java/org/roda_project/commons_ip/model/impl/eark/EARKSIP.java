@@ -472,7 +472,7 @@ public class EARKSIP extends SIP {
       }
 
       return sip;
-    } catch (SIPException e) {
+    } catch (final IPException e) {
       throw new ParseException("Error parsing E-ARK SIP", e);
     }
   }
@@ -647,28 +647,28 @@ public class EARKSIP extends SIP {
   }
 
   private static SIP processDescriptiveMetadata(MetsWrapper metsWrapper, SIP sip, IPRepresentation representation,
-    Path basePath) throws SIPException {
+    Path basePath) throws IPException {
 
     return processMetadata(sip, metsWrapper, representation, metsWrapper.getDescriptiveMetadataDiv(),
       IPConstants.DESCRIPTIVE, basePath);
   }
 
   private static SIP processOtherMetadata(MetsWrapper metsWrapper, SIP sip, IPRepresentation representation,
-    Path basePath) throws SIPException {
+    Path basePath) throws IPException {
 
     return processMetadata(sip, metsWrapper, representation, metsWrapper.getOtherMetadataDiv(), IPConstants.OTHER,
       basePath);
   }
 
   private static SIP processPreservationMetadata(MetsWrapper metsWrapper, SIP sip, IPRepresentation representation,
-    Path basePath) throws SIPException {
+    Path basePath) throws IPException {
 
     return processMetadata(sip, metsWrapper, representation, metsWrapper.getPreservationMetadataDiv(),
       IPConstants.PRESERVATION, basePath);
   }
 
   private static SIP processMetadata(SIP sip, MetsWrapper representationMetsWrapper, IPRepresentation representation,
-    DivType div, String metadataType, Path basePath) throws SIPException {
+    DivType div, String metadataType, Path basePath) throws IPException {
     if (div != null && div.getFptr() != null) {
       for (Fptr fptr : div.getFptr()) {
         MdRef mdRef = (MdRef) fptr.getFILEID();
@@ -695,7 +695,7 @@ public class EARKSIP extends SIP {
   }
 
   private static void processMetadataFile(SIP sip, IPRepresentation representation, String metadataType, MdRef mdRef,
-    Path filePath, List<String> fileRelativeFolders) throws SIPException {
+    Path filePath, List<String> fileRelativeFolders) throws IPException {
     Optional<IPFile> metadataFile = validateMetadataFile(sip, filePath, mdRef, fileRelativeFolders);
     if (metadataFile.isPresent()) {
       ValidationUtils.addInfo(sip.getValidationReport(),
@@ -796,7 +796,7 @@ public class EARKSIP extends SIP {
     return sip;
   }
 
-  private static SIP processRepresentations(MetsWrapper metsWrapper, SIP sip) throws SIPException {
+  private static SIP processRepresentations(MetsWrapper metsWrapper, SIP sip) throws IPException {
 
     if (metsWrapper.getRepresentationsDiv() != null && metsWrapper.getRepresentationsDiv().getDiv() != null) {
       for (DivType representationDiv : metsWrapper.getRepresentationsDiv().getDiv()) {
