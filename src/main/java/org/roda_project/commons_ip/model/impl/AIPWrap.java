@@ -308,9 +308,21 @@ public class AIPWrap implements AIP {
   }
 
   @Override
+  public Path build(final Path destinationDirectory, final boolean onlyManifest)
+    throws IPException, InterruptedException {
+    return aip.build(destinationDirectory, onlyManifest);
+  }
+
+  @Override
   public Path build(final Path destinationDirectory, final String fileNameWithoutExtension)
     throws IPException, InterruptedException {
     return aip.build(destinationDirectory, fileNameWithoutExtension);
+  }
+
+  @Override
+  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
+    throws IPException, InterruptedException {
+    return aip.build(destinationDirectory, fileNameWithoutExtension, onlyManifest);
   }
 
 }

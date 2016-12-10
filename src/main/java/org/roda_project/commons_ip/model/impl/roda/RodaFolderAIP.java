@@ -121,6 +121,7 @@ public class RodaFolderAIP extends AIPWrap {
       final ObjectMapper mapper = new ObjectMapper();
       final JsonNode json = mapper.readTree(getBasePath().resolve("aip.json").toFile());
 
+      this.setId(getBasePath().getFileName().toString());
       this.setAncestors(Collections.singletonList(json.get("parentId").asText()));
       this.setContentType(new IPContentType(json.get(TYPE).asText()));
       this.setState(IPEnums.AIPState.valueOf(json.get("state").asText()));

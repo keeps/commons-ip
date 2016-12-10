@@ -25,6 +25,8 @@ public class RodaFolderAIPTest {
     AIP aip = RodaFolderAIP.parse(inputPath);
     Assert.assertTrue(aip.isValid());
 
+    Assert.assertEquals("5408d7a3-9efd-4616-9609-7f335d976489", aip.getId());
+
     Assert.assertEquals(1, aip.getDescriptiveMetadata().size());
     Assert.assertEquals(10, aip.getPreservationMetadata().size());
     Assert.assertEquals(0, aip.getOtherMetadata().size());

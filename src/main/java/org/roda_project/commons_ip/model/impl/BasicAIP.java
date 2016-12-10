@@ -16,8 +16,9 @@ import org.roda_project.commons_ip.utils.IPException;
  * AIP basic implementation. This implementation just holds values in memory. It
  * can't read or write AIPs.
  * 
- * Build methods: {@link #build(Path)}, {@link #build(Path, String)} throw a
- * {@link IPException}.
+ * Build methods: {@link #build(Path)}, {@link #build(Path, boolean)},
+ * {@link #build(Path, String)} and {@link #build(Path, String, boolean)} throw
+ * a {@link IPException}.
  *
  * Parse methods: {@link #parse(Path)}, {@link #parse(Path, Path)} throw a
  * {@link org.roda_project.commons_ip.model.ParseException}.
@@ -101,7 +102,19 @@ public class BasicAIP extends IP implements AIP {
   }
 
   @Override
+  public Path build(final Path destinationDirectory, final boolean onlyManifest)
+    throws IPException, InterruptedException {
+    throw new IPException("Not implemented");
+  }
+
+  @Override
   public Path build(final Path destinationDirectory, final String fileNameWithoutExtension)
+    throws IPException, InterruptedException {
+    throw new IPException("Not implemented");
+  }
+
+  @Override
+  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
     throws IPException, InterruptedException {
     throw new IPException("Not implemented");
   }

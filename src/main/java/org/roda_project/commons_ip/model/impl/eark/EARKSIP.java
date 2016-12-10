@@ -93,12 +93,54 @@ public class EARKSIP extends SIP {
   }
 
   /**
-   * 
+   * Builds a SIP.
+   *
+   * @param destinationDirectory
+   *          the {@link Path} where the SIP should be build.
+   * @param onlyManifest
+   *          build only the manifest file? (<strong>this parameter is
+   *          ignored</strong>).
+   * @return the {@link Path}.
+   * @throws IPException
+   *           if some error occurs.
+   * @throws InterruptedException
+   *           if some error occurs.
+   */
+  @Override
+  public Path build(final Path destinationDirectory, final boolean onlyManifest)
+    throws IPException, InterruptedException {
+    return build(destinationDirectory, null);
+  }
+
+  @Override
+  public Path build(Path destinationDirectory, String fileNameWithoutExtension)
+    throws IPException, InterruptedException {
+    return build(destinationDirectory, fileNameWithoutExtension, false);
+  }
+
+  /**
+   *
    * build and all build related methods
    * _________________________________________________________________________
    */
+  /**
+   * Builds a SIP.
+   *
+   * @param destinationDirectory
+   *          the {@link Path} where the SIP should be build.
+   * @param fileNameWithoutExtension
+   *          the name of the output file without extension.
+   * @param onlyManifest
+   *          build only the manifest file? (<strong>this parameter is
+   *          ignored</strong>).
+   * @return the {@link Path}.
+   * @throws IPException
+   *           if some error occurs.
+   * @throws InterruptedException
+   *           if some error occurs.
+   */
   @Override
-  public Path build(Path destinationDirectory, String fileNameWithoutExtension)
+  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
     throws IPException, InterruptedException {
     Path buildDir = createBuildDir();
     Path zipPath = null;

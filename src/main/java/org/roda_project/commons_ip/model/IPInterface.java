@@ -122,7 +122,11 @@ public interface IPInterface {
    */
   Path build(Path destinationDirectory) throws IPException, InterruptedException;
 
+  Path build(Path destinationDirectory, boolean onlyManifest) throws IPException, InterruptedException;
+
   Path build(Path destinationDirectory, String fileNameWithoutExtension) throws IPException, InterruptedException;
+
+  Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest) throws IPException, InterruptedException;
 
   static IPInterface parse(Path source) throws ParseException {
     throw new ParseException("One must implement static method parse in a concrete class");
