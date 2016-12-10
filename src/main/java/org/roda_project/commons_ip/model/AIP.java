@@ -1,93 +1,75 @@
-/**
- * The contents of this file are subject to the license and copyright
- * detailed in the LICENSE file at the root of the source
- * tree and available online at
- *
- * https://github.com/keeps/commons-ip
- */
 package org.roda_project.commons_ip.model;
 
-import java.util.ArrayList;
+import java.nio.file.Path;
 import java.util.List;
 
 import org.roda_project.commons_ip.utils.IPEnums.AIPState;
-import org.roda_project.commons_ip.utils.IPEnums.IPType;
 
 /**
- * This is an Archival Information Package (AIP).
- *
- * @author Hélder Silva (hsilva@keep.pt)
+ * AIP interface.
+ * 
  * @author Rui Castro (rui.castro@gmail.com)
  */
-public abstract class AIP extends IP implements AIPInterface {
+public interface AIP extends IPInterface {
 
   /**
-   * The state.
-   */
-  private AIPState state;
-
-  /**
-   * List of submission files.
-   */
-  private List<IPFile> submissions;
-
-  /**
-   * Constructor.
-   */
-  public AIP() {
-    super();
-    this.setType(IPType.AIP);
-    this.submissions = new ArrayList<>();
-  }
-
-  /**
-   * Constructor.
+   * Set the {@link AIPState}.
    * 
-   * @param id
-   *          the ID.
+   * @param state
+   *          the {@link AIPState}.
    */
-  public AIP(final String id) {
-    this();
-    setId(id);
+  void setState(AIPState state);
+
+  /**
+   * Get the {@link AIPState}.
+   * 
+   * @return the {@link AIPState}.
+   */
+  AIPState getState();
+
+  /**
+   * Get the {@link List} of submission {@link IPFile}.
+   *
+   * @return a {@link List<IPFile>}.
+   */
+  List<IPFile> getSubmissions();
+
+  /**
+   * Add a submission.
+   * 
+   * @param submission
+   *          the submission {@link IPFile}.
+   * @return the {@link AIP}.
+   */
+  AIP addSubmission(IPFile submission);
+
+  /**
+   * Parse an {@link AIP} from the given source {@link Path}.
+   *
+   * @param source
+   *          the source {@link Path}.
+   * @return the parsed {@link AIP}.
+   * @throws ParseException
+   *           if some error occurred.
+   */
+  static AIP parse(final Path source) throws ParseException {
+    throw new ParseException("One must implement static method parse in a concrete class");
   }
 
   /**
-   * Constructor.
-   * 
-   * @param id
-   *          the ID.
-   * @param contentType
-   *          the {@link IPContentType}.
+   * Parse an {@link AIP} from the given source {@link Path} and copy it to the
+   * given destination {@link Path}.
+   *
+   * @param source
+   *          the source {@link Path}.
+   * @param destination
+   *          the destination {@link Path}.
+   * @return the parsed {@link AIP}.
+   * @throws ParseException
+   *           if some error occurred.
    */
-  public AIP(final String id, final IPContentType contentType) {
-    this(id);
-    setContentType(contentType);
-  }
-
-  @Override
-  public String toString() {
-    return "AIP [super=" + super.toString() + ", submissions=" + submissions + "]";
-  }
-
-  @Override
-  public void setState(final AIPState state) {
-    this.state = state;
-  }
-
-  @Override
-  public AIPState getState() {
-    return state;
-  }
-
-  @Override
-  public List<IPFile> getSubmissions() {
-    return submissions;
-  }
-
-  @Override
-  public AIPInterface addSubmission(final IPFile submission) {
-    this.submissions.add(submission);
-    return this;
+  static AIP parse(final Path source, final Path destination) throws ParseException {
+    throw new ParseException("One must implement static method parse in a concrete class");
   }
 
 }

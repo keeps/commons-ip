@@ -1,8 +1,15 @@
 package org.roda_project.commons_ip.model.impl;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.roda_project.commons_ip.model.AIP;
+import org.roda_project.commons_ip.model.IP;
+import org.roda_project.commons_ip.model.IPContentType;
+import org.roda_project.commons_ip.model.IPFile;
+import org.roda_project.commons_ip.utils.IPEnums.AIPState;
+import org.roda_project.commons_ip.utils.IPEnums.IPType;
 import org.roda_project.commons_ip.utils.IPException;
 
 /**
@@ -17,7 +24,76 @@ import org.roda_project.commons_ip.utils.IPException;
  *
  * @author Rui Castro (rui.castro@gmail.com)
  */
-public class BasicAIP extends AIP {
+public class BasicAIP extends IP implements AIP {
+
+  /**
+   * The state.
+   */
+  private AIPState state;
+
+  /**
+   * List of submission files.
+   */
+  private List<IPFile> submissions;
+
+  /**
+   * Constructor.
+   */
+  public BasicAIP() {
+    super();
+    this.setType(IPType.AIP);
+    this.submissions = new ArrayList<>();
+  }
+
+  /**
+   * Constructor.
+   *
+   * @param id
+   *          the ID.
+   */
+  public BasicAIP(final String id) {
+    this();
+    setId(id);
+  }
+
+  /**
+   * Constructor.
+   *
+   * @param id
+   *          the ID.
+   * @param contentType
+   *          the {@link IPContentType}.
+   */
+  public BasicAIP(final String id, final IPContentType contentType) {
+    this(id);
+    setContentType(contentType);
+  }
+
+  @Override
+  public String toString() {
+    return "BasicAIP [super=" + super.toString() + ", submissions=" + submissions + "]";
+  }
+
+  @Override
+  public void setState(final AIPState state) {
+    this.state = state;
+  }
+
+  @Override
+  public AIPState getState() {
+    return state;
+  }
+
+  @Override
+  public List<IPFile> getSubmissions() {
+    return submissions;
+  }
+
+  @Override
+  public AIP addSubmission(final IPFile submission) {
+    this.submissions.add(submission);
+    return this;
+  }
 
   @Override
   public Path build(final Path destinationDirectory) throws IPException, InterruptedException {

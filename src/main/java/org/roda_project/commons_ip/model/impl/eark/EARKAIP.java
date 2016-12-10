@@ -27,7 +27,6 @@ import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType;
 import org.roda_project.commons_ip.mets_v1_11.beans.StructMapType;
 import org.roda_project.commons_ip.model.AIP;
-import org.roda_project.commons_ip.model.AIPInterface;
 import org.roda_project.commons_ip.model.IPConstants;
 import org.roda_project.commons_ip.model.IPContentType;
 import org.roda_project.commons_ip.model.IPDescriptiveMetadata;
@@ -59,7 +58,7 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 /**
- * EARK AIP. This implementation of {@link AIPInterface} can read/write AIPs
+ * EARK AIP. This implementation of {@link AIP} can read/write AIPs
  * from/to a folder.
  * 
  * @author Rui Castro (rui.castro@gmail.com)
@@ -78,7 +77,7 @@ public class EARKAIP extends AIPWrap {
    * @param aip
    *          the {@link AIP} to warp.
    */
-  public EARKAIP(final AIPInterface aip) {
+  public EARKAIP(final AIP aip) {
     this(aip, null);
   }
 
@@ -90,7 +89,7 @@ public class EARKAIP extends AIPWrap {
    * @param id
    *          will be used as OBJID in METS (/mets[@OBJID])
    */
-  public EARKAIP(final AIPInterface aip, final String id) {
+  public EARKAIP(final AIP aip, final String id) {
     this(aip, id, null);
   }
 
@@ -104,7 +103,7 @@ public class EARKAIP extends AIPWrap {
    * @param contentType
    *          the contentType.
    */
-  public EARKAIP(final AIPInterface aip, final String id, final IPContentType contentType) {
+  public EARKAIP(final AIP aip, final String id, final IPContentType contentType) {
     super(aip);
     setId(id);
     setContentType(contentType);
@@ -165,7 +164,7 @@ public class EARKAIP extends AIPWrap {
     }
   }
 
-  public static AIPInterface parse(final Path source) throws ParseException {
+  public static AIP parse(final Path source) throws ParseException {
     try {
       if (source.toFile().isDirectory()) {
         return parseEARKAIPFromPath(source);
@@ -177,7 +176,7 @@ public class EARKAIP extends AIPWrap {
     }
   }
 
-  public static AIPInterface parse(Path source, Path destinationDirectory) throws ParseException {
+  public static AIP parse(Path source, Path destinationDirectory) throws ParseException {
     return parseEARKAIP(source, destinationDirectory);
   }
 
@@ -525,14 +524,14 @@ public class EARKAIP extends AIPWrap {
     return sb.toString();
   }
 
-  private static AIPInterface parseEARKAIP(final Path source, final Path destinationDirectory) throws ParseException {
+  private static AIP parseEARKAIP(final Path source, final Path destinationDirectory) throws ParseException {
     Path aipPath = ZIPUtils.extractSIPIfInZipFormat(source, destinationDirectory, FILE_EXTENSION);
     return parseEARKAIPFromPath(aipPath);
   }
 
-  private static AIPInterface parseEARKAIPFromPath(final Path aipPath) throws ParseException {
+  private static AIP parseEARKAIPFromPath(final Path aipPath) throws ParseException {
     try {
-      final AIPInterface aip = new EARKAIP(new BasicAIP());
+      final AIP aip = new EARKAIP(new BasicAIP());
       aip.setBasePath(aipPath);
       final MetsWrapper metsWrapper = processMainMets(aip, aipPath);
 
@@ -565,7 +564,7 @@ public class EARKAIP extends AIPWrap {
     }
   }
 
-  private static MetsWrapper processMainMets(AIPInterface aip, Path sipPath) {
+  private static MetsWrapper processMainMets(AIP aip, Path sipPath) {
     Path mainMETSFile = sipPath.resolve(IPConstants.METS_FILE);
     Mets mainMets = null;
     if (Files.exists(mainMETSFile)) {
@@ -594,7 +593,7 @@ public class EARKAIP extends AIPWrap {
     return new MetsWrapper(mainMets, mainMETSFile);
   }
 
-  private static MetsWrapper processRepresentationMets(AIPInterface aip, Path representationMetsFile,
+  private static MetsWrapper processRepresentationMets(AIP aip, Path representationMetsFile,
     IPRepresentation representation) {
     Mets representationMets = null;
     if (Files.exists(representationMetsFile)) {
@@ -617,7 +616,7 @@ public class EARKAIP extends AIPWrap {
     return new MetsWrapper(representationMets, representationMetsFile);
   }
 
-  private static void setAIPContentType(Mets mets, AIPInterface aip) throws ParseException {
+  private static void setAIPContentType(Mets mets, AIP aip) throws ParseException {
     String metsType = mets.getTYPE();
 
     if (StringUtils.isBlank(metsType)) {
@@ -668,7 +667,7 @@ public class EARKAIP extends AIPWrap {
     representation.setContentType(new RepresentationContentType(contentTypeParts[1]));
   }
 
-  private static Mets addAgentsToMETS(Mets mets, AIPInterface aip, IPRepresentation representation) {
+  private static Mets addAgentsToMETS(Mets mets, AIP aip, IPRepresentation representation) {
     if (mets.getMetsHdr() != null && mets.getMetsHdr().getAgent() != null) {
       for (MetsType.MetsHdr.Agent agent : mets.getMetsHdr().getAgent()) {
         if (representation == null) {
@@ -682,7 +681,7 @@ public class EARKAIP extends AIPWrap {
     return mets;
   }
 
-  private static StructMapType getEARKStructMap(MetsWrapper metsWrapper, AIPInterface aip, boolean mainMets) {
+  private static StructMapType getEARKStructMap(MetsWrapper metsWrapper, AIP aip, boolean mainMets) {
     Mets mets = metsWrapper.getMets();
     StructMapType res = null;
     for (StructMapType structMap : mets.getStructMap()) {
@@ -734,28 +733,28 @@ public class EARKAIP extends AIPWrap {
     }
   }
 
-  private static AIPInterface processDescriptiveMetadata(MetsWrapper metsWrapper, AIPInterface aip,
+  private static AIP processDescriptiveMetadata(MetsWrapper metsWrapper, AIP aip,
     IPRepresentation representation, Path basePath) throws IPException {
 
     return processMetadata(aip, metsWrapper, representation, metsWrapper.getDescriptiveMetadataDiv(),
       IPConstants.DESCRIPTIVE, basePath);
   }
 
-  private static AIPInterface processOtherMetadata(MetsWrapper metsWrapper, AIPInterface aip,
+  private static AIP processOtherMetadata(MetsWrapper metsWrapper, AIP aip,
     IPRepresentation representation, Path basePath) throws IPException {
 
     return processMetadata(aip, metsWrapper, representation, metsWrapper.getOtherMetadataDiv(), IPConstants.OTHER,
       basePath);
   }
 
-  private static AIPInterface processPreservationMetadata(MetsWrapper metsWrapper, AIPInterface aip,
+  private static AIP processPreservationMetadata(MetsWrapper metsWrapper, AIP aip,
     IPRepresentation representation, Path basePath) throws IPException {
 
     return processMetadata(aip, metsWrapper, representation, metsWrapper.getPreservationMetadataDiv(),
       IPConstants.PRESERVATION, basePath);
   }
 
-  private static AIPInterface processMetadata(AIPInterface aip, MetsWrapper representationMetsWrapper,
+  private static AIP processMetadata(AIP aip, MetsWrapper representationMetsWrapper,
     IPRepresentation representation, DivType div, String metadataType, Path basePath) throws IPException {
     if (div != null && div.getFptr() != null) {
       for (Fptr fptr : div.getFptr()) {
@@ -782,7 +781,7 @@ public class EARKAIP extends AIPWrap {
     return aip;
   }
 
-  private static void processMetadataFile(AIPInterface aip, IPRepresentation representation, String metadataType,
+  private static void processMetadataFile(AIP aip, IPRepresentation representation, String metadataType,
     MdRef mdRef, Path filePath, List<String> fileRelativeFolders) throws IPException {
     Optional<IPFile> metadataFile = validateMetadataFile(aip, filePath, mdRef, fileRelativeFolders);
     if (metadataFile.isPresent()) {
@@ -834,19 +833,19 @@ public class EARKAIP extends AIPWrap {
     }
   }
 
-  private static Optional<IPFile> validateFile(AIPInterface aip, Path filePath, FileType fileType,
+  private static Optional<IPFile> validateFile(AIP aip, Path filePath, FileType fileType,
     List<String> fileRelativeFolders) {
     return Utils.validateFile(aip, filePath, fileRelativeFolders, fileType.getCHECKSUM(), fileType.getCHECKSUMTYPE(),
       fileType.getID());
   }
 
-  private static Optional<IPFile> validateMetadataFile(AIPInterface aip, Path filePath, MdRef mdRef,
+  private static Optional<IPFile> validateMetadataFile(AIP aip, Path filePath, MdRef mdRef,
     List<String> fileRelativeFolders) {
     return Utils.validateFile(aip, filePath, fileRelativeFolders, mdRef.getCHECKSUM(), mdRef.getCHECKSUMTYPE(),
       mdRef.getID());
   }
 
-  private static AIPInterface processFile(AIPInterface aip, DivType div, String folder, Path basePath)
+  private static AIP processFile(AIP aip, DivType div, String folder, Path basePath)
     throws SIPException {
     if (div != null && div.getFptr() != null) {
       for (Fptr fptr : div.getFptr()) {
@@ -885,7 +884,7 @@ public class EARKAIP extends AIPWrap {
     return aip;
   }
 
-  private static AIPInterface processRepresentations(MetsWrapper metsWrapper, AIPInterface aip) throws IPException {
+  private static AIP processRepresentations(MetsWrapper metsWrapper, AIP aip) throws IPException {
 
     if (metsWrapper.getRepresentationsDiv() != null && metsWrapper.getRepresentationsDiv().getDiv() != null) {
       for (DivType representationDiv : metsWrapper.getRepresentationsDiv().getDiv()) {
@@ -950,7 +949,7 @@ public class EARKAIP extends AIPWrap {
     addAgentsToMETS(representationMetsWrapper.getMets(), null, representation);
   }
 
-  private static void processRepresentationFiles(AIPInterface aip, MetsWrapper representationMetsWrapper,
+  private static void processRepresentationFiles(AIP aip, MetsWrapper representationMetsWrapper,
     IPRepresentation representation, Path representationBasePath) throws SIPException {
 
     if (representationMetsWrapper.getDataDiv() != null && representationMetsWrapper.getDataDiv().getFptr() != null) {
@@ -991,19 +990,19 @@ public class EARKAIP extends AIPWrap {
 
   }
 
-  private static AIPInterface processSchemasMetadata(MetsWrapper metsWrapper, AIPInterface aip, Path basePath)
+  private static AIP processSchemasMetadata(MetsWrapper metsWrapper, AIP aip, Path basePath)
     throws SIPException {
 
     return processFile(aip, metsWrapper.getSchemasDiv(), IPConstants.SCHEMAS, basePath);
   }
 
-  private static AIPInterface processDocumentationMetadata(MetsWrapper metsWrapper, AIPInterface aip, Path basePath)
+  private static AIP processDocumentationMetadata(MetsWrapper metsWrapper, AIP aip, Path basePath)
     throws SIPException {
 
     return processFile(aip, metsWrapper.getDocumentationDiv(), IPConstants.DOCUMENTATION, basePath);
   }
 
-  private static AIPInterface processAncestors(MetsWrapper metsWrapper, AIPInterface aip) {
+  private static AIP processAncestors(MetsWrapper metsWrapper, AIP aip) {
     Mets mets = metsWrapper.getMets();
 
     if (mets.getStructMap() != null && !mets.getStructMap().isEmpty()) {

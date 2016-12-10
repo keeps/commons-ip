@@ -6,23 +6,23 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.junit.Assert;
 import org.junit.Test;
-import org.roda_project.commons_ip.model.AIPInterface;
+import org.roda_project.commons_ip.model.AIP;
 import org.roda_project.commons_ip.model.IPRepresentation;
 import org.roda_project.commons_ip.model.ParseException;
 
 /**
- * Test class for {@link RodaAIP}.
+ * Test class for {@link RodaFolderAIP}.
  * 
  * @author Rui Castro (rui.castro@gmail.com)
  */
-public class RodaAIPTest {
+public class RodaFolderAIPTest {
 
   @Test
   public void readsAIPFromFolder() throws URISyntaxException, ParseException {
     URI resource = getClass().getResource("/").toURI();
     final Path inputPath = Paths.get(resource).resolve("aip").resolve("roda")
       .resolve("5408d7a3-9efd-4616-9609-7f335d976489");
-    AIPInterface aip = RodaAIP.parse(inputPath);
+    AIP aip = RodaFolderAIP.parse(inputPath);
     Assert.assertTrue(aip.isValid());
 
     Assert.assertEquals(1, aip.getDescriptiveMetadata().size());

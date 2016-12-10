@@ -7,7 +7,6 @@ import java.util.Optional;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.roda_project.commons_ip.model.AIP;
-import org.roda_project.commons_ip.model.AIPInterface;
 import org.roda_project.commons_ip.model.IP;
 import org.roda_project.commons_ip.model.IPAgent;
 import org.roda_project.commons_ip.model.IPContentType;
@@ -27,20 +26,20 @@ import org.roda_project.commons_ip.utils.ZipEntryInfo;
  * 
  * @author Rui Castro (rui.castro@gmail.com)
  */
-public class AIPWrap implements AIPInterface {
+public class AIPWrap implements AIP {
 
   /**
    * The wrapped {@link AIP}.
    */
-  private final AIPInterface aip;
+  private final AIP aip;
 
   /**
    * Constructor.
    * 
    * @param aip
-   *          the {@link AIPInterface} to wrap.
+   *          the {@link AIP} to wrap.
    */
-  public AIPWrap(final AIPInterface aip) {
+  public AIPWrap(final AIP aip) {
     this.aip = aip;
   }
 
@@ -200,7 +199,7 @@ public class AIPWrap implements AIPInterface {
   }
 
   @Override
-  public AIPInterface addSubmission(final IPFile submission) {
+  public AIP addSubmission(final IPFile submission) {
     return aip.addSubmission(submission);
   }
 
@@ -215,17 +214,20 @@ public class AIPWrap implements AIPInterface {
   }
 
   @Override
-  public IP addDescriptiveMetadataToRepresentation(final String representationID, final IPDescriptiveMetadata descriptiveMetadata) throws SIPException {
+  public IP addDescriptiveMetadataToRepresentation(final String representationID,
+    final IPDescriptiveMetadata descriptiveMetadata) throws SIPException {
     return aip.addDescriptiveMetadataToRepresentation(representationID, descriptiveMetadata);
   }
 
   @Override
-  public IP addPreservationMetadataToRepresentation(final String representationID, final IPMetadata preservationMetadata) throws SIPException {
+  public IP addPreservationMetadataToRepresentation(final String representationID,
+    final IPMetadata preservationMetadata) throws SIPException {
     return aip.addPreservationMetadataToRepresentation(representationID, preservationMetadata);
   }
 
   @Override
-  public IP addOtherMetadataToRepresentation(final String representationID, final IPMetadata otherMetadata) throws SIPException {
+  public IP addOtherMetadataToRepresentation(final String representationID, final IPMetadata otherMetadata)
+    throws SIPException {
     return aip.addOtherMetadataToRepresentation(representationID, otherMetadata);
   }
 
@@ -240,7 +242,8 @@ public class AIPWrap implements AIPInterface {
   }
 
   @Override
-  public IP addDocumentationToRepresentation(final String representationID, final IPFile documentation) throws SIPException {
+  public IP addDocumentationToRepresentation(final String representationID, final IPFile documentation)
+    throws SIPException {
     return aip.addDocumentationToRepresentation(representationID, documentation);
   }
 
@@ -305,7 +308,8 @@ public class AIPWrap implements AIPInterface {
   }
 
   @Override
-  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension) throws IPException, InterruptedException {
+  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension)
+    throws IPException, InterruptedException {
     return aip.build(destinationDirectory, fileNameWithoutExtension);
   }
 

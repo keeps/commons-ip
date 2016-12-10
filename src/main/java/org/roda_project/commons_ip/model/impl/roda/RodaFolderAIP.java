@@ -11,20 +11,18 @@ import java.util.stream.Stream;
 
 import org.apache.commons.io.FilenameUtils;
 import org.roda_project.commons_ip.model.AIP;
-import org.roda_project.commons_ip.model.AIPInterface;
-import org.roda_project.commons_ip.model.AIPReader;
 import org.roda_project.commons_ip.model.IPContentType;
 import org.roda_project.commons_ip.model.IPDescriptiveMetadata;
 import org.roda_project.commons_ip.model.IPFile;
 import org.roda_project.commons_ip.model.IPMetadata;
 import org.roda_project.commons_ip.model.IPRepresentation;
 import org.roda_project.commons_ip.model.MetadataType;
-import org.roda_project.commons_ip.model.MetadataType.MetadataTypeEnum;
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.model.RepresentationContentType;
 import org.roda_project.commons_ip.model.RepresentationStatus;
+import org.roda_project.commons_ip.model.impl.AIPWrap;
 import org.roda_project.commons_ip.model.impl.BasicAIP;
-import org.roda_project.commons_ip.utils.IPEnums.AIPState;
+import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.IPException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,15 +31,15 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * Roda AIP reader.
+ * {@link AIP} implementation that can read a RODA AIP from a folder.
  *
  * @author Rui Castro (rui.castro@gmail.com)
  */
-public class RodaAIPReader implements AIPReader {
+public class RodaFolderAIP extends AIPWrap {
   /**
    * Logger.
    */
-  private static final Logger LOGGER = LoggerFactory.getLogger(RodaAIPReader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RodaFolderAIP.class);
 
   /**
    * Constant string "id".
@@ -85,51 +83,59 @@ public class RodaAIPReader implements AIPReader {
   private static final String DOCUMENTATION = "documentation";
 
   /**
-   * AIP path.
-   */
-  private final Path path;
-
-  /**
    * Constructor.
-   * 
+   *
+   * @param aip
+   *          the {@link AIP} to wrap.
    * @param path
    *          AIP path.
    */
-  public RodaAIPReader(final Path path) {
-    this.path = path;
+  public RodaFolderAIP(final AIP aip, final Path path) {
+    super(aip);
+    setBasePath(path);
+  }
+
+  /**
+   * Reads a {@link RodaFolderAIP} from the given folder.
+   *
+   * @param source
+   *          the source folder.
+   * @return a {@link RodaFolderAIP}.
+   * @throws ParseException
+   *           if some error occurs.
+   */
+  public static AIP parse(final Path source) throws ParseException {
+    return new RodaFolderAIP(new BasicAIP(), source).read();
   }
 
   /**
    * Read the AIP.
-   * 
+   *
    * @return the {@link AIP}.
    * @throws ParseException
    *           if some error occurred.
    */
-  @Override
-  public AIPInterface read() throws ParseException {
+  private AIP read() throws ParseException {
     try {
 
-      final AIPInterface aip = new RodaAIP(new BasicAIP());
-
       final ObjectMapper mapper = new ObjectMapper();
-      final JsonNode json = mapper.readTree(this.path.resolve("aip.json").toFile());
+      final JsonNode json = mapper.readTree(getBasePath().resolve("aip.json").toFile());
 
-      aip.setAncestors(Collections.singletonList(json.get("parentId").asText()));
-      aip.setContentType(new IPContentType(json.get(TYPE).asText()));
-      aip.setState(AIPState.valueOf(json.get("state").asText()));
+      this.setAncestors(Collections.singletonList(json.get("parentId").asText()));
+      this.setContentType(new IPContentType(json.get(TYPE).asText()));
+      this.setState(IPEnums.AIPState.valueOf(json.get("state").asText()));
 
-      final Path mdPath = this.path.resolve(METADATA);
+      final Path mdPath = getBasePath().resolve(METADATA);
 
-      readJsonDescriptiveMDs(aip, json);
-      findAndAddPreservationMDs(aip::addPreservationMetadata);
-      findAndAddOtherMDs(mdPath.resolve(OTHER), aip::addOtherMetadata);
-      findIPFiles(this.path.resolve(SCHEMAS)).forEach(aip::addSchema);
-      findIPFiles(this.path.resolve(DOCUMENTATION)).forEach(aip::addDocumentation);
+      readJsonDescriptiveMDs(this, json);
+      findAndAddPreservationMDs(this::addPreservationMetadata);
+      findAndAddOtherMDs(mdPath.resolve(OTHER), this::addOtherMetadata);
+      findIPFiles(getBasePath().resolve(SCHEMAS)).forEach(this::addSchema);
+      findIPFiles(getBasePath().resolve(DOCUMENTATION)).forEach(this::addDocumentation);
 
-      readRepresentations(aip, json);
+      readRepresentations(this, json);
 
-      return aip;
+      return this;
 
     } catch (final IOException | IPException e) {
       LOGGER.debug("Error reading aip.json - " + e.getMessage(), e);
@@ -138,91 +144,10 @@ public class RodaAIPReader implements AIPReader {
   }
 
   /**
-   * Read {@link IPDescriptiveMetadata} records from <code>aip.json</code>
-   * "descriptiveMetadata" field and update the {@link AIPInterface}.
+   * Read {@link IPRepresentation} and update the {@link AIP}.
    *
    * @param aip
-   *          the {@link AIPInterface}.
-   * @param json
-   *          the JSON node.
-   * @throws IPException
-   *           if some error occurs.
-   */
-  private void readJsonDescriptiveMDs(final AIPInterface aip, final JsonNode json) throws IPException {
-    if (json.has(DESCRIPTIVE_METADATA)) {
-      final Iterator<JsonNode> iterator = json.get(DESCRIPTIVE_METADATA).elements();
-      while (iterator.hasNext()) {
-        aip.addDescriptiveMetadata(readJsonDescriptionMD(iterator.next()));
-      }
-    }
-  }
-
-  /**
-   * Read {@link IPDescriptiveMetadata} from a {@link JsonNode}.
-   *
-   * @param json
-   *          the JSON node.
-   * @return the {@link IPDescriptiveMetadata}.
-   */
-  private IPDescriptiveMetadata readJsonDescriptionMD(final JsonNode json) {
-    final String id = json.get(ID).asText();
-    return new IPDescriptiveMetadata(id, new IPFile(this.path.resolve(METADATA).resolve(DESCRIPTIVE).resolve(id)),
-      new MetadataType(json.get(TYPE).asText()), json.get("version").asText());
-  }
-
-  /**
-   * Find preservation metadata files and adds them to {@link AIPInterface}.
-   *
-   * @param mdSetter
-   *          the {@link IPMetadataSetter}.
-   * @throws IOException
-   *           if some I/O error occurs.
-   * @throws IPException
-   *           if some other error occurs.
-   */
-  private void findAndAddPreservationMDs(final IPMetadataSetter mdSetter) throws IOException, IPException {
-    for (IPMetadata md : findPreservationMDs(this.path.resolve(METADATA).resolve(PRESERVATION))) {
-      mdSetter.addMetadata(md);
-    }
-  }
-
-  /**
-   * Find other metadata files and for each one calls
-   * {@link IPMetadataSetter#addMetadata(IPMetadata)}.
-   *
-   * @param omdPath
-   *          the {@link Path} to other metadata files.
-   * @param mdSetter
-   *          the {@link IPMetadataSetter}.
-   * @throws IOException
-   *           if some I/O error occurs.
-   * @throws IPException
-   *           if some other error occurs.
-   */
-  private void findAndAddOtherMDs(final Path omdPath, final IPMetadataSetter mdSetter) throws IOException, IPException {
-    if (Files.isDirectory(omdPath)) {
-      final Iterator<Path> paths = Files.list(omdPath).iterator();
-      while (paths.hasNext()) {
-        final Path mdPath = paths.next();
-        if (Files.isDirectory(mdPath)) {
-          for (IPMetadata md : findMDs(mdPath, MetadataType.OTHER().setOtherType(mdPath.getFileName().toString()))) {
-            mdSetter.addMetadata(md);
-          }
-        }
-        if (Files.isRegularFile(mdPath)) {
-          for (IPMetadata md : findMDs(mdPath, MetadataType.OTHER())) {
-            mdSetter.addMetadata(md);
-          }
-        }
-      }
-    }
-  }
-
-  /**
-   * Read {@link IPRepresentation} and update the {@link AIPInterface}.
-   *
-   * @param aip
-   *          the {@link AIPInterface}.
+   *          the {@link AIP}.
    * @param json
    *          the JSON node.
    * @throws IPException
@@ -230,7 +155,7 @@ public class RodaAIPReader implements AIPReader {
    * @throws IOException
    *           if some I/O error occurs.
    */
-  private void readRepresentations(final AIPInterface aip, final JsonNode json) throws IPException, IOException {
+  private void readRepresentations(final AIP aip, final JsonNode json) throws IPException, IOException {
     if (json.has(REPRESENTATIONS)) {
       final Iterator<JsonNode> iterator = json.get(REPRESENTATIONS).elements();
       while (iterator.hasNext()) {
@@ -253,10 +178,10 @@ public class RodaAIPReader implements AIPReader {
   private IPRepresentation readRepresentation(final JsonNode json) throws IOException, IPException {
     final IPRepresentation rep = new IPRepresentation(json.get(ID).asText());
     rep.setStatus(
-      json.get("original").asBoolean() ? RepresentationStatus.getORIGINAL() : RepresentationStatus.getOTHER());
+        json.get("original").asBoolean() ? RepresentationStatus.getORIGINAL() : RepresentationStatus.getOTHER());
     rep.setContentType(new RepresentationContentType(json.get(TYPE).asText()));
 
-    final Path repPath = this.path.resolve(REPRESENTATIONS).resolve(rep.getRepresentationID());
+    final Path repPath = getBasePath().resolve(REPRESENTATIONS).resolve(rep.getRepresentationID());
     final Path mdPath = repPath.resolve(METADATA);
 
     findIPFiles(repPath.resolve("data")).forEach(rep::addFile);
@@ -271,11 +196,94 @@ public class RodaAIPReader implements AIPReader {
   }
 
   /**
+   * Read {@link IPDescriptiveMetadata} records from <code>aip.json</code>
+   * "descriptiveMetadata" field and update the {@link AIP}.
+   *
+   * @param aip
+   *          the {@link AIP}.
+   * @param json
+   *          the JSON node.
+   * @throws IPException
+   *           if some error occurs.
+   */
+  private void readJsonDescriptiveMDs(final AIP aip, final JsonNode json) throws IPException {
+    if (json.has(DESCRIPTIVE_METADATA)) {
+      final Iterator<JsonNode> iterator = json.get(DESCRIPTIVE_METADATA).elements();
+      while (iterator.hasNext()) {
+        aip.addDescriptiveMetadata(readJsonDescriptionMD(iterator.next()));
+      }
+    }
+  }
+
+  /**
+   * Read {@link IPDescriptiveMetadata} from a {@link JsonNode}.
+   *
+   * @param json
+   *          the JSON node.
+   * @return the {@link IPDescriptiveMetadata}.
+   */
+  private IPDescriptiveMetadata readJsonDescriptionMD(final JsonNode json) {
+    final String id = json.get(ID).asText();
+    return new IPDescriptiveMetadata(id, new IPFile(getBasePath().resolve(METADATA).resolve(DESCRIPTIVE).resolve(id)),
+      new MetadataType(json.get(TYPE).asText()), json.get("version").asText());
+  }
+
+  /**
+   * Find preservation metadata files and adds them to {@link AIP}.
+   *
+   * @param mdSetter
+   *          the {@link IPMetadataSetter}.
+   * @throws IOException
+   *           if some I/O error occurs.
+   * @throws IPException
+   *           if some other error occurs.
+   */
+  private void findAndAddPreservationMDs(final IPMetadataSetter mdSetter)
+    throws IOException, IPException {
+    for (IPMetadata md : findPreservationMDs(getBasePath().resolve(METADATA).resolve(PRESERVATION))) {
+      mdSetter.addMetadata(md);
+    }
+  }
+
+  /**
+   * Find other metadata files and for each one calls
+   * {@link IPMetadataSetter#addMetadata(IPMetadata)}.
+   *
+   * @param omdPath
+   *          the {@link Path} to other metadata files.
+   * @param mdSetter
+   *          the {@link IPMetadataSetter}.
+   * @throws IOException
+   *           if some I/O error occurs.
+   * @throws IPException
+   *           if some other error occurs.
+   */
+  private void findAndAddOtherMDs(final Path omdPath, final IPMetadataSetter mdSetter)
+    throws IOException, IPException {
+    if (Files.isDirectory(omdPath)) {
+      final Iterator<Path> paths = Files.list(omdPath).iterator();
+      while (paths.hasNext()) {
+        final Path mdPath = paths.next();
+        if (Files.isDirectory(mdPath)) {
+          for (IPMetadata md : findMDs(mdPath, MetadataType.OTHER().setOtherType(mdPath.getFileName().toString()))) {
+            mdSetter.addMetadata(md);
+          }
+        }
+        if (Files.isRegularFile(mdPath)) {
+          for (IPMetadata md : findMDs(mdPath, MetadataType.OTHER())) {
+            mdSetter.addMetadata(md);
+          }
+        }
+      }
+    }
+  }
+
+  /**
    * Find {@link IPDescriptiveMetadata}s in the given {@link Path}.
    *
    * @param dmdPath
    *          the {@link Path}.
-   * @return the {@link List<IPDescriptiveMetadata>}.
+   * @return the {@link List <IPDescriptiveMetadata>}.
    * @throws IOException
    *           if some I/O error occurs.
    */
@@ -304,7 +312,7 @@ public class RodaAIPReader implements AIPReader {
    *           if some I/O error occurs.
    */
   private List<IPMetadata> findPreservationMDs(final Path mdPath) throws IOException {
-    return findMDs(mdPath, new MetadataType(MetadataTypeEnum.PREMIS));
+    return findMDs(mdPath, new MetadataType(MetadataType.MetadataTypeEnum.PREMIS));
   }
 
   /**
