@@ -103,6 +103,9 @@ public final class EARKMETSUtils {
     FileGrpType schemasFileGroup = createFileGroupType(IPConstants.SCHEMAS);
     mainFileGroup.getFileGrp().add(schemasFileGroup);
     metsWrapper.setSchemasFileGroup(schemasFileGroup);
+    FileGrpType submissionFileGroup = createFileGroupType(IPConstants.SUBMISSION);
+    mainFileGroup.getFileGrp().add(submissionFileGroup);
+    metsWrapper.setSubmissionFileGroup(submissionFileGroup);
     FileGrpType documentationFileGroup = createFileGroupType(IPConstants.DOCUMENTATION);
     mainFileGroup.getFileGrp().add(documentationFileGroup);
     metsWrapper.setDocumentationFileGroup(documentationFileGroup);
@@ -150,6 +153,10 @@ public final class EARKMETSUtils {
     DivType documentationDiv = createDivForStructMap(IPConstants.DOCUMENTATION);
     metsWrapper.setDocumentationDiv(documentationDiv);
     mainDiv.getDiv().add(documentationDiv);
+    // submission
+    DivType submissionDiv = createDivForStructMap(IPConstants.SUBMISSION);
+    metsWrapper.setSubmissionsDiv(submissionDiv);
+    mainDiv.getDiv().add(submissionDiv);
 
     structMap.setDiv(mainDiv);
     mets.getStructMap().add(structMap);
@@ -420,7 +427,7 @@ public final class EARKMETSUtils {
     // add to file section
     FLocat fileLocation = createFileLocation(submissionFilePath);
     file.getFLocat().add(fileLocation);
-    metsWrapper.getSchemasFileGroup().getFile().add(file);
+    metsWrapper.getSubmissionFileGroup().getFile().add(file);
 
     // add to struct map
     Fptr fptr = new Fptr();

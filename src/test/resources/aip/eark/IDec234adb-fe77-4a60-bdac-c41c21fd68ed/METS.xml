@@ -29,6 +29,11 @@
                     <FLocat LOCTYPE="URL" xlink:type="simple" xlink:href="documentation/sakila.mwb"/>
                 </file>
             </fileGrp>
+            <fileGrp ID="ID0080BB37-C2D7-4305-895D-12E4B7BCC9DA" USE="submission">
+                <file ID="IDF0DC85A1-4C7F-4566-A7D6-FB758B751F5D" MIMETYPE="application/sql" SIZE="23424" CREATED="2016-10-21T10:55:48.580+01:00" CHECKSUM="4324B46283B8A65F3F317319918C45559EA9BE49AC2007CCF001D3C60E4989A3" CHECKSUMTYPE="SHA-256">
+                    <FLocat LOCTYPE="URL" xlink:type="simple" xlink:href="submission/sakila-schema.sql"/>
+                </file>
+            </fileGrp>
         </fileGrp>
     </fileSec>
     <structMap ID="IDEFAB5678-4929-4F89-AB35-4DF2DCBFA348" TYPE="physical" LABEL="E-ARK structural map">
@@ -56,6 +61,9 @@
             </div>
             <div ID="ID1D02E358-DB96-4E5A-94C1-63F4C0570DED" LABEL="documentation">
                 <fptr FILEID="IDF36E0934-AB0F-4E84-ACEC-71E7E9F8D006"/>
+            </div>
+            <div ID="ID1D02E358-DB96-4E5A-94C1-63F4C0570DEE" LABEL="submission">
+                <fptr FILEID="IDF0DC85A1-4C7F-4566-A7D6-FB758B751F5D"/>
             </div>
         </div>
     </structMap>

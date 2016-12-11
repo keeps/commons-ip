@@ -31,6 +31,7 @@ public class RodaFolderAIPTest {
     Assert.assertEquals(10, aip.getPreservationMetadata().size());
     Assert.assertEquals(0, aip.getOtherMetadata().size());
     Assert.assertEquals(3, aip.getSchemas().size());
+    Assert.assertEquals(1, aip.getSubmissions().size());
 
     Assert.assertEquals(1, aip.getRepresentations().size());
     if (aip.getRepresentations().size() == 1) {

@@ -81,6 +81,10 @@ public class RodaFolderAIP extends AIPWrap {
    * Constant string "documentation".
    */
   private static final String DOCUMENTATION = "documentation";
+  /**
+   * Constant string "submission".
+   */
+  private static final String SUBMISSION = "submission";
 
   /**
    * Constructor.
@@ -133,6 +137,7 @@ public class RodaFolderAIP extends AIPWrap {
       findAndAddOtherMDs(mdPath.resolve(OTHER), this::addOtherMetadata);
       findIPFiles(getBasePath().resolve(SCHEMAS)).forEach(this::addSchema);
       findIPFiles(getBasePath().resolve(DOCUMENTATION)).forEach(this::addDocumentation);
+      findIPFiles(getBasePath().resolve(SUBMISSION)).forEach(this::addSubmission);
 
       readRepresentations(this, json);
 

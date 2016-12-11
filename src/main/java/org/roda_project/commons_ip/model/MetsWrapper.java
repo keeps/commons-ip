@@ -29,6 +29,7 @@ public class MetsWrapper {
 
   private FileGrpType representationsFileGroup;
   private FileGrpType schemasFileGroup;
+  private FileGrpType submissionFileGroup;
   private FileGrpType documentationFileGroup;
   private FileGrpType dataFileGroup;
 
@@ -108,6 +109,14 @@ public class MetsWrapper {
 
   public void setSchemasFileGroup(FileGrpType schemasFileGroup) {
     this.schemasFileGroup = schemasFileGroup;
+  }
+
+  public FileGrpType getSubmissionFileGroup() {
+    return submissionFileGroup;
+  }
+
+  public void setSubmissionFileGroup(FileGrpType submissionFileGroup) {
+    this.submissionFileGroup = submissionFileGroup;
   }
 
   public FileGrpType getDocumentationFileGroup() {

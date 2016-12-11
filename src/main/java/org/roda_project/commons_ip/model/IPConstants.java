@@ -41,6 +41,8 @@ public final class IPConstants {
   public static final String SCHEMAS_FOLDER = SCHEMAS + METS_PATH_SEPARATOR;
   public static final String DOCUMENTATION = "documentation";
   public static final String DOCUMENTATION_FOLDER = DOCUMENTATION + METS_PATH_SEPARATOR;
+  public static final String SUBMISSION = "submission";
+  public static final String SUBMISSION_FOLDER = SUBMISSION + METS_PATH_SEPARATOR;
 
   // misc
   public static final String ZIP_PATH_SEPARATOR = "/";

@@ -69,8 +69,10 @@ public final class ValidationConstants {
   public static final String SCHEMA_FILE_NOT_FOUND = "Schema file referenced in METS.xml was not found.";
   public static final String DOCUMENTATION_FILE_FOUND_WITH_MATCHING_CHECKSUMS = "Documentation file referenced in METS.xml was found and file checksum matches METS checksum.";
   public static final String DOCUMENTATION_FILE_NOT_FOUND = "Documentation file referenced in METS.xml was not found.";
+  public static final String SUBMISSION_FILE_FOUND_WITH_MATCHING_CHECKSUMS = "Submission file referenced in METS.xml was found and file checksum matches METS checksum.";
+  public static final String SUBMISSION_FILE_NOT_FOUND = "Submission file referenced in METS.xml was not found.";
 
-  /** Private empty constructor */
+    /** Private empty constructor */
   private ValidationConstants() {
 
   }

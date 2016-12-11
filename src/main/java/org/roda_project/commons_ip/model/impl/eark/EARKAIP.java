@@ -105,7 +105,7 @@ public class EARKAIP extends AIPWrap {
     Path zipPath = null;
     try {
       final List<ZipEntryInfo> zipEntries = getZipEntries();
-      zipPath = getDirPath(destinationDirectory, fileNameWithoutExtension);
+      zipPath = getDirPath(destinationDirectory, fileNameWithoutExtension, false);
 
       // 20160407 hsilva: as METS does not have an attribute 'otherType', the
       // other type must be put in the 'type' attribute allowing this way other
@@ -189,7 +189,7 @@ public class EARKAIP extends AIPWrap {
     }
   }
 
-  private Path getDirPath(final Path targetPath, final String name) throws IPException {
+  private Path getDirPath(final Path targetPath, final String name, final boolean deleteExisting) throws IPException {
     final Path path;
     if (name != null) {
       path = targetPath.resolve(name);
@@ -198,7 +198,7 @@ public class EARKAIP extends AIPWrap {
     }
 
     try {
-      if (Files.exists(path)) {
+      if (deleteExisting && Files.exists(path)) {
         Files.delete(path);
       }
     } catch (final IOException e) {
@@ -389,16 +389,16 @@ public class EARKAIP extends AIPWrap {
     }
   }
 
-  public void addSubmissionsToZipAndMETS(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-    List<IPFile> submissions) throws SIPException, InterruptedException {
+  public void addSubmissionsToZipAndMETS(final List<ZipEntryInfo> zipEntries, final MetsWrapper metsWrapper,
+    final List<IPFile> submissions) throws SIPException, InterruptedException {
     if (submissions != null && !submissions.isEmpty()) {
       for (IPFile submission : submissions) {
         if (Thread.interrupted()) {
           throw new InterruptedException();
         }
-        String submissionFilePath = IPConstants.SCHEMAS_FOLDER + getFoldersFromList(submission.getRelativeFolders())
-          + submission.getFileName();
-        FileType fileType = EARKMETSUtils.addSubmissionFileToMETS(metsWrapper, submissionFilePath,
+        final String submissionFilePath = IPConstants.SUBMISSION_FOLDER
+          + getFoldersFromList(submission.getRelativeFolders()) + submission.getFileName();
+        final FileType fileType = EARKMETSUtils.addSubmissionFileToMETS(metsWrapper, submissionFilePath,
           submission.getPath());
         ZIPUtils.addFileTypeFileToZip(zipEntries, submission.getPath(), submissionFilePath, fileType);
       }
@@ -434,7 +434,7 @@ public class EARKAIP extends AIPWrap {
   private void writeToPath(final List<ZipEntryInfo> zipEntryInfos, final Path path, final boolean onlyMets)
     throws IPException, InterruptedException {
     try {
-      Files.createDirectory(path);
+      Files.createDirectories(path);
       for (ZipEntryInfo zipEntryInfo : zipEntryInfos) {
         if (Thread.interrupted()) {
           throw new InterruptedException();
@@ -541,6 +541,8 @@ public class EARKAIP extends AIPWrap {
           processSchemasMetadata(metsWrapper, aip, aip.getBasePath());
 
           processDocumentationMetadata(metsWrapper, aip, aip.getBasePath());
+
+          processSubmissionMetadata(metsWrapper, aip, aip.getBasePath());
 
           processAncestors(metsWrapper, aip);
         }
@@ -716,6 +718,8 @@ public class EARKAIP extends AIPWrap {
           metsWrapper.setSchemasDiv(firstLevel);
         } else if (IPConstants.DOCUMENTATION.equalsIgnoreCase(firstLevel.getLABEL())) {
           metsWrapper.setDocumentationDiv(firstLevel);
+        } else if (IPConstants.SUBMISSION.equalsIgnoreCase(firstLevel.getLABEL())) {
+          metsWrapper.setSubmissionsDiv(firstLevel);
         }
       }
     }
@@ -856,13 +860,23 @@ public class EARKAIP extends AIPWrap {
                 ValidationUtils.addInfo(aip.getValidationReport(),
                   ValidationConstants.DOCUMENTATION_FILE_FOUND_WITH_MATCHING_CHECKSUMS, aip.getBasePath(), filePath);
                 aip.addDocumentation(file.get());
+              } else if (IPConstants.SUBMISSION.equalsIgnoreCase(folder)) {
+                ValidationUtils.addInfo(aip.getValidationReport(),
+                  ValidationConstants.SUBMISSION_FILE_FOUND_WITH_MATCHING_CHECKSUMS, aip.getBasePath(), filePath);
+                aip.addSubmission(file.get());
               }
             }
           } else {
-            ValidationUtils.addIssue(aip.getValidationReport(),
-              IPConstants.SCHEMAS.equalsIgnoreCase(folder) ? ValidationConstants.SCHEMA_FILE_NOT_FOUND
-                : ValidationConstants.DOCUMENTATION_FILE_NOT_FOUND,
-              ValidationEntry.LEVEL.ERROR, div, aip.getBasePath(), filePath);
+            if (IPConstants.SCHEMAS.equalsIgnoreCase(folder)) {
+              ValidationUtils.addIssue(aip.getValidationReport(), ValidationConstants.SCHEMA_FILE_NOT_FOUND,
+                ValidationEntry.LEVEL.ERROR, div, aip.getBasePath(), filePath);
+            } else if (IPConstants.DOCUMENTATION.equalsIgnoreCase(folder)) {
+              ValidationUtils.addIssue(aip.getValidationReport(), ValidationConstants.DOCUMENTATION_FILE_NOT_FOUND,
+                ValidationEntry.LEVEL.ERROR, div, aip.getBasePath(), filePath);
+            } else if (IPConstants.SUBMISSION.equalsIgnoreCase(folder)) {
+              ValidationUtils.addIssue(aip.getValidationReport(), ValidationConstants.SUBMISSION_FILE_NOT_FOUND,
+                ValidationEntry.LEVEL.ERROR, div, aip.getBasePath(), filePath);
+            }
           }
         }
       }
@@ -985,6 +999,13 @@ public class EARKAIP extends AIPWrap {
   private static AIP processDocumentationMetadata(MetsWrapper metsWrapper, AIP aip, Path basePath) throws SIPException {
 
     return processFile(aip, metsWrapper.getDocumentationDiv(), IPConstants.DOCUMENTATION, basePath);
+  }
+
+  private static AIP processSubmissionMetadata(final MetsWrapper metsWrapper, final AIP aip, final Path basePath)
+    throws SIPException {
+
+    return processFile(aip, metsWrapper.getSubmissionsDiv(), IPConstants.SUBMISSION, basePath);
+
   }
 
   private static AIP processAncestors(MetsWrapper metsWrapper, AIP aip) {
