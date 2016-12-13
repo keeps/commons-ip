@@ -510,7 +510,7 @@ public class EARKAIP extends AIPWrap {
   }
 
   private static AIP parseEARKAIP(final Path source, final Path destinationDirectory) throws ParseException {
-    Path aipPath = ZIPUtils.extractIPIfInZipFormat(source, destinationDirectory, FILE_EXTENSION);
+    Path aipPath = ZIPUtils.extractIPIfInZipFormat(source, destinationDirectory);
     return parseEARKAIPFromPath(aipPath);
   }
 

@@ -483,7 +483,7 @@ public class EARKSIP extends SIP {
     try {
       SIP sip = new EARKSIP();
 
-      Path sipPath = ZIPUtils.extractIPIfInZipFormat(source, destinationDirectory, SIP_FILE_EXTENSION);
+      Path sipPath = ZIPUtils.extractIPIfInZipFormat(source, destinationDirectory);
       sip.setBasePath(sipPath);
 
       MetsWrapper metsWrapper = processMainMets(sip, sipPath);

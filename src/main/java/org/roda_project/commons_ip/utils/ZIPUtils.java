@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
@@ -48,20 +49,24 @@ public final class ZIPUtils {
    * @param ipFileExtension
    *          file extension (e.g. .zip)
    */
-  public static Path extractIPIfInZipFormat(final Path source, Path destinationDirectory, String ipFileExtension)
-    throws ParseException {
-    Path ipFolderPath = source;
+  public static Path extractIPIfInZipFormat(final Path source, Path destinationDirectory) throws ParseException {
+    Path ipFolderPath = destinationDirectory;
     if (!Files.isDirectory(source)) {
       try {
-        String ipId = source.getFileName().toString().replaceFirst(ipFileExtension + "$", "");
-        ipFolderPath = destinationDirectory.resolve(ipId);
-        ZIPUtils.unzip(source, ipFolderPath);
+        ZIPUtils.unzip(source, destinationDirectory);
 
-        // 20161111 hsilva: see if the SIP extracted has a folder named sipId
-        // (for being compliant with previous way of creating SIP in ZIP format,
-        // this test/adjustment is needed)
-        if (Files.exists(ipFolderPath.resolve(ipId))) {
-          ipFolderPath = ipFolderPath.resolve(ipId);
+        // 20161111 hsilva: see if the IP extracted has a folder which contains
+        // the content of the IP (for being compliant with previous way of
+        // creating SIP in ZIP format, this test/adjustment is needed)
+        if (!Files.exists(destinationDirectory.resolve(IPConstants.METS_FILE))) {
+          try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(destinationDirectory)) {
+            for (Path path : directoryStream) {
+              if (Files.isDirectory(path) && Files.exists(path.resolve(IPConstants.METS_FILE))) {
+                ipFolderPath = path;
+                break;
+              }
+            }
+          }
         }
       } catch (IOException e) {
         LOGGER.error("Error unzipping file", e);
