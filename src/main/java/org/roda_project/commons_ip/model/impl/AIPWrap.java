@@ -1,3 +1,10 @@
+/**
+ * The contents of this file are subject to the license and copyright
+ * detailed in the LICENSE file at the root of the source
+ * tree and available online at
+ *
+ * https://github.com/keeps/commons-ip
+ */
 package org.roda_project.commons_ip.model.impl;
 
 import java.nio.file.Path;
@@ -18,7 +25,6 @@ import org.roda_project.commons_ip.model.ValidationReport;
 import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.IPEnums.AIPState;
 import org.roda_project.commons_ip.utils.IPException;
-import org.roda_project.commons_ip.utils.SIPException;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
 
 /**
@@ -169,18 +175,18 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public IP addAgent(final IPAgent sipAgent) {
-    return aip.addAgent(sipAgent);
+  public IP addAgent(final IPAgent aipAgent) {
+    return aip.addAgent(aipAgent);
   }
 
   @Override
-  public IP addPreservationMetadata(final IPMetadata sipMetadata) throws IPException {
-    return aip.addPreservationMetadata(sipMetadata);
+  public IP addPreservationMetadata(final IPMetadata metadata) throws IPException {
+    return aip.addPreservationMetadata(metadata);
   }
 
   @Override
-  public IP addOtherMetadata(final IPMetadata sipMetadata) throws IPException {
-    return aip.addOtherMetadata(sipMetadata);
+  public IP addOtherMetadata(final IPMetadata metadata) throws IPException {
+    return aip.addOtherMetadata(metadata);
   }
 
   @Override
@@ -189,8 +195,8 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public IP addRepresentation(final IPRepresentation sipRepresentation) throws IPException {
-    return aip.addRepresentation(sipRepresentation);
+  public IP addRepresentation(final IPRepresentation aipRepresentation) throws IPException {
+    return aip.addRepresentation(aipRepresentation);
   }
 
   @Override
@@ -209,41 +215,41 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public IP addAgentToRepresentation(final String representationID, final IPAgent agent) throws SIPException {
+  public IP addAgentToRepresentation(final String representationID, final IPAgent agent) throws IPException {
     return aip.addAgentToRepresentation(representationID, agent);
   }
 
   @Override
   public IP addDescriptiveMetadataToRepresentation(final String representationID,
-    final IPDescriptiveMetadata descriptiveMetadata) throws SIPException {
+    final IPDescriptiveMetadata descriptiveMetadata) throws IPException {
     return aip.addDescriptiveMetadataToRepresentation(representationID, descriptiveMetadata);
   }
 
   @Override
   public IP addPreservationMetadataToRepresentation(final String representationID,
-    final IPMetadata preservationMetadata) throws SIPException {
+    final IPMetadata preservationMetadata) throws IPException {
     return aip.addPreservationMetadataToRepresentation(representationID, preservationMetadata);
   }
 
   @Override
   public IP addOtherMetadataToRepresentation(final String representationID, final IPMetadata otherMetadata)
-    throws SIPException {
+    throws IPException {
     return aip.addOtherMetadataToRepresentation(representationID, otherMetadata);
   }
 
   @Override
-  public IP addFileToRepresentation(final String representationID, final IPFile file) throws SIPException {
+  public IP addFileToRepresentation(final String representationID, final IPFile file) throws IPException {
     return aip.addFileToRepresentation(representationID, file);
   }
 
   @Override
-  public IP addSchemaToRepresentation(final String representationID, final IPFile schema) throws SIPException {
+  public IP addSchemaToRepresentation(final String representationID, final IPFile schema) throws IPException {
     return aip.addSchemaToRepresentation(representationID, schema);
   }
 
   @Override
   public IP addDocumentationToRepresentation(final String representationID, final IPFile documentation)
-    throws SIPException {
+    throws IPException {
     return aip.addDocumentationToRepresentation(representationID, documentation);
   }
 

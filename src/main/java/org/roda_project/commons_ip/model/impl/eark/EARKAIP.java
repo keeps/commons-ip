@@ -1,3 +1,10 @@
+/**
+ * The contents of this file are subject to the license and copyright
+ * detailed in the LICENSE file at the root of the source
+ * tree and available online at
+ *
+ * https://github.com/keeps/commons-ip
+ */
 package org.roda_project.commons_ip.model.impl.eark;
 
 import java.io.IOException;
@@ -11,8 +18,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.JAXBException;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.StringUtils;
@@ -47,7 +56,6 @@ import org.roda_project.commons_ip.utils.METSFileTypeZipEntryInfo;
 import org.roda_project.commons_ip.utils.METSMdRefZipEntryInfo;
 import org.roda_project.commons_ip.utils.METSUtils;
 import org.roda_project.commons_ip.utils.METSZipEntryInfo;
-import org.roda_project.commons_ip.utils.SIPException;
 import org.roda_project.commons_ip.utils.Utils;
 import org.roda_project.commons_ip.utils.ValidationConstants;
 import org.roda_project.commons_ip.utils.ValidationUtils;
@@ -64,7 +72,7 @@ import org.xml.sax.SAXException;
  * @author Rui Castro (rui.castro@gmail.com)
  */
 public class EARKAIP extends AIPWrap {
-  private static final Logger LOGGER = LoggerFactory.getLogger(EARKSIP.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EARKAIP.class);
 
   private static final String TEMP_DIR = "EARKAIP";
   private static final String FILE_EXTENSION = ".zip";
@@ -140,8 +148,6 @@ public class EARKAIP extends AIPWrap {
     } catch (final InterruptedException e) {
       cleanUpUponInterrupt(zipPath);
       throw e;
-    } catch (final IPException e) {
-      throw new SIPException(e.getMessage(), e);
     } finally {
       deleteBuildDir(buildDir);
     }
@@ -149,13 +155,13 @@ public class EARKAIP extends AIPWrap {
 
   public static AIP parse(final Path source) throws ParseException {
     try {
-      if (source.toFile().isDirectory()) {
+      if (Files.isDirectory(source)) {
         return parseEARKAIPFromPath(source);
       } else {
         return parse(source, Files.createTempDirectory("unzipped"));
       }
     } catch (final IOException e) {
-      throw new ParseException("Error creating temporary directory for E-ARK SIP parse", e);
+      throw new ParseException("Error creating temporary directory for E-ARK AIP parse", e);
     }
   }
 
@@ -163,11 +169,11 @@ public class EARKAIP extends AIPWrap {
     return parseEARKAIP(source, destinationDirectory);
   }
 
-  private Path createBuildDir() throws SIPException {
+  private Path createBuildDir() throws IPException {
     try {
       return Files.createTempDirectory(TEMP_DIR);
     } catch (IOException e) {
-      throw new SIPException("Unable to create temporary directory to hold SIP files", e);
+      throw new IPException("Unable to create temporary directory to hold AIP files", e);
     }
   }
 
@@ -181,11 +187,11 @@ public class EARKAIP extends AIPWrap {
     }
   }
 
-  private void deleteBuildDir(Path buildDir) throws SIPException {
+  private void deleteBuildDir(Path buildDir) throws IPException {
     try {
       Utils.deletePath(buildDir);
     } catch (IOException e) {
-      throw new SIPException("Error while deleting temporary directory that was created to hold SIP files", e);
+      throw new IPException("Error while deleting temporary directory that was created to hold AIP files", e);
     }
   }
 
@@ -208,8 +214,7 @@ public class EARKAIP extends AIPWrap {
   }
 
   public void addDescriptiveMetadataToZipAndMETS(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-    List<IPDescriptiveMetadata> descriptiveMetadata, String representationId)
-    throws SIPException, InterruptedException {
+    List<IPDescriptiveMetadata> descriptiveMetadata, String representationId) throws IPException, InterruptedException {
     if (descriptiveMetadata != null && !descriptiveMetadata.isEmpty()) {
       for (IPDescriptiveMetadata dm : descriptiveMetadata) {
         if (Thread.interrupted()) {
@@ -231,7 +236,7 @@ public class EARKAIP extends AIPWrap {
   }
 
   public void addPreservationMetadataToZipAndMETS(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-    List<IPMetadata> preservationMetadata, String representationId) throws SIPException, InterruptedException {
+    List<IPMetadata> preservationMetadata, String representationId) throws IPException, InterruptedException {
     if (preservationMetadata != null && !preservationMetadata.isEmpty()) {
       for (IPMetadata pm : preservationMetadata) {
         if (Thread.interrupted()) {
@@ -253,7 +258,7 @@ public class EARKAIP extends AIPWrap {
   }
 
   public void addOtherMetadataToZipAndMETS(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-    List<IPMetadata> otherMetadata, String representationId) throws SIPException, InterruptedException {
+    List<IPMetadata> otherMetadata, String representationId) throws IPException, InterruptedException {
     if (otherMetadata != null && !otherMetadata.isEmpty()) {
       for (IPMetadata om : otherMetadata) {
         if (Thread.interrupted()) {
@@ -275,10 +280,9 @@ public class EARKAIP extends AIPWrap {
   }
 
   public void addRepresentationsToZipAndMETS(List<ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper, Path buildDir)
-    throws SIPException, InterruptedException {
+    throws IPException, InterruptedException {
     // representations
     if (getRepresentations() != null && !getRepresentations().isEmpty()) {
-      // this.notifySipBuildRepresentationsProcessingStarted(getRepresentations().size());
       for (IPRepresentation representation : getRepresentations()) {
         if (Thread.interrupted()) {
           throw new InterruptedException();
@@ -322,16 +326,13 @@ public class EARKAIP extends AIPWrap {
             + IPConstants.ZIP_PATH_SEPARATOR + IPConstants.METS_FILE,
           buildDir);
       }
-      // this.notifySipBuildRepresentationsProcessingEnded();
     }
   }
 
   private void addRepresentationDataFilesToZipAndMETS(List<ZipEntryInfo> zipEntries,
     MetsWrapper representationMETSWrapper, IPRepresentation representation, String representationId)
-    throws SIPException, InterruptedException {
+    throws IPException, InterruptedException {
     if (representation.getData() != null && !representation.getData().isEmpty()) {
-      // this.notifySipBuildRepresentationProcessingStarted(representation.getData().size());
-      int i = 0;
       for (IPFile file : representation.getData()) {
         if (Thread.interrupted()) {
           throw new InterruptedException();
@@ -344,11 +345,7 @@ public class EARKAIP extends AIPWrap {
         dataFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
           + dataFilePath;
         ZIPUtils.addFileTypeFileToZip(zipEntries, file.getPath(), dataFilePath, fileType);
-
-        i++;
-        // this.notifySipBuildRepresentationProcessingCurrentStatus(i);
       }
-      // this.notifySipBuildRepresentationProcessingEnded();
     }
   }
 
@@ -369,7 +366,7 @@ public class EARKAIP extends AIPWrap {
   }
 
   public void addSchemasToZipAndMETS(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper, List<IPFile> schemas,
-    String representationId) throws SIPException, InterruptedException {
+    String representationId) throws IPException, InterruptedException {
     if (schemas != null && !schemas.isEmpty()) {
       for (IPFile schema : schemas) {
         if (Thread.interrupted()) {
@@ -390,7 +387,7 @@ public class EARKAIP extends AIPWrap {
   }
 
   public void addSubmissionsToZipAndMETS(final List<ZipEntryInfo> zipEntries, final MetsWrapper metsWrapper,
-    final List<IPFile> submissions) throws SIPException, InterruptedException {
+    final List<IPFile> submissions) throws IPException, InterruptedException {
     if (submissions != null && !submissions.isEmpty()) {
       for (IPFile submission : submissions) {
         if (Thread.interrupted()) {
@@ -406,7 +403,7 @@ public class EARKAIP extends AIPWrap {
   }
 
   public void addDocumentationToZipAndMETS(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-    List<IPFile> documentation, String representationId) throws SIPException, InterruptedException {
+    List<IPFile> documentation, String representationId) throws IPException, InterruptedException {
     if (documentation != null && !documentation.isEmpty()) {
       for (IPFile doc : documentation) {
         if (Thread.interrupted()) {
@@ -427,7 +424,7 @@ public class EARKAIP extends AIPWrap {
   }
 
   private void addMainMETSToZip(List<ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper, Path buildDir)
-    throws SIPException {
+    throws IPException {
     EARKMETSUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, IPConstants.METS_FILE, buildDir);
   }
 
@@ -446,7 +443,7 @@ public class EARKAIP extends AIPWrap {
         writeFileToPath(zipEntryInfo, outputPath, onlyMets);
       }
     } catch (final IOException | NoSuchAlgorithmException e) {
-      LOGGER.debug("Error in write method - " + e.getMessage(), e);
+      LOGGER.debug("Error in write method", e);
       throw new IPException(e.getMessage(), e);
     }
   }
@@ -513,7 +510,7 @@ public class EARKAIP extends AIPWrap {
   }
 
   private static AIP parseEARKAIP(final Path source, final Path destinationDirectory) throws ParseException {
-    Path aipPath = ZIPUtils.extractSIPIfInZipFormat(source, destinationDirectory, FILE_EXTENSION);
+    Path aipPath = ZIPUtils.extractIPIfInZipFormat(source, destinationDirectory, FILE_EXTENSION);
     return parseEARKAIPFromPath(aipPath);
   }
 
@@ -550,15 +547,15 @@ public class EARKAIP extends AIPWrap {
 
       return aip;
     } catch (final IPException e) {
-      throw new ParseException("Error parsing E-ARK SIP", e);
+      throw new ParseException("Error parsing E-ARK AIP", e);
     }
   }
 
-  private static MetsWrapper processMainMets(AIP aip, Path sipPath) {
-    Path mainMETSFile = sipPath.resolve(IPConstants.METS_FILE);
+  private static MetsWrapper processMainMets(AIP aip, Path aipPath) {
+    Path mainMETSFile = aipPath.resolve(IPConstants.METS_FILE);
     Mets mainMets = null;
     if (Files.exists(mainMETSFile)) {
-      ValidationUtils.addInfo(aip.getValidationReport(), ValidationConstants.MAIN_METS_FILE_FOUND, sipPath,
+      ValidationUtils.addInfo(aip.getValidationReport(), ValidationConstants.MAIN_METS_FILE_FOUND, aipPath,
         mainMETSFile);
       try {
         mainMets = METSUtils.instantiateMETSFromFile(mainMETSFile);
@@ -569,7 +566,7 @@ public class EARKAIP extends AIPWrap {
         setAIPContentType(mainMets, aip);
         addAgentsToMETS(mainMets, aip, null);
 
-        ValidationUtils.addInfo(aip.getValidationReport(), ValidationConstants.MAIN_METS_IS_VALID, sipPath,
+        ValidationUtils.addInfo(aip.getValidationReport(), ValidationConstants.MAIN_METS_IS_VALID, aipPath,
           mainMETSFile);
       } catch (final JAXBException | ParseException | SAXException e) {
         mainMets = null;
@@ -696,10 +693,10 @@ public class EARKAIP extends AIPWrap {
 
   private static void preProcessStructMap(MetsWrapper metsWrapper, StructMapType structMap) {
 
-    DivType sipDiv = structMap.getDiv();
-    if (sipDiv.getDiv() != null) {
-      metsWrapper.setMainDiv(sipDiv);
-      for (DivType firstLevel : sipDiv.getDiv()) {
+    DivType aipDiv = structMap.getDiv();
+    if (aipDiv.getDiv() != null) {
+      metsWrapper.setMainDiv(aipDiv);
+      for (DivType firstLevel : aipDiv.getDiv()) {
         if (IPConstants.METADATA.equalsIgnoreCase(firstLevel.getLABEL()) && firstLevel.getDiv() != null) {
           for (DivType secondLevel : firstLevel.getDiv()) {
             if (IPConstants.DESCRIPTIVE.equalsIgnoreCase(secondLevel.getLABEL())) {
@@ -837,7 +834,7 @@ public class EARKAIP extends AIPWrap {
       mdRef.getID());
   }
 
-  private static AIP processFile(AIP aip, DivType div, String folder, Path basePath) throws SIPException {
+  private static AIP processFile(AIP aip, DivType div, String folder, Path basePath) throws IPException {
     if (div != null && div.getFptr() != null) {
       for (Fptr fptr : div.getFptr()) {
         FileType fileType = (FileType) fptr.getFILEID();
@@ -951,7 +948,7 @@ public class EARKAIP extends AIPWrap {
   }
 
   private static void processRepresentationFiles(AIP aip, MetsWrapper representationMetsWrapper,
-    IPRepresentation representation, Path representationBasePath) throws SIPException {
+    IPRepresentation representation, Path representationBasePath) throws IPException {
 
     if (representationMetsWrapper.getDataDiv() != null && representationMetsWrapper.getDataDiv().getFptr() != null) {
       for (Fptr fptr : representationMetsWrapper.getDataDiv().getFptr()) {
@@ -991,18 +988,18 @@ public class EARKAIP extends AIPWrap {
 
   }
 
-  private static AIP processSchemasMetadata(MetsWrapper metsWrapper, AIP aip, Path basePath) throws SIPException {
+  private static AIP processSchemasMetadata(MetsWrapper metsWrapper, AIP aip, Path basePath) throws IPException {
 
     return processFile(aip, metsWrapper.getSchemasDiv(), IPConstants.SCHEMAS, basePath);
   }
 
-  private static AIP processDocumentationMetadata(MetsWrapper metsWrapper, AIP aip, Path basePath) throws SIPException {
+  private static AIP processDocumentationMetadata(MetsWrapper metsWrapper, AIP aip, Path basePath) throws IPException {
 
     return processFile(aip, metsWrapper.getDocumentationDiv(), IPConstants.DOCUMENTATION, basePath);
   }
 
   private static AIP processSubmissionMetadata(final MetsWrapper metsWrapper, final AIP aip, final Path basePath)
-    throws SIPException {
+    throws IPException {
 
     return processFile(aip, metsWrapper.getSubmissionsDiv(), IPConstants.SUBMISSION, basePath);
 

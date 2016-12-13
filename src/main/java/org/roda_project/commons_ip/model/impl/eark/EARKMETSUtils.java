@@ -40,9 +40,9 @@ import org.roda_project.commons_ip.model.IPDescriptiveMetadata;
 import org.roda_project.commons_ip.model.IPMetadata;
 import org.roda_project.commons_ip.model.MetsWrapper;
 import org.roda_project.commons_ip.utils.IPEnums;
+import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.METSEnums.LocType;
-import org.roda_project.commons_ip.utils.SIPException;
 import org.roda_project.commons_ip.utils.Utils;
 import org.roda_project.commons_ip.utils.ZIPUtils;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
@@ -57,7 +57,7 @@ public final class EARKMETSUtils {
   }
 
   public static MetsWrapper generateMETS(String id, String label, String type, String profile, List<IPAgent> ipAgents,
-    boolean mainMets, Optional<List<String>> ancestors, Path metsPath, IPEnums.IPStatus status) throws SIPException {
+    boolean mainMets, Optional<List<String>> ancestors, Path metsPath, IPEnums.IPStatus status) throws IPException {
     Mets mets = new Mets();
     MetsWrapper metsWrapper = new MetsWrapper(mets, metsPath);
 
@@ -75,7 +75,7 @@ public final class EARKMETSUtils {
       header.setLASTMODDATE(currentDate);
       header.setRECORDSTATUS(status.toString());
     } catch (DatatypeConfigurationException e) {
-      throw new SIPException("Error getting current calendar", e);
+      throw new IPException("Error getting current calendar", e);
     }
     // header/agent
     for (IPAgent sipAgent : ipAgents) {
@@ -192,17 +192,17 @@ public final class EARKMETSUtils {
   }
 
   public static void addMainMETSToZip(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper, String metsPath,
-    Path buildDir) throws SIPException {
+    Path buildDir) throws IPException {
     try {
       addMETSToZip(zipEntries, metsWrapper, metsPath, buildDir, true);
     } catch (JAXBException | IOException e) {
-      throw new SIPException(e.getMessage(), e);
+      throw new IPException(e.getMessage(), e);
     }
   }
 
   public static void addRepresentationMETSToZipAndToMainMETS(List<ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper,
     String representationId, MetsWrapper representationMETSWrapper, String representationMetsPath, Path buildDir)
-    throws SIPException, InterruptedException {
+    throws IPException, InterruptedException {
     try {
       if (Thread.interrupted()) {
         throw new InterruptedException();
@@ -216,12 +216,12 @@ public final class EARKMETSUtils {
       representationDiv.getMptr().add(mptr);
       mainMETSWrapper.getRepresentationsDiv().getDiv().add(representationDiv);
     } catch (JAXBException | IOException e) {
-      throw new SIPException("Error saving representation METS", e);
+      throw new IPException("Error saving representation METS", e);
     }
   }
 
   private static void addMETSToZip(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper, String metsPath,
-    Path buildDir, boolean mainMets) throws JAXBException, IOException, SIPException {
+    Path buildDir, boolean mainMets) throws JAXBException, IOException, IPException {
     Path temp = Files.createTempFile(buildDir, IPConstants.METS_FILE_NAME, IPConstants.METS_FILE_EXTENSION);
     ZIPUtils.addMETSFileToZip(zipEntries, temp, metsPath, metsWrapper.getMets(), mainMets);
   }
@@ -253,20 +253,20 @@ public final class EARKMETSUtils {
   }
 
   public static MdRef addDescriptiveMetadataToMETS(MetsWrapper metsWrapper, IPDescriptiveMetadata descriptiveMetadata,
-    String descriptiveMetadataPath) throws SIPException, InterruptedException {
+    String descriptiveMetadataPath) throws IPException, InterruptedException {
     return addMetadataToMETS(metsWrapper, descriptiveMetadata, descriptiveMetadataPath,
       descriptiveMetadata.getMetadataType().getType().getType(), descriptiveMetadata.getMetadataType().getOtherType(),
       descriptiveMetadata.getMetadataVersion(), true);
   }
 
   public static MdRef addOtherMetadataToMETS(MetsWrapper metsWrapper, IPMetadata otherMetadata,
-    String otherMetadataPath) throws SIPException, InterruptedException {
+    String otherMetadataPath) throws IPException, InterruptedException {
     return addMetadataToMETS(metsWrapper, otherMetadata, otherMetadataPath, "OTHER", null, null, false);
   }
 
   private static MdRef addMetadataToMETS(MetsWrapper metsWrapper, IPMetadata metadata, String metadataPath,
     String mdType, String mdOtherType, String mdTypeVersion, boolean isDescriptive)
-    throws SIPException, InterruptedException {
+    throws IPException, InterruptedException {
     MdSecType dmdSec = new MdSecType();
     dmdSec.setID(Utils.generateRandomAndPrefixedUUID());
 
@@ -295,7 +295,7 @@ public final class EARKMETSUtils {
   }
 
   public static MdRef addPreservationMetadataToMETS(MetsWrapper metsWrapper, IPMetadata preservationMetadata,
-    String preservationMetadataPath) throws SIPException, InterruptedException {
+    String preservationMetadataPath) throws IPException, InterruptedException {
     MdSecType digiprovMD = new MdSecType();
     digiprovMD.setID(Utils.generateRandomAndPrefixedUUID());
 
@@ -325,7 +325,7 @@ public final class EARKMETSUtils {
   }
 
   public static FileType addDataFileToMETS(MetsWrapper representationMETS, String dataFilePath, Path dataFile)
-    throws SIPException, InterruptedException {
+    throws IPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedUUID());
 
@@ -344,46 +344,46 @@ public final class EARKMETSUtils {
     return file;
   }
 
-  private static MdRef setFileBasicInformation(Path file, MdRef mdRef) throws SIPException, InterruptedException {
+  private static MdRef setFileBasicInformation(Path file, MdRef mdRef) throws IPException, InterruptedException {
     // mimetype info.
     try {
       mdRef.setMIMETYPE(Files.probeContentType(file));
     } catch (IOException e) {
-      throw new SIPException("Error probing file content (" + file + ")", e);
+      throw new IPException("Error probing file content (" + file + ")", e);
     }
 
     // date creation info.
     try {
       mdRef.setCREATED(Utils.getCurrentCalendar());
     } catch (DatatypeConfigurationException e) {
-      throw new SIPException("Error getting current calendar", e);
+      throw new IPException("Error getting current calendar", e);
     }
 
     // size info.
     try {
       mdRef.setSIZE(Files.size(file));
     } catch (IOException e) {
-      throw new SIPException("Error getting file size (" + file + ")", e);
+      throw new IPException("Error getting file size (" + file + ")", e);
     }
 
     return mdRef;
   }
 
-  private static void setFileBasicInformation(Path file, FileType fileType) throws SIPException, InterruptedException {
+  private static void setFileBasicInformation(Path file, FileType fileType) throws IPException, InterruptedException {
     // mimetype info.
     try {
       LOGGER.debug("Setting mimetype {}", file);
       fileType.setMIMETYPE(Files.probeContentType(file));
       LOGGER.debug("Done setting mimetype");
     } catch (IOException e) {
-      throw new SIPException("Error probing content-type (" + file.toString() + ")", e);
+      throw new IPException("Error probing content-type (" + file.toString() + ")", e);
     }
 
     // date creation info.
     try {
       fileType.setCREATED(Utils.getCurrentCalendar());
     } catch (DatatypeConfigurationException e) {
-      throw new SIPException("Error getting curent calendar (" + file.toString() + ")", e);
+      throw new IPException("Error getting curent calendar (" + file.toString() + ")", e);
     }
 
     // size info.
@@ -392,12 +392,12 @@ public final class EARKMETSUtils {
       fileType.setSIZE(Files.size(file));
       LOGGER.debug("Done setting file size");
     } catch (IOException e) {
-      throw new SIPException("Error getting file size (" + file.toString() + ")", e);
+      throw new IPException("Error getting file size (" + file.toString() + ")", e);
     }
   }
 
   public static FileType addSchemaFileToMETS(MetsWrapper metsWrapper, String schemaFilePath, Path schemaFile)
-    throws SIPException, InterruptedException {
+    throws IPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedUUID());
 
@@ -416,8 +416,8 @@ public final class EARKMETSUtils {
     return file;
   }
 
-  public static FileType addSubmissionFileToMETS(MetsWrapper metsWrapper, String submissionFilePath, Path submissionFile)
-      throws SIPException, InterruptedException {
+  public static FileType addSubmissionFileToMETS(MetsWrapper metsWrapper, String submissionFilePath,
+    Path submissionFile) throws IPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedUUID());
 
@@ -437,7 +437,7 @@ public final class EARKMETSUtils {
   }
 
   public static FileType addDocumentationFileToMETS(MetsWrapper metsWrapper, String documentationFilePath,
-    Path documentationFile) throws SIPException, InterruptedException {
+    Path documentationFile) throws IPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedUUID());
 

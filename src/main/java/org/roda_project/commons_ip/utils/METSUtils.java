@@ -46,7 +46,7 @@ public final class METSUtils {
   }
 
   public static Path marshallMETS(Mets mets, Path tempMETSFile, boolean rootMETS)
-    throws JAXBException, IOException, PropertyException, SIPException {
+    throws JAXBException, IOException, PropertyException, IPException {
     JAXBContext context = JAXBContext.newInstance(Mets.class);
     Marshaller m = context.createMarshaller();
     m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);

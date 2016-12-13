@@ -19,7 +19,9 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+
 import javax.xml.bind.DatatypeConverter;
+
 import org.apache.commons.io.IOUtils;
 import org.roda_project.commons_ip.mets_v1_11.beans.FileType;
 import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType.MdRef;
@@ -39,28 +41,27 @@ public final class ZIPUtils {
 
   /**
    * @param source
-   *          SIP
+   *          IP
    * @param destinationDirectory
    *          this path is only used if unzipping the SIP, otherwise source will
    *          be used
-   * @param sipFileExtension
+   * @param ipFileExtension
    *          file extension (e.g. .zip)
-   * @throws SIPException
    */
-  public static Path extractSIPIfInZipFormat(final Path source, Path destinationDirectory, String sipFileExtension)
+  public static Path extractIPIfInZipFormat(final Path source, Path destinationDirectory, String ipFileExtension)
     throws ParseException {
-    Path sipFolderPath = source;
+    Path ipFolderPath = source;
     if (!Files.isDirectory(source)) {
       try {
-        String sipId = source.getFileName().toString().replaceFirst(sipFileExtension + "$", "");
-        sipFolderPath = destinationDirectory.resolve(sipId);
-        ZIPUtils.unzip(source, sipFolderPath);
+        String ipId = source.getFileName().toString().replaceFirst(ipFileExtension + "$", "");
+        ipFolderPath = destinationDirectory.resolve(ipId);
+        ZIPUtils.unzip(source, ipFolderPath);
 
         // 20161111 hsilva: see if the SIP extracted has a folder named sipId
         // (for being compliant with previous way of creating SIP in ZIP format,
         // this test/adjustment is needed)
-        if (Files.exists(sipFolderPath.resolve(sipId))) {
-          sipFolderPath = sipFolderPath.resolve(sipId);
+        if (Files.exists(ipFolderPath.resolve(ipId))) {
+          ipFolderPath = ipFolderPath.resolve(ipId);
         }
       } catch (IOException e) {
         LOGGER.error("Error unzipping file", e);
@@ -68,11 +69,11 @@ public final class ZIPUtils {
       }
     }
 
-    return sipFolderPath;
+    return ipFolderPath;
   }
 
   public static List<ZipEntryInfo> addMdRefFileToZip(List<ZipEntryInfo> zipEntries, Path filePath, String zipPath,
-    MdRef mdRef) throws SIPException {
+    MdRef mdRef) throws IPException {
 
     zipEntries.add(new METSMdRefZipEntryInfo(zipPath, filePath, mdRef));
 
@@ -80,7 +81,7 @@ public final class ZIPUtils {
   }
 
   public static List<ZipEntryInfo> addFileTypeFileToZip(List<ZipEntryInfo> zipEntries, Path filePath, String zipPath,
-    FileType fileType) throws SIPException {
+    FileType fileType) throws IPException {
 
     zipEntries.add(new METSFileTypeZipEntryInfo(zipPath, filePath, fileType));
 
@@ -88,7 +89,7 @@ public final class ZIPUtils {
   }
 
   public static List<ZipEntryInfo> addMETSFileToZip(List<ZipEntryInfo> zipEntries, Path filePath, String zipPath,
-    Mets mets, boolean rootMETS) throws SIPException {
+    Mets mets, boolean rootMETS) throws IPException {
 
     zipEntries.add(new METSZipEntryInfo(zipPath, filePath, mets, rootMETS));
 
@@ -163,10 +164,9 @@ public final class ZIPUtils {
   }
 
   public static void zip(List<ZipEntryInfo> files, OutputStream out, AIP aip)
-      throws IOException, InterruptedException, IPException {
+    throws IOException, InterruptedException, IPException {
     ZipOutputStream zos = new ZipOutputStream(out);
 
-    int i = 0;
     for (ZipEntryInfo file : files) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
@@ -211,10 +211,7 @@ public final class ZIPUtils {
         }
         zos.closeEntry();
         inputStream.close();
-        i++;
       }
-
-      //sip.notifySipBuildPackagingCurrentStatus(i);
     }
 
     zos.close();

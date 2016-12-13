@@ -16,7 +16,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.roda_project.commons_ip.utils.IPEnums.IPStatus;
 import org.roda_project.commons_ip.utils.IPEnums.IPType;
 import org.roda_project.commons_ip.utils.IPException;
-import org.roda_project.commons_ip.utils.SIPException;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
 
 public interface IPInterface {
@@ -79,21 +78,21 @@ public interface IPInterface {
 
   IP addDocumentation(IPFile documentation);
 
-  IP addAgentToRepresentation(String representationID, IPAgent agent) throws SIPException;
+  IP addAgentToRepresentation(String representationID, IPAgent agent) throws IPException;
 
   IP addDescriptiveMetadataToRepresentation(String representationID, IPDescriptiveMetadata descriptiveMetadata)
-    throws SIPException;
+    throws IPException;
 
   IP addPreservationMetadataToRepresentation(String representationID, IPMetadata preservationMetadata)
-    throws SIPException;
+    throws IPException;
 
-  IP addOtherMetadataToRepresentation(String representationID, IPMetadata otherMetadata) throws SIPException;
+  IP addOtherMetadataToRepresentation(String representationID, IPMetadata otherMetadata) throws IPException;
 
-  IP addFileToRepresentation(String representationID, IPFile file) throws SIPException;
+  IP addFileToRepresentation(String representationID, IPFile file) throws IPException;
 
-  IP addSchemaToRepresentation(String representationID, IPFile schema) throws SIPException;
+  IP addSchemaToRepresentation(String representationID, IPFile schema) throws IPException;
 
-  IP addDocumentationToRepresentation(String representationID, IPFile documentation) throws SIPException;
+  IP addDocumentationToRepresentation(String representationID, IPFile documentation) throws IPException;
 
   List<IPAgent> getAgents();
 
@@ -126,7 +125,8 @@ public interface IPInterface {
 
   Path build(Path destinationDirectory, String fileNameWithoutExtension) throws IPException, InterruptedException;
 
-  Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest) throws IPException, InterruptedException;
+  Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest)
+    throws IPException, InterruptedException;
 
   static IPInterface parse(Path source) throws ParseException {
     throw new ParseException("One must implement static method parse in a concrete class");

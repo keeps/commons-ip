@@ -1,3 +1,10 @@
+/**
+ * The contents of this file are subject to the license and copyright
+ * detailed in the LICENSE file at the root of the source
+ * tree and available online at
+ *
+ * https://github.com/keeps/commons-ip
+ */
 package org.roda_project.commons_ip.model.impl.roda;
 
 import java.io.IOException;
@@ -144,7 +151,7 @@ public class RodaFolderAIP extends AIPWrap {
       return this;
 
     } catch (final IOException | IPException e) {
-      LOGGER.debug("Error reading aip.json - " + e.getMessage(), e);
+      LOGGER.debug("Error reading aip.json", e);
       throw new ParseException("Error reading aip.json", e);
     }
   }
@@ -184,7 +191,7 @@ public class RodaFolderAIP extends AIPWrap {
   private IPRepresentation readRepresentation(final JsonNode json) throws IOException, IPException {
     final IPRepresentation rep = new IPRepresentation(json.get(ID).asText());
     rep.setStatus(
-        json.get("original").asBoolean() ? RepresentationStatus.getORIGINAL() : RepresentationStatus.getOTHER());
+      json.get("original").asBoolean() ? RepresentationStatus.getORIGINAL() : RepresentationStatus.getOTHER());
     rep.setContentType(new RepresentationContentType(json.get(TYPE).asText()));
 
     final Path repPath = getBasePath().resolve(REPRESENTATIONS).resolve(rep.getRepresentationID());
@@ -244,8 +251,7 @@ public class RodaFolderAIP extends AIPWrap {
    * @throws IPException
    *           if some other error occurs.
    */
-  private void findAndAddPreservationMDs(final IPMetadataSetter mdSetter)
-    throws IOException, IPException {
+  private void findAndAddPreservationMDs(final IPMetadataSetter mdSetter) throws IOException, IPException {
     for (IPMetadata md : findPreservationMDs(getBasePath().resolve(METADATA).resolve(PRESERVATION))) {
       mdSetter.addMetadata(md);
     }
@@ -264,8 +270,7 @@ public class RodaFolderAIP extends AIPWrap {
    * @throws IPException
    *           if some other error occurs.
    */
-  private void findAndAddOtherMDs(final Path omdPath, final IPMetadataSetter mdSetter)
-    throws IOException, IPException {
+  private void findAndAddOtherMDs(final Path omdPath, final IPMetadataSetter mdSetter) throws IOException, IPException {
     if (Files.isDirectory(omdPath)) {
       final Iterator<Path> paths = Files.list(omdPath).iterator();
       while (paths.hasNext()) {

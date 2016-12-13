@@ -21,7 +21,6 @@ import org.roda_project.commons_ip.utils.IPEnums.IPStatus;
 import org.roda_project.commons_ip.utils.IPEnums.IPType;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
-import org.roda_project.commons_ip.utils.SIPException;
 import org.roda_project.commons_ip.utils.Utils;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
 
@@ -216,13 +215,13 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP addPreservationMetadata(IPMetadata sipMetadata) throws SIPException {
+  public IP addPreservationMetadata(IPMetadata sipMetadata) throws IPException {
     preservationMetadata.add(sipMetadata);
     return this;
   }
 
   @Override
-  public IP addOtherMetadata(IPMetadata sipMetadata) throws SIPException {
+  public IP addOtherMetadata(IPMetadata sipMetadata) throws IPException {
     otherMetadata.add(sipMetadata);
     return this;
   }
@@ -237,7 +236,7 @@ public abstract class IP implements IPInterface {
   public IP addRepresentation(IPRepresentation sipRepresentation) throws IPException {
     String representationId = sipRepresentation.getRepresentationID();
     if (representations.containsKey(representationId)) {
-      throw new SIPException("Representation already exists");
+      throw new IPException("Representation already exists");
     } else {
       representationIds.add(representationId);
       representations.put(representationId, sipRepresentation);
@@ -258,7 +257,7 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP addAgentToRepresentation(String representationID, IPAgent agent) throws SIPException {
+  public IP addAgentToRepresentation(String representationID, IPAgent agent) throws IPException {
     checkIfRepresentationExists(representationID);
     IPRepresentation rep = representations.get(representationID);
     rep.addAgent(agent);
@@ -268,7 +267,7 @@ public abstract class IP implements IPInterface {
 
   @Override
   public IP addDescriptiveMetadataToRepresentation(String representationID, IPDescriptiveMetadata descriptiveMetadata)
-    throws SIPException {
+    throws IPException {
     checkIfRepresentationExists(representationID);
     IPRepresentation rep = representations.get(representationID);
     rep.addDescriptiveMetadata(descriptiveMetadata);
@@ -278,7 +277,7 @@ public abstract class IP implements IPInterface {
 
   @Override
   public IP addPreservationMetadataToRepresentation(String representationID, IPMetadata preservationMetadata)
-    throws SIPException {
+    throws IPException {
     checkIfRepresentationExists(representationID);
     IPRepresentation rep = representations.get(representationID);
     rep.addPreservationMetadata(preservationMetadata);
@@ -287,7 +286,7 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP addOtherMetadataToRepresentation(String representationID, IPMetadata otherMetadata) throws SIPException {
+  public IP addOtherMetadataToRepresentation(String representationID, IPMetadata otherMetadata) throws IPException {
     checkIfRepresentationExists(representationID);
     IPRepresentation rep = representations.get(representationID);
     rep.addOtherMetadata(otherMetadata);
@@ -296,7 +295,7 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP addFileToRepresentation(String representationID, IPFile file) throws SIPException {
+  public IP addFileToRepresentation(String representationID, IPFile file) throws IPException {
     checkIfRepresentationExists(representationID);
     IPRepresentation rep = representations.get(representationID);
     rep.addFile(file);
@@ -305,7 +304,7 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP addSchemaToRepresentation(String representationID, IPFile schema) throws SIPException {
+  public IP addSchemaToRepresentation(String representationID, IPFile schema) throws IPException {
     checkIfRepresentationExists(representationID);
     IPRepresentation rep = representations.get(representationID);
     rep.addSchema(schema);
@@ -314,7 +313,7 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP addDocumentationToRepresentation(String representationID, IPFile documentation) throws SIPException {
+  public IP addDocumentationToRepresentation(String representationID, IPFile documentation) throws IPException {
     checkIfRepresentationExists(representationID);
     IPRepresentation rep = representations.get(representationID);
     rep.addDocumentation(documentation);
@@ -371,9 +370,9 @@ public abstract class IP implements IPInterface {
     return validationReport.isValid();
   }
 
-  private void checkIfRepresentationExists(String representationID) throws SIPException {
+  private void checkIfRepresentationExists(String representationID) throws IPException {
     if (!representations.containsKey(representationID)) {
-      throw new SIPException("Representation doesn't exist");
+      throw new IPException("Representation doesn't exist");
     }
   }
 
