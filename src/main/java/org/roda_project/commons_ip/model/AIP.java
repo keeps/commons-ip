@@ -10,8 +10,6 @@ package org.roda_project.commons_ip.model;
 import java.nio.file.Path;
 import java.util.List;
 
-import org.roda_project.commons_ip.utils.IPEnums.AIPState;
-
 /**
  * AIP interface.
  * 
@@ -25,14 +23,14 @@ public interface AIP extends IPInterface {
    * @param state
    *          the {@link AIPState}.
    */
-  void setState(AIPState state);
+  void setState(String state);
 
   /**
    * Get the {@link AIPState}.
    * 
    * @return the {@link AIPState}.
    */
-  AIPState getState();
+  String getState();
 
   /**
    * Get the {@link List} of submission {@link IPFile}.

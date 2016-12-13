@@ -15,7 +15,6 @@ import org.roda_project.commons_ip.model.AIP;
 import org.roda_project.commons_ip.model.IP;
 import org.roda_project.commons_ip.model.IPContentType;
 import org.roda_project.commons_ip.model.IPFile;
-import org.roda_project.commons_ip.utils.IPEnums.AIPState;
 import org.roda_project.commons_ip.utils.IPEnums.IPType;
 import org.roda_project.commons_ip.utils.IPException;
 
@@ -37,7 +36,7 @@ public class BasicAIP extends IP implements AIP {
   /**
    * The state.
    */
-  private AIPState state;
+  private String state;
 
   /**
    * List of submission files.
@@ -83,12 +82,12 @@ public class BasicAIP extends IP implements AIP {
   }
 
   @Override
-  public void setState(final AIPState state) {
+  public void setState(final String state) {
     this.state = state;
   }
 
   @Override
-  public AIPState getState() {
+  public String getState() {
     return state;
   }
 

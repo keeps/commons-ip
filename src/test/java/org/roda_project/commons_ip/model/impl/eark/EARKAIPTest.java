@@ -22,7 +22,6 @@ import org.roda_project.commons_ip.model.IPConstants;
 import org.roda_project.commons_ip.model.IPRepresentation;
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.model.impl.BasicAIP;
-import org.roda_project.commons_ip.model.impl.roda.RodaFolderAIP;
 import org.roda_project.commons_ip.utils.IPException;
 
 /**
@@ -87,9 +86,9 @@ public class EARKAIPTest {
   public void writesOnlyMets()
     throws URISyntaxException, ParseException, IOException, InterruptedException, IPException {
     URI resource = getClass().getResource("/").toURI();
-    final Path inputPath = Paths.get(resource).resolve("aip").resolve("roda")
-      .resolve("5408d7a3-9efd-4616-9609-7f335d976489");
-    AIP aip = RodaFolderAIP.parse(inputPath);
+    final Path inputPath = Paths.get(resource).resolve("aip").resolve("eark")
+      .resolve("IDec234adb-fe77-4a60-bdac-c41c21fd68ed");
+    AIP aip = EARKAIP.parse(inputPath);
     Path outputPath = Files.createTempDirectory("aip-output");
 
     Path aipPath = new EARKAIP(aip).build(outputPath, true);
@@ -97,8 +96,8 @@ public class EARKAIPTest {
     Assert.assertTrue(Files.isDirectory(aipPath));
     Assert.assertTrue(Files.isRegularFile(aipPath.resolve("METS.xml")));
 
-    Assert.assertEquals(1, aip.getRepresentations().size());
-    if (aip.getRepresentations().size() == 1) {
+    Assert.assertEquals(2, aip.getRepresentations().size());
+    if (aip.getRepresentations().size() == 2) {
       Assert.assertTrue(Files.isDirectory(aipPath.resolve(IPConstants.REPRESENTATIONS)));
       IPRepresentation rep = aip.getRepresentations().get(0);
       Path repPath = aipPath.resolve(IPConstants.REPRESENTATIONS).resolve(rep.getRepresentationID());

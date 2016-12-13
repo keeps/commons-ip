@@ -32,8 +32,4 @@ public class IPEnums {
     }
   }
 
-  public enum AIPState {
-    CREATED, INGEST_PROCESSING, UNDER_APPRAISAL, ACTIVE, DELETED;
-  }
-
 }

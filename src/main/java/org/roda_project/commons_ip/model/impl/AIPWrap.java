@@ -23,7 +23,6 @@ import org.roda_project.commons_ip.model.IPMetadata;
 import org.roda_project.commons_ip.model.IPRepresentation;
 import org.roda_project.commons_ip.model.ValidationReport;
 import org.roda_project.commons_ip.utils.IPEnums;
-import org.roda_project.commons_ip.utils.IPEnums.AIPState;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
 
@@ -95,12 +94,12 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public void setState(final AIPState state) {
+  public void setState(final String state) {
     aip.setState(state);
   }
 
   @Override
-  public AIPState getState() {
+  public String getState() {
     return aip.getState();
   }
 
