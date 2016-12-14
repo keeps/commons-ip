@@ -41,11 +41,11 @@ public class RepresentationContentType implements Serializable {
     this.otherType = "";
   }
 
-  private RepresentationContentTypeEnum getType() {
+  public RepresentationContentTypeEnum getType() {
     return type;
   }
 
-  private String getOtherType() {
+  public String getOtherType() {
     return otherType;
   }
 

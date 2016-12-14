@@ -31,11 +31,11 @@ API to manipulate Information Packages of different formats: RODA, E-ARK, etc.
   <dependency>
     <groupId>org.roda-project</groupId>
     <artifactId>commons-ip</artifactId>
-    <version>1.0.0-alpha24</version>
+    <version>1.0.0-alpha25</version>
   </dependency>
   ```
 
-* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha24/commons-ip-1.0.0-alpha24.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
+* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha25/commons-ip-1.0.0-alpha25.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
 
 
 ### Write some code
@@ -148,6 +148,11 @@ SIP earkSIP = EARKSIP.parse(zipSIP);
 5. Submit a pull request :D
 
 ## History
+
+#### Alpha 25 (2016-12-14)
+
+* Now E-ARK AIP is also supported
+* Fixed bug that was happening when E-ARK SIP zip file had a different filename from the ID and was causing a validation error (when root folder exists; issue #19).
 
 #### Alpha 24 (2016-11-11)
 

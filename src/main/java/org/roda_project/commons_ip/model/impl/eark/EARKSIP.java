@@ -142,10 +142,9 @@ public class EARKSIP extends SIP {
   public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
     throws IPException, InterruptedException {
     Path buildDir = createBuildDir();
-    Path zipPath = null;
+    Path zipPath = getZipPath(destinationDirectory, fileNameWithoutExtension);
     try {
       List<ZipEntryInfo> zipEntries = getZipEntries();
-      zipPath = getZipPath(destinationDirectory, fileNameWithoutExtension);
 
       // 20160407 hsilva: as METS does not have an attribute 'otherType', the
       // other type must be put in the 'type' attribute allowing this way other
@@ -178,8 +177,6 @@ public class EARKSIP extends SIP {
     } catch (InterruptedException e) {
       cleanUpUponInterrupt(zipPath);
       throw e;
-    } catch (IPException e) {
-      throw new IPException(e.getMessage(), e);
     } finally {
       deleteBuildDir(buildDir);
     }
