@@ -32,7 +32,7 @@ import org.roda_project.commons_ip.mets_v1_11.beans.FileType;
 import org.roda_project.commons_ip.mets_v1_11.beans.FileType.FLocat;
 import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType.MdRef;
 import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
-import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.MetsHdr.Agent;
+import org.roda_project.commons_ip.mets_v1_11.beans.OriginalMetsType.MetsHdr.Agent;
 import org.roda_project.commons_ip.model.IPAgent;
 import org.roda_project.commons_ip.model.IPConstants;
 import org.roda_project.commons_ip.model.MetsWrapper;
@@ -51,7 +51,7 @@ public final class METSUtils {
     Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
     SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
     factory.setResourceResolver(new ResourceResolver());
-    InputStream metsSchemaInputStream = METSUtils.class.getResourceAsStream("/schemas/mets1_11.xsd");
+    InputStream metsSchemaInputStream = METSUtils.class.getResourceAsStream("/schemas/IP.xsd");
     Source metsSchemaSource = new StreamSource(metsSchemaInputStream);
     Schema schema = factory.newSchema(metsSchemaSource);
     jaxbUnmarshaller.setSchema(schema);

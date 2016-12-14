@@ -9,7 +9,7 @@ package org.roda_project.commons_ip.utils;
 
 public class IPEnums {
   public enum IPType {
-    SIP, AIP, DIP;
+    SIP, AIP, DIP, AIU, AIC;
   }
 
   public enum IPStatus {

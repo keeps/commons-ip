@@ -25,7 +25,7 @@ import org.roda_project.commons_ip.mets_v1_11.beans.FileType;
 import org.roda_project.commons_ip.mets_v1_11.beans.FileType.FLocat;
 import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType.MdRef;
 import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
-import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.MetsHdr.Agent;
+import org.roda_project.commons_ip.mets_v1_11.beans.OriginalMetsType.MetsHdr.Agent;
 import org.roda_project.commons_ip.mets_v1_11.beans.StructMapType;
 import org.roda_project.commons_ip.model.AIP;
 import org.roda_project.commons_ip.model.IPConstants;
@@ -270,9 +270,8 @@ public final class EARKUtils {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
-      Path metsSchema = Utils.copyResourceFromClasspathToDir(EARKSIP.class, buildDir, "mets.xsd",
-        "/schemas/mets1_11.xsd");
-      schemas.add(new IPFile(metsSchema, "mets.xsd"));
+      Path metsSchema = Utils.copyResourceFromClasspathToDir(EARKSIP.class, buildDir, "IP.xsd", "/schemas/IP.xsd");
+      schemas.add(new IPFile(metsSchema, "IP.xsd"));
       Path xlinkSchema = Utils.copyResourceFromClasspathToDir(EARKSIP.class, buildDir, "xlink.xsd",
         "/schemas/xlink.xsd");
       schemas.add(new IPFile(xlinkSchema, "xlink.xsd"));

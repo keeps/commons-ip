@@ -13,7 +13,7 @@ import org.roda_project.commons_ip.mets_v1_11.beans.DivType;
 import org.roda_project.commons_ip.mets_v1_11.beans.FileGrpType;
 import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType;
 import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
-import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec.FileGrp;
+import org.roda_project.commons_ip.mets_v1_11.beans.OriginalMetsType.FileSec.FileGrp;
 
 public class MetsWrapper {
 

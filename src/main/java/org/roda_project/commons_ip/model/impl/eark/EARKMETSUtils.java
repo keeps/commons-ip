@@ -30,11 +30,11 @@ import org.roda_project.commons_ip.mets_v1_11.beans.FileType.FLocat;
 import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType;
 import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType.MdRef;
 import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
-import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec;
-import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec.FileGrp;
-import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.MetsHdr;
-import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.MetsHdr.Agent;
-import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.MetsHdr.AltRecordID;
+import org.roda_project.commons_ip.mets_v1_11.beans.OriginalMetsType.FileSec;
+import org.roda_project.commons_ip.mets_v1_11.beans.OriginalMetsType.FileSec.FileGrp;
+import org.roda_project.commons_ip.mets_v1_11.beans.OriginalMetsType.MetsHdr;
+import org.roda_project.commons_ip.mets_v1_11.beans.OriginalMetsType.MetsHdr.Agent;
+import org.roda_project.commons_ip.mets_v1_11.beans.OriginalMetsType.MetsHdr.AltRecordID;
 import org.roda_project.commons_ip.mets_v1_11.beans.StructMapType;
 import org.roda_project.commons_ip.model.IPAgent;
 import org.roda_project.commons_ip.model.IPAltRecordID;
@@ -43,6 +43,7 @@ import org.roda_project.commons_ip.model.IPDescriptiveMetadata;
 import org.roda_project.commons_ip.model.IPHeader;
 import org.roda_project.commons_ip.model.IPMetadata;
 import org.roda_project.commons_ip.model.MetsWrapper;
+import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.METSEnums.LocType;
@@ -70,6 +71,9 @@ public final class EARKMETSUtils {
     mets.setPROFILE(profile);
     mets.setTYPE(type);
     mets.setLABEL(label);
+
+    // FIXME
+    mets.setOAISSTATUS(IPEnums.IPType.SIP.toString());
 
     // header
     MetsHdr header = new MetsHdr();

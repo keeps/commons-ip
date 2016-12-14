@@ -30,6 +30,7 @@ import org.roda_project.commons_ip.model.MetadataType.MetadataTypeEnum;
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.model.RepresentationStatus;
 import org.roda_project.commons_ip.model.SIP;
+import org.roda_project.commons_ip.model.ValidationReport;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.Utils;
@@ -146,7 +147,8 @@ public class EARKTest {
     SIP earkSIP = EARKSIP.parse(zipSIP, tempFolder);
 
     // general assessment
-    Assert.assertTrue(earkSIP.getValidationReport().isValid());
+    ValidationReport validationReport = earkSIP.getValidationReport();
+    Assert.assertTrue(validationReport.isValid());
 
     // assess # of representations
     List<IPRepresentation> representations = earkSIP.getRepresentations();
@@ -157,8 +159,7 @@ public class EARKTest {
       Is.is(RepresentationStatus.getORIGINAL().asString()));
     Assert.assertThat(representations.get(1).getStatus().asString(), Is.is(REPRESENTATION_STATUS_NORMALIZED));
 
-    LOGGER.info("SIP with id '{}' parsed with success (valid? {})!", earkSIP.getId(),
-      earkSIP.getValidationReport().isValid());
+    LOGGER.info("SIP with id '{}' parsed with success (valid? {})!", earkSIP.getId(), validationReport.isValid());
   }
 
 }

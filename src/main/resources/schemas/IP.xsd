@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<xsd:schema targetNamespace="http://www.loc.gov/METS/" xmlns="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xsd:import namespace="http://www.w3.org/1999/xlink" schemaLocation="http://www.loc.gov/standards/xlink/xlink.xsd"/>
+  <xsd:redefine schemaLocation="mets1_11.xsd">
+    <xsd:complexType name="metsType">
+      <xsd:complexContent>
+        <xsd:extension base="metsType">
+          <xsd:attribute name="OAISSTATUS" use="required">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="SIP"/>
+                <xsd:enumeration value="AIP"/>
+                <xsd:enumeration value="DIP"/>
+                <xsd:enumeration value="AIU"/>
+                <xsd:enumeration value="AIC"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:attribute>
+          <xsd:attribute name="CONTENTTYPESPECIFICATION" use="optional" />
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:redefine>
+</xsd:schema>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jxb:bindings xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:jxb="http://java.sun.com/xml/ns/jaxb" xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+	jxb:extensionBindingPrefixes="xjc" xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:xml="http://www.w3.org/XML/1998/namespace" version="2.1">
+
+	<jxb:bindings schemaLocation="xlink.xsd"
+		node="//xsd:attribute[@name='label']">
+		<jxb:property name="xlinkLabel" />
+	</jxb:bindings>
+
+</jxb:bindings> 
