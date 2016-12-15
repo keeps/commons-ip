@@ -61,13 +61,13 @@
 <div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
   &lt;<span class="pl-ent">groupId</span>&gt;org.roda-project&lt;/<span class="pl-ent">groupId</span>&gt;
   &lt;<span class="pl-ent">artifactId</span>&gt;commons-ip&lt;/<span class="pl-ent">artifactId</span>&gt;
-  &lt;<span class="pl-ent">version</span>&gt;1.0.0-alpha24&lt;/<span class="pl-ent">version</span>&gt;
+  &lt;<span class="pl-ent">version</span>&gt;1.0.0-alpha25&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 </li>
 </ol>
 
 <ul>
-<li>Not using maven, download <a href="http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha24/commons-ip-1.0.0-alpha24.jar">Commons IP latest jar</a>, each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.</li>
+<li>Not using maven, download <a href="http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha25/commons-ip-1.0.0-alpha25.jar">Commons IP latest jar</a>, each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.</li>
 </ul>
 
 <h3>
@@ -188,6 +188,14 @@ representation2<span class="pl-k">.</span>addFile(representationFile3);
 
 <h2>
 <a id="history" class="anchor" href="#history" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>History</h2>
+
+<h4>
+<a id="alpha-25-2016-12-14" class="anchor" href="#alpha-25-2016-12-14" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 25 (2016-12-14)</h4>
+
+<ul>
+<li>Now E-ARK AIP is also supported</li>
+<li>Fixed bug that was happening when E-ARK SIP zip file had a different filename from the ID and was causing a validation error (when root folder exists; issue #19).</li>
+</ul>
 
 <h4>
 <a id="alpha-24-2016-11-11" class="anchor" href="#alpha-24-2016-11-11" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha 24 (2016-11-11)</h4>
