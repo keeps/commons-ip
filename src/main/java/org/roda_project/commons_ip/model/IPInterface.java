@@ -40,15 +40,15 @@ public interface IPInterface {
 
   IPContentType getContentType();
 
-  void setStatus(IPStatus status);
+  IP setStatus(IPStatus status);
 
   IPStatus getStatus();
 
-  void setCreateDate(XMLGregorianCalendar date);
+  IP setCreateDate(XMLGregorianCalendar date);
 
   Optional<XMLGregorianCalendar> getCreateDate();
 
-  void setModificationDate(XMLGregorianCalendar date);
+  IP setModificationDate(XMLGregorianCalendar date);
 
   Optional<XMLGregorianCalendar> getModificationDate();
 

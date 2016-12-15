@@ -140,8 +140,9 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public void setCreateDate(XMLGregorianCalendar date) {
+  public IP setCreateDate(XMLGregorianCalendar date) {
     this.createDate = Optional.ofNullable(date);
+    return this;
   }
 
   @Override
@@ -150,8 +151,9 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public void setModificationDate(XMLGregorianCalendar date) {
+  public IP setModificationDate(XMLGregorianCalendar date) {
     this.modificationDate = Optional.ofNullable(date);
+    return this;
   }
 
   @Override
@@ -182,8 +184,9 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public void setStatus(IPStatus status) {
+  public IP setStatus(IPStatus status) {
     this.status = status;
+    return this;
   }
 
   @Override

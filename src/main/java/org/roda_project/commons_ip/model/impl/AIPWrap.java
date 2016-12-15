@@ -114,8 +114,8 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public void setStatus(final IPEnums.IPStatus status) {
-    aip.setStatus(status);
+  public IP setStatus(final IPEnums.IPStatus status) {
+    return aip.setStatus(status);
   }
 
   @Override
@@ -124,8 +124,8 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public void setCreateDate(final XMLGregorianCalendar date) {
-    aip.setCreateDate(date);
+  public IP setCreateDate(final XMLGregorianCalendar date) {
+    return aip.setCreateDate(date);
   }
 
   @Override
@@ -134,8 +134,8 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public void setModificationDate(final XMLGregorianCalendar date) {
-    aip.setModificationDate(date);
+  public IP setModificationDate(final XMLGregorianCalendar date) {
+    return aip.setModificationDate(date);
   }
 
   @Override
