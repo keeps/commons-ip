@@ -101,17 +101,12 @@ public final class ZIPUtils {
     return zipEntries;
   }
 
-  /**
-   * @deprecated 20161021 hsilva: same as invoking
-   *             {@link #zip(List, OutputStream, SIP)} & therefore this will be
-   *             removed as soon as possible
-   */
-  public static void zipWhileCalculatingChecksum(List<ZipEntryInfo> files, OutputStream out, SIP sip)
+  public static void zip(List<ZipEntryInfo> files, OutputStream out, SIP sip)
     throws IOException, InterruptedException, IPException {
-    zip(files, out, sip);
+    zip(files, out, sip, true);
   }
 
-  public static void zip(List<ZipEntryInfo> files, OutputStream out, SIP sip)
+  public static void zip(List<ZipEntryInfo> files, OutputStream out, SIP sip, boolean createSipIdFolder)
     throws IOException, InterruptedException, IPException {
     ZipOutputStream zos = new ZipOutputStream(out);
 
@@ -124,7 +119,13 @@ public final class ZIPUtils {
       file.prepareEntryforZipping();
 
       LOGGER.debug("Zipping file {}", file.getFilePath());
-      ZipEntry entry = new ZipEntry(sip.getId() + "/" + file.getName());
+      ZipEntry entry;
+      if (createSipIdFolder) {
+        entry = new ZipEntry(sip.getId() + "/" + file.getName());
+      } else {
+        entry = new ZipEntry(file.getName());
+      }
+
       zos.putNextEntry(entry);
       InputStream inputStream = Files.newInputStream(file.getFilePath());
 
