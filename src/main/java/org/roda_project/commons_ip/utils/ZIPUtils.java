@@ -17,6 +17,7 @@ import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -77,41 +78,46 @@ public final class ZIPUtils {
     return ipFolderPath;
   }
 
-  public static List<ZipEntryInfo> addMdRefFileToZip(List<ZipEntryInfo> zipEntries, Path filePath, String zipPath,
-    MdRef mdRef) throws IPException {
+  public static Map<String, ZipEntryInfo> addMdRefFileToZip(Map<String, ZipEntryInfo> zipEntries, Path filePath,
+    String zipPath, MdRef mdRef) throws IPException {
 
-    zipEntries.add(new METSMdRefZipEntryInfo(zipPath, filePath, mdRef));
-
-    return zipEntries;
-  }
-
-  public static List<ZipEntryInfo> addFileTypeFileToZip(List<ZipEntryInfo> zipEntries, Path filePath, String zipPath,
-    FileType fileType) throws IPException {
-
-    zipEntries.add(new METSFileTypeZipEntryInfo(zipPath, filePath, fileType));
+    zipEntries.put(zipPath, new METSMdRefZipEntryInfo(zipPath, filePath, mdRef));
 
     return zipEntries;
   }
 
-  public static List<ZipEntryInfo> addMETSFileToZip(List<ZipEntryInfo> zipEntries, Path filePath, String zipPath,
-    Mets mets, boolean rootMETS) throws IPException {
+  public static Map<String, ZipEntryInfo> addFileTypeFileToZip(Map<String, ZipEntryInfo> zipEntries, Path filePath,
+    String zipPath, FileType fileType) throws IPException {
 
-    zipEntries.add(new METSZipEntryInfo(zipPath, filePath, mets, rootMETS));
+    zipEntries.put(zipPath, new METSFileTypeZipEntryInfo(zipPath, filePath, fileType));
 
     return zipEntries;
   }
 
-  public static void zip(List<ZipEntryInfo> files, OutputStream out, SIP sip)
+  public static Map<String, ZipEntryInfo> addMETSFileToZip(Map<String, ZipEntryInfo> zipEntries, Path filePath,
+    String zipPath, Mets mets, boolean rootMETS) throws IPException {
+
+    zipEntries.put(zipPath, new METSZipEntryInfo(zipPath, filePath, mets, rootMETS));
+
+    return zipEntries;
+  }
+
+  /**
+   * @deprecated 20161021 hsilva: same as invoking
+   *             {@link #zip(List, OutputStream, SIP)} & therefore this will be
+   *             removed as soon as possible
+   */
+  public static void zipWhileCalculatingChecksum(Map<String, ZipEntryInfo> files, OutputStream out, SIP sip)
     throws IOException, InterruptedException, IPException {
     zip(files, out, sip, true);
   }
 
-  public static void zip(List<ZipEntryInfo> files, OutputStream out, SIP sip, boolean createSipIdFolder)
+  public static void zip(Map<String, ZipEntryInfo> files, OutputStream out, SIP sip, boolean createSipIdFolder)
     throws IOException, InterruptedException, IPException {
     ZipOutputStream zos = new ZipOutputStream(out);
 
     int i = 0;
-    for (ZipEntryInfo file : files) {
+    for (ZipEntryInfo file : files.values()) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
@@ -169,11 +175,11 @@ public final class ZIPUtils {
     out.close();
   }
 
-  public static void zip(List<ZipEntryInfo> files, OutputStream out, AIP aip)
+  public static void zip(Map<String, ZipEntryInfo> files, OutputStream out, AIP aip)
     throws IOException, InterruptedException, IPException {
     ZipOutputStream zos = new ZipOutputStream(out);
 
-    for (ZipEntryInfo file : files) {
+    for (ZipEntryInfo file : files.values()) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }

@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.xml.bind.JAXBException;
@@ -60,7 +61,7 @@ public final class EARKUtils {
 
   }
 
-  protected static void addDescriptiveMetadataToZipAndMETS(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
+  protected static void addDescriptiveMetadataToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
     List<IPDescriptiveMetadata> descriptiveMetadata, String representationId) throws IPException, InterruptedException {
     if (descriptiveMetadata != null && !descriptiveMetadata.isEmpty()) {
       for (IPDescriptiveMetadata dm : descriptiveMetadata) {
@@ -82,7 +83,7 @@ public final class EARKUtils {
     }
   }
 
-  protected static void addPreservationMetadataToZipAndMETS(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
+  protected static void addPreservationMetadataToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
     List<IPMetadata> preservationMetadata, String representationId) throws IPException, InterruptedException {
     if (preservationMetadata != null && !preservationMetadata.isEmpty()) {
       for (IPMetadata pm : preservationMetadata) {
@@ -104,7 +105,7 @@ public final class EARKUtils {
     }
   }
 
-  protected static void addOtherMetadataToZipAndMETS(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
+  protected static void addOtherMetadataToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
     List<IPMetadata> otherMetadata, String representationId) throws IPException, InterruptedException {
     if (otherMetadata != null && !otherMetadata.isEmpty()) {
       for (IPMetadata om : otherMetadata) {
@@ -127,7 +128,7 @@ public final class EARKUtils {
   }
 
   protected static void addRepresentationsToZipAndMETS(IPInterface ip, List<IPRepresentation> representations,
-    List<ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper, Path buildDir)
+    Map<String, ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper, Path buildDir)
     throws IPException, InterruptedException {
     // representations
     if (representations != null && !representations.isEmpty()) {
@@ -184,7 +185,7 @@ public final class EARKUtils {
     }
   }
 
-  protected static void addRepresentationDataFilesToZipAndMETS(IPInterface ip, List<ZipEntryInfo> zipEntries,
+  protected static void addRepresentationDataFilesToZipAndMETS(IPInterface ip, Map<String, ZipEntryInfo> zipEntries,
     MetsWrapper representationMETSWrapper, IPRepresentation representation, String representationId)
     throws IPException, InterruptedException {
     if (representation.getData() != null && !representation.getData().isEmpty()) {
@@ -216,7 +217,7 @@ public final class EARKUtils {
     }
   }
 
-  protected static void addSchemasToZipAndMETS(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
+  protected static void addSchemasToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
     List<IPFile> schemas, String representationId) throws IPException, InterruptedException {
     if (schemas != null && !schemas.isEmpty()) {
       for (IPFile schema : schemas) {
@@ -237,7 +238,7 @@ public final class EARKUtils {
     }
   }
 
-  protected static void addDocumentationToZipAndMETS(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
+  protected static void addDocumentationToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
     List<IPFile> documentation, String representationId) throws IPException, InterruptedException {
     if (documentation != null && !documentation.isEmpty()) {
       for (IPFile doc : documentation) {
@@ -275,7 +276,7 @@ public final class EARKUtils {
     }
   }
 
-  protected static void addSubmissionsToZipAndMETS(final List<ZipEntryInfo> zipEntries, final MetsWrapper metsWrapper,
+  protected static void addSubmissionsToZipAndMETS(final Map<String, ZipEntryInfo> zipEntries, final MetsWrapper metsWrapper,
     final List<IPFile> submissions) throws IPException, InterruptedException {
     if (submissions != null && !submissions.isEmpty()) {
       for (IPFile submission : submissions) {
@@ -291,7 +292,7 @@ public final class EARKUtils {
     }
   }
 
-  protected static void addMainMETSToZip(List<ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper, Path buildDir)
+  protected static void addMainMETSToZip(Map<String, ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper, Path buildDir)
     throws IPException {
     EARKMETSUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, IPConstants.METS_FILE, buildDir);
   }

@@ -9,6 +9,7 @@ package org.roda_project.commons_ip.model;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -108,7 +109,7 @@ public interface IPInterface {
 
   List<IPFile> getDocumentation();
 
-  List<ZipEntryInfo> getZipEntries();
+  Map<String, ZipEntryInfo> getZipEntries();
 
   ValidationReport getValidationReport();
 

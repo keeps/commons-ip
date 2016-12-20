@@ -9,6 +9,7 @@ package org.roda_project.commons_ip.model.impl;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -293,7 +294,7 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public List<ZipEntryInfo> getZipEntries() {
+  public Map<String, ZipEntryInfo> getZipEntries() {
     return aip.getZipEntries();
   }
 

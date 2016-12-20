@@ -47,7 +47,7 @@ public abstract class IP implements IPInterface {
   private List<IPFile> schemas;
   private List<IPFile> documentation;
 
-  private List<ZipEntryInfo> zipEntries;
+  private Map<String, ZipEntryInfo> zipEntries;
 
   private ValidationReport validationReport;
 
@@ -72,14 +72,14 @@ public abstract class IP implements IPInterface {
     this.documentation = new ArrayList<IPFile>();
 
     this.validationReport = new ValidationReport();
-    this.zipEntries = new ArrayList<ZipEntryInfo>();
+    this.zipEntries = new HashMap<String, ZipEntryInfo>();
   }
 
   public IP(List<String> ipIds, IPType ipType) {
     super();
     this.setIds(ipIds);
     this.type = ipType;
-    this.zipEntries = new ArrayList<ZipEntryInfo>();
+    this.zipEntries = new HashMap<String, ZipEntryInfo>();
   }
 
   public IP(List<String> ipIds, IPType ipType, IPContentType contentType, String creator) {
@@ -398,7 +398,7 @@ public abstract class IP implements IPInterface {
     throw new ParseException("One must implement static method parse in a concrete class");
   }
 
-  public List<ZipEntryInfo> getZipEntries() {
+  public Map<String, ZipEntryInfo> getZipEntries() {
     return zipEntries;
   }
 }

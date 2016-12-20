@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.xml.bind.JAXBException;
@@ -191,7 +192,7 @@ public final class EARKMETSUtils {
     return div;
   }
 
-  public static void addMainMETSToZip(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper, String metsPath,
+  public static void addMainMETSToZip(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper, String metsPath,
     Path buildDir) throws IPException {
     try {
       addMETSToZip(zipEntries, metsWrapper, metsPath, buildDir, true);
@@ -200,7 +201,7 @@ public final class EARKMETSUtils {
     }
   }
 
-  public static void addRepresentationMETSToZipAndToMainMETS(List<ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper,
+  public static void addRepresentationMETSToZipAndToMainMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper,
     String representationId, MetsWrapper representationMETSWrapper, String representationMetsPath, Path buildDir)
     throws IPException, InterruptedException {
     try {
@@ -220,7 +221,7 @@ public final class EARKMETSUtils {
     }
   }
 
-  private static void addMETSToZip(List<ZipEntryInfo> zipEntries, MetsWrapper metsWrapper, String metsPath,
+  private static void addMETSToZip(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper, String metsPath,
     Path buildDir, boolean mainMets) throws JAXBException, IOException, IPException {
     Path temp = Files.createTempFile(buildDir, IPConstants.METS_FILE_NAME, IPConstants.METS_FILE_EXTENSION);
     ZIPUtils.addMETSFileToZip(zipEntries, temp, metsPath, metsWrapper.getMets(), mainMets);

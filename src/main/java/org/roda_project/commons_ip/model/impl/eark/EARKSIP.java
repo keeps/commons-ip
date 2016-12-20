@@ -12,6 +12,7 @@ import java.nio.channels.ClosedByInterruptException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
@@ -115,7 +116,7 @@ public class EARKSIP extends SIP {
     Path buildDir = EARKUtils.createBuildDir(SIP_TEMP_DIR);
     Path zipPath = getZipPath(destinationDirectory, fileNameWithoutExtension);
     try {
-      List<ZipEntryInfo> zipEntries = getZipEntries();
+      Map<String, ZipEntryInfo> zipEntries = getZipEntries();
 
       // 20160407 hsilva: as METS does not have an attribute 'otherType', the
       // other type must be put in the 'type' attribute allowing this way other
@@ -171,7 +172,7 @@ public class EARKSIP extends SIP {
     return zipPath;
   }
 
-  private void createZipFile(List<ZipEntryInfo> zipEntries, Path zipPath) throws IPException, InterruptedException {
+  private void createZipFile(Map<String, ZipEntryInfo> zipEntries, Path zipPath) throws IPException, InterruptedException {
     try {
       notifySipBuildPackagingStarted(zipEntries.size());
       ZIPUtils.zip(zipEntries, Files.newOutputStream(zipPath), this);
