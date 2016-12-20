@@ -16,7 +16,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -102,12 +101,7 @@ public final class ZIPUtils {
     return zipEntries;
   }
 
-  /**
-   * @deprecated 20161021 hsilva: same as invoking
-   *             {@link #zip(List, OutputStream, SIP)} & therefore this will be
-   *             removed as soon as possible
-   */
-  public static void zipWhileCalculatingChecksum(Map<String, ZipEntryInfo> files, OutputStream out, SIP sip)
+  public static void zip(Map<String, ZipEntryInfo> files, OutputStream out, SIP sip)
     throws IOException, InterruptedException, IPException {
     zip(files, out, sip, true);
   }

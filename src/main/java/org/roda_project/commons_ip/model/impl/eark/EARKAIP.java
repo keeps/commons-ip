@@ -15,7 +15,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -87,7 +86,7 @@ public class EARKAIP extends AIPWrap {
     final Path buildDir = EARKUtils.createBuildDir(TEMP_DIR);
     Path zipPath = null;
     try {
-      final Map<String,ZipEntryInfo> zipEntries = getZipEntries();
+      final Map<String, ZipEntryInfo> zipEntries = getZipEntries();
       zipPath = getDirPath(destinationDirectory, fileNameWithoutExtension, false);
 
       // 20160407 hsilva: as METS does not have an attribute 'otherType', the
@@ -162,7 +161,7 @@ public class EARKAIP extends AIPWrap {
     return path;
   }
 
-  private void writeToPath(final Map<String,ZipEntryInfo> zipEntryInfos, final Path path, final boolean onlyMets)
+  private void writeToPath(final Map<String, ZipEntryInfo> zipEntryInfos, final Path path, final boolean onlyMets)
     throws IPException, InterruptedException {
     try {
       Files.createDirectories(path);

@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.nio.channels.ClosedByInterruptException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -172,7 +171,8 @@ public class EARKSIP extends SIP {
     return zipPath;
   }
 
-  private void createZipFile(Map<String, ZipEntryInfo> zipEntries, Path zipPath) throws IPException, InterruptedException {
+  private void createZipFile(Map<String, ZipEntryInfo> zipEntries, Path zipPath)
+    throws IPException, InterruptedException {
     try {
       notifySipBuildPackagingStarted(zipEntries.size());
       ZIPUtils.zip(zipEntries, Files.newOutputStream(zipPath), this);

@@ -201,9 +201,9 @@ public final class EARKMETSUtils {
     }
   }
 
-  public static void addRepresentationMETSToZipAndToMainMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper,
-    String representationId, MetsWrapper representationMETSWrapper, String representationMetsPath, Path buildDir)
-    throws IPException, InterruptedException {
+  public static void addRepresentationMETSToZipAndToMainMETS(Map<String, ZipEntryInfo> zipEntries,
+    MetsWrapper mainMETSWrapper, String representationId, MetsWrapper representationMETSWrapper,
+    String representationMetsPath, Path buildDir) throws IPException, InterruptedException {
     try {
       if (Thread.interrupted()) {
         throw new InterruptedException();
