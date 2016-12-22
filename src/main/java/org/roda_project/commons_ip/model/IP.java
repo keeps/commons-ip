@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -72,14 +73,14 @@ public abstract class IP implements IPInterface {
     this.documentation = new ArrayList<IPFile>();
 
     this.validationReport = new ValidationReport();
-    this.zipEntries = new HashMap<String, ZipEntryInfo>();
+    this.zipEntries = new LinkedHashMap<String, ZipEntryInfo>();
   }
 
   public IP(List<String> ipIds, IPType ipType) {
     super();
     this.setIds(ipIds);
     this.type = ipType;
-    this.zipEntries = new HashMap<String, ZipEntryInfo>();
+    this.zipEntries = new LinkedHashMap<String, ZipEntryInfo>();
   }
 
   public IP(List<String> ipIds, IPType ipType, IPContentType contentType, String creator) {

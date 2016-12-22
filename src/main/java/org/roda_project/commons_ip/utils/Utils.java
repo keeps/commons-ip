@@ -182,12 +182,12 @@ public final class Utils {
     // validate if both mets checksum or mets algorithm are set
     if (StringUtils.isBlank(metsChecksum)) {
       ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CHECKSUM_NOT_SET,
-        ValidationEntry.LEVEL.WARN, ip.getBasePath(), filePath);
+        ValidationEntry.LEVEL.ERROR, ip.getBasePath(), filePath);
       calculateChecksum = false;
     }
     if (StringUtils.isBlank(metsChecksumAlgorithm)) {
       ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CHECKSUM_ALGORITHM_NOT_SET,
-        ValidationEntry.LEVEL.WARN, ip.getBasePath(), filePath);
+        ValidationEntry.LEVEL.ERROR, ip.getBasePath(), filePath);
       calculateChecksum = false;
     }
 
