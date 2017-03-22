@@ -18,28 +18,26 @@ import java.util.Optional;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.roda_project.commons_ip.utils.IPEnums.IPStatus;
-import org.roda_project.commons_ip.utils.IPEnums.IPType;
 import org.roda_project.commons_ip.utils.IPException;
-import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.Utils;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
+import org.roda_project.commons_ip.utils.IPEnums.IPStatus;
+import org.roda_project.commons_ip.utils.IPEnums.IPType;
+import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 
 public abstract class IP implements IPInterface {
 
   private List<String> ids;
   private String profile;
   private IPType type;
-  private Optional<XMLGregorianCalendar> createDate;
-  private Optional<XMLGregorianCalendar> modificationDate;
+  private IPHeader header;
+
   private IPContentType contentType;
-  private IPStatus status;
   private List<String> ancestors;
 
   private Path basePath;
   private String description;
 
-  private List<IPAgent> agents;
   private List<IPDescriptiveMetadata> descriptiveMetadata;
   private List<IPMetadata> preservationMetadata;
   private List<IPMetadata> otherMetadata;
@@ -56,14 +54,13 @@ public abstract class IP implements IPInterface {
     this.setId(Utils.generateRandomAndPrefixedUUID());
     this.profile = "http://www.eark-project.com/METS/IP.xml";
     this.type = IPType.SIP;
-    this.createDate = Utils.getCurrentTime();
+    this.header = new IPHeader();
+
     this.contentType = IPContentType.getMIXED();
-    this.status = IPStatus.NEW;
     this.ancestors = new ArrayList<>();
 
     this.description = "";
 
-    this.agents = new ArrayList<IPAgent>();
     this.descriptiveMetadata = new ArrayList<IPDescriptiveMetadata>();
     this.preservationMetadata = new ArrayList<IPMetadata>();
     this.otherMetadata = new ArrayList<IPMetadata>();
@@ -81,6 +78,7 @@ public abstract class IP implements IPInterface {
     this.setIds(ipIds);
     this.type = ipType;
     this.zipEntries = new LinkedHashMap<String, ZipEntryInfo>();
+    this.header = new IPHeader();
   }
 
   public IP(List<String> ipIds, IPType ipType, IPContentType contentType, String creator) {
@@ -88,7 +86,7 @@ public abstract class IP implements IPInterface {
     this.contentType = contentType;
 
     IPAgent creatorAgent = new IPAgent(creator, "CREATOR", null, CreatorType.OTHER, "SOFTWARE");
-    this.agents.add(creatorAgent);
+    header.addAgent(creatorAgent);
   }
 
   @Override
@@ -137,23 +135,23 @@ public abstract class IP implements IPInterface {
 
   @Override
   public Optional<XMLGregorianCalendar> getCreateDate() {
-    return createDate;
+    return header.getCreateDate();
   }
 
   @Override
   public IP setCreateDate(XMLGregorianCalendar date) {
-    this.createDate = Optional.ofNullable(date);
+    header.setCreateDate(date);
     return this;
   }
 
   @Override
   public Optional<XMLGregorianCalendar> getModificationDate() {
-    return modificationDate;
+    return header.getModificationDate();
   }
 
   @Override
   public IP setModificationDate(XMLGregorianCalendar date) {
-    this.modificationDate = Optional.ofNullable(date);
+    header.setModificationDate(date);
     return this;
   }
 
@@ -181,12 +179,12 @@ public abstract class IP implements IPInterface {
 
   @Override
   public IPStatus getStatus() {
-    return status;
+    return header.getStatus();
   }
 
   @Override
   public IP setStatus(IPStatus status) {
-    this.status = status;
+    this.header.setStatus(status);
     return this;
   }
 
@@ -214,7 +212,7 @@ public abstract class IP implements IPInterface {
 
   @Override
   public IP addAgent(IPAgent sipAgent) {
-    agents.add(sipAgent);
+    header.addAgent(sipAgent);
     return this;
   }
 
@@ -327,7 +325,7 @@ public abstract class IP implements IPInterface {
 
   @Override
   public List<IPAgent> getAgents() {
-    return agents;
+    return header.getAgents();
   }
 
   @Override
@@ -382,9 +380,8 @@ public abstract class IP implements IPInterface {
 
   @Override
   public String toString() {
-    return "IP [ids=" + ids + ", profile=" + profile + ", type=" + type + ", createDate=" + createDate
-      + ", modificationDate=" + modificationDate + ", contentType=" + contentType + ", status=" + status
-      + ", ancestors=" + ancestors + ", basePath=" + basePath + ", description=" + description + ", agents=" + agents
+    return "IP [ids=" + ids + ", profile=" + profile + ", type=" + type + ", header=" + header + ", contentType="
+      + contentType + ", ancestors=" + ancestors + ", basePath=" + basePath + ", description=" + description
       + ", descriptiveMetadata=" + descriptiveMetadata + ", preservationMetadata=" + preservationMetadata
       + ", otherMetadata=" + otherMetadata + ", representationIds=" + representationIds + ", representations="
       + representations + ", schemas=" + schemas + ", documentation=" + documentation + ", validationReport="
