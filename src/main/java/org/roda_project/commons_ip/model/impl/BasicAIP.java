@@ -9,7 +9,9 @@ package org.roda_project.commons_ip.model.impl;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.roda_project.commons_ip.model.AIP;
 import org.roda_project.commons_ip.model.IP;
@@ -123,5 +125,10 @@ public class BasicAIP extends IP implements AIP {
   public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
     throws IPException, InterruptedException {
     throw new IPException("Not implemented");
+  }
+
+  @Override
+  public Set<String> getExtraChecksumAlgorithms() {
+    return new HashSet<>();
   }
 }

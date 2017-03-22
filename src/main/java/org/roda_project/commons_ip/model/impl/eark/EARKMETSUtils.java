@@ -54,7 +54,7 @@ public final class EARKMETSUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(EARKMETSUtils.class);
 
   private EARKMETSUtils() {
-
+    // do nothing
   }
 
   public static MetsWrapper generateMETS(String id, String label, String type, String profile, List<IPAgent> ipAgents,
@@ -78,10 +78,12 @@ public final class EARKMETSUtils {
     } catch (DatatypeConfigurationException e) {
       throw new IPException("Error getting current calendar", e);
     }
+
     // header/agent
     for (IPAgent sipAgent : ipAgents) {
       header.getAgent().add(createMETSAgent(sipAgent));
     }
+
     mets.setMetsHdr(header);
 
     // administrative section

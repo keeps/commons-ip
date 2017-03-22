@@ -29,10 +29,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType.MdRef;
@@ -63,8 +65,7 @@ public final class Utils {
   public static XMLGregorianCalendar getCurrentCalendar() throws DatatypeConfigurationException {
     GregorianCalendar gcal = new GregorianCalendar();
     gcal.setTime(new Date());
-    XMLGregorianCalendar calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
-    return calendar;
+    return DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
   }
 
   public static String generateRandomAndPrefixedUUID() {

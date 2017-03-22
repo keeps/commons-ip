@@ -47,11 +47,7 @@ import org.slf4j.LoggerFactory;
  */
 public class EARKAIP extends AIPWrap {
   private static final Logger LOGGER = LoggerFactory.getLogger(EARKAIP.class);
-
   private static final String TEMP_DIR = "EARKAIP";
-  private static final String FILE_EXTENSION = ".zip";
-
-  private static boolean VALIDATION_FAIL_IF_REPRESENTATION_METS_DOES_NOT_HAVE_TWO_PARTS = false;
 
   /**
    * Constructor.

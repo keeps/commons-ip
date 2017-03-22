@@ -19,15 +19,14 @@ public abstract class SIP extends IP {
 
   public SIP() {
     super();
-    observers = new ArrayList<SIPObserver>();
+    observers = new ArrayList<>();
   }
 
   public SIP(String sipId) {
     super();
     setId(sipId);
     setType(IPType.SIP);
-
-    observers = new ArrayList<SIPObserver>();
+    observers = new ArrayList<>();
   }
 
   public SIP(String sipId, IPContentType contentType, String creator) {
@@ -37,8 +36,7 @@ public abstract class SIP extends IP {
     setContentType(contentType);
     IPAgent creatorAgent = new IPAgent(creator, "CREATOR", null, CreatorType.OTHER, "SOFTWARE");
     getAgents().add(creatorAgent);
-
-    observers = new ArrayList<SIPObserver>();
+    observers = new ArrayList<>();
   }
 
   public void addObserver(SIPObserver observer) {

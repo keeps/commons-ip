@@ -9,6 +9,8 @@ package org.roda_project.commons_ip.utils;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
@@ -17,15 +19,37 @@ import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
 public class METSZipEntryInfo extends FileZipEntryInfo {
   private Mets mets;
   private boolean rootMETS;
+  private Map<String, String> checksums;
+  private long size;
 
   public METSZipEntryInfo(String name, Path filePath) {
     super(name, filePath);
+    checksums = new HashMap<>();
+    size = 0;
   }
 
   public METSZipEntryInfo(String name, Path filePath, Mets mets, boolean rootMETS) {
     super(name, filePath);
     this.mets = mets;
     this.rootMETS = rootMETS;
+    checksums = new HashMap<>();
+    size = 0;
+  }
+
+  public Map<String, String> getChecksums() {
+    return checksums;
+  }
+
+  public void setChecksums(Map<String, String> checksums) {
+    this.checksums = checksums;
+  }
+
+  public long getSize() {
+    return size;
+  }
+
+  public void setSize(long size) {
+    this.size = size;
   }
 
   @Override

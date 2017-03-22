@@ -15,15 +15,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.roda_project.commons_ip.utils.IPException;
-import org.roda_project.commons_ip.utils.Utils;
-import org.roda_project.commons_ip.utils.ZipEntryInfo;
 import org.roda_project.commons_ip.utils.IPEnums.IPStatus;
 import org.roda_project.commons_ip.utils.IPEnums.IPType;
+import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
+import org.roda_project.commons_ip.utils.Utils;
+import org.roda_project.commons_ip.utils.ZipEntryInfo;
 
 public abstract class IP implements IPInterface {
 
@@ -61,30 +62,29 @@ public abstract class IP implements IPInterface {
 
     this.description = "";
 
-    this.descriptiveMetadata = new ArrayList<IPDescriptiveMetadata>();
-    this.preservationMetadata = new ArrayList<IPMetadata>();
-    this.otherMetadata = new ArrayList<IPMetadata>();
-    this.representationIds = new ArrayList<String>();
-    this.representations = new HashMap<String, IPRepresentation>();
-    this.schemas = new ArrayList<IPFile>();
-    this.documentation = new ArrayList<IPFile>();
+    this.descriptiveMetadata = new ArrayList<>();
+    this.preservationMetadata = new ArrayList<>();
+    this.otherMetadata = new ArrayList<>();
+    this.representationIds = new ArrayList<>();
+    this.representations = new HashMap<>();
+    this.schemas = new ArrayList<>();
+    this.documentation = new ArrayList<>();
 
     this.validationReport = new ValidationReport();
-    this.zipEntries = new LinkedHashMap<String, ZipEntryInfo>();
+    this.zipEntries = new LinkedHashMap<>();
   }
 
   public IP(List<String> ipIds, IPType ipType) {
     super();
     this.setIds(ipIds);
     this.type = ipType;
-    this.zipEntries = new LinkedHashMap<String, ZipEntryInfo>();
+    this.zipEntries = new LinkedHashMap<>();
     this.header = new IPHeader();
   }
 
   public IP(List<String> ipIds, IPType ipType, IPContentType contentType, String creator) {
     this(ipIds, ipType);
     this.contentType = contentType;
-
     IPAgent creatorAgent = new IPAgent(creator, "CREATOR", null, CreatorType.OTHER, "SOFTWARE");
     header.addAgent(creatorAgent);
   }
@@ -345,7 +345,7 @@ public abstract class IP implements IPInterface {
 
   @Override
   public List<IPRepresentation> getRepresentations() {
-    List<IPRepresentation> representationsList = new ArrayList<IPRepresentation>();
+    List<IPRepresentation> representationsList = new ArrayList<>();
     for (String representationId : representationIds) {
       representationsList.add(representations.get(representationId));
     }
@@ -365,6 +365,14 @@ public abstract class IP implements IPInterface {
   @Override
   public ValidationReport getValidationReport() {
     return validationReport;
+  }
+
+  public IPHeader getHeader() {
+    return header;
+  }
+
+  public void setHeader(IPHeader hdr) {
+    header = hdr;
   }
 
   @Override
@@ -396,7 +404,10 @@ public abstract class IP implements IPInterface {
     throw new ParseException("One must implement static method parse in a concrete class");
   }
 
+  @Override
   public Map<String, ZipEntryInfo> getZipEntries() {
     return zipEntries;
   }
+
+  public abstract Set<String> getExtraChecksumAlgorithms();
 }

@@ -58,7 +58,7 @@ public final class EARKUtils {
   protected static boolean VALIDATION_FAIL_IF_REPRESENTATION_METS_DOES_NOT_HAVE_TWO_PARTS = false;
 
   private EARKUtils() {
-
+    // do nothing
   }
 
   protected static void addDescriptiveMetadataToZipAndMETS(Map<String, ZipEntryInfo> zipEntries,
@@ -261,7 +261,7 @@ public final class EARKUtils {
     }
   }
 
-  protected static void addDefaultSchemas(Logger LOGGER, List<IPFile> schemas, Path buildDir)
+  protected static void addDefaultSchemas(Logger logger, List<IPFile> schemas, Path buildDir)
     throws InterruptedException {
     try {
       if (Thread.interrupted()) {
@@ -274,7 +274,7 @@ public final class EARKUtils {
         "/schemas/xlink.xsd");
       schemas.add(new IPFile(xlinkSchema, "xlink.xsd"));
     } catch (IOException e) {
-      LOGGER.error("Error while trying to add default schemas", e);
+      logger.error("Error while trying to add default schemas", e);
     }
   }
 
@@ -416,7 +416,7 @@ public final class EARKUtils {
     representation.setContentType(new RepresentationContentType(contentTypeParts[1]));
   }
 
-  protected static IPInterface processRepresentations(MetsWrapper metsWrapper, IPInterface ip, Logger LOGGER)
+  protected static IPInterface processRepresentations(MetsWrapper metsWrapper, IPInterface ip, Logger logger)
     throws IPException {
 
     if (metsWrapper.getRepresentationsDiv() != null && metsWrapper.getRepresentationsDiv().getDiv() != null) {
@@ -446,14 +446,14 @@ public final class EARKUtils {
               processRepresentationFiles(ip, representationMetsWrapper, representation, representationBasePath);
 
               // process descriptive metadata
-              processDescriptiveMetadata(representationMetsWrapper, ip, LOGGER, representation, representationBasePath);
+              processDescriptiveMetadata(representationMetsWrapper, ip, logger, representation, representationBasePath);
 
               // process preservation metadata
-              processPreservationMetadata(representationMetsWrapper, ip, LOGGER, representation,
+              processPreservationMetadata(representationMetsWrapper, ip, logger, representation,
                 representationBasePath);
 
               // process other metadata
-              processOtherMetadata(representationMetsWrapper, ip, LOGGER, representation, representationBasePath);
+              processOtherMetadata(representationMetsWrapper, ip, logger, representation, representationBasePath);
 
               // process schemas
               processSchemasMetadata(representationMetsWrapper, ip, representationBasePath);
@@ -530,28 +530,28 @@ public final class EARKUtils {
     }
   }
 
-  protected static IPInterface processDescriptiveMetadata(MetsWrapper metsWrapper, IPInterface ip, Logger LOGGER,
+  protected static IPInterface processDescriptiveMetadata(MetsWrapper metsWrapper, IPInterface ip, Logger logger,
     IPRepresentation representation, Path basePath) throws IPException {
 
-    return processMetadata(ip, LOGGER, metsWrapper, representation, metsWrapper.getDescriptiveMetadataDiv(),
+    return processMetadata(ip, logger, metsWrapper, representation, metsWrapper.getDescriptiveMetadataDiv(),
       IPConstants.DESCRIPTIVE, basePath);
   }
 
-  protected static IPInterface processOtherMetadata(MetsWrapper metsWrapper, IPInterface ip, Logger LOGGER,
+  protected static IPInterface processOtherMetadata(MetsWrapper metsWrapper, IPInterface ip, Logger logger,
     IPRepresentation representation, Path basePath) throws IPException {
 
-    return processMetadata(ip, LOGGER, metsWrapper, representation, metsWrapper.getOtherMetadataDiv(),
+    return processMetadata(ip, logger, metsWrapper, representation, metsWrapper.getOtherMetadataDiv(),
       IPConstants.OTHER, basePath);
   }
 
-  protected static IPInterface processPreservationMetadata(MetsWrapper metsWrapper, IPInterface ip, Logger LOGGER,
+  protected static IPInterface processPreservationMetadata(MetsWrapper metsWrapper, IPInterface ip, Logger logger,
     IPRepresentation representation, Path basePath) throws IPException {
 
-    return processMetadata(ip, LOGGER, metsWrapper, representation, metsWrapper.getPreservationMetadataDiv(),
+    return processMetadata(ip, logger, metsWrapper, representation, metsWrapper.getPreservationMetadataDiv(),
       IPConstants.PRESERVATION, basePath);
   }
 
-  protected static IPInterface processMetadata(IPInterface ip, Logger LOGGER, MetsWrapper representationMetsWrapper,
+  protected static IPInterface processMetadata(IPInterface ip, Logger logger, MetsWrapper representationMetsWrapper,
     IPRepresentation representation, DivType div, String metadataType, Path basePath) throws IPException {
     if (div != null && div.getFptr() != null) {
       for (Fptr fptr : div.getFptr()) {
@@ -562,7 +562,7 @@ public final class EARKUtils {
           List<String> fileRelativeFolders = Utils
             .getFileRelativeFolders(basePath.resolve(IPConstants.METADATA).resolve(metadataType), filePath);
 
-          processMetadataFile(ip, LOGGER, representation, metadataType, mdRef, filePath, fileRelativeFolders);
+          processMetadataFile(ip, logger, representation, metadataType, mdRef, filePath, fileRelativeFolders);
         } else {
           ValidationUtils.addIssue(ip.getValidationReport(),
             ValidationConstants.getMetadataFileNotFoundString(metadataType), ValidationEntry.LEVEL.ERROR,
@@ -578,7 +578,7 @@ public final class EARKUtils {
     return ip;
   }
 
-  protected static void processMetadataFile(IPInterface ip, Logger LOGGER, IPRepresentation representation,
+  protected static void processMetadataFile(IPInterface ip, Logger logger, IPRepresentation representation,
     String metadataType, MdRef mdRef, Path filePath, List<String> fileRelativeFolders) throws IPException {
     Optional<IPFile> metadataFile = validateMetadataFile(ip, filePath, mdRef, fileRelativeFolders);
     if (metadataFile.isPresent()) {
@@ -593,11 +593,11 @@ public final class EARKUtils {
           if (StringUtils.isNotBlank(mdRef.getOTHERMDTYPE())) {
             dmdType.setOtherType(mdRef.getOTHERMDTYPE());
           }
-          LOGGER.debug("Metadata type valid: {}", dmdType);
+          logger.debug("Metadata type valid: {}", dmdType);
         } catch (NullPointerException | IllegalArgumentException e) {
           // do nothing and use already defined values for metadataType &
           // metadataVersion
-          LOGGER.debug("Setting metadata type to {}", dmdType);
+          logger.debug("Setting metadata type to {}", dmdType);
           ValidationUtils.addEntry(ip.getValidationReport(), ValidationConstants.UNKNOWN_DESCRIPTIVE_METADATA_TYPE,
             ValidationEntry.LEVEL.WARN, "Setting metadata type to " + dmdType, ip.getBasePath(), filePath);
         }
@@ -693,7 +693,6 @@ public final class EARKUtils {
 
   protected static void processRepresentationAgents(MetsWrapper representationMetsWrapper,
     IPRepresentation representation) {
-
     addAgentsToMETS(representationMetsWrapper.getMets(), null, representation);
   }
 
@@ -740,13 +739,11 @@ public final class EARKUtils {
 
   protected static IPInterface processSchemasMetadata(MetsWrapper metsWrapper, IPInterface ip, Path basePath)
     throws IPException {
-
     return processFile(ip, metsWrapper.getSchemasDiv(), IPConstants.SCHEMAS, basePath);
   }
 
   protected static IPInterface processDocumentationMetadata(MetsWrapper metsWrapper, IPInterface ip, Path basePath)
     throws IPException {
-
     return processFile(ip, metsWrapper.getDocumentationDiv(), IPConstants.DOCUMENTATION, basePath);
   }
 
@@ -762,9 +759,7 @@ public final class EARKUtils {
 
   protected static IPInterface processSubmissionMetadata(final MetsWrapper metsWrapper, final IPInterface ip,
     final Path basePath) throws IPException {
-
     return processFile(ip, metsWrapper.getSubmissionsDiv(), IPConstants.SUBMISSION, basePath);
-
   }
 
   /*--------------------------------*/
@@ -795,12 +790,12 @@ public final class EARKUtils {
     return sb.toString();
   }
 
-  protected static void cleanUpUponInterrupt(Logger LOGGER, Path path) {
+  protected static void cleanUpUponInterrupt(Logger logger, Path path) {
     if (path != null && Files.exists(path)) {
       try {
         Utils.deletePath(path);
       } catch (IOException e) {
-        LOGGER.error("Error while cleaning up unneeded files", e);
+        logger.error("Error while cleaning up unneeded files", e);
       }
     }
   }
