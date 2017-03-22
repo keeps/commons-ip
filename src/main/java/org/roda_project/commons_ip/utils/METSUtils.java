@@ -17,7 +17,6 @@ import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
@@ -30,7 +29,7 @@ import org.xml.sax.SAXException;
 public final class METSUtils {
 
   private METSUtils() {
-
+    // do nothing
   }
 
   public static Mets instantiateMETSFromFile(Path metsFile) throws JAXBException, SAXException {
@@ -46,10 +45,11 @@ public final class METSUtils {
   }
 
   public static Path marshallMETS(Mets mets, Path tempMETSFile, boolean rootMETS)
-    throws JAXBException, IOException, PropertyException, IPException {
+    throws JAXBException, IOException, IPException {
     JAXBContext context = JAXBContext.newInstance(Mets.class);
     Marshaller m = context.createMarshaller();
     m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
     if (rootMETS) {
       m.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,
         "http://www.loc.gov/METS/ schemas/IP.xsd http://www.w3.org/1999/xlink schemas/xlink.xsd");
@@ -57,9 +57,10 @@ public final class METSUtils {
       m.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,
         "http://www.loc.gov/METS/ ../../schemas/IP.xsd http://www.w3.org/1999/xlink ../../schemas/xlink.xsd");
     }
-    OutputStream metsOutputStream = Files.newOutputStream(tempMETSFile);
-    m.marshal(mets, metsOutputStream);
-    metsOutputStream.close();
+
+    try (OutputStream metsOutputStream = Files.newOutputStream(tempMETSFile)) {
+      m.marshal(mets, metsOutputStream);
+    }
 
     return tempMETSFile;
   }

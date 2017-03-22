@@ -85,26 +85,32 @@ public class ResourceInput implements LSInput {
 
   @Override
   public void setBaseURI(String baseURI) {
+    // do nothing
   }
 
   @Override
   public void setByteStream(InputStream byteStream) {
+    // do nothing
   }
 
   @Override
   public void setCertifiedText(boolean certifiedText) {
+    // do nothing
   }
 
   @Override
   public void setCharacterStream(Reader characterStream) {
+    // do nothing
   }
 
   @Override
   public void setEncoding(String encoding) {
+    // do nothing
   }
 
   @Override
   public void setStringData(String stringData) {
+    // do nothing
   }
 
   @Override

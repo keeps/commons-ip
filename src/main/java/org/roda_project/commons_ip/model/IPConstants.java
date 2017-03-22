@@ -24,6 +24,12 @@ public final class IPConstants {
   public static final String METS_PATH_SEPARATOR = "/";
   public static final String METS_REPRESENTATION_TYPE_PART_1 = "representation";
 
+  public static final String METS_ORIGINAL = "original";
+  public static final String METS_TYPE_AGGREGATION = "aggregation";
+  public static final String METS_TYPE_DOCUMENTATION = "documentation";
+  public static final String METS_TYPE_RECORDGRP = "recordgrp";
+  public static final String METS_LABEL_DOKU = "Doku";
+
   // IP structure related
   public static final String METADATA = "metadata";
   public static final String METADATA_FOLDER = METADATA + METS_PATH_SEPARATOR;
@@ -44,8 +50,15 @@ public final class IPConstants {
   public static final String SUBMISSION = "submission";
   public static final String SUBMISSION_FOLDER = SUBMISSION + METS_PATH_SEPARATOR;
 
+  public static final String CONTENT_FOLDER = "content";
+  public static final String HEADER_FOLDER = "header";
+  public static final String METADATA_FILE = "metadata.xml";
+  public static final String HUNGARIAN_METADATA_FILE = HEADER_FOLDER + "/" + METADATA_FILE;
+
   // misc
   public static final String ZIP_PATH_SEPARATOR = "/";
+  public static final String CHECKSUM_MD5_ALGORITHM = "MD5";
+  public static final String CHECKSUM_SHA_1_ALGORITHM = "SHA1";
   public static final String CHECKSUM_SHA_256_ALGORITHM = "SHA-256";
   public static final String CHECKSUM_ALGORITHM = CHECKSUM_SHA_256_ALGORITHM;
 

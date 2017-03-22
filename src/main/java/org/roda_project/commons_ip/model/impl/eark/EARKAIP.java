@@ -30,6 +30,7 @@ import org.roda_project.commons_ip.model.MetsWrapper;
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.model.impl.AIPWrap;
 import org.roda_project.commons_ip.model.impl.BasicAIP;
+import org.roda_project.commons_ip.model.impl.ModelUtils;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.METSFileTypeZipEntryInfo;
 import org.roda_project.commons_ip.utils.METSMdRefZipEntryInfo;
@@ -47,11 +48,7 @@ import org.slf4j.LoggerFactory;
  */
 public class EARKAIP extends AIPWrap {
   private static final Logger LOGGER = LoggerFactory.getLogger(EARKAIP.class);
-
   private static final String TEMP_DIR = "EARKAIP";
-  private static final String FILE_EXTENSION = ".zip";
-
-  private static boolean VALIDATION_FAIL_IF_REPRESENTATION_METS_DOES_NOT_HAVE_TWO_PARTS = false;
 
   /**
    * Constructor.
@@ -83,7 +80,7 @@ public class EARKAIP extends AIPWrap {
   @Override
   public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
     throws IPException, InterruptedException {
-    final Path buildDir = EARKUtils.createBuildDir(TEMP_DIR);
+    final Path buildDir = ModelUtils.createBuildDir(TEMP_DIR);
     Path zipPath = null;
     try {
       final Map<String, ZipEntryInfo> zipEntries = getZipEntries();
@@ -120,10 +117,10 @@ public class EARKAIP extends AIPWrap {
 
       return zipPath;
     } catch (final InterruptedException e) {
-      EARKUtils.cleanUpUponInterrupt(LOGGER, zipPath);
+      ModelUtils.cleanUpUponInterrupt(LOGGER, zipPath);
       throw e;
     } finally {
-      EARKUtils.deleteBuildDir(buildDir);
+      ModelUtils.deleteBuildDir(buildDir);
     }
   }
 
