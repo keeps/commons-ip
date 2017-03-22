@@ -19,6 +19,7 @@ public class IPAgent implements Serializable {
   private CreatorType type;
   private String otherRole;
   private String otherType;
+  private String note;
 
   public IPAgent() {
     this.name = "";
@@ -26,6 +27,7 @@ public class IPAgent implements Serializable {
     this.type = CreatorType.OTHER;
     this.otherRole = "";
     this.otherType = "";
+    this.note = "";
   }
 
   public IPAgent(String name, String role, String otherRole, CreatorType type, String otherType) {
@@ -34,6 +36,7 @@ public class IPAgent implements Serializable {
     this.type = type;
     this.otherRole = otherRole;
     this.otherType = otherType;
+    this.note = "";
   }
 
   public String getName() {
@@ -81,10 +84,19 @@ public class IPAgent implements Serializable {
     return this;
   }
 
+  public String getNote() {
+    return note;
+  }
+
+  public IPAgent setNote(String note) {
+    this.note = note;
+    return this;
+  }
+
   @Override
   public String toString() {
     return "IPAgent [name=" + name + ", role=" + role + ", type=" + type + ", otherRole=" + otherRole + ", otherType="
-      + otherType + "]";
+      + otherType + ", note=" + note + "]";
   }
 
 }
