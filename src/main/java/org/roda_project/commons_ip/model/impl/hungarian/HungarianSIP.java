@@ -5,36 +5,41 @@
  *
  * https://github.com/keeps/commons-ip
  */
-package org.roda_project.commons_ip.model.impl.eark;
+package org.roda_project.commons_ip.model.impl.hungarian;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.channels.ClosedByInterruptException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.roda_project.commons_ip.mets_v1_11.beans.StructMapType;
+import org.roda_project.commons_ip.model.IPConstants;
 import org.roda_project.commons_ip.model.IPContentType;
 import org.roda_project.commons_ip.model.MetsWrapper;
-import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.model.SIP;
 import org.roda_project.commons_ip.utils.IPException;
+import org.roda_project.commons_ip.utils.METSZipEntryInfo;
 import org.roda_project.commons_ip.utils.ZIPUtils;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EARKSIP extends SIP {
-  private static final Logger LOGGER = LoggerFactory.getLogger(EARKSIP.class);
+public class HungarianSIP extends SIP {
+  private static final Logger LOGGER = LoggerFactory.getLogger(HungarianSIP.class);
 
-  private static final String SIP_TEMP_DIR = "EARKSIP";
+  private static final String SIP_TEMP_DIR = "HungarianSIP";
   private static final String SIP_FILE_EXTENSION = ".zip";
+  private static final String TXT_FILE_EXTENSION = ".txt";
 
-  public EARKSIP() {
+  public HungarianSIP() {
     super();
   }
 
@@ -42,7 +47,7 @@ public class EARKSIP extends SIP {
    * @param sipId
    *          will be used as OBJID in METS (/mets[@OBJID])
    */
-  public EARKSIP(String sipId) {
+  public HungarianSIP(String sipId) {
     super(sipId);
   }
 
@@ -50,7 +55,7 @@ public class EARKSIP extends SIP {
    * @param sipId
    *          will be used as OBJID in METS (/mets[@OBJID])
    */
-  public EARKSIP(String sipId, IPContentType contentType, String creator) {
+  public HungarianSIP(String sipId, IPContentType contentType, String creator) {
     super(sipId, contentType, creator);
   }
 
@@ -114,44 +119,29 @@ public class EARKSIP extends SIP {
   @Override
   public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
     throws IPException, InterruptedException {
-    Path buildDir = EARKUtils.createBuildDir(SIP_TEMP_DIR);
+    Path buildDir = HungarianUtils.createBuildDir(SIP_TEMP_DIR);
     Path zipPath = getZipPath(destinationDirectory, fileNameWithoutExtension);
     try {
       Map<String, ZipEntryInfo> zipEntries = getZipEntries();
-
-      // 20160407 hsilva: as METS does not have an attribute 'otherType', the
-      // other type must be put in the 'type' attribute allowing this way other
-      // values besides the ones in the Enum
       String contentType = this.getContentType().asString();
 
-      MetsWrapper mainMETSWrapper = EARKMETSUtils.generateMETS(StringUtils.join(this.getIds(), " "),
-        this.getDescription(), this.getType() + ":" + contentType, this.getProfile(), this.getAgents(), true,
-        Optional.ofNullable(this.getAncestors()), null, this.getStatus());
+      MetsWrapper mainMETSWrapper = HungarianMETSUtils.generateMETS(StringUtils.join(this.getIds(), " "),
+        this.getDescription(), this.getType() + ":" + contentType, this.getProfile(), null, this.getHeader());
 
-      EARKUtils.addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
-
-      EARKUtils.addPreservationMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getPreservationMetadata(), null);
-
-      EARKUtils.addOtherMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getOtherMetadata(), null);
-
-      EARKUtils.addRepresentationsToZipAndMETS(this, getRepresentations(), zipEntries, mainMETSWrapper, buildDir);
-
-      EARKUtils.addDefaultSchemas(LOGGER, getSchemas(), buildDir);
-
-      EARKUtils.addSchemasToZipAndMETS(zipEntries, mainMETSWrapper, getSchemas(), null);
-
-      EARKUtils.addDocumentationToZipAndMETS(zipEntries, mainMETSWrapper, getDocumentation(), null);
-
-      EARKUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, buildDir);
+      HungarianUtils.addMetadataToMETS(mainMETSWrapper, getDescriptiveMetadata());
+      HungarianUtils.addRepresentationsToZipAndMETS(this, getRepresentations(), zipEntries, mainMETSWrapper);
+      HungarianUtils.addDocumentationToZipAndMETS(zipEntries, mainMETSWrapper, getDocumentation());
+      HungarianUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, buildDir);
 
       createZipFile(zipEntries, zipPath);
+      createTxtFile(destinationDirectory, fileNameWithoutExtension, zipEntries, zipPath);
 
       return zipPath;
     } catch (InterruptedException e) {
-      EARKUtils.cleanUpUponInterrupt(LOGGER, zipPath);
+      HungarianUtils.cleanUpUponInterrupt(LOGGER, zipPath);
       throw e;
     } finally {
-      EARKUtils.deleteBuildDir(buildDir);
+      HungarianUtils.deleteBuildDir(buildDir);
     }
   }
 
@@ -168,8 +158,9 @@ public class EARKSIP extends SIP {
         Files.delete(zipPath);
       }
     } catch (IOException e) {
-      throw new IPException("Error deleting already existing zip", e);
+      throw new IPException("Error deleting already existing ZIP", e);
     }
+
     return zipPath;
   }
 
@@ -181,72 +172,65 @@ public class EARKSIP extends SIP {
     } catch (ClosedByInterruptException e) {
       throw new InterruptedException();
     } catch (IOException e) {
-      throw new IPException("Error generating E-ARK SIP ZIP file. Reason: " + e.getMessage(), e);
+      throw new IPException("Error generating Hungarian SIP ZIP file. Reason: " + e.getMessage(), e);
     } finally {
       notifySipBuildPackagingEnded();
     }
   }
 
-  /**
-   * 
-   * parse and all parse related methods; during parse, validation is also
-   * conducted and stored inside the SIP
-   * _________________________________________________________________________
-   */
-
-  public static SIP parse(Path source, Path destinationDirectory) throws ParseException {
-    return parseEARKSIP(source, destinationDirectory);
-  }
-
-  public static SIP parse(Path source) throws ParseException {
-    try {
-      return parse(source, Files.createTempDirectory("unzipped"));
-    } catch (IOException e) {
-      throw new ParseException("Error creating temporary directory for E-ARK SIP parse", e);
+  private void createTxtFile(Path destinationDirectory, String fileNameWithoutExtension,
+    Map<String, ZipEntryInfo> zipEntries, Path zipPath) {
+    Path txtPath;
+    if (fileNameWithoutExtension != null) {
+      txtPath = destinationDirectory.resolve(fileNameWithoutExtension + TXT_FILE_EXTENSION);
+    } else {
+      txtPath = destinationDirectory.resolve(getId() + TXT_FILE_EXTENSION);
     }
-  }
 
-  private static SIP parseEARKSIP(final Path source, final Path destinationDirectory) throws ParseException {
-    try {
-      SIP sip = new EARKSIP();
+    try (PrintWriter writer = new PrintWriter(txtPath.toFile())) {
+      ZipEntryInfo zipEntryInfo = zipEntries.get(IPConstants.HUNGARIAN_METADATA_FILE);
+      if (zipEntryInfo != null && zipEntryInfo instanceof METSZipEntryInfo) {
+        METSZipEntryInfo metsEntry = (METSZipEntryInfo) zipEntryInfo;
+        Map<String, String> checksums = metsEntry.getChecksums();
+        long size = metsEntry.getSize();
+        final String separator = ": ";
 
-      Path sipPath = ZIPUtils.extractIPIfInZipFormat(source, destinationDirectory);
-      sip.setBasePath(sipPath);
+        writer.println(IPConstants.METADATA_FILE + separator + size);
+        writer
+          .println(IPConstants.CHECKSUM_MD5_ALGORITHM + separator + checksums.get(IPConstants.CHECKSUM_MD5_ALGORITHM));
+        writer.println(
+          IPConstants.CHECKSUM_SHA_1_ALGORITHM + separator + checksums.get(IPConstants.CHECKSUM_SHA_1_ALGORITHM));
 
-      MetsWrapper metsWrapper = EARKUtils.processMainMets(sip, sipPath);
+        try (FileInputStream zipStream = new FileInputStream(zipPath.toFile())) {
+          Set<String> zipChecksums = new HashSet<>();
+          zipChecksums.add(IPConstants.CHECKSUM_MD5_ALGORITHM);
+          zipChecksums.add(IPConstants.CHECKSUM_SHA_1_ALGORITHM);
+          Map<String, String> calculateChecksums = ZIPUtils.calculateChecksums(Optional.empty(), zipStream,
+            zipChecksums);
 
-      if (sip.isValid()) {
-
-        StructMapType structMap = EARKUtils.getEARKStructMap(metsWrapper, sip, true);
-
-        if (structMap != null) {
-          EARKUtils.preProcessStructMap(metsWrapper, structMap);
-
-          EARKUtils.processDescriptiveMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
-
-          EARKUtils.processOtherMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
-
-          EARKUtils.processPreservationMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
-
-          EARKUtils.processRepresentations(metsWrapper, sip, LOGGER);
-
-          EARKUtils.processSchemasMetadata(metsWrapper, sip, sip.getBasePath());
-
-          EARKUtils.processDocumentationMetadata(metsWrapper, sip, sip.getBasePath());
-
-          EARKUtils.processAncestors(metsWrapper, sip);
+          writer.println(zipPath.getFileName().toString() + separator + zipPath.toFile().length());
+          writer.println(IPConstants.CHECKSUM_MD5_ALGORITHM + separator
+            + calculateChecksums.get(IPConstants.CHECKSUM_MD5_ALGORITHM));
+          writer.println(IPConstants.CHECKSUM_SHA_1_ALGORITHM + separator
+            + calculateChecksums.get(IPConstants.CHECKSUM_SHA_1_ALGORITHM));
+        } catch (NoSuchAlgorithmException e) {
+          LOGGER.error("Wrong checksum name used");
+        } catch (IOException e) {
+          LOGGER.error("Could not open zip file");
         }
-      }
 
-      return sip;
-    } catch (final IPException e) {
-      throw new ParseException("Error parsing E-ARK SIP", e);
+      }
+    } catch (FileNotFoundException e) {
+      LOGGER.error("Could not write SIP information to txt file");
     }
   }
 
   @Override
   public Set<String> getExtraChecksumAlgorithms() {
-    return new HashSet<>();
+    Set<String> algorithms = new HashSet<>();
+    algorithms.add(IPConstants.CHECKSUM_MD5_ALGORITHM);
+    algorithms.add(IPConstants.CHECKSUM_SHA_1_ALGORITHM);
+    return algorithms;
   }
 
 }

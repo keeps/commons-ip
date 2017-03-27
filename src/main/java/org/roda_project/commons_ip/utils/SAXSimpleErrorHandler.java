@@ -18,7 +18,7 @@ public class SAXSimpleErrorHandler extends DefaultHandler {
   List<SAXParseException> errors;
 
   public SAXSimpleErrorHandler() {
-    errors = new ArrayList<SAXParseException>();
+    errors = new ArrayList<>();
   }
 
   public List<SAXParseException> getErrors() {

@@ -16,7 +16,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -38,6 +43,7 @@ public final class ZIPUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(ZIPUtils.class);
 
   private ZIPUtils() {
+    // do nothing
   }
 
   /**
@@ -79,25 +85,19 @@ public final class ZIPUtils {
 
   public static Map<String, ZipEntryInfo> addMdRefFileToZip(Map<String, ZipEntryInfo> zipEntries, Path filePath,
     String zipPath, MdRef mdRef) throws IPException {
-
     zipEntries.put(zipPath, new METSMdRefZipEntryInfo(zipPath, filePath, mdRef));
-
     return zipEntries;
   }
 
   public static Map<String, ZipEntryInfo> addFileTypeFileToZip(Map<String, ZipEntryInfo> zipEntries, Path filePath,
     String zipPath, FileType fileType) throws IPException {
-
     zipEntries.put(zipPath, new METSFileTypeZipEntryInfo(zipPath, filePath, fileType));
-
     return zipEntries;
   }
 
   public static Map<String, ZipEntryInfo> addMETSFileToZip(Map<String, ZipEntryInfo> zipEntries, Path filePath,
     String zipPath, Mets mets, boolean rootMETS) throws IPException {
-
     zipEntries.put(zipPath, new METSZipEntryInfo(zipPath, filePath, mets, rootMETS));
-
     return zipEntries;
   }
 
@@ -109,6 +109,12 @@ public final class ZIPUtils {
   public static void zip(Map<String, ZipEntryInfo> files, OutputStream out, SIP sip, boolean createSipIdFolder)
     throws IOException, InterruptedException, IPException {
     ZipOutputStream zos = new ZipOutputStream(out);
+
+    Set<String> nonMetsChecksumAlgorithms = new TreeSet<>();
+    nonMetsChecksumAlgorithms.add(IPConstants.CHECKSUM_ALGORITHM);
+    Set<String> metsChecksumAlgorithms = new TreeSet<>();
+    metsChecksumAlgorithms.addAll(nonMetsChecksumAlgorithms);
+    metsChecksumAlgorithms.addAll(sip.getExtraChecksumAlgorithms());
 
     int i = 0;
     for (ZipEntryInfo file : files.values()) {
@@ -129,20 +135,19 @@ public final class ZIPUtils {
       zos.putNextEntry(entry);
       InputStream inputStream = Files.newInputStream(file.getFilePath());
 
-      byte[] buffer = new byte[4096];
-      MessageDigest complete;
       try {
-        complete = MessageDigest.getInstance(IPConstants.CHECKSUM_ALGORITHM);
-        int numRead;
-        do {
-          numRead = inputStream.read(buffer);
-          if (numRead > 0) {
-            complete.update(buffer, 0, numRead);
-            zos.write(buffer, 0, numRead);
-          }
-        } while (numRead != -1);
+        Map<String, String> checksums;
+        if (file instanceof METSZipEntryInfo) {
+          checksums = calculateChecksums(Optional.of(zos), inputStream, metsChecksumAlgorithms);
+          METSZipEntryInfo metsEntry = (METSZipEntryInfo) file;
+          metsEntry.setChecksums(checksums);
+          metsEntry.setSize(metsEntry.getFilePath().toFile().length());
+        } else {
+          checksums = calculateChecksums(Optional.of(zos), inputStream, nonMetsChecksumAlgorithms);
+        }
+
         LOGGER.debug("Done zipping file");
-        String checksum = DatatypeConverter.printHexBinary(complete.digest());
+        String checksum = checksums.get(IPConstants.CHECKSUM_ALGORITHM);
         String checksumType = IPConstants.CHECKSUM_ALGORITHM;
         file.setChecksum(checksum);
         file.setChecksumAlgorithm(checksumType);
@@ -169,9 +174,44 @@ public final class ZIPUtils {
     out.close();
   }
 
+  public static Map<String, String> calculateChecksums(Optional<ZipOutputStream> zos, InputStream inputStream,
+    Set<String> checksumAlgorithms) throws NoSuchAlgorithmException, IOException {
+    byte[] buffer = new byte[4096];
+    Map<String, String> values = new HashMap<>();
+
+    // instantiate different checksum algorithms
+    Map<String, MessageDigest> algorithms = new HashMap<>();
+    for (String alg : checksumAlgorithms) {
+      algorithms.put(alg, MessageDigest.getInstance(alg));
+    }
+
+    // calculate value for each one of the algorithms
+    int numRead;
+    do {
+      numRead = inputStream.read(buffer);
+      if (numRead > 0) {
+        for (Entry<String, MessageDigest> alg : algorithms.entrySet()) {
+          alg.getValue().update(buffer, 0, numRead);
+        }
+
+        if (zos.isPresent()) {
+          zos.get().write(buffer, 0, numRead);
+        }
+      }
+    } while (numRead != -1);
+
+    // generate hex versions of the digests
+    algorithms.forEach((alg, dig) -> values.put(alg, DatatypeConverter.printHexBinary(dig.digest())));
+
+    return values;
+  }
+
   public static void zip(Map<String, ZipEntryInfo> files, OutputStream out, AIP aip)
     throws IOException, InterruptedException, IPException {
     ZipOutputStream zos = new ZipOutputStream(out);
+
+    Set<String> checksumAlgorithms = new TreeSet<>();
+    checksumAlgorithms.add(IPConstants.CHECKSUM_ALGORITHM);
 
     for (ZipEntryInfo file : files.values()) {
       if (Thread.interrupted()) {
@@ -186,20 +226,10 @@ public final class ZIPUtils {
 
       try (InputStream inputStream = Files.newInputStream(file.getFilePath())) {
 
-        byte[] buffer = new byte[4096];
-        MessageDigest complete;
         try {
-          complete = MessageDigest.getInstance(IPConstants.CHECKSUM_ALGORITHM);
-          int numRead;
-          do {
-            numRead = inputStream.read(buffer);
-            if (numRead > 0) {
-              complete.update(buffer, 0, numRead);
-              zos.write(buffer, 0, numRead);
-            }
-          } while (numRead != -1);
+          Map<String, String> checksums = calculateChecksums(Optional.of(zos), inputStream, checksumAlgorithms);
           LOGGER.debug("Done zipping file");
-          String checksum = DatatypeConverter.printHexBinary(complete.digest());
+          String checksum = checksums.get(IPConstants.CHECKSUM_ALGORITHM);
           String checksumType = IPConstants.CHECKSUM_ALGORITHM;
           file.setChecksum(checksum);
           file.setChecksumAlgorithm(checksumType);
@@ -225,51 +255,37 @@ public final class ZIPUtils {
   }
 
   public static void unzip(Path zip, final Path dest) throws IOException {
-
     ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zip.toFile()));
-
     ZipEntry zipEntry = zipInputStream.getNextEntry();
 
     if (zipEntry == null) {
       // No entries in ZIP
-
       zipInputStream.close();
-
     } else {
-
       while (zipEntry != null) {
-
         // for each entry to be extracted
         String entryName = zipEntry.getName();
-
         Path newFile = dest.resolve(entryName);
 
         if (zipEntry.isDirectory()) {
-
           Files.createDirectories(newFile);
-
         } else {
-
           if (!Files.exists(newFile.getParent())) {
             Files.createDirectories(newFile.getParent());
           }
 
           OutputStream newFileOutputStream = Files.newOutputStream(newFile);
-
           IOUtils.copyLarge(zipInputStream, newFileOutputStream);
 
           newFileOutputStream.close();
           zipInputStream.closeEntry();
-
         }
 
         zipEntry = zipInputStream.getNextEntry();
-
       } // end while
 
       zipInputStream.close();
     }
-
   }
 
 }
