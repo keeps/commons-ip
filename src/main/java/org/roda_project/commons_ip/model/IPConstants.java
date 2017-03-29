@@ -72,6 +72,14 @@ public final class IPConstants {
   public static final String RODA_DIV_LABEL = "RODA";
   public static final String RODA_ANCESTORS_DIV_LABEL = "Ancestors";
 
+  // Bagit
+  public static final String BAGIT_PARENT = "parent";
+  public static final String BAGIT_ID = "id";
+  public static final String BAGIT_TITLE = "title";
+  public static final String BAGIT_LEVEL = "level";
+  public static final String BAGIT_ITEM_LEVEL = "item";
+  public static final String BAGIT_DATA_FOLDER = "data";
+
   /** Private empty constructor */
   private IPConstants() {
 

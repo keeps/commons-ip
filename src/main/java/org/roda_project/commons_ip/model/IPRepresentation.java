@@ -39,13 +39,13 @@ public class IPRepresentation {
     this.contentType = RepresentationContentType.getMIXED();
     this.status = RepresentationStatus.getORIGINAL();
     this.description = "";
-    this.agents = new ArrayList<IPAgent>();
-    this.descriptiveMetadata = new ArrayList<IPDescriptiveMetadata>();
-    this.preservationMetadata = new ArrayList<IPMetadata>();
-    this.otherMetadata = new ArrayList<IPMetadata>();
-    this.data = new ArrayList<IPFile>();
-    this.schemas = new ArrayList<IPFile>();
-    this.documentation = new ArrayList<IPFile>();
+    this.agents = new ArrayList<>();
+    this.descriptiveMetadata = new ArrayList<>();
+    this.preservationMetadata = new ArrayList<>();
+    this.otherMetadata = new ArrayList<>();
+    this.data = new ArrayList<>();
+    this.schemas = new ArrayList<>();
+    this.documentation = new ArrayList<>();
   }
 
   public IPRepresentation(String representationID) {
