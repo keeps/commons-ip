@@ -58,7 +58,7 @@ public final class ZIPUtils {
         // 20161111 hsilva: see if the IP extracted has a folder which contains
         // the content of the IP (for being compliant with previous way of
         // creating SIP in ZIP format, this test/adjustment is needed)
-        if (!Files.exists(destinationDirectory.resolve(IPConstants.METS_FILE))) {
+        if (Files.exists(destinationDirectory) && !Files.exists(destinationDirectory.resolve(IPConstants.METS_FILE))) {
           try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(destinationDirectory)) {
             for (Path path : directoryStream) {
               if (Files.isDirectory(path) && Files.exists(path.resolve(IPConstants.METS_FILE))) {
