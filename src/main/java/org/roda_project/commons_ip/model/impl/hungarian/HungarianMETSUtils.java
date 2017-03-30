@@ -19,6 +19,11 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip.mets_v1_11.beans.DivType;
@@ -40,6 +45,7 @@ import org.roda_project.commons_ip.model.IPAltRecordID;
 import org.roda_project.commons_ip.model.IPConstants;
 import org.roda_project.commons_ip.model.IPDescriptiveMetadata;
 import org.roda_project.commons_ip.model.IPHeader;
+import org.roda_project.commons_ip.model.MetadataType.MetadataTypeEnum;
 import org.roda_project.commons_ip.model.MetsWrapper;
 import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.IPException;
@@ -67,8 +73,6 @@ public final class HungarianMETSUtils {
 
   public static MetsWrapper generateMETS(String id, String label, String type, String profile, List<IPAgent> ipAgents,
     Path metsPath, IPEnums.IPStatus status, List<IPAltRecordID> recordList) throws IPException {
-    // FIXME There are missing attributes on some elements
-
     Mets mets = new Mets();
     MetsWrapper metsWrapper = new MetsWrapper(mets, metsPath);
 
@@ -110,7 +114,7 @@ public final class HungarianMETSUtils {
     FileSec fileSec = new FileSec();
     FileGrp mainFileGroup = new FileGrp();
     mainFileGroup.setUSE(IPConstants.METS_ORIGINAL);
-    mainFileGroup.setID(Utils.generateRandomAndPrefixedUUID());
+    mainFileGroup.setID(IPConstants.METS_ORIGINAL);
     metsWrapper.setMainFileGroup(mainFileGroup);
     fileSec.getFileGrp().add(mainFileGroup);
     mets.setFileSec(fileSec);
@@ -121,7 +125,6 @@ public final class HungarianMETSUtils {
 
     DivType mainAggregationDiv = new DivType();
     mainAggregationDiv.setID(Utils.generateRandomAndPrefixedUUID());
-    mainAggregationDiv.setTYPE(IPConstants.METS_TYPE_RECORDGRP);
     metsWrapper.setMainDiv(mainAggregationDiv);
 
     aggregationMap.setDiv(mainAggregationDiv);
@@ -134,6 +137,7 @@ public final class HungarianMETSUtils {
     DivType mainDocDiv = new DivType();
     mainDocDiv.setID(Utils.generateRandomAndPrefixedUUID());
     mainDocDiv.setLABEL(IPConstants.METS_LABEL_DOKU);
+    mainDocDiv.setTYPE(IPConstants.METS_TYPE_DOCUMENTATION);
     metsWrapper.setDocumentationDiv(mainDocDiv);
 
     docMap.setDiv(mainDocDiv);
@@ -169,10 +173,11 @@ public final class HungarianMETSUtils {
 
   public static void addDescriptiveMetadataToMETS(MetsWrapper metsWrapper, IPDescriptiveMetadata metadata)
     throws IPException, InterruptedException {
-    // FIXME There are missing attributes on some elements
 
     MdSecType dmdSec = new MdSecType();
     dmdSec.setID(Utils.generateRandomAndPrefixedUUID());
+    dmdSec.setGROUPID(IPConstants.METS_GROUP_ID);
+    dmdSec.setSTATUS(IPConstants.METS_STATUS_CURRENT);
 
     try {
       dmdSec.setCREATED(Utils.getCurrentCalendar());
@@ -190,20 +195,53 @@ public final class HungarianMETSUtils {
       mdWrap.setOTHERMDTYPE(mdOtherType);
     }
 
-    try {
-      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-      InputStream inputStream = Files.newInputStream(metadata.getMetadata().getPath());
+    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    try (InputStream inputStream = Files.newInputStream(metadata.getMetadata().getPath())) {
       Document xmlDataContent = factory.newDocumentBuilder().parse(inputStream);
+
+      try {
+        XPathFactory xPathfactory = XPathFactory.newInstance();
+        XPath xpath = xPathfactory.newXPath();
+        XPathExpression levelExpression = xpath.compile("//archdesc/@level");
+        String level = (String) levelExpression.evaluate(xmlDataContent, XPathConstants.STRING);
+        if (IPConstants.METS_LEVEL_OTHER.equalsIgnoreCase(level)) {
+          XPathExpression otherExpression = xpath.compile("//archdesc/@otherlevel");
+          level = (String) otherExpression.evaluate(xmlDataContent, XPathConstants.STRING);
+        }
+        metsWrapper.getMainDiv().setTYPE(level);
+      } catch (XPathExpressionException e) {
+        LOGGER.error("Error getting archdesc level or otherlevel", e);
+      }
 
       XmlData metadataContent = new XmlData();
       metadataContent.getAny().add(xmlDataContent.getDocumentElement());
       mdWrap.setXmlData(metadataContent);
     } catch (SAXException | ParserConfigurationException | IOException e) {
-      LOGGER.error("Error adding EAD xml to xmlData");
+      LOGGER.error("Error adding EAD xml to xmlData", e);
     }
 
     dmdSec.setMdWrap(mdWrap);
     metsWrapper.getMets().getDmdSec().add(dmdSec);
+    // FIXME 20170330 nvieira this code line is needed but causes an error
+    // marshalling mets
+    // metsWrapper.getMainDiv().getDMDID().add(dmdSec.getID());
+
+    // documentation dmdSec
+    MdSecType dmdDocSec = new MdSecType();
+    dmdDocSec.setID(Utils.generateRandomAndPrefixedUUID());
+    dmdDocSec.setGROUPID(IPConstants.METS_GROUP_ID);
+    dmdDocSec.setSTATUS(IPConstants.METS_STATUS_CURRENT);
+
+    MdWrap mdDocWrap = new MdWrap();
+    mdDocWrap.setID(Utils.generateRandomAndPrefixedUUID());
+    mdDocWrap.setMDTYPE(MetadataTypeEnum.OTHER.getType());
+    mdDocWrap.setXmlData(new XmlData());
+
+    dmdDocSec.setMdWrap(mdDocWrap);
+    metsWrapper.getMets().getDmdSec().add(dmdDocSec);
+    // FIXME 20170330 nvieira this code line is needed but causes an error
+    // marshalling mets
+    // metsWrapper.getDocumentationDiv().getDMDID().add(dmdDocSec.getID());
   }
 
   public static FileType addDataFileToMETS(MetsWrapper mainMETS, String dataFilePath, Path dataFile)

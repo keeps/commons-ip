@@ -25,10 +25,13 @@ public final class IPConstants {
   public static final String METS_REPRESENTATION_TYPE_PART_1 = "representation";
 
   public static final String METS_ORIGINAL = "original";
+  public static final String METS_STATUS_CURRENT = "current";
+  public static final String METS_GROUP_ID = "1";
   public static final String METS_TYPE_AGGREGATION = "aggregation";
   public static final String METS_TYPE_DOCUMENTATION = "documentation";
   public static final String METS_TYPE_RECORDGRP = "recordgrp";
   public static final String METS_LABEL_DOKU = "Doku";
+  public static final String METS_LEVEL_OTHER = "otherlevel";
 
   // IP structure related
   public static final String METADATA = "metadata";
