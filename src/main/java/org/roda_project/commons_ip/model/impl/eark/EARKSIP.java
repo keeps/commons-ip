@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.nio.channels.ClosedByInterruptException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -24,6 +24,7 @@ import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.model.SIP;
 import org.roda_project.commons_ip.model.impl.ModelUtils;
 import org.roda_project.commons_ip.utils.IPException;
+import org.roda_project.commons_ip.utils.METSUtils;
 import org.roda_project.commons_ip.utils.ZIPUtils;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
 import org.slf4j.Logger;
@@ -143,7 +144,7 @@ public class EARKSIP extends SIP {
 
       EARKUtils.addDocumentationToZipAndMETS(zipEntries, mainMETSWrapper, getDocumentation(), null);
 
-      EARKUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, buildDir);
+      METSUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, buildDir);
 
       createZipFile(zipEntries, zipPath);
 
@@ -247,7 +248,7 @@ public class EARKSIP extends SIP {
 
   @Override
   public Set<String> getExtraChecksumAlgorithms() {
-    return new HashSet<>();
+    return Collections.emptySet();
   }
 
 }

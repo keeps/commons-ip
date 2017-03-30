@@ -21,6 +21,7 @@ import org.roda_project.commons_ip.model.MetsWrapper;
 import org.roda_project.commons_ip.model.SIP;
 import org.roda_project.commons_ip.model.impl.ModelUtils;
 import org.roda_project.commons_ip.utils.IPException;
+import org.roda_project.commons_ip.utils.METSUtils;
 import org.roda_project.commons_ip.utils.ZIPUtils;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
 
@@ -119,7 +120,7 @@ public final class HungarianUtils {
 
   protected static void addMainMETSToZip(Map<String, ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper,
     Path buildDir) throws IPException {
-    HungarianMETSUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, IPConstants.HUNGARIAN_METADATA_FILE, buildDir);
+    METSUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, IPConstants.HUNGARIAN_METADATA_FILE, buildDir);
   }
 
 }

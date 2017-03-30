@@ -54,7 +54,6 @@ public class BagitSIP extends SIP {
 
   /**
    * @param sipId
-   *          will be used as OBJID in METS (/mets[@OBJID])
    */
   public BagitSIP(String sipId) {
     super(sipId);
@@ -62,7 +61,6 @@ public class BagitSIP extends SIP {
 
   /**
    * @param sipId
-   *          will be used as OBJID in METS (/mets[@OBJID])
    */
   public BagitSIP(String sipId, IPContentType contentType, String creator) {
     super(sipId, contentType, creator);
@@ -235,7 +233,7 @@ public class BagitSIP extends SIP {
     try {
       return parse(source, Files.createTempDirectory("unzipped"));
     } catch (IOException e) {
-      throw new ParseException("Error creating temporary directory for E-ARK SIP parse", e);
+      throw new ParseException("Error creating temporary directory for bagit SIP parse", e);
     }
   }
 
@@ -282,7 +280,7 @@ public class BagitSIP extends SIP {
 
       return sip;
     } catch (final IPException | IOException e) {
-      throw new ParseException("Error parsing Bagit SIP", e);
+      throw new ParseException("Error parsing bagit SIP", e);
     }
   }
 

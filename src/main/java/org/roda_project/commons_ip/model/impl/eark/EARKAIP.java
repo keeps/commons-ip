@@ -34,6 +34,7 @@ import org.roda_project.commons_ip.model.impl.ModelUtils;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.METSFileTypeZipEntryInfo;
 import org.roda_project.commons_ip.utils.METSMdRefZipEntryInfo;
+import org.roda_project.commons_ip.utils.METSUtils;
 import org.roda_project.commons_ip.utils.METSZipEntryInfo;
 import org.roda_project.commons_ip.utils.ZIPUtils;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
@@ -111,7 +112,7 @@ public class EARKAIP extends AIPWrap {
 
       EARKUtils.addSubmissionsToZipAndMETS(zipEntries, mainMETSWrapper, getSubmissions());
 
-      EARKUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, buildDir);
+      METSUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, buildDir);
 
       writeToPath(zipEntries, zipPath, onlyManifest);
 

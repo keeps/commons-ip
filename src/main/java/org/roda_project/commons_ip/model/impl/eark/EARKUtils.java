@@ -295,11 +295,6 @@ public final class EARKUtils {
     }
   }
 
-  protected static void addMainMETSToZip(Map<String, ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper,
-    Path buildDir) throws IPException {
-    EARKMETSUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, IPConstants.METS_FILE, buildDir);
-  }
-
   protected static MetsWrapper processMainMets(IPInterface ip, Path ipPath) {
     Path mainMETSFile = ipPath.resolve(IPConstants.METS_FILE);
     Mets mainMets = null;

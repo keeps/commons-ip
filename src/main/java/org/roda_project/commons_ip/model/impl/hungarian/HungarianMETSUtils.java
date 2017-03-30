@@ -12,9 +12,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Map;
 
-import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -37,7 +35,6 @@ import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec.FileGrp;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.MetsHdr;
-import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.MetsHdr.Agent;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.MetsHdr.AltRecordID;
 import org.roda_project.commons_ip.mets_v1_11.beans.StructMapType;
 import org.roda_project.commons_ip.model.IPAgent;
@@ -49,10 +46,8 @@ import org.roda_project.commons_ip.model.MetadataType.MetadataTypeEnum;
 import org.roda_project.commons_ip.model.MetsWrapper;
 import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.IPException;
-import org.roda_project.commons_ip.utils.METSEnums.LocType;
+import org.roda_project.commons_ip.utils.METSUtils;
 import org.roda_project.commons_ip.utils.Utils;
-import org.roda_project.commons_ip.utils.ZIPUtils;
-import org.roda_project.commons_ip.utils.ZipEntryInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -95,7 +90,7 @@ public final class HungarianMETSUtils {
 
     // header/agent
     for (IPAgent sipAgent : ipAgents) {
-      header.getAgent().add(createMETSAgent(sipAgent));
+      header.getAgent().add(METSUtils.createMETSAgent(sipAgent));
     }
 
     // records
@@ -144,31 +139,6 @@ public final class HungarianMETSUtils {
     mets.getStructMap().add(docMap);
 
     return metsWrapper;
-  }
-
-  public static void addMainMETSToZip(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper, String metsPath,
-    Path buildDir) throws IPException {
-    try {
-      addMETSToZip(zipEntries, metsWrapper, metsPath, buildDir, true);
-    } catch (JAXBException | IOException e) {
-      throw new IPException(e.getMessage(), e);
-    }
-  }
-
-  private static void addMETSToZip(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper, String metsPath,
-    Path buildDir, boolean mainMets) throws JAXBException, IOException, IPException {
-    Path temp = Files.createTempFile(buildDir, IPConstants.METS_FILE_NAME, IPConstants.METS_FILE_EXTENSION);
-    ZIPUtils.addMETSFileToZip(zipEntries, temp, metsPath, metsWrapper.getMets(), mainMets);
-  }
-
-  private static Agent createMETSAgent(IPAgent ipAgent) {
-    Agent agent = new Agent();
-    agent.setName(ipAgent.getName());
-    agent.setROLE(ipAgent.getRole());
-    agent.setOTHERROLE(ipAgent.getOtherRole());
-    agent.setTYPE(ipAgent.getType().toString());
-    agent.setOTHERTYPE(ipAgent.getOtherType());
-    return agent;
   }
 
   public static void addDescriptiveMetadataToMETS(MetsWrapper metsWrapper, IPDescriptiveMetadata metadata)
@@ -250,10 +220,10 @@ public final class HungarianMETSUtils {
     file.setID(Utils.generateRandomAndPrefixedUUID());
 
     // set mimetype, date creation, etc.
-    setFileBasicInformation(dataFile, file);
+    METSUtils.setFileBasicInformation(LOGGER, dataFile, file);
 
     // add to file section
-    FLocat fileLocation = createFileLocation(dataFilePath);
+    FLocat fileLocation = METSUtils.createFileLocation(dataFilePath);
     file.getFLocat().add(fileLocation);
     mainMETS.getMainFileGroup().getFile().add(file);
 
@@ -264,43 +234,16 @@ public final class HungarianMETSUtils {
     return file;
   }
 
-  private static void setFileBasicInformation(Path file, FileType fileType) throws IPException, InterruptedException {
-    // mimetype info.
-    try {
-      LOGGER.debug("Setting mimetype {}", file);
-      fileType.setMIMETYPE(Files.probeContentType(file));
-      LOGGER.debug("Done setting mimetype");
-    } catch (IOException e) {
-      throw new IPException("Error probing content-type (" + file.toString() + ")", e);
-    }
-
-    // date creation info.
-    try {
-      fileType.setCREATED(Utils.getCurrentCalendar());
-    } catch (DatatypeConfigurationException e) {
-      throw new IPException("Error getting curent calendar (" + file.toString() + ")", e);
-    }
-
-    // size info.
-    try {
-      LOGGER.debug("Setting file size {}", file);
-      fileType.setSIZE(Files.size(file));
-      LOGGER.debug("Done setting file size");
-    } catch (IOException e) {
-      throw new IPException("Error getting file size (" + file.toString() + ")", e);
-    }
-  }
-
   public static FileType addDocumentationFileToMETS(MetsWrapper metsWrapper, String documentationFilePath,
     Path documentationFile) throws IPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedUUID());
 
     // set mimetype, date creation, etc.
-    setFileBasicInformation(documentationFile, file);
+    METSUtils.setFileBasicInformation(LOGGER, documentationFile, file);
 
     // add to file section
-    FLocat fileLocation = createFileLocation(documentationFilePath);
+    FLocat fileLocation = METSUtils.createFileLocation(documentationFilePath);
     file.getFLocat().add(fileLocation);
     metsWrapper.getMainFileGroup().getFile().add(file);
 
@@ -310,14 +253,6 @@ public final class HungarianMETSUtils {
     metsWrapper.getDocumentationDiv().getFptr().add(fptr);
 
     return file;
-  }
-
-  private static FLocat createFileLocation(String filePath) {
-    FLocat fileLocation = new FLocat();
-    fileLocation.setType(IPConstants.METS_TYPE_SIMPLE);
-    fileLocation.setLOCTYPE(LocType.URL.toString());
-    fileLocation.setHref(Utils.encode(filePath));
-    return fileLocation;
   }
 
 }

@@ -44,6 +44,7 @@ import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.METSEnums.LocType;
+import org.roda_project.commons_ip.utils.METSUtils;
 import org.roda_project.commons_ip.utils.Utils;
 import org.roda_project.commons_ip.utils.ZIPUtils;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
@@ -194,15 +195,6 @@ public final class EARKMETSUtils {
     return div;
   }
 
-  public static void addMainMETSToZip(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper, String metsPath,
-    Path buildDir) throws IPException {
-    try {
-      addMETSToZip(zipEntries, metsWrapper, metsPath, buildDir, true);
-    } catch (JAXBException | IOException e) {
-      throw new IPException(e.getMessage(), e);
-    }
-  }
-
   public static void addRepresentationMETSToZipAndToMainMETS(Map<String, ZipEntryInfo> zipEntries,
     MetsWrapper mainMETSWrapper, String representationId, MetsWrapper representationMETSWrapper,
     String representationMetsPath, Path buildDir) throws IPException, InterruptedException {
@@ -281,7 +273,7 @@ public final class EARKMETSUtils {
     mdRef.setMDTYPEVERSION(mdTypeVersion);
 
     // set mimetype, date creation, etc.
-    setFileBasicInformation(metadata.getMetadata().getPath(), mdRef);
+    METSUtils.setFileBasicInformation(metadata.getMetadata().getPath(), mdRef);
 
     // structural map info.
     Fptr fptr = new Fptr();
@@ -306,7 +298,7 @@ public final class EARKMETSUtils {
     mdRef.setMDTYPE("OTHER");
 
     // set mimetype, date creation, etc.
-    setFileBasicInformation(preservationMetadata.getMetadata().getPath(), mdRef);
+    METSUtils.setFileBasicInformation(preservationMetadata.getMetadata().getPath(), mdRef);
 
     // structural map info.
     Fptr fptr = new Fptr();
@@ -333,10 +325,10 @@ public final class EARKMETSUtils {
     file.setID(Utils.generateRandomAndPrefixedUUID());
 
     // set mimetype, date creation, etc.
-    setFileBasicInformation(dataFile, file);
+    METSUtils.setFileBasicInformation(LOGGER, dataFile, file);
 
     // add to file section
-    FLocat fileLocation = createFileLocation(dataFilePath);
+    FLocat fileLocation = METSUtils.createFileLocation(dataFilePath);
     file.getFLocat().add(fileLocation);
     representationMETS.getDataFileGroup().getFile().add(file);
 
@@ -347,68 +339,16 @@ public final class EARKMETSUtils {
     return file;
   }
 
-  private static MdRef setFileBasicInformation(Path file, MdRef mdRef) throws IPException, InterruptedException {
-    // mimetype info.
-    try {
-      mdRef.setMIMETYPE(Files.probeContentType(file));
-    } catch (IOException e) {
-      throw new IPException("Error probing file content (" + file + ")", e);
-    }
-
-    // date creation info.
-    try {
-      mdRef.setCREATED(Utils.getCurrentCalendar());
-    } catch (DatatypeConfigurationException e) {
-      throw new IPException("Error getting current calendar", e);
-    }
-
-    // size info.
-    try {
-      mdRef.setSIZE(Files.size(file));
-    } catch (IOException e) {
-      throw new IPException("Error getting file size (" + file + ")", e);
-    }
-
-    return mdRef;
-  }
-
-  private static void setFileBasicInformation(Path file, FileType fileType) throws IPException, InterruptedException {
-    // mimetype info.
-    try {
-      LOGGER.debug("Setting mimetype {}", file);
-      fileType.setMIMETYPE(Files.probeContentType(file));
-      LOGGER.debug("Done setting mimetype");
-    } catch (IOException e) {
-      throw new IPException("Error probing content-type (" + file.toString() + ")", e);
-    }
-
-    // date creation info.
-    try {
-      fileType.setCREATED(Utils.getCurrentCalendar());
-    } catch (DatatypeConfigurationException e) {
-      throw new IPException("Error getting curent calendar (" + file.toString() + ")", e);
-    }
-
-    // size info.
-    try {
-      LOGGER.debug("Setting file size {}", file);
-      fileType.setSIZE(Files.size(file));
-      LOGGER.debug("Done setting file size");
-    } catch (IOException e) {
-      throw new IPException("Error getting file size (" + file.toString() + ")", e);
-    }
-  }
-
   public static FileType addSchemaFileToMETS(MetsWrapper metsWrapper, String schemaFilePath, Path schemaFile)
     throws IPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedUUID());
 
     // set mimetype, date creation, etc.
-    setFileBasicInformation(schemaFile, file);
+    METSUtils.setFileBasicInformation(LOGGER, schemaFile, file);
 
     // add to file section
-    FLocat fileLocation = createFileLocation(schemaFilePath);
+    FLocat fileLocation = METSUtils.createFileLocation(schemaFilePath);
     file.getFLocat().add(fileLocation);
     metsWrapper.getSchemasFileGroup().getFile().add(file);
 
@@ -425,10 +365,10 @@ public final class EARKMETSUtils {
     file.setID(Utils.generateRandomAndPrefixedUUID());
 
     // set mimetype, date creation, etc.
-    setFileBasicInformation(submissionFile, file);
+    METSUtils.setFileBasicInformation(LOGGER, submissionFile, file);
 
     // add to file section
-    FLocat fileLocation = createFileLocation(submissionFilePath);
+    FLocat fileLocation = METSUtils.createFileLocation(submissionFilePath);
     file.getFLocat().add(fileLocation);
     metsWrapper.getSubmissionFileGroup().getFile().add(file);
 
@@ -445,10 +385,10 @@ public final class EARKMETSUtils {
     file.setID(Utils.generateRandomAndPrefixedUUID());
 
     // set mimetype, date creation, etc.
-    setFileBasicInformation(documentationFile, file);
+    METSUtils.setFileBasicInformation(LOGGER, documentationFile, file);
 
     // add to file section
-    FLocat fileLocation = createFileLocation(documentationFilePath);
+    FLocat fileLocation = METSUtils.createFileLocation(documentationFilePath);
     file.getFLocat().add(fileLocation);
     metsWrapper.getDocumentationFileGroup().getFile().add(file);
 
@@ -458,15 +398,6 @@ public final class EARKMETSUtils {
     metsWrapper.getDocumentationDiv().getFptr().add(fptr);
 
     return file;
-  }
-
-  private static FLocat createFileLocation(String filePath) {
-    FLocat fileLocation = new FLocat();
-    fileLocation.setType(IPConstants.METS_TYPE_SIMPLE);
-    fileLocation.setLOCTYPE(LocType.URL.toString());
-    fileLocation.setHref(Utils.encode(filePath));
-
-    return fileLocation;
   }
 
   private static StructMapType generateAncestorStructMap(List<String> ancestors) {
