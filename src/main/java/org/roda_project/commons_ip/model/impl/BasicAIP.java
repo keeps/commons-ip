@@ -9,7 +9,7 @@ package org.roda_project.commons_ip.model.impl;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -129,6 +129,6 @@ public class BasicAIP extends IP implements AIP {
 
   @Override
   public Set<String> getExtraChecksumAlgorithms() {
-    return new HashSet<>();
+    return Collections.emptySet();
   }
 }
