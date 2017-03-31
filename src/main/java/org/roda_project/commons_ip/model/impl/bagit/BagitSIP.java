@@ -8,18 +8,14 @@
 package org.roda_project.commons_ip.model.impl.bagit;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -33,6 +29,7 @@ import org.roda_project.commons_ip.model.IPFile;
 import org.roda_project.commons_ip.model.IPRepresentation;
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.model.SIP;
+import org.roda_project.commons_ip.model.impl.ModelUtils;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.Utils;
 import org.slf4j.Logger;
@@ -135,12 +132,10 @@ public class BagitSIP extends SIP {
     }
 
     Path data = namePath.resolve(IPConstants.BAGIT_DATA_FOLDER);
-    new File(data.toString()).mkdirs();
     int fileCounter = 0;
 
     for (IPRepresentation rep : getRepresentations()) {
       Path representationPath = data.resolve(rep.getRepresentationID());
-      new File(representationPath.toString()).mkdirs();
       for (IPFile file : rep.getData()) {
         createFiles(file, representationPath);
         fileCounter++;
@@ -172,52 +167,17 @@ public class BagitSIP extends SIP {
     return namePath;
   }
 
-  private void createFiles(IPFile file, Path dest) {
+  private void createFiles(IPFile file, Path representationPath) {
+    String relativeFilePath = ModelUtils.getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
+    Path destination = representationPath.resolve(relativeFilePath);
     try {
-      recCreateFiles(file.getPath(), dest);
+      Files.createDirectories(destination.getParent());
+      try (InputStream input = Files.newInputStream(file.getPath());
+        OutputStream output = Files.newOutputStream(destination);) {
+        IOUtils.copyLarge(input, output);
+      }
     } catch (IOException e) {
       LOGGER.error("Error creating file {} on bagit data folder", file.getFileName(), e);
-    }
-  }
-
-  private void recCreateFiles(Path nodePath, Path dest) throws IOException {
-    if (Files.isDirectory(nodePath)) {
-      Path directory = dest.resolve(nodePath.getFileName().toString());
-      new File(directory.toString()).mkdir();
-      for (File file : nodePath.toFile().listFiles()) {
-        recCreateFiles(Paths.get(file.getPath()), directory);
-      }
-    } else {
-      Path destination = dest.resolve(nodePath.getFileName().toString());
-      copyFile(nodePath, destination);
-    }
-  }
-
-  private void copyFile(Path path, Path dest) {
-    final int progressCheckpoint = 1000;
-    long bytesCopied = 0;
-    long previousLength = 0;
-    File destFile = dest.toFile();
-
-    try {
-      long totalBytes = Files.size(path);
-      try (InputStream in = new FileInputStream(path.toFile()); OutputStream out = new FileOutputStream(destFile)) {
-        byte[] buf = new byte[1024];
-        int counter = 0;
-        int len;
-
-        while ((len = in.read(buf)) > 0) {
-          out.write(buf, 0, len);
-          counter += len;
-          bytesCopied += (destFile.length() - previousLength);
-          previousLength = destFile.length();
-          if (counter > progressCheckpoint || bytesCopied == totalBytes) {
-            counter = 0;
-          }
-        }
-      }
-    } catch (IOException e) {
-      LOGGER.error("Error writing(copying) file. Source: {}; Destination: {}", path, dest, e);
     }
   }
 
@@ -279,7 +239,7 @@ public class BagitSIP extends SIP {
             Path destPath = destinationDirectory.resolve(split.get(split.size() - 1));
             try (InputStream bagStream = bagFile.newInputStream();
               OutputStream destStream = Files.newOutputStream(destPath)) {
-              IOUtils.copy(bagStream, destStream);
+              IOUtils.copyLarge(bagStream, destStream);
             }
             IPFile file = new IPFile(destPath, directoryPath);
             representation.addFile(file);
