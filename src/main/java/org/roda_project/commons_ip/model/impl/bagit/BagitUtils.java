@@ -7,6 +7,8 @@
  */
 package org.roda_project.commons_ip.model.impl.bagit;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +45,7 @@ public final class BagitUtils {
     try {
       FileBasedConfigurationBuilder<PropertiesConfiguration> builder = new Configurations()
         .propertiesBuilder(metadataPath.toFile());
+      Files.createFile(metadataPath);
       PropertiesConfiguration config = builder.getConfiguration();
 
       for (Entry<String, String> entry : metadata.entrySet()) {
@@ -54,8 +57,8 @@ public final class BagitUtils {
       }
 
       builder.save();
-    } catch (ConfigurationException e) {
-      LOGGER.error("Could not save bagit metadata content on file");
+    } catch (IOException | ConfigurationException e) {
+      LOGGER.error("Could not save bagit metadata content on file", e);
     }
 
     return new IPDescriptiveMetadata(metadataPath.getFileName().toString(), new IPFile(metadataPath),
@@ -72,7 +75,7 @@ public final class BagitUtils {
         metadataList.put(key, config.getString(key));
       }
     } catch (ConfigurationException e) {
-      LOGGER.error("Could not load properties with bagit metadata");
+      LOGGER.error("Could not load properties with bagit metadata", e);
     }
 
     return metadataList;
