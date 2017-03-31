@@ -215,14 +215,14 @@ public class HungarianSIP extends SIP {
           writer.println(IPConstants.CHECKSUM_SHA_1_ALGORITHM + separator
             + calculateChecksums.get(IPConstants.CHECKSUM_SHA_1_ALGORITHM));
         } catch (NoSuchAlgorithmException e) {
-          LOGGER.error("Wrong checksum name used");
+          LOGGER.error("Wrong checksum name used", e);
         } catch (IOException e) {
-          LOGGER.error("Could not open zip file");
+          LOGGER.error("Could not open zip file", e);
         }
 
       }
     } catch (FileNotFoundException e) {
-      LOGGER.error("Could not write SIP information to txt file");
+      LOGGER.error("Could not write SIP information to txt file", e);
     }
   }
 

@@ -80,8 +80,8 @@ public final class HungarianUtils {
           throw new InterruptedException();
         }
 
-        String dataFilePath = IPConstants.DATA_FOLDER + ModelUtils.getFoldersFromList(file.getRelativeFolders())
-          + file.getFileName();
+        String dataFilePath = IPConstants.DATA_FOLDER + representation.getRepresentationID() + "/"
+          + ModelUtils.getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
         FileType fileType = HungarianMETSUtils.addDataFileToMETS(mainMETSWrapper, dataFilePath, file.getPath());
 
         dataFilePath = IPConstants.CONTENT_FOLDER + IPConstants.ZIP_PATH_SEPARATOR + dataFilePath;

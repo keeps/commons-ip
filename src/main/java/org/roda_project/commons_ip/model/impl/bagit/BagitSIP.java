@@ -139,8 +139,10 @@ public class BagitSIP extends SIP {
     int fileCounter = 0;
 
     for (IPRepresentation rep : getRepresentations()) {
+      Path representationPath = data.resolve(rep.getRepresentationID());
+      new File(representationPath.toString()).mkdirs();
       for (IPFile file : rep.getData()) {
-        createFiles(file, data);
+        createFiles(file, representationPath);
         fileCounter++;
       }
     }
@@ -164,7 +166,7 @@ public class BagitSIP extends SIP {
       zipWriter.endPayload();
       notifySipBuildPackagingEnded();
     } catch (IOException e) {
-      LOGGER.error("Could not make bag in place");
+      LOGGER.error("Could not make bag in place", e);
     }
 
     return namePath;
@@ -174,7 +176,7 @@ public class BagitSIP extends SIP {
     try {
       recCreateFiles(file.getPath(), dest);
     } catch (IOException e) {
-      LOGGER.error("Error creating file {} on bagit data folder", file.getFileName());
+      LOGGER.error("Error creating file {} on bagit data folder", file.getFileName(), e);
     }
   }
 
@@ -262,19 +264,32 @@ public class BagitSIP extends SIP {
 
         Path metadataPath = destinationDirectory.resolve(Utils.generateRandomAndPrefixedUUID());
         sip.addDescriptiveMetadata(BagitUtils.createBagitMetadata(metadataMap, metadataPath));
+        Map<String, IPRepresentation> representations = new HashMap<>();
 
-        IPRepresentation representation = new IPRepresentation();
         for (BagFile bagFile : bag.getPayload()) {
           List<String> split = Arrays.asList(bagFile.getFilepath().split("/"));
-          if (!split.isEmpty() && IPConstants.BAGIT_DATA_FOLDER.equals(split.get(0))) {
-            List<String> directoryPath = split.subList(1, split.size() - 1);
+          if (split.size() > 2 && IPConstants.BAGIT_DATA_FOLDER.equals(split.get(0))) {
+            String representationId = split.get(1);
+            if (!representations.containsKey(representationId)) {
+              representations.put(representationId, new IPRepresentation(representationId));
+            }
+
+            IPRepresentation representation = representations.get(representationId);
+            List<String> directoryPath = split.subList(2, split.size() - 1);
             Path destPath = destinationDirectory.resolve(split.get(split.size() - 1));
-            IOUtils.copy(bagFile.newInputStream(), Files.newOutputStream(destPath));
-            representation.addFile(new IPFile(destPath, directoryPath));
+            try (InputStream bagStream = bagFile.newInputStream();
+              OutputStream destStream = Files.newOutputStream(destPath)) {
+              IOUtils.copy(bagStream, destStream);
+            }
+            IPFile file = new IPFile(destPath, directoryPath);
+            representation.addFile(file);
           }
         }
 
-        sip.addRepresentation(representation);
+        for (IPRepresentation rep : representations.values()) {
+          sip.addRepresentation(rep);
+        }
+
       } else {
         throw new ParseException(result.getMessages().toString());
       }
