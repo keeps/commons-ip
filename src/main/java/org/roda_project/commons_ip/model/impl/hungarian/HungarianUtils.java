@@ -34,6 +34,8 @@ public final class HungarianUtils {
   protected static void addMetadataToMETS(MetsWrapper metsWrapper, List<IPDescriptiveMetadata> descriptiveMetadata)
     throws IPException, InterruptedException {
     if (descriptiveMetadata != null && !descriptiveMetadata.isEmpty()) {
+      HungarianMETSUtils.addDescriptiveMetadataSections(metsWrapper);
+
       for (IPDescriptiveMetadata dm : descriptiveMetadata) {
         if (Thread.interrupted()) {
           throw new InterruptedException();

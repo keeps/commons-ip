@@ -11,6 +11,7 @@ import java.nio.file.Path;
 
 import org.roda_project.commons_ip.mets_v1_11.beans.DivType;
 import org.roda_project.commons_ip.mets_v1_11.beans.FileGrpType;
+import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType;
 import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec.FileGrp;
 
@@ -36,6 +37,9 @@ public class MetsWrapper {
   private FileGrpType submissionFileGroup;
   private FileGrpType documentationFileGroup;
   private FileGrpType dataFileGroup;
+
+  private MdSecType mainDmdSec;
+  private MdSecType documentationDmdSec;
 
   public MetsWrapper(Mets mets, Path metsPath) {
     super();
@@ -177,6 +181,22 @@ public class MetsWrapper {
 
   public void setSubmissionsDiv(final DivType submissionsDiv) {
     this.submissionsDiv = submissionsDiv;
+  }
+
+  public MdSecType getMainDmdSec() {
+    return mainDmdSec;
+  }
+
+  public void setMainDmdSec(MdSecType mainDmdSec) {
+    this.mainDmdSec = mainDmdSec;
+  }
+
+  public MdSecType getDocumentationDmdSec() {
+    return documentationDmdSec;
+  }
+
+  public void setDocumentationDmdSec(MdSecType documentationDmdSec) {
+    this.documentationDmdSec = documentationDmdSec;
   }
 
 }
