@@ -222,6 +222,7 @@ public class BagitSIP extends SIP {
           }
         }
 
+        String vendor = metadataMap.get(IPConstants.BAGIT_VENDOR);
         Path metadataPath = destinationDirectory.resolve(Utils.generateRandomAndPrefixedUUID());
         sip.addDescriptiveMetadata(BagitUtils.createBagitMetadata(metadataMap, metadataPath));
         Map<String, IPRepresentation> representations = new HashMap<>();
@@ -229,18 +230,25 @@ public class BagitSIP extends SIP {
         for (BagFile bagFile : bag.getPayload()) {
           List<String> split = Arrays.asList(bagFile.getFilepath().split("/"));
           if (split.size() > 2 && IPConstants.BAGIT_DATA_FOLDER.equals(split.get(0))) {
-            String representationId = split.get(1);
+            String representationId = "rep1";
+            int beginIndex = 1;
+            if (vendor != null && vendor.equals(IPConstants.BAGIT_VENDOR_COMMONS_IP)) {
+              representationId = split.get(1);
+              beginIndex = 2;
+            }
+
             if (!representations.containsKey(representationId)) {
               representations.put(representationId, new IPRepresentation(representationId));
             }
 
             IPRepresentation representation = representations.get(representationId);
-            List<String> directoryPath = split.subList(2, split.size() - 1);
+            List<String> directoryPath = split.subList(beginIndex, split.size() - 1);
             Path destPath = destinationDirectory.resolve(split.get(split.size() - 1));
             try (InputStream bagStream = bagFile.newInputStream();
               OutputStream destStream = Files.newOutputStream(destPath)) {
               IOUtils.copyLarge(bagStream, destStream);
             }
+
             IPFile file = new IPFile(destPath, directoryPath);
             representation.addFile(file);
           }

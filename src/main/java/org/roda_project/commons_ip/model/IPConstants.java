@@ -80,6 +80,8 @@ public final class IPConstants {
   public static final String BAGIT_NAME = "name";
   public static final String BAGIT_FIELD = "field";
   public static final String BAGIT_METADATA = "metadata";
+  public static final String BAGIT_VENDOR = "vendor";
+  public static final String BAGIT_VENDOR_COMMONS_IP = "commons-ip";
 
   // Hungarian
   public static final String CONTENT_FOLDER = "content";
@@ -90,7 +92,7 @@ public final class IPConstants {
 
   /** Private empty constructor */
   private IPConstants() {
-
+    // do nothing
   }
 
 }
