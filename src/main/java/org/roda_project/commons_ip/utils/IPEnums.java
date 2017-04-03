@@ -13,7 +13,7 @@ public class IPEnums {
   }
 
   public enum IPStatus {
-    NEW, UPDATE;
+    NEW, UPDATE, REPLACEMENT, TEST;
 
     public static IPStatus parse(String value, IPStatus defaultValue) {
       IPStatus ret = defaultValue;
