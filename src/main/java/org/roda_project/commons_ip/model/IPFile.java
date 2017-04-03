@@ -24,6 +24,7 @@ public class IPFile implements Serializable {
   private List<String> relativeFolders;
   private String checksum = "";
   private String checksumAlgorithm = "";
+  private List<String> relatedTags;
 
   public IPFile(Path path) {
     super();
@@ -31,6 +32,7 @@ public class IPFile implements Serializable {
     this.pathString = this.path.toAbsolutePath().toString();
     this.renameTo = null;
     this.relativeFolders = new ArrayList<>();
+    this.relatedTags = new ArrayList<>();
   }
 
   public IPFile(Path path, List<String> relativeFolders) {
@@ -39,6 +41,7 @@ public class IPFile implements Serializable {
     this.pathString = this.path.toAbsolutePath().toString();
     this.renameTo = null;
     this.relativeFolders = relativeFolders;
+    this.relatedTags = new ArrayList<>();
   }
 
   public IPFile(Path path, String renameTo) {
@@ -47,6 +50,7 @@ public class IPFile implements Serializable {
     this.pathString = this.path.toAbsolutePath().toString();
     this.renameTo = renameTo;
     this.relativeFolders = new ArrayList<>();
+    this.relatedTags = new ArrayList<>();
   }
 
   public Path getPath() {
@@ -111,10 +115,19 @@ public class IPFile implements Serializable {
     return this;
   }
 
+  public List<String> getRelatedTags() {
+    return relatedTags;
+  }
+
+  public IPFile setRelatedTags(List<String> relatedTags) {
+    this.relatedTags = relatedTags;
+    return this;
+  }
+
   @Override
   public String toString() {
     return "IPFile [path=" + path + ", renameTo=" + renameTo + ", relativeFolders=" + relativeFolders + ", checksum="
-      + checksum + ", checksumAlgorithm=" + checksumAlgorithm + "]";
+      + checksum + ", checksumAlgorithm=" + checksumAlgorithm + ", relatedTags=" + relatedTags + "]";
   }
 
   private void readObject(ObjectInputStream inputStream) throws IOException, ClassNotFoundException {

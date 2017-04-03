@@ -39,7 +39,11 @@ public final class HungarianUtils {
           throw new InterruptedException();
         }
 
-        HungarianMETSUtils.addDescriptiveMetadataToMETS(metsWrapper, dm);
+        if (dm.getMetadata().getRelativeFolders().contains(IPConstants.HUNGARIAN_DOCUMENTATION_TAG)) {
+          HungarianMETSUtils.addDocumentationDescriptiveMetadataToMETS(metsWrapper, dm);
+        } else {
+          HungarianMETSUtils.addAggregationDescriptiveMetadataToMETS(metsWrapper, dm);
+        }
       }
     }
   }

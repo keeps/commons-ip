@@ -141,7 +141,7 @@ public final class HungarianMETSUtils {
     return metsWrapper;
   }
 
-  public static void addDescriptiveMetadataToMETS(MetsWrapper metsWrapper, IPDescriptiveMetadata metadata)
+  public static void addAggregationDescriptiveMetadataToMETS(MetsWrapper metsWrapper, IPDescriptiveMetadata metadata)
     throws IPException, InterruptedException {
 
     MdSecType dmdSec = new MdSecType();
@@ -195,23 +195,35 @@ public final class HungarianMETSUtils {
     // FIXME 20170330 nvieira this code line is needed but causes an error
     // marshalling mets
     // metsWrapper.getMainDiv().getDMDID().add(dmdSec.getID());
+  }
 
+  public static void addDocumentationDescriptiveMetadataToMETS(MetsWrapper metsWrapper, IPDescriptiveMetadata metadata)
+    throws IPException, InterruptedException {
     // documentation dmdSec
-    MdSecType dmdDocSec = new MdSecType();
-    dmdDocSec.setID(Utils.generateRandomAndPrefixedUUID());
-    dmdDocSec.setGROUPID(IPConstants.METS_GROUP_ID);
-    dmdDocSec.setSTATUS(IPConstants.METS_STATUS_CURRENT);
+    MdSecType dmdSec = new MdSecType();
+    dmdSec.setID(Utils.generateRandomAndPrefixedUUID());
+    dmdSec.setGROUPID(IPConstants.METS_GROUP_ID);
+    dmdSec.setSTATUS(IPConstants.METS_STATUS_CURRENT);
 
-    MdWrap mdDocWrap = new MdWrap();
-    mdDocWrap.setID(Utils.generateRandomAndPrefixedUUID());
-    mdDocWrap.setMDTYPE(MetadataTypeEnum.OTHER.getType());
-    mdDocWrap.setXmlData(new XmlData());
+    MdWrap mdWrap = new MdWrap();
+    mdWrap.setID(Utils.generateRandomAndPrefixedUUID());
+    mdWrap.setMDTYPE(MetadataTypeEnum.OTHER.getType());
 
-    dmdDocSec.setMdWrap(mdDocWrap);
-    metsWrapper.getMets().getDmdSec().add(dmdDocSec);
+    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    try (InputStream inputStream = Files.newInputStream(metadata.getMetadata().getPath())) {
+      Document xmlDataContent = factory.newDocumentBuilder().parse(inputStream);
+      XmlData metadataContent = new XmlData();
+      metadataContent.getAny().add(xmlDataContent.getDocumentElement());
+      mdWrap.setXmlData(metadataContent);
+    } catch (SAXException | ParserConfigurationException | IOException e) {
+      LOGGER.error("Error adding EAD xml to xmlData", e);
+    }
+
+    dmdSec.setMdWrap(mdWrap);
+    metsWrapper.getMets().getDmdSec().add(dmdSec);
     // FIXME 20170330 nvieira this code line is needed but causes an error
     // marshalling mets
-    // metsWrapper.getDocumentationDiv().getDMDID().add(dmdDocSec.getID());
+    // metsWrapper.getDocumentationDiv().getDMDID().add(dmdSec.getID());
   }
 
   public static FileType addDataFileToMETS(MetsWrapper mainMETS, String dataFilePath, Path dataFile)

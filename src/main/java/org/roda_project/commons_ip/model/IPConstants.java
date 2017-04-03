@@ -53,11 +53,6 @@ public final class IPConstants {
   public static final String SUBMISSION = "submission";
   public static final String SUBMISSION_FOLDER = SUBMISSION + METS_PATH_SEPARATOR;
 
-  public static final String CONTENT_FOLDER = "content";
-  public static final String HEADER_FOLDER = "header";
-  public static final String METADATA_FILE = "metadata.xml";
-  public static final String HUNGARIAN_METADATA_FILE = HEADER_FOLDER + "/" + METADATA_FILE;
-
   // misc
   public static final String ZIP_PATH_SEPARATOR = "/";
   public static final String CHECKSUM_MD5_ALGORITHM = "MD5";
@@ -82,6 +77,16 @@ public final class IPConstants {
   public static final String BAGIT_LEVEL = "level";
   public static final String BAGIT_ITEM_LEVEL = "item";
   public static final String BAGIT_DATA_FOLDER = "data";
+  public static final String BAGIT_NAME = "name";
+  public static final String BAGIT_FIELD = "field";
+  public static final String BAGIT_METADATA = "metadata";
+
+  // Hungarian
+  public static final String CONTENT_FOLDER = "content";
+  public static final String HEADER_FOLDER = "header";
+  public static final String METADATA_FILE = "metadata.xml";
+  public static final String HUNGARIAN_METADATA_FILE = HEADER_FOLDER + "/" + METADATA_FILE;
+  public static final String HUNGARIAN_DOCUMENTATION_TAG = "documentation";
 
   /** Private empty constructor */
   private IPConstants() {
