@@ -48,14 +48,6 @@ public class HungarianSIP extends SIP {
    * @param sipId
    *          will be used as OBJID in METS (/mets[@OBJID])
    */
-  public HungarianSIP(String sipId) {
-    super(sipId);
-  }
-
-  /**
-   * @param sipId
-   *          will be used as OBJID in METS (/mets[@OBJID])
-   */
   public HungarianSIP(String sipId, IPContentType contentType, String creator) {
     super(sipId, contentType, creator);
   }

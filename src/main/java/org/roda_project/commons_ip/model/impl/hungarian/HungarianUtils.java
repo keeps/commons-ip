@@ -39,7 +39,7 @@ public final class HungarianUtils {
           throw new InterruptedException();
         }
 
-        if (dm.getMetadata().getRelativeFolders().contains(IPConstants.HUNGARIAN_DOCUMENTATION_TAG)) {
+        if (dm.getMetadata().getRelatedTags().contains(IPConstants.HUNGARIAN_DOCUMENTATION_TAG)) {
           HungarianMETSUtils.addDocumentationDescriptiveMetadataToMETS(metsWrapper, dm);
         } else {
           HungarianMETSUtils.addAggregationDescriptiveMetadataToMETS(metsWrapper, dm);
