@@ -76,6 +76,7 @@ public final class BagitUtils {
     try {
       PropertiesConfiguration config = new Configurations().properties(metadataPath.toFile());
       Iterator<String> keys = config.getKeys();
+
       while (keys.hasNext()) {
         String key = keys.next();
         metadataList.put(key, config.getString(key));

@@ -152,6 +152,7 @@ public class BagitSIP extends SIP {
       for (Entry<String, String> entry : metadataList.entrySet()) {
         b.getBagInfoTxt().put(entry.getKey(), entry.getValue());
       }
+      b.getBagInfoTxt().put(IPConstants.BAGIT_VENDOR, IPConstants.BAGIT_VENDOR_COMMONS_IP);
 
       b.makeComplete();
 
