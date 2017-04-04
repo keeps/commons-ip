@@ -8,14 +8,28 @@
 package org.roda_project.commons_ip.model.hungarian;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.roda_project.commons_ip.model.IPConstants;
 import org.roda_project.commons_ip.model.IPContentType;
 import org.roda_project.commons_ip.model.IPDescriptiveMetadata;
 import org.roda_project.commons_ip.model.IPFile;
@@ -30,8 +44,8 @@ import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import junit.framework.Assert;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 /**
  * Unit tests for EARK Information Packages (SIP, AIP and DIP)
@@ -39,8 +53,8 @@ import junit.framework.Assert;
 public class HungarianTest {
   private static final Logger LOGGER = LoggerFactory.getLogger(HungarianTest.class);
   private static final String REPRESENTATION_STATUS_NORMALIZED = "NORMALIZED";
-  private static Path tempFolder;
   private static final String SIP_ID = "SIP_1";
+  private static Path tempFolder;
 
   @BeforeClass
   public static void setup() throws IOException {
@@ -53,58 +67,99 @@ public class HungarianTest {
   }
 
   @Test
-  public void buildAndParseHungarianSIP() throws IPException, ParseException, InterruptedException {
+  public void buildAndParseHungarianSIP() throws IPException, ParseException, InterruptedException, IOException,
+    SAXException, ParserConfigurationException, XPathExpressionException {
     LOGGER.info("Creating full Hungarian SIP");
     createFullHungarianSIP();
     LOGGER.info("Done creating full Hungarian SIP");
+    testZIPAndTxtContent();
+    LOGGER.info("Done testing full Hungarian SIP");
+  }
 
-    Assert.assertEquals(true,
-      Files.exists(tempFolder.resolve(SIP_ID + ".zip")) && Files.exists(tempFolder.resolve(SIP_ID + ".txt")));
+  private void testZIPAndTxtContent()
+    throws IOException, SAXException, ParserConfigurationException, XPathExpressionException {
+    Path zipPath = tempFolder.resolve(SIP_ID + ".zip");
+    Path txtPath = tempFolder.resolve(SIP_ID + ".txt");
+
+    Assert.assertEquals(true, Files.exists(zipPath) && Files.exists(txtPath));
+    Assert.assertEquals(Files.lines(txtPath).count(), 6);
+
+    try (ZipFile zipFile = new ZipFile(zipPath.toFile())) {
+      Enumeration<? extends ZipEntry> entries = zipFile.entries();
+      int metadataFileCounter = 0;
+      int documentationPdfCounter = 0;
+
+      while (entries.hasMoreElements()) {
+        ZipEntry entry = entries.nextElement();
+        if (entry.getName().contains(IPConstants.METADATA_FILE)) {
+          metadataFileCounter++;
+          try (InputStream stream = zipFile.getInputStream(entry)) {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            Document metsContent = factory.newDocumentBuilder().parse(stream);
+            XPathFactory xPathfactory = XPathFactory.newInstance();
+            XPath xpath = xPathfactory.newXPath();
+
+            XPathExpression typeExpression = xpath.compile("//mdWrap/@MDTYPE");
+            String mdType = (String) typeExpression.evaluate(metsContent, XPathConstants.STRING);
+
+            XPathExpression versionExpression = xpath.compile("//mdWrap/@MDTYPEVERSION");
+            String mdVersion = (String) versionExpression.evaluate(metsContent, XPathConstants.STRING);
+
+            Assert.assertEquals(mdType, MetadataTypeEnum.EAD.toString());
+            Assert.assertEquals(mdVersion, "2002");
+          }
+        } else if (entry.getName().contains("documentation.pdf")) {
+          documentationPdfCounter++;
+        }
+      }
+
+      Assert.assertEquals(metadataFileCounter, 1);
+      Assert.assertEquals(documentationPdfCounter, 2);
+    }
   }
 
   private Path createFullHungarianSIP() throws IPException, InterruptedException {
-    // 1) instantiate Hungarian SIP object
+    // instantiate Hungarian SIP object
     SIP sip = new HungarianSIP(SIP_ID, IPContentType.getMIXED(), "RODA Commons IP");
 
-    // 1.1) set optional human-readable description
+    // set optional human-readable description
     sip.setDescription("A full Hungarian SIP");
 
-    // 1.2) add descriptive metadata (SIP level)
+    // add descriptive metadata
     IPDescriptiveMetadata metadataDescriptiveEAD = new IPDescriptiveMetadata(
       new IPFile(Paths.get("src/test/resources/eark/metadata_descriptive_ead2002.xml")),
-      new MetadataType(MetadataTypeEnum.EAD), null);
+      new MetadataType(MetadataTypeEnum.EAD), "2002");
     sip.addDescriptiveMetadata(metadataDescriptiveEAD);
 
-    // 1.6) add documentation (SIP level)
+    // add documentation
     sip.addDocumentation(new IPFile(Paths.get("src/test/resources/eark/documentation.pdf")));
 
-    // 1.9) add a representation (status will be set to the default value, i.e.,
-    // ORIGINAL)
+    // add a representation
     IPRepresentation representation1 = new IPRepresentation("representation 1");
     sip.addRepresentation(representation1);
 
-    // 1.9.1) add a file to the representation
+    // add a file to the representation
     IPFile representationFile = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
     representationFile.setRenameTo("data.pdf");
     representation1.addFile(representationFile);
 
-    // 1.9.2) add a file to the representation and put it inside a folder
+    // add a file to the representation and put it inside a folder
     // called 'abc' which has a folder inside called 'def'
     IPFile representationFile2 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
     representationFile2.setRelativeFolders(Arrays.asList("abc", "def"));
     representation1.addFile(representationFile2);
 
-    // 1.10) add a representation & define its status
+    // add a representation & define its status
     IPRepresentation representation2 = new IPRepresentation("representation 2");
     representation2.setStatus(new RepresentationStatus(REPRESENTATION_STATUS_NORMALIZED));
     sip.addRepresentation(representation2);
 
-    // 1.10.1) add a file to the representation
+    // add a file to the representation
     IPFile representationFile3 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
     representationFile3.setRenameTo("data3.pdf");
     representation2.addFile(representationFile3);
 
-    // 2) build SIP, providing an output directory
+    // build SIP, providing an output directory
     return sip.build(tempFolder);
   }
 
