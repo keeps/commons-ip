@@ -232,7 +232,7 @@ public class BagitSIP extends SIP {
           if (split.size() > 2 && IPConstants.BAGIT_DATA_FOLDER.equals(split.get(0))) {
             String representationId = "rep1";
             int beginIndex = 1;
-            if (vendor != null && vendor.equals(IPConstants.BAGIT_VENDOR_COMMONS_IP)) {
+            if (IPConstants.BAGIT_VENDOR_COMMONS_IP.equals(vendor)) {
               representationId = split.get(1);
               beginIndex = 2;
             }

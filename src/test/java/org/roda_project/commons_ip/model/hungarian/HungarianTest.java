@@ -35,8 +35,8 @@ import org.slf4j.LoggerFactory;
  * Unit tests for EARK Information Packages (SIP, AIP and DIP)
  */
 public class HungarianTest {
-  private static final String REPRESENTATION_STATUS_NORMALIZED = "NORMALIZED";
   private static final Logger LOGGER = LoggerFactory.getLogger(HungarianTest.class);
+  private static final String REPRESENTATION_STATUS_NORMALIZED = "NORMALIZED";
   private static Path tempFolder;
 
   @BeforeClass
