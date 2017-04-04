@@ -20,6 +20,7 @@ import org.roda_project.commons_ip.model.IPAgent;
 import org.roda_project.commons_ip.model.IPContentType;
 import org.roda_project.commons_ip.model.IPDescriptiveMetadata;
 import org.roda_project.commons_ip.model.IPFile;
+import org.roda_project.commons_ip.model.IPHeader;
 import org.roda_project.commons_ip.model.IPMetadata;
 import org.roda_project.commons_ip.model.IPRepresentation;
 import org.roda_project.commons_ip.model.ValidationReport;
@@ -306,6 +307,11 @@ public class AIPWrap implements AIP {
   @Override
   public boolean isValid() {
     return aip.isValid();
+  }
+
+  @Override
+  public IPHeader getHeader() {
+    return aip.getHeader();
   }
 
   @Override

@@ -127,27 +127,19 @@ public class EARKSIP extends SIP {
       String contentType = this.getContentType().asString();
 
       MetsWrapper mainMETSWrapper = EARKMETSUtils.generateMETS(StringUtils.join(this.getIds(), " "),
-        this.getDescription(), this.getType() + ":" + contentType, this.getProfile(), this.getAgents(), true,
-        Optional.ofNullable(this.getAncestors()), null, this.getStatus());
+        this.getDescription(), this.getType() + ":" + contentType, this.getProfile(), true,
+        Optional.ofNullable(this.getAncestors()), null, this.getHeader());
 
       EARKUtils.addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
-
       EARKUtils.addPreservationMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getPreservationMetadata(), null);
-
       EARKUtils.addOtherMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getOtherMetadata(), null);
-
       EARKUtils.addRepresentationsToZipAndMETS(this, getRepresentations(), zipEntries, mainMETSWrapper, buildDir);
-
       EARKUtils.addDefaultSchemas(LOGGER, getSchemas(), buildDir);
-
       EARKUtils.addSchemasToZipAndMETS(zipEntries, mainMETSWrapper, getSchemas(), null);
-
       EARKUtils.addDocumentationToZipAndMETS(zipEntries, mainMETSWrapper, getDocumentation(), null);
-
       METSUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, buildDir);
 
       createZipFile(zipEntries, zipPath);
-
       return zipPath;
     } catch (InterruptedException e) {
       ModelUtils.cleanUpUponInterrupt(LOGGER, zipPath);
@@ -223,19 +215,12 @@ public class EARKSIP extends SIP {
 
         if (structMap != null) {
           EARKUtils.preProcessStructMap(metsWrapper, structMap);
-
           EARKUtils.processDescriptiveMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
-
           EARKUtils.processOtherMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
-
           EARKUtils.processPreservationMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
-
           EARKUtils.processRepresentations(metsWrapper, sip, LOGGER);
-
           EARKUtils.processSchemasMetadata(metsWrapper, sip, sip.getBasePath());
-
           EARKUtils.processDocumentationMetadata(metsWrapper, sip, sip.getBasePath());
-
           EARKUtils.processAncestors(metsWrapper, sip);
         }
       }

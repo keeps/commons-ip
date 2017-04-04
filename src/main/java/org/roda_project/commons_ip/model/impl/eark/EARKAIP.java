@@ -93,8 +93,8 @@ public class EARKAIP extends AIPWrap {
       final String contentType = this.getContentType().asString();
 
       final MetsWrapper mainMETSWrapper = EARKMETSUtils.generateMETS(StringUtils.join(this.getIds(), " "),
-        this.getDescription(), this.getType() + ":" + contentType, this.getProfile(), this.getAgents(), true,
-        Optional.ofNullable(this.getAncestors()), null, this.getStatus());
+        this.getDescription(), this.getType() + ":" + contentType, this.getProfile(), true,
+        Optional.ofNullable(this.getAncestors()), null, this.getHeader());
 
       EARKUtils.addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
 

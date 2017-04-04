@@ -34,13 +34,15 @@ import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.FileSec.FileGrp;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.MetsHdr;
 import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.MetsHdr.Agent;
+import org.roda_project.commons_ip.mets_v1_11.beans.MetsType.MetsHdr.AltRecordID;
 import org.roda_project.commons_ip.mets_v1_11.beans.StructMapType;
 import org.roda_project.commons_ip.model.IPAgent;
+import org.roda_project.commons_ip.model.IPAltRecordID;
 import org.roda_project.commons_ip.model.IPConstants;
 import org.roda_project.commons_ip.model.IPDescriptiveMetadata;
+import org.roda_project.commons_ip.model.IPHeader;
 import org.roda_project.commons_ip.model.IPMetadata;
 import org.roda_project.commons_ip.model.MetsWrapper;
-import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.METSEnums.LocType;
@@ -58,8 +60,8 @@ public final class EARKMETSUtils {
     // do nothing
   }
 
-  public static MetsWrapper generateMETS(String id, String label, String type, String profile, List<IPAgent> ipAgents,
-    boolean mainMets, Optional<List<String>> ancestors, Path metsPath, IPEnums.IPStatus status) throws IPException {
+  public static MetsWrapper generateMETS(String id, String label, String type, String profile, boolean mainMets,
+    Optional<List<String>> ancestors, Path metsPath, IPHeader ipHeader) throws IPException {
     Mets mets = new Mets();
     MetsWrapper metsWrapper = new MetsWrapper(mets, metsPath);
 
@@ -75,14 +77,22 @@ public final class EARKMETSUtils {
       XMLGregorianCalendar currentDate = Utils.getCurrentCalendar();
       header.setCREATEDATE(currentDate);
       header.setLASTMODDATE(currentDate);
-      header.setRECORDSTATUS(status.toString());
+      header.setRECORDSTATUS(ipHeader.getStatus().toString());
     } catch (DatatypeConfigurationException e) {
       throw new IPException("Error getting current calendar", e);
     }
 
     // header/agent
-    for (IPAgent sipAgent : ipAgents) {
+    for (IPAgent sipAgent : ipHeader.getAgents()) {
       header.getAgent().add(createMETSAgent(sipAgent));
+    }
+
+    // records
+    for (IPAltRecordID iprecord : ipHeader.getAltRecordIDs()) {
+      AltRecordID recordId = new AltRecordID();
+      recordId.setTYPE(iprecord.getType());
+      recordId.setValue(iprecord.getValue());
+      header.getAltRecordID().add(recordId);
     }
 
     mets.setMetsHdr(header);
@@ -228,7 +238,7 @@ public final class EARKMETSUtils {
     agent.setOTHERROLE(ipAgent.getOtherRole());
     agent.setTYPE(ipAgent.getType().toString());
     agent.setOTHERTYPE(ipAgent.getOtherType());
-
+    agent.getNote().add(ipAgent.getNote());
     return agent;
   }
 

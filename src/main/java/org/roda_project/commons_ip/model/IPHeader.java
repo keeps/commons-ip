@@ -31,6 +31,14 @@ public class IPHeader {
     this.agents = new ArrayList<>();
   }
 
+  public IPHeader(IPEnums.IPStatus status) {
+    this.createDate = Utils.getCurrentTime();
+    this.modificationDate = Optional.empty();
+    this.status = status;
+    this.altRecordIDs = new ArrayList<>();
+    this.agents = new ArrayList<>();
+  }
+
   public Optional<XMLGregorianCalendar> getCreateDate() {
     return createDate;
   }
@@ -69,6 +77,11 @@ public class IPHeader {
 
   public List<IPAgent> getAgents() {
     return agents;
+  }
+
+  public IPHeader setAgents(List<IPAgent> agents) {
+    this.agents = agents;
+    return this;
   }
 
   public IPHeader addAgent(IPAgent sipAgent) {

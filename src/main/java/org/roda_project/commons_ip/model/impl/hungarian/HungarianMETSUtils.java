@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -44,7 +43,6 @@ import org.roda_project.commons_ip.model.IPDescriptiveMetadata;
 import org.roda_project.commons_ip.model.IPHeader;
 import org.roda_project.commons_ip.model.MetadataType.MetadataTypeEnum;
 import org.roda_project.commons_ip.model.MetsWrapper;
-import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.METSUtils;
 import org.roda_project.commons_ip.utils.Utils;
@@ -61,13 +59,7 @@ public final class HungarianMETSUtils {
   }
 
   public static MetsWrapper generateMETS(String id, String label, String type, String profile, Path metsPath,
-    IPHeader header) throws IPException {
-    return generateMETS(id, label, type, profile, header.getAgents(), metsPath, header.getStatus(),
-      header.getAltRecordIDs());
-  }
-
-  public static MetsWrapper generateMETS(String id, String label, String type, String profile, List<IPAgent> ipAgents,
-    Path metsPath, IPEnums.IPStatus status, List<IPAltRecordID> recordList) throws IPException {
+    IPHeader ipHeader) throws IPException {
     Mets mets = new Mets();
     MetsWrapper metsWrapper = new MetsWrapper(mets, metsPath);
 
@@ -83,24 +75,22 @@ public final class HungarianMETSUtils {
       XMLGregorianCalendar currentDate = Utils.getCurrentCalendar();
       header.setCREATEDATE(currentDate);
       header.setLASTMODDATE(currentDate);
-      header.setRECORDSTATUS(status.toString());
+      header.setRECORDSTATUS(ipHeader.getStatus().toString());
     } catch (DatatypeConfigurationException e) {
       throw new IPException("Error getting current calendar", e);
     }
 
     // header/agent
-    for (IPAgent sipAgent : ipAgents) {
+    for (IPAgent sipAgent : ipHeader.getAgents()) {
       header.getAgent().add(METSUtils.createMETSAgent(sipAgent));
     }
 
     // records
-    if (recordList != null) {
-      for (IPAltRecordID iprecord : recordList) {
-        AltRecordID recordId = new AltRecordID();
-        recordId.setTYPE(iprecord.getType());
-        recordId.setValue(iprecord.getValue());
-        header.getAltRecordID().add(recordId);
-      }
+    for (IPAltRecordID iprecord : ipHeader.getAltRecordIDs()) {
+      AltRecordID recordId = new AltRecordID();
+      recordId.setTYPE(iprecord.getType());
+      recordId.setValue(iprecord.getValue());
+      header.getAltRecordID().add(recordId);
     }
 
     mets.setMetsHdr(header);

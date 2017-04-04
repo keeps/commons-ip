@@ -115,6 +115,8 @@ public interface IPInterface {
 
   boolean isValid();
 
+  IPHeader getHeader();
+
   /**
    * @param destinationDirectory
    *          directory where the SIP will be placed into

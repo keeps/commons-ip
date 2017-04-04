@@ -32,6 +32,7 @@ import org.roda_project.commons_ip.model.IPConstants;
 import org.roda_project.commons_ip.model.IPContentType;
 import org.roda_project.commons_ip.model.IPDescriptiveMetadata;
 import org.roda_project.commons_ip.model.IPFile;
+import org.roda_project.commons_ip.model.IPHeader;
 import org.roda_project.commons_ip.model.IPInterface;
 import org.roda_project.commons_ip.model.IPMetadata;
 import org.roda_project.commons_ip.model.IPRepresentation;
@@ -147,10 +148,11 @@ public final class EARKUtils {
         String representationProfile = "";
         String representationContentType = representation.getContentType().asString();
 
+        IPHeader header = new IPHeader(IPEnums.IPStatus.NEW).setAgents(representation.getAgents());
         MetsWrapper representationMETSWrapper = EARKMETSUtils.generateMETS(representationId,
           representation.getDescription(),
-          IPConstants.METS_REPRESENTATION_TYPE_PART_1 + ":" + representationContentType, representationProfile,
-          representation.getAgents(), false, Optional.empty(), null, IPEnums.IPStatus.NEW);
+          IPConstants.METS_REPRESENTATION_TYPE_PART_1 + ":" + representationContentType, representationProfile, false,
+          Optional.empty(), null, header);
         representationMETSWrapper.getMainDiv().setTYPE(representation.getStatus().asString());
 
         // representation data

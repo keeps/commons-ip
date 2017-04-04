@@ -31,6 +31,8 @@ import org.roda_project.commons_ip.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import junit.framework.Assert;
+
 /**
  * Unit tests for EARK Information Packages (SIP, AIP and DIP)
  */
@@ -38,6 +40,7 @@ public class HungarianTest {
   private static final Logger LOGGER = LoggerFactory.getLogger(HungarianTest.class);
   private static final String REPRESENTATION_STATUS_NORMALIZED = "NORMALIZED";
   private static Path tempFolder;
+  private static final String SIP_ID = "SIP_1";
 
   @BeforeClass
   public static void setup() throws IOException {
@@ -54,11 +57,14 @@ public class HungarianTest {
     LOGGER.info("Creating full Hungarian SIP");
     createFullHungarianSIP();
     LOGGER.info("Done creating full Hungarian SIP");
+
+    Assert.assertEquals(true,
+      Files.exists(tempFolder.resolve(SIP_ID + ".zip")) && Files.exists(tempFolder.resolve(SIP_ID + ".txt")));
   }
 
   private Path createFullHungarianSIP() throws IPException, InterruptedException {
     // 1) instantiate Hungarian SIP object
-    SIP sip = new HungarianSIP("SIP_1", IPContentType.getMIXED(), "RODA Commons IP");
+    SIP sip = new HungarianSIP(SIP_ID, IPContentType.getMIXED(), "RODA Commons IP");
 
     // 1.1) set optional human-readable description
     sip.setDescription("A full Hungarian SIP");
