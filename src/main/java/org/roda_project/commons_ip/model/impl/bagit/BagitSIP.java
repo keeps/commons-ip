@@ -230,7 +230,7 @@ public class BagitSIP extends SIP {
 
         for (BagFile bagFile : bag.getPayload()) {
           List<String> split = Arrays.asList(bagFile.getFilepath().split("/"));
-          if (split.size() > 2 && IPConstants.BAGIT_DATA_FOLDER.equals(split.get(0))) {
+          if (split.size() > 1 && IPConstants.BAGIT_DATA_FOLDER.equals(split.get(0))) {
             String representationId = "rep1";
             int beginIndex = 1;
             if (IPConstants.BAGIT_VENDOR_COMMONS_IP.equals(vendor)) {
