@@ -7,6 +7,7 @@
  */
 package org.roda_project.commons_ip.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,9 +17,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.Utils;
 
-public class IPHeader {
-  private Optional<XMLGregorianCalendar> createDate;
-  private Optional<XMLGregorianCalendar> modificationDate;
+public class IPHeader implements Serializable {
+  private transient Optional<XMLGregorianCalendar> createDate;
+  private transient Optional<XMLGregorianCalendar> modificationDate;
   private IPEnums.IPStatus status;
   private List<IPAgent> agents;
   private List<IPAltRecordID> altRecordIDs;

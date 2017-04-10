@@ -7,7 +7,9 @@
  */
 package org.roda_project.commons_ip.model;
 
-public class IPAltRecordID {
+import java.io.Serializable;
+
+public class IPAltRecordID implements Serializable {
   private String value;
   private String type;
 
