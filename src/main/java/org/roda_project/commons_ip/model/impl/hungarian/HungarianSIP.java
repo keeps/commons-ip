@@ -161,7 +161,7 @@ public class HungarianSIP extends SIP {
     throws IPException, InterruptedException {
     try {
       notifySipBuildPackagingStarted(zipEntries.size());
-      ZIPUtils.zip(zipEntries, Files.newOutputStream(zipPath), this, false);
+      ZIPUtils.zip(zipEntries, Files.newOutputStream(zipPath), this, false, false);
     } catch (ClosedByInterruptException e) {
       throw new InterruptedException();
     } catch (IOException e) {
