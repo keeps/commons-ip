@@ -97,7 +97,7 @@ public final class BagitUtils {
       if (!IPConstants.BAGIT_PARENT.equalsIgnoreCase(entry.getKey())) {
         Element child = new Element(IPConstants.BAGIT_FIELD);
         child.setAttribute(IPConstants.BAGIT_NAME, XmlEscapers.xmlAttributeEscaper().escape(entry.getKey()));
-        child.addContent(XmlEscapers.xmlContentEscaper().escape(entry.getValue()));
+        child.addContent(entry.getValue());
         root.addContent(child);
       }
     }
