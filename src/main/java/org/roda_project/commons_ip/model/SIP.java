@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.roda_project.commons_ip.utils.IPEnums.IPType;
-import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 
 public abstract class SIP extends IP {
   private final List<SIPObserver> observers;
@@ -29,13 +28,11 @@ public abstract class SIP extends IP {
     observers = new ArrayList<>();
   }
 
-  public SIP(String sipId, IPContentType contentType, String creator) {
+  public SIP(String sipId, IPContentType contentType) {
     super();
     setId(sipId);
     setType(IPType.SIP);
     setContentType(contentType);
-    IPAgent creatorAgent = new IPAgent(creator, "CREATOR", null, CreatorType.OTHER, "SOFTWARE");
-    getAgents().add(creatorAgent);
     observers = new ArrayList<>();
   }
 

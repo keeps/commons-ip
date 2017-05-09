@@ -120,7 +120,8 @@ public class HungarianTest {
 
   private Path createFullHungarianSIP() throws IPException, InterruptedException {
     // instantiate Hungarian SIP object
-    SIP sip = new HungarianSIP(SIP_ID, IPContentType.getMIXED(), "RODA Commons IP");
+    SIP sip = new HungarianSIP(SIP_ID, IPContentType.getMIXED());
+    sip.addCreatorSoftwareAgent("RODA Commons IP");
 
     // set optional human-readable description
     sip.setDescription("A full Hungarian SIP");

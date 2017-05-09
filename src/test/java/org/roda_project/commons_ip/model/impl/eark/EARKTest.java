@@ -71,7 +71,8 @@ public class EARKTest {
   private Path createFullEARKSIP() throws IPException, InterruptedException {
 
     // 1) instantiate E-ARK SIP object
-    SIP sip = new EARKSIP("SIP_1", IPContentType.getMIXED(), "RODA Commons IP");
+    SIP sip = new EARKSIP("SIP_1", IPContentType.getMIXED());
+    sip.addCreatorSoftwareAgent("RODA Commons IP");
 
     // 1.1) set optional human-readable description
     sip.setDescription("A full E-ARK SIP");

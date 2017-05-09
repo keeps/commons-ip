@@ -82,11 +82,9 @@ public abstract class IP implements IPInterface {
     this.header = new IPHeader();
   }
 
-  public IP(List<String> ipIds, IPType ipType, IPContentType contentType, String creator) {
+  public IP(List<String> ipIds, IPType ipType, IPContentType contentType) {
     this(ipIds, ipType);
     this.contentType = contentType;
-    IPAgent creatorAgent = new IPAgent(creator, "CREATOR", null, CreatorType.OTHER, "SOFTWARE");
-    header.addAgent(creatorAgent);
   }
 
   @Override
@@ -384,6 +382,11 @@ public abstract class IP implements IPInterface {
     if (!representations.containsKey(representationID)) {
       throw new IPException("Representation doesn't exist");
     }
+  }
+
+  public void addCreatorSoftwareAgent(String softwarename) {
+    IPAgent creatorAgent = new IPAgent(softwarename, "CREATOR", null, CreatorType.OTHER, "SOFTWARE");
+    header.addAgent(creatorAgent);
   }
 
   @Override

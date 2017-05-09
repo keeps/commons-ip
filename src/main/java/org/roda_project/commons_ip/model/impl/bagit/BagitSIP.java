@@ -60,8 +60,8 @@ public class BagitSIP extends SIP {
   /**
    * @param sipId
    */
-  public BagitSIP(String sipId, IPContentType contentType, String creator) {
-    super(sipId, contentType, creator);
+  public BagitSIP(String sipId, IPContentType contentType) {
+    super(sipId, contentType);
   }
 
   /**

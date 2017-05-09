@@ -52,8 +52,8 @@ public class EARKSIP extends SIP {
    * @param sipId
    *          will be used as OBJID in METS (/mets[@OBJID])
    */
-  public EARKSIP(String sipId, IPContentType contentType, String creator) {
-    super(sipId, contentType, creator);
+  public EARKSIP(String sipId, IPContentType contentType) {
+    super(sipId, contentType);
   }
 
   /**
