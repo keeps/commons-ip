@@ -99,6 +99,7 @@ public final class METSUtils {
   public static Agent createMETSAgent(IPAgent ipAgent) {
     Agent agent = new Agent();
     agent.setName(ipAgent.getName());
+    agent.getNote().add(ipAgent.getNote());
     agent.setROLE(ipAgent.getRole());
     agent.setOTHERROLE(ipAgent.getOtherRole());
     agent.setTYPE(ipAgent.getType().toString());
