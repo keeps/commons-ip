@@ -112,14 +112,14 @@ public class HungarianSIP extends SIP {
   @Override
   public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
     throws IPException, InterruptedException {
+    IPConstants.ENCODE_AND_DECODE = false;
     Path buildDir = ModelUtils.createBuildDir(SIP_TEMP_DIR);
     Path zipPath = getZipPath(destinationDirectory, fileNameWithoutExtension);
     try {
       Map<String, ZipEntryInfo> zipEntries = getZipEntries();
-      String contentType = this.getContentType().asString();
 
       MetsWrapper mainMETSWrapper = HungarianMETSUtils.generateMETS(StringUtils.join(this.getIds(), " "),
-        this.getDescription(), this.getType() + ":" + contentType, this.getProfile(), null, this.getHeader());
+        this.getDescription(), this.getType(), this.getProfile(), null, this.getHeader());
 
       HungarianUtils.addMetadataToMETS(mainMETSWrapper, getDescriptiveMetadata());
       HungarianUtils.addRepresentationsToZipAndMETS(this, getRepresentations(), zipEntries, mainMETSWrapper);

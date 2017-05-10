@@ -213,19 +213,24 @@ public final class Utils {
   }
 
   public static String decode(String value) {
-    try {
-      value = URLDecoder.decode(value, "UTF-8");
-    } catch (NullPointerException | UnsupportedEncodingException e) {
-      // do nothing
+    if (IPConstants.ENCODE_AND_DECODE) {
+      try {
+        value = URLDecoder.decode(value, "UTF-8");
+      } catch (NullPointerException | UnsupportedEncodingException e) {
+        // do nothing
+      }
     }
+
     return value;
   }
 
   public static String encode(String value) {
-    try {
-      value = URLEncoder.encode(value, "UTF-8");
-    } catch (NullPointerException | UnsupportedEncodingException e) {
-      // do nothing
+    if (IPConstants.ENCODE_AND_DECODE) {
+      try {
+        value = URLEncoder.encode(value, "UTF-8");
+      } catch (NullPointerException | UnsupportedEncodingException e) {
+        // do nothing
+      }
     }
     return value;
   }

@@ -18,6 +18,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip.mets_v1_11.beans.StructMapType;
+import org.roda_project.commons_ip.model.IPConstants;
 import org.roda_project.commons_ip.model.IPContentType;
 import org.roda_project.commons_ip.model.MetsWrapper;
 import org.roda_project.commons_ip.model.ParseException;
@@ -116,6 +117,7 @@ public class EARKSIP extends SIP {
   @Override
   public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
     throws IPException, InterruptedException {
+    IPConstants.ENCODE_AND_DECODE = true;
     Path buildDir = ModelUtils.createBuildDir(SIP_TEMP_DIR);
     Path zipPath = getZipPath(destinationDirectory, fileNameWithoutExtension);
     try {
@@ -202,6 +204,7 @@ public class EARKSIP extends SIP {
 
   private static SIP parseEARKSIP(final Path source, final Path destinationDirectory) throws ParseException {
     try {
+      IPConstants.ENCODE_AND_DECODE = true;
       SIP sip = new EARKSIP();
 
       Path sipPath = ZIPUtils.extractIPIfInZipFormat(source, destinationDirectory);
