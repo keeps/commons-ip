@@ -117,7 +117,7 @@ public class EARKSIP extends SIP {
   @Override
   public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
     throws IPException, InterruptedException {
-    IPConstants.ENCODE_AND_DECODE = true;
+    IPConstants.METS_ENCODE_AND_DECODE_HREF = true;
     Path buildDir = ModelUtils.createBuildDir(SIP_TEMP_DIR);
     Path zipPath = getZipPath(destinationDirectory, fileNameWithoutExtension);
     try {
@@ -204,7 +204,7 @@ public class EARKSIP extends SIP {
 
   private static SIP parseEARKSIP(final Path source, final Path destinationDirectory) throws ParseException {
     try {
-      IPConstants.ENCODE_AND_DECODE = true;
+      IPConstants.METS_ENCODE_AND_DECODE_HREF = true;
       SIP sip = new EARKSIP();
 
       Path sipPath = ZIPUtils.extractIPIfInZipFormat(source, destinationDirectory);

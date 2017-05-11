@@ -384,9 +384,10 @@ public abstract class IP implements IPInterface {
     }
   }
 
-  public void addCreatorSoftwareAgent(String softwarename) {
+  public IPAgent addCreatorSoftwareAgent(String softwarename) {
     IPAgent creatorAgent = new IPAgent(softwarename, "CREATOR", null, CreatorType.OTHER, "SOFTWARE");
     header.addAgent(creatorAgent);
+    return creatorAgent;
   }
 
   @Override

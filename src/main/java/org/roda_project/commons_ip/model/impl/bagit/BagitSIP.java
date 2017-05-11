@@ -124,7 +124,7 @@ public class BagitSIP extends SIP {
   @Override
   public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
     throws IPException, InterruptedException {
-    IPConstants.ENCODE_AND_DECODE = true;
+    IPConstants.METS_ENCODE_AND_DECODE_HREF = true;
 
     Path namePath;
     if (StringUtils.isNotBlank(fileNameWithoutExtension)) {
@@ -204,7 +204,7 @@ public class BagitSIP extends SIP {
   }
 
   private static SIP parseBagit(final Path source, final Path destinationDirectory) throws ParseException {
-    IPConstants.ENCODE_AND_DECODE = true;
+    IPConstants.METS_ENCODE_AND_DECODE_HREF = true;
 
     SIP sip = new BagitSIP();
     BagFactory bagFactory = new BagFactory();

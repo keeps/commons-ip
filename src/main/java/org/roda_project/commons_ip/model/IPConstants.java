@@ -90,7 +90,7 @@ public final class IPConstants {
   public static final String HUNGARIAN_METADATA_FILE = HEADER_FOLDER + "/" + METADATA_FILE;
   public static final String HUNGARIAN_DOCUMENTATION_TAG = "documentation";
 
-  public static boolean ENCODE_AND_DECODE = true;
+  public static boolean METS_ENCODE_AND_DECODE_HREF = true;
 
   /** Private empty constructor */
   private IPConstants() {

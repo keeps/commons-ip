@@ -112,7 +112,7 @@ public class HungarianSIP extends SIP {
   @Override
   public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
     throws IPException, InterruptedException {
-    IPConstants.ENCODE_AND_DECODE = false;
+    IPConstants.METS_ENCODE_AND_DECODE_HREF = false;
     Path buildDir = ModelUtils.createBuildDir(SIP_TEMP_DIR);
     Path zipPath = getZipPath(destinationDirectory, fileNameWithoutExtension);
     try {

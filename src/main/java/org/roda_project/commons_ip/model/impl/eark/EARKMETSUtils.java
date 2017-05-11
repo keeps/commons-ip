@@ -216,7 +216,7 @@ public final class EARKMETSUtils {
       Mptr mptr = new Mptr();
       mptr.setLOCTYPE(LocType.URL.toString());
       mptr.setType(IPConstants.METS_TYPE_SIMPLE);
-      mptr.setHref(Utils.encode(representationMetsPath));
+      mptr.setHref(METSUtils.encodeHref(representationMetsPath));
       DivType representationDiv = createDivForStructMap(representationId);
       representationDiv.getMptr().add(mptr);
       mainMETSWrapper.getRepresentationsDiv().getDiv().add(representationDiv);
@@ -325,7 +325,7 @@ public final class EARKMETSUtils {
     mdRef.setID(id);
     mdRef.setType(IPConstants.METS_TYPE_SIMPLE);
     mdRef.setLOCTYPE(LocType.URL.toString());
-    mdRef.setHref(Utils.encode(metadataPath));
+    mdRef.setHref(METSUtils.encodeHref(metadataPath));
     return mdRef;
   }
 
@@ -421,7 +421,7 @@ public final class EARKMETSUtils {
     for (String anc : ancestors) {
       Mptr mptr = new Mptr();
       mptr.setType(IPConstants.METS_TYPE_SIMPLE);
-      mptr.setHref(Utils.encode(anc));
+      mptr.setHref(METSUtils.encodeHref(anc));
       mptr.setLOCTYPE(LocType.HANDLE.toString());
       ancestorsDiv.getMptr().add(mptr);
     }
@@ -442,7 +442,7 @@ public final class EARKMETSUtils {
           for (DivType div : mainDiv.getDiv()) {
             if (IPConstants.RODA_ANCESTORS_DIV_LABEL.equalsIgnoreCase(div.getLABEL()) && div.getMptr() != null) {
               for (Mptr m : div.getMptr()) {
-                String href = Utils.decode(m.getHref());
+                String href = METSUtils.decodeHref(m.getHref());
                 if (StringUtils.isNotBlank(href)) {
                   ancestors.add(href);
                 }

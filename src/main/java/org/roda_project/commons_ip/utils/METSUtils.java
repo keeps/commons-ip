@@ -10,6 +10,9 @@ package org.roda_project.commons_ip.utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
@@ -111,7 +114,7 @@ public final class METSUtils {
     FLocat fileLocation = new FLocat();
     fileLocation.setType(IPConstants.METS_TYPE_SIMPLE);
     fileLocation.setLOCTYPE(LocType.URL.toString());
-    fileLocation.setHref(Utils.encode(filePath));
+    fileLocation.setHref(encodeHref(filePath));
     return fileLocation;
   }
 
@@ -166,5 +169,48 @@ public final class METSUtils {
     } catch (IOException e) {
       throw new IPException("Error getting file size (" + file.toString() + ")", e);
     }
+  }
+
+  /**
+   * Decodes a value from a METS HREF attribute.
+   * 
+   * <p>
+   * 20170511 hsilva: a global variable called
+   * {@link IPConstants.METS_ENCODE_AND_DECODE_HREF} is used to enable/disable
+   * the effective decode (done this way to avoid lots of changes in the methods
+   * that use this method)
+   * </p>
+   */
+  public static String decodeHref(String value) {
+    if (IPConstants.METS_ENCODE_AND_DECODE_HREF) {
+      try {
+        value = URLDecoder.decode(value, "UTF-8");
+      } catch (NullPointerException | UnsupportedEncodingException e) {
+        // do nothing
+      }
+    }
+
+    return value;
+  }
+
+  /**
+   * Encodes a value to put in METS HREF attribute.
+   * 
+   * <p>
+   * 20170511 hsilva: a global variable called
+   * {@link IPConstants.METS_ENCODE_AND_DECODE_HREF} is used to enable/disable
+   * the effective encode (done this way to avoid lots of changes in the methods
+   * that use this method)
+   * </p>
+   */
+  public static String encodeHref(String value) {
+    if (IPConstants.METS_ENCODE_AND_DECODE_HREF) {
+      try {
+        value = URLEncoder.encode(value, "UTF-8");
+      } catch (NullPointerException | UnsupportedEncodingException e) {
+        // do nothing
+      }
+    }
+    return value;
   }
 }
