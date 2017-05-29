@@ -114,7 +114,7 @@ public final class METSUtils {
     FLocat fileLocation = new FLocat();
     fileLocation.setType(IPConstants.METS_TYPE_SIMPLE);
     fileLocation.setLOCTYPE(LocType.URL.toString());
-    fileLocation.setHref(encodeHref(filePath));
+    fileLocation.setHref(filePath);
     return fileLocation;
   }
 
@@ -195,7 +195,7 @@ public final class METSUtils {
 
   /**
    * Encodes a value to put in METS HREF attribute.
-   * 
+   *
    * <p>
    * 20170511 hsilva: a global variable called
    * {@link IPConstants.METS_ENCODE_AND_DECODE_HREF} is used to enable/disable
