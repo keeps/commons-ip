@@ -115,8 +115,25 @@ public class EARKTest {
 
     // 1.9.1) add a file to the representation
     IPFile representationFile = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
-    representationFile.setRenameTo("data.pdf");
+    representationFile.setRenameTo("data_.pdf");
     representation1.addFile(representationFile);
+
+    // SIDE TEST: encoding
+    IPFile representationFileEnc1 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
+    representationFileEnc1.setRenameTo("enc1_.pdf");
+    representation1.addFile(representationFileEnc1);
+    
+    IPFile representationFileEnc2 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
+    representationFileEnc2.setRenameTo("enc2_ÿ.pdf");
+    representation1.addFile(representationFileEnc2);
+    
+    IPFile representationFileEnc3 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
+    representationFileEnc3.setRenameTo("enc3_;?:@=&.pdf");
+    representation1.addFile(representationFileEnc3);
+    
+    IPFile representationFileEnc4 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
+    representationFileEnc4.setRenameTo("enc4_\"<>#%{}|\\^~[ ]`.pdf");
+    representation1.addFile(representationFileEnc4);
 
     // 1.9.2) add a file to the representation and put it inside a folder
     // called 'abc' which has a folder inside called 'def'
