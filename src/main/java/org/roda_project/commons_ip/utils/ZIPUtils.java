@@ -222,6 +222,9 @@ public final class ZIPUtils {
       while (zipEntry != null) {
         // for each entry to be extracted
         String entryName = zipEntry.getName();
+        if (Utils.systemIsWindows()) {
+          entryName = entryName.replaceAll("/", "\\\\");
+        }
         Path newFile = dest.resolve(entryName);
 
         if (zipEntry.isDirectory()) {

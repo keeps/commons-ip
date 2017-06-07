@@ -45,7 +45,13 @@ import org.slf4j.LoggerFactory;
 public final class Utils {
   private static final Logger LOGGER = LoggerFactory.getLogger(Utils.class);
 
+  private static final String SYSTEM_OS = System.getProperty("os.name").toLowerCase();
+
   private Utils() {
+  }
+
+  public static boolean systemIsWindows() {
+    return SYSTEM_OS.contains("win");
   }
 
   public static Optional<XMLGregorianCalendar> getCurrentTime() {

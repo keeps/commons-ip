@@ -30,6 +30,7 @@ import org.roda_project.commons_ip.model.MetadataType.MetadataTypeEnum;
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.model.RepresentationStatus;
 import org.roda_project.commons_ip.model.SIP;
+import org.roda_project.commons_ip.model.ValidationEntry.LEVEL;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.Utils;
@@ -119,20 +120,22 @@ public class EARKTest {
     representation1.addFile(representationFile);
 
     // SIDE TEST: encoding
+    if(!Utils.systemIsWindows()){
     IPFile representationFileEnc1 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
-    representationFileEnc1.setRenameTo("enc1_.pdf");
+    representationFileEnc1.setRenameTo("enc1_\u0001\u001F.pdf");
     representation1.addFile(representationFileEnc1);
-    
+    }
+
     IPFile representationFileEnc2 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
-    representationFileEnc2.setRenameTo("enc2_ÿ.pdf");
+    representationFileEnc2.setRenameTo("enc2_\u0080\u0081\u0090\u00FF.pdf");
     representation1.addFile(representationFileEnc2);
-    
+
     IPFile representationFileEnc3 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
-    representationFileEnc3.setRenameTo("enc3_;?:@=&.pdf");
+    representationFileEnc3.setRenameTo(Utils.systemIsWindows()?"enc3_;@=&.pdf":"enc3_;?:@=&.pdf");
     representation1.addFile(representationFileEnc3);
-    
+
     IPFile representationFileEnc4 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
-    representationFileEnc4.setRenameTo("enc4_\"<>#%{}|\\^~[ ]`.pdf");
+    representationFileEnc4.setRenameTo(Utils.systemIsWindows()?"enc4_#%{}\\^~[ ]`.pdf":"enc4_\"<>#%{}|\\^~[ ]`.pdf");
     representation1.addFile(representationFileEnc4);
 
     // 1.9.2) add a file to the representation and put it inside a folder
@@ -163,6 +166,8 @@ public class EARKTest {
     SIP earkSIP = EARKSIP.parse(zipSIP, tempFolder);
 
     // general assessment
+    earkSIP.getValidationReport().getValidationEntries().stream().filter(e -> e.getLevel() == LEVEL.ERROR)
+      .forEach(e -> LOGGER.error("Validation report entry: {}", e));
     Assert.assertTrue(earkSIP.getValidationReport().isValid());
 
     // assess # of representations

@@ -114,7 +114,7 @@ public final class METSUtils {
     FLocat fileLocation = new FLocat();
     fileLocation.setType(IPConstants.METS_TYPE_SIMPLE);
     fileLocation.setLOCTYPE(LocType.URL.toString());
-    fileLocation.setHref(filePath);
+    fileLocation.setHref(encodeHref(filePath));
     return fileLocation;
   }
 
@@ -189,7 +189,6 @@ public final class METSUtils {
         // do nothing
       }
     }
-
     return value;
   }
 
@@ -200,17 +199,41 @@ public final class METSUtils {
    * 20170511 hsilva: a global variable called
    * {@link IPConstants.METS_ENCODE_AND_DECODE_HREF} is used to enable/disable
    * the effective encode (done this way to avoid lots of changes in the methods
-   * that use this method)
+   * that use this method). This method is not multi-thread safe when using
+   * different SIP formats.
    * </p>
    */
   public static String encodeHref(String value) {
     if (IPConstants.METS_ENCODE_AND_DECODE_HREF) {
-      try {
-        value = URLEncoder.encode(value, "UTF-8");
-      } catch (NullPointerException | UnsupportedEncodingException e) {
-        // do nothing
-      }
+      value = escapeSpecialCharacters(value);
     }
     return value;
+  }
+
+  public static String escapeSpecialCharacters(String input) {
+    StringBuilder resultStr = new StringBuilder();
+    for (char ch : input.toCharArray()) {
+      if (isSafeChar(ch)) {
+        resultStr.append(ch);
+      } else {
+        resultStr.append(encodeUnsafeChar(ch));
+      }
+    }
+    return resultStr.toString();
+  }
+
+  private static boolean isSafeChar(char ch) {
+    return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')
+      || "/$-_.+!*'(),".indexOf(ch) >= 0;
+  }
+
+  private static String encodeUnsafeChar(char ch) {
+    String ret = String.valueOf(ch);
+    try {
+      ret = URLEncoder.encode(ret, "UTF-8");
+    } catch (NullPointerException | UnsupportedEncodingException e) {
+      // do nothing & return original value
+    }
+    return ret;
   }
 }
