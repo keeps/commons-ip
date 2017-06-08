@@ -105,8 +105,8 @@ public final class EARKMETSUtils {
     // file section
     FileSec fileSec = new FileSec();
     fileSec.setID(Utils.generateRandomAndPrefixedUUID());
-    FileGrp mainFileGroup = mainMets ? createFileGroup(IPConstants.E_ARK_FILES_ROOT)
-      : createFileGroup(IPConstants.E_ARK_FILES_REPRESENTATION + id);
+    FileGrp mainFileGroup = mainMets ? createFileGroup(IPConstants.COMMON_SPEC_FILES_ROOT)
+      : createFileGroup(IPConstants.COMMON_SPEC_FILES_REPRESENTATION + id);
 
     FileGrpType representationsFileGroup = createFileGroupType(IPConstants.REPRESENTATIONS);
     mainFileGroup.getFileGrp().add(representationsFileGroup);
@@ -131,7 +131,7 @@ public final class EARKMETSUtils {
     StructMapType structMap = new StructMapType();
     structMap.setID(Utils.generateRandomAndPrefixedUUID());
     structMap.setTYPE(IPConstants.METS_TYPE_PHYSICAL);
-    structMap.setLABEL(IPConstants.E_ARK_STRUCTURAL_MAP);
+    structMap.setLABEL(IPConstants.COMMON_SPEC_STRUCTURAL_MAP);
 
     DivType mainDiv = createDivForStructMap(id);
     metsWrapper.setMainDiv(mainDiv);
@@ -284,6 +284,8 @@ public final class EARKMETSUtils {
 
     // set mimetype, date creation, etc.
     METSUtils.setFileBasicInformation(metadata.getMetadata().getPath(), mdRef);
+    // also set date created in dmdSec elem
+    dmdSec.setCREATED(mdRef.getCREATED());
 
     // structural map info.
     Fptr fptr = new Fptr();

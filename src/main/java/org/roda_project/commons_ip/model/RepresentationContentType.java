@@ -15,7 +15,7 @@ public class RepresentationContentType implements Serializable {
   private static final long serialVersionUID = -5292855152678206771L;
 
   public enum RepresentationContentTypeEnum {
-    MOREQ, SIARD, SIARD2, SMURF, OTHER, MIXED;
+    MOREQ, SIARD, SIARD2, SMURF, SMURFERMS, SMURFSFSB, SIARDDK, GeoVectorGML, GeoRasterGeotiff, OTHER, MIXED;
   }
 
   private RepresentationContentTypeEnum type;

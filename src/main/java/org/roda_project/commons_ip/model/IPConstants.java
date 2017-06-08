@@ -60,7 +60,12 @@ public final class IPConstants {
   public static final String CHECKSUM_SHA_256_ALGORITHM = "SHA-256";
   public static final String CHECKSUM_ALGORITHM = CHECKSUM_SHA_256_ALGORITHM;
 
-  // E-ARK
+  // Common Specification (& E-ARK)
+  // 20170607 hsilva: E-ARK constants were left for backwards compatibility
+  // (when parsing)
+  public static final String COMMON_SPEC_STRUCTURAL_MAP = "Common Specification structural map";
+  public static final String COMMON_SPEC_FILES_ROOT = "Common Specification files root";
+  public static final String COMMON_SPEC_FILES_REPRESENTATION = "Common Specification files representation ";
   public static final String E_ARK_STRUCTURAL_MAP = "E-ARK structural map";
   public static final String E_ARK_FILES_ROOT = "E-ARK files root";
   public static final String E_ARK_FILES_REPRESENTATION = "E-ARK files representation ";
