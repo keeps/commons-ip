@@ -8,9 +8,11 @@
 package org.roda_project.commons_ip.model.impl.hungarian;
 
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.roda_project.commons_ip.mets_v1_11.beans.DivType;
 import org.roda_project.commons_ip.mets_v1_11.beans.FileType;
 import org.roda_project.commons_ip.model.IPConstants;
 import org.roda_project.commons_ip.model.IPDescriptiveMetadata;
@@ -22,6 +24,7 @@ import org.roda_project.commons_ip.model.SIP;
 import org.roda_project.commons_ip.model.impl.ModelUtils;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.METSUtils;
+import org.roda_project.commons_ip.utils.Utils;
 import org.roda_project.commons_ip.utils.ZIPUtils;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
 
@@ -81,6 +84,9 @@ public final class HungarianUtils {
       }
 
       int i = 0;
+      Map<String, DivType> divs = new HashMap<>();
+      divs.put("", mainMETSWrapper.getMainDiv());
+
       for (IPFile file : representation.getData()) {
         if (Thread.interrupted()) {
           throw new InterruptedException();
@@ -88,7 +94,26 @@ public final class HungarianUtils {
 
         String dataFilePath = IPConstants.DATA_FOLDER + representation.getRepresentationID() + "/"
           + ModelUtils.getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
-        FileType fileType = HungarianMETSUtils.addDataFileToMETS(mainMETSWrapper, dataFilePath, file.getPath());
+
+        StringBuilder actualFolder = new StringBuilder();
+        for (String folder : file.getRelativeFolders()) {
+          String parentFolder = actualFolder.toString();
+
+          actualFolder.append(folder);
+          if (actualFolder.length() > 0) {
+            actualFolder.append(IPConstants.ZIP_PATH_SEPARATOR);
+          }
+
+          if (!divs.containsKey(actualFolder.toString())) {
+            DivType newDiv = new DivType();
+            newDiv.setID(Utils.generateRandomAndPrefixedUUID(actualFolder.toString()));
+            divs.get(parentFolder).getDiv().add(newDiv);
+            divs.put(actualFolder.toString(), newDiv);
+          }
+        }
+
+        FileType fileType = HungarianMETSUtils.addDataFileToMETS(mainMETSWrapper, dataFilePath, file.getPath(),
+          divs.get(ModelUtils.getFoldersFromList(file.getRelativeFolders())));
 
         dataFilePath = IPConstants.CONTENT_FOLDER + IPConstants.ZIP_PATH_SEPARATOR + dataFilePath;
         ZIPUtils.addFileTypeFileToZip(zipEntries, file.getPath(), dataFilePath, fileType);

@@ -171,7 +171,7 @@ public final class HungarianMETSUtils {
     MdSecType dmdSec = metsWrapper.getMainDmdSec();
     MdWrap mdWrap = dmdSec.getMdWrap();
 
-    mdWrap.setID(metadata.getId());
+    mdWrap.setID(Utils.generateRandomAndPrefixedUUID(metadata.getId()));
     mdWrap.setMDTYPE(metadata.getMetadataType().getType().getType());
     mdWrap.setMDTYPEVERSION(metadata.getMetadataVersion());
 
@@ -220,7 +220,7 @@ public final class HungarianMETSUtils {
     }
   }
 
-  public static FileType addDataFileToMETS(MetsWrapper mainMETS, String dataFilePath, Path dataFile)
+  public static FileType addDataFileToMETS(MetsWrapper mainMETS, String dataFilePath, Path dataFile, DivType folderDiv)
     throws IPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedUUID());
@@ -236,7 +236,7 @@ public final class HungarianMETSUtils {
     // add to struct map
     Fptr fptr = new Fptr();
     fptr.setFILEID(file);
-    mainMETS.getMainDiv().getFptr().add(fptr);
+    folderDiv.getFptr().add(fptr);
     return file;
   }
 
