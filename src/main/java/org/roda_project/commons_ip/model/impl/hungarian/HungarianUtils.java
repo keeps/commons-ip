@@ -104,11 +104,13 @@ public final class HungarianUtils {
             actualFolder.append(IPConstants.ZIP_PATH_SEPARATOR);
           }
 
-          if (!divs.containsKey(actualFolder.toString())) {
+          String newFolder = actualFolder.toString();
+          if (!divs.containsKey(newFolder)) {
             DivType newDiv = new DivType();
-            newDiv.setID(Utils.generateRandomAndPrefixedUUID(actualFolder.toString()));
+            newDiv.setID(Utils.generateRandomAndPrefixedUUID(newFolder));
+            newDiv.setTYPE(IPConstants.METS_TYPE_RECORDGRP);
             divs.get(parentFolder).getDiv().add(newDiv);
-            divs.put(actualFolder.toString(), newDiv);
+            divs.put(newFolder, newDiv);
           }
         }
 
