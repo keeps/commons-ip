@@ -1,0 +1,8 @@
+title: E-ARK IP manipulation java library
+description: Library to generate SIP, AIP or DIP in E-ARK formats
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-cayman
+
+gems:
+  - jekyll-mentions
