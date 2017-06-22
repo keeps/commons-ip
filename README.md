@@ -1,6 +1,6 @@
 # E-ARK IP manipulation java library
 
-API to manipulate Information Packages of different formats: RODA, E-ARK, etc.
+API to manipulate Information Packages of different formats: E-ARK, BagIt, Hungarian type 4 SIP.
 
 ## Installation
 
@@ -41,6 +41,7 @@ API to manipulate Information Packages of different formats: RODA, E-ARK, etc.
 ### Write some code
 
 * Create a full E-ARK SIP
+
 ```java
 // 1) instantiate E-ARK SIP object
 SIP sip = new EARKSIP("SIP_1", IPContentType.getMIXED(), "RODA Commons IP");
@@ -109,6 +110,7 @@ representation2.addFile(representationFile3);
 Path zipSIP = sip.build(tempFolder);
 ```
 **Note:** SIP implements the Observer Pattern. This way, if one wants to be notified of SIP build progress, one just needs to implement SIPObserver interface and register itself in the SIP. Something like (just presenting some of the events):
+
 ```java
 public class WhoWantsToBuildSIPAndBeNotified implements SIPObserver{
 
@@ -134,6 +136,7 @@ public class WhoWantsToBuildSIPAndBeNotified implements SIPObserver{
 
 
 * Parse a full E-ARK SIP
+
 ```java
 // 1) invoke static method parse and that's it
 SIP earkSIP = EARKSIP.parse(zipSIP);
@@ -148,6 +151,10 @@ SIP earkSIP = EARKSIP.parse(zipSIP);
 5. Submit a pull request :D
 
 ## History
+
+#### 1.0.0 (2017-06-22)
+
+* Hungarian type 4 SIP fixes to the mdWrap/@id (https://github.com/keeps/roda-in/issues/302) and struct map to reflect folder structure (https://github.com/keeps/roda-in/issues/304)
 
 #### Alpha 30/31 (2017-06-08)
 
