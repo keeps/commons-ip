@@ -32,6 +32,11 @@ public final class IPConstants {
   public static final String METS_TYPE_RECORDGRP = "recordgrp";
   public static final String METS_LABEL_DOKU = "Doku";
   public static final String METS_LEVEL_OTHER = "otherlevel";
+  public static final String METS_EAD_TYPE = "EAD";
+  public static final String METS_EAD_VERSION = "2002";
+
+  public static final String FOLDER_TEMPLATE_ID_FIELD = "id";
+  public static final String FOLDER_TEMPLATE_FOLDER_FIELD = "folder";
 
   // IP structure related
   public static final String METADATA = "metadata";

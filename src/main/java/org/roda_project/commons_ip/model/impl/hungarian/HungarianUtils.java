@@ -7,13 +7,23 @@
  */
 package org.roda_project.commons_ip.model.impl.hungarian;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.roda_project.commons_ip.mets_v1_11.beans.DivType;
 import org.roda_project.commons_ip.mets_v1_11.beans.FileType;
+import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType;
+import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType.MdWrap;
+import org.roda_project.commons_ip.mets_v1_11.beans.MdSecType.MdWrap.XmlData;
 import org.roda_project.commons_ip.model.IPConstants;
 import org.roda_project.commons_ip.model.IPDescriptiveMetadata;
 import org.roda_project.commons_ip.model.IPFile;
@@ -27,8 +37,13 @@ import org.roda_project.commons_ip.utils.METSUtils;
 import org.roda_project.commons_ip.utils.Utils;
 import org.roda_project.commons_ip.utils.ZIPUtils;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 public final class HungarianUtils {
+  private static final Logger LOGGER = LoggerFactory.getLogger(HungarianUtils.class);
 
   private HungarianUtils() {
     // do nothing
@@ -54,7 +69,8 @@ public final class HungarianUtils {
   }
 
   protected static void addRepresentationsToZipAndMETS(IPInterface ip, List<IPRepresentation> representations,
-    Map<String, ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper) throws IPException, InterruptedException {
+    Map<String, ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper, String folderTemplate)
+    throws IPException, InterruptedException {
     // representations
     if (representations != null && !representations.isEmpty()) {
       if (ip instanceof SIP) {
@@ -67,7 +83,7 @@ public final class HungarianUtils {
         }
 
         // representation data
-        addRepresentationDataFilesToZipAndMETS(ip, zipEntries, mainMETSWrapper, representation);
+        addRepresentationDataFilesToZipAndMETS(ip, zipEntries, mainMETSWrapper, representation, folderTemplate);
       }
 
       if (ip instanceof SIP) {
@@ -77,7 +93,8 @@ public final class HungarianUtils {
   }
 
   protected static void addRepresentationDataFilesToZipAndMETS(IPInterface ip, Map<String, ZipEntryInfo> zipEntries,
-    MetsWrapper mainMETSWrapper, IPRepresentation representation) throws IPException, InterruptedException {
+    MetsWrapper mainMETSWrapper, IPRepresentation representation, String folderTemplate)
+    throws IPException, InterruptedException {
     if (representation.getData() != null && !representation.getData().isEmpty()) {
       if (ip instanceof SIP) {
         ((SIP) ip).notifySipBuildRepresentationProcessingStarted(representation.getData().size());
@@ -95,24 +112,7 @@ public final class HungarianUtils {
         String dataFilePath = IPConstants.DATA_FOLDER + representation.getRepresentationID() + "/"
           + ModelUtils.getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
 
-        StringBuilder actualFolder = new StringBuilder();
-        for (String folder : file.getRelativeFolders()) {
-          String parentFolder = actualFolder.toString();
-
-          actualFolder.append(folder);
-          if (actualFolder.length() > 0) {
-            actualFolder.append(IPConstants.ZIP_PATH_SEPARATOR);
-          }
-
-          String newFolder = actualFolder.toString();
-          if (!divs.containsKey(newFolder)) {
-            DivType newDiv = new DivType();
-            newDiv.setID(Utils.generateRandomAndPrefixedUUID(newFolder));
-            newDiv.setTYPE(IPConstants.METS_TYPE_RECORDGRP);
-            divs.get(parentFolder).getDiv().add(newDiv);
-            divs.put(newFolder, newDiv);
-          }
-        }
+        divs = addFolderStructure(divs, mainMETSWrapper, file, folderTemplate);
 
         FileType fileType = HungarianMETSUtils.addDataFileToMETS(mainMETSWrapper, dataFilePath, file.getPath(),
           divs.get(ModelUtils.getFoldersFromList(file.getRelativeFolders())));
@@ -130,6 +130,66 @@ public final class HungarianUtils {
         ((SIP) ip).notifySipBuildRepresentationProcessingEnded();
       }
     }
+  }
+
+  private static Map<String, DivType> addFolderStructure(Map<String, DivType> divs, MetsWrapper mainMETSWrapper,
+    IPFile file, String folderTemplate) {
+    StringBuilder actualFolder = new StringBuilder();
+    for (String folder : file.getRelativeFolders()) {
+      String parentFolder = actualFolder.toString();
+
+      actualFolder.append(folder);
+      if (actualFolder.length() > 0) {
+        actualFolder.append(IPConstants.ZIP_PATH_SEPARATOR);
+      }
+
+      String newFolder = actualFolder.toString();
+      if (!divs.containsKey(newFolder)) {
+        DivType newDiv = new DivType();
+        newDiv.setID(Utils.generateRandomAndPrefixedUUID(newFolder));
+        newDiv.setTYPE(IPConstants.METS_TYPE_RECORDGRP);
+
+        if (folderTemplate != null) {
+          String dmdUUID = Utils.generateRandomAndPrefixedUUID();
+
+          MdSecType folderDmdSec = new MdSecType();
+          folderDmdSec.setID(dmdUUID);
+          folderDmdSec.setGROUPID(IPConstants.METS_GROUP_ID);
+          folderDmdSec.setSTATUS(IPConstants.METS_STATUS_CURRENT);
+
+          MdWrap wrap = new MdWrap();
+          wrap.setID(Utils.generateRandomAndPrefixedUUID());
+          wrap.setMDTYPE(IPConstants.METS_EAD_TYPE);
+          wrap.setMDTYPEVERSION(IPConstants.METS_EAD_VERSION);
+
+          DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+          String content = folderTemplate;
+          content = content.replaceAll("\\{\\{" + IPConstants.FOLDER_TEMPLATE_ID_FIELD + "\\}\\}",
+            folderDmdSec.getID());
+          content = content.replaceAll("\\{\\{" + IPConstants.FOLDER_TEMPLATE_FOLDER_FIELD + "\\}\\}", folder);
+
+          try (InputStream stream = new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8))) {
+            Document xmlDataContent = factory.newDocumentBuilder().parse(stream);
+            XmlData metadataContent = new XmlData();
+            metadataContent.getAny().add(xmlDataContent.getDocumentElement());
+            wrap.setXmlData(metadataContent);
+          } catch (IOException | SAXException | ParserConfigurationException e) {
+            LOGGER.warn("Could not create folder template metadata section", e);
+          }
+
+          folderDmdSec.setMdWrap(wrap);
+          mainMETSWrapper.getMets().getDmdSec().add(folderDmdSec);
+
+          newDiv.getDMDID().add(folderDmdSec);
+        }
+
+        divs.get(parentFolder).getDiv().add(newDiv);
+        divs.put(newFolder, newDiv);
+      }
+    }
+
+    return divs;
   }
 
   protected static void addDocumentationToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,

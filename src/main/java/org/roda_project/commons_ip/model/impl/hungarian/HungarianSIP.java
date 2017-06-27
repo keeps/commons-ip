@@ -40,6 +40,8 @@ public class HungarianSIP extends SIP {
   private static final String SIP_FILE_EXTENSION = ".zip";
   private static final String TXT_FILE_EXTENSION = ".txt";
 
+  private String folderTemplate = null;
+
   public HungarianSIP() {
     super();
   }
@@ -50,6 +52,14 @@ public class HungarianSIP extends SIP {
    */
   public HungarianSIP(String sipId, IPContentType contentType) {
     super(sipId, contentType);
+  }
+
+  public String getFolderTemplate() {
+    return folderTemplate;
+  }
+
+  public void setFolderTemplate(String folderTemplate) {
+    this.folderTemplate = folderTemplate;
   }
 
   /**
@@ -122,7 +132,8 @@ public class HungarianSIP extends SIP {
         this.getDescription(), this.getType(), this.getProfile(), null, this.getHeader());
 
       HungarianUtils.addMetadataToMETS(mainMETSWrapper, getDescriptiveMetadata());
-      HungarianUtils.addRepresentationsToZipAndMETS(this, getRepresentations(), zipEntries, mainMETSWrapper);
+      HungarianUtils.addRepresentationsToZipAndMETS(this, getRepresentations(), zipEntries, mainMETSWrapper,
+        folderTemplate);
       HungarianUtils.addDocumentationToZipAndMETS(zipEntries, mainMETSWrapper, getDocumentation());
       HungarianUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, buildDir);
 
