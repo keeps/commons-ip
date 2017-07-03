@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -156,6 +157,12 @@ public final class HungarianUtils {
           folderDmdSec.setID(dmdUUID);
           folderDmdSec.setGROUPID(IPConstants.METS_GROUP_ID);
           folderDmdSec.setSTATUS(IPConstants.METS_STATUS_CURRENT);
+
+          try {
+            folderDmdSec.setCREATED(Utils.getCurrentCalendar());
+          } catch (DatatypeConfigurationException e) {
+            LOGGER.error("Error getting current calendar", e);
+          }
 
           MdWrap wrap = new MdWrap();
           wrap.setID(Utils.generateRandomAndPrefixedUUID());

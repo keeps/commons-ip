@@ -154,6 +154,12 @@ public final class HungarianMETSUtils {
     dmdDocSec.setGROUPID(IPConstants.METS_GROUP_ID);
     dmdDocSec.setSTATUS(IPConstants.METS_STATUS_CURRENT);
 
+    try {
+      dmdDocSec.setCREATED(Utils.getCurrentCalendar());
+    } catch (DatatypeConfigurationException e) {
+      throw new IPException("Error getting current calendar", e);
+    }
+
     MdWrap mdDocWrap = new MdWrap();
     mdDocWrap.setID(Utils.generateRandomAndPrefixedUUID());
     mdDocWrap.setMDTYPE(MetadataTypeEnum.OTHER.getType());
