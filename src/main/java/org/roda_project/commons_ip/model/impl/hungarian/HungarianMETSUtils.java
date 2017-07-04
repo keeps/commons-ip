@@ -177,7 +177,7 @@ public final class HungarianMETSUtils {
     MdSecType dmdSec = metsWrapper.getMainDmdSec();
     MdWrap mdWrap = dmdSec.getMdWrap();
 
-    mdWrap.setID(Utils.generateRandomAndPrefixedUUID(metadata.getId()));
+    mdWrap.setID(Utils.generateRandomAndPrefixedUUID());
     mdWrap.setMDTYPE(metadata.getMetadataType().getType().getType());
     mdWrap.setMDTYPEVERSION(metadata.getMetadataVersion());
 

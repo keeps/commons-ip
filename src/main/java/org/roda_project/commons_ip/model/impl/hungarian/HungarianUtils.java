@@ -147,7 +147,7 @@ public final class HungarianUtils {
       String newFolder = actualFolder.toString();
       if (!divs.containsKey(newFolder)) {
         DivType newDiv = new DivType();
-        newDiv.setID(Utils.generateRandomAndPrefixedUUID(newFolder));
+        newDiv.setID(Utils.generateRandomAndPrefixedUUID());
         newDiv.setTYPE(IPConstants.METS_TYPE_RECORDGRP);
 
         if (folderTemplate != null) {

@@ -75,10 +75,6 @@ public final class Utils {
     return METSEnums.ID_PREFIX + UUID.randomUUID().toString().toUpperCase();
   }
 
-  public static String generateRandomAndPrefixedUUID(String id) {
-    return METSEnums.ID_PREFIX + UUID.nameUUIDFromBytes(id.getBytes()).toString().toUpperCase();
-  }
-
   public static Path copyResourceFromClasspathToDir(Class<?> resourceClass, Path dir, String resourceTempSuffix,
     String resourcePath) throws IOException, InterruptedException {
     try {
