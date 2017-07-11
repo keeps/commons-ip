@@ -207,12 +207,13 @@ public final class HungarianUtils {
           throw new InterruptedException();
         }
 
+        String docPath = IPConstants.DOCUMENTATION_FOLDER + ModelUtils.getFoldersFromList(doc.getRelativeFolders())
+          + doc.getFileName();
+        FileType fileType = HungarianMETSUtils.addDocumentationFileToMETS(metsWrapper, docPath, doc.getPath());
+
         String documentationFilePath = IPConstants.CONTENT_FOLDER + IPConstants.ZIP_PATH_SEPARATOR
           + IPConstants.DOCUMENTATION_FOLDER + ModelUtils.getFoldersFromList(doc.getRelativeFolders())
           + doc.getFileName();
-        FileType fileType = HungarianMETSUtils.addDocumentationFileToMETS(metsWrapper, documentationFilePath,
-          doc.getPath());
-
         ZIPUtils.addFileTypeFileToZip(zipEntries, doc.getPath(), documentationFilePath, fileType);
       }
     }
