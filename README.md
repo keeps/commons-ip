@@ -31,11 +31,11 @@ API to manipulate Information Packages of different formats: E-ARK, BagIt, Hunga
   <dependency>
     <groupId>org.roda-project</groupId>
     <artifactId>commons-ip</artifactId>
-    <version>1.0.0-alpha31</version>
+    <version>1.0.3</version>
   </dependency>
   ```
 
-* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.0-alpha31/commons-ip-1.0.0-alpha31.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
+* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.3/commons-ip-1.0.3.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
 
 
 ### Write some code
@@ -44,7 +44,7 @@ API to manipulate Information Packages of different formats: E-ARK, BagIt, Hunga
 
 ```java
 // 1) instantiate E-ARK SIP object
-SIP sip = new EARKSIP("SIP_1", IPContentType.getMIXED(), "RODA Commons IP");
+SIP sip = new EARKSIP("SIP_1", IPContentType.getMIXED());
 
 // 1.1) set optional human-readable description
 sip.setDescription("A full E-ARK SIP");
@@ -91,7 +91,7 @@ representationFile.setRenameTo("data.pdf");
 representation1.addFile(representationFile);
 
 // 1.9.2) add a file to the representation and put it inside a folder
-// called 'abc' which has a folder inside called 'def'
+// called 'def' which is inside a folder called 'abc'
 IPFile representationFile2 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
 representationFile2.setRelativeFolders(Arrays.asList("abc", "def"));
 representation1.addFile(representationFile2);
@@ -116,7 +116,7 @@ public class WhoWantsToBuildSIPAndBeNotified implements SIPObserver{
 
   public void buildSIP(){
     ...
-    SIP sip = new EARKSIP("SIP_1", IPContentType.getMIXED(), "RODA Commons IP");
+    SIP sip = new EARKSIP("SIP_1", IPContentType.getMIXED());
     sip.addObserver(this);
     ...
   }
