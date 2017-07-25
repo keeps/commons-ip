@@ -75,7 +75,6 @@ public final class ZIPUtils {
           }
         }
       } catch (IOException e) {
-        LOGGER.error("Error unzipping file", e);
         throw new ParseException("Error unzipping file", e);
       }
     }
