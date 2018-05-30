@@ -1,6 +1,19 @@
 # E-ARK IP manipulation java library
 
-API to manipulate Information Packages of different formats: E-ARK, BagIt, Hungarian type 4 SIP.
+API to manipulate OAIS Information Packages of different formats: E-ARK, BagIt, Hungarian type 4 SIP. 
+
+The E-ARK Information Packages are maintained by the Digital Information LifeCycle Interoperability Standards Board (DILCIS Board).  DILCIS Board is an international group of experts committed to maintain and sustain maintain a set of interoperability specifications which allow for the transfer, long-term preservation, and reuse of digital information regardless of the origin or type of the information.
+
+More specifically, the DILCIS Board maintains specifications initially developed within the E-ARK Project (02.2014 - 01.2017): 
+
+- Common Specification for Information Packages
+- E-ARK Submission Information Package (SIP)
+- E-ARK Archival Information Package (AIP)
+- E-ARK Dissemination Information Package (DIP)
+
+The DILCIS Board collaborates closely with the Swiss Federal Archives in regard to the maintenance of the SIARD (Software Independent Archiving of Relational Databases) specification. 
+
+For more information about the E-ARK Information Packages specifications, please visit http://www.dilcis.eu/
 
 ## Installation
 
