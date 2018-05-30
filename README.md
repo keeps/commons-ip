@@ -262,7 +262,7 @@ SIP earkSIP = EARKSIP.parse(zipSIP);
 
 ## Credits
 
-TODO: Write credits
+- Hélder Silva (KEEP SOLUTIONS)
 
 ## License
 
