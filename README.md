@@ -1,17 +1,17 @@
 # E-ARK IP manipulation java library
 
-API to manipulate OAIS Information Packages of different formats: E-ARK, BagIt, Hungarian type 4 SIP. 
+API to manipulate OAIS Information Packages of different formats: E-ARK, BagIt, Hungarian type 4 SIP.
 
 The E-ARK Information Packages are maintained by the Digital Information LifeCycle Interoperability Standards Board (DILCIS Board).  DILCIS Board is an international group of experts committed to maintain and sustain maintain a set of interoperability specifications which allow for the transfer, long-term preservation, and reuse of digital information regardless of the origin or type of the information.
 
-More specifically, the DILCIS Board maintains specifications initially developed within the E-ARK Project (02.2014 - 01.2017): 
+More specifically, the DILCIS Board maintains specifications initially developed within the E-ARK Project (02.2014 - 01.2017):
 
 - Common Specification for Information Packages
 - E-ARK Submission Information Package (SIP)
 - E-ARK Archival Information Package (AIP)
 - E-ARK Dissemination Information Package (DIP)
 
-The DILCIS Board collaborates closely with the Swiss Federal Archives in regard to the maintenance of the SIARD (Software Independent Archiving of Relational Databases) specification. 
+The DILCIS Board collaborates closely with the Swiss Federal Archives in regard to the maintenance of the SIARD (Software Independent Archiving of Relational Databases) specification.
 
 For more information about the E-ARK Information Packages specifications, please visit http://www.dilcis.eu/
 
@@ -153,6 +153,45 @@ public class WhoWantsToBuildSIPAndBeNotified implements SIPObserver{
 ```java
 // 1) invoke static method parse and that's it
 SIP earkSIP = EARKSIP.parse(zipSIP);
+```
+
+## Development
+
+In this sections are some relevant notes about Commons IP development.
+
+### XML Beans
+
+XML Beans are used by Commons IP to manipulate METS files using Java code.
+
+#### Details
+
+Some changes were made to XML Schemas in order to be able to compile XML Schemas into Java classes using XJC as well as to be able to validate a XML file against its XML Schema without Internet connections.
+
+The changes are:
+* `src/main/resources/schemas/mets1_11.xsd` XLink Schema location made local (and respectively file available locally)
+* `src/main/resources/schemas/mets1_11.xjb` Bindings file created to deal with attribute name conflict between METS and XLink Schemas
+
+In order to be E-ARK Common Specification for IPs compliant, the following files were created:
+* `src/main/resources/schemas/E-ARK-CSIP.xsd` XML Schema that extends METS XML Schema (using **redefine** element). Here, **OAISPACKAGETYPE** was relaxed to optional (as opposite to his original nature **required**) for backward compatibility reasons
+* `src/main/resources/schemas/E-ARK-CSIP.xjb` Bindings file created to deal with attribute name conflict between METS and XLink Schemas
+
+After Java classes are created, some changes were made to produce METS XML files well defined in terms of namespaces. Namely:
+* `src/main/java/org/roda_project/commons_ip2/mets_v1_11/beans/package-info.java` Annotations for corretly generate namespaces were added. Following is the before & then the after:
+```
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.loc.gov/METS/", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+```
+and the after
+```
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.loc.gov/METS/", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED, xmlns = {
+  @javax.xml.bind.annotation.XmlNs(prefix = "", namespaceURI = "http://www.loc.gov/METS/"),
+  @javax.xml.bind.annotation.XmlNs(prefix = "xsi", namespaceURI = "http://www.w3.org/2001/XMLSchema-instance"),
+  @javax.xml.bind.annotation.XmlNs(prefix = "xlink", namespaceURI = "http://www.w3.org/1999/xlink")})
+```
+
+#### How to generate/update XML Beans
+
+```
+xjc -npa -d src/main/java/ -p org.roda_project.commons_ip2.mets_v1_11.beans src/main/resources/schemas/E-ARK-CSIP.xsd -b src/main/resources/schemas/E-ARK-CSIP.xjb
 ```
 
 ## Contributing
