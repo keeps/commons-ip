@@ -13,12 +13,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.roda_project.commons_ip.utils.IPEnums.IPType;
+import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip2.model.AIP;
 import org.roda_project.commons_ip2.model.IP;
 import org.roda_project.commons_ip2.model.IPContentType;
 import org.roda_project.commons_ip2.model.IPFile;
-import org.roda_project.commons_ip2.utils.IPException;
-import org.roda_project.commons_ip2.utils.IPEnums.IPType;
 
 /**
  * AIP basic implementation. This implementation just holds values in memory. It

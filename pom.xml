@@ -6,7 +6,7 @@
 	<groupId>org.roda-project</groupId>
 	<artifactId>commons-ip2</artifactId>
 	<packaging>jar</packaging>
-	<version>2.0.0-SNAPSHOT</version>
+	<version>2.0.0-alpha1</version>
 	<name>RODA Commons IP - Library to manipulate Information Packages of different formats: RODA, E-ARK, BagIt, Hungarian SIP 4, etc.</name>
 
 	<scm>
@@ -151,6 +151,30 @@
 							</includes>
 						</configuration>
 					</plugin>
+					<plugin>
+						<groupId>pl.project13.maven</groupId>
+						<artifactId>git-commit-id-plugin</artifactId>
+						<version>2.2.4</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>revision</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<!-- this is false by default, forces the plugin to generate the file -->
+							<generateGitPropertiesFile>true</generateGitPropertiesFile>
+
+							<!-- The path for the properties file to be generated. See Super Pom 
+								for default variable reference https://maven.apache.org/guides/introduction/introduction-to-the-pom.html -->
+							<generateGitPropertiesFilename>
+								${project.build.directory}/classes/version.json
+							</generateGitPropertiesFilename>
+							<format>json</format>
+						</configuration>
+					</plugin>
+
 				</plugins>
 			</build>
 		</profile>
@@ -205,6 +229,29 @@
 								</configuration>
 							</execution>
 						</executions>
+					</plugin>
+					<plugin>
+						<groupId>pl.project13.maven</groupId>
+						<artifactId>git-commit-id-plugin</artifactId>
+						<version>2.2.4</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>revision</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<!-- this is false by default, forces the plugin to generate the file -->
+							<generateGitPropertiesFile>true</generateGitPropertiesFile>
+
+							<!-- The path for the properties file to be generated. See Super Pom 
+								for default variable reference https://maven.apache.org/guides/introduction/introduction-to-the-pom.html -->
+							<generateGitPropertiesFilename>
+								${project.build.directory}/classes/version.json
+							</generateGitPropertiesFilename>
+							<format>json</format>
+						</configuration>
 					</plugin>
 				</plugins>
 			</build>

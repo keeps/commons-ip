@@ -8,32 +8,42 @@
 package org.roda_project.commons_ip2.utils;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 
-import org.roda_project.commons_ip2.mets_v1_11.beans.Mets;
+import org.roda_project.commons_ip.utils.FileZipEntryInfo;
+import org.roda_project.commons_ip.utils.IPException;
+import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
+import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
+import org.roda_project.commons_ip2.model.IPConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class METSZipEntryInfo extends FileZipEntryInfo {
+  private static final Logger LOGGER = LoggerFactory.getLogger(METSZipEntryInfo.class);
+
   private Mets mets;
   private boolean rootMETS;
   private Map<String, String> checksums;
   private long size;
+  private FileType fileType;
 
-  public METSZipEntryInfo(String name, Path filePath) {
-    super(name, filePath);
-    checksums = new HashMap<>();
-    size = 0;
-  }
-
-  public METSZipEntryInfo(String name, Path filePath, Mets mets, boolean rootMETS) {
+  public METSZipEntryInfo(String name, Path filePath, Mets mets, boolean rootMETS, FileType fileType) {
     super(name, filePath);
     this.mets = mets;
     this.rootMETS = rootMETS;
     checksums = new HashMap<>();
     size = 0;
+    this.fileType = fileType;
   }
 
   public Map<String, String> getChecksums() {
@@ -56,8 +66,27 @@ public class METSZipEntryInfo extends FileZipEntryInfo {
   public void prepareEntryforZipping() throws IPException {
     try {
       METSUtils.marshallMETS(mets, getFilePath(), rootMETS);
+      if (!rootMETS && fileType != null) {
+        METSUtils.setFileBasicInformation(LOGGER, getFilePath(), fileType);
+
+        String checksumType = IPConstants.CHECKSUM_ALGORITHM;
+        Set<String> checksumAlgorithms = new HashSet<>();
+        checksumAlgorithms.add(checksumType);
+        try (InputStream inputStream = Files.newInputStream(getFilePath())) {
+          Map<String, String> checksums = ZIPUtils.calculateChecksums(Optional.empty(), inputStream,
+            checksumAlgorithms);
+          String checksum = checksums.get(checksumType);
+          fileType.setCHECKSUM(checksum);
+          fileType.setCHECKSUMTYPE(checksumType);
+        } catch (NoSuchAlgorithmException e) {
+          // do nothing
+        }
+
+      }
     } catch (JAXBException | IOException e) {
       throw new IPException("Error marshalling METS", e);
+    } catch (InterruptedException e) {
+      // do nothing
     }
   }
 

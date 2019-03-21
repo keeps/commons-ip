@@ -17,17 +17,18 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.roda_project.commons_ip2.mets_v1_11.beans.StructMapType;
+import org.roda_project.commons_ip.model.ParseException;
+import org.roda_project.commons_ip.utils.IPException;
+import org.roda_project.commons_ip.utils.ZipEntryInfo;
+import org.roda_project.commons_ip2.mets_v1_12.beans.StructMapType;
 import org.roda_project.commons_ip2.model.IPConstants;
+import org.roda_project.commons_ip2.model.IPContentInformationType;
 import org.roda_project.commons_ip2.model.IPContentType;
 import org.roda_project.commons_ip2.model.MetsWrapper;
-import org.roda_project.commons_ip2.model.ParseException;
 import org.roda_project.commons_ip2.model.SIP;
 import org.roda_project.commons_ip2.model.impl.ModelUtils;
-import org.roda_project.commons_ip2.utils.IPException;
 import org.roda_project.commons_ip2.utils.METSUtils;
 import org.roda_project.commons_ip2.utils.ZIPUtils;
-import org.roda_project.commons_ip2.utils.ZipEntryInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +40,7 @@ public class EARKSIP extends SIP {
 
   public EARKSIP() {
     super();
+    setProfile(IPConstants.COMMON_SPEC_PROFILE);
   }
 
   /**
@@ -47,14 +49,16 @@ public class EARKSIP extends SIP {
    */
   public EARKSIP(String sipId) {
     super(sipId);
+    setProfile(IPConstants.COMMON_SPEC_PROFILE);
   }
 
   /**
    * @param sipId
    *          will be used as OBJID in METS (/mets[@OBJID])
    */
-  public EARKSIP(String sipId, IPContentType contentType) {
-    super(sipId, contentType);
+  public EARKSIP(String sipId, IPContentType contentType, IPContentInformationType contentInformationType) {
+    super(sipId, contentType, contentInformationType);
+    setProfile(IPConstants.COMMON_SPEC_PROFILE);
   }
 
   /**
@@ -123,14 +127,9 @@ public class EARKSIP extends SIP {
     try {
       Map<String, ZipEntryInfo> zipEntries = getZipEntries();
 
-      // 20160407 hsilva: as METS does not have an attribute 'otherType', the
-      // other type must be put in the 'type' attribute allowing this way other
-      // values besides the ones in the Enum
-      String contentType = this.getContentType().asString();
-
       MetsWrapper mainMETSWrapper = EARKMETSUtils.generateMETS(StringUtils.join(this.getIds(), " "),
         this.getDescription(), this.getProfile(), true, Optional.ofNullable(this.getAncestors()), null,
-        this.getHeader(), this.getType(), contentType);
+        this.getHeader(), this.getType(), this.getContentType(), null);
 
       EARKUtils.addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
       EARKUtils.addPreservationMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getPreservationMetadata(), null);

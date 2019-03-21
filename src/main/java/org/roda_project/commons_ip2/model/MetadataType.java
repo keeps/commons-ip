@@ -24,13 +24,9 @@ public class MetadataType implements Serializable {
 
     protected static final Map<String, MetadataTypeEnum> typeToEnum = new HashMap<>();
     static {
-      typeToEnum.put("LC-AV", MetadataTypeEnum.LCAV);
-      typeToEnum.put("PREMIS:OBJECT", MetadataTypeEnum.PREMISOBJECT);
-      typeToEnum.put("PREMIS:AGENT", MetadataTypeEnum.PREMISAGENT);
-      typeToEnum.put("PREMIS:RIGHTS", MetadataTypeEnum.PREMISRIGHTS);
-      typeToEnum.put("PREMIS:EVENT", MetadataTypeEnum.PREMISEVENT);
-      typeToEnum.put("ISO 19115:2003", MetadataTypeEnum.ISO191152003);
-      typeToEnum.put("EAC-CPF", MetadataTypeEnum.EACCPF);
+      for (MetadataTypeEnum metadataTypeEnum : MetadataTypeEnum.values()) {
+        typeToEnum.put(metadataTypeEnum.getType(), metadataTypeEnum);
+      }
     }
 
     private final String type;

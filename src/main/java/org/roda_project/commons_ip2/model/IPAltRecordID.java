@@ -10,6 +10,8 @@ package org.roda_project.commons_ip2.model;
 import java.io.Serializable;
 
 public class IPAltRecordID implements Serializable {
+  private static final long serialVersionUID = -7072144177392875004L;
+
   private String value;
   private String type;
 

@@ -11,12 +11,12 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.roda_project.commons_ip2.mets_v1_11.beans.DivType;
-import org.roda_project.commons_ip2.mets_v1_11.beans.FileType;
-import org.roda_project.commons_ip2.mets_v1_11.beans.StructMapType;
+import org.roda_project.commons_ip2.mets_v1_12.beans.DivType;
+import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
+import org.roda_project.commons_ip2.mets_v1_12.beans.StructMapType;
 import org.roda_project.commons_ip2.model.ValidationEntry;
-import org.roda_project.commons_ip2.model.ValidationReport;
 import org.roda_project.commons_ip2.model.ValidationEntry.LEVEL;
+import org.roda_project.commons_ip2.model.ValidationReport;
 
 public final class ValidationUtils {
   private static final String UNKNOWN_ID = "UNKNOWN_ID";
@@ -81,6 +81,10 @@ public final class ValidationUtils {
       getDescription(metsElementId, metsChecksum, metsChecksumAlgorithm, computedChecksum), ipPath, relatedFilePath);
   }
 
+  public static ValidationReport addIssue(ValidationReport report, String message, LEVEL level, String metsElementId) {
+    return addEntry(report, message, level, getDescription(metsElementId), null, null);
+  }
+
   public static ValidationReport addEntry(ValidationReport report, String message, LEVEL level, String description,
     Path ipPath, Path relatedFilePath) {
     ValidationEntry entry = new ValidationEntry();
@@ -111,6 +115,10 @@ public final class ValidationUtils {
       message = exception.toString();
     }
     return message;
+  }
+
+  private static String getDescription(String metsElementId) {
+    return String.format("METS element with id '%s'", metsElementId);
   }
 
   private static String getDescription(String metsElementId, String metsChecksum, String metsChecksumAlgorithm,

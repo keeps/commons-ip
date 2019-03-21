@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.roda_project.commons_ip.utils.ResourceInput;
 import org.roda_project.commons_ip2.model.IPConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,10 @@ public class ResourceResolver implements LSResourceResolver {
     internalResources.put(IPConstants.SCHEMA_XLINK_URL, IPConstants.SCHEMA_XLINK_FILENAME);
     internalResources.put(IPConstants.SCHEMA_METS_FILENAME_WITH_VERSION,
       IPConstants.SCHEMA_METS_RELATIVE_PATH_FROM_RESOURCES);
+    internalResources.put(IPConstants.SCHEMA_EARK_CSIP_FILENAME,
+      IPConstants.SCHEMA_EARK_CSIP_RELATIVE_PATH_FROM_RESOURCES);
+    internalResources.put(IPConstants.SCHEMA_EARK_SIP_FILENAME,
+      IPConstants.SCHEMA_EARK_SIP_RELATIVE_PATH_FROM_RESOURCES);
     internalResources.put(IPConstants.SCHEMA_XLINK_FILENAME, IPConstants.SCHEMA_XLINK_RELATIVE_PATH_FROM_RESOURCES);
   }
 

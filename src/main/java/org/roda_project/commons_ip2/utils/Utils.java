@@ -34,7 +34,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.roda_project.commons_ip2.mets_v1_11.beans.MdSecType.MdRef;
+import org.roda_project.commons_ip.utils.METSEnums;
+import org.roda_project.commons_ip.utils.ValidationConstants;
+import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType.MdRef;
 import org.roda_project.commons_ip2.model.IPConstants;
 import org.roda_project.commons_ip2.model.IPFile;
 import org.roda_project.commons_ip2.model.IPInterface;

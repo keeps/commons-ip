@@ -20,7 +20,7 @@ public final class IPConstants {
   public static final String METS_FILE = METS_FILE_NAME + METS_FILE_EXTENSION;
   public static final List<String> METS_FILE_PREFIXES_TO_ACCEPT = Arrays.asList("file://./", "file:");
   public static final String METS_TYPE_SIMPLE = "simple";
-  public static final String METS_TYPE_PHYSICAL = "physical";
+  public static final String METS_TYPE_PHYSICAL = "PHYSICAL";
   public static final String METS_PATH_SEPARATOR = "/";
   public static final String METS_REPRESENTATION_TYPE_PART_1 = "representation";
 
@@ -39,20 +39,26 @@ public final class IPConstants {
   public static final String FOLDER_TEMPLATE_FOLDER_FIELD = "folder";
 
   // IP structure related
+  public static final String METADATA_WITH_FIRST_LETTER_CAPITAL = "Metadata";
   public static final String METADATA = "metadata";
   public static final String METADATA_FOLDER = METADATA + METS_PATH_SEPARATOR;
   public static final String DESCRIPTIVE = "descriptive";
   public static final String DESCRIPTIVE_FOLDER = METADATA_FOLDER + DESCRIPTIVE + METS_PATH_SEPARATOR;
   public static final String PRESERVATION = "preservation";
   public static final String PRESERVATION_FOLDER = METADATA_FOLDER + PRESERVATION + METS_PATH_SEPARATOR;
+  public static final String OTHER_WITH_FIRST_LETTER_CAPITAL = "Other";
   public static final String OTHER = "other";
   public static final String OTHER_FOLDER = METADATA_FOLDER + OTHER + METS_PATH_SEPARATOR;
+  public static final String REPRESENTATIONS_WITH_FIRST_LETTER_CAPITAL = "Representations";
   public static final String REPRESENTATIONS = "representations";
   public static final String REPRESENTATIONS_FOLDER = REPRESENTATIONS + METS_PATH_SEPARATOR;
+  public static final String DATA_WITH_FIRST_LETTER_CAPITAL = "Data";
   public static final String DATA = "data";
   public static final String DATA_FOLDER = DATA + METS_PATH_SEPARATOR;
+  public static final String SCHEMAS_WITH_FIRST_LETTER_CAPITAL = "Schemas";
   public static final String SCHEMAS = "schemas";
   public static final String SCHEMAS_FOLDER = SCHEMAS + METS_PATH_SEPARATOR;
+  public static final String DOCUMENTATION_WITH_FIRST_LETTER_CAPITAL = "Documentation";
   public static final String DOCUMENTATION = "documentation";
   public static final String DOCUMENTATION_FOLDER = DOCUMENTATION + METS_PATH_SEPARATOR;
   public static final String SUBMISSION = "submission";
@@ -66,14 +72,8 @@ public final class IPConstants {
   public static final String CHECKSUM_ALGORITHM = CHECKSUM_SHA_256_ALGORITHM;
 
   // Common Specification (& E-ARK)
-  // 20170607 hsilva: E-ARK constants were left for backwards compatibility
-  // (when parsing)
-  public static final String COMMON_SPEC_STRUCTURAL_MAP = "Common Specification structural map";
-  public static final String COMMON_SPEC_FILES_ROOT = "Common Specification files root";
-  public static final String COMMON_SPEC_FILES_REPRESENTATION = "Common Specification files representation ";
-  public static final String E_ARK_STRUCTURAL_MAP = "E-ARK structural map";
-  public static final String E_ARK_FILES_ROOT = "E-ARK files root";
-  public static final String E_ARK_FILES_REPRESENTATION = "E-ARK files representation ";
+  public static final String COMMON_SPEC_STRUCTURAL_MAP = "CSIP";
+  public static final String COMMON_SPEC_PROFILE = "https://earkcsip.dilcis.eu/profile/E-ARK-CSIP.xml";
 
   // RODA
   public static final String RODA_STRUCTURAL_MAP = "RODA structural map";
@@ -100,19 +100,24 @@ public final class IPConstants {
   public static final String HUNGARIAN_METADATA_FILE = HEADER_FOLDER + "/" + METADATA_FILE;
   public static final String HUNGARIAN_DOCUMENTATION_TAG = "documentation";
 
+  // FIXME 20190625 hsilva: this "fix" might introduce strange behaviors in
+  // multi-threaded/multi-package type processing
   public static boolean METS_ENCODE_AND_DECODE_HREF = true;
 
   // XML SChemas
-  public static final String SCHEMA_METS_FILENAME_WITH_VERSION = "mets1_11.xsd";
+  public static final String SCHEMA_METS_FILENAME_WITH_VERSION = "mets1_12.xsd";
   public static final String SCHEMA_METS_RELATIVE_PATH_FROM_RESOURCES = METS_PATH_SEPARATOR + SCHEMAS + "2"
     + METS_PATH_SEPARATOR + SCHEMA_METS_FILENAME_WITH_VERSION;
   public static final String SCHEMA_XLINK_FILENAME = "xlink.xsd";
   public static final String SCHEMA_XLINK_RELATIVE_PATH_FROM_RESOURCES = METS_PATH_SEPARATOR + SCHEMAS + "2"
     + METS_PATH_SEPARATOR + SCHEMA_XLINK_FILENAME;
   public static final String SCHEMA_XLINK_URL = "http://www.loc.gov/standards/xlink/xlink.xsd";
-  public static final String SCHEMA_EARK_CSIP_FILENAME = "E-ARK-CSIP.xsd";
+  public static final String SCHEMA_EARK_CSIP_FILENAME = "DILCISExtensionMETS.xsd";
   public static final String SCHEMA_EARK_CSIP_RELATIVE_PATH_FROM_RESOURCES = METS_PATH_SEPARATOR + SCHEMAS + "2"
     + METS_PATH_SEPARATOR + SCHEMA_EARK_CSIP_FILENAME;
+  public static final String SCHEMA_EARK_SIP_FILENAME = "DILCISExtensionSIPMETS.xsd";
+  public static final String SCHEMA_EARK_SIP_RELATIVE_PATH_FROM_RESOURCES = METS_PATH_SEPARATOR + SCHEMAS + "2"
+    + METS_PATH_SEPARATOR + SCHEMA_EARK_SIP_FILENAME;
 
   /** Private empty constructor */
   private IPConstants() {

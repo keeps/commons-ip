@@ -19,12 +19,13 @@ import java.util.Set;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.roda_project.commons_ip2.utils.IPException;
+import org.roda_project.commons_ip.model.ParseException;
+import org.roda_project.commons_ip.utils.IPEnums.IPStatus;
+import org.roda_project.commons_ip.utils.IPEnums.IPType;
+import org.roda_project.commons_ip.utils.IPException;
+import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
+import org.roda_project.commons_ip.utils.ZipEntryInfo;
 import org.roda_project.commons_ip2.utils.Utils;
-import org.roda_project.commons_ip2.utils.ZipEntryInfo;
-import org.roda_project.commons_ip2.utils.IPEnums.IPStatus;
-import org.roda_project.commons_ip2.utils.IPEnums.IPType;
-import org.roda_project.commons_ip2.utils.METSEnums.CreatorType;
 
 public abstract class IP implements IPInterface {
 
@@ -33,7 +34,9 @@ public abstract class IP implements IPInterface {
   private IPType type;
   private IPHeader header;
 
+  // maps to mets/@type
   private IPContentType contentType;
+  private IPContentInformationType contentInformationType;
   private List<String> ancestors;
 
   private Path basePath;
@@ -53,11 +56,12 @@ public abstract class IP implements IPInterface {
 
   public IP() {
     this.setId(Utils.generateRandomAndPrefixedUUID());
-    this.profile = "http://www.eark-project.com/METS/IP.xml";
+    this.profile = "NOT_DEFINED";
     this.type = IPType.SIP;
     this.header = new IPHeader();
 
     this.contentType = IPContentType.getMIXED();
+    this.contentInformationType = IPContentInformationType.getMIXED();
     this.ancestors = new ArrayList<>();
 
     this.description = "";
@@ -162,6 +166,17 @@ public abstract class IP implements IPInterface {
   @Override
   public IPContentType getContentType() {
     return contentType;
+  }
+
+  @Override
+  public IP setContentInformationType(IPContentInformationType contentInformationType) {
+    this.contentInformationType = contentInformationType;
+    return this;
+  }
+
+  @Override
+  public IPContentInformationType getContentInformationType() {
+    return contentInformationType;
   }
 
   @Override
@@ -384,8 +399,9 @@ public abstract class IP implements IPInterface {
     }
   }
 
-  public IPAgent addCreatorSoftwareAgent(String softwarename) {
-    IPAgent creatorAgent = new IPAgent(softwarename, "CREATOR", null, CreatorType.OTHER, "SOFTWARE");
+  public IPAgent addCreatorSoftwareAgent(String softwareName, String softwareVersion) {
+    IPAgent creatorAgent = new IPAgent(softwareName, "CREATOR", null, CreatorType.OTHER, "SOFTWARE", softwareVersion,
+      IPAgentNoteTypeEnum.SOFTWARE_VERSION);
     header.addAgent(creatorAgent);
     return creatorAgent;
   }

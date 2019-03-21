@@ -9,7 +9,8 @@ package org.roda_project.commons_ip2.utils;
 
 import java.nio.file.Path;
 
-import org.roda_project.commons_ip2.mets_v1_11.beans.MdSecType.MdRef;
+import org.roda_project.commons_ip.utils.FileZipEntryInfo;
+import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType.MdRef;
 
 public class METSMdRefZipEntryInfo extends FileZipEntryInfo {
   private MdRef metsMdRef;

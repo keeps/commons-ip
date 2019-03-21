@@ -14,10 +14,11 @@ import java.util.Optional;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.roda_project.commons_ip2.utils.IPException;
-import org.roda_project.commons_ip2.utils.ZipEntryInfo;
-import org.roda_project.commons_ip2.utils.IPEnums.IPStatus;
-import org.roda_project.commons_ip2.utils.IPEnums.IPType;
+import org.roda_project.commons_ip.model.ParseException;
+import org.roda_project.commons_ip.utils.IPEnums.IPStatus;
+import org.roda_project.commons_ip.utils.IPEnums.IPType;
+import org.roda_project.commons_ip.utils.IPException;
+import org.roda_project.commons_ip.utils.ZipEntryInfo;
 
 public interface IPInterface {
 
@@ -40,6 +41,10 @@ public interface IPInterface {
   IP setContentType(IPContentType contentType);
 
   IPContentType getContentType();
+  
+  IP setContentInformationType(IPContentInformationType contentInformationType);
+
+  IPContentInformationType getContentInformationType();
 
   IP setStatus(IPStatus status);
 

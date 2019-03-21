@@ -21,7 +21,10 @@ public class IPRepresentation {
   private String objectID;
   private Optional<XMLGregorianCalendar> createDate;
   private Optional<XMLGregorianCalendar> modificationDate;
-  private RepresentationContentType contentType;
+
+  // maps to mets/@type
+  private IPContentType contentType;
+  private IPContentInformationType contentInformationType;
   private RepresentationStatus status;
   private String description;
   private List<IPAgent> agents;
@@ -36,7 +39,8 @@ public class IPRepresentation {
     this.representationID = Utils.generateRandomAndPrefixedUUID();
     this.objectID = representationID;
     this.createDate = Utils.getCurrentTime();
-    this.contentType = RepresentationContentType.getMIXED();
+    this.contentType = IPContentType.getMIXED();
+    this.contentInformationType = IPContentInformationType.getMIXED();
     this.status = RepresentationStatus.getORIGINAL();
     this.description = "";
     this.agents = new ArrayList<>();
@@ -67,13 +71,21 @@ public class IPRepresentation {
     return this;
   }
 
-  public RepresentationContentType getContentType() {
+  public IPContentType getContentType() {
     return contentType;
   }
 
-  public IPRepresentation setContentType(RepresentationContentType contentType) {
+  public IPRepresentation setContentType(IPContentType contentType) {
     this.contentType = contentType;
     return this;
+  }
+
+  public IPContentInformationType getContentInformationType() {
+    return contentInformationType;
+  }
+
+  public void setContentInformationType(IPContentInformationType contentInformationType) {
+    this.contentInformationType = contentInformationType;
   }
 
   public RepresentationStatus getStatus() {
@@ -183,10 +195,11 @@ public class IPRepresentation {
   @Override
   public String toString() {
     return "IPRepresentation [representationID=" + representationID + ", objectID=" + objectID + ", createDate="
-      + createDate + ", modificationDate=" + modificationDate + ", contentType=" + contentType + ", status=" + status
-      + ", description=" + description + ", agents=" + agents + ", descriptiveMetadata=" + descriptiveMetadata
-      + ", preservationMetadata=" + preservationMetadata + ", otherMetadata=" + otherMetadata + ", data=" + data
-      + ", schemas=" + schemas + ", documentation=" + documentation + "]";
+      + createDate + ", modificationDate=" + modificationDate + ", contentType=" + contentType
+      + ", contentInformationType=" + contentInformationType + ", status=" + status + ", description=" + description
+      + ", agents=" + agents + ", descriptiveMetadata=" + descriptiveMetadata + ", preservationMetadata="
+      + preservationMetadata + ", otherMetadata=" + otherMetadata + ", data=" + data + ", schemas=" + schemas
+      + ", documentation=" + documentation + "]";
   }
 
 }

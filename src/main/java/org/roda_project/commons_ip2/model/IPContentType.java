@@ -8,6 +8,8 @@
 package org.roda_project.commons_ip2.model;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,7 +17,54 @@ public class IPContentType implements Serializable {
   private static final long serialVersionUID = 1191075605637022551L;
 
   public enum IPContentTypeEnum {
-    SFSB, RDB, ERMS, GEODATA, MIXED, OTHER;
+    TEXTUAL_WORKS_PRINT("Textual works – Print"), TEXTUAL_WORKS_DIGITAL("Textual works – Digital"),
+    TEXTUAL_WORKS_ELECTRONIC_SERIALS("Textual works – Electronic Serials"),
+    DIGITAL_MUSICAL_COMPOSITION("Digital Musical Composition (score-based representations)"),
+    PHOTOGRAPHS_PRINT("Photographs – Print"), PHOTOGRAPHS_DIGITAL("Photographs – Digital"),
+    OTHER_GRAPHIC_IMAGES_PRINT("Other Graphic Images – Print"),
+    OTHER_GRAPHIC_IMAGES_DIGITAL("Other Graphic Images – Digital"), MICROFORMS("Microforms"),
+    AUDIO_ON_TANGIBLE_MEDIUM("Audio – On Tangible Medium (digital or analog)"),
+    AUDIO_MEDIA_INDEPENDENT("Audio – Media-independent (digital)"),
+    MOTION_PICTURES("Motion Pictures – Digital and Physical Media"), VIDEO("Video – File-based and Physical Media"),
+    SOFTWARE("Software"), DATASETS("Datasets"), GEOSPATIAL_DATA("Geospatial Data"), DATABASES("Databases"),
+    WEBSITES("Websites"), COLLECTION("Collection"), EVENT("Event"), INTERACTIVE_RESOURCE("Interactive resource"),
+    PHYSICAL_OBJECT("Physical object"), SERVICE("Service"), MIXED("Mixed"), OTHER("Other");
+
+    protected static final Map<String, IPContentTypeEnum> typeToEnum = new HashMap<>();
+    static {
+      for (IPContentTypeEnum ipContentTypeEnum : IPContentTypeEnum.values()) {
+        typeToEnum.put(ipContentTypeEnum.getType(), ipContentTypeEnum);
+      }
+    }
+
+    private String type;
+
+    private IPContentTypeEnum(String type) {
+      this.type = type;
+    }
+
+    public String getType() {
+      return type;
+    }
+
+    public String asString() {
+      IPContentTypeEnum ipContentTypeEnum = typeToEnum.get(type);
+      return ipContentTypeEnum != null ? ipContentTypeEnum.getType() : this.toString();
+    }
+
+    public static IPContentTypeEnum parse(final String type) {
+      IPContentTypeEnum ipContentTypeEnum = OTHER;
+      try {
+        ipContentTypeEnum = IPContentTypeEnum.valueOf(type);
+      } catch (IllegalArgumentException | NullPointerException e) {
+        IPContentTypeEnum ipContentTypeEnumFromMap = typeToEnum.get(type);
+        if (ipContentTypeEnumFromMap != null) {
+          ipContentTypeEnum = ipContentTypeEnumFromMap;
+        }
+      }
+      return ipContentTypeEnum;
+    }
+
   }
 
   private IPContentTypeEnum type;
@@ -52,6 +101,10 @@ public class IPContentType implements Serializable {
   public IPContentType setOtherType(final String otherType) {
     this.otherType = otherType;
     return this;
+  }
+
+  public boolean isOtherAndOtherTypeIsDefined() {
+    return type == IPContentTypeEnum.OTHER && otherType != null && !"".equals(otherType);
   }
 
   @Override

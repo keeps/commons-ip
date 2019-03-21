@@ -12,6 +12,7 @@ import java.util.Optional;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.roda_project.commons_ip2.model.MetadataType.MetadataTypeEnum;
 import org.roda_project.commons_ip2.utils.Utils;
 
 public class IPMetadata implements Serializable {
@@ -20,7 +21,8 @@ public class IPMetadata implements Serializable {
   private String id;
   private Optional<XMLGregorianCalendar> createDate;
   private IPFile metadata;
-  private MetadataType metadataType;
+  private MetadataType metadataType = MetadataType.OTHER();
+  private MetadataStatus metadataStatus = MetadataStatus.CURRENT;
 
   public IPMetadata() {
     // empty constructor for serialization purposes
@@ -83,10 +85,24 @@ public class IPMetadata implements Serializable {
     return this;
   }
 
+  public IPMetadata setMetadataType(MetadataTypeEnum metadataTypeEnum) {
+    this.metadataType = new MetadataType(metadataTypeEnum);
+    return this;
+  }
+
+  public MetadataStatus getMetadataStatus() {
+    return metadataStatus;
+  }
+
+  public IPMetadata setMetadataStatus(MetadataStatus metadataStatus) {
+    this.metadataStatus = metadataStatus;
+    return this;
+  }
+
   @Override
   public String toString() {
     return "IPMetadata [id=" + id + ", createDate=" + createDate + ", metadata=" + metadata + ", metadataType="
-      + metadataType + "]";
+      + metadataType + ", metadataStatus=" + metadataStatus + "]";
   }
 
 }

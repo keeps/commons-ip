@@ -12,8 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip2.model.IPConstants;
-import org.roda_project.commons_ip2.utils.IPException;
 import org.roda_project.commons_ip2.utils.Utils;
 import org.slf4j.Logger;
 

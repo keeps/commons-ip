@@ -9,7 +9,8 @@ package org.roda_project.commons_ip2.utils;
 
 import java.nio.file.Path;
 
-import org.roda_project.commons_ip2.mets_v1_11.beans.FileType;
+import org.roda_project.commons_ip.utils.FileZipEntryInfo;
+import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
 
 public class METSFileTypeZipEntryInfo extends FileZipEntryInfo {
   private FileType metsFileType;

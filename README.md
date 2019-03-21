@@ -1,6 +1,6 @@
 # E-ARK IP manipulation java library
 
-API to manipulate OAIS Information Packages of different formats: E-ARK, BagIt, Hungarian type 4 SIP.
+API to manipulate OAIS Information Packages of different formats: E-ARK (version 1 & 2 in alpha stage), BagIt, Hungarian type 4 SIP.
 
 The E-ARK Information Packages are maintained by the Digital Information LifeCycle Interoperability Standards Board (DILCIS Board).  DILCIS Board is an international group of experts committed to maintain and sustain maintain a set of interoperability specifications which allow for the transfer, long-term preservation, and reuse of digital information regardless of the origin or type of the information.
 
@@ -43,8 +43,8 @@ For more information about the E-ARK Information Packages specifications, please
   ```xml
   <dependency>
     <groupId>org.roda-project</groupId>
-    <artifactId>commons-ip</artifactId>
-    <version>1.0.3</version>
+    <artifactId>commons-ip2</artifactId>
+    <version>2.0.0-alpha1</version>
   </dependency>
   ```
 
@@ -168,15 +168,11 @@ XML Beans are used by Commons IP to manipulate METS files using Java code.
 Some changes were made to XML Schemas in order to be able to compile XML Schemas into Java classes using XJC as well as to be able to validate a XML file against its XML Schema without Internet connections.
 
 The changes are:
-* `src/main/resources/schemas/mets1_11.xsd` XLink Schema location made local (and respectively file available locally)
-* `src/main/resources/schemas/mets1_11.xjb` Bindings file created to deal with attribute name conflict between METS and XLink Schemas
-
-In order to be E-ARK Common Specification for IPs compliant, the following files were created:
-* `src/main/resources/schemas/E-ARK-CSIP.xsd` XML Schema that extends METS XML Schema (using **redefine** element). Here, **OAISPACKAGETYPE** was relaxed to optional (as opposite to his original nature **required**) for backward compatibility reasons
-* `src/main/resources/schemas/E-ARK-CSIP.xjb` Bindings file created to deal with attribute name conflict between METS and XLink Schemas
+* `src/main/resources/schemas2/mets1_12.xsd` XLink Schema location made local (and respectively file available locally)
+* `src/main/resources/schemas2/mets1_12.xjb` Bindings file created to deal with attribute name conflict between METS and XLink Schemas
 
 After Java classes are created, some changes were made to produce METS XML files well defined in terms of namespaces. Namely:
-* `src/main/java/org/roda_project/commons_ip2/mets_v1_11/beans/package-info.java` Annotations for corretly generate namespaces were added. Following is the before & then the after:
+* `src/main/java/org/roda_project/commons_ip2/mets_v1_12/beans/package-info.java` Annotations for corretly generate namespaces were added. Following is the before & then the after:
 ```
 @javax.xml.bind.annotation.XmlSchema(namespace = "http://www.loc.gov/METS/", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 ```
@@ -185,14 +181,33 @@ and the after
 @javax.xml.bind.annotation.XmlSchema(namespace = "http://www.loc.gov/METS/", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED, xmlns = {
   @javax.xml.bind.annotation.XmlNs(prefix = "", namespaceURI = "http://www.loc.gov/METS/"),
   @javax.xml.bind.annotation.XmlNs(prefix = "xsi", namespaceURI = "http://www.w3.org/2001/XMLSchema-instance"),
+  @javax.xml.bind.annotation.XmlNs(prefix = "csip", namespaceURI = "https://dilcis.eu/XML/METS/CSIPExtensionMETS"),
+  @javax.xml.bind.annotation.XmlNs(prefix = "sip", namespaceURI = "https://dilcis.eu/XML/METS/SIPExtensionMETS"),
   @javax.xml.bind.annotation.XmlNs(prefix = "xlink", namespaceURI = "http://www.w3.org/1999/xlink")})
 ```
 
 #### How to generate/update XML Beans
 
 ```
-xjc -npa -d src/main/java/ -p org.roda_project.commons_ip2.mets_v1_11.beans src/main/resources/schemas/E-ARK-CSIP.xsd -b src/main/resources/schemas/E-ARK-CSIP.xjb
+xjc [-npa] -d src/main/java/ -p "org.roda_project.commons_ip2.mets_v1_12.beans" src/main/resources/schemas2/mets1_12.xsd -b src/main/resources/schemas2/mets1_12.xjb
 ```
+
+## Commercial support
+
+For more information or commercial support, contact [KEEP SOLUTIONS](http://www.keep.pt).
+
+## Further reading
+
+* [Bagit specification](https://tools.ietf.org/html/draft-kunze-bagit-13)
+* [E-ARK SIP specification (all versions)](https://dilcis.eu/specifications/sip)
+* [E-ARK SIP specification (latest version)](https://earksip.dilcis.eu)
+* [E-ARK Common specification (all versions)](https://dilcis.eu/specifications/common-specification)
+* [E-ARK Common specification (latest version)](https://earkcsip.dilcis.eu)
+* [RODA-in source code](https://github.com/keeps/roda-in)
+* [RODA source code](https://github.com/keeps/roda)
+* [RODA Community Web site](https://www.roda-community.org)
+* [E-ARK Project Web site](https://www.eark-project.com)
+* [CEF eArchiving Building Block](https://ec.europa.eu/cefdigital/wiki/display/CEFDIGITAL/eArchiving)
 
 ## Contributing
 

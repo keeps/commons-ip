@@ -10,6 +10,8 @@ package org.roda_project.commons_ip2.model;
 import java.nio.file.Path;
 import java.util.List;
 
+import org.roda_project.commons_ip.model.ParseException;
+
 /**
  * AIP interface.
  * 

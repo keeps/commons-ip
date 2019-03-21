@@ -14,7 +14,7 @@ import java.util.Optional;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.roda_project.commons_ip2.utils.IPEnums;
+import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip2.utils.Utils;
 
 public class IPHeader implements Serializable {

@@ -28,15 +28,18 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
-import org.roda_project.commons_ip2.mets_v1_11.beans.FileType;
-import org.roda_project.commons_ip2.mets_v1_11.beans.Mets;
-import org.roda_project.commons_ip2.mets_v1_11.beans.FileType.FLocat;
-import org.roda_project.commons_ip2.mets_v1_11.beans.MdSecType.MdRef;
-import org.roda_project.commons_ip2.mets_v1_11.beans.OriginalMetsType.MetsHdr.Agent;
+import org.roda_project.commons_ip.utils.IPException;
+import org.roda_project.commons_ip.utils.METSEnums.LocType;
+import org.roda_project.commons_ip.utils.ZipEntryInfo;
+import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
+import org.roda_project.commons_ip2.mets_v1_12.beans.FileType.FLocat;
+import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType.MdRef;
+import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
+import org.roda_project.commons_ip2.mets_v1_12.beans.MetsType.MetsHdr.Agent;
+import org.roda_project.commons_ip2.mets_v1_12.beans.MetsType.MetsHdr.Agent.Note;
 import org.roda_project.commons_ip2.model.IPAgent;
 import org.roda_project.commons_ip2.model.IPConstants;
 import org.roda_project.commons_ip2.model.MetsWrapper;
-import org.roda_project.commons_ip2.utils.METSEnums.LocType;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
@@ -52,7 +55,7 @@ public final class METSUtils {
     SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
     factory.setResourceResolver(new ResourceResolver());
     InputStream metsSchemaInputStream = METSUtils.class
-      .getResourceAsStream(IPConstants.SCHEMA_EARK_CSIP_RELATIVE_PATH_FROM_RESOURCES);
+      .getResourceAsStream(IPConstants.SCHEMA_METS_RELATIVE_PATH_FROM_RESOURCES);
     Source metsSchemaSource = new StreamSource(metsSchemaInputStream);
     Schema schema = factory.newSchema(metsSchemaSource);
     jaxbUnmarshaller.setSchema(schema);
@@ -67,12 +70,16 @@ public final class METSUtils {
 
     if (rootMETS) {
       m.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,
-        "http://www.loc.gov/METS/ schemas/" + IPConstants.SCHEMA_EARK_CSIP_FILENAME
-          + " http://www.w3.org/1999/xlink schemas/" + IPConstants.SCHEMA_XLINK_FILENAME);
+        "http://www.loc.gov/METS/ schemas/" + IPConstants.SCHEMA_METS_FILENAME_WITH_VERSION
+          + " http://www.w3.org/1999/xlink schemas/" + IPConstants.SCHEMA_XLINK_FILENAME
+          + " https://dilcis.eu/XML/METS/CSIPExtensionMETS schemas/" + IPConstants.SCHEMA_EARK_CSIP_FILENAME
+          + " https://dilcis.eu/XML/METS/SIPExtensionMETS schemas/" + IPConstants.SCHEMA_EARK_SIP_FILENAME);
     } else {
       m.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,
-        "http://www.loc.gov/METS/ ../../schemas/" + IPConstants.SCHEMA_EARK_CSIP_FILENAME
-          + " http://www.w3.org/1999/xlink ../../schemas/" + IPConstants.SCHEMA_XLINK_FILENAME);
+        "http://www.loc.gov/METS/ ../../schemas/" + IPConstants.SCHEMA_METS_FILENAME_WITH_VERSION
+          + " http://www.w3.org/1999/xlink ../../schemas/" + IPConstants.SCHEMA_XLINK_FILENAME
+          + " https://dilcis.eu/XML/METS/CSIPExtensionMETS ../../schemas/" + IPConstants.SCHEMA_EARK_CSIP_FILENAME
+          + " https://dilcis.eu/XML/METS/SIPExtensionMETS ../../schemas/" + IPConstants.SCHEMA_EARK_SIP_FILENAME);
     }
 
     try (OutputStream metsOutputStream = Files.newOutputStream(tempMETSFile)) {
@@ -85,7 +92,7 @@ public final class METSUtils {
   public static void addMainMETSToZip(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper, String metsPath,
     Path buildDir) throws IPException {
     try {
-      addMETSToZip(zipEntries, metsWrapper, metsPath, buildDir, true);
+      addMETSToZip(zipEntries, metsWrapper, metsPath, buildDir, true, null);
     } catch (JAXBException | IOException e) {
       throw new IPException(e.getMessage(), e);
     }
@@ -97,15 +104,19 @@ public final class METSUtils {
   }
 
   public static void addMETSToZip(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper, String metsPath,
-    Path buildDir, boolean mainMets) throws JAXBException, IOException, IPException {
+    Path buildDir, boolean mainMets, FileType fileType) throws JAXBException, IOException, IPException {
     Path temp = Files.createTempFile(buildDir, IPConstants.METS_FILE_NAME, IPConstants.METS_FILE_EXTENSION);
-    ZIPUtils.addMETSFileToZip(zipEntries, temp, metsPath, metsWrapper.getMets(), mainMets);
+    ZIPUtils.addMETSFileToZip(zipEntries, temp, metsPath, metsWrapper.getMets(), mainMets, fileType);
   }
 
   public static Agent createMETSAgent(IPAgent ipAgent) {
     Agent agent = new Agent();
     agent.setName(ipAgent.getName());
-    agent.getNote().add(ipAgent.getNote());
+    Note note = new Note();
+    note.setValue(ipAgent.getNote());
+    note.setNOTETYPE(ipAgent.getNoteType().asString());
+    agent.getNote().add(note);
+
     agent.setROLE(ipAgent.getRole());
     agent.setOTHERROLE(ipAgent.getOtherRole());
     agent.setTYPE(ipAgent.getType().toString());
@@ -124,7 +135,7 @@ public final class METSUtils {
   public static MdRef setFileBasicInformation(Path file, MdRef mdRef) throws IPException, InterruptedException {
     // mimetype info.
     try {
-      mdRef.setMIMETYPE(Files.probeContentType(file));
+      mdRef.setMIMETYPE(getFileMimetype(file));
     } catch (IOException e) {
       throw new IPException("Error probing file content (" + file + ")", e);
     }
@@ -151,7 +162,7 @@ public final class METSUtils {
     // mimetype info.
     try {
       logger.debug("Setting mimetype {}", file);
-      fileType.setMIMETYPE(Files.probeContentType(file));
+      fileType.setMIMETYPE(getFileMimetype(file));
       logger.debug("Done setting mimetype");
     } catch (IOException e) {
       throw new IPException("Error probing content-type (" + file.toString() + ")", e);
@@ -172,6 +183,14 @@ public final class METSUtils {
     } catch (IOException e) {
       throw new IPException("Error getting file size (" + file.toString() + ")", e);
     }
+  }
+
+  private static String getFileMimetype(Path file) throws IOException {
+    String probedContentType = Files.probeContentType(file);
+    if (probedContentType == null) {
+      probedContentType = "application/octet-stream";
+    }
+    return probedContentType;
   }
 
   /**

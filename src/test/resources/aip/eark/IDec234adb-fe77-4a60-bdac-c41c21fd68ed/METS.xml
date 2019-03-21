@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<mets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" OAISPACKAGETYPE="AIP" CONTENTTYPESPECIFICATION="OTHER" OBJID="IDec234adb-fe77-4a60-bdac-c41c21fd68ed" LABEL="" TYPE="AIP:RDB" PROFILE="http://www.eark-project.com/METS/IP.xml" xsi:schemaLocation="http://www.loc.gov/METS/ schemas/E-ARK-CSIP.xsd http://www.w3.org/1999/xlink schemas/xlink.xsd">
+<mets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" OBJID="IDec234adb-fe77-4a60-bdac-c41c21fd68ed" LABEL="" TYPE="AIP:RDB" PROFILE="http://www.eark-project.com/METS/IP.xml" xsi:schemaLocation="http://www.loc.gov/METS/ schemas/IP.xsd http://www.w3.org/1999/xlink schemas/xlink.xsd">
     <metsHdr CREATEDATE="2016-10-21T10:55:48.570+01:00" LASTMODDATE="2016-10-21T10:55:48.570+01:00" RECORDSTATUS="NEW">
         <agent ROLE="CREATOR" TYPE="OTHER" OTHERTYPE="SOFTWARE">
             <name>RODA-in 2.0.0-alpha.8</name>

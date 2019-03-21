@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<mets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" OAISPACKAGETYPE="AIP" CONTENTTYPESPECIFICATION="MIXED" OBJID="rep2" LABEL="" TYPE="representation:MIXED" PROFILE="" xsi:schemaLocation="http://www.loc.gov/METS/ ../../schemas/E-ARK-CSIP.xsd http://www.w3.org/1999/xlink ../../schemas/xlink.xsd">
+<mets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" OBJID="rep2" LABEL="" TYPE="representation:MIXED" PROFILE="" xsi:schemaLocation="http://www.loc.gov/METS/ ../../schemas/IP.xsd http://www.w3.org/1999/xlink ../../schemas/xlink.xsd">
     <metsHdr CREATEDATE="2016-10-21T10:55:48.581+01:00" LASTMODDATE="2016-10-21T10:55:48.581+01:00" RECORDSTATUS="NEW"/>
     <amdSec ID="ID5950744A-78EE-4467-8BD3-DDE46A7ECA44"/>
     <fileSec ID="IDA1CDCCCA-9037-4852-91C0-22F4E790474F">

@@ -8,6 +8,24 @@
 	</appender>
 
 	<!-- 
+	<logger name="org.roda_project.commons_ip.model.impl.eark.EARKTest"
+		additivity="false">
+		<level value="DEBUG" />
+		<appender-ref ref="STDOUT" />
+	</logger>
+	
+	<logger name="org.roda_project.commons_ip.model.impl.eark.EARKMETSUtils"
+		additivity="false">
+		<level value="DEBUG" />
+		<appender-ref ref="STDOUT" />
+	</logger>
+
+	<logger name="org.roda_project.commons_ip.utils.ZIPUtils"
+		additivity="false">
+		<level value="DEBUG" />
+		<appender-ref ref="STDOUT" />
+	</logger>
+	
 	<logger name="org.roda_project.commons_ip2.model.impl.eark.EARKTest"
 		additivity="false">
 		<level value="DEBUG" />

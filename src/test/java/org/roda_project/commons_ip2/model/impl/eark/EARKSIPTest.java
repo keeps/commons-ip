@@ -19,22 +19,23 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.roda_project.commons_ip.model.ParseException;
+import org.roda_project.commons_ip.utils.IPException;
+import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip2.model.IPAgent;
+import org.roda_project.commons_ip2.model.IPAgentNoteTypeEnum;
+import org.roda_project.commons_ip2.model.IPContentInformationType;
 import org.roda_project.commons_ip2.model.IPContentType;
 import org.roda_project.commons_ip2.model.IPDescriptiveMetadata;
 import org.roda_project.commons_ip2.model.IPFile;
 import org.roda_project.commons_ip2.model.IPMetadata;
 import org.roda_project.commons_ip2.model.IPRepresentation;
 import org.roda_project.commons_ip2.model.MetadataType;
-import org.roda_project.commons_ip2.model.ParseException;
+import org.roda_project.commons_ip2.model.MetadataType.MetadataTypeEnum;
 import org.roda_project.commons_ip2.model.RepresentationStatus;
 import org.roda_project.commons_ip2.model.SIP;
-import org.roda_project.commons_ip2.model.MetadataType.MetadataTypeEnum;
 import org.roda_project.commons_ip2.model.ValidationEntry.LEVEL;
-import org.roda_project.commons_ip2.model.impl.eark.EARKSIP;
-import org.roda_project.commons_ip2.utils.IPException;
 import org.roda_project.commons_ip2.utils.Utils;
-import org.roda_project.commons_ip2.utils.METSEnums.CreatorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,8 +74,8 @@ public class EARKSIPTest {
   private Path createFullEARKSIP() throws IPException, InterruptedException {
 
     // 1) instantiate E-ARK SIP object
-    SIP sip = new EARKSIP("SIP_1", IPContentType.getMIXED());
-    sip.addCreatorSoftwareAgent("RODA Commons IP");
+    SIP sip = new EARKSIP("SIP_1", IPContentType.getMIXED(), IPContentInformationType.getMIXED());
+    sip.addCreatorSoftwareAgent("RODA Commons IP", "2.0.0");
 
     // 1.1) set optional human-readable description
     sip.setDescription("A full E-ARK SIP");
@@ -87,7 +88,8 @@ public class EARKSIPTest {
 
     // 1.3) add preservation metadata (SIP level)
     IPMetadata metadataPreservation = new IPMetadata(
-      new IPFile(Paths.get("src/test/resources/eark/metadata_preservation_premis.xml")));
+      new IPFile(Paths.get("src/test/resources/eark/metadata_preservation_premis.xml")))
+        .setMetadataType(MetadataTypeEnum.PREMIS);
     sip.addPreservationMetadata(metadataPreservation);
 
     // 1.4) add other metadata (SIP level)
@@ -95,6 +97,11 @@ public class EARKSIPTest {
     // 1.4.1) optionally one may rename file final name
     metadataOtherFile.setRenameTo("metadata_other_renamed.txt");
     IPMetadata metadataOther = new IPMetadata(metadataOtherFile);
+    sip.addOtherMetadata(metadataOther);
+    metadataOtherFile = new IPFile(Paths.get("src/test/resources/eark/metadata_other.txt"));
+    // 1.4.1) optionally one may rename file final name
+    metadataOtherFile.setRenameTo("metadata_other_renamed2.txt");
+    metadataOther = new IPMetadata(metadataOtherFile);
     sip.addOtherMetadata(metadataOther);
 
     // 1.5) add xml schema (SIP level)
@@ -107,7 +114,8 @@ public class EARKSIPTest {
     sip.setAncestors(Arrays.asList("b6f24059-8973-4582-932d-eb0b2cb48f28"));
 
     // 1.8) add an agent (SIP level)
-    IPAgent agent = new IPAgent("Agent Name", "OTHER", "OTHER ROLE", CreatorType.INDIVIDUAL, "OTHER TYPE");
+    IPAgent agent = new IPAgent("Agent Name", "OTHER", "OTHER ROLE", CreatorType.INDIVIDUAL, "OTHER TYPE", "",
+      IPAgentNoteTypeEnum.SOFTWARE_VERSION);
     sip.addAgent(agent);
 
     // 1.9) add a representation (status will be set to the default value, i.e.,
@@ -121,10 +129,10 @@ public class EARKSIPTest {
     representation1.addFile(representationFile);
 
     // SIDE TEST: encoding
-    if(!Utils.systemIsWindows()){
-    IPFile representationFileEnc1 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
-    representationFileEnc1.setRenameTo("enc1_\u0001\u001F.pdf");
-    representation1.addFile(representationFileEnc1);
+    if (!Utils.systemIsWindows()) {
+      IPFile representationFileEnc1 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
+      representationFileEnc1.setRenameTo("enc1_\u0001\u001F.pdf");
+      representation1.addFile(representationFileEnc1);
     }
 
     IPFile representationFileEnc2 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
@@ -132,11 +140,12 @@ public class EARKSIPTest {
     representation1.addFile(representationFileEnc2);
 
     IPFile representationFileEnc3 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
-    representationFileEnc3.setRenameTo(Utils.systemIsWindows()?"enc3_;@=&.pdf":"enc3_;?:@=&.pdf");
+    representationFileEnc3.setRenameTo(Utils.systemIsWindows() ? "enc3_;@=&.pdf" : "enc3_;?:@=&.pdf");
     representation1.addFile(representationFileEnc3);
 
     IPFile representationFileEnc4 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
-    representationFileEnc4.setRenameTo(Utils.systemIsWindows()?"enc4_#%{}\\^~[ ]`.pdf":"enc4_\"<>#%{}|\\^~[ ]`.pdf");
+    representationFileEnc4
+      .setRenameTo(Utils.systemIsWindows() ? "enc4_#%{}\\^~[ ]`.pdf" : "enc4_\"<>#%{}|\\^~[ ]`.pdf");
     representation1.addFile(representationFileEnc4);
 
     // 1.9.2) add a file to the representation and put it inside a folder

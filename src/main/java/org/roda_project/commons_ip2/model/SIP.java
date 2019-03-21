@@ -11,7 +11,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.roda_project.commons_ip2.utils.IPEnums.IPType;
+import org.roda_project.commons_ip.model.ParseException;
+import org.roda_project.commons_ip.utils.IPEnums.IPType;
 
 public abstract class SIP extends IP {
   private final List<SIPObserver> observers;
@@ -28,11 +29,12 @@ public abstract class SIP extends IP {
     observers = new ArrayList<>();
   }
 
-  public SIP(String sipId, IPContentType contentType) {
+  public SIP(String sipId, IPContentType contentType, IPContentInformationType contentInformationType) {
     super();
     setId(sipId);
     setType(IPType.SIP);
     setContentType(contentType);
+    setContentInformationType(contentInformationType);
     observers = new ArrayList<>();
   }
 

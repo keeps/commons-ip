@@ -1,5 +1,10 @@
 # Changelog 
 
+## 2.0.0-alpha1 (2019-10-31)
+
+* E-ARK SIP 2 support (E-ARK Common Specification 2.0.1 compliant)
+* Fixed file detection not setting mimetype attribute in METS (when detection failed; see https://github.com/keeps/commons-ip/issues/30)
+
 ## 1.0.3 (2017-07-12)
 
 * Hungarian SIP related fixes
