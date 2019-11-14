@@ -35,7 +35,7 @@ For more information about the E-ARK Information Packages specifications, please
   <repository>
     <id>KEEPS-Artifacts</id>
     <name>KEEP Artifacts-releases</name>
-    <url>http://artifactory.keep.pt/keep</url>
+    <url>https://artifactory.keep.pt/artifactory/keep</url>
   </repository>
   ```
 1. Add the following dependency
@@ -48,16 +48,16 @@ For more information about the E-ARK Information Packages specifications, please
   </dependency>
   ```
 
-* Not using maven, download [Commons IP latest jar](http://artifactory.keep.pt/keep/org/roda-project/commons-ip/1.0.3/commons-ip-1.0.3.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
+* Not using maven, download [Commons IP latest jar](https://artifactory.keep.pt/artifactory/keep/org/roda-project/commons-ip2/2.0.0-alpha1/commons-ip2-2.0.0-alpha1.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
 
 
 ### Write some code
 
 * Create a full E-ARK SIP
 
-```java
-// 1) instantiate E-ARK SIP object
-SIP sip = new EARKSIP("SIP_1", IPContentType.getMIXED());
+```java// 1) instantiate E-ARK SIP object
+SIP sip = new EARKSIP("SIP_1", IPContentType.getMIXED(), IPContentInformationType.getMIXED());
+sip.addCreatorSoftwareAgent("RODA Commons IP", "2.0.0");
 
 // 1.1) set optional human-readable description
 sip.setDescription("A full E-ARK SIP");
@@ -90,7 +90,8 @@ sip.addDocumentation(new IPFile(Paths.get("src/test/resources/eark/documentation
 sip.setAncestors(Arrays.asList("b6f24059-8973-4582-932d-eb0b2cb48f28"));
 
 // 1.8) add an agent (SIP level)
-IPAgent agent = new IPAgent("Agent Name", "OTHER", "OTHER ROLE", CreatorType.INDIVIDUAL, "OTHER TYPE");
+IPAgent agent = new IPAgent("Agent Name", "OTHER", "OTHER ROLE", CreatorType.INDIVIDUAL, "OTHER TYPE", "",
+   IPAgentNoteTypeEnum.SOFTWARE_VERSION);
 sip.addAgent(agent);
 
 // 1.9) add a representation (status will be set to the default value, i.e.,
