@@ -52,8 +52,6 @@ public final class ZIPUtils {
    * @param source
    *          IP
    * @param destinationDirectory
-   *          this path is only used if unzipping the SIP, otherwise source will
-   *          be used
    * @param ipFileExtension
    *          file extension (e.g. .zip)
    */

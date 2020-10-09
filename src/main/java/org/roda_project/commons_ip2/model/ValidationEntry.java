@@ -15,10 +15,24 @@ public class ValidationEntry {
     ERROR, WARN, INFO
   }
 
+  public enum TYPE {
+    STRUCTURAL, SCHEMA, SCHEMATRON
+  }
+
+  private TYPE type = TYPE.STRUCTURAL;
   private LEVEL level;
   private String message;
   private String description;
   private List<Path> relatedItem;
+
+  public TYPE getType() {
+    return type;
+  }
+
+  public ValidationEntry setType(TYPE type) {
+    this.type = type;
+    return this;
+  }
 
   public LEVEL getLevel() {
     return level;

@@ -49,6 +49,7 @@ import org.roda_project.commons_ip2.model.MetsWrapper;
 import org.roda_project.commons_ip2.model.RepresentationStatus;
 import org.roda_project.commons_ip2.model.SIP;
 import org.roda_project.commons_ip2.model.ValidationEntry;
+import org.roda_project.commons_ip2.model.ValidationEntry.LEVEL;
 import org.roda_project.commons_ip2.model.impl.ModelUtils;
 import org.roda_project.commons_ip2.utils.METSUtils;
 import org.roda_project.commons_ip2.utils.Utils;
@@ -302,11 +303,12 @@ public final class EARKUtils {
     }
   }
 
-  protected static MetsWrapper processMainMets(IPInterface ip, Path ipPath) {
+  protected static MetsWrapper processMainMets(IPInterface ip, Path ipPath, boolean strict) {
     Path mainMETSFile = ipPath.resolve(IPConstants.METS_FILE);
     Mets mainMets = null;
     if (Files.exists(mainMETSFile)) {
       ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.MAIN_METS_FILE_FOUND, ipPath, mainMETSFile);
+      ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIPSTR4, ipPath, mainMETSFile);
       try {
         mainMets = METSUtils.instantiateMETSFromFile(mainMETSFile);
         ip.setIds(Arrays.asList(mainMets.getOBJID().split(" ")));
@@ -317,6 +319,14 @@ public final class EARKUtils {
         addAgentsToMETS(mainMets, ip, null);
 
         ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.MAIN_METS_IS_VALID, ipPath, mainMETSFile);
+
+        if (ipPath.getFileName().toString().equals(mainMets.getOBJID())) {
+          ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIPSTR2, ip.getBasePath(),
+            mainMETSFile);
+        } else {
+          ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIPSTR2,
+            strict ? ValidationEntry.LEVEL.ERROR : ValidationEntry.LEVEL.WARN, ip.getBasePath(), mainMETSFile);
+        }
       } catch (JAXBException | ParseException | SAXException e) {
         mainMets = null;
         ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.MAIN_METS_NOT_VALID,
@@ -325,6 +335,8 @@ public final class EARKUtils {
     } else {
       ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.MAIN_METS_FILE_NOT_FOUND,
         ValidationEntry.LEVEL.ERROR, ip.getBasePath(), mainMETSFile);
+      ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIPSTR4, ValidationEntry.LEVEL.ERROR,
+        ip.getBasePath(), mainMETSFile);
     }
     return new MetsWrapper(mainMets, mainMETSFile);
   }
@@ -764,6 +776,27 @@ public final class EARKUtils {
   protected static IPInterface processSubmissionMetadata(final MetsWrapper metsWrapper, final IPInterface ip,
     final Path basePath) throws IPException {
     return processFile(ip, metsWrapper.getSubmissionsDiv(), IPConstants.SUBMISSION, basePath);
+  }
+
+  public static void processMetadata(SIP sip) {
+    if (Files.isDirectory(sip.getBasePath().resolve(IPConstants.METADATA))) {
+      ValidationUtils.addInfo(sip.getValidationReport(), ValidationConstants.CSIPSTR5, sip.getBasePath(),
+        sip.getBasePath().resolve(IPConstants.METADATA));
+    } else {
+      ValidationUtils.addIssue(sip.getValidationReport(), ValidationConstants.CSIPSTR5, LEVEL.WARN, sip.getBasePath(),
+        sip.getBasePath().resolve(IPConstants.METADATA));
+    }
+  }
+
+  public static void processSourcePath(SIP sip, Path source, Path destinationDirectory) throws ParseException {
+    if (Files.isDirectory(source)) {
+      ValidationUtils.addInfo(sip.getValidationReport(), ValidationConstants.CSIPSTR1, source, null);
+      sip.setBasePath(source);
+    } else {
+      Path sipPath = ZIPUtils.extractIPIfInZipFormat(source, destinationDirectory);
+      ValidationUtils.addInfo(sip.getValidationReport(), ValidationConstants.CSIPSTR3, source, null);
+      sip.setBasePath(sipPath);
+    }
   }
 
 }

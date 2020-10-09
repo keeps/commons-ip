@@ -61,13 +61,29 @@ public class EARKSIPTest {
 
   @Test
   public void buildAndParseEARKSIP() throws IPException, ParseException, InterruptedException {
-    LOGGER.info("Creating full E-ARK SIP");
-    Path zipSIP = createFullEARKSIP();
-    LOGGER.info("Done creating full E-ARK SIP");
+    // EARKSIP.enableStrictMode();
 
-    LOGGER.info("Parsing (and validating) full E-ARK SIP");
-    parseAndValidateFullEARKSIP(zipSIP);
-    LOGGER.info("Done parsing (and validating) full E-ARK SIP");
+    // LOGGER.info("Creating full E-ARK SIP");
+    // Path zipSIP = createFullEARKSIP();
+    // LOGGER.info("Done creating full E-ARK SIP");
+    //
+    // LOGGER.info("Parsing (and validating) full E-ARK SIP");
+    // parseAndValidateFullEARKSIP(zipSIP);
+    // LOGGER.info("Done parsing (and validating) full E-ARK SIP");
+
+    // Path zipSIP =
+    // Paths.get("/home/hsilva/Desktop/test_zip/uuid-c01f99b2-6f96-4080-8cfd-aeead1b0d113/");
+    // Path zipSIP =
+    // Paths.get("/home/hsilva/Desktop/test_zip/uuid-c01f99b2-6f96-4080-8cfd-aeead1b0d113.zip");
+    Path zipSIP = Paths.get(
+      "/home/hsilva/Desktop/test_zip/uuid-c01f99b2-6f96-4080-8cfd-aeead1b0d113/XXX-uuid-c01f99b2-6f96-4080-8cfd-aeead1b0d113.zip");
+    SIP earkSIP = EARKSIP.parse(zipSIP);
+
+    // general assessment
+    earkSIP.getValidationReport().getValidationEntries().stream()
+      .filter(e -> e.getLevel() == LEVEL.ERROR || e.getLevel() == LEVEL.WARN)
+      .forEach(e -> LOGGER.error("Validation report entry: {}", e));
+    Assert.assertTrue(earkSIP.getValidationReport().isValid());
 
   }
 
@@ -178,7 +194,7 @@ public class EARKSIPTest {
   private void parseAndValidateFullEARKSIP(Path zipSIP) throws ParseException {
 
     // 1) invoke static method parse and that's it
-    SIP earkSIP = EARKSIP.parse(zipSIP, tempFolder);
+    SIP earkSIP = EARKSIP.parse(zipSIP);
 
     // general assessment
     earkSIP.getValidationReport().getValidationEntries().stream().filter(e -> e.getLevel() == LEVEL.ERROR)

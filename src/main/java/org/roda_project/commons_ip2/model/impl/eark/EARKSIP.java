@@ -19,6 +19,7 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.utils.IPException;
+import org.roda_project.commons_ip.utils.ValidationConstants;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
 import org.roda_project.commons_ip2.mets_v1_12.beans.StructMapType;
 import org.roda_project.commons_ip2.model.IPConstants;
@@ -28,6 +29,7 @@ import org.roda_project.commons_ip2.model.MetsWrapper;
 import org.roda_project.commons_ip2.model.SIP;
 import org.roda_project.commons_ip2.model.impl.ModelUtils;
 import org.roda_project.commons_ip2.utils.METSUtils;
+import org.roda_project.commons_ip2.utils.ValidationUtils;
 import org.roda_project.commons_ip2.utils.ZIPUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +39,8 @@ public class EARKSIP extends SIP {
 
   private static final String SIP_TEMP_DIR = "EARKSIP";
   private static final String SIP_FILE_EXTENSION = ".zip";
+
+  private static boolean strictMode = false;
 
   public EARKSIP() {
     super();
@@ -59,6 +63,10 @@ public class EARKSIP extends SIP {
   public EARKSIP(String sipId, IPContentType contentType, IPContentInformationType contentInformationType) {
     super(sipId, contentType, contentInformationType);
     setProfile(IPConstants.COMMON_SPEC_PROFILE);
+  }
+
+  public static void enableStrictMode() {
+    strictMode = true;
   }
 
   /**
@@ -172,7 +180,7 @@ public class EARKSIP extends SIP {
     throws IPException, InterruptedException {
     try {
       notifySipBuildPackagingStarted(zipEntries.size());
-      ZIPUtils.zip(zipEntries, Files.newOutputStream(zipPath), this, false, true);
+      ZIPUtils.zip(zipEntries, Files.newOutputStream(zipPath), this, strictMode, true);
     } catch (ClosedByInterruptException e) {
       throw new InterruptedException();
     } catch (IOException e) {
@@ -206,10 +214,9 @@ public class EARKSIP extends SIP {
       IPConstants.METS_ENCODE_AND_DECODE_HREF = true;
       SIP sip = new EARKSIP();
 
-      Path sipPath = ZIPUtils.extractIPIfInZipFormat(source, destinationDirectory);
-      sip.setBasePath(sipPath);
+      EARKUtils.processSourcePath(sip, source, destinationDirectory);
 
-      MetsWrapper metsWrapper = EARKUtils.processMainMets(sip, sipPath);
+      MetsWrapper metsWrapper = EARKUtils.processMainMets(sip, sip.getBasePath(), strictMode);
 
       if (sip.isValid()) {
 
@@ -217,6 +224,7 @@ public class EARKSIP extends SIP {
 
         if (structMap != null) {
           EARKUtils.preProcessStructMap(metsWrapper, structMap);
+          EARKUtils.processMetadata(sip);
           EARKUtils.processDescriptiveMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
           EARKUtils.processOtherMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
           EARKUtils.processPreservationMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());

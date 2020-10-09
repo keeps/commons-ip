@@ -212,7 +212,7 @@
 											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 										<transformer
 											implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-											<mainClass>org.roda_project.commons_ip.command_line.Main</mainClass>
+											<mainClass>org.roda_project.commons_ip2.command_line.Main</mainClass>
 										</transformer>
 									</transformers>
 									<filters>
@@ -287,7 +287,7 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-configuration2</artifactId>
-			<version>2.3</version>
+			<version>2.7</version>
 		</dependency>
 		<dependency>
 			<!-- needed for commons-configuration2 -->
