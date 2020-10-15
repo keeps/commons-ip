@@ -61,6 +61,41 @@
 			</activation>
 			<build>
 				<plugins>
+					<!-- <plugin> -->
+					<!-- <groupId>com.helger.maven</groupId> -->
+					<!-- <artifactId>ph-schematron-maven-plugin</artifactId> -->
+					<!-- <version>5.4.1</version> -->
+					<!-- <executions> -->
+					<!-- <execution> -->
+					<!-- <goals> -->
+					<!-- <goal>validate</goal> -->
+					<!-- </goals> -->
+					<!-- <configuration> -->
+					<!-- <schematronFile>src/main/resources/schematron/mets_root_rules.xml</schematronFile> -->
+					<!-- <schematronFile>src/main/resources/schematron/mets_hdr_rules.xml</schematronFile> -->
+					<!-- <xmlDirectory>/home/hsilva/Desktop/test_zip/xml/</xmlDirectory> -->
+					<!-- <schematronProcessingEngine>pure</schematronProcessingEngine> -->
+					<!-- </configuration> -->
+					<!-- </execution> -->
+					<!-- </executions> -->
+					<!-- </plugin> -->
+					<!-- <plugin> -->
+					<!-- <groupId>com.helger.maven</groupId> -->
+					<!-- <artifactId>ph-schematron-maven-plugin</artifactId> -->
+					<!-- <version>5.4.1</version> -->
+					<!-- <executions> -->
+					<!-- <execution> -->
+					<!-- <goals> -->
+					<!-- <goal>convert</goal> -->
+					<!-- </goals> -->
+					<!-- <configuration> -->
+					<!-- <schematronDirectory>src/main/resources/schematron/</schematronDirectory> -->
+					<!-- <schematronPattern>**/*.xml</schematronPattern> -->
+					<!-- <xsltDirectory>src/main/resources/schematron/</xsltDirectory> -->
+					<!-- </configuration> -->
+					<!-- </execution> -->
+					<!-- </executions> -->
+					<!-- </plugin> -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-compiler-plugin</artifactId>
@@ -266,7 +301,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<version>4.13.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -304,6 +339,11 @@
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>26.0-jre</version>
+		</dependency>
+		<dependency>
+			<groupId>com.helger</groupId>
+			<artifactId>ph-schematron</artifactId>
+			<version>5.6.4</version>
 		</dependency>
 	</dependencies>
 </project>

@@ -16,8 +16,10 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.IPEnums.IPStatus;
@@ -44,6 +46,7 @@ import org.roda_project.commons_ip2.model.IPHeader;
 import org.roda_project.commons_ip2.model.IPInterface;
 import org.roda_project.commons_ip2.model.IPMetadata;
 import org.roda_project.commons_ip2.model.IPRepresentation;
+//import org.roda_project.commons_ip2.model.IPRepresentation;
 import org.roda_project.commons_ip2.model.MetadataType;
 import org.roda_project.commons_ip2.model.MetsWrapper;
 import org.roda_project.commons_ip2.model.RepresentationStatus;
@@ -57,6 +60,10 @@ import org.roda_project.commons_ip2.utils.ValidationUtils;
 import org.roda_project.commons_ip2.utils.ZIPUtils;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
+
+import com.helger.schematron.pure.SchematronResourcePure;
+import com.helger.schematron.svrl.jaxb.FailedAssert;
+import com.helger.schematron.svrl.jaxb.SchematronOutputType;
 
 public final class EARKUtils {
   protected static boolean VALIDATION_FAIL_IF_REPRESENTATION_METS_DOES_NOT_HAVE_TWO_PARTS = false;
@@ -303,7 +310,8 @@ public final class EARKUtils {
     }
   }
 
-  protected static MetsWrapper processMainMets(IPInterface ip, Path ipPath, boolean strict) {
+  protected static MetsWrapper processMainMets(IPInterface ip, Path ipPath, boolean strict,
+    boolean schematronValidation) {
     Path mainMETSFile = ipPath.resolve(IPConstants.METS_FILE);
     Mets mainMets = null;
     if (Files.exists(mainMETSFile)) {
@@ -327,6 +335,21 @@ public final class EARKUtils {
           ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIPSTR2,
             strict ? ValidationEntry.LEVEL.ERROR : ValidationEntry.LEVEL.WARN, ip.getBasePath(), mainMETSFile);
         }
+
+        if (schematronValidation) {
+          try {
+            validateXMLViaPureSchematron(ip, "mets_root_rules.xml", mainMETSFile);
+            validateXMLViaPureSchematron(ip, "mets_hdr_rules.xml", mainMETSFile);
+            validateXMLViaPureSchematron(ip, "mets_amd_rules.xml", mainMETSFile);
+            validateXMLViaPureSchematron(ip, "mets_dmd_rules.xml", mainMETSFile);
+            validateXMLViaPureSchematron(ip, "mets_file_rules.xml", mainMETSFile);
+            validateXMLViaPureSchematron(ip, "mets_structmap_rules.xml", mainMETSFile);
+          } catch (Exception e) {
+            // FIXME
+            e.printStackTrace();
+          }
+        }
+
       } catch (JAXBException | ParseException | SAXException e) {
         mainMets = null;
         ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.MAIN_METS_NOT_VALID,
@@ -339,6 +362,42 @@ public final class EARKUtils {
         ip.getBasePath(), mainMETSFile);
     }
     return new MetsWrapper(mainMets, mainMETSFile);
+  }
+
+  private static void validateXMLViaPureSchematron(IPInterface ip, String schematronFile, Path xmlFile) {
+    try {
+
+      final SchematronResourcePure schematronResource = SchematronResourcePure
+        .fromInputStream(EARKUtils.class.getResourceAsStream(IPConstants.SCHEMATRON_FOLDER + schematronFile));
+      // final SchematronResourceSCH schematronResource = SchematronResourceSCH
+      // .fromClassPath(IPConstants.SCHEMATRON_FOLDER + schematronFile);
+
+      if (!schematronResource.isValidSchematron())
+        throw new IllegalArgumentException("Invalid Schematron!");
+
+      SchematronOutputType schematronValidation = schematronResource
+        .applySchematronValidationToSVRL(new StreamSource(xmlFile.toFile()));
+
+      if (schematronValidation != null) {
+        for (final Object aObj : schematronValidation.getActivePatternAndFiredRuleAndFailedAssert()) {
+          if (aObj instanceof FailedAssert) {
+            FailedAssert failedAssert = (FailedAssert) aObj;
+            String message = "";
+
+            for (Object object : failedAssert.getText().getContent()) {
+              message += object.toString() + " ";
+            }
+
+            ValidationUtils.addIssue(ip.getValidationReport(), failedAssert.getId() + " - " + message,
+              ("ERROR".equals(failedAssert.getRole())) ? ValidationEntry.LEVEL.ERROR : ValidationEntry.LEVEL.WARN,
+              ip.getBasePath(), xmlFile);
+          }
+        }
+      }
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   protected static void setIPContentType(Mets mets, IPInterface ip) throws ParseException {
@@ -383,10 +442,40 @@ public final class EARKUtils {
 
   protected static MetsWrapper processRepresentationMets(IPInterface ip, Path representationMetsFile,
     IPRepresentation representation) {
+    Path representationFolder = representationMetsFile.getParent();
+    if (representationFolder.getFileName().toString().equals(representation.getRepresentationID())) {
+      ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIPSTR10, ip.getBasePath(),
+        representationMetsFile.getParent());
+    } else {
+      ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIPSTR10, LEVEL.ERROR, ip.getBasePath(),
+        representationMetsFile.getParent());
+    }
+
+    Path representationDataFolder = representationFolder.resolve(IPConstants.DATA);
+    if (Files.isDirectory(representationDataFolder)) {
+      ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIPSTR11, ip.getBasePath(),
+        representationDataFolder);
+    } else {
+      ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIPSTR11, LEVEL.WARN, ip.getBasePath(),
+        representationDataFolder);
+    }
+
+    Path representationMetadataFolder = representationFolder.resolve(IPConstants.METADATA);
+    if (Files.isDirectory(representationMetadataFolder)) {
+      ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIPSTR13, ip.getBasePath(),
+        representationMetadataFolder);
+    } else {
+      ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIPSTR13, LEVEL.WARN, ip.getBasePath(),
+        representationMetadataFolder);
+    }
+
     Mets representationMets = null;
     if (Files.exists(representationMetsFile)) {
       ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.REPRESENTATION_METS_FILE_FOUND,
         ip.getBasePath(), representationMetsFile);
+      ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIPSTR12, ip.getBasePath(),
+        representationMetsFile);
+
       try {
         representationMets = METSUtils.instantiateMETSFromFile(representationMetsFile);
         setRepresentationContentType(representationMets, representation);
@@ -400,6 +489,8 @@ public final class EARKUtils {
     } else {
       ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.REPRESENTATION_METS_FILE_NOT_FOUND,
         ValidationEntry.LEVEL.ERROR, ip.getBasePath(), representationMetsFile);
+      ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIPSTR12, LEVEL.ERROR, ip.getBasePath(),
+        representationDataFolder);
     }
     return new MetsWrapper(representationMets, representationMetsFile);
   }
@@ -421,6 +512,14 @@ public final class EARKUtils {
   protected static IPInterface processRepresentations(MetsWrapper metsWrapper, IPInterface ip, Logger logger)
     throws IPException {
 
+    if (Files.isDirectory(ip.getBasePath().resolve(IPConstants.REPRESENTATIONS))) {
+      ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIPSTR9, ip.getBasePath(),
+        ip.getBasePath().resolve(IPConstants.REPRESENTATIONS));
+    } else {
+      ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIPSTR9, LEVEL.WARN, ip.getBasePath(),
+        ip.getBasePath().resolve(IPConstants.REPRESENTATIONS));
+    }
+
     if (metsWrapper.getMainDiv() != null && metsWrapper.getMainDiv().getDiv() != null) {
       for (DivType div : metsWrapper.getMainDiv().getDiv()) {
         if (div.getLABEL().startsWith(IPConstants.REPRESENTATIONS_WITH_FIRST_LETTER_CAPITAL)) {
@@ -429,8 +528,8 @@ public final class EARKUtils {
             Mptr mptr = div.getMptr().get(0);
             String href = Utils.extractedRelativePathFromHref(mptr.getHref());
             Path metsFilePath = ip.getBasePath().resolve(href);
-            IPRepresentation representation = new IPRepresentation(
-              div.getLABEL().replaceFirst(IPConstants.REPRESENTATIONS_WITH_FIRST_LETTER_CAPITAL + "/", ""));
+            IPRepresentation representation = new IPRepresentation(metsFilePath.getParent().getFileName().toString());
+
             MetsWrapper representationMetsWrapper = processRepresentationMets(ip, metsFilePath, representation);
 
             if (representationMetsWrapper.getMets() != null) {
@@ -553,13 +652,26 @@ public final class EARKUtils {
     IPRepresentation representation, DivType div, String metadataType, Path basePath) throws IPException {
     if (div != null) {
       List<Object> objects = null;
-      if (IPConstants.DESCRIPTIVE.equals(metadataType) || IPConstants.OTHER.equals(metadataType)) {
+      Pair<String, String> csip = null;
+      if (IPConstants.DESCRIPTIVE.equals(metadataType)) {
         objects = div.getDMDID();
+        csip = ValidationConstants.CSIPSTR7;
+      } else if (IPConstants.OTHER.equals(metadataType)) {
+        objects = div.getDMDID();
+        csip = ValidationConstants.CSIPSTR8;
       } else if (IPConstants.PRESERVATION.equals(metadataType)) {
         objects = div.getADMID();
+        csip = ValidationConstants.CSIPSTR6;
       }
 
-      if (objects != null) {
+      if (objects != null && !objects.isEmpty()) {
+        Path folder = ip.getBasePath().resolve(IPConstants.METADATA).resolve(metadataType);
+        if (Files.isDirectory(folder)) {
+          ValidationUtils.addInfo(ip.getValidationReport(), csip, ip.getBasePath(), folder);
+        } else {
+          ValidationUtils.addIssue(ip.getValidationReport(), csip, LEVEL.WARN, ip.getBasePath(), folder);
+        }
+
         for (Object obj : objects) {
           if (obj instanceof MdSecType) {
             MdRef mdRef = ((MdSecType) obj).getMdRef();
@@ -670,6 +782,8 @@ public final class EARKUtils {
                   if (IPConstants.SCHEMAS.equalsIgnoreCase(folder)) {
                     ValidationUtils.addInfo(ip.getValidationReport(),
                       ValidationConstants.SCHEMA_FILE_FOUND_WITH_MATCHING_CHECKSUMS, ip.getBasePath(), filePath);
+                    ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIPSTR15, ip.getBasePath(),
+                      filePath);
                     ip.addSchema(file.get());
                   } else if (IPConstants.DOCUMENTATION.equalsIgnoreCase(folder)) {
                     ValidationUtils.addInfo(ip.getValidationReport(),
@@ -685,6 +799,9 @@ public final class EARKUtils {
                 if (IPConstants.SCHEMAS.equalsIgnoreCase(folder)) {
                   ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.SCHEMA_FILE_NOT_FOUND,
                     ValidationEntry.LEVEL.ERROR, div, ip.getBasePath(), filePath);
+                  ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIPSTR15,
+                    ValidationEntry.LEVEL.ERROR, div, ip.getBasePath(), filePath);
+
                 } else if (IPConstants.DOCUMENTATION.equalsIgnoreCase(folder)) {
                   ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.DOCUMENTATION_FILE_NOT_FOUND,
                     ValidationEntry.LEVEL.ERROR, div, ip.getBasePath(), filePath);

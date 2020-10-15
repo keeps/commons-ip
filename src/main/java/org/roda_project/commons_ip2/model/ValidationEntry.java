@@ -16,7 +16,7 @@ public class ValidationEntry {
   }
 
   public enum TYPE {
-    STRUCTURAL, SCHEMA, SCHEMATRON
+    STRUCTURAL, CSIP, SCHEMA, SCHEMATRON
   }
 
   private TYPE type = TYPE.STRUCTURAL;

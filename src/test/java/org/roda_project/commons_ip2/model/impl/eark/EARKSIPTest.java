@@ -62,6 +62,7 @@ public class EARKSIPTest {
   @Test
   public void buildAndParseEARKSIP() throws IPException, ParseException, InterruptedException {
     // EARKSIP.enableStrictMode();
+    EARKSIP.enableSchematronValidation();
 
     // LOGGER.info("Creating full E-ARK SIP");
     // Path zipSIP = createFullEARKSIP();
@@ -75,13 +76,16 @@ public class EARKSIPTest {
     // Paths.get("/home/hsilva/Desktop/test_zip/uuid-c01f99b2-6f96-4080-8cfd-aeead1b0d113/");
     // Path zipSIP =
     // Paths.get("/home/hsilva/Desktop/test_zip/uuid-c01f99b2-6f96-4080-8cfd-aeead1b0d113.zip");
-    Path zipSIP = Paths.get(
-      "/home/hsilva/Desktop/test_zip/uuid-c01f99b2-6f96-4080-8cfd-aeead1b0d113/XXX-uuid-c01f99b2-6f96-4080-8cfd-aeead1b0d113.zip");
+    // Path zipSIP = Paths.get(
+    // "/home/hsilva/Desktop/test_zip/uuid-c01f99b2-6f96-4080-8cfd-aeead1b0d113/XXX-uuid-c01f99b2-6f96-4080-8cfd-aeead1b0d113.zip");
+    Path zipSIP = Paths.get("/home/hsilva/Desktop/test_zip/SIP_1.zip");
     SIP earkSIP = EARKSIP.parse(zipSIP);
 
-    // general assessment
+    // general assessmentgit di
     earkSIP.getValidationReport().getValidationEntries().stream()
-      .filter(e -> e.getLevel() == LEVEL.ERROR || e.getLevel() == LEVEL.WARN)
+      // .filter(e -> e.getLevel() == LEVEL.ERROR || e.getLevel() == LEVEL.WARN)
+      // .filter(e -> e.getMessage().startsWith("CS") /*&&
+      // !e.getMessage().startsWith("CSIPSTR")*/)
       .forEach(e -> LOGGER.error("Validation report entry: {}", e));
     Assert.assertTrue(earkSIP.getValidationReport().isValid());
 

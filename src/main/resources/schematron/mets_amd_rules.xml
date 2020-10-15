@@ -1,0 +1,44 @@
+<schema xmlns="http://purl.oclc.org/dsdl/schematron">
+  <ns prefix="mets" uri="http://www.loc.gov/METS/" />
+  <ns prefix="csip" uri="https://DILCIS.eu/XML/METS/CSIPExtensionMETS"/>
+  <ns prefix="xlink" uri="http://www.w3.org/1999/xlink" />
+  <pattern id="METS_administrative_metadata_element">
+    <title>Use of the METS administrative metadata section.</title>
+    <rule context="/mets:mets/mets:amdSec">
+      <assert id="CSIP32" role="WARN" test="mets:digiprovMD">Sould be used to record information about preservation the standard PREMIS is used.</assert>
+      <report id="CSIP45" role="INFO" test="mets:rightsMD">A simple rights statement may be used to describe general permissions for the package. Individual representations should state their specific rights in their representation METS file.</report>
+    </rule>
+    <rule context="/mets:mets/mets:amdSec/mets:digiprovMD">
+      <assert id="CSIP33" role="ERROR" test="@ID">Mandatory, unique id for the digital provenance.</assert>
+      <assert id="CSIP34" role="WARN" test="@STATUS">Should be used to indicate the status of the package.</assert>
+      <assert id="CSIP35" role="WARN" test="mets:mdRef">Should provide a reference to the digital provenance metadata file stored in the “metadata” section of the IP.</assert>
+    </rule>
+    <rule context="/mets:mets/mets:amdSec/mets:digiprovMD/mets:mdRef">
+      <assert id="CSIP36" role="ERROR" test="@LOCTYPE = 'URL'">Mandatory, locator type is always used with the value “URL” from the vocabulary in the attribute.</assert>
+      <assert id="CSIP37" role="ERROR" test="@xlink:type = 'simple'">Attribute MUST be used with the value “simple”. Value list is maintained by the xlink standard.</assert>
+      <assert id="CSIP38" role="ERROR" test="@xlink:href">MUST record the actual location of the resource. This specification recommends recording a URL type filepath within this attribute.</assert>
+      <assert id="CSIP39" role="ERROR" test="@MDTYPE">MUST record the type of metadata at the referenced location.</assert>
+      <assert id="CSIP40" role="ERROR" test="@MIMETYPE">MUST record the MIME type of the referenced file.</assert>
+      <assert id="CSIP41" role="ERROR" test="@SIZE">MUST record the size in bytes of the referenced file.</assert>
+      <assert id="CSIP42" role="ERROR" test="@CREATED">MUST record the date the referenced file was created.</assert>
+      <assert id="CSIP43" role="ERROR" test="@CHECKSUM">MUST record the checksum of the referenced file.</assert>
+      <assert id="CSIP44" role="ERROR" test="@CHECKSUMTYPE">MUST record the checksum type of the referenced file.</assert>
+    </rule>
+    <rule context="/mets:mets/mets:amdSec/mets:rightsMD">
+      <assert id="CSIP46" role="ERROR" test="@ID">Mandatory, unique id for the rights metadata.</assert>
+      <assert id="CSIP47" role="WARN" test="@STATUS">Should be used to indicate the status of the package.</assert>
+      <assert id="CSIP48" role="WARN" test="mets:mdRef">Should provide a reference to the digital provenance metadata file stored in the “metadata” section of the IP.</assert>
+    </rule>
+    <rule context="/mets:mets/mets:amdSec/mets:rightsMD/mets:mdRef">
+      <assert id="CSIP49" role="ERROR" test="@LOCTYPE = 'URL'">Mandatory, locator type is always used with the value “URL” from the vocabulary in the attribute.</assert>
+      <assert id="CSIP50" role="ERROR" test="@xlink:type = 'simple'">Attribute MUST be used with the value “simple”. Value list is maintained by the xlink standard.</assert>
+      <assert id="CSIP51" role="ERROR" test="@xlink:href">MUST record the actual location of the resource. This specification recommends recording a URL type filepath within this attribute.</assert>
+      <assert id="CSIP52" role="ERROR" test="@MDTYPE">MUST record the type of metadata at the referenced location.</assert>
+      <assert id="CSIP53" role="ERROR" test="@MIMETYPE">MUST record the MIME type of the referenced file.</assert>
+      <assert id="CSIP54" role="ERROR" test="@SIZE">MUST record the size in bytes of the referenced file.</assert>
+      <assert id="CSIP55" role="ERROR" test="@CREATED">MUST record the date the referenced file was created.</assert>
+      <assert id="CSIP56" role="ERROR" test="@CHECKSUM">MUST record the checksum of the referenced file.</assert>
+      <assert id="CSIP57" role="ERROR" test="@CHECKSUMTYPE">MUST record the checksum type of the referenced file.</assert>
+    </rule>
+  </pattern>
+</schema>

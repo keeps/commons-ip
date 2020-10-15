@@ -212,7 +212,7 @@ public final class EARKMETSUtils {
   private static DivType createRepresentationDivForStructMap(String representationId, Mptr mptr) {
     DivType div = new DivType();
     div.setID(Utils.generateRandomAndPrefixedUUID());
-    div.setLABEL(IPConstants.REPRESENTATIONS_WITH_FIRST_LETTER_CAPITAL + "/" + representationId);
+    div.setLABEL(IPConstants.REPRESENTATIONS_WITH_FIRST_LETTER_CAPITAL);
     div.getMptr().add(mptr);
     return div;
   }
@@ -238,7 +238,7 @@ public final class EARKMETSUtils {
       addMETSToZip(zipEntries, representationMETSWrapper, representationMetsPath, buildDir, false, fileType);
 
       // add to file group and then to file section
-      FileGrp fileGrp = createFileGroup(IPConstants.REPRESENTATIONS_WITH_FIRST_LETTER_CAPITAL + "/" + representationId);
+      FileGrp fileGrp = createFileGroup(IPConstants.REPRESENTATIONS_WITH_FIRST_LETTER_CAPITAL);
       FLocat fileLocation = METSUtils.createFileLocation(representationMetsPath);
       fileType.getFLocat().add(fileLocation);
       fileGrp.getFile().add(fileType);

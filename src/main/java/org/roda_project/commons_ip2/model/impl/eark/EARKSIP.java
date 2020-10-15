@@ -19,7 +19,6 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.utils.IPException;
-import org.roda_project.commons_ip.utils.ValidationConstants;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
 import org.roda_project.commons_ip2.mets_v1_12.beans.StructMapType;
 import org.roda_project.commons_ip2.model.IPConstants;
@@ -29,7 +28,6 @@ import org.roda_project.commons_ip2.model.MetsWrapper;
 import org.roda_project.commons_ip2.model.SIP;
 import org.roda_project.commons_ip2.model.impl.ModelUtils;
 import org.roda_project.commons_ip2.utils.METSUtils;
-import org.roda_project.commons_ip2.utils.ValidationUtils;
 import org.roda_project.commons_ip2.utils.ZIPUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +38,9 @@ public class EARKSIP extends SIP {
   private static final String SIP_TEMP_DIR = "EARKSIP";
   private static final String SIP_FILE_EXTENSION = ".zip";
 
+  // 20201013 hsilva: by default, for backward compatibility, strict mode is off
   private static boolean strictMode = false;
+  private static boolean schematronValidation = false;
 
   public EARKSIP() {
     super();
@@ -67,6 +67,10 @@ public class EARKSIP extends SIP {
 
   public static void enableStrictMode() {
     strictMode = true;
+  }
+
+  public static void enableSchematronValidation() {
+    schematronValidation = true;
   }
 
   /**
@@ -216,7 +220,7 @@ public class EARKSIP extends SIP {
 
       EARKUtils.processSourcePath(sip, source, destinationDirectory);
 
-      MetsWrapper metsWrapper = EARKUtils.processMainMets(sip, sip.getBasePath(), strictMode);
+      MetsWrapper metsWrapper = EARKUtils.processMainMets(sip, sip.getBasePath(), strictMode, schematronValidation);
 
       if (sip.isValid()) {
 
@@ -225,9 +229,9 @@ public class EARKSIP extends SIP {
         if (structMap != null) {
           EARKUtils.preProcessStructMap(metsWrapper, structMap);
           EARKUtils.processMetadata(sip);
+          EARKUtils.processPreservationMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
           EARKUtils.processDescriptiveMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
           EARKUtils.processOtherMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
-          EARKUtils.processPreservationMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
           EARKUtils.processRepresentations(metsWrapper, sip, LOGGER);
           EARKUtils.processSchemasMetadata(metsWrapper, sip, sip.getBasePath());
           EARKUtils.processDocumentationMetadata(metsWrapper, sip, sip.getBasePath());

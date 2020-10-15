@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.roda_project.commons_ip2.mets_v1_12.beans.DivType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.StructMapType;
@@ -24,73 +25,73 @@ public final class ValidationUtils {
   private ValidationUtils() {
   }
 
-  public static ValidationReport addInfo(ValidationReport report, String message, StructMapType structMap, Path ipPath,
+  public static ValidationReport addInfo(ValidationReport report, Object message, StructMapType structMap, Path ipPath,
     Path relatedFilePath) {
     return addInfo(report, message, getDescription(structMap), ipPath, relatedFilePath);
   }
 
-  public static ValidationReport addInfo(ValidationReport report, String message, DivType div, Path ipPath,
+  public static ValidationReport addInfo(ValidationReport report, Object message, DivType div, Path ipPath,
     Path relatedFilePath) {
     return addInfo(report, message, getDescription(div), ipPath, relatedFilePath);
   }
 
-  public static ValidationReport addInfo(ValidationReport report, String message, Path ipPath, Path relatedPath) {
+  public static ValidationReport addInfo(ValidationReport report, Object message, Path ipPath, Path relatedPath) {
     return addInfo(report, message, "", ipPath, relatedPath);
   }
 
-  private static ValidationReport addInfo(ValidationReport report, String message, String description, Path ipPath,
+  private static ValidationReport addInfo(ValidationReport report, Object message, String description, Path ipPath,
     Path relatedFilePath) {
     ValidationEntry validation = new ValidationEntry();
     validation.setDescription(description);
     validation.setLevel(LEVEL.INFO);
-    validation.setMessage(message);
+    validation.setMessage(messageToString(message));
     validation.setRelatedItem(
       relatedFilePath == null ? (new ArrayList<Path>()) : Arrays.asList(ipPath.relativize(relatedFilePath)));
     report.getValidationEntries().add(validation);
     return report;
   }
 
-  public static ValidationReport addIssue(ValidationReport report, String message, LEVEL level, StructMapType structMap,
+  public static ValidationReport addIssue(ValidationReport report, Object message, LEVEL level, StructMapType structMap,
     Path ipPath, Path relatedFilePath) {
     return addEntry(report, message, level, getDescription(structMap), ipPath, relatedFilePath);
   }
 
-  public static ValidationReport addIssue(ValidationReport report, String message, LEVEL level, DivType div,
+  public static ValidationReport addIssue(ValidationReport report, Object message, LEVEL level, DivType div,
     Path ipPath, Path relatedFilePath) {
     return addEntry(report, message, level, getDescription(div), ipPath, relatedFilePath);
   }
 
-  public static ValidationReport addIssue(ValidationReport report, String message, LEVEL level, FileType fptr,
+  public static ValidationReport addIssue(ValidationReport report, Object message, LEVEL level, FileType fptr,
     Path ipPath, Path relatedFilePath) {
     return addEntry(report, message, level, getDescription(fptr), ipPath, relatedFilePath);
   }
 
-  public static ValidationReport addIssue(ValidationReport report, String message, LEVEL level, Path ipPath,
+  public static ValidationReport addIssue(ValidationReport report, Object message, LEVEL level, Path ipPath,
     Path relatedFilePath) {
     return addEntry(report, message, level, "", ipPath, relatedFilePath);
   }
 
-  public static ValidationReport addIssue(ValidationReport report, String message, LEVEL level, Exception exception,
+  public static ValidationReport addIssue(ValidationReport report, Object message, LEVEL level, Exception exception,
     Path ipPath, Path relatedFilePath) {
     return addEntry(report, message, level, getDescription(exception), ipPath, relatedFilePath);
   }
 
-  public static ValidationReport addIssue(ValidationReport report, String message, LEVEL level, String metsElementId,
+  public static ValidationReport addIssue(ValidationReport report, Object message, LEVEL level, String metsElementId,
     String metsChecksum, String metsChecksumAlgorithm, String computedChecksum, Path ipPath, Path relatedFilePath) {
     return addEntry(report, message, level,
       getDescription(metsElementId, metsChecksum, metsChecksumAlgorithm, computedChecksum), ipPath, relatedFilePath);
   }
 
-  public static ValidationReport addIssue(ValidationReport report, String message, LEVEL level, String metsElementId) {
+  public static ValidationReport addIssue(ValidationReport report, Object message, LEVEL level, String metsElementId) {
     return addEntry(report, message, level, getDescription(metsElementId), null, null);
   }
 
-  public static ValidationReport addEntry(ValidationReport report, String message, LEVEL level, String description,
+  public static ValidationReport addEntry(ValidationReport report, Object message, LEVEL level, String description,
     Path ipPath, Path relatedFilePath) {
     ValidationEntry entry = new ValidationEntry();
     entry.setDescription(description);
     entry.setLevel(level);
-    entry.setMessage(message);
+    entry.setMessage(messageToString(message));
     entry.setRelatedItem(
       relatedFilePath == null ? (new ArrayList<Path>()) : Arrays.asList(ipPath.relativize(relatedFilePath)));
     report.addEntry(entry);
@@ -126,5 +127,11 @@ public final class ValidationUtils {
     return String.format(
       "METS element with id '%s', METS checksum '%s', METS checksum algorithm '%s', computed checksum '%s'",
       metsElementId, metsChecksum, metsChecksumAlgorithm, computedChecksum);
+  }
+
+  private static String messageToString(Object message) {
+    return (message instanceof Pair<?, ?>)
+      ? ((Pair<String, String>) message).getKey() + " - " + ((Pair<String, String>) message).getValue()
+      : message.toString();
   }
 }
