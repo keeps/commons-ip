@@ -47,6 +47,25 @@ For more information about the E-ARK Information Packages specifications, please
     <version>2.0.0-alpha1</version>
   </dependency>
   ```
+  
+ If using Java 11 or greater, you might need the following extra dependencies:
+   ```xml
+ <dependency>
+    <groupId>javax.xml.bind</groupId>
+    <artifactId>jaxb-api</artifactId>
+    <version>2.3.0-b170201.1204</version>
+</dependency>
+<dependency>
+    <groupId>javax.activation</groupId>
+    <artifactId>activation</artifactId>
+    <version>1.1</version>
+</dependency>
+<dependency>
+    <groupId>org.glassfish.jaxb</groupId>
+    <artifactId>jaxb-runtime</artifactId>
+    <version>2.3.0-b170127.1453</version>
+</dependency>
+```
 
 * Not using maven, download [Commons IP latest jar](https://artifactory.keep.pt/artifactory/keep/org/roda-project/commons-ip2/2.0.0-alpha1/commons-ip2-2.0.0-alpha1.jar), each of Commons IP dependencies (see pom.xml to know which dependencies/versions) and add them to your project classpath.
 
