@@ -19,6 +19,7 @@ import org.roda_project.commons_ip.utils.IPEnums.IPStatus;
 import org.roda_project.commons_ip.utils.IPEnums.IPType;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
+import org.roda_project.commons_ip2.model.impl.IPConfig;
 
 public interface IPInterface {
 
@@ -41,7 +42,7 @@ public interface IPInterface {
   IP setContentType(IPContentType contentType);
 
   IPContentType getContentType();
-  
+
   IP setContentInformationType(IPContentInformationType contentInformationType);
 
   IPContentInformationType getContentInformationType();
@@ -122,25 +123,26 @@ public interface IPInterface {
 
   IPHeader getHeader();
 
-  /**
-   * @param destinationDirectory
-   *          directory where the SIP will be placed into
-   * @throws InterruptedException
-   */
-  Path build(Path destinationDirectory) throws IPException, InterruptedException;
+  IPConfig getIPConfig();
 
-  Path build(Path destinationDirectory, boolean onlyManifest) throws IPException, InterruptedException;
+  IP setIPConfig(IPConfig ipConfig);
 
-  Path build(Path destinationDirectory, String fileNameWithoutExtension) throws IPException, InterruptedException;
+  Path build(Path destinationDirectory, IPConfig ipConfig) throws IPException, InterruptedException;
 
-  Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest)
+  Path build(Path destinationDirectory, boolean onlyManifest, IPConfig ipConfig)
     throws IPException, InterruptedException;
 
-  static IPInterface parse(Path source) throws ParseException {
+  Path build(Path destinationDirectory, String fileNameWithoutExtension, IPConfig ipConfig)
+    throws IPException, InterruptedException;
+
+  Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest, IPConfig ipConfig)
+    throws IPException, InterruptedException;
+
+  static IPInterface parse(Path source, IPConfig ipConfig) throws ParseException {
     throw new ParseException("One must implement static method parse in a concrete class");
   }
 
-  static IPInterface parse(Path source, Path destinationDirectory) throws ParseException {
+  static IPInterface parse(Path source, Path destinationDirectory, IPConfig ipConfig) throws ParseException {
     throw new ParseException("One must implement static method parse in a concrete class");
   }
 

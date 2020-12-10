@@ -25,6 +25,7 @@ import org.roda_project.commons_ip.utils.IPEnums.IPType;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
+import org.roda_project.commons_ip2.model.impl.IPConfig;
 import org.roda_project.commons_ip2.utils.Utils;
 
 public abstract class IP implements IPInterface {
@@ -416,11 +417,11 @@ public abstract class IP implements IPInterface {
       + validationReport + "]";
   }
 
-  public static IP parse(Path source) throws ParseException {
+  public static IP parse(Path source, IPConfig ipConfig) throws ParseException {
     throw new ParseException("One must implement static method parse in a concrete class");
   }
 
-  public static IP parse(Path source, Path destinationDirectory) throws ParseException {
+  public static IP parse(Path source, Path destinationDirectory, IPConfig ipConfig) throws ParseException {
     throw new ParseException("One must implement static method parse in a concrete class");
   }
 

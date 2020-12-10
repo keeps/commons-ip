@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.utils.IPEnums.IPType;
+import org.roda_project.commons_ip2.model.impl.IPConfig;
 
 public abstract class SIP extends IP {
   private final List<SIPObserver> observers;
@@ -94,11 +95,11 @@ public abstract class SIP extends IP {
     }
   }
 
-  public static SIP parse(Path source) throws ParseException {
+  public static SIP parse(Path source, IPConfig ipConfig) throws ParseException {
     throw new ParseException("One must implement static method parse in a concrete class");
   }
 
-  public static SIP parse(Path source, Path destinationDirectory) throws ParseException {
+  public static SIP parse(Path source, Path destinationDirectory, IPConfig ipConfig) throws ParseException {
     throw new ParseException("One must implement static method parse in a concrete class");
   }
 

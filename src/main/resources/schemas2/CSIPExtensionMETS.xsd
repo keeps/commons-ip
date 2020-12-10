@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="https://dilcis.eu/XML/METS/CSIPExtensionMETS"
-    targetNamespace="https://dilcis.eu/XML/METS/CSIPExtensionMETS" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="https://DILCIS.eu/XML/METS/CSIPExtensionMETS"
+    targetNamespace="https://DILCIS.eu/XML/METS/CSIPExtensionMETS" elementFormDefault="qualified">
     <xs:attribute name="CONTENTINFORMATIONTYPE">
         <xs:simpleType>
             <xs:restriction base="xs:string">

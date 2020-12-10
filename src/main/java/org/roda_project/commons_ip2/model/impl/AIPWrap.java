@@ -326,26 +326,36 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public Path build(final Path destinationDirectory) throws IPException, InterruptedException {
-    return aip.build(destinationDirectory);
+  public Path build(final Path destinationDirectory, final IPConfig ipConfig) throws IPException, InterruptedException {
+    return aip.build(destinationDirectory, ipConfig);
   }
 
   @Override
-  public Path build(final Path destinationDirectory, final boolean onlyManifest)
+  public Path build(final Path destinationDirectory, final boolean onlyManifest, final IPConfig ipConfig)
     throws IPException, InterruptedException {
-    return aip.build(destinationDirectory, onlyManifest);
+    return aip.build(destinationDirectory, onlyManifest, ipConfig);
   }
 
   @Override
-  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension)
+  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final IPConfig ipConfig)
     throws IPException, InterruptedException {
-    return aip.build(destinationDirectory, fileNameWithoutExtension);
+    return aip.build(destinationDirectory, fileNameWithoutExtension, ipConfig);
   }
 
   @Override
-  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
-    throws IPException, InterruptedException {
-    return aip.build(destinationDirectory, fileNameWithoutExtension, onlyManifest);
+  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest,
+    final IPConfig ipConfig) throws IPException, InterruptedException {
+    return aip.build(destinationDirectory, fileNameWithoutExtension, onlyManifest, ipConfig);
+  }
+
+  @Override
+  public IPConfig getIPConfig() {
+    return null;
+  }
+
+  @Override
+  public IP setIPConfig(IPConfig ipConfig) {
+    return null;
   }
 
 }

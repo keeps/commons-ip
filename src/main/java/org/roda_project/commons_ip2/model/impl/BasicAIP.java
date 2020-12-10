@@ -105,30 +105,40 @@ public class BasicAIP extends IP implements AIP {
   }
 
   @Override
-  public Path build(final Path destinationDirectory) throws IPException, InterruptedException {
+  public Path build(final Path destinationDirectory, final IPConfig ipConfig) throws IPException, InterruptedException {
     throw new IPException("Not implemented");
   }
 
   @Override
-  public Path build(final Path destinationDirectory, final boolean onlyManifest)
+  public Path build(final Path destinationDirectory, final boolean onlyManifest, final IPConfig ipConfig)
     throws IPException, InterruptedException {
     throw new IPException("Not implemented");
   }
 
   @Override
-  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension)
+  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final IPConfig ipConfig)
     throws IPException, InterruptedException {
     throw new IPException("Not implemented");
   }
 
   @Override
-  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
-    throws IPException, InterruptedException {
+  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest,
+    final IPConfig ipConfig) throws IPException, InterruptedException {
     throw new IPException("Not implemented");
   }
 
   @Override
   public Set<String> getExtraChecksumAlgorithms() {
     return Collections.emptySet();
+  }
+
+  @Override
+  public IPConfig getIPConfig() {
+    return null;
+  }
+
+  @Override
+  public IP setIPConfig(IPConfig ipConfig) {
+    return null;
   }
 }

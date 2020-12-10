@@ -14,6 +14,10 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+
 public class ValidationReport {
   private boolean valid;
   private List<ValidationEntry> entries;
@@ -51,6 +55,15 @@ public class ValidationReport {
   @Override
   public String toString() {
     return "ValidationReport [valid=" + valid + ", entries=" + entries + ", date=" + date + "]";
+  }
+
+  public String toJson() {
+    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+    try {
+      return ow.writeValueAsString(this);
+    } catch (JsonProcessingException e) {
+      return "{}";
+    }
   }
 
   public String toHtml() {

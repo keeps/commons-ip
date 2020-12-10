@@ -54,6 +54,7 @@ import org.roda_project.commons_ip2.model.IPInterface;
 import org.roda_project.commons_ip2.model.IPMetadata;
 import org.roda_project.commons_ip2.model.MetsWrapper;
 import org.roda_project.commons_ip2.model.ValidationEntry.LEVEL;
+import org.roda_project.commons_ip2.model.impl.IPConfig;
 import org.roda_project.commons_ip2.utils.METSUtils;
 import org.roda_project.commons_ip2.utils.Utils;
 import org.roda_project.commons_ip2.utils.ValidationUtils;
@@ -70,7 +71,7 @@ public final class EARKMETSUtils {
 
   public static MetsWrapper generateMETS(String id, String label, String profile, boolean mainMets,
     Optional<List<String>> ancestors, Path metsPath, IPHeader ipHeader, String type, IPContentType contentType,
-    IPContentInformationType contentInformationType) throws IPException {
+    IPContentInformationType contentInformationType, IPConfig ipConfig) throws IPException {
     Mets mets = new Mets();
     MetsWrapper metsWrapper = new MetsWrapper(mets, metsPath);
 
@@ -188,7 +189,7 @@ public final class EARKMETSUtils {
 
     // RODA struct map
     if (ancestors.isPresent() && !ancestors.get().isEmpty()) {
-      StructMapType structMapParent = generateAncestorStructMap(ancestors.get());
+      StructMapType structMapParent = generateAncestorStructMap(ancestors.get(), ipConfig.isEncodeDecodeHref());
       mets.getStructMap().add(structMapParent);
     }
 
@@ -219,7 +220,7 @@ public final class EARKMETSUtils {
 
   public static void addRepresentationMETSToZipAndToMainMETS(Map<String, ZipEntryInfo> zipEntries,
     MetsWrapper mainMETSWrapper, String representationId, MetsWrapper representationMETSWrapper,
-    String representationMetsPath, Path buildDir) throws IPException, InterruptedException {
+    String representationMetsPath, Path buildDir, IPConfig ipConfig) throws IPException, InterruptedException {
     try {
       if (Thread.interrupted()) {
         throw new InterruptedException();
@@ -229,7 +230,7 @@ public final class EARKMETSUtils {
       Mptr mptr = new Mptr();
       mptr.setLOCTYPE(LocType.URL.toString());
       mptr.setType(IPConstants.METS_TYPE_SIMPLE);
-      mptr.setHref(METSUtils.encodeHref(representationMetsPath));
+      mptr.setHref(METSUtils.encodeHref(representationMetsPath, ipConfig.isEncodeDecodeHref()));
 
       // create file
       FileType fileType = new FileType();
@@ -239,7 +240,7 @@ public final class EARKMETSUtils {
 
       // add to file group and then to file section
       FileGrp fileGrp = createFileGroup(IPConstants.REPRESENTATIONS_WITH_FIRST_LETTER_CAPITAL);
-      FLocat fileLocation = METSUtils.createFileLocation(representationMetsPath);
+      FLocat fileLocation = METSUtils.createFileLocation(representationMetsPath, ipConfig.isEncodeDecodeHref());
       fileType.getFLocat().add(fileLocation);
       fileGrp.getFile().add(fileType);
       mainMETSWrapper.getMets().getFileSec().getFileGrp().add(fileGrp);
@@ -302,25 +303,25 @@ public final class EARKMETSUtils {
   }
 
   public static MdRef addDescriptiveMetadataToMETS(MetsWrapper metsWrapper, IPDescriptiveMetadata descriptiveMetadata,
-    String descriptiveMetadataPath) throws IPException, InterruptedException {
+    String descriptiveMetadataPath, IPConfig ipConfig) throws IPException, InterruptedException {
     return addMetadataToMETS(metsWrapper, descriptiveMetadata, descriptiveMetadataPath,
       descriptiveMetadata.getMetadataType().getType().getType(), descriptiveMetadata.getMetadataType().getOtherType(),
-      descriptiveMetadata.getMetadataVersion(), true);
+      descriptiveMetadata.getMetadataVersion(), true, ipConfig);
   }
 
   public static MdRef addOtherMetadataToMETS(MetsWrapper metsWrapper, IPMetadata otherMetadata,
-    String otherMetadataPath) throws IPException, InterruptedException {
-    return addMetadataToMETS(metsWrapper, otherMetadata, otherMetadataPath, "OTHER", null, null, false);
+    String otherMetadataPath, IPConfig ipConfig) throws IPException, InterruptedException {
+    return addMetadataToMETS(metsWrapper, otherMetadata, otherMetadataPath, "OTHER", null, null, false, ipConfig);
   }
 
   private static MdRef addMetadataToMETS(MetsWrapper metsWrapper, IPMetadata metadata, String metadataPath,
-    String mdType, String mdOtherType, String mdTypeVersion, boolean isDescriptive)
+    String mdType, String mdOtherType, String mdTypeVersion, boolean isDescriptive, IPConfig ipConfig)
     throws IPException, InterruptedException {
     MdSecType dmdSec = new MdSecType();
     dmdSec.setSTATUS(metadata.getMetadataStatus().toString());
     dmdSec.setID(Utils.generateRandomAndPrefixedUUID());
 
-    MdRef mdRef = createMdRef(metadata.getId(), metadataPath);
+    MdRef mdRef = createMdRef(metadata.getId(), metadataPath, ipConfig.isEncodeDecodeHref());
     mdRef.setMDTYPE(mdType);
     if (StringUtils.isNotBlank(mdOtherType)) {
       mdRef.setOTHERMDTYPE(mdOtherType);
@@ -345,11 +346,11 @@ public final class EARKMETSUtils {
   }
 
   public static MdRef addPreservationMetadataToMETS(MetsWrapper metsWrapper, IPMetadata preservationMetadata,
-    String preservationMetadataPath) throws IPException, InterruptedException {
+    String preservationMetadataPath, IPConfig ipConfig) throws IPException, InterruptedException {
     MdSecType digiprovMD = new MdSecType();
     digiprovMD.setID(Utils.generateRandomAndPrefixedUUID());
 
-    MdRef mdRef = createMdRef(preservationMetadata.getId(), preservationMetadataPath);
+    MdRef mdRef = createMdRef(preservationMetadata.getId(), preservationMetadataPath, ipConfig.isEncodeDecodeHref());
     mdRef.setMDTYPE(preservationMetadata.getMetadataType().asString());
 
     // set mimetype, date creation, etc.
@@ -363,17 +364,17 @@ public final class EARKMETSUtils {
     return mdRef;
   }
 
-  private static MdRef createMdRef(String id, String metadataPath) {
+  private static MdRef createMdRef(String id, String metadataPath, boolean encodeDecodeHref) {
     MdRef mdRef = new MdRef();
     mdRef.setID(id);
     mdRef.setType(IPConstants.METS_TYPE_SIMPLE);
     mdRef.setLOCTYPE(LocType.URL.toString());
-    mdRef.setHref(METSUtils.encodeHref(metadataPath));
+    mdRef.setHref(METSUtils.encodeHref(metadataPath, encodeDecodeHref));
     return mdRef;
   }
 
-  public static FileType addDataFileToMETS(MetsWrapper representationMETS, String dataFilePath, Path dataFile)
-    throws IPException, InterruptedException {
+  public static FileType addDataFileToMETS(MetsWrapper representationMETS, String dataFilePath, Path dataFile,
+    IPConfig ipConfig) throws IPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedUUID());
 
@@ -381,7 +382,7 @@ public final class EARKMETSUtils {
     METSUtils.setFileBasicInformation(LOGGER, dataFile, file);
 
     // add to file section
-    FLocat fileLocation = METSUtils.createFileLocation(dataFilePath);
+    FLocat fileLocation = METSUtils.createFileLocation(dataFilePath, ipConfig.isEncodeDecodeHref());
     file.getFLocat().add(fileLocation);
     representationMETS.getDataFileGroup().getFile().add(file);
 
@@ -394,8 +395,8 @@ public final class EARKMETSUtils {
     return file;
   }
 
-  public static FileType addSchemaFileToMETS(MetsWrapper metsWrapper, String schemaFilePath, Path schemaFile)
-    throws IPException, InterruptedException {
+  public static FileType addSchemaFileToMETS(MetsWrapper metsWrapper, String schemaFilePath, Path schemaFile,
+    IPConfig ipConfig) throws IPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedUUID());
 
@@ -403,7 +404,7 @@ public final class EARKMETSUtils {
     METSUtils.setFileBasicInformation(LOGGER, schemaFile, file);
 
     // add to file section
-    FLocat fileLocation = METSUtils.createFileLocation(schemaFilePath);
+    FLocat fileLocation = METSUtils.createFileLocation(schemaFilePath, ipConfig.isEncodeDecodeHref());
     file.getFLocat().add(fileLocation);
     metsWrapper.getSchemasFileGroup().getFile().add(file);
 
@@ -417,7 +418,7 @@ public final class EARKMETSUtils {
   }
 
   public static FileType addSubmissionFileToMETS(MetsWrapper metsWrapper, String submissionFilePath,
-    Path submissionFile) throws IPException, InterruptedException {
+    Path submissionFile, IPConfig ipConfig) throws IPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedUUID());
 
@@ -425,7 +426,7 @@ public final class EARKMETSUtils {
     METSUtils.setFileBasicInformation(LOGGER, submissionFile, file);
 
     // add to file section
-    FLocat fileLocation = METSUtils.createFileLocation(submissionFilePath);
+    FLocat fileLocation = METSUtils.createFileLocation(submissionFilePath, ipConfig.isEncodeDecodeHref());
     file.getFLocat().add(fileLocation);
     metsWrapper.getSubmissionFileGroup().getFile().add(file);
 
@@ -437,7 +438,7 @@ public final class EARKMETSUtils {
   }
 
   public static FileType addDocumentationFileToMETS(MetsWrapper metsWrapper, String documentationFilePath,
-    Path documentationFile) throws IPException, InterruptedException {
+    Path documentationFile, IPConfig ipConfig) throws IPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedUUID());
 
@@ -445,7 +446,7 @@ public final class EARKMETSUtils {
     METSUtils.setFileBasicInformation(LOGGER, documentationFile, file);
 
     // add to file section
-    FLocat fileLocation = METSUtils.createFileLocation(documentationFilePath);
+    FLocat fileLocation = METSUtils.createFileLocation(documentationFilePath, ipConfig.isEncodeDecodeHref());
     file.getFLocat().add(fileLocation);
     metsWrapper.getDocumentationFileGroup().getFile().add(file);
 
@@ -459,7 +460,7 @@ public final class EARKMETSUtils {
     return file;
   }
 
-  private static StructMapType generateAncestorStructMap(List<String> ancestors) {
+  private static StructMapType generateAncestorStructMap(List<String> ancestors, boolean encodeDecodeHref) {
     StructMapType structMap = new StructMapType();
     structMap.setID(Utils.generateRandomAndPrefixedUUID());
     structMap.setLABEL(IPConstants.RODA_STRUCTURAL_MAP);
@@ -470,7 +471,7 @@ public final class EARKMETSUtils {
     for (String anc : ancestors) {
       Mptr mptr = new Mptr();
       mptr.setType(IPConstants.METS_TYPE_SIMPLE);
-      mptr.setHref(METSUtils.encodeHref(anc));
+      mptr.setHref(METSUtils.encodeHref(anc, encodeDecodeHref));
       mptr.setLOCTYPE(LocType.HANDLE.toString());
       ancestorsDiv.getMptr().add(mptr);
     }
@@ -479,7 +480,7 @@ public final class EARKMETSUtils {
     return structMap;
   }
 
-  public static List<String> extractAncestorsFromStructMap(Mets mets) {
+  public static List<String> extractAncestorsFromStructMap(Mets mets, IPConfig ipConfig) {
     List<String> ancestors = new ArrayList<>();
 
     for (StructMapType structMap : mets.getStructMap()) {
@@ -491,7 +492,7 @@ public final class EARKMETSUtils {
           for (DivType div : mainDiv.getDiv()) {
             if (IPConstants.RODA_ANCESTORS_DIV_LABEL.equalsIgnoreCase(div.getLABEL()) && div.getMptr() != null) {
               for (Mptr m : div.getMptr()) {
-                String href = METSUtils.decodeHref(m.getHref());
+                String href = METSUtils.decodeHref(m.getHref(), ipConfig.isEncodeDecodeHref());
                 if (StringUtils.isNotBlank(href)) {
                   ancestors.add(href);
                 }

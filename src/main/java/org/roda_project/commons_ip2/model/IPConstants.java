@@ -13,6 +13,7 @@ import java.util.List;
 public final class IPConstants {
 
   public static final String SYSTEM_LINE_SEP = System.lineSeparator();
+  public static final String DEFAULT_ENCODING = "UTF-8";
 
   // METS related
   public static final String METS_FILE_NAME = "METS";
@@ -74,6 +75,7 @@ public final class IPConstants {
   // Common Specification (& E-ARK)
   public static final String COMMON_SPEC_STRUCTURAL_MAP = "CSIP";
   public static final String COMMON_SPEC_PROFILE = "https://earkcsip.dilcis.eu/profile/E-ARK-CSIP.xml";
+  public static final String EARK_SIP_SPEC_PROFILE = "https://earksip.dilcis.eu/profile/E-ARK-SIP.xml";
 
   // RODA
   public static final String RODA_STRUCTURAL_MAP = "RODA structural map";
@@ -100,10 +102,6 @@ public final class IPConstants {
   public static final String HUNGARIAN_METADATA_FILE = HEADER_FOLDER + "/" + METADATA_FILE;
   public static final String HUNGARIAN_DOCUMENTATION_TAG = "documentation";
 
-  // FIXME 20190625 hsilva: this "fix" might introduce strange behaviors in
-  // multi-threaded/multi-package type processing
-  public static boolean METS_ENCODE_AND_DECODE_HREF = true;
-
   // XML SChemas
   public static final String SCHEMA_METS_FILENAME_WITH_VERSION = "mets1_12.xsd";
   public static final String SCHEMA_METS_RELATIVE_PATH_FROM_RESOURCES = METS_PATH_SEPARATOR + SCHEMAS + "2"
@@ -112,10 +110,10 @@ public final class IPConstants {
   public static final String SCHEMA_XLINK_RELATIVE_PATH_FROM_RESOURCES = METS_PATH_SEPARATOR + SCHEMAS + "2"
     + METS_PATH_SEPARATOR + SCHEMA_XLINK_FILENAME;
   public static final String SCHEMA_XLINK_URL = "http://www.loc.gov/standards/xlink/xlink.xsd";
-  public static final String SCHEMA_EARK_CSIP_FILENAME = "DILCISExtensionMETS.xsd";
+  public static final String SCHEMA_EARK_CSIP_FILENAME = "CSIPExtensionMETS.xsd";
   public static final String SCHEMA_EARK_CSIP_RELATIVE_PATH_FROM_RESOURCES = METS_PATH_SEPARATOR + SCHEMAS + "2"
     + METS_PATH_SEPARATOR + SCHEMA_EARK_CSIP_FILENAME;
-  public static final String SCHEMA_EARK_SIP_FILENAME = "DILCISExtensionSIPMETS.xsd";
+  public static final String SCHEMA_EARK_SIP_FILENAME = "SIPExtensionMETS.xsd";
   public static final String SCHEMA_EARK_SIP_RELATIVE_PATH_FROM_RESOURCES = METS_PATH_SEPARATOR + SCHEMAS + "2"
     + METS_PATH_SEPARATOR + SCHEMA_EARK_SIP_FILENAME;
 

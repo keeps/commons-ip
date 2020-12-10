@@ -124,11 +124,11 @@ public final class METSUtils {
     return agent;
   }
 
-  public static FLocat createFileLocation(String filePath) {
+  public static FLocat createFileLocation(String filePath, boolean encodeDecodeHref) {
     FLocat fileLocation = new FLocat();
     fileLocation.setType(IPConstants.METS_TYPE_SIMPLE);
     fileLocation.setLOCTYPE(LocType.URL.toString());
-    fileLocation.setHref(encodeHref(filePath));
+    fileLocation.setHref(encodeHref(filePath, encodeDecodeHref));
     return fileLocation;
   }
 
@@ -195,18 +195,11 @@ public final class METSUtils {
 
   /**
    * Decodes a value from a METS HREF attribute.
-   * 
-   * <p>
-   * 20170511 hsilva: a global variable called
-   * {@link IPConstants.METS_ENCODE_AND_DECODE_HREF} is used to enable/disable
-   * the effective decode (done this way to avoid lots of changes in the methods
-   * that use this method)
-   * </p>
    */
-  public static String decodeHref(String value) {
-    if (IPConstants.METS_ENCODE_AND_DECODE_HREF) {
+  public static String decodeHref(String value, boolean encodeDecodeHref) {
+    if (encodeDecodeHref) {
       try {
-        value = URLDecoder.decode(value, "UTF-8");
+        value = URLDecoder.decode(value, IPConstants.DEFAULT_ENCODING);
       } catch (NullPointerException | UnsupportedEncodingException e) {
         // do nothing
       }
@@ -216,17 +209,9 @@ public final class METSUtils {
 
   /**
    * Encodes a value to put in METS HREF attribute.
-   *
-   * <p>
-   * 20170511 hsilva: a global variable called
-   * {@link IPConstants.METS_ENCODE_AND_DECODE_HREF} is used to enable/disable
-   * the effective encode (done this way to avoid lots of changes in the methods
-   * that use this method). This method is not multi-thread safe when using
-   * different SIP formats.
-   * </p>
    */
-  public static String encodeHref(String value) {
-    if (IPConstants.METS_ENCODE_AND_DECODE_HREF) {
+  public static String encodeHref(String value, boolean encodeDecodeHref) {
+    if (encodeDecodeHref) {
       value = escapeSpecialCharacters(value);
     }
     return value;
@@ -251,7 +236,7 @@ public final class METSUtils {
   private static String encodeUnsafeChar(char ch) {
     String ret = String.valueOf(ch);
     try {
-      ret = URLEncoder.encode(ret, "UTF-8");
+      ret = URLEncoder.encode(ret, IPConstants.DEFAULT_ENCODING);
     } catch (NullPointerException | UnsupportedEncodingException e) {
       // do nothing & return original value
     }

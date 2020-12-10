@@ -21,11 +21,13 @@ import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
 import org.roda_project.commons_ip2.mets_v1_12.beans.StructMapType;
+import org.roda_project.commons_ip2.model.IP;
 import org.roda_project.commons_ip2.model.IPConstants;
 import org.roda_project.commons_ip2.model.IPContentInformationType;
 import org.roda_project.commons_ip2.model.IPContentType;
 import org.roda_project.commons_ip2.model.MetsWrapper;
 import org.roda_project.commons_ip2.model.SIP;
+import org.roda_project.commons_ip2.model.impl.IPConfig;
 import org.roda_project.commons_ip2.model.impl.ModelUtils;
 import org.roda_project.commons_ip2.utils.METSUtils;
 import org.roda_project.commons_ip2.utils.ZIPUtils;
@@ -38,13 +40,11 @@ public class EARKSIP extends SIP {
   private static final String SIP_TEMP_DIR = "EARKSIP";
   private static final String SIP_FILE_EXTENSION = ".zip";
 
-  // 20201013 hsilva: by default, for backward compatibility, strict mode is off
-  private static boolean strictMode = false;
-  private static boolean schematronValidation = false;
+  private IPConfig ipConfig = new IPConfig();
 
   public EARKSIP() {
     super();
-    setProfile(IPConstants.COMMON_SPEC_PROFILE);
+    setProfile(IPConstants.EARK_SIP_SPEC_PROFILE);
   }
 
   /**
@@ -53,7 +53,7 @@ public class EARKSIP extends SIP {
    */
   public EARKSIP(String sipId) {
     super(sipId);
-    setProfile(IPConstants.COMMON_SPEC_PROFILE);
+    setProfile(IPConstants.EARK_SIP_SPEC_PROFILE);
   }
 
   /**
@@ -62,15 +62,16 @@ public class EARKSIP extends SIP {
    */
   public EARKSIP(String sipId, IPContentType contentType, IPContentInformationType contentInformationType) {
     super(sipId, contentType, contentInformationType);
-    setProfile(IPConstants.COMMON_SPEC_PROFILE);
+    setProfile(IPConstants.EARK_SIP_SPEC_PROFILE);
   }
 
-  public static void enableStrictMode() {
-    strictMode = true;
+  public IPConfig getIPConfig() {
+    return ipConfig;
   }
 
-  public static void enableSchematronValidation() {
-    schematronValidation = true;
+  public IP setIPConfig(IPConfig ipConfig) {
+    this.ipConfig = ipConfig;
+    return this;
   }
 
   /**
@@ -79,34 +80,20 @@ public class EARKSIP extends SIP {
    * _________________________________________________________________________
    */
   @Override
-  public Path build(Path destinationDirectory) throws IPException, InterruptedException {
-    return build(destinationDirectory, null);
-  }
-
-  /**
-   * Builds a SIP.
-   *
-   * @param destinationDirectory
-   *          the {@link Path} where the SIP should be build.
-   * @param onlyManifest
-   *          build only the manifest file? (<strong>this parameter is
-   *          ignored</strong>).
-   * @return the {@link Path}.
-   * @throws IPException
-   *           if some error occurs.
-   * @throws InterruptedException
-   *           if some error occurs.
-   */
-  @Override
-  public Path build(final Path destinationDirectory, final boolean onlyManifest)
-    throws IPException, InterruptedException {
-    return build(destinationDirectory, null);
+  public Path build(Path destinationDirectory, IPConfig ipConfig) throws IPException, InterruptedException {
+    return build(destinationDirectory, (String) null, false, ipConfig);
   }
 
   @Override
-  public Path build(Path destinationDirectory, String fileNameWithoutExtension)
+  public Path build(final Path destinationDirectory, final boolean onlyManifest, IPConfig ipConfig)
     throws IPException, InterruptedException {
-    return build(destinationDirectory, fileNameWithoutExtension, false);
+    return build(destinationDirectory, (String) null, onlyManifest, ipConfig);
+  }
+
+  @Override
+  public Path build(Path destinationDirectory, String fileNameWithoutExtension, IPConfig ipConfig)
+    throws IPException, InterruptedException {
+    return build(destinationDirectory, fileNameWithoutExtension, false, ipConfig);
   }
 
   /**
@@ -131,9 +118,9 @@ public class EARKSIP extends SIP {
    *           if some error occurs.
    */
   @Override
-  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
-    throws IPException, InterruptedException {
-    IPConstants.METS_ENCODE_AND_DECODE_HREF = true;
+  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest,
+    IPConfig ipConfig) throws IPException, InterruptedException {
+    this.ipConfig = ipConfig;
     Path buildDir = ModelUtils.createBuildDir(SIP_TEMP_DIR);
     Path zipPath = getZipPath(destinationDirectory, fileNameWithoutExtension);
     try {
@@ -141,15 +128,17 @@ public class EARKSIP extends SIP {
 
       MetsWrapper mainMETSWrapper = EARKMETSUtils.generateMETS(StringUtils.join(this.getIds(), " "),
         this.getDescription(), this.getProfile(), true, Optional.ofNullable(this.getAncestors()), null,
-        this.getHeader(), this.getType(), this.getContentType(), null);
+        this.getHeader(), this.getType(), this.getContentType(), null, ipConfig);
 
-      EARKUtils.addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
-      EARKUtils.addPreservationMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getPreservationMetadata(), null);
-      EARKUtils.addOtherMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getOtherMetadata(), null);
+      EARKUtils.addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null,
+        ipConfig);
+      EARKUtils.addPreservationMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getPreservationMetadata(), null,
+        ipConfig);
+      EARKUtils.addOtherMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getOtherMetadata(), null, ipConfig);
       EARKUtils.addRepresentationsToZipAndMETS(this, getRepresentations(), zipEntries, mainMETSWrapper, buildDir);
       EARKUtils.addDefaultSchemas(LOGGER, getSchemas(), buildDir);
-      EARKUtils.addSchemasToZipAndMETS(zipEntries, mainMETSWrapper, getSchemas(), null);
-      EARKUtils.addDocumentationToZipAndMETS(zipEntries, mainMETSWrapper, getDocumentation(), null);
+      EARKUtils.addSchemasToZipAndMETS(zipEntries, mainMETSWrapper, getSchemas(), null, ipConfig);
+      EARKUtils.addDocumentationToZipAndMETS(zipEntries, mainMETSWrapper, getDocumentation(), null, ipConfig);
       METSUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, buildDir);
 
       createZipFile(zipEntries, zipPath);
@@ -184,7 +173,7 @@ public class EARKSIP extends SIP {
     throws IPException, InterruptedException {
     try {
       notifySipBuildPackagingStarted(zipEntries.size());
-      ZIPUtils.zip(zipEntries, Files.newOutputStream(zipPath), this, strictMode, true);
+      ZIPUtils.zip(zipEntries, Files.newOutputStream(zipPath), this, ipConfig.isStrictMode(), true);
     } catch (ClosedByInterruptException e) {
       throw new InterruptedException();
     } catch (IOException e) {
@@ -201,26 +190,27 @@ public class EARKSIP extends SIP {
    * _________________________________________________________________________
    */
 
-  public static SIP parse(Path source, Path destinationDirectory) throws ParseException {
-    return parseEARKSIP(source, destinationDirectory);
+  public static SIP parse(Path source, Path destinationDirectory, IPConfig ipConfig) throws ParseException {
+    return parseEARKSIP(source, destinationDirectory, ipConfig);
   }
 
-  public static SIP parse(Path source) throws ParseException {
+  public static SIP parse(Path source, IPConfig ipConfig) throws ParseException {
     try {
-      return parse(source, Files.createTempDirectory("unzipped"));
+      return parse(source, Files.createTempDirectory("unzipped"), ipConfig);
     } catch (IOException e) {
       throw new ParseException("Error creating temporary directory for E-ARK SIP parse", e);
     }
   }
 
-  private static SIP parseEARKSIP(final Path source, final Path destinationDirectory) throws ParseException {
+  private static SIP parseEARKSIP(final Path source, final Path destinationDirectory, final IPConfig ipConfig)
+    throws ParseException {
     try {
-      IPConstants.METS_ENCODE_AND_DECODE_HREF = true;
       SIP sip = new EARKSIP();
+      sip.setIPConfig(ipConfig);
 
       EARKUtils.processSourcePath(sip, source, destinationDirectory);
 
-      MetsWrapper metsWrapper = EARKUtils.processMainMets(sip, sip.getBasePath(), strictMode, schematronValidation);
+      MetsWrapper metsWrapper = EARKUtils.processMainMets(sip, sip.getBasePath());
 
       if (sip.isValid()) {
 

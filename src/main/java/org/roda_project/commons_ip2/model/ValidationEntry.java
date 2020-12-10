@@ -10,6 +10,9 @@ package org.roda_project.commons_ip2.model;
 import java.nio.file.Path;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
 public class ValidationEntry {
   public enum LEVEL {
     ERROR, WARN, INFO
@@ -20,10 +23,23 @@ public class ValidationEntry {
   }
 
   private TYPE type = TYPE.STRUCTURAL;
+  private String id = "undefined";
   private LEVEL level;
   private String message;
   private String description;
+  @JsonSerialize(using = ToStringSerializer.class)
   private List<Path> relatedItem;
+
+  public ValidationEntry() {
+    super();
+  }
+
+  public ValidationEntry(TYPE type, String id, String message) {
+    super();
+    this.type = type;
+    this.id = id;
+    this.message = message;
+  }
 
   public TYPE getType() {
     return type;
@@ -31,6 +47,15 @@ public class ValidationEntry {
 
   public ValidationEntry setType(TYPE type) {
     this.type = type;
+    return this;
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public ValidationEntry setId(String id) {
+    this.id = id;
     return this;
   }
 
@@ -72,8 +97,8 @@ public class ValidationEntry {
 
   @Override
   public String toString() {
-    return "ValidationIssue [level=" + level + ", message=" + message + ", description=" + description
-      + ", relatedItem=" + relatedItem + "]";
+    return "ValidationEntry [type=" + type + ", id=" + id + ", level=" + level + ", message=" + message
+      + ", description=" + description + ", relatedItem=" + relatedItem + "]";
   }
 
 }

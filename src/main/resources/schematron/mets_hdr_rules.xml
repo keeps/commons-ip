@@ -6,7 +6,7 @@
     <rule context="/mets:mets/mets:metsHdr">
       <assert id="CSIP7" role="ERROR" test="@CREATEDATE">The metsHdr element MUST have a CREATEDATE attribute.</assert>
       <assert id="CSIP8" role="WARN" test="@LASTMODDATE">The metsHdr element SHOULD have a LASTMODDATE attribute.</assert>
-      <assert id="CSIP9" role="ERROR" test="@*:OAISPACKAGETYPE">The metsHdr element MUST have a csip:OAISPACKAGETYPE attribute.</assert>
+      <assert id="CSIP9" role="ERROR" test="@csip:OAISPACKAGETYPE">The metsHdr element MUST have a csip:OAISPACKAGETYPE attribute.</assert>
       <assert id="CSIP10" role="ERROR" test="mets:agent">The metsHdr element MUST contain an agent element that records the software used to create the package.</assert>
     </rule>
     <rule context="/mets:mets/mets:metsHdr/mets:agent">
@@ -15,7 +15,7 @@
       <assert id="CSIP13" role="ERROR" test="@OTHERTYPE = 'SOFTWARE'">The agent element MUST have a OTHERTYPE attribute with the value "SOFTWARE".</assert>
       <assert id="CSIP14" role="ERROR" test="mets:name">The agent element MUST have a child name element that records the name of the software tool used to create the IP.</assert>
       <assert id="CSIP15" role="ERROR" test="mets:note">The agent element MUST have a child note element that records the version of the tool used to create the IP.</assert>
-      <assert id="CSIP16" role="ERROR" test="mets:note[@*:NOTETYPE='SOFTWARE VERSION']">The mandatory agent element’s note child has a @csip:NOTETYPE attribute with a fixed value of “SOFTWARE VERSION”.</assert>
+      <assert id="CSIP16" role="ERROR" test="mets:note[@csip:NOTETYPE='SOFTWARE VERSION']">The mandatory agent element’s note child has a @csip:NOTETYPE attribute with a fixed value of “SOFTWARE VERSION”.</assert>
     </rule>
   </pattern>
 </schema>

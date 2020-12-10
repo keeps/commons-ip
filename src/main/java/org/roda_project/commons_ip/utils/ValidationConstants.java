@@ -7,8 +7,9 @@
  */
 package org.roda_project.commons_ip.utils;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.roda_project.commons_ip.model.IPConstants;
+import org.roda_project.commons_ip2.model.ValidationEntry;
+import org.roda_project.commons_ip2.model.ValidationEntry.TYPE;
 
 public final class ValidationConstants {
   // Mets related
@@ -75,38 +76,59 @@ public final class ValidationConstants {
   public static final String SUBMISSION_FILE_FOUND_WITH_MATCHING_CHECKSUMS = "Submission file referenced in METS.xml was found and file checksum matches METS checksum.";
   public static final String SUBMISSION_FILE_NOT_FOUND = "Submission file referenced in METS.xml was not found.";
 
-  public static final Pair<String, String> CSIPSTR1 = Pair.of("CSIPSTR1",
+  public static final ValidationEntry CSIPSTR1 = new ValidationEntry(TYPE.STRUCTURAL, "CSIPSTR1",
     "Any Information Package MUST be included within a single physical root folder (known as the “Information Package root folder”). For packages presented in an archive format, see CSIPSTR3, the archive MUST unpack to a single root folder.");
-  public static final Pair<String, String> CSIPSTR2 = Pair.of("CSIPSTR2",
+  public static final ValidationEntry CSIPSTR2 = new ValidationEntry(TYPE.STRUCTURAL, "CSIPSTR2",
     "The Information Package root folder SHOULD be named with the ID or name of the Information Package, that is the value of the package METS.xml’s root <mets> element’s @OBJID attribute.");
-  public static final Pair<String, String> CSIPSTR3 = Pair.of("CSIPSTR3",
+  public static final ValidationEntry CSIPSTR3 = new ValidationEntry(TYPE.STRUCTURAL, "CSIPSTR3",
     "The Information Package root folder MAY be compressed (for example by using TAR or ZIP). Which specific compression format to use needs to be stated in the Submission Agreement.");
-  public static final Pair<String, String> CSIPSTR4 = Pair.of("CSIPSTR4",
+  public static final ValidationEntry CSIPSTR4 = new ValidationEntry(TYPE.STRUCTURAL, "CSIPSTR4",
     "The Information Package root folder MUST include a file named METS.xml. This file MUST contain metadata that identifies the package, provides a high-level package description, and describes its structure, including pointers to constituent representations.");
-  public static final Pair<String, String> CSIPSTR5 = Pair.of("CSIPSTR5",
+  public static final ValidationEntry CSIPSTR5 = new ValidationEntry(TYPE.STRUCTURAL, "CSIPSTR5",
     "The Information Package root folder SHOULD include a folder named metadata, which SHOULD include metadata relevant to the whole package.");
-  public static final Pair<String, String> CSIPSTR6 = Pair.of("CSIPSTR6",
+  public static final ValidationEntry CSIPSTR6 = new ValidationEntry(TYPE.STRUCTURAL, "CSIPSTR6",
     "If preservation metadata are available, they SHOULD be included in sub-folder preservation.");
-  public static final Pair<String, String> CSIPSTR7 = Pair.of("CSIPSTR7",
+  public static final ValidationEntry CSIPSTR7 = new ValidationEntry(TYPE.STRUCTURAL, "CSIPSTR7",
     "If descriptive metadata are available, they SHOULD be included in sub-folder descriptive.");
-  public static final Pair<String, String> CSIPSTR8 = Pair.of("CSIPSTR8",
+  public static final ValidationEntry CSIPSTR8 = new ValidationEntry(TYPE.STRUCTURAL, "CSIPSTR8",
     "If any other metadata are available, they MAY be included in separate sub-folders, for example an additional folder named other.");
-  public static final Pair<String, String> CSIPSTR9 = Pair.of("CSIPSTR9",
+  public static final ValidationEntry CSIPSTR9 = new ValidationEntry(TYPE.STRUCTURAL, "CSIPSTR9",
     "The Information Package folder SHOULD include a folder named representations.");
-  public static final Pair<String, String> CSIPSTR10 = Pair.of("CSIPSTR10",
+  public static final ValidationEntry CSIPSTR10 = new ValidationEntry(TYPE.STRUCTURAL, "CSIPSTR10",
     "The representations folder SHOULD include a sub-folder for each individual representation (i.e. the “representation folder”). Each representation folder should have a string name that is unique within the package scope. For example the name of the representation and/or its creation date might be good candidates as a representation sub-folder name.");
-  public static final Pair<String, String> CSIPSTR11 = Pair.of("CSIPSTR11",
+  public static final ValidationEntry CSIPSTR11 = new ValidationEntry(TYPE.STRUCTURAL, "CSIPSTR11",
     "The representation folder SHOULD include a sub-folder named data which MAY include all data constituting the representation.");
-  public static final Pair<String, String> CSIPSTR12 = Pair.of("CSIPSTR12",
+  public static final ValidationEntry CSIPSTR12 = new ValidationEntry(TYPE.STRUCTURAL, "CSIPSTR12",
     "The representation folder SHOULD include a metadata file named METS.xml which includes information about the identity and structure of the representation and its components. The recommended best practice is to always have a METS.xml in the representation folder.");
-  public static final Pair<String, String> CSIPSTR13 = Pair.of("CSIPSTR13",
+  public static final ValidationEntry CSIPSTR13 = new ValidationEntry(TYPE.STRUCTURAL, "CSIPSTR13",
     "The representation folder SHOULD include a sub-folder named metadata which MAY include all metadata about the specific representation.");
-  public static final Pair<String, String> CSIPSTR14 = Pair.of("CSIPSTR14",
+  public static final ValidationEntry CSIPSTR14 = new ValidationEntry(TYPE.STRUCTURAL, "CSIPSTR14",
     "The Information Package MAY be extended with additional sub-folders.");
-  public static final Pair<String, String> CSIPSTR15 = Pair.of("CSIPSTR15",
+  public static final ValidationEntry CSIPSTR15 = new ValidationEntry(TYPE.STRUCTURAL, "CSIPSTR15",
     "We recommend including all XML schema documents for any structured metadata within package. These schema documents SHOULD be placed in a sub-folder called schemas within the Information Package root folder and/or the representation folder.");
-  public static final Pair<String, String> CSIPSTR16 = Pair.of("CSIPSTR16",
+  public static final ValidationEntry CSIPSTR16 = new ValidationEntry(TYPE.STRUCTURAL, "CSIPSTR16",
     "We recommend including any supplementary documentation for the package or a specific representation within the package. Supplementary documentation SHOULD be placed in a sub-folder called documentation within the Information Package root folder and/or the representation folder.");
+
+  public static final ValidationEntry CSIP1 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP1",
+    "The mets/@OBJID attribute is mandatory, its value is a string identifier for the METS document. For the package METS document, this should be the name/ID of the package, i.e. the name of the package root folder. For a representation level METS document this value records the name/ID of the representation, i.e. the name of the top-level representation folder.");
+  public static final ValidationEntry CSIP2 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP2",
+    "The mets/@TYPE attribute MUST be used to declare the category of the content held in the package, e.g. book, journal, stereograph, video, etc.. Legal values are defined in a fixed vocabulary. When the content category used falls outside of the defined vocabulary the mets/@TYPE value must be set to “OTHER” and the specific value declared in mets/@csip:OTHERTYPE. The vocabulary will develop under the curation of the DILCIS Board as additional content information type specifications are produced.");
+  public static final ValidationEntry CSIP3 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP3",
+    "When the mets/@TYPE attribute has the value “OTHER” the mets/@csip:OTHERTYPE attribute MUST be used to declare the content category of the package/representation.");
+  public static final ValidationEntry CSIP4 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP4",
+    "Used to declare the Content Information Type Specification used when creating the package. Legal values are defined in a fixed vocabulary. The attribute is mandatory for representation level METS documents. The vocabulary will evolve under the care of the DILCIS Board as additional Content Information Type Specifications are developed.");
+  public static final ValidationEntry CSIP5 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP5",
+    "When the mets/@csip:CONTENTINFORMATIONTYPE has the value “OTHER” the mets/@csip:OTHERCONTENTINFORMATIONTYPE must state the content information type.");
+  public static final ValidationEntry CSIP6 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP6",
+    "The URL of the METS profile that the information package conforms with.");
+  public static final ValidationEntry CSIP117 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP117",
+    "General element for describing the package.");
+  public static final ValidationEntry CSIP7 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP7",
+    "mets/metsHdr/@CREATEDATE records the date the package was created.");
+  public static final ValidationEntry CSIP8 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP8",
+    "mets/metsHdr/@LASTMODDATE is mandatory when the package has been modified.");
+  public static final ValidationEntry CSIP9 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP9",
+    "mets/metsHdr/@csip:OAISPACKAGETYPE is an additional CSIP attribute that declares the type of the IP.");
 
   /** Private empty constructor */
   private ValidationConstants() {

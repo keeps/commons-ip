@@ -35,6 +35,7 @@ import org.roda_project.commons_ip2.model.MetadataType.MetadataTypeEnum;
 import org.roda_project.commons_ip2.model.RepresentationStatus;
 import org.roda_project.commons_ip2.model.SIP;
 import org.roda_project.commons_ip2.model.ValidationEntry.LEVEL;
+import org.roda_project.commons_ip2.model.impl.IPConfig;
 import org.roda_project.commons_ip2.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,15 +62,16 @@ public class EARKSIPTest {
 
   @Test
   public void buildAndParseEARKSIP() throws IPException, ParseException, InterruptedException {
-    // EARKSIP.enableStrictMode();
-    EARKSIP.enableSchematronValidation();
+    IPConfig ipConfig = new IPConfig();
+    // ipConfig.enableStrictMode();
+    ipConfig.enableSchematronValidation();
 
     // LOGGER.info("Creating full E-ARK SIP");
-    // Path zipSIP = createFullEARKSIP();
+    // Path zipSIP = createFullEARKSIP(ipConfig);
     // LOGGER.info("Done creating full E-ARK SIP");
     //
     // LOGGER.info("Parsing (and validating) full E-ARK SIP");
-    // parseAndValidateFullEARKSIP(zipSIP);
+    // parseAndValidateFullEARKSIP(zipSIP, ipConfig);
     // LOGGER.info("Done parsing (and validating) full E-ARK SIP");
 
     // Path zipSIP =
@@ -78,12 +80,13 @@ public class EARKSIPTest {
     // Paths.get("/home/hsilva/Desktop/test_zip/uuid-c01f99b2-6f96-4080-8cfd-aeead1b0d113.zip");
     // Path zipSIP = Paths.get(
     // "/home/hsilva/Desktop/test_zip/uuid-c01f99b2-6f96-4080-8cfd-aeead1b0d113/XXX-uuid-c01f99b2-6f96-4080-8cfd-aeead1b0d113.zip");
-    Path zipSIP = Paths.get("/home/hsilva/Desktop/test_zip/SIP_1.zip");
-    SIP earkSIP = EARKSIP.parse(zipSIP);
+    Path zipSIP = Paths.get("/home/hsilva/Git/commons-ip/SIP_1.zip");
+    SIP earkSIP = EARKSIP.parse(zipSIP, ipConfig);
 
-    // general assessmentgit di
+    // general assessment
     earkSIP.getValidationReport().getValidationEntries().stream()
-      // .filter(e -> e.getLevel() == LEVEL.ERROR || e.getLevel() == LEVEL.WARN)
+      // .filter(e -> e.getLevel() == LEVEL.ERROR || e.getLevel() ==
+      // LEVEL.WARN)
       // .filter(e -> e.getMessage().startsWith("CS") /*&&
       // !e.getMessage().startsWith("CSIPSTR")*/)
       .forEach(e -> LOGGER.error("Validation report entry: {}", e));
@@ -91,7 +94,7 @@ public class EARKSIPTest {
 
   }
 
-  private Path createFullEARKSIP() throws IPException, InterruptedException {
+  private Path createFullEARKSIP(IPConfig ipConfig) throws IPException, InterruptedException {
 
     // 1) instantiate E-ARK SIP object
     SIP sip = new EARKSIP("SIP_1", IPContentType.getMIXED(), IPContentInformationType.getMIXED());
@@ -155,18 +158,23 @@ public class EARKSIPTest {
       representation1.addFile(representationFileEnc1);
     }
 
-    IPFile representationFileEnc2 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
-    representationFileEnc2.setRenameTo("enc2_\u0080\u0081\u0090\u00FF.pdf");
-    representation1.addFile(representationFileEnc2);
-
-    IPFile representationFileEnc3 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
-    representationFileEnc3.setRenameTo(Utils.systemIsWindows() ? "enc3_;@=&.pdf" : "enc3_;?:@=&.pdf");
-    representation1.addFile(representationFileEnc3);
-
-    IPFile representationFileEnc4 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
-    representationFileEnc4
-      .setRenameTo(Utils.systemIsWindows() ? "enc4_#%{}\\^~[ ]`.pdf" : "enc4_\"<>#%{}|\\^~[ ]`.pdf");
-    representation1.addFile(representationFileEnc4);
+    // IPFile representationFileEnc2 = new
+    // IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
+    // representationFileEnc2.setRenameTo("enc2_\u0080\u0081\u0090\u00FF.pdf");
+    // representation1.addFile(representationFileEnc2);
+    //
+    // IPFile representationFileEnc3 = new
+    // IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
+    // representationFileEnc3.setRenameTo(Utils.systemIsWindows() ?
+    // "enc3_;@=&.pdf" : "enc3_;?:@=&.pdf");
+    // representation1.addFile(representationFileEnc3);
+    //
+    // IPFile representationFileEnc4 = new
+    // IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
+    // representationFileEnc4
+    // .setRenameTo(Utils.systemIsWindows() ? "enc4_#%{}\\^~[ ]`.pdf" :
+    // "enc4_\"<>#%{}|\\^~[ ]`.pdf");
+    // representation1.addFile(representationFileEnc4);
 
     IPFile representationFileEnc5 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
     representationFileEnc5
@@ -190,15 +198,15 @@ public class EARKSIPTest {
     representation2.addFile(representationFile3);
 
     // 2) build SIP, providing an output directory
-    Path zipSIP = sip.build(tempFolder);
+    Path zipSIP = sip.build(tempFolder, ipConfig);
 
     return zipSIP;
   }
 
-  private void parseAndValidateFullEARKSIP(Path zipSIP) throws ParseException {
+  private void parseAndValidateFullEARKSIP(Path zipSIP, IPConfig ipConfig) throws ParseException {
 
     // 1) invoke static method parse and that's it
-    SIP earkSIP = EARKSIP.parse(zipSIP);
+    SIP earkSIP = EARKSIP.parse(zipSIP, ipConfig);
 
     // general assessment
     earkSIP.getValidationReport().getValidationEntries().stream().filter(e -> e.getLevel() == LEVEL.ERROR)

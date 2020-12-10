@@ -92,12 +92,12 @@ public final class Utils {
     }
   }
 
-  public static String extractedRelativePathFromHref(MdRef mdref) {
-    return extractedRelativePathFromHref(mdref.getHref());
+  public static String extractedRelativePathFromHref(MdRef mdref, boolean encodeDecodeHref) {
+    return extractedRelativePathFromHref(mdref.getHref(), encodeDecodeHref);
   }
 
-  public static String extractedRelativePathFromHref(String href) {
-    String res = METSUtils.decodeHref(href);
+  public static String extractedRelativePathFromHref(String href, boolean encodeDecodeHref) {
+    String res = METSUtils.decodeHref(href, encodeDecodeHref);
     for (String prefix : IPConstants.METS_FILE_PREFIXES_TO_ACCEPT) {
       if (res.startsWith(prefix)) {
         res = res.replaceFirst(prefix, "");

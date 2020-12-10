@@ -11,7 +11,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.roda_project.commons_ip2.mets_v1_12.beans.DivType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.StructMapType;
@@ -41,10 +40,9 @@ public final class ValidationUtils {
 
   private static ValidationReport addInfo(ValidationReport report, Object message, String description, Path ipPath,
     Path relatedFilePath) {
-    ValidationEntry validation = new ValidationEntry();
+    ValidationEntry validation = instantiateFromMessage(message);
     validation.setDescription(description);
     validation.setLevel(LEVEL.INFO);
-    validation.setMessage(messageToString(message));
     validation.setRelatedItem(
       relatedFilePath == null ? (new ArrayList<Path>()) : Arrays.asList(ipPath.relativize(relatedFilePath)));
     report.getValidationEntries().add(validation);
@@ -88,10 +86,9 @@ public final class ValidationUtils {
 
   public static ValidationReport addEntry(ValidationReport report, Object message, LEVEL level, String description,
     Path ipPath, Path relatedFilePath) {
-    ValidationEntry entry = new ValidationEntry();
+    ValidationEntry entry = instantiateFromMessage(message);
     entry.setDescription(description);
     entry.setLevel(level);
-    entry.setMessage(messageToString(message));
     entry.setRelatedItem(
       relatedFilePath == null ? (new ArrayList<Path>()) : Arrays.asList(ipPath.relativize(relatedFilePath)));
     report.addEntry(entry);
@@ -129,9 +126,17 @@ public final class ValidationUtils {
       metsElementId, metsChecksum, metsChecksumAlgorithm, computedChecksum);
   }
 
-  private static String messageToString(Object message) {
-    return (message instanceof Pair<?, ?>)
-      ? ((Pair<String, String>) message).getKey() + " - " + ((Pair<String, String>) message).getValue()
-      : message.toString();
+  private static ValidationEntry instantiateFromMessage(Object message) {
+    ValidationEntry entry = new ValidationEntry();
+    if (message instanceof ValidationEntry) {
+      ValidationEntry inputEntry = (ValidationEntry) message;
+      entry.setType(inputEntry.getType());
+      entry.setId(inputEntry.getId());
+      entry.setMessage(inputEntry.getMessage());
+    } else {
+      entry.setMessage(message.toString());
+    }
+
+    return entry;
   }
 }
