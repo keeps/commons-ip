@@ -148,6 +148,11 @@ public class EARKSIPTest {
       .setRenameTo(Utils.systemIsWindows() ? "enc4_#%{}\\^~[ ]`.pdf" : "enc4_\"<>#%{}|\\^~[ ]`.pdf");
     representation1.addFile(representationFileEnc4);
 
+    IPFile representationFileEnc5 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
+    representationFileEnc5
+        .setRenameTo(Utils.systemIsWindows() ? "enc4_#+%{}\\^~[ ]`.pdf" : "enc4_\"<>+#%{}|\\^~[ ]`.pdf");
+    representation1.addFile(representationFileEnc5);
+
     // 1.9.2) add a file to the representation and put it inside a folder
     // called 'abc' which has a folder inside called 'def'
     IPFile representationFile2 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
