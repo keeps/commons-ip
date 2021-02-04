@@ -1,5 +1,9 @@
 # Changelog 
 
+## 2.0.0-alpha2 (2021-02-04)
+
+* Fixed E-ARK SIP package parsing containing plus char in filename (https://github.com/keeps/commons-ip/issues/29)
+
 ## 2.0.0-alpha1 (2019-10-31)
 
 * E-ARK SIP 2 support (E-ARK Common Specification 2.0.1 compliant)

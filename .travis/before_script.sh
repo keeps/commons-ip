@@ -13,4 +13,4 @@ set -ex
 #    > rm settings.xml
 
 # decrypt maven setting.xml
-openssl aes-256-cbc -K $encrypted_f647f4e729e9_key -iv $encrypted_f647f4e729e9_iv -in .travis/settings.xml.enc -out settings.xml -d
+openssl aes-256-cbc -K $encrypted_1d784fce58c3_key -iv $encrypted_1d784fce58c3_iv -in .travis/settings.xml.enc -out settings.xml -d
