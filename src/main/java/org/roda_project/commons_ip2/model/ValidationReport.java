@@ -11,8 +11,11 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.roda_project.commons_ip2.model.ValidationEntry.LEVEL;
+import org.roda_project.commons_ip2.model.impl.IPConfig;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,13 +60,30 @@ public class ValidationReport {
     return "ValidationReport [valid=" + valid + ", entries=" + entries + ", date=" + date + "]";
   }
 
-  public String toJson() {
+  public String toJson(IPConfig ipConfig) {
     ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
     try {
-      return ow.writeValueAsString(this);
+      List<ValidationEntry> oldEntries = entries;
+      List<ValidationEntry> tempEntries = entries.stream().filter(entry -> keepEntry(entry, ipConfig))
+        .collect(Collectors.toList());
+      entries = tempEntries;
+      String jsonString = ow.writeValueAsString(this);
+      entries = oldEntries;
+      return jsonString;
     } catch (JsonProcessingException e) {
       return "{}";
     }
+  }
+
+  private boolean keepEntry(ValidationEntry entry, IPConfig ipConfig) {
+    boolean ret = true;
+    if (LEVEL.WARN == entry.getLevel() && !ipConfig.isReportWarn()) {
+      ret = false;
+    }
+    if (LEVEL.INFO == entry.getLevel() && !ipConfig.isReportInfo()) {
+      ret = false;
+    }
+    return ret;
   }
 
   public String toHtml() {

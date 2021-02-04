@@ -129,6 +129,40 @@ public final class ValidationConstants {
     "mets/metsHdr/@LASTMODDATE is mandatory when the package has been modified.");
   public static final ValidationEntry CSIP9 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP9",
     "mets/metsHdr/@csip:OAISPACKAGETYPE is an additional CSIP attribute that declares the type of the IP.");
+  public static final ValidationEntry CSIP10 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP10",
+    "A mandatory agent element records the software used to create the package. Other uses of agents may be described in any local implementations that extend the profile.");
+  public static final ValidationEntry CSIP11 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP11",
+    "The mandatory agent element MUST have a @ROLE attribute with the value “CREATOR”.");
+  public static final ValidationEntry CSIP12 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP12",
+    "The mandatory agent element MUST have a @TYPE attribute with the value “OTHER”.");
+  public static final ValidationEntry CSIP13 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP13",
+    "The mandatory agent element MUST have a @OTHERTYPE attribute with the value “SOFTWARE”.");
+  public static final ValidationEntry CSIP14 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP14",
+    "The mandatory agent’s name element records the name of the software tool used to create the IP.");
+  public static final ValidationEntry CSIP15 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP15",
+    "The mandatory agent’s note element records the version of the tool used to create the IP.");
+  public static final ValidationEntry CSIP16 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP16",
+    "The mandatory agent element’s note child has a @csip:NOTETYPE attribute with a fixed value of “SOFTWARE VERSION”.");
+  public static final ValidationEntry CSIP17 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP17",
+    "Must be used if descriptive metadata for the package content is available. Each descriptive metadata section (<dmdSec>) contains a single description and must be repeated for multiple descriptions, when available. It is possible to transfer metadata in a package using just the descriptive metadata section and/or administrative metadata section.");
+  public static final ValidationEntry CSIP18 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP18",
+    "An xml:id identifier for the descriptive metadata section (<dmdSec>) used for internal package references. It must be unique within the package.");
+  public static final ValidationEntry CSIP19 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP19",
+    "Creation date of the descriptive metadata in this section.");
+  public static final ValidationEntry CSIP20 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP20",
+    "Indicates the status of the package using a fixed vocabulary.");
+  public static final ValidationEntry CSIP21 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP21",
+    "Reference to the descriptive metadata file located in the “metadata” section of the IP.");
+  public static final ValidationEntry CSIP22 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP22",
+    "The locator type is always used with the value “URL” from the vocabulary in the attribute.");
+  public static final ValidationEntry CSIP23 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP23",
+    "Attribute used with the value “simple”. Value list is maintained by the xlink standard.");
+  public static final ValidationEntry CSIP24 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP24",
+    "The actual location of the resource. This specification recommends recording a URL type filepath in this attribute.");
+  public static final ValidationEntry CSIP25 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP25",
+    "Specifies the type of metadata in the referenced file. Values are taken from the list provided by the METS.");
+  public static final ValidationEntry CSIP26 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP26",
+    "The IANA mime type of the referenced file.");
 
   /** Private empty constructor */
   private ValidationConstants() {

@@ -386,6 +386,7 @@ public final class EARKUtils {
     } else {
       ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIP117, ipPath, metsPath);
 
+      // mets/metsHdr/@CREATEDATE
       if (metsHdr.getCREATEDATE() == null) {
         ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIP7, LEVEL.ERROR, ip.getBasePath(),
           metsPath);
@@ -393,6 +394,7 @@ public final class EARKUtils {
         ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIP7, ipPath, metsPath);
       }
 
+      // mets/metsHdr/@LASTMODDATE
       if (metsHdr.getLASTMODDATE() == null) {
         ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIP8, LEVEL.WARN, ip.getBasePath(),
           metsPath);
@@ -406,6 +408,59 @@ public final class EARKUtils {
           metsPath);
       } else {
         ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIP9, ipPath, metsPath);
+      }
+
+      // mets/metsHdr/agent
+      List<Agent> agents = metsHdr.getAgent();
+      if (agents == null || agents.isEmpty()) {
+        ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIP10, LEVEL.ERROR, ip.getBasePath(),
+          metsPath);
+      } else {
+        ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIP10, ipPath, metsPath);
+        boolean foundSoftwareAgent = false;
+        for (Agent agent : agents) {
+          if ("CREATOR".equals(agent.getROLE()) && "OTHER".equals(agent.getTYPE())
+            && "SOFTWARE".equals(agent.getOTHERTYPE())) {
+            ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIP11, ipPath, metsPath);
+            ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIP12, ipPath, metsPath);
+            ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIP13, ipPath, metsPath);
+
+            // mets/metsHdr/agent/name
+            if (agent.getName() == null || "".equals(agent.getName())) {
+              ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIP14, LEVEL.ERROR,
+                ip.getBasePath(), metsPath);
+            } else {
+              ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIP14, ipPath, metsPath);
+            }
+
+            // mets/metsHdr/agent/note
+            if (agent.getNote() == null || agent.getNote().size() != 1) {
+              ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIP15, LEVEL.ERROR,
+                ip.getBasePath(), metsPath);
+            } else {
+              ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIP15, ipPath, metsPath);
+
+              // mets/metsHdr/agent/note[@csip:NOTETYPE='SOFTWARE VERSION']
+              if ("SOFTWARE VERSION".equals(agent.getNote().get(0).getNOTETYPE())) {
+                ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIP16, ipPath, metsPath);
+              } else {
+                ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIP16, LEVEL.ERROR,
+                  ip.getBasePath(), metsPath);
+              }
+            }
+
+            foundSoftwareAgent = true;
+            break;
+          }
+        }
+        if (!foundSoftwareAgent) {
+          ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIP11, LEVEL.ERROR, ip.getBasePath(),
+            metsPath);
+          ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIP12, LEVEL.ERROR, ip.getBasePath(),
+            metsPath);
+          ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIP13, LEVEL.ERROR, ip.getBasePath(),
+            metsPath);
+        }
       }
     }
 
@@ -769,30 +824,57 @@ public final class EARKUtils {
     IPRepresentation representation, DivType div, String metadataType, Path basePath) throws IPException {
     if (div != null) {
       List<Object> objects = null;
+      ValidationEntry csipstr = null;
       ValidationEntry csip = null;
       if (IPConstants.DESCRIPTIVE.equals(metadataType)) {
         objects = div.getDMDID();
-        csip = ValidationConstants.CSIPSTR7;
+        csipstr = ValidationConstants.CSIPSTR7;
+        csip = ValidationConstants.CSIP18;
       } else if (IPConstants.OTHER.equals(metadataType)) {
         objects = div.getDMDID();
-        csip = ValidationConstants.CSIPSTR8;
+        csipstr = ValidationConstants.CSIPSTR8;
       } else if (IPConstants.PRESERVATION.equals(metadataType)) {
         objects = div.getADMID();
-        csip = ValidationConstants.CSIPSTR6;
+        csipstr = ValidationConstants.CSIPSTR6;
       }
 
       if (objects != null && !objects.isEmpty()) {
         Path folder = ip.getBasePath().resolve(IPConstants.METADATA).resolve(metadataType);
         if (Files.isDirectory(folder)) {
-          ValidationUtils.addInfo(ip.getValidationReport(), csip, ip.getBasePath(), folder);
+          ValidationUtils.addInfo(ip.getValidationReport(), csipstr, ip.getBasePath(), folder);
         } else {
-          ValidationUtils.addIssue(ip.getValidationReport(), csip, LEVEL.WARN, ip.getBasePath(), folder);
+          ValidationUtils.addIssue(ip.getValidationReport(), csipstr, LEVEL.WARN, ip.getBasePath(), folder);
         }
 
         for (Object obj : objects) {
           if (obj instanceof MdSecType) {
-            MdRef mdRef = ((MdSecType) obj).getMdRef();
+            MdSecType mdSecType = (MdSecType) obj;
+
+            // i'm here
+            if (csip != null) {
+              ValidationUtils.addInfo(ip.getValidationReport(), csip, mdSecType.getID());
+              if (IPConstants.DESCRIPTIVE.equals(metadataType)) {
+                ValidationUtils.addIssueIfNull(ip.getValidationReport(), ValidationConstants.CSIP19,
+                  mdSecType.getCREATED(), LEVEL.ERROR, mdSecType.getID());
+                ValidationUtils.addIssueIfNull(ip.getValidationReport(), ValidationConstants.CSIP20,
+                  mdSecType.getSTATUS(), LEVEL.ERROR, mdSecType.getID());
+              }
+            }
+
+            MdRef mdRef = mdSecType.getMdRef();
             if (mdRef != null) {
+              ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIP21, mdSecType.getID());
+              ValidationUtils.addIssueIfStringNotEqual(ip.getValidationReport(), ValidationConstants.CSIP23,
+                mdRef.getLOCTYPE(), "URL", LEVEL.ERROR, mdRef.getID());
+              ValidationUtils.addIssueIfStringNotEqual(ip.getValidationReport(), ValidationConstants.CSIP23,
+                mdRef.getType(), "simple", LEVEL.ERROR, mdRef.getID());
+              ValidationUtils.addIssueIfNull(ip.getValidationReport(), ValidationConstants.CSIP24, mdRef.getHref(),
+                LEVEL.ERROR, mdRef.getID());
+              ValidationUtils.addIssueIfNull(ip.getValidationReport(), ValidationConstants.CSIP25, mdRef.getMDTYPE(),
+                LEVEL.ERROR, mdRef.getID());
+              ValidationUtils.addIssueIfNull(ip.getValidationReport(), ValidationConstants.CSIP25, mdRef.getMIMETYPE(),
+                LEVEL.ERROR, mdRef.getID());
+
               String href = Utils.extractedRelativePathFromHref(mdRef, ip.getIPConfig().isEncodeDecodeHref());
               Path filePath = basePath.resolve(href);
               if (Files.exists(filePath)) {
@@ -805,6 +887,9 @@ public final class EARKUtils {
                   ValidationConstants.getMetadataFileNotFoundString(metadataType), LEVEL.ERROR, ip.getBasePath(),
                   filePath);
               }
+            } else {
+              ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIP21, LEVEL.WARN,
+                mdSecType.getID());
             }
           }
         }
@@ -1013,13 +1098,22 @@ public final class EARKUtils {
     return processFile(ip, metsWrapper.getSubmissionsDiv(), IPConstants.SUBMISSION, basePath);
   }
 
-  public static void processMetadata(SIP sip) {
+  public static void processMetadata(MetsWrapper metsWrapper, SIP sip) {
     if (Files.isDirectory(sip.getBasePath().resolve(IPConstants.METADATA))) {
       ValidationUtils.addInfo(sip.getValidationReport(), ValidationConstants.CSIPSTR5, sip.getBasePath(),
         sip.getBasePath().resolve(IPConstants.METADATA));
     } else {
       ValidationUtils.addIssue(sip.getValidationReport(), ValidationConstants.CSIPSTR5, LEVEL.WARN, sip.getBasePath(),
         sip.getBasePath().resolve(IPConstants.METADATA));
+    }
+
+    List<MdSecType> dmdSec = metsWrapper.getMets().getDmdSec();
+    if (dmdSec.isEmpty()) {
+      ValidationUtils.addIssue(sip.getValidationReport(), ValidationConstants.CSIP17, LEVEL.WARN, sip.getBasePath(),
+        metsWrapper.getMetsPath());
+    } else {
+      ValidationUtils.addInfo(sip.getValidationReport(), ValidationConstants.CSIP17, sip.getBasePath(),
+        metsWrapper.getMetsPath());
     }
   }
 

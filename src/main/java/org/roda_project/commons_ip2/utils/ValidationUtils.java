@@ -11,9 +11,12 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.roda_project.commons_ip.utils.ValidationConstants;
 import org.roda_project.commons_ip2.mets_v1_12.beans.DivType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
+import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType.MdRef;
 import org.roda_project.commons_ip2.mets_v1_12.beans.StructMapType;
+import org.roda_project.commons_ip2.model.IPInterface;
 import org.roda_project.commons_ip2.model.ValidationEntry;
 import org.roda_project.commons_ip2.model.ValidationEntry.LEVEL;
 import org.roda_project.commons_ip2.model.ValidationReport;
@@ -49,6 +52,10 @@ public final class ValidationUtils {
     return report;
   }
 
+  public static ValidationReport addInfo(ValidationReport report, Object message, String metsElementId) {
+    return addInfo(report, message, getDescription(metsElementId), null, null);
+  }
+
   public static ValidationReport addIssue(ValidationReport report, Object message, LEVEL level, StructMapType structMap,
     Path ipPath, Path relatedFilePath) {
     return addEntry(report, message, level, getDescription(structMap), ipPath, relatedFilePath);
@@ -82,6 +89,24 @@ public final class ValidationUtils {
 
   public static ValidationReport addIssue(ValidationReport report, Object message, LEVEL level, String metsElementId) {
     return addEntry(report, message, level, getDescription(metsElementId), null, null);
+  }
+
+  public static ValidationReport addIssueIfStringNotEqual(ValidationReport report, Object message, String textToTest,
+    String textoToTestAgainst, LEVEL levelIfNull, String metsElementId) {
+    if (textoToTestAgainst.equals(textToTest)) {
+      return ValidationUtils.addInfo(report, message, metsElementId);
+    } else {
+      return ValidationUtils.addIssue(report, message, levelIfNull, metsElementId);
+    }
+  }
+
+  public static ValidationReport addIssueIfNull(ValidationReport report, Object message, Object objectToTest,
+    LEVEL levelIfNull, String metsElementId) {
+    if (objectToTest != null) {
+      return ValidationUtils.addInfo(report, message, metsElementId);
+    } else {
+      return ValidationUtils.addIssue(report, message, levelIfNull, metsElementId);
+    }
   }
 
   public static ValidationReport addEntry(ValidationReport report, Object message, LEVEL level, String description,
@@ -139,4 +164,5 @@ public final class ValidationUtils {
 
     return entry;
   }
+
 }

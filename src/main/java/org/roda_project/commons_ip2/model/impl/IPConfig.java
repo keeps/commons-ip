@@ -12,6 +12,8 @@ public class IPConfig {
   private boolean strictMode = false;
   private boolean schematronValidation = false;
   private boolean encodeDecodeHref = true;
+  private boolean reportInfo = true;
+  private boolean reportWarn = true;
 
   public IPConfig() {
     super();
@@ -41,6 +43,24 @@ public class IPConfig {
 
   public IPConfig disableEncodeDecodeHref() {
     this.encodeDecodeHref = false;
+    return this;
+  }
+
+  public boolean isReportInfo() {
+    return reportInfo;
+  }
+
+  public IPConfig disableReportInfo() {
+    this.reportInfo = false;
+    return this;
+  }
+
+  public boolean isReportWarn() {
+    return reportWarn;
+  }
+
+  public IPConfig disableReportWarn() {
+    this.reportWarn = false;
     return this;
   }
 

@@ -34,6 +34,14 @@ public final class Main implements Callable<Integer> {
   @Option(names = "-r", description = "Types available: ${COMPLETION-CANDIDATES}", defaultValue = "NONE", showDefaultValue = Visibility.ALWAYS)
   REPORT_TYPE reportType = null;
 
+  @Option(names = {
+    "-rDisableInfo"}, defaultValue = "false", description = "Disables reporting entries of the type INFO", showDefaultValue = Visibility.ALWAYS)
+  private boolean disableReportInfo;
+
+  @Option(names = {
+    "-rDisableWarn"}, defaultValue = "false", description = "Disables reporting entries of the type WARN", showDefaultValue = Visibility.ALWAYS)
+  private boolean disableReportWarn;
+
   @Option(names = "--strict", defaultValue = "true", description = "Enables strict mode", hidden = true, hideParamSyntax = true)
   private boolean strictMode;
 
@@ -60,6 +68,12 @@ public final class Main implements Callable<Integer> {
     if (enableSchematronValidation) {
       ipConfig.enableSchematronValidation();
     }
+    if (disableReportInfo) {
+      ipConfig.disableReportInfo();
+    }
+    if (disableReportWarn) {
+      ipConfig.disableReportWarn();
+    }
 
     SIP sip = EARKSIP.parse(Paths.get(packagePath.getAbsolutePath()), ipConfig);
     switch (reportType) {
@@ -67,7 +81,7 @@ public final class Main implements Callable<Integer> {
         System.out.println(sip.getValidationReport().toHtml());
         break;
       case JSON:
-        System.out.println(sip.getValidationReport().toJson());
+        System.out.println(sip.getValidationReport().toJson(ipConfig));
         break;
       default:
         break;
