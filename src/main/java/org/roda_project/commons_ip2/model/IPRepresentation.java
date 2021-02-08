@@ -31,9 +31,9 @@ public class IPRepresentation {
   private List<IPDescriptiveMetadata> descriptiveMetadata;
   private List<IPMetadata> preservationMetadata;
   private List<IPMetadata> otherMetadata;
-  private List<IPFile> data;
-  private List<IPFile> schemas;
-  private List<IPFile> documentation;
+  private List<IPFileInterface> data;
+  private List<IPFileInterface> schemas;
+  private List<IPFileInterface> documentation;
 
   public IPRepresentation() {
     this.representationID = Utils.generateRandomAndPrefixedUUID();
@@ -160,11 +160,11 @@ public class IPRepresentation {
     return this;
   }
 
-  public List<IPFile> getData() {
+  public List<IPFileInterface> getData() {
     return data;
   }
 
-  public IPRepresentation addFile(IPFile ipFile) {
+  public IPRepresentation addFile(IPFileInterface ipFile) {
     data.add(ipFile);
     return this;
   }
@@ -174,20 +174,20 @@ public class IPRepresentation {
     return this;
   }
 
-  public List<IPFile> getSchemas() {
+  public List<IPFileInterface> getSchemas() {
     return schemas;
   }
 
-  public IPRepresentation addSchema(IPFile schema) {
+  public IPRepresentation addSchema(IPFileInterface schema) {
     this.schemas.add(schema);
     return this;
   }
 
-  public List<IPFile> getDocumentation() {
+  public List<IPFileInterface> getDocumentation() {
     return documentation;
   }
 
-  public IPRepresentation addDocumentation(IPFile documentation) {
+  public IPRepresentation addDocumentation(IPFileInterface documentation) {
     this.documentation.add(documentation);
     return this;
   }

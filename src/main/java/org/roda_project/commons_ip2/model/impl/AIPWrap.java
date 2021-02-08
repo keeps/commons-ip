@@ -24,6 +24,7 @@ import org.roda_project.commons_ip2.model.IPContentInformationType;
 import org.roda_project.commons_ip2.model.IPContentType;
 import org.roda_project.commons_ip2.model.IPDescriptiveMetadata;
 import org.roda_project.commons_ip2.model.IPFile;
+import org.roda_project.commons_ip2.model.IPFileInterface;
 import org.roda_project.commons_ip2.model.IPHeader;
 import org.roda_project.commons_ip2.model.IPMetadata;
 import org.roda_project.commons_ip2.model.IPRepresentation;
@@ -212,17 +213,17 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public IP addSchema(final IPFile schema) {
+  public IP addSchema(final IPFileInterface schema) {
     return aip.addSchema(schema);
   }
 
   @Override
-  public AIP addSubmission(final IPFile submission) {
+  public AIP addSubmission(final IPFileInterface submission) {
     return aip.addSubmission(submission);
   }
 
   @Override
-  public IP addDocumentation(final IPFile documentationPath) {
+  public IP addDocumentation(final IPFileInterface documentationPath) {
     return aip.addDocumentation(documentationPath);
   }
 
@@ -250,17 +251,17 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public IP addFileToRepresentation(final String representationID, final IPFile file) throws IPException {
+  public IP addFileToRepresentation(final String representationID, final IPFileInterface file) throws IPException {
     return aip.addFileToRepresentation(representationID, file);
   }
 
   @Override
-  public IP addSchemaToRepresentation(final String representationID, final IPFile schema) throws IPException {
+  public IP addSchemaToRepresentation(final String representationID, final IPFileInterface schema) throws IPException {
     return aip.addSchemaToRepresentation(representationID, schema);
   }
 
   @Override
-  public IP addDocumentationToRepresentation(final String representationID, final IPFile documentation)
+  public IP addDocumentationToRepresentation(final String representationID, final IPFileInterface documentation)
     throws IPException {
     return aip.addDocumentationToRepresentation(representationID, documentation);
   }
@@ -291,17 +292,17 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public List<IPFile> getSchemas() {
+  public List<IPFileInterface> getSchemas() {
     return aip.getSchemas();
   }
 
   @Override
-  public List<IPFile> getSubmissions() {
+  public List<IPFileInterface> getSubmissions() {
     return aip.getSubmissions();
   }
 
   @Override
-  public List<IPFile> getDocumentation() {
+  public List<IPFileInterface> getDocumentation() {
     return aip.getDocumentation();
   }
 

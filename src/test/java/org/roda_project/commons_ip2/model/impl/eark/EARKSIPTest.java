@@ -8,6 +8,8 @@
 package org.roda_project.commons_ip2.model.impl.eark;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,12 +24,16 @@ import org.junit.Test;
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
+import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
 import org.roda_project.commons_ip2.model.IPAgent;
 import org.roda_project.commons_ip2.model.IPAgentNoteTypeEnum;
+import org.roda_project.commons_ip2.model.IPConstants;
 import org.roda_project.commons_ip2.model.IPContentInformationType;
 import org.roda_project.commons_ip2.model.IPContentType;
 import org.roda_project.commons_ip2.model.IPDescriptiveMetadata;
 import org.roda_project.commons_ip2.model.IPFile;
+import org.roda_project.commons_ip2.model.IPFileInterface;
+import org.roda_project.commons_ip2.model.IPFileShallow;
 import org.roda_project.commons_ip2.model.IPMetadata;
 import org.roda_project.commons_ip2.model.IPRepresentation;
 import org.roda_project.commons_ip2.model.MetadataType;
@@ -38,6 +44,8 @@ import org.roda_project.commons_ip2.model.ValidationEntry.LEVEL;
 import org.roda_project.commons_ip2.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.xml.datatype.DatatypeConfigurationException;
 
 /**
  * Unit tests for EARK Information Packages (SIP, AIP and DIP)
@@ -69,6 +77,83 @@ public class EARKSIPTest {
     parseAndValidateFullEARKSIP(zipSIP);
     LOGGER.info("Done parsing (and validating) full E-ARK SIP");
 
+  }
+
+  @Test
+  public void buildEARKSIPShallow() throws IPException, InterruptedException, MalformedURLException, DatatypeConfigurationException {
+    LOGGER.info("Creating full E-ARK SIP-S");
+    Path zipSIPS = createFullEARKSIPS();
+    LOGGER.info("Done creating full E-ARK SIP-S");
+  }
+
+  private Path createFullEARKSIPS() throws IPException, InterruptedException, MalformedURLException, DatatypeConfigurationException {
+    // 1) instantiate E-ARK SIP object
+    SIP sip = new EARKSIP("SIP_S_1", IPContentType.getMIXED(), IPContentInformationType.getMIXED());
+    sip.addCreatorSoftwareAgent("RODA Commons IP", "2.0.0");
+
+    // 1.1) set optional human-readable description
+    sip.setDescription("A full E-ARK SIP-S");
+
+    // 1.2) add descriptive metadata (SIP level)
+    IPDescriptiveMetadata metadataDescriptiveDC = new IPDescriptiveMetadata(
+        new IPFile(Paths.get("src/test/resources/eark/metadata_descriptive_dc.xml")),
+        new MetadataType(MetadataTypeEnum.DC), null);
+    sip.addDescriptiveMetadata(metadataDescriptiveDC);
+
+    // 1.3) add preservation metadata (SIP level)
+    IPMetadata metadataPreservation = new IPMetadata(
+        new IPFile(Paths.get("src/test/resources/eark/metadata_preservation_premis.xml")))
+        .setMetadataType(MetadataTypeEnum.PREMIS);
+    sip.addPreservationMetadata(metadataPreservation);
+
+    // 1.4) add other metadata (SIP level)
+    IPFile metadataOtherFile = new IPFile(Paths.get("src/test/resources/eark/metadata_other.txt"));
+    // 1.4.1) optionally one may rename file final name
+    metadataOtherFile.setRenameTo("metadata_other_renamed.txt");
+    IPMetadata metadataOther = new IPMetadata(metadataOtherFile);
+    sip.addOtherMetadata(metadataOther);
+    metadataOtherFile = new IPFile(Paths.get("src/test/resources/eark/metadata_other.txt"));
+    // 1.4.1) optionally one may rename file final name
+    metadataOtherFile.setRenameTo("metadata_other_renamed2.txt");
+    metadataOther = new IPMetadata(metadataOtherFile);
+    sip.addOtherMetadata(metadataOther);
+
+    // 1.5) add xml schema (SIP level)
+    sip.addSchema(new IPFile(Paths.get("src/test/resources/eark/schema.xsd")));
+
+    // 1.6) add documentation (SIP level)
+    sip.addDocumentation(new IPFile(Paths.get("src/test/resources/eark/documentation.pdf")));
+
+    // 1.7) set optional RODA related information about ancestors
+    sip.setAncestors(Arrays.asList("b6f24059-8973-4582-932d-eb0b2cb48f28"));
+
+    // 1.8) add an agent (SIP level)
+    IPAgent agent = new IPAgent("Agent Name", "OTHER", "OTHER ROLE", CreatorType.INDIVIDUAL, "OTHER TYPE", "",
+        IPAgentNoteTypeEnum.SOFTWARE_VERSION);
+    sip.addAgent(agent);
+
+    // 1.9) add a representation (status will be set to the default value, i.e.,
+    // ORIGINAL)
+    IPRepresentation representation1 = new IPRepresentation("representation 1");
+    sip.addRepresentation(representation1);
+
+    // 1.9.1) add a file to the representation
+    URL url = new URL("https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
+    // setting basic information about the remote file
+    FileType filetype = new FileType();
+    filetype.setMIMETYPE("application/pdf");
+    filetype.setSIZE(784099L);
+    filetype.setCREATED(Utils.getCurrentCalendar());
+    filetype.setCHECKSUM("3df79d34abbca99308e79cb94461c1893582604d68329a41fd4bec1885e6adb4");
+    filetype.setCHECKSUMTYPE(IPConstants.CHECKSUM_ALGORITHM);
+
+    IPFileInterface representationFile = new IPFileShallow(url, filetype);
+    representation1.addFile(representationFile);
+
+    // 2) build SIP, providing an output directory
+    Path zipSIP = sip.build(tempFolder);
+
+    return zipSIP;
   }
 
   private Path createFullEARKSIP() throws IPException, InterruptedException {

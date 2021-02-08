@@ -49,6 +49,7 @@ import org.roda_project.commons_ip2.model.IPConstants;
 import org.roda_project.commons_ip2.model.IPContentInformationType;
 import org.roda_project.commons_ip2.model.IPContentType;
 import org.roda_project.commons_ip2.model.IPDescriptiveMetadata;
+import org.roda_project.commons_ip2.model.IPFileShallow;
 import org.roda_project.commons_ip2.model.IPHeader;
 import org.roda_project.commons_ip2.model.IPInterface;
 import org.roda_project.commons_ip2.model.IPMetadata;
@@ -370,6 +371,23 @@ public final class EARKMETSUtils {
     mdRef.setLOCTYPE(LocType.URL.toString());
     mdRef.setHref(METSUtils.encodeHref(metadataPath));
     return mdRef;
+  }
+
+  public static void addDataFileToMETS(MetsWrapper representationMETS, IPFileShallow shallow) {
+    FileType file = shallow.getFileType();
+    file.setID(Utils.generateRandomAndPrefixedUUID());
+
+    // add to file section
+    FLocat fileLocation = METSUtils.createFileLocation(shallow.getFileLocation().toString());
+    file.getFLocat().add(fileLocation);
+    representationMETS.getDataFileGroup().getFile().add(file);
+
+    // add to struct map
+    if (representationMETS.getDataDiv().getFptr().isEmpty()) {
+      Fptr fptr = new Fptr();
+      fptr.setFILEID(representationMETS.getDataFileGroup());
+      representationMETS.getDataDiv().getFptr().add(fptr);
+    }
   }
 
   public static FileType addDataFileToMETS(MetsWrapper representationMETS, String dataFilePath, Path dataFile)

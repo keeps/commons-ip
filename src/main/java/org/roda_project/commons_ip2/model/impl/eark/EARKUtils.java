@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,10 +41,12 @@ import org.roda_project.commons_ip2.model.IPConstants;
 import org.roda_project.commons_ip2.model.IPContentType;
 import org.roda_project.commons_ip2.model.IPDescriptiveMetadata;
 import org.roda_project.commons_ip2.model.IPFile;
+import org.roda_project.commons_ip2.model.IPFileShallow;
 import org.roda_project.commons_ip2.model.IPHeader;
 import org.roda_project.commons_ip2.model.IPInterface;
 import org.roda_project.commons_ip2.model.IPMetadata;
 import org.roda_project.commons_ip2.model.IPRepresentation;
+import org.roda_project.commons_ip2.model.IPFileInterface;
 import org.roda_project.commons_ip2.model.MetadataType;
 import org.roda_project.commons_ip2.model.MetsWrapper;
 import org.roda_project.commons_ip2.model.RepresentationStatus;
@@ -72,7 +75,7 @@ public final class EARKUtils {
         if (Thread.interrupted()) {
           throw new InterruptedException();
         }
-        IPFile file = dm.getMetadata();
+        IPFileInterface file = dm.getMetadata();
 
         String descriptiveFilePath = IPConstants.DESCRIPTIVE_FOLDER
           + ModelUtils.getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
@@ -95,7 +98,7 @@ public final class EARKUtils {
         if (Thread.interrupted()) {
           throw new InterruptedException();
         }
-        IPFile file = pm.getMetadata();
+        IPFileInterface file = pm.getMetadata();
 
         String preservationMetadataPath = IPConstants.PRESERVATION_FOLDER
           + ModelUtils.getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
@@ -117,7 +120,7 @@ public final class EARKUtils {
         if (Thread.interrupted()) {
           throw new InterruptedException();
         }
-        IPFile file = om.getMetadata();
+        IPFileInterface file = om.getMetadata();
 
         String otherMetadataPath = IPConstants.OTHER_FOLDER + ModelUtils.getFoldersFromList(file.getRelativeFolders())
           + file.getFileName();
@@ -197,18 +200,23 @@ public final class EARKUtils {
         ((SIP) ip).notifySipBuildRepresentationProcessingStarted(representation.getData().size());
       }
       int i = 0;
-      for (IPFile file : representation.getData()) {
+      for (IPFileInterface file : representation.getData()) {
         if (Thread.interrupted()) {
           throw new InterruptedException();
         }
 
-        String dataFilePath = IPConstants.DATA_FOLDER + ModelUtils.getFoldersFromList(file.getRelativeFolders())
-          + file.getFileName();
-        FileType fileType = EARKMETSUtils.addDataFileToMETS(representationMETSWrapper, dataFilePath, file.getPath());
+        if (file instanceof IPFile) {
+          String dataFilePath = IPConstants.DATA_FOLDER + ModelUtils.getFoldersFromList(file.getRelativeFolders())
+              + file.getFileName();
+          FileType fileType = EARKMETSUtils.addDataFileToMETS(representationMETSWrapper, dataFilePath, file.getPath());
 
-        dataFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
-          + dataFilePath;
-        ZIPUtils.addFileTypeFileToZip(zipEntries, file.getPath(), dataFilePath, fileType);
+          dataFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
+              + dataFilePath;
+          ZIPUtils.addFileTypeFileToZip(zipEntries, file.getPath(), dataFilePath, fileType);
+        } else if (file instanceof IPFileShallow) {
+          IPFileShallow shallow = (IPFileShallow) file;
+          EARKMETSUtils.addDataFileToMETS(representationMETSWrapper, shallow);
+        }
 
         i++;
         if (ip instanceof SIP) {
@@ -222,9 +230,9 @@ public final class EARKUtils {
   }
 
   protected static void addSchemasToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-    List<IPFile> schemas, String representationId) throws IPException, InterruptedException {
+                                               List<IPFileInterface> schemas, String representationId) throws IPException, InterruptedException {
     if (schemas != null && !schemas.isEmpty()) {
-      for (IPFile schema : schemas) {
+      for (IPFileInterface schema : schemas) {
         if (Thread.interrupted()) {
           throw new InterruptedException();
         }
@@ -243,9 +251,9 @@ public final class EARKUtils {
   }
 
   protected static void addDocumentationToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-    List<IPFile> documentation, String representationId) throws IPException, InterruptedException {
+                                                     List<IPFileInterface> documentation, String representationId) throws IPException, InterruptedException {
     if (documentation != null && !documentation.isEmpty()) {
-      for (IPFile doc : documentation) {
+      for (IPFileInterface doc : documentation) {
         if (Thread.interrupted()) {
           throw new InterruptedException();
         }
@@ -263,7 +271,7 @@ public final class EARKUtils {
     }
   }
 
-  protected static void addDefaultSchemas(Logger logger, List<IPFile> schemas, Path buildDir)
+  protected static void addDefaultSchemas(Logger logger, List<IPFileInterface> schemas, Path buildDir)
     throws InterruptedException {
     try {
       if (Thread.interrupted()) {
@@ -287,9 +295,9 @@ public final class EARKUtils {
   }
 
   protected static void addSubmissionsToZipAndMETS(final Map<String, ZipEntryInfo> zipEntries,
-    final MetsWrapper metsWrapper, final List<IPFile> submissions) throws IPException, InterruptedException {
+    final MetsWrapper metsWrapper, final List<IPFileInterface> submissions) throws IPException, InterruptedException {
     if (submissions != null && !submissions.isEmpty()) {
-      for (IPFile submission : submissions) {
+      for (IPFileInterface submission : submissions) {
         if (Thread.interrupted()) {
           throw new InterruptedException();
         }
@@ -575,7 +583,7 @@ public final class EARKUtils {
 
   protected static void processMetadataFile(IPInterface ip, Logger logger, IPRepresentation representation,
     String metadataType, MdRef mdRef, Path filePath, List<String> fileRelativeFolders) throws IPException {
-    Optional<IPFile> metadataFile = validateMetadataFile(ip, filePath, mdRef, fileRelativeFolders);
+    Optional<IPFileInterface> metadataFile = validateMetadataFile(ip, filePath, mdRef, fileRelativeFolders);
     if (metadataFile.isPresent()) {
       ValidationUtils.addInfo(ip.getValidationReport(),
         ValidationConstants.getMetadataFileFoundWithMatchingChecksumString(metadataType), ip.getBasePath(), filePath);
@@ -625,13 +633,13 @@ public final class EARKUtils {
     }
   }
 
-  protected static Optional<IPFile> validateFile(IPInterface ip, Path filePath, FileType fileType,
+  protected static Optional<IPFileInterface> validateFile(IPInterface ip, Path filePath, FileType fileType,
     List<String> fileRelativeFolders) {
     return Utils.validateFile(ip, filePath, fileRelativeFolders, fileType.getCHECKSUM(), fileType.getCHECKSUMTYPE(),
       fileType.getID());
   }
 
-  protected static Optional<IPFile> validateMetadataFile(IPInterface ip, Path filePath, MdRef mdRef,
+  protected static Optional<IPFileInterface> validateMetadataFile(IPInterface ip, Path filePath, MdRef mdRef,
     List<String> fileRelativeFolders) {
     return Utils.validateFile(ip, filePath, fileRelativeFolders, mdRef.getCHECKSUM(), mdRef.getCHECKSUMTYPE(),
       mdRef.getID());
@@ -652,7 +660,7 @@ public final class EARKUtils {
 
               if (Files.exists(filePath)) {
                 List<String> fileRelativeFolders = Utils.getFileRelativeFolders(basePath.resolve(folder), filePath);
-                Optional<IPFile> file = validateFile(ip, filePath, fileType, fileRelativeFolders);
+                Optional<IPFileInterface> file = validateFile(ip, filePath, fileType, fileRelativeFolders);
 
                 if (file.isPresent()) {
                   if (IPConstants.SCHEMAS.equalsIgnoreCase(folder)) {
@@ -712,7 +720,7 @@ public final class EARKUtils {
               if (Files.exists(filePath)) {
                 List<String> fileRelativeFolders = Utils
                   .getFileRelativeFolders(representationBasePath.resolve(IPConstants.DATA), filePath);
-                Optional<IPFile> file = validateFile(ip, filePath, fileType, fileRelativeFolders);
+                Optional<IPFileInterface> file = validateFile(ip, filePath, fileType, fileRelativeFolders);
 
                 if (file.isPresent()) {
                   representation.addFile(file.get());

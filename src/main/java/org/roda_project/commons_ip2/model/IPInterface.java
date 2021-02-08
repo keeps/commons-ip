@@ -80,9 +80,9 @@ public interface IPInterface {
 
   IP addRepresentation(IPRepresentation representation) throws IPException;
 
-  IP addSchema(IPFile schema);
+  IP addSchema(IPFileInterface schema);
 
-  IP addDocumentation(IPFile documentation);
+  IP addDocumentation(IPFileInterface documentation);
 
   IP addAgentToRepresentation(String representationID, IPAgent agent) throws IPException;
 
@@ -94,11 +94,11 @@ public interface IPInterface {
 
   IP addOtherMetadataToRepresentation(String representationID, IPMetadata otherMetadata) throws IPException;
 
-  IP addFileToRepresentation(String representationID, IPFile file) throws IPException;
+  IP addFileToRepresentation(String representationID, IPFileInterface file) throws IPException;
 
-  IP addSchemaToRepresentation(String representationID, IPFile schema) throws IPException;
+  IP addSchemaToRepresentation(String representationID, IPFileInterface schema) throws IPException;
 
-  IP addDocumentationToRepresentation(String representationID, IPFile documentation) throws IPException;
+  IP addDocumentationToRepresentation(String representationID, IPFileInterface documentation) throws IPException;
 
   List<IPAgent> getAgents();
 
@@ -110,9 +110,9 @@ public interface IPInterface {
 
   List<IPRepresentation> getRepresentations();
 
-  List<IPFile> getSchemas();
+  List<IPFileInterface> getSchemas();
 
-  List<IPFile> getDocumentation();
+  List<IPFileInterface> getDocumentation();
 
   Map<String, ZipEntryInfo> getZipEntries();
 

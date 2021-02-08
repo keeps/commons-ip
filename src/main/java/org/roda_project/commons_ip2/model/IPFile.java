@@ -9,13 +9,12 @@ package org.roda_project.commons_ip2.model;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.Serializable;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IPFile implements Serializable {
+public class IPFile implements IPFileInterface {
   private static final long serialVersionUID = -8653651803476080935L;
 
   private transient Path path;
@@ -25,6 +24,10 @@ public class IPFile implements Serializable {
   private String checksum = "";
   private String checksumAlgorithm = "";
   private List<String> relatedTags;
+
+  public IPFile() {
+    super();
+  }
 
   public IPFile(Path path) {
     super();
@@ -67,7 +70,7 @@ public class IPFile implements Serializable {
     return relativeFolders;
   }
 
-  public IPFile setRelativeFolders(List<String> relativeFolders) {
+  public IPFileInterface setRelativeFolders(List<String> relativeFolders) {
     this.relativeFolders = relativeFolders;
     return this;
   }
@@ -76,7 +79,7 @@ public class IPFile implements Serializable {
     return renameTo;
   }
 
-  public IPFile setRenameTo(String renameTo) {
+  public IPFileInterface setRenameTo(String renameTo) {
     this.renameTo = renameTo;
     return this;
   }
@@ -95,7 +98,7 @@ public class IPFile implements Serializable {
     return checksum;
   }
 
-  public IPFile setChecksum(String checksum) {
+  public IPFileInterface setChecksum(String checksum) {
     this.checksum = checksum;
     return this;
   }
@@ -104,12 +107,12 @@ public class IPFile implements Serializable {
     return checksumAlgorithm;
   }
 
-  public IPFile setChecksumAlgorithm(String checksumAlgorithm) {
+  public IPFileInterface setChecksumAlgorithm(String checksumAlgorithm) {
     this.checksumAlgorithm = checksumAlgorithm;
     return this;
   }
 
-  public IPFile setChecksumAndAlgorithm(String checksum, String checksumAlgorithm) {
+  public IPFileInterface setChecksumAndAlgorithm(String checksum, String checksumAlgorithm) {
     this.checksum = checksum == null ? "" : checksum;
     this.checksumAlgorithm = checksumAlgorithm == null ? "" : checksumAlgorithm;
     return this;
@@ -119,7 +122,7 @@ public class IPFile implements Serializable {
     return relatedTags;
   }
 
-  public IPFile setRelatedTags(List<String> relatedTags) {
+  public IPFileInterface setRelatedTags(List<String> relatedTags) {
     this.relatedTags = relatedTags;
     return this;
   }

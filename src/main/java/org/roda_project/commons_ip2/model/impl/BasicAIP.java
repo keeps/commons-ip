@@ -18,7 +18,7 @@ import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip2.model.AIP;
 import org.roda_project.commons_ip2.model.IP;
 import org.roda_project.commons_ip2.model.IPContentType;
-import org.roda_project.commons_ip2.model.IPFile;
+import org.roda_project.commons_ip2.model.IPFileInterface;
 
 /**
  * AIP basic implementation. This implementation just holds values in memory. It
@@ -43,7 +43,7 @@ public class BasicAIP extends IP implements AIP {
   /**
    * List of submission files.
    */
-  private List<IPFile> submissions;
+  private List<IPFileInterface> submissions;
 
   /**
    * Constructor.
@@ -94,12 +94,12 @@ public class BasicAIP extends IP implements AIP {
   }
 
   @Override
-  public List<IPFile> getSubmissions() {
+  public List<IPFileInterface> getSubmissions() {
     return submissions;
   }
 
   @Override
-  public AIP addSubmission(final IPFile submission) {
+  public AIP addSubmission(final IPFileInterface submission) {
     this.submissions.add(submission);
     return this;
   }

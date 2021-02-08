@@ -35,20 +35,20 @@ public interface AIP extends IPInterface {
   String getState();
 
   /**
-   * Get the {@link List} of submission {@link IPFile}.
+   * Get the {@link List} of submission {@link IPFileInterface}.
    *
-   * @return a {@link List<IPFile>}.
+   * @return a {@link List<IPFileInterface>}.
    */
-  List<IPFile> getSubmissions();
+  List<IPFileInterface> getSubmissions();
 
   /**
    * Add a submission.
    * 
    * @param submission
-   *          the submission {@link IPFile}.
+   *          the submission {@link IPFileInterface}.
    * @return the {@link AIP}.
    */
-  AIP addSubmission(IPFile submission);
+  AIP addSubmission(IPFileInterface submission);
 
   /**
    * Parse an {@link AIP} from the given source {@link Path}.

@@ -47,8 +47,8 @@ public abstract class IP implements IPInterface {
   private List<IPMetadata> otherMetadata;
   private List<String> representationIds;
   private Map<String, IPRepresentation> representations;
-  private List<IPFile> schemas;
-  private List<IPFile> documentation;
+  private List<IPFileInterface> schemas;
+  private List<IPFileInterface> documentation;
 
   private Map<String, ZipEntryInfo> zipEntries;
 
@@ -260,13 +260,13 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP addSchema(IPFile schema) {
+  public IP addSchema(IPFileInterface schema) {
     schemas.add(schema);
     return this;
   }
 
   @Override
-  public IP addDocumentation(IPFile documentationPath) {
+  public IP addDocumentation(IPFileInterface documentationPath) {
     documentation.add(documentationPath);
     return this;
   }
@@ -310,7 +310,7 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP addFileToRepresentation(String representationID, IPFile file) throws IPException {
+  public IP addFileToRepresentation(String representationID, IPFileInterface file) throws IPException {
     checkIfRepresentationExists(representationID);
     IPRepresentation rep = representations.get(representationID);
     rep.addFile(file);
@@ -319,7 +319,7 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP addSchemaToRepresentation(String representationID, IPFile schema) throws IPException {
+  public IP addSchemaToRepresentation(String representationID, IPFileInterface schema) throws IPException {
     checkIfRepresentationExists(representationID);
     IPRepresentation rep = representations.get(representationID);
     rep.addSchema(schema);
@@ -328,7 +328,7 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP addDocumentationToRepresentation(String representationID, IPFile documentation) throws IPException {
+  public IP addDocumentationToRepresentation(String representationID, IPFileInterface documentation) throws IPException {
     checkIfRepresentationExists(representationID);
     IPRepresentation rep = representations.get(representationID);
     rep.addDocumentation(documentation);
@@ -366,12 +366,12 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public List<IPFile> getSchemas() {
+  public List<IPFileInterface> getSchemas() {
     return schemas;
   }
 
   @Override
-  public List<IPFile> getDocumentation() {
+  public List<IPFileInterface> getDocumentation() {
     return documentation;
   }
 

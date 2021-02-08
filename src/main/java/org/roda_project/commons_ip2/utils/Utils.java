@@ -39,6 +39,7 @@ import org.roda_project.commons_ip.utils.ValidationConstants;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType.MdRef;
 import org.roda_project.commons_ip2.model.IPConstants;
 import org.roda_project.commons_ip2.model.IPFile;
+import org.roda_project.commons_ip2.model.IPFileInterface;
 import org.roda_project.commons_ip2.model.IPInterface;
 import org.roda_project.commons_ip2.model.ValidationEntry;
 import org.slf4j.Logger;
@@ -180,10 +181,10 @@ public final class Utils {
     return res;
   }
 
-  public static Optional<IPFile> validateFile(IPInterface ip, Path filePath, List<String> fileRelativeFolders,
+  public static Optional<IPFileInterface> validateFile(IPInterface ip, Path filePath, List<String> fileRelativeFolders,
     String metsChecksum, String metsChecksumAlgorithm, String metsElementId) {
     boolean calculateChecksum = true;
-    Optional<IPFile> file = Optional.empty();
+    Optional<IPFileInterface> file = Optional.empty();
 
     // validate if both mets checksum or mets algorithm are set
     if (StringUtils.isBlank(metsChecksum)) {
