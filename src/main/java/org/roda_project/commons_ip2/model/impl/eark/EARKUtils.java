@@ -341,13 +341,9 @@ public final class EARKUtils {
 
         ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.MAIN_METS_IS_VALID, ipPath, mainMETSFile);
 
-        if (ipPath.getFileName().toString().equals(mainMets.getOBJID())) {
-          ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIPSTR2, ip.getBasePath(),
-            mainMETSFile);
-        } else {
-          ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIPSTR2,
-            ip.getIPConfig().isStrictMode() ? LEVEL.ERROR : LEVEL.WARN, ip.getBasePath(), mainMETSFile);
-        }
+        ValidationUtils.addIssueIfFalse(ip.getValidationReport(), ValidationConstants.CSIPSTR2,
+          ipPath.getFileName().toString().equals(mainMets.getOBJID()),
+          ip.getIPConfig().isStrictMode() ? LEVEL.ERROR : LEVEL.WARN, ip.getBasePath(), mainMETSFile);
 
         if (ip.getIPConfig().isSchematronValidation()) {
           try {
@@ -387,20 +383,12 @@ public final class EARKUtils {
       ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIP117, ipPath, metsPath);
 
       // mets/metsHdr/@CREATEDATE
-      if (metsHdr.getCREATEDATE() == null) {
-        ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIP7, LEVEL.ERROR, ip.getBasePath(),
-          metsPath);
-      } else {
-        ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIP7, ipPath, metsPath);
-      }
+      ValidationUtils.addIssueIfNull(ip.getValidationReport(), ValidationConstants.CSIP7, metsHdr.getCREATEDATE(),
+        LEVEL.ERROR, ip.getBasePath(), metsPath);
 
       // mets/metsHdr/@LASTMODDATE
-      if (metsHdr.getLASTMODDATE() == null) {
-        ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIP8, LEVEL.WARN, ip.getBasePath(),
-          metsPath);
-      } else {
-        ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIP8, ipPath, metsPath);
-      }
+      ValidationUtils.addIssueIfNull(ip.getValidationReport(), ValidationConstants.CSIP8, metsHdr.getLASTMODDATE(),
+        LEVEL.WARN, ip.getBasePath(), metsPath);
 
       // mets/metsHdr/@csip:OAISPACKAGETYPE
       if (metsHdr.getOAISPACKAGETYPE() == null || "".equals(metsHdr.getOAISPACKAGETYPE())) {
@@ -615,31 +603,17 @@ public final class EARKUtils {
   protected static MetsWrapper processRepresentationMets(IPInterface ip, Path representationMetsFile,
     IPRepresentation representation) {
     Path representationFolder = representationMetsFile.getParent();
-    if (representationFolder.getFileName().toString().equals(representation.getRepresentationID())) {
-      ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIPSTR10, ip.getBasePath(),
-        representationMetsFile.getParent());
-    } else {
-      ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIPSTR10, LEVEL.ERROR, ip.getBasePath(),
-        representationMetsFile.getParent());
-    }
+    ValidationUtils.addIssueIfStringNotEqual(ip.getValidationReport(), ValidationConstants.CSIPSTR10,
+      representationFolder.getFileName().toString(), representation.getRepresentationID(), LEVEL.ERROR,
+      ip.getBasePath(), representationMetsFile.getParent());
 
     Path representationDataFolder = representationFolder.resolve(IPConstants.DATA);
-    if (Files.isDirectory(representationDataFolder)) {
-      ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIPSTR11, ip.getBasePath(),
-        representationDataFolder);
-    } else {
-      ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIPSTR11, LEVEL.WARN, ip.getBasePath(),
-        representationDataFolder);
-    }
+    ValidationUtils.addIssueIfFalse(ip.getValidationReport(), ValidationConstants.CSIPSTR11,
+      Files.isDirectory(representationDataFolder), LEVEL.WARN, ip.getBasePath(), representationDataFolder);
 
     Path representationMetadataFolder = representationFolder.resolve(IPConstants.METADATA);
-    if (Files.isDirectory(representationMetadataFolder)) {
-      ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIPSTR13, ip.getBasePath(),
-        representationMetadataFolder);
-    } else {
-      ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIPSTR13, LEVEL.WARN, ip.getBasePath(),
-        representationMetadataFolder);
-    }
+    ValidationUtils.addIssueIfFalse(ip.getValidationReport(), ValidationConstants.CSIPSTR13,
+      Files.isDirectory(representationMetadataFolder), LEVEL.WARN, ip.getBasePath(), representationMetadataFolder);
 
     Mets representationMets = null;
     if (Files.exists(representationMetsFile)) {
@@ -684,13 +658,9 @@ public final class EARKUtils {
   protected static IPInterface processRepresentations(MetsWrapper metsWrapper, IPInterface ip, Logger logger)
     throws IPException {
 
-    if (Files.isDirectory(ip.getBasePath().resolve(IPConstants.REPRESENTATIONS))) {
-      ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIPSTR9, ip.getBasePath(),
-        ip.getBasePath().resolve(IPConstants.REPRESENTATIONS));
-    } else {
-      ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIPSTR9, LEVEL.WARN, ip.getBasePath(),
-        ip.getBasePath().resolve(IPConstants.REPRESENTATIONS));
-    }
+    ValidationUtils.addIssueIfFalse(ip.getValidationReport(), ValidationConstants.CSIPSTR9,
+      Files.isDirectory(ip.getBasePath().resolve(IPConstants.REPRESENTATIONS)), LEVEL.WARN, ip.getBasePath(),
+      ip.getBasePath().resolve(IPConstants.REPRESENTATIONS));
 
     if (metsWrapper.getMainDiv() != null && metsWrapper.getMainDiv().getDiv() != null) {
       for (DivType div : metsWrapper.getMainDiv().getDiv()) {
@@ -711,6 +681,14 @@ public final class EARKUtils {
               if (representationStructMap != null) {
 
                 preProcessStructMap(representationMetsWrapper, representationStructMap);
+
+                ValidationUtils.addIssueIfNull(ip.getValidationReport(), ValidationConstants.CSIP58,
+                  representationMetsWrapper.getMets().getFileSec(), LEVEL.WARN, ip.getBasePath(), metsFilePath);
+                if (representationMetsWrapper.getMets().getFileSec() != null) {
+                  ValidationUtils.addIssueIfNull(ip.getValidationReport(), ValidationConstants.CSIP59,
+                    representationMetsWrapper.getMets().getFileSec(), LEVEL.ERROR, ip.getBasePath(), metsFilePath);
+                }
+
                 representation.setStatus(new RepresentationStatus(representationMetsWrapper.getMainDiv().getTYPE()));
                 ip.addRepresentation(representation);
 
@@ -762,17 +740,11 @@ public final class EARKUtils {
         break;
       }
     }
-    if (res == null) {
-      ValidationUtils.addIssue(ip.getValidationReport(),
-        mainMets ? ValidationConstants.MAIN_METS_HAS_NO_E_ARK_STRUCT_MAP
-          : ValidationConstants.REPRESENTATION_METS_HAS_NO_E_ARK_STRUCT_MAP,
-        LEVEL.ERROR, res, ip.getBasePath(), metsWrapper.getMetsPath());
-    } else {
-      ValidationUtils.addInfo(ip.getValidationReport(),
-        mainMets ? ValidationConstants.MAIN_METS_HAS_E_ARK_STRUCT_MAP
-          : ValidationConstants.REPRESENTATION_METS_HAS_E_ARK_STRUCT_MAP,
-        res, ip.getBasePath(), metsWrapper.getMetsPath());
-    }
+
+    ValidationUtils.addIssueIfNull(ip.getValidationReport(),
+      mainMets ? ValidationConstants.MAIN_METS_HAS_NO_E_ARK_STRUCT_MAP
+        : ValidationConstants.REPRESENTATION_METS_HAS_NO_E_ARK_STRUCT_MAP,
+      res, LEVEL.ERROR, ip.getBasePath(), metsWrapper.getMetsPath());
     return res;
   }
 
@@ -802,6 +774,9 @@ public final class EARKUtils {
   protected static IPInterface processDescriptiveMetadata(MetsWrapper metsWrapper, IPInterface ip, Logger logger,
     IPRepresentation representation, Path basePath) throws IPException {
 
+    ValidationUtils.addIssueIfEmpty(ip.getValidationReport(), ValidationConstants.CSIP17,
+      metsWrapper.getMets().getDmdSec(), LEVEL.WARN, ip.getBasePath(), metsWrapper.getMetsPath());
+
     return processMetadata(ip, logger, metsWrapper, representation, metsWrapper.getMetadataDiv(),
       IPConstants.DESCRIPTIVE, basePath);
   }
@@ -815,6 +790,9 @@ public final class EARKUtils {
 
   protected static IPInterface processPreservationMetadata(MetsWrapper metsWrapper, IPInterface ip, Logger logger,
     IPRepresentation representation, Path basePath) throws IPException {
+
+    ValidationUtils.addIssueIfEmpty(ip.getValidationReport(), ValidationConstants.CSIP31,
+      metsWrapper.getMets().getAmdSec(), LEVEL.WARN, ip.getBasePath(), metsWrapper.getMetsPath());
 
     return processMetadata(ip, logger, metsWrapper, representation, metsWrapper.getMetadataDiv(),
       IPConstants.PRESERVATION, basePath);
@@ -836,15 +814,13 @@ public final class EARKUtils {
       } else if (IPConstants.PRESERVATION.equals(metadataType)) {
         objects = div.getADMID();
         csipstr = ValidationConstants.CSIPSTR6;
+        csip = ValidationConstants.CSIP33;
       }
 
       if (objects != null && !objects.isEmpty()) {
         Path folder = ip.getBasePath().resolve(IPConstants.METADATA).resolve(metadataType);
-        if (Files.isDirectory(folder)) {
-          ValidationUtils.addInfo(ip.getValidationReport(), csipstr, ip.getBasePath(), folder);
-        } else {
-          ValidationUtils.addIssue(ip.getValidationReport(), csipstr, LEVEL.WARN, ip.getBasePath(), folder);
-        }
+        ValidationUtils.addIssueIfFalse(ip.getValidationReport(), csipstr, Files.isDirectory(folder), LEVEL.WARN,
+          ip.getBasePath(), folder);
 
         for (Object obj : objects) {
           if (obj instanceof MdSecType) {
@@ -858,22 +834,36 @@ public final class EARKUtils {
                   mdSecType.getCREATED(), LEVEL.ERROR, mdSecType.getID());
                 ValidationUtils.addIssueIfNull(ip.getValidationReport(), ValidationConstants.CSIP20,
                   mdSecType.getSTATUS(), LEVEL.ERROR, mdSecType.getID());
+              } else if (IPConstants.PRESERVATION.equals(metadataType)) {
+                // FIXME 20210209 hsilva: by one side CSIP specification states
+                // that every preservation related information should be
+                // recorded as digiprovMD but it also has requirements for
+                // rightsMD and none for techMD and sourceMD
+                ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIP32, mdSecType.getID());
+                ValidationUtils.addInfo(ip.getValidationReport(), csip, mdSecType.getID());
+                ValidationUtils.addIssueIfNull(ip.getValidationReport(), ValidationConstants.CSIP34,
+                  mdSecType.getSTATUS(), LEVEL.WARN, mdSecType.getID());
               }
             }
 
             MdRef mdRef = mdSecType.getMdRef();
             if (mdRef != null) {
-              ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIP21, mdSecType.getID());
-              ValidationUtils.addIssueIfStringNotEqual(ip.getValidationReport(), ValidationConstants.CSIP23,
+              ValidationUtils.addInfo(ip.getValidationReport(),
+                IPConstants.DESCRIPTIVE.equals(metadataType) ? ValidationConstants.CSIP21 : ValidationConstants.CSIP35,
+                mdSecType.getID());
+
+              ValidationUtils.addIssueIfStringNotEqual(ip.getValidationReport(),
+                IPConstants.DESCRIPTIVE.equals(metadataType) ? ValidationConstants.CSIP22 : ValidationConstants.CSIP36,
                 mdRef.getLOCTYPE(), "URL", LEVEL.ERROR, mdRef.getID());
-              ValidationUtils.addIssueIfStringNotEqual(ip.getValidationReport(), ValidationConstants.CSIP23,
+              ValidationUtils.addIssueIfStringNotEqual(ip.getValidationReport(),
+                IPConstants.DESCRIPTIVE.equals(metadataType) ? ValidationConstants.CSIP23 : ValidationConstants.CSIP37,
                 mdRef.getType(), "simple", LEVEL.ERROR, mdRef.getID());
-              ValidationUtils.addIssueIfNull(ip.getValidationReport(), ValidationConstants.CSIP24, mdRef.getHref(),
-                LEVEL.ERROR, mdRef.getID());
-              ValidationUtils.addIssueIfNull(ip.getValidationReport(), ValidationConstants.CSIP25, mdRef.getMDTYPE(),
-                LEVEL.ERROR, mdRef.getID());
-              ValidationUtils.addIssueIfNull(ip.getValidationReport(), ValidationConstants.CSIP25, mdRef.getMIMETYPE(),
-                LEVEL.ERROR, mdRef.getID());
+              ValidationUtils.addIssueIfNull(ip.getValidationReport(),
+                IPConstants.DESCRIPTIVE.equals(metadataType) ? ValidationConstants.CSIP24 : ValidationConstants.CSIP38,
+                mdRef.getHref(), LEVEL.ERROR, mdRef.getID());
+              ValidationUtils.addIssueIfNull(ip.getValidationReport(),
+                IPConstants.DESCRIPTIVE.equals(metadataType) ? ValidationConstants.CSIP26 : ValidationConstants.CSIP40,
+                mdRef.getMIMETYPE(), LEVEL.ERROR, mdRef.getID());
 
               String href = Utils.extractedRelativePathFromHref(mdRef, ip.getIPConfig().isEncodeDecodeHref());
               Path filePath = basePath.resolve(href);
@@ -888,8 +878,9 @@ public final class EARKUtils {
                   filePath);
               }
             } else {
-              ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIP21, LEVEL.WARN,
-                mdSecType.getID());
+              ValidationUtils.addIssue(ip.getValidationReport(),
+                IPConstants.DESCRIPTIVE.equals(metadataType) ? ValidationConstants.CSIP21 : ValidationConstants.CSIP35,
+                LEVEL.WARN, mdSecType.getID());
             }
           }
         }
@@ -907,24 +898,18 @@ public final class EARKUtils {
         ValidationConstants.getMetadataFileFoundWithMatchingChecksumString(metadataType), ip.getBasePath(), filePath);
 
       if (IPConstants.DESCRIPTIVE.equalsIgnoreCase(metadataType)) {
-        MetadataType dmdType = new MetadataType(mdRef.getMDTYPE().toUpperCase());
-        String dmdVersion = null;
-        try {
-          dmdVersion = mdRef.getMDTYPEVERSION();
-          if (StringUtils.isNotBlank(mdRef.getOTHERMDTYPE())) {
-            dmdType.setOtherType(mdRef.getOTHERMDTYPE());
-          }
-          logger.debug("Metadata type valid: {}", dmdType);
-        } catch (NullPointerException | IllegalArgumentException e) {
-          // do nothing and use already defined values for metadataType &
-          // metadataVersion
-          logger.debug("Setting metadata type to {}", dmdType);
-          ValidationUtils.addEntry(ip.getValidationReport(), ValidationConstants.UNKNOWN_DESCRIPTIVE_METADATA_TYPE,
-            LEVEL.WARN, "Setting metadata type to " + dmdType, ip.getBasePath(), filePath);
-        }
+        ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIP29, ip.getBasePath(), filePath);
+        ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIP30, ip.getBasePath(), filePath);
+
+        MetadataType dmdType = getMetadataType(ip, logger, metadataType, mdRef, filePath);
+
+        ValidationUtils.addIssueIfNotGreatorThan(ip.getValidationReport(), ValidationConstants.CSIP27, mdRef.getSIZE(),
+          0L, LEVEL.ERROR, mdRef.getID());
+        ValidationUtils.addIssueIfNull(ip.getValidationReport(), ValidationConstants.CSIP28, mdRef.getCREATED(),
+          LEVEL.ERROR, mdRef.getID());
 
         IPDescriptiveMetadata descriptiveMetadata = new IPDescriptiveMetadata(mdRef.getID(), metadataFile.get(),
-          dmdType, dmdVersion);
+          dmdType, mdRef.getMDTYPEVERSION());
         descriptiveMetadata.setCreateDate(mdRef.getCREATED());
         if (representation == null) {
           ip.addDescriptiveMetadata(descriptiveMetadata);
@@ -932,7 +917,17 @@ public final class EARKUtils {
           representation.addDescriptiveMetadata(descriptiveMetadata);
         }
       } else if (IPConstants.PRESERVATION.equalsIgnoreCase(metadataType)) {
-        IPMetadata preservationMetadata = new IPMetadata(metadataFile.get());
+        ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIP43, ip.getBasePath(), filePath);
+        ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.CSIP44, ip.getBasePath(), filePath);
+
+        MetadataType amdType = getMetadataType(ip, logger, metadataType, mdRef, filePath);
+
+        ValidationUtils.addIssueIfNotGreatorThan(ip.getValidationReport(), ValidationConstants.CSIP41, mdRef.getSIZE(),
+          0L, LEVEL.ERROR, mdRef.getID());
+        ValidationUtils.addIssueIfNull(ip.getValidationReport(), ValidationConstants.CSIP42, mdRef.getCREATED(),
+          LEVEL.ERROR, mdRef.getID());
+
+        IPMetadata preservationMetadata = new IPMetadata(metadataFile.get(), amdType);
         preservationMetadata.setCreateDate(mdRef.getCREATED());
         if (representation == null) {
           ip.addPreservationMetadata(preservationMetadata);
@@ -948,7 +943,47 @@ public final class EARKUtils {
           representation.addOtherMetadata(otherMetadata);
         }
       }
+    } else {
+      if (IPConstants.DESCRIPTIVE.equalsIgnoreCase(metadataType)) {
+        ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIP29, LEVEL.ERROR, ip.getBasePath(),
+          filePath);
+        ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIP30, LEVEL.ERROR, ip.getBasePath(),
+          filePath);
+      } else if (IPConstants.PRESERVATION.equalsIgnoreCase(metadataType)) {
+        ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIP43, LEVEL.ERROR, ip.getBasePath(),
+          filePath);
+        ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.CSIP44, LEVEL.ERROR, ip.getBasePath(),
+          filePath);
+      }
     }
+  }
+
+  private static MetadataType getMetadataType(IPInterface ip, Logger logger, String metadataType, MdRef mdRef,
+    Path filePath) {
+    MetadataType dmdType = new MetadataType(mdRef.getMDTYPE().toUpperCase());
+    try {
+      if (StringUtils.isNotBlank(mdRef.getOTHERMDTYPE())) {
+        dmdType.setOtherType(mdRef.getOTHERMDTYPE());
+      }
+
+      logger.debug("Metadata type valid: {}", dmdType);
+      ValidationUtils.addInfo(ip.getValidationReport(),
+        IPConstants.DESCRIPTIVE.equalsIgnoreCase(metadataType) ? ValidationConstants.CSIP25
+          : ValidationConstants.CSIP39,
+        mdRef.getID());
+    } catch (NullPointerException | IllegalArgumentException e) {
+      logger.debug("Setting metadata type to {}", dmdType);
+      ValidationUtils.addEntry(ip.getValidationReport(),
+        IPConstants.DESCRIPTIVE.equalsIgnoreCase(metadataType) ? ValidationConstants.UNKNOWN_DESCRIPTIVE_METADATA_TYPE
+          : ValidationConstants.UNKNOWN_PRESERVATION_METADATA_TYPE,
+        IPConstants.DESCRIPTIVE.equalsIgnoreCase(metadataType) ? LEVEL.ERROR : LEVEL.WARN,
+        "Setting metadata type to " + dmdType, ip.getBasePath(), filePath);
+      ValidationUtils.addIssue(ip.getValidationReport(),
+        IPConstants.DESCRIPTIVE.equalsIgnoreCase(metadataType) ? ValidationConstants.CSIP25
+          : ValidationConstants.CSIP39,
+        IPConstants.DESCRIPTIVE.equalsIgnoreCase(metadataType) ? LEVEL.ERROR : LEVEL.WARN, mdRef.getID());
+    }
+    return dmdType;
   }
 
   protected static Optional<IPFile> validateFile(IPInterface ip, Path filePath, FileType fileType,
@@ -1105,15 +1140,6 @@ public final class EARKUtils {
     } else {
       ValidationUtils.addIssue(sip.getValidationReport(), ValidationConstants.CSIPSTR5, LEVEL.WARN, sip.getBasePath(),
         sip.getBasePath().resolve(IPConstants.METADATA));
-    }
-
-    List<MdSecType> dmdSec = metsWrapper.getMets().getDmdSec();
-    if (dmdSec.isEmpty()) {
-      ValidationUtils.addIssue(sip.getValidationReport(), ValidationConstants.CSIP17, LEVEL.WARN, sip.getBasePath(),
-        metsWrapper.getMetsPath());
-    } else {
-      ValidationUtils.addInfo(sip.getValidationReport(), ValidationConstants.CSIP17, sip.getBasePath(),
-        metsWrapper.getMetsPath());
     }
   }
 

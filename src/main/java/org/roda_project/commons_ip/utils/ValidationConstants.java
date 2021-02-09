@@ -55,6 +55,7 @@ public final class ValidationConstants {
   public static final String OTHER_METADATA_FILE_NOT_FOUND = "Other metadata file not found.";
   public static final String OTHER_METADATA_FPTR_NOT_FOUND = "Other metadata has no FPTR.";
   public static final String UNKNOWN_DESCRIPTIVE_METADATA_TYPE = "Descriptive metadata type is unknown.";
+  public static final String UNKNOWN_PRESERVATION_METADATA_TYPE = "Preservation metadata type is unknown.";
 
   // Mets checksum related
   public static final String CHECKSUM_NOT_SET = "Checksum in METS.xml is not set.";
@@ -163,6 +164,47 @@ public final class ValidationConstants {
     "Specifies the type of metadata in the referenced file. Values are taken from the list provided by the METS.");
   public static final ValidationEntry CSIP26 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP26",
     "The IANA mime type of the referenced file.");
+  public static final ValidationEntry CSIP27 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP27",
+    "Size of the referenced file in bytes.");
+  public static final ValidationEntry CSIP28 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP28",
+    "The creation date of the referenced file.");
+  public static final ValidationEntry CSIP29 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP29",
+    "The checksum of the referenced file.");
+  public static final ValidationEntry CSIP30 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP30",
+    "The type of checksum following the value list present in the METS-standard which has been used for calculating the checksum for the referenced file.");
+  public static final ValidationEntry CSIP31 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP31",
+    "If administrative / preservation metadata is available, it must be described using the administrative metadata section (<amdSec>) element. All administrative metadata is present in a single <amdSec> element. It is possible to transfer metadata in a package using just the descriptive metadata section and/or administrative metadata section.");
+  public static final ValidationEntry CSIP32 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP32",
+    "For recording information about preservation the standard PREMIS is used. It is mandatory to include one <digiprovMD> element for each piece of PREMIS metadata. The use if PREMIS in METS is following the recommendations in the 2017 version of PREMIS in METS Guidelines.");
+  public static final ValidationEntry CSIP33 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP33",
+    "An xml:id identifier for the digital provenance metadata section mets/amdSec/digiprovMD used for internal package references. It must be unique within the package.");
+  public static final ValidationEntry CSIP34 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP34",
+    "Indicates the status of the package using a fixed vocabulary.");
+  public static final ValidationEntry CSIP35 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP35",
+    "Reference to the digital provenance metadata file stored in the “metadata” section of the IP.");
+  public static final ValidationEntry CSIP36 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP36",
+    "The locator type is always used with the value “URL” from the vocabulary in the attribute.");
+  public static final ValidationEntry CSIP37 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP37",
+    "Attribute used with the value “simple”. Value list is maintained by the xlink standard.");
+  public static final ValidationEntry CSIP38 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP38",
+    "The actual location of the resource. This specification recommends recording a URL type filepath within this attribute.");
+  public static final ValidationEntry CSIP39 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP39",
+    "Specifies the type of metadata in the referenced file. Values are taken from the list provided by the METS.");
+  public static final ValidationEntry CSIP40 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP40",
+    "The IANA mime type for the referenced file.");
+  public static final ValidationEntry CSIP41 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP41",
+    "Size of the referenced file in bytes.");
+  public static final ValidationEntry CSIP42 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP42",
+    "Creation date of the referenced file.");
+  public static final ValidationEntry CSIP43 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP43",
+    "The checksum of the referenced file.");
+  public static final ValidationEntry CSIP44 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP44",
+    "The type of checksum following the value list present in the METS-standard which has been used for calculating the checksum for the referenced file.");
+
+  public static final ValidationEntry CSIP58 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP58",
+    "The transferred content is placed in the file section in different file group elements, described in other requirements. Only a single file section (<fileSec>) element should be present. It is possible to transfer just descriptive metadata and/or administrative metadata without files placed in this section.");
+  public static final ValidationEntry CSIP59 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP59",
+    "An xml:id identifier for the file section used for internal package references. It must be unique within the package.");
 
   /** Private empty constructor */
   private ValidationConstants() {

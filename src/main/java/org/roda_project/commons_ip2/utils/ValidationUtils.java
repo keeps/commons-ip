@@ -10,13 +10,11 @@ package org.roda_project.commons_ip2.utils;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-import org.roda_project.commons_ip.utils.ValidationConstants;
 import org.roda_project.commons_ip2.mets_v1_12.beans.DivType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
-import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType.MdRef;
 import org.roda_project.commons_ip2.mets_v1_12.beans.StructMapType;
-import org.roda_project.commons_ip2.model.IPInterface;
 import org.roda_project.commons_ip2.model.ValidationEntry;
 import org.roda_project.commons_ip2.model.ValidationEntry.LEVEL;
 import org.roda_project.commons_ip2.model.ValidationReport;
@@ -91,6 +89,33 @@ public final class ValidationUtils {
     return addEntry(report, message, level, getDescription(metsElementId), null, null);
   }
 
+  public static ValidationReport addIssueIfFalse(ValidationReport report, Object message, boolean condition,
+    LEVEL levelIfNull, Path ipPath, Path relatedFilePath) {
+    if (condition) {
+      return ValidationUtils.addInfo(report, message, ipPath, relatedFilePath);
+    } else {
+      return ValidationUtils.addIssue(report, message, levelIfNull, ipPath, relatedFilePath);
+    }
+  }
+
+  public static ValidationReport addIssueIfEmpty(ValidationReport report, Object message, List<?> listToTest,
+    LEVEL levelIfNull, Path ipPath, Path relatedFilePath) {
+    if (listToTest != null && !listToTest.isEmpty()) {
+      return ValidationUtils.addInfo(report, message, ipPath, relatedFilePath);
+    } else {
+      return ValidationUtils.addIssue(report, message, levelIfNull, ipPath, relatedFilePath);
+    }
+  }
+
+  public static ValidationReport addIssueIfStringNotEqual(ValidationReport report, Object message, String textToTest,
+    String textoToTestAgainst, LEVEL levelIfNull, Path ipPath, Path relatedFilePath) {
+    if (textoToTestAgainst.equals(textToTest)) {
+      return ValidationUtils.addInfo(report, message, ipPath, relatedFilePath);
+    } else {
+      return ValidationUtils.addIssue(report, message, levelIfNull, ipPath, relatedFilePath);
+    }
+  }
+
   public static ValidationReport addIssueIfStringNotEqual(ValidationReport report, Object message, String textToTest,
     String textoToTestAgainst, LEVEL levelIfNull, String metsElementId) {
     if (textoToTestAgainst.equals(textToTest)) {
@@ -101,8 +126,26 @@ public final class ValidationUtils {
   }
 
   public static ValidationReport addIssueIfNull(ValidationReport report, Object message, Object objectToTest,
+    LEVEL levelIfNull, Path ipPath, Path relatedFilePath) {
+    if (objectToTest != null) {
+      return ValidationUtils.addInfo(report, message, ipPath, relatedFilePath);
+    } else {
+      return ValidationUtils.addIssue(report, message, levelIfNull, ipPath, relatedFilePath);
+    }
+  }
+
+  public static ValidationReport addIssueIfNull(ValidationReport report, Object message, Object objectToTest,
     LEVEL levelIfNull, String metsElementId) {
     if (objectToTest != null) {
+      return ValidationUtils.addInfo(report, message, metsElementId);
+    } else {
+      return ValidationUtils.addIssue(report, message, levelIfNull, metsElementId);
+    }
+  }
+
+  public static ValidationReport addIssueIfNotGreatorThan(ValidationReport report, Object message, Long objectToTest,
+    Long valueToCompareWith, LEVEL levelIfNull, String metsElementId) {
+    if (objectToTest != null && objectToTest > valueToCompareWith) {
       return ValidationUtils.addInfo(report, message, metsElementId);
     } else {
       return ValidationUtils.addIssue(report, message, levelIfNull, metsElementId);
