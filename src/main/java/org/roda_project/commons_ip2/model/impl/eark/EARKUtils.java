@@ -8,6 +8,8 @@
 package org.roda_project.commons_ip2.model.impl.eark;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -728,8 +730,19 @@ public final class EARKUtils {
                     ValidationConstants.REPRESENTATION_FILE_FOUND_WITH_MATCHING_CHECKSUMS, ip.getBasePath(), filePath);
                 }
               } else {
-                ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.REPRESENTATION_FILE_NOT_FOUND,
-                  ValidationEntry.LEVEL.ERROR, ip.getBasePath(), filePath);
+                //TODO:Verify if path has a protocol
+                if(URI.create(href).getScheme() == null){
+                  ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.REPRESENTATION_FILE_NOT_FOUND,
+                      ValidationEntry.LEVEL.ERROR, ip.getBasePath(), filePath);
+                } else {
+                  try {
+                    IPFileShallow ipFile = new IPFileShallow(URI.create(href).toURL(), fileType);
+                    representation.addFile(ipFile);
+                  } catch ( MalformedURLException e) {
+                    ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.REPRESENTATION_FILE_NOT_FOUND,
+                        ValidationEntry.LEVEL.ERROR, ip.getBasePath(), filePath);
+                  }
+                }
               }
             } else {
               ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.REPRESENTATION_FILE_HAS_NO_FLOCAT,
