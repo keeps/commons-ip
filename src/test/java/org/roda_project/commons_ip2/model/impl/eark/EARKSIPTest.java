@@ -80,10 +80,14 @@ public class EARKSIPTest {
   }
 
   @Test
-  public void buildEARKSIPShallow() throws IPException, InterruptedException, MalformedURLException, DatatypeConfigurationException {
+  public void buildEARKSIPShallow() throws IPException, InterruptedException, MalformedURLException, DatatypeConfigurationException, ParseException {
     LOGGER.info("Creating full E-ARK SIP-S");
     Path zipSIPS = createFullEARKSIPS();
     LOGGER.info("Done creating full E-ARK SIP-S");
+
+    LOGGER.info("Parsing (and validating) full E-ARK SIP");
+    parseAndValidateFullEARKSIPS(zipSIPS);
+    LOGGER.info("Done parsing (and validating) full E-ARK SIP");
   }
 
   private Path createFullEARKSIPS() throws IPException, InterruptedException, MalformedURLException, DatatypeConfigurationException {
@@ -258,6 +262,27 @@ public class EARKSIPTest {
     Path zipSIP = sip.build(tempFolder);
 
     return zipSIP;
+  }
+
+  private void parseAndValidateFullEARKSIPS(Path zipSIPS) throws ParseException {
+    // 1) invoke static method parse and that's it
+    SIP earkSIP = EARKSIP.parse(zipSIPS, tempFolder);
+
+    // general assessment
+    earkSIP.getValidationReport().getValidationEntries().stream().filter(e -> e.getLevel() == LEVEL.ERROR)
+        .forEach(e -> LOGGER.error("Validation report entry: {}", e));
+    Assert.assertTrue(earkSIP.getValidationReport().isValid());
+
+    // assess # of representations
+    List<IPRepresentation> representations = earkSIP.getRepresentations();
+    Assert.assertThat(representations.size(), Is.is(1));
+
+    // assess representations status
+    Assert.assertThat(representations.get(0).getStatus().asString(),
+        Is.is(RepresentationStatus.getORIGINAL().asString()));
+
+    LOGGER.info("SIP with id '{}' parsed with success (valid? {})!", earkSIP.getId(),
+        earkSIP.getValidationReport().isValid());
   }
 
   private void parseAndValidateFullEARKSIP(Path zipSIP) throws ParseException {
