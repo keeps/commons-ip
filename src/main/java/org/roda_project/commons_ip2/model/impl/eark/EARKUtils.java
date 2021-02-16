@@ -8,12 +8,10 @@
 package org.roda_project.commons_ip2.model.impl.eark;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -43,12 +41,12 @@ import org.roda_project.commons_ip2.model.IPConstants;
 import org.roda_project.commons_ip2.model.IPContentType;
 import org.roda_project.commons_ip2.model.IPDescriptiveMetadata;
 import org.roda_project.commons_ip2.model.IPFile;
+import org.roda_project.commons_ip2.model.IPFileInterface;
 import org.roda_project.commons_ip2.model.IPFileShallow;
 import org.roda_project.commons_ip2.model.IPHeader;
 import org.roda_project.commons_ip2.model.IPInterface;
 import org.roda_project.commons_ip2.model.IPMetadata;
 import org.roda_project.commons_ip2.model.IPRepresentation;
-import org.roda_project.commons_ip2.model.IPFileInterface;
 import org.roda_project.commons_ip2.model.MetadataType;
 import org.roda_project.commons_ip2.model.MetsWrapper;
 import org.roda_project.commons_ip2.model.RepresentationStatus;
@@ -209,11 +207,11 @@ public final class EARKUtils {
 
         if (file instanceof IPFile) {
           String dataFilePath = IPConstants.DATA_FOLDER + ModelUtils.getFoldersFromList(file.getRelativeFolders())
-              + file.getFileName();
+            + file.getFileName();
           FileType fileType = EARKMETSUtils.addDataFileToMETS(representationMETSWrapper, dataFilePath, file.getPath());
 
           dataFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
-              + dataFilePath;
+            + dataFilePath;
           ZIPUtils.addFileTypeFileToZip(zipEntries, file.getPath(), dataFilePath, fileType);
         } else if (file instanceof IPFileShallow) {
           IPFileShallow shallow = (IPFileShallow) file;
@@ -232,7 +230,7 @@ public final class EARKUtils {
   }
 
   protected static void addSchemasToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-                                               List<IPFileInterface> schemas, String representationId) throws IPException, InterruptedException {
+    List<IPFileInterface> schemas, String representationId) throws IPException, InterruptedException {
     if (schemas != null && !schemas.isEmpty()) {
       for (IPFileInterface schema : schemas) {
         if (Thread.interrupted()) {
@@ -253,7 +251,7 @@ public final class EARKUtils {
   }
 
   protected static void addDocumentationToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-                                                     List<IPFileInterface> documentation, String representationId) throws IPException, InterruptedException {
+    List<IPFileInterface> documentation, String representationId) throws IPException, InterruptedException {
     if (documentation != null && !documentation.isEmpty()) {
       for (IPFileInterface doc : documentation) {
         if (Thread.interrupted()) {
@@ -730,18 +728,13 @@ public final class EARKUtils {
                     ValidationConstants.REPRESENTATION_FILE_FOUND_WITH_MATCHING_CHECKSUMS, ip.getBasePath(), filePath);
                 }
               } else {
-                //TODO:Verify if path has a protocol
-                if(URI.create(href).getScheme() == null){
+                // TODO:Verify if path has a protocol
+                if (URI.create(href).getScheme() == null) {
                   ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.REPRESENTATION_FILE_NOT_FOUND,
-                      ValidationEntry.LEVEL.ERROR, ip.getBasePath(), filePath);
+                    ValidationEntry.LEVEL.ERROR, ip.getBasePath(), filePath);
                 } else {
-                  try {
-                    IPFileShallow ipFile = new IPFileShallow(URI.create(href).toURL(), fileType);
-                    representation.addFile(ipFile);
-                  } catch ( MalformedURLException e) {
-                    ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.REPRESENTATION_FILE_NOT_FOUND,
-                        ValidationEntry.LEVEL.ERROR, ip.getBasePath(), filePath);
-                  }
+                  IPFileShallow ipFile = new IPFileShallow(URI.create(href), fileType);
+                  representation.addFile(ipFile);
                 }
               }
             } else {

@@ -9,7 +9,8 @@ package org.roda_project.commons_ip2.model.impl.eark;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -80,7 +81,7 @@ public class EARKSIPTest {
   }
 
   @Test
-  public void buildEARKSIPShallow() throws IPException, InterruptedException, MalformedURLException, DatatypeConfigurationException, ParseException {
+  public void buildEARKSIPShallow() throws IPException, InterruptedException, MalformedURLException, DatatypeConfigurationException, ParseException, URISyntaxException {
     LOGGER.info("Creating full E-ARK SIP-S");
     Path zipSIPS = createFullEARKSIPS();
     LOGGER.info("Done creating full E-ARK SIP-S");
@@ -90,7 +91,7 @@ public class EARKSIPTest {
     LOGGER.info("Done parsing (and validating) full E-ARK SIP");
   }
 
-  private Path createFullEARKSIPS() throws IPException, InterruptedException, MalformedURLException, DatatypeConfigurationException {
+  private Path createFullEARKSIPS() throws IPException, InterruptedException, MalformedURLException, DatatypeConfigurationException, URISyntaxException {
     // 1) instantiate E-ARK SIP object
     SIP sip = new EARKSIP("SIP_S_1", IPContentType.getMIXED(), IPContentInformationType.getMIXED());
     sip.addCreatorSoftwareAgent("RODA Commons IP", "2.0.0");
@@ -142,7 +143,7 @@ public class EARKSIPTest {
     sip.addRepresentation(representation1);
 
     // 1.9.1) add a file to the representation
-    URL url = new URL("https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
+    URI url = new URI("https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
     // setting basic information about the remote file
     FileType filetype = new FileType();
     filetype.setMIMETYPE("application/pdf");
