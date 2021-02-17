@@ -246,7 +246,7 @@ public final class METSUtils {
 
   private static boolean isSafeChar(char ch) {
     return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')
-        || "/$-_.!*'(),".indexOf(ch) >= 0;
+        || ":/$-_.!*'(),".indexOf(ch) >= 0;
   }
 
   private static String encodeUnsafeChar(char ch) {

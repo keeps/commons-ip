@@ -729,11 +729,12 @@ public final class EARKUtils {
                 }
               } else {
                 // TODO:Verify if path has a protocol
-                if (URI.create(href).getScheme() == null) {
+                String decodedShallowRef = METSUtils.decodeHref(fLocat.getHref());
+                if (URI.create(decodedShallowRef).getScheme() == null) {
                   ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.REPRESENTATION_FILE_NOT_FOUND,
                     ValidationEntry.LEVEL.ERROR, ip.getBasePath(), filePath);
                 } else {
-                  IPFileShallow ipFile = new IPFileShallow(URI.create(href), fileType);
+                  IPFileShallow ipFile = new IPFileShallow(URI.create(decodedShallowRef), fileType);
                   representation.addFile(ipFile);
                 }
               }
