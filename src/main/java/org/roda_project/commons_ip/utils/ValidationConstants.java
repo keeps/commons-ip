@@ -64,6 +64,7 @@ public final class ValidationConstants {
   public static final String REPRESENTATION_FILE_FOUND_WITH_MATCHING_CHECKSUMS = "Representation file referenced in METS.xml was found and file checksum matches METS checksum.";
   public static final String REPRESENTATION_FILE_NOT_FOUND = "Representation file referenced in METS.xml not found.";
   public static final String REPRESENTATION_FILE_HAS_NO_FLOCAT = "Representation file referenced in METS.xml has no FLocat element.";
+  public static final String REPRESENTATION_SCHEME_NOT_FOUND = "Representation schema referenced in METS.xml not found for Shallow file";
 
   // Mets schemas and documentation related
   public static final String SCHEMA_FILE_FOUND_WITH_MATCHING_CHECKSUMS = "Schema file referenced in METS.xml was found and file checksum matches METS checksum.";

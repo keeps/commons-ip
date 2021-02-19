@@ -81,7 +81,7 @@ public class EARKSIPTest {
   }
 
   @Test
-  public void buildEARKSIPShallow() throws IPException, InterruptedException, MalformedURLException, DatatypeConfigurationException, ParseException, URISyntaxException {
+  public void buildEARKSIPShallow() throws IPException, InterruptedException, DatatypeConfigurationException, ParseException, URISyntaxException {
     LOGGER.info("Creating full E-ARK SIP-S");
     Path zipSIPS = createFullEARKSIPS();
     LOGGER.info("Done creating full E-ARK SIP-S");
@@ -91,7 +91,7 @@ public class EARKSIPTest {
     LOGGER.info("Done parsing (and validating) full E-ARK SIP");
   }
 
-  private Path createFullEARKSIPS() throws IPException, InterruptedException, MalformedURLException, DatatypeConfigurationException, URISyntaxException {
+  private Path createFullEARKSIPS() throws IPException, InterruptedException, DatatypeConfigurationException, URISyntaxException {
     // 1) instantiate E-ARK SIP object
     SIP sip = new EARKSIP("SIP_S_1", IPContentType.getMIXED(), IPContentInformationType.getMIXED());
     sip.addCreatorSoftwareAgent("RODA Commons IP", "2.0.0");

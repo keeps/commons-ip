@@ -717,26 +717,29 @@ public final class EARKUtils {
               FLocat fLocat = fileType.getFLocat().get(0);
               String href = Utils.extractedRelativePathFromHref(fLocat.getHref());
               Path filePath = representationBasePath.resolve(href);
-              if (Files.exists(filePath)) {
-                List<String> fileRelativeFolders = Utils
-                  .getFileRelativeFolders(representationBasePath.resolve(IPConstants.DATA), filePath);
-                Optional<IPFileInterface> file = validateFile(ip, filePath, fileType, fileRelativeFolders);
 
-                if (file.isPresent()) {
-                  representation.addFile(file.get());
-                  ValidationUtils.addInfo(ip.getValidationReport(),
-                    ValidationConstants.REPRESENTATION_FILE_FOUND_WITH_MATCHING_CHECKSUMS, ip.getBasePath(), filePath);
+              // Verify that when protocol is file:/// the file is inside the SIP or not
+              if (filePath.startsWith(representationBasePath)) {
+                // treat as a SIP (generic behaviour)
+                if (Files.exists(filePath)) {
+                  List<String> fileRelativeFolders = Utils
+                      .getFileRelativeFolders(representationBasePath.resolve(IPConstants.DATA), filePath);
+                  Optional<IPFileInterface> file = validateFile(ip, filePath, fileType, fileRelativeFolders);
+
+                  if (file.isPresent()) {
+                    representation.addFile(file.get());
+                    ValidationUtils.addInfo(ip.getValidationReport(),
+                        ValidationConstants.REPRESENTATION_FILE_FOUND_WITH_MATCHING_CHECKSUMS, ip.getBasePath(), filePath);
+                  }
+                } else {
+                  // treat as a SIP shallow
+                  Optional<IPFileInterface> ipFileInterface = validateFileShallow(ip, fLocat, filePath, fileType);
+                  ipFileInterface.ifPresent(representation::addFile);
                 }
               } else {
-                // TODO:Verify if path has a protocol
-                String decodedShallowRef = METSUtils.decodeHref(fLocat.getHref());
-                if (URI.create(decodedShallowRef).getScheme() == null) {
-                  ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.REPRESENTATION_FILE_NOT_FOUND,
-                    ValidationEntry.LEVEL.ERROR, ip.getBasePath(), filePath);
-                } else {
-                  IPFileShallow ipFile = new IPFileShallow(URI.create(decodedShallowRef), fileType);
-                  representation.addFile(ipFile);
-                }
+                // treat as a SIP shallow
+                Optional<IPFileInterface> ipFileInterface = validateFileShallow(ip, fLocat, filePath, fileType);
+                ipFileInterface.ifPresent(representation::addFile);
               }
             } else {
               ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.REPRESENTATION_FILE_HAS_NO_FLOCAT,
@@ -753,7 +756,20 @@ public final class EARKUtils {
           representationMetsWrapper.getMetsPath());
       }
     }
+  }
 
+  private static Optional<IPFileInterface> validateFileShallow(IPInterface ip, FLocat fLocat, Path filePath, FileType fileType) {
+    Optional<IPFileInterface> file = Optional.empty();
+
+    String decodedShallowRef = METSUtils.decodeHref(fLocat.getHref());
+    if (URI.create(decodedShallowRef).getScheme() != null) {
+      file = Optional.of(new IPFileShallow(URI.create(decodedShallowRef), fileType));
+    } else {
+      ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.REPRESENTATION_SCHEME_NOT_FOUND,
+          ValidationEntry.LEVEL.ERROR, ip.getBasePath(), filePath);
+    }
+
+    return file;
   }
 
   protected static IPInterface processSchemasMetadata(MetsWrapper metsWrapper, IPInterface ip, Path basePath)
