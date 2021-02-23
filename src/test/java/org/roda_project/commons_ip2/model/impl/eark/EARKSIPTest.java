@@ -143,7 +143,7 @@ public class EARKSIPTest {
     sip.addRepresentation(representation1);
 
     // 1.9.1) add a file to the representation
-    URI url = new URI("https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
+    URI url = new URI("file:///home/mguimaraes/Downloads/Search+results.csv");
     // setting basic information about the remote file
     FileType filetype = new FileType();
     filetype.setMIMETYPE("application/pdf");

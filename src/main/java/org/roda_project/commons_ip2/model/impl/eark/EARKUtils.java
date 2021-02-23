@@ -761,9 +761,8 @@ public final class EARKUtils {
   private static Optional<IPFileInterface> validateFileShallow(IPInterface ip, FLocat fLocat, Path filePath, FileType fileType) {
     Optional<IPFileInterface> file = Optional.empty();
 
-    String decodedShallowRef = METSUtils.decodeHref(fLocat.getHref());
-    if (URI.create(decodedShallowRef).getScheme() != null) {
-      file = Optional.of(new IPFileShallow(URI.create(decodedShallowRef), fileType));
+    if (URI.create(fLocat.getHref()).getScheme() != null) {
+      file = Optional.of(new IPFileShallow(URI.create(fLocat.getHref()), fileType));
     } else {
       ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.REPRESENTATION_SCHEME_NOT_FOUND,
           ValidationEntry.LEVEL.ERROR, ip.getBasePath(), filePath);

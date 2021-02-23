@@ -132,6 +132,14 @@ public final class METSUtils {
     return fileLocation;
   }
 
+  public static FLocat createShallowFileLocation(String filePath) {
+    FLocat fileLocation = new FLocat();
+    fileLocation.setType(IPConstants.METS_TYPE_SIMPLE);
+    fileLocation.setLOCTYPE(LocType.URL.toString());
+    fileLocation.setHref(filePath);
+    return fileLocation;
+  }
+
   public static MdRef setFileBasicInformation(Path file, MdRef mdRef) throws IPException, InterruptedException {
     // mimetype info.
     try {

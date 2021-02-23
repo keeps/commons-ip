@@ -378,7 +378,7 @@ public final class EARKMETSUtils {
     file.setID(Utils.generateRandomAndPrefixedUUID());
 
     // add to file section
-    FLocat fileLocation = METSUtils.createFileLocation(shallow.getFileLocation().toString());
+    FLocat fileLocation = METSUtils.createShallowFileLocation(shallow.getFileLocation().toString());
     file.getFLocat().add(fileLocation);
     representationMETS.getDataFileGroup().getFile().add(file);
 
