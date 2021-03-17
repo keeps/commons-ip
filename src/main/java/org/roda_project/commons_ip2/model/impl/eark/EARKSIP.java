@@ -218,6 +218,7 @@ public class EARKSIP extends SIP {
 
         if (structMap != null) {
           EARKUtils.preProcessStructMap(metsWrapper, structMap);
+          EARKUtils.preProcessFileSec(metsWrapper, sip);
           EARKUtils.processMetadata(metsWrapper, sip);
           EARKUtils.processPreservationMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
           EARKUtils.processDescriptiveMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());

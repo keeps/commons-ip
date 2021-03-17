@@ -34,6 +34,8 @@ import org.roda_project.commons_ip2.mets_v1_12.beans.FileType.FLocat;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType.MdRef;
 import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
+import org.roda_project.commons_ip2.mets_v1_12.beans.MetsType.FileSec;
+import org.roda_project.commons_ip2.mets_v1_12.beans.MetsType.FileSec.FileGrp;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MetsType.MetsHdr;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MetsType.MetsHdr.Agent;
 import org.roda_project.commons_ip2.mets_v1_12.beans.StructMapType;
@@ -681,13 +683,7 @@ public final class EARKUtils {
               if (representationStructMap != null) {
 
                 preProcessStructMap(representationMetsWrapper, representationStructMap);
-
-                ValidationUtils.addIssueIfNull(ip.getValidationReport(), ValidationConstants.CSIP58,
-                  representationMetsWrapper.getMets().getFileSec(), LEVEL.WARN, ip.getBasePath(), metsFilePath);
-                if (representationMetsWrapper.getMets().getFileSec() != null) {
-                  ValidationUtils.addIssueIfNull(ip.getValidationReport(), ValidationConstants.CSIP59,
-                    representationMetsWrapper.getMets().getFileSec(), LEVEL.ERROR, ip.getBasePath(), metsFilePath);
-                }
+                preProcessFileSec(representationMetsWrapper, ip);
 
                 representation.setStatus(new RepresentationStatus(representationMetsWrapper.getMainDiv().getTYPE()));
                 ip.addRepresentation(representation);
@@ -766,6 +762,54 @@ public final class EARKUtils {
           metsWrapper.setDocumentationDiv(firstLevel);
         } else if (IPConstants.SUBMISSION.equalsIgnoreCase(firstLevel.getLABEL())) {
           metsWrapper.setSubmissionsDiv(firstLevel);
+        }
+      }
+    }
+  }
+
+  protected static void preProcessFileSec(MetsWrapper metsWrapper, IPInterface ip) {
+    FileSec fileSec = metsWrapper.getMets().getFileSec();
+    ValidationUtils.addIssueIfNull(ip.getValidationReport(), ValidationConstants.CSIP58, fileSec, LEVEL.WARN,
+      ip.getBasePath(), metsWrapper.getMetsPath());
+
+    if (fileSec != null) {
+      boolean hasData = false, hasSchemas = false, hasDocumentation = false, hasRepresentations = false;
+      ValidationUtils.addIssueIfNull(ip.getValidationReport(), ValidationConstants.CSIP59, fileSec, LEVEL.ERROR,
+        ip.getBasePath(), metsWrapper.getMetsPath());
+
+      for (FileGrp fileGrp : fileSec.getFileGrp()) {
+        String fileGrpID = fileGrp.getID();
+        ValidationUtils.addIssueIfNull(ip.getValidationReport(), ValidationConstants.CSIP65, fileGrpID, LEVEL.ERROR,
+          ip.getBasePath(), metsWrapper.getMetsPath());
+
+        String fileGrpUse = fileGrp.getUSE();
+        ValidationUtils.addIssueIfNull(ip.getValidationReport(), ValidationConstants.CSIP64, fileGrpUse, LEVEL.ERROR,
+          fileGrp.getID());
+
+        if (fileGrpUse == null) {
+          continue;
+        }
+
+        switch (fileGrpUse) {
+          case IPConstants.DATA_WITH_FIRST_LETTER_CAPITAL:
+            // metsWrapper.setDataFileGroup(fileGrp);
+            hasData = true;
+
+            break;
+          case IPConstants.SCHEMAS_WITH_FIRST_LETTER_CAPITAL:
+            // metsWrapper.setSchemasFileGroup(fileGrp);
+            hasSchemas = true;
+            break;
+          case IPConstants.DOCUMENTATION_WITH_FIRST_LETTER_CAPITAL:
+            // metsWrapper.setDocumentationFileGroup(fileGrp);
+            hasDocumentation = true;
+            break;
+          case IPConstants.REPRESENTATIONS_WITH_FIRST_LETTER_CAPITAL:
+            // metsWrapper.getRepresentationsFileGroups().add(fileGrp);
+            hasRepresentations = true;
+            break;
+          default:
+            break;
         }
       }
     }

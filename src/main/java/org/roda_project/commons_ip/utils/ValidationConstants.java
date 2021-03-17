@@ -200,11 +200,20 @@ public final class ValidationConstants {
     "The checksum of the referenced file.");
   public static final ValidationEntry CSIP44 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP44",
     "The type of checksum following the value list present in the METS-standard which has been used for calculating the checksum for the referenced file.");
-
+  // FIXME CSIP45-57 are related to rightsMD, which we don't support
   public static final ValidationEntry CSIP58 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP58",
     "The transferred content is placed in the file section in different file group elements, described in other requirements. Only a single file section (<fileSec>) element should be present. It is possible to transfer just descriptive metadata and/or administrative metadata without files placed in this section.");
   public static final ValidationEntry CSIP59 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP59",
     "An xml:id identifier for the file section used for internal package references. It must be unique within the package.");
+  public static final ValidationEntry CSIP60 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP60",
+    "All documentation pertaining to the transferred content is placed in one or more file group elements with mets/fileSec/fileGrp/@USE attribute value “Documentation”.");
+  public static final ValidationEntry CSIP113 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP113",
+    "All XML schemas used in the information package should be referenced from one or more file groups with mets/fileSec/fileGrp/@USE attribute value “Schemas”.");
+
+  public static final ValidationEntry CSIP64 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP64",
+    "The value in the mets/fileSec/fileGrp/@USE is the name of the whole folder structure to the data, e.g “Documentation”, “Schemas”, “Representations/preingest” or “Representations/submission/data”.");
+  public static final ValidationEntry CSIP65 = new ValidationEntry(TYPE.STRUCTURAL, "CSIP65",
+    "An xml:id identifier for the file group used for internal package references. It must be unique within the package.");
 
   /** Private empty constructor */
   private ValidationConstants() {
