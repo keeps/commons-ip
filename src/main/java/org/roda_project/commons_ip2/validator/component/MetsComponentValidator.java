@@ -1,5 +1,6 @@
 package org.roda_project.commons_ip2.validator.component;
 
+import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,18 +28,21 @@ public class MetsComponentValidator {
     String CONTENTINFORMATIONTYPE = data.get("CONTENTINFORMATIONTYPE");
     String PROFILE = data.get("PROFILE");
     if(OBJID == null){
-      reporter.componentValidationResult("CSIP1",false,"mets/@OBJID attribute is mandatory!");
+      reporter.componentValidationResult(Constants.VALIDATION_REPORT_HEADER_ID_CSIP,"CSIP1",false,"mets/@OBJID attribute is mandatory!");
       reporter.countErrors();
       return false;
     }
-    reporter.componentValidationResult("CSIP1",true,"mets/@OBJID attribute is mandatory!");
+    reporter.componentValidationResult(Constants.VALIDATION_REPORT_HEADER_ID_CSIP,"CSIP1",true,"mets/@OBJID attribute is mandatory!");
     reporter.countSuccess();
     if(PROFILE == null){
-      reporter.componentValidationResult("CSIP2",false,"mets/@PROFILE The URL of the METS profile that the information package conforms with.");
+      reporter.componentValidationResult(Constants.VALIDATION_REPORT_HEADER_ID_CSIP,"CSIP2",false,"mets/@PROFILE The URL of the METS profile that the information package conforms with.");
       reporter.countErrors();
     }
-    reporter.componentValidationResult("CSIP2",true,"mets/@PROFILE The URL of the METS profile that the information package conforms with.");
-    reporter.countSuccess();
+    else{
+      reporter.componentValidationResult(Constants.VALIDATION_REPORT_HEADER_ID_CSIP,"CSIP2",true,"mets/@PROFILE The URL of the METS profile that the information package conforms with.");
+      reporter.countSuccess();
+    }
+
     return true;
   }
 }

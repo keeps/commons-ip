@@ -25,6 +25,7 @@ public class ValidationReporter {
   private JsonGenerator jsonGenerator;
   private int success;
   private int errors;
+  private int warnings;
 
   public ValidationReporter(Path path) {
     init(path);
@@ -32,6 +33,10 @@ public class ValidationReporter {
 
   public void countSuccess(){
     success++;
+  }
+
+  public void countWarnings(){
+    warnings++;
   }
 
   public void countErrors(){
@@ -42,6 +47,7 @@ public class ValidationReporter {
     this.outputFile = path;
     this.success = 0;
     this.errors = 0;
+    this.warnings = 0;
     if (outputFile.toFile().exists()) {
       try {
         Files.createFile(outputFile);
@@ -61,13 +67,31 @@ public class ValidationReporter {
         JsonFactory jsonFactory = new JsonFactory();
         jsonGenerator = jsonFactory.createGenerator(outputStream, JsonEncoding.UTF8);
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_HEADER);
+        // header object
+        jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_HEADER_KEY_HEADER);
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_TITLE, Constants.VALIDATION_REPORT_TITLE);
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_VERSION_CSIP, Constants.VALIDATION_REPORT_SPECIFICATION_CSIP_VERSION);
+        // header -> title
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_KEY_TITLE, Constants.VALIDATION_REPORT_HEADER_TITLE);
+        // header -> specifications
+        jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_HEADER_KEY_SPECIFICATIONS);
+        jsonGenerator.writeStartArray();
+        // header -> specifications -> CSIP
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID, Constants.VALIDATION_REPORT_HEADER_ID_CSIP);
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL, Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_CSIP);
+        jsonGenerator.writeEndObject();
+        // header -> specifications -> SIP
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID, Constants.VALIDATION_REPORT_HEADER_ID_SIP);
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL, Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_SIP);
+        jsonGenerator.writeEndObject();
+        jsonGenerator.writeEndArray();
+        // header -> version_commons_ip
         jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_VERSION_COMMONS_IP, Constants.VALIDATION_REPORT_SPECIFICATION_COMMONS_IP_VERSION);
+        // header -> date (date of sip validation)
         jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_DATE, new org.joda.time.DateTime().toString());
         jsonGenerator.writeEndObject();
+        // initialize validation array
         jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_VALIDATION);
         jsonGenerator.writeStartArray();
       } catch (IOException e) {
@@ -76,13 +100,20 @@ public class ValidationReporter {
     }
   }
 
-  public void componentValidationResult(String specification, Boolean status, String message) {
+  public void componentValidationResult(String specification,String id,Boolean status, String detail) {
     try {
       jsonGenerator.writeStartObject();
-      jsonGenerator.writeFieldName(specification);
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_SPECIFICATION, specification);
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID, id);
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_NAME,Constants.getSpecificationName(id));
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LOCATION, Constants.getSpecificationLocation(id));
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_DESCRIPTION, Constants.getSpecificationDescription(id));
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_CARDINALITY, Constants.getSpecificationCardinality(id));
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LEVEL, Constants.getSpecificationLevel(id));
+      jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_OUTCOME);
       jsonGenerator.writeStartObject();
-      jsonGenerator.writeObjectField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_VALID, status);
-      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_MESSAGE, message);
+      jsonGenerator.writeObjectField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_OUTCOME_VALID, status);
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_OUTCOME_DETAIL, detail);
       jsonGenerator.writeEndObject();
       jsonGenerator.writeEndObject();
     } catch (IOException e) {
@@ -96,6 +127,7 @@ public class ValidationReporter {
       jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_SUMMARY);
       jsonGenerator.writeStartObject();
       jsonGenerator.writeNumberField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_SUCCESS, success);
+      jsonGenerator.writeNumberField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_WARNINGS, warnings);
       jsonGenerator.writeNumberField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_ERRORS, errors);
       jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_RESULT,status);
       jsonGenerator.writeEndObject();
