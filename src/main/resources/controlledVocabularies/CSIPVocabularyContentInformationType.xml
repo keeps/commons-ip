@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="DILCISVocabularies.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<Vocabularies xmlns="https://DILCIS.eu/XML/Vocabularies/IP">
+    <Vocabulary Name="VocabularyDetailedContentType">
+        <Information>
+            <p>Vocabulary derived from E-ARK</p>
+        </Information>
+        <Entry>
+            <Term lang="en">ERMS</Term>
+            <Definition>The specification for Electronic records management is used</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">SIARD1</Term>
+            <Definition>A relational database is described with SIARD version 1</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">SIARD2</Term>
+            <Definition>A relational database is described with SIARD version 2</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="eb">SIARDDK</Term>
+            <Definition>A relational database is described with SIARD version DK</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">GeoData</Term>
+            <Definition>The specification for Geodata is used</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">MIXED</Term>
+            <Definition>A mixed set is described</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">OTHER</Term>
+            <Definition>A term other than present in the vocabulary is used</Definition>
+        </Entry>
+    </Vocabulary>
+</Vocabularies>

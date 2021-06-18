@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="DILCISVocabularies.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<Vocabularies xmlns="https://DILCIS.eu/XML/Vocabularies/IP">
+    <Vocabulary Name="VocabularyContentCategory">
+        <Information>
+            <p>Vocabulary derived from http://www.loc.gov/preservation/resources/rfs/TOC.html and http://www.dublincore.org/documents/dcmi-type-vocabulary/</p>
+            <p>Values are mixed and the terms "Mixed" and "Other" are derived from E-ARK</p>
+        </Information>
+        <Entry>
+            <Term lang="en">Textual works – Print</Term>
+            <Definition>Books, musical compositions, etc.</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Textual works – Digital</Term>
+            <Definition>Electronic books, etc.</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Textual works – Electronic Serials</Term>
+            <Definition></Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Digital Musical Composition (score-based representations)</Term>
+            <Definition></Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Photographs – Print</Term>
+            <Definition></Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Photographs – Digital</Term>
+            <Definition></Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Other Graphic Images – Print</Term>
+            <Definition>Posters, architectural drawings, postcards, maps, fine prints, etc.</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Other Graphic Images – Digital</Term>
+            <Definition></Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Microforms</Term>
+            <Definition></Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Audio – On Tangible Medium (digital or analog)</Term>
+            <Definition></Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Audio – Media-independent (digital)</Term>
+            <Definition></Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Motion Pictures – Digital and Physical Media</Term>
+            <Definition>Theatrically released films</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Video – File-based and Physical Media</Term>
+            <Definition></Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Software</Term>
+            <Definition>Software, electronic gaming and learning</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Datasets</Term>
+            <Definition>Data encoded in a defined structure.</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Geospatial Data</Term>
+            <Definition></Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Databases</Term>
+            <Definition></Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Websites</Term>
+            <Definition>Archived web content.</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Collection</Term>
+            <Definition>An aggregation of resources.</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Event</Term>
+            <Definition>A non-persistent, time-based occurrence, e.g. exhibition, webcast, etc..</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Interactive resource</Term>
+            <Definition>A resource requiring interaction from the user to be understood, executed, or experienced.</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Physical object</Term>
+            <Definition>An inanimate, three-dimensional object or substance.</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Service</Term>
+            <Definition>A system that provides one or more functions.</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Mixed</Term>
+            <Definition>The package contains a mix of content types</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">Other</Term>
+            <Definition>A term other than present in the vocabulary is used</Definition>
+        </Entry>
+    </Vocabulary>
+</Vocabularies>

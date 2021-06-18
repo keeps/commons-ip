@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="DILCISVocabularies.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<Vocabularies xmlns="https://DILCIS.eu/XML/Vocabularies/IP">
+    <Vocabulary Name="VocabularyOAISPackageType">
+        <Information>
+            <p>Vocabulary derived from the OAIS Reference model, https://public.ccsds.org/pubs/650x0m2.pdf</p>
+        </Information>
+        <Entry>
+            <Term lang="en">SIP</Term>
+            <Definition>Submission Information Package</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">AIP</Term>
+            <Definition>Archival information Package</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">DIP</Term>
+            <Definition>Dissemination Information Package</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">AIU</Term>
+            <Definition>Archival Information Unit</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">AIC</Term>
+            <Definition>Archival Information Collection</Definition>
+        </Entry>
+    </Vocabulary>
+</Vocabularies>

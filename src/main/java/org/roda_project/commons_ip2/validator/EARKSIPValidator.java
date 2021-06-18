@@ -31,7 +31,6 @@ public class EARKSIPValidator {
   private ValidationObserver observer;
   private HashMap<String,String> data;
 
-
   public EARKSIPValidator(Path earksipPath, Path reportPath){
     this.earksipPath = earksipPath.toAbsolutePath().normalize();
     reporter = new ValidationReporter(reportPath.toAbsolutePath().normalize());

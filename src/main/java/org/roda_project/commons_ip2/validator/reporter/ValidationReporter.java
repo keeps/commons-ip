@@ -1,6 +1,7 @@
 package org.roda_project.commons_ip2.validator.reporter;
 
 import org.roda_project.commons_ip2.validator.constants.Constants;
+import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,11 +106,11 @@ public class ValidationReporter {
       jsonGenerator.writeStartObject();
       jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_SPECIFICATION, specification);
       jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID, id);
-      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_NAME,Constants.getSpecificationName(id));
-      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LOCATION, Constants.getSpecificationLocation(id));
-      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_DESCRIPTION, Constants.getSpecificationDescription(id));
-      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_CARDINALITY, Constants.getSpecificationCardinality(id));
-      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LEVEL, Constants.getSpecificationLevel(id));
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_NAME, ConstantsCSIPspec.getSpecificationName(id));
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LOCATION, ConstantsCSIPspec.getSpecificationLocation(id));
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_DESCRIPTION, ConstantsCSIPspec.getSpecificationDescription(id));
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_CARDINALITY, ConstantsCSIPspec.getSpecificationCardinality(id));
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LEVEL, ConstantsCSIPspec.getSpecificationLevel(id));
       jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_OUTCOME);
       jsonGenerator.writeStartObject();
       jsonGenerator.writeObjectField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_OUTCOME_VALID, status);

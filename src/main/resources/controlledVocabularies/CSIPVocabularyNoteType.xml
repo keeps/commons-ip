@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="DILCISVocabularies.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<Vocabularies xmlns="https://DILCIS.eu/XML/Vocabularies/IP">
+    <Vocabulary Name="VocabularyNoteType">
+        <Information>
+            <p>Vocabulary derived from E-ARK</p>
+        </Information>
+        <Entry>
+            <Term lang="en">SOFTWARE VERSION</Term>
+            <Definition>Describes the version of a software</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">IDENTIFICATIONCODE</Term>
+            <Definition>Describes the identification code of an agent</Definition>
+        </Entry>
+    </Vocabulary>
+</Vocabularies>

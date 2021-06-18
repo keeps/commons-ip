@@ -7,7 +7,11 @@ public class Constants {
   private Constants() {
   }
 
+  /* File Paths */
+  public static final String PATH_RESOURCES_CSIP_VOCABULARY_CONTENT_CATEGORY = "./src/main/resources/controlledVocabularies/CSIPVocabularyContentCategory.xml";
+  public static final String PATH_RESOURCES_CSIP_VOCABULARY_CONTENT_INFORMATION_TYPE = "./src/main/resources/controlledVocabularies/CSIPVocabularyContentInformationType.xml";
   public static final String VALIDATION_REPORT_PREFIX = "commons-ip-validation-reporter";
+
   /* Report Header */
   public static final String VALIDATION_REPORT_HEADER_KEY_TITLE = "title";
   public static final String VALIDATION_REPORT_HEADER_TITLE = "Validation Report CSIP";
@@ -41,82 +45,4 @@ public class Constants {
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_OUTCOME = "outcome";
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_OUTCOME_VALID = "valid";
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_OUTCOME_DETAIL = "detail";
-
-  /* CSIP1 */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP1_NAME = "Package Identifier";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP1_LOCATION = "mets/@OBJID";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP1_DESCRIPTION = "The mets/@OBJID attribute is mandatory, its value is a string identifier for " +
-          "the METS document. For the package METS document, this should be the " +
-          "name/ID of the package, i.e. the name of the package root folder. For a " +
-          "representation level METS document this value records the name/ID of the " +
-          "representation, i.e. the name of the top-level representation folder.";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP1_CARDINALITY = "1..1";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP1_LEVEL = "MUST";
-
-  /* CSIP2 */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP2_NAME = "Content Category";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP2_LOCATION = "mets/@TYPE";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP2_DESCRIPTION = "The mets/@TYPE attribute MUST be used to declare the category of the " +
-          "content held in the package, e.g. book, journal, stereograph, video, etc.. " +
-          "Legal values are defined in a fixed vocabulary. When the content category " +
-          "used falls outside of the defined vocabulary the mets/@TYPE value must be " +
-          "set to “OTHER” and the specific value declared in mets/@csip:OTHERTYPE. " +
-          "The vocabulary will develop under the curation of the DILCIS Board as " +
-          " additional content information type specifications are produced.See also: Content Category";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP2_CARDINALITY = "0..1";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP2_LEVEL = "MUST";
-
-  /* CSIP 3 */
-
-
-  /* Get Name, Location, Description, Cardinality and Level for given specification ID */
-  public static String getSpecificationName(String id){
-    if (id.equals("CSIP1")) {
-      return VALIDATION_REPORT_SPECIFICATION_CSIP1_NAME;
-    }
-    if (id.equals("CSIP2")) {
-      return VALIDATION_REPORT_SPECIFICATION_CSIP2_NAME;
-    }
-    return "Not Defined";
-  }
-
-  public static String getSpecificationLocation(String id){
-    if (id.equals("CSIP1")) {
-      return VALIDATION_REPORT_SPECIFICATION_CSIP1_LOCATION;
-    }
-    if (id.equals("CSIP2")) {
-      return VALIDATION_REPORT_SPECIFICATION_CSIP2_LOCATION;
-    }
-    return "Not Defined";
-  }
-
-  public static String getSpecificationDescription(String id){
-    if (id.equals("CSIP1")) {
-      return VALIDATION_REPORT_SPECIFICATION_CSIP1_DESCRIPTION;
-    }
-    if (id.equals("CSIP2")) {
-      return VALIDATION_REPORT_SPECIFICATION_CSIP2_DESCRIPTION;
-    }
-    return "Not Defined";
-  }
-
-  public static String getSpecificationCardinality(String id){
-    if (id.equals("CSIP1")) {
-      return VALIDATION_REPORT_SPECIFICATION_CSIP1_CARDINALITY;
-    }
-    if (id.equals("CSIP2")) {
-      return VALIDATION_REPORT_SPECIFICATION_CSIP2_CARDINALITY;
-    }
-    return "Not Defined";
-  }
-
-  public static String getSpecificationLevel(String id){
-    if (id.equals("CSIP1")) {
-      return VALIDATION_REPORT_SPECIFICATION_CSIP1_LEVEL;
-    }
-    if (id.equals("CSIP2")) {
-      return VALIDATION_REPORT_SPECIFICATION_CSIP2_LEVEL;
-    }
-    return "Not Defined";
-  }
 }
