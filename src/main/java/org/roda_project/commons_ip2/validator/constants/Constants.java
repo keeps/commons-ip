@@ -18,8 +18,8 @@ public class Constants {
   public static final String VALIDATION_REPORT_HEADER_KEY_HEADER = "header";
   public static final String VALIDATION_REPORT_HEADER_KEY_SPECIFICATIONS = "specifications";
   public static final String VALIDATION_REPORT_KEY_ID = "id";
-  public static final String VALIDATION_REPORT_HEADER_ID_CSIP = "CSIP-2.0.4";
-  public static final String VALIDATION_REPORT_HEADER_ID_SIP = "SIP-2.0.4";
+  public static final String VALIDATION_REPORT_HEADER_CSIP_VERSION = "CSIP-2.0.4";
+  public static final String VALIDATION_REPORT_HEADER_SIP_VERSION = "SIP-2.0.4";
   public static final String VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL = "url";
   public static final String VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_CSIP = "https://github.com/DILCISBoard/E-ARK-CSIP/releases/tag/v2.0.4";
   public static final String VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_SIP = "https://github.com/DILCISBoard/E-ARK-SIP/releases/tag/v2.0.4";
@@ -45,4 +45,7 @@ public class Constants {
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_OUTCOME = "outcome";
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_OUTCOME_VALID = "valid";
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_OUTCOME_DETAIL = "detail";
+
+  /* Modules Names */
+  public static final String CSIP_MODULE_NAME_1 = "Use of the METS root element (element mets)";
 }

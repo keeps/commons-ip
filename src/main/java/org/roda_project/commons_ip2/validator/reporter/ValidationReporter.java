@@ -78,12 +78,12 @@ public class ValidationReporter {
         jsonGenerator.writeStartArray();
         // header -> specifications -> CSIP
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID, Constants.VALIDATION_REPORT_HEADER_ID_CSIP);
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID, Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
         jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL, Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_CSIP);
         jsonGenerator.writeEndObject();
         // header -> specifications -> SIP
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID, Constants.VALIDATION_REPORT_HEADER_ID_SIP);
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID, Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
         jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL, Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_SIP);
         jsonGenerator.writeEndObject();
         jsonGenerator.writeEndArray();

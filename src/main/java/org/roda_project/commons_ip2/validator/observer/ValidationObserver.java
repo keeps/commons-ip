@@ -10,5 +10,12 @@ public interface ValidationObserver {
 
   void notifyStartValidationModule(String moduleName, String ID);
 
+  void notifyStartStep(String id);
+
+  void notifyFinishStep(String id);
+
+  void notifyFinishModule(String moduleName);
+
+  void notifyFinishValidation();
 
 }

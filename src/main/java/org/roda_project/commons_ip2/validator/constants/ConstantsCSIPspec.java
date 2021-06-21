@@ -8,6 +8,7 @@ public class ConstantsCSIPspec {
     }
 
     /* CSIP1 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP1_ID = "CSIP1";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP1_NAME = "Package Identifier";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP1_LOCATION = "mets/@OBJID";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP1_DESCRIPTION = "The mets/@OBJID attribute is mandatory, its value is a string identifier for " +
@@ -19,6 +20,7 @@ public class ConstantsCSIPspec {
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP1_LEVEL = "MUST";
 
     /* CSIP2 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP2_ID = "CSIP2";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP2_NAME = "Content Category";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP2_LOCATION = "mets/@TYPE";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP2_DESCRIPTION = "The mets/@TYPE attribute MUST be used to declare the category of the " +
@@ -32,6 +34,7 @@ public class ConstantsCSIPspec {
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP2_LEVEL = "MUST";
 
     /* CSIP 3 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP3_ID = "CSIP3";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP3_NAME = "Other Content Category";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP3_LOCATION = "mets[@TYPE=’OTHER’]/@csip:OTHERTYPE";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP3_DESCRIPTION = "When the mets/@TYPE attribute has the value “OTHER” the " +
@@ -41,6 +44,7 @@ public class ConstantsCSIPspec {
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP3_LEVEL = "SHOULD";
 
     /* CSIP 4 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP4_ID = "CSIP4";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP4_NAME = "Content Information Type Specification";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP4_LOCATION = "mets/@csip:CONTENTINFORMATIONTYPE";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP4_DESCRIPTION = "Used to declare the Content Information Type Specification used when " +
@@ -53,6 +57,7 @@ public class ConstantsCSIPspec {
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP4_LEVEL = "SHOULD";
 
     /* CSIP 5 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP5_ID = "CSIP5";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP5_NAME = "Other Content Information Type Specification";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP5_LOCATION = "mets[@csip:CONTENTINFORMATIONTYPE=’OTHER’]/@csip:OTHERCONTENTINFORMATIONTYPE";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP5_DESCRIPTION = "When the mets/@csip:CONTENTINFORMATIONTYPE has the value " +
@@ -62,6 +67,7 @@ public class ConstantsCSIPspec {
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP5_LEVEL = "MAY";
 
     /* CSIP 6 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP6_ID = "CSIP6";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP6_NAME = "METS Profile";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP6_LOCATION = "mets/@PROFILE";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP6_DESCRIPTION = "The URL of the METS profile that the information package conforms with. ";

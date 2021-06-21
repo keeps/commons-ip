@@ -18,4 +18,24 @@ public class ProgressValidationLoggerObserver  implements  ValidationObserver{
   public void notifyStartValidationModule(String moduleName, String ID) {
     LOGGER.info("Start validation of: {} - {}", ID, moduleName);
   }
+
+  @Override
+  public void notifyStartStep(String ID) {
+    LOGGER.info("Start validation of: {}", ID);
+  }
+
+  @Override
+  public void notifyFinishStep(String ID) {
+    LOGGER.info("Finish validation of: {}", ID );
+  }
+
+  @Override
+  public void notifyFinishModule(String moduleName) {
+    LOGGER.info("Finish validation of module: {}", moduleName  );
+  }
+
+  @Override
+  public void notifyFinishValidation() {
+    LOGGER.info("Finish validation");
+  }
 }
