@@ -13,7 +13,9 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author João Gomes <jgomes@keep.pt>
@@ -30,6 +32,12 @@ public class ControlledVocabularyParser {
 
     public List<String> getData() {
         return data;
+    }
+
+    public List<String> getFilteredData(String filter){
+        List<String> newData = new ArrayList<>();
+        newData = data.stream().filter(d -> !d.equals(filter)).collect(Collectors.toList());
+        return newData;
     }
 
     public void parse(){

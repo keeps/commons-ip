@@ -5,7 +5,11 @@ import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import java.nio.file.Path;
 
 /**
@@ -18,6 +22,8 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
   private ValidationReporter reporter = null;
   protected ValidationObserver observer = null;
   protected ZipManager zipManager = null;
+  protected SAXParserFactory factory = null;
+  private String zipName = null;
 
   protected Path getEARKSIPpath() {
     return  path;
@@ -26,6 +32,11 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
   @Override
   public void setEARKSIPpath(Path path) {
     this.path = path;
+    zipName = path.toString().split("/")[path.toString().split("/").length - 1];
+  }
+
+  public String getZipName(){
+    return zipName;
   }
 
   protected ValidationReporter getReporter() {
@@ -47,8 +58,15 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
     this.observer = observer;
   }
 
+  public SAXParser getSAXParser() throws ParserConfigurationException, SAXException {
+    factory = SAXParserFactory.newInstance();
+    return factory.newSAXParser();
+  }
+
   protected void validationError(String specification,String MODULE_NAME,String ID, boolean status, String detail){
     reporter.componentValidationResult(specification, ID,status, detail);
   }
-  
+
+
+
 }

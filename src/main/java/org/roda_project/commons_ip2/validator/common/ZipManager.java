@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -21,9 +22,36 @@ public class ZipManager {
     if (zipFile == null) {
       zipFile = new ZipFile(path.toFile());
     }
-    ZipEntry zipArchiveEntry = zipFile.getEntry(entry);
 
+    ZipEntry zipArchiveEntry = zipFile.getEntry(entry);
     return zipFile.getInputStream(zipArchiveEntry);
+  }
+
+  public InputStream getMetsRootInputStream(Path path) throws IOException {
+    if (zipFile == null) {
+      zipFile = new ZipFile(path.toFile());
+    }
+
+    Enumeration entries = zipFile.entries();
+    String entry = null;
+    while (entries.hasMoreElements()){
+      ZipEntry entr = (ZipEntry) entries.nextElement();
+      if(entr.getName().matches(".*?METS.xml")){
+        if(entr.getName().split("/").length <= 3){
+          entry = entr.getName();
+        }
+      }
+    }
+    if(entry == null){
+      LOGGER.debug("METS.xml not Found");
+      throw new IOException("METS.xml not Found");
+    }
+    ZipEntry zipArchiveEntry = zipFile.getEntry(entry);
+    return zipFile.getInputStream(zipArchiveEntry);
+  }
+
+  public Enumeration getEntries(){
+    return zipFile.entries();
   }
 
   public ZipEntry getZipEntry(Path path, String entry){
@@ -37,6 +65,28 @@ public class ZipManager {
       LOGGER.debug("Failed to retrieve the entry: {} from {}", entry, path.toString(), e);
       return null;
     }
+  }
+
+  public String getMETSxmlPath(Path path) throws IOException {
+    if (zipFile == null) {
+      zipFile = new ZipFile(path.toFile());
+    }
+
+    Enumeration entries = zipFile.entries();
+    String entry = null;
+    while (entries.hasMoreElements()){
+      ZipEntry entr = (ZipEntry) entries.nextElement();
+      if(entr.getName().matches(".*?METS.xml")){
+        if(entr.getName().split("/").length <= 3){
+          entry = entr.getName();
+        }
+      }
+    }
+    if(entry == null){
+      LOGGER.debug("METS.xml not Found");
+      throw new IOException("METS.xml not Found");
+    }
+    return entry;
   }
 
   public void closeZipFile() {

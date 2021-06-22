@@ -38,4 +38,11 @@ public class ProgressValidationLoggerObserver  implements  ValidationObserver{
   public void notifyFinishValidation() {
     LOGGER.info("Finish validation");
   }
+
+  @Override
+  public void notifyIndicators(int errors, int success, int warnings) {
+    LOGGER.info("Number of requirements success [{}]", success);
+    LOGGER.info("Number of requirements failed [{}]", errors);
+    LOGGER.info("Number of warnings [{}]", warnings);
+  }
 }

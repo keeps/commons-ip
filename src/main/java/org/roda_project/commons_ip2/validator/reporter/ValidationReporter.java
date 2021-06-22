@@ -14,7 +14,6 @@ import java.nio.file.Path;
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
-import org.joda.time.DateTime;
 /**
  * @author João Gomes <jgomes@keep.pt>
  */
@@ -31,6 +30,12 @@ public class ValidationReporter {
   public ValidationReporter(Path path) {
     init(path);
   }
+
+  public int getSuccess(){ return success;}
+
+  public int getErrors(){ return errors;}
+
+  public int getWarnings(){ return warnings;}
 
   public void countSuccess(){
     success++;

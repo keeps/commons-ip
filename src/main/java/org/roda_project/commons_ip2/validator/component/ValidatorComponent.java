@@ -23,7 +23,7 @@ public interface ValidatorComponent {
 
   void setObserver(ValidationObserver observer);
 
-  boolean validateComponent() throws SAXException, ParserConfigurationException, IOException;
+  boolean validate() throws SAXException, ParserConfigurationException, IOException;
 
   void clean();
 }

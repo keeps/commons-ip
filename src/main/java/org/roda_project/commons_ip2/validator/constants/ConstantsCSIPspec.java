@@ -7,6 +7,7 @@ public class ConstantsCSIPspec {
     private ConstantsCSIPspec(){
     }
 
+    /* Use of the METS root element (element mets) */
     /* CSIP1 */
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP1_ID = "CSIP1";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP1_NAME = "Package Identifier";
@@ -74,6 +75,95 @@ public class ConstantsCSIPspec {
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP6_CARDINALITY = "1..1";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP6_LEVEL = "MUST";
 
+    /* Use of the METS header (element metsHdr) */
+    /* CSIP117 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP117_ID = "CSIP117";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP117_NAME = "Package header";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP117_LOCATION = "mets/metsHdr";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP117_DESCRIPTION = "General element for describing the package.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP117_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP117_LEVEL = "MUST";
+
+    /* CSIP7 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP7_ID = "CSIP7";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP7_NAME = "Package creation date";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP7_LOCATION = "mets/metsHdr/@CREATEDATE";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP7_DESCRIPTION = "mets/metsHdr/@CREATEDATE records the date the package was created.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP7_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP7_LEVEL = "MUST";
+
+    /* CSIP8 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP8_ID = "CSIP8";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP8_NAME = "Package last modification date";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP8_LOCATION = "mets/metsHdr/@LASTMODDATE";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP8_DESCRIPTION = "mets/metsHdr/@LASTMODDATE is mandatory when the package has been modified.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP8_CARDINALITY = "0..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP8_LEVEL = "SHOULD";
+
+    /* CSIP9 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP9_ID = "CSIP9";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP9_NAME = "OAIS Package type information";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP9_LOCATION = "mets/metsHdr/@csip:OAISPACKAGETYPE";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP9_DESCRIPTION = "mets/metsHdr/@csip:OAISPACKAGETYPE is an additional CSIP attribute that declares the type of the IP.See also: OAIS Package type";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP9_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP9_LEVEL = "MUST";
+
+    /* CSIP10 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP10_ID = "CSIP10";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP10_NAME = "Agent";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP10_LOCATION = "mets/metsHdr/agent";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP10_DESCRIPTION = "A mandatory agent element records the software used to create the package. Other uses of agents may be described in any local implementations that extend the profile.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP10_CARDINALITY = "1..n";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP10_LEVEL = "MUST";
+
+    /* CSIP11 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP11_ID = "CSIP11";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP11_NAME = "Agent role";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP11_LOCATION = "mets/metsHdr/agent[@ROLE=’CREATOR’]";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP11_DESCRIPTION = "The mandatory agent element MUST have a @ROLE attribute with the value 'CREATOR'";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP11_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP11_LEVEL = "MUST";
+
+    /* CSIP12 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP12_ID = "CSIP12";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP12_NAME = "Agent type";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP12_LOCATION = "mets/metsHdr/agent[@TYPE=’OTHER’]";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP12_DESCRIPTION = "The mandatory agent element MUST have a @TYPE attribute with the value 'OTHER'.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP12_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP12_LEVEL = "MUST";
+
+    /* CSIP13 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP13_ID = "CSIP13";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP13_NAME = "Agent other type";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP13_LOCATION = "mets/metsHdr/agent[@OTHERTYPE=’SOFTWARE’]";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP13_DESCRIPTION = "The mandatory agent element MUST have a @OTHERTYPE attribute with the value “SOFTWARE”.See also: Other agent type";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP13_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP13_LEVEL = "MUST";
+
+    /* CSIP14 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP14_ID = "CSIP14";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP14_NAME = "Agent name";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP14_LOCATION = "mets/metsHdr/agent/name";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP14_DESCRIPTION = "The mandatory agent’s name element records the name of the software tool used to create the IP.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP14_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP14_LEVEL = "MUST";
+
+    /* CSIP15 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP15_ID = "CSIP15";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP15_NAME = "Agent additional information";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP15_LOCATION = "mets/metsHdr/agent/note";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP15_DESCRIPTION = "The mandatory agent’s note element records the version of the tool used to create the IP.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP15_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP15_LEVEL = "MUST";
+
+    /* CSIP16 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP16_ID = "CSIP16";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP16_NAME = "Classification of the agent additional information";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP16_LOCATION = "mets/metsHdr/agent/note[@csip:NOTETYPE=’SOFTWARE VERSION’]";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP16_DESCRIPTION = "The mandatory agent element’s note child has a @csip:NOTETYPE attribute with a fixed value of “SOFTWARE VERSION”.See also: Note type";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP16_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP16_LEVEL = "MUST";
+
     /* Get Name, Location, Description, Cardinality and Level for given specification ID */
     public static String getSpecificationName(String id){
         if (id.equals("CSIP1")) {
@@ -93,6 +183,39 @@ public class ConstantsCSIPspec {
         }
         if (id.equals("CSIP6")) {
             return VALIDATION_REPORT_SPECIFICATION_CSIP6_NAME;
+        }
+        if(id.equals("CSIP117")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP117_NAME;
+        }
+        if(id.equals("CSIP7")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP7_NAME;
+        }
+        if(id.equals("CSIP8")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP8_NAME;
+        }
+        if(id.equals("CSIP9")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP9_NAME;
+        }
+        if(id.equals("CSIP10")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP10_NAME;
+        }
+        if(id.equals("CSIP11")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP11_NAME;
+        }
+        if(id.equals("CSIP12")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP12_NAME;
+        }
+        if(id.equals("CSIP13")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP13_NAME;
+        }
+        if(id.equals("CSIP14")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP14_NAME;
+        }
+        if(id.equals("CSIP15")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP15_NAME;
+        }
+        if(id.equals("CSIP16")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP16_NAME;
         }
         return "Not Defined";
     }
@@ -116,6 +239,39 @@ public class ConstantsCSIPspec {
         if (id.equals("CSIP6")) {
             return VALIDATION_REPORT_SPECIFICATION_CSIP6_LOCATION;
         }
+        if(id.equals("CSIP117")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP117_LOCATION;
+        }
+        if(id.equals("CSIP7")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP7_LOCATION;
+        }
+        if(id.equals("CSIP8")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP8_LOCATION;
+        }
+        if(id.equals("CSIP9")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP9_LOCATION;
+        }
+        if(id.equals("CSIP10")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP10_LOCATION;
+        }
+        if(id.equals("CSIP11")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP11_LOCATION;
+        }
+        if(id.equals("CSIP12")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP12_LOCATION;
+        }
+        if(id.equals("CSIP13")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP13_LOCATION;
+        }
+        if(id.equals("CSIP14")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP14_LOCATION;
+        }
+        if(id.equals("CSIP15")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP15_LOCATION;
+        }
+        if(id.equals("CSIP16")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP16_LOCATION;
+        }
         return "Not Defined";
     }
 
@@ -137,6 +293,39 @@ public class ConstantsCSIPspec {
         }
         if (id.equals("CSIP6")) {
             return VALIDATION_REPORT_SPECIFICATION_CSIP6_DESCRIPTION;
+        }
+        if(id.equals("CSIP117")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP117_DESCRIPTION;
+        }
+        if(id.equals("CSIP7")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP7_DESCRIPTION;
+        }
+        if(id.equals("CSIP8")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP8_DESCRIPTION;
+        }
+        if(id.equals("CSIP9")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP9_DESCRIPTION;
+        }
+        if(id.equals("CSIP10")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP10_DESCRIPTION;
+        }
+        if(id.equals("CSIP11")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP11_DESCRIPTION;
+        }
+        if(id.equals("CSIP12")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP12_DESCRIPTION;
+        }
+        if(id.equals("CSIP13")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP13_DESCRIPTION;
+        }
+        if(id.equals("CSIP14")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP14_DESCRIPTION;
+        }
+        if(id.equals("CSIP15")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP15_DESCRIPTION;
+        }
+        if(id.equals("CSIP16")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP16_DESCRIPTION;
         }
         return "Not Defined";
     }
@@ -160,6 +349,39 @@ public class ConstantsCSIPspec {
         if (id.equals("CSIP6")) {
             return VALIDATION_REPORT_SPECIFICATION_CSIP6_CARDINALITY;
         }
+        if(id.equals("CSIP117")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP117_CARDINALITY;
+        }
+        if(id.equals("CSIP7")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP7_CARDINALITY;
+        }
+        if(id.equals("CSIP8")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP8_CARDINALITY;
+        }
+        if(id.equals("CSIP9")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP9_CARDINALITY;
+        }
+        if(id.equals("CSIP10")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP10_CARDINALITY;
+        }
+        if(id.equals("CSIP11")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP11_CARDINALITY;
+        }
+        if(id.equals("CSIP12")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP12_CARDINALITY;
+        }
+        if(id.equals("CSIP13")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP13_CARDINALITY;
+        }
+        if(id.equals("CSIP14")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP14_CARDINALITY;
+        }
+        if(id.equals("CSIP15")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP15_CARDINALITY;
+        }
+        if(id.equals("CSIP16")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP16_CARDINALITY;
+        }
         return "Not Defined";
     }
 
@@ -181,6 +403,39 @@ public class ConstantsCSIPspec {
         }
         if (id.equals("CSIP6")) {
             return VALIDATION_REPORT_SPECIFICATION_CSIP6_LEVEL;
+        }
+        if(id.equals("CSIP117")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP117_LEVEL;
+        }
+        if(id.equals("CSIP7")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP7_LEVEL;
+        }
+        if(id.equals("CSIP8")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP8_LEVEL;
+        }
+        if(id.equals("CSIP9")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP9_LEVEL;
+        }
+        if(id.equals("CSIP10")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP10_LEVEL;
+        }
+        if(id.equals("CSIP11")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP11_LEVEL;
+        }
+        if(id.equals("CSIP12")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP12_LEVEL;
+        }
+        if(id.equals("CSIP13")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP13_LEVEL;
+        }
+        if(id.equals("CSIP14")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP14_LEVEL;
+        }
+        if(id.equals("CSIP15")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP15_LEVEL;
+        }
+        if(id.equals("CSIP16")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP16_LEVEL;
         }
         return "Not Defined";
     }

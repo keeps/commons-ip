@@ -1,7 +1,7 @@
 package org.roda_project.commons_ip2.validator;
 
 import org.roda_project.commons_ip2.validator.common.ZipManager;
-import org.roda_project.commons_ip2.validator.component.MetsComponentValidator;
+import org.roda_project.commons_ip2.validator.component.metsrootComponent.MetsComponentValidator;
 import org.roda_project.commons_ip2.validator.component.ValidatorComponent;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.observer.ProgressValidationLoggerObserver;
@@ -48,18 +48,22 @@ public class EARKSIPValidator {
   public boolean validate() {
     observer.notifyValidationStart();
     try {
+      List<Boolean> results = new ArrayList<>();
       for(ValidatorComponent component : components){
         component.setObserver(observer);
         component.setReporter(reporter);
         component.setZipManager(zipManager);
         component.setEARKSIPpath(earksipPath);
-        if(component.validateComponent()){
-          reporter.componentValidationFinish("VALID");
-        }
-        else{
-          reporter.componentValidationFinish("INVALID");
-        }
+        results.add(component.validate());
+        component.clean();
       }
+      if(results.contains(false)){
+        reporter.componentValidationFinish("INVALID");
+      }
+      else{
+        reporter.componentValidationFinish("VALID");
+      }
+      observer.notifyIndicators( reporter.getErrors(), reporter.getSuccess(), reporter.getWarnings());
       reporter.close();
       observer.notifyFinishValidation();
     } catch (ParserConfigurationException | SAXException | IOException e){
