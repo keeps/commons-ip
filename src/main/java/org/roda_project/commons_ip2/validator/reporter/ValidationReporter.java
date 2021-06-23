@@ -106,7 +106,7 @@ public class ValidationReporter {
     }
   }
 
-  public void componentValidationResult(String specification,String id,Boolean status, String detail) {
+  public void componentValidationResult(String specification,String id,String status, String detail) {
     try {
       jsonGenerator.writeStartObject();
       jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_SPECIFICATION, specification);
@@ -116,10 +116,10 @@ public class ValidationReporter {
       jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_DESCRIPTION, ConstantsCSIPspec.getSpecificationDescription(id));
       jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_CARDINALITY, ConstantsCSIPspec.getSpecificationCardinality(id));
       jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LEVEL, ConstantsCSIPspec.getSpecificationLevel(id));
-      jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_OUTCOME);
+      jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING);
       jsonGenerator.writeStartObject();
-      jsonGenerator.writeObjectField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_OUTCOME_VALID, status);
-      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_OUTCOME_DETAIL, detail);
+      jsonGenerator.writeObjectField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_OUTCOME, status);
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_DETAIL, detail);
       jsonGenerator.writeEndObject();
       jsonGenerator.writeEndObject();
     } catch (IOException e) {

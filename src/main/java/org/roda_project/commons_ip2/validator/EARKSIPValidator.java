@@ -3,6 +3,7 @@ package org.roda_project.commons_ip2.validator;
 import org.roda_project.commons_ip2.validator.common.ZipManager;
 import org.roda_project.commons_ip2.validator.component.metsrootComponent.MetsComponentValidator;
 import org.roda_project.commons_ip2.validator.component.ValidatorComponent;
+import org.roda_project.commons_ip2.validator.component.metsrootComponent.MetsHeaderComponentValidator;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.observer.ProgressValidationLoggerObserver;
 import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
@@ -15,7 +16,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author João Gomes <jgomes@keep.pt>
@@ -43,21 +46,22 @@ public class EARKSIPValidator {
     components = new ArrayList<>();
     ValidatorComponent metsComponent = new MetsComponentValidator(Constants.CSIP_MODULE_NAME_1);
     components.add(metsComponent);
+    ValidatorComponent metsHeaderComponent = new MetsHeaderComponentValidator(Constants.CSIP_MODULE_NAME_2);
+    components.add(metsHeaderComponent);
   }
 
   public boolean validate() {
     observer.notifyValidationStart();
     try {
-      List<Boolean> results = new ArrayList<>();
       for(ValidatorComponent component : components){
         component.setObserver(observer);
         component.setReporter(reporter);
         component.setZipManager(zipManager);
         component.setEARKSIPpath(earksipPath);
-        results.add(component.validate());
+        boolean valid = component.validate();
         component.clean();
       }
-      if(results.contains(false)){
+      if(reporter.getErrors() > 0){
         reporter.componentValidationFinish("INVALID");
       }
       else{

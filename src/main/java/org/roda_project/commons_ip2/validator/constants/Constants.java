@@ -10,6 +10,7 @@ public class Constants {
   /* File Paths */
   public static final String PATH_RESOURCES_CSIP_VOCABULARY_CONTENT_CATEGORY = "./src/main/resources/controlledVocabularies/CSIPVocabularyContentCategory.xml";
   public static final String PATH_RESOURCES_CSIP_VOCABULARY_CONTENT_INFORMATION_TYPE = "./src/main/resources/controlledVocabularies/CSIPVocabularyContentInformationType.xml";
+  public static final String PATH_RESOURCES_CSIP_VOCABULARY_OAIS_PACKAGE_TYPE = "./src/main/resources/controlledVocabularies/CSIPVocabularyOAISPackageType.xml";
   public static final String VALIDATION_REPORT_PREFIX = "commons-ip-validation-reporter";
 
   /* Report Header */
@@ -42,9 +43,17 @@ public class Constants {
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_DESCRIPTION = "description";
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_CARDINALITY = "cardinality";
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_LEVEL = "level";
-  public static final String VALIDATION_REPORT_SPECIFICATION_KEY_OUTCOME = "outcome";
-  public static final String VALIDATION_REPORT_SPECIFICATION_KEY_OUTCOME_VALID = "valid";
-  public static final String VALIDATION_REPORT_SPECIFICATION_KEY_OUTCOME_DETAIL = "detail";
+  public static final String VALIDATION_REPORT_SPECIFICATION_KEY_TESTING = "testing";
+  public static final String VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_OUTCOME = "outcome";
+  public static final String VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_DETAIL = "detail";
+
+  /* Report Status */
+  public static final String VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_PASSED = "PASSED";
+  public static final String VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_FAILED = "FAILED";
+
+  public static final String VALIDATION_REPORT_SPECIFICATION_RESULT_VALID = "VALID";
+  public static final String VALIDATION_REPORT_SPECIFICATION_RESULT_INVALID = "INVALID";
+  public static final String VALIDATION_REPORT_SPECIFICATION_RESULT_ERROR = "ERROR";
 
   /* Modules Names */
   public static final String CSIP_MODULE_NAME_1 = "Use of the METS root element (element mets)";

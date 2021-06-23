@@ -53,102 +53,72 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   @Override
   public boolean validate() throws SAXException, ParserConfigurationException, IOException {
     boolean valid = true;
-
     /* Parse mets element in METS.xml  */
     MetsComponentHandler handler = new MetsComponentHandler("mets", data);
     InputStream stream = zipManager.getMetsRootInputStream(path);
     getSAXParser().parse(stream, handler);
 
     /* CSIP1 Validation */
-    observer.notifyStartValidationModule(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID);
-    observer.notifyStartStep(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID);
+    validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID);
     if(!validateCSIP1()){
-      getReporter().componentValidationResult(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID,
-              false,"mets/@OBJID attribute is mandatory!");
-      getReporter().countErrors();
+      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID,"mets/@OBJID attribute is mandatory!");
       valid = false;
     }
-    getReporter().componentValidationResult(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID,
-            true,"");
-    getReporter().countSuccess();
-    observer.notifyFinishStep(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID);
+    else validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID,"");
 
     /* CSIP2 Validation */
-    observer.notifyStartValidationModule(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP2_ID);
-    observer.notifyStartStep(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP2_ID);
+    validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP2_ID);
     if(!validateCSIP2()){
-      getReporter().componentValidationResult(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP2_ID,
-              false,"The mets/@TYPE attribute MUST be used to declare the category of the content held in the package.");
-      getReporter().countErrors();
+      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP2_ID,"The mets/@TYPE attribute MUST be used to declare the category of the content held in the package.");
       valid = false;
     }
-    getReporter().componentValidationResult(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP2_ID,
-            true,"");
-    getReporter().countSuccess();
-    observer.notifyFinishStep(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP2_ID);
+    else validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP2_ID,"");
 
     /* CSIP3 Validation */
-    observer.notifyStartValidationModule(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP3_ID);
-    observer.notifyStartStep(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP3_ID);
+    validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP3_ID);
     if(!validateCSIP3()){
-      getReporter().componentValidationResult(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP3_ID,
-                      false, "When the mets/@TYPE attribute has the value “OTHER” the " +
+      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP3_ID, "When the mets/@TYPE attribute has the value “OTHER” the " +
                       "mets/@csip:OTHERTYPE attribute MUST be used to declare the content " +
                       "category of the package/representation");
-      getReporter().countWarnings();
       valid = false;
     }
-    getReporter().componentValidationResult(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP3_ID,true,"");
-    getReporter().countSuccess();
-    observer.notifyFinishStep(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP3_ID);
+    else validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP3_ID,"");
 
     /* CSIP4 Validation */
-    observer.notifyStartValidationModule(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP4_ID);
-    observer.notifyStartStep(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP4_ID);
+    validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP4_ID);
     if(!validateCSIP4()){
-      getReporter().componentValidationResult(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP4_ID,
-              false, "Should include @csip:CONTENTINFORMATIONTYPE!");
-      getReporter().countWarnings();
+      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP4_ID, "Should include @csip:CONTENTINFORMATIONTYPE!");
       valid = false;
     }
-    getReporter().componentValidationResult(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP4_ID,true,"");
-    getReporter().countSuccess();
-    observer.notifyFinishStep(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP4_ID);
+    else validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP4_ID,"");
 
     /* CSIP5 Validation */
-    observer.notifyStartValidationModule(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP5_ID);
-    observer.notifyStartStep(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP5_ID);
+    validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP5_ID);
     if(!validateCSIP5()){
-      getReporter().componentValidationResult(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP5_ID,
-              false, "Should include @csip:OTHERCONTENTINFORMATIONTYPE!");
-      getReporter().countWarnings();
+      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP5_ID, "Should include @csip:OTHERCONTENTINFORMATIONTYPE!");
       valid = false;
     }
-    getReporter().componentValidationResult(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP5_ID,true,"");
-    getReporter().countSuccess();
-    observer.notifyFinishStep(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP5_ID);
+    else validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP5_ID,"");
 
     /* CSIP6 Validation */
-    observer.notifyStartValidationModule(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP6_ID);
-    observer.notifyStartStep(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP6_ID);
+    validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP6_ID);
     if(!validateCSIP6()){
-      getReporter().componentValidationResult(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP6_ID,
-              false, "Must include The URL of the METS profile that the information package conforms with.");
-      getReporter().countErrors();
+      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP6_ID, "Must include The URL of the METS profile that the information package conforms with.");
       valid = false;
     }
-    getReporter().componentValidationResult(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP6_ID,true,"");
-    getReporter().countSuccess();
-    observer.notifyFinishStep(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP5_ID);
+    else validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP6_ID,"");
     observer.notifyFinishModule(MODULE_NAME);
     return valid;
   }
 
-  @Override
-  public void clean() {
-    zipManager.closeZipFile();
-  }
-
+  /*
+  * mets/@OBJID
+  * The mets/@OBJID attribute is mandatory, its value is a string identifier for
+  * the METS document. For the package METS document, this should be the
+  * name/ID of the package, i.e. the name of the package root folder. For a
+  * representation level METS document this value records the name/ID of the
+  * representation, i.e. the name of the top-level representation folder.
+  */
   private boolean validateCSIP1() throws IOException {
     boolean valid = true;
     String OBJID = data.get("OBJID");
@@ -173,26 +143,58 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     return valid;
   }
 
+  /*
+  * mets/@TYPE
+  * The mets/@TYPE attribute MUST be used to declare the category of the
+  * content held in the package, e.g. book, journal, stereograph, video, etc..
+  * Legal values are defined in a fixed vocabulary. When the content category
+  * used falls outside of the defined vocabulary the mets/@TYPE value must be
+  * set to “OTHER” and the specific value declared in mets/@csip:OTHERTYPE .
+  * The vocabulary will develop under the curation of the DILCIS Board as
+  * additional content information type specifications are produced.See also:
+  * Content Category
+  */
   private boolean validateCSIP2() {
     boolean valid = true;
     String TYPE = data.get("TYPE");
-    if(!contentCategory.contains(TYPE)){
+    if(TYPE == null || TYPE.equals("")){
       valid = false;
+    }
+    else {
+      if(!contentCategory.contains(TYPE)){
+        valid = false;
+      }
     }
     return valid;
   }
 
+  /*
+  * mets[@TYPE=’OTHER’]/@csip:OTHERTYPE
+  * When the mets/@TYPE attribute has the value “OTHER” the
+  * mets/@csip:OTHERTYPE attribute MUST be used to declare the content
+  * category of the package/representation.See also: Content Category
+  */
   private boolean validateCSIP3() {
     boolean valid = true;
     String TYPE = data.get("TYPE");
     String otherType = data.get("csip:OTHERTYPE");
-
-    if(TYPE.equalsIgnoreCase("Other") && otherType == null){
-      valid = false;
+    if(TYPE != null){
+      if(TYPE.equalsIgnoreCase("Other") && otherType == null){
+        valid = false;
+      }
     }
     return valid;
   }
 
+  /*
+  * mets/@csip:CONTENTINFORMATIONTYPE
+  * Used to declare the Content Information Type Specification used when
+  * creating the package. Legal values are defined in a fixed vocabulary. The
+  * attribute is mandatory for representation level METS documents. The
+  * vocabulary will evolve under the care of the DILCIS Board as additional
+  * Content Information Type Specifications are developed.See also: Content
+  * information type specification
+  */
   private boolean validateCSIP4() {
     boolean valid = true;
     String ContentInformationType = data.get("@csip:CONTENTINFORMATIONTYPE");
@@ -204,6 +206,12 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     return valid;
   }
 
+  /*
+  * mets[@csip:CONTENTINFORMATIONTYPE=’OTHER’]/@csip:OTHERCONTENTINFORMATIONTYPE
+  * When the mets/@csip:CONTENTINFORMATIONTYPE has the value
+  * “OTHER” the mets/@csip:OTHERCONTENTINFORMATIONTYPE must state
+  * the content information type.
+  */
   private boolean validateCSIP5(){
     boolean valid = true;
     String ContentInformationType = data.get("@csip:CONTENTINFORMATIONTYPE");
@@ -216,10 +224,14 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     return valid;
   }
 
+  /*
+  * mets/@PROFILE
+  * The URL of the METS profile that the information package conforms with.
+  */
   private boolean validateCSIP6(){
     boolean valid = true;
     String profile = data.get("PROFILE");
-    if(profile == null){
+    if(profile == null || profile.equals("")){
       valid = false;
     }
     return valid;

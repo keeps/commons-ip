@@ -1,6 +1,8 @@
 package org.roda_project.commons_ip2.validator.component;
 
 import org.roda_project.commons_ip2.validator.common.ZipManager;
+import org.roda_project.commons_ip2.validator.constants.Constants;
+import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReporter;
 import org.slf4j.Logger;
@@ -58,14 +60,38 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
     this.observer = observer;
   }
 
+  @Override
+  public void clean() {
+    this.zipManager.closeZipFile();
+  }
+
   public SAXParser getSAXParser() throws ParserConfigurationException, SAXException {
     factory = SAXParserFactory.newInstance();
     return factory.newSAXParser();
   }
 
-  protected void validationError(String specification,String MODULE_NAME,String ID, boolean status, String detail){
-    reporter.componentValidationResult(specification, ID,status, detail);
+  protected void validationOutcomeFailed(String specification,String ID, String detail){
+    reporter.componentValidationResult(specification, ID, Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_FAILED, detail);
+    if(ConstantsCSIPspec.getSpecificationLevel(ID).equals("MUST")){
+      reporter.countErrors();
+    }
+    else{
+      reporter.countWarnings();
+    }
+    observer.notifyFinishStep(ID);
   }
+
+  protected void validationOutcomePassed(String specification,String ID, String detail){
+    reporter.componentValidationResult(specification, ID, Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_PASSED, detail);
+    reporter.countSuccess();
+    observer.notifyFinishStep(ID);
+  }
+
+  protected void validationInit(String moduleName, String ID){
+    observer.notifyStartValidationModule(moduleName,ID);
+    observer.notifyStartStep(ID);
+  }
+
 
 
 
