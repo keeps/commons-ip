@@ -36,8 +36,8 @@ public class ZipManager {
     String entry = null;
     while (entries.hasMoreElements()){
       ZipEntry entr = (ZipEntry) entries.nextElement();
-      if(entr.getName().matches(".*?METS.xml")){
-        if(entr.getName().split("/").length <= 3){
+      if(entr.getName().matches(".*/METS.xml")){
+        if(entr.getName().split("/").length == 2){
           entry = entr.getName();
         }
       }
@@ -87,6 +87,21 @@ public class ZipManager {
       throw new IOException("METS.xml not Found");
     }
     return entry;
+  }
+
+  public boolean checkIfExistsRootMetsFile(Path path) throws IOException {
+    boolean found = false;
+    ZipFile zipFile = new ZipFile(path.toFile());
+    Enumeration entries = zipFile.entries();
+    while (entries.hasMoreElements()){
+      ZipEntry entry = (ZipEntry) entries.nextElement();
+      if(entry.getName().matches(".*/METS.xml")){
+        if(entry.getName().split("/").length == 2){
+          found = true;
+        }
+      }
+    }
+    return found;
   }
 
   public void closeZipFile() {

@@ -1,5 +1,6 @@
 package org.roda_project.commons_ip2.validator.component;
 
+import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
 import org.roda_project.commons_ip2.validator.common.ZipManager;
 import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReporter;
@@ -19,11 +20,13 @@ public interface ValidatorComponent {
 
   void setReporter(ValidationReporter reporter);
 
+  void setMets(Mets mets);
+
   void setZipManager(ZipManager zipManager);
 
   void setObserver(ValidationObserver observer);
 
-  boolean validate() throws SAXException, ParserConfigurationException, IOException;
+  boolean validate() throws IOException;
 
   void clean();
 }

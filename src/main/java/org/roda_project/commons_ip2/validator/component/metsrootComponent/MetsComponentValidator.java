@@ -1,19 +1,15 @@
 package org.roda_project.commons_ip2.validator.component.metsrootComponent;
 
+import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
 import org.roda_project.commons_ip2.validator.common.ControlledVocabularyParser;
 import org.roda_project.commons_ip2.validator.component.ValidatorComponentImpl;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
-import org.roda_project.commons_ip2.validator.handlers.MetsComponentHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -22,7 +18,6 @@ import java.util.List;
 public class MetsComponentValidator extends ValidatorComponentImpl {
   private static final Logger LOGGER = LoggerFactory.getLogger(MetsComponentValidator.class);
 
-  private HashMap<String,String> data;
   private final String MODULE_NAME;
 
   private List<String> contentCategory;
@@ -38,7 +33,6 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
 
   public MetsComponentValidator(String moduleName) {
     this.MODULE_NAME = moduleName;
-    this.data = new HashMap<>();
     this.contentCategory = new ArrayList<>();
     ControlledVocabularyParser controlledVocabularyParser = new ControlledVocabularyParser(Constants.PATH_RESOURCES_CSIP_VOCABULARY_CONTENT_CATEGORY,contentCategory);
     controlledVocabularyParser.parse();
@@ -51,12 +45,8 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   }
 
   @Override
-  public boolean validate() throws SAXException, ParserConfigurationException, IOException {
+  public boolean validate() throws IOException {
     boolean valid = true;
-    /* Parse mets element in METS.xml  */
-    MetsComponentHandler handler = new MetsComponentHandler("mets", data);
-    InputStream stream = zipManager.getMetsRootInputStream(path);
-    getSAXParser().parse(stream, handler);
 
     /* CSIP1 Validation */
     validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID);
@@ -121,7 +111,7 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   */
   private boolean validateCSIP1() throws IOException {
     boolean valid = true;
-    String OBJID = data.get("OBJID");
+    String OBJID = mets.getOBJID();
     if(OBJID == null){
       valid = false;
     }
@@ -135,7 +125,7 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
         }
       }
       else{
-        if(!OBJID.equals(getZipName().split("\\.")[0])){
+        if(!OBJID.equals(getName().split("\\.")[0])){
           valid = false;
         }
       }
@@ -156,7 +146,7 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   */
   private boolean validateCSIP2() {
     boolean valid = true;
-    String TYPE = data.get("TYPE");
+    String TYPE = mets.getTYPE();
     if(TYPE == null || TYPE.equals("")){
       valid = false;
     }
@@ -176,8 +166,8 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   */
   private boolean validateCSIP3() {
     boolean valid = true;
-    String TYPE = data.get("TYPE");
-    String otherType = data.get("csip:OTHERTYPE");
+    String TYPE = mets.getTYPE();
+    String otherType = mets.getOTHERTYPE();
     if(TYPE != null){
       if(TYPE.equalsIgnoreCase("Other") && otherType == null){
         valid = false;
@@ -197,7 +187,7 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   */
   private boolean validateCSIP4() {
     boolean valid = true;
-    String ContentInformationType = data.get("@csip:CONTENTINFORMATIONTYPE");
+    String ContentInformationType = mets.getCONTENTINFORMATIONTYPE();
     if(ContentInformationType != null){
       if(!contentInformationType.contains(ContentInformationType)){
         valid = false;
@@ -214,8 +204,8 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   */
   private boolean validateCSIP5(){
     boolean valid = true;
-    String ContentInformationType = data.get("@csip:CONTENTINFORMATIONTYPE");
-    String OtherContentInformationType = data.get("@csip:OTHERCONTENTINFORMATIONTYPE");
+    String ContentInformationType = mets.getCONTENTINFORMATIONTYPE();
+    String OtherContentInformationType = mets.getOTHERCONTENTINFORMATIONTYPE();
     if(ContentInformationType != null){
       if(ContentInformationType.equalsIgnoreCase("Other") && OtherContentInformationType == null){
         valid = false;
@@ -230,7 +220,7 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   */
   private boolean validateCSIP6(){
     boolean valid = true;
-    String profile = data.get("PROFILE");
+    String profile = mets.getPROFILE();
     if(profile == null || profile.equals("")){
       valid = false;
     }

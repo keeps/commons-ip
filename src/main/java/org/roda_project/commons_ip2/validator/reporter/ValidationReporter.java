@@ -127,6 +127,21 @@ public class ValidationReporter {
     }
   }
 
+  public void componentPathValidationResult(String id,String status,String detail){
+    try {
+      jsonGenerator.writeStartObject();
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID, id);
+      jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING);
+      jsonGenerator.writeStartObject();
+      jsonGenerator.writeObjectField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_OUTCOME, status);
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_DETAIL, detail);
+      jsonGenerator.writeEndObject();
+      jsonGenerator.writeEndObject();
+    } catch (IOException e) {
+      LOGGER.error("Could not write result of" + id + "result in file '", e);
+    }
+  }
+
   public void componentValidationFinish(String status){
     try {
       jsonGenerator.writeEndArray();

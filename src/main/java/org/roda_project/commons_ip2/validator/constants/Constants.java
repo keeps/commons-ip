@@ -54,12 +54,15 @@ public class Constants {
   public static final String VALIDATION_REPORT_SPECIFICATION_RESULT_VALID = "VALID";
   public static final String VALIDATION_REPORT_SPECIFICATION_RESULT_INVALID = "INVALID";
   public static final String VALIDATION_REPORT_SPECIFICATION_RESULT_ERROR = "ERROR";
+  public static final String VALIDATION_REPORT_SPECIFICATION_KEY_ERROR = "fileErrors";
 
   /* Modules Names */
+  public static final String CSIP_MODULE_NAME_0 = "Validation of the received sip";
   public static final String CSIP_MODULE_NAME_1 = "Use of the METS root element (element mets)";
   public static final String CSIP_MODULE_NAME_2 = "Use of the METS header (element metsHdr)";
   public static final String CSIP_MODULE_NAME_3 = "Use of the METS descriptive metadata section (element dmdSec)";
   public static final String CSIP_MODULE_NAME_4 = "Use of the METS administrative metadata section (element amdSec)";
   public static final String CSIP_MODULE_NAME_5 = "Use of the METS file section (element fileSec)";
   public static final String CSIP_MODULE_NAME_6 = "Use of the METS structural map (<structMap>)";
+
 }

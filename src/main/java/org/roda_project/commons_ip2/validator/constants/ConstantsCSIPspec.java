@@ -7,6 +7,12 @@ public class ConstantsCSIPspec {
     private ConstantsCSIPspec(){
     }
 
+    /* Errors and ID's for constants in validation of sip path */
+    public static final String VALIDATION_REPORT_PATH_DOES_NOT_EXIST_ID = "Path";
+    public static final String VALIDATION_REPORT_PATH_DOES_NOT_EXIST_DETAIL = "The path does not exist or is not a directory or archive files";
+    public static final String VALIDATION_REPORT_METS_NOT_FOUND_ID = "METS";
+    public static final String VALIDATION_REPORT_METS_NOT_FOUND_DETAIL = "Root METS.xml not found";
+
     /* Use of the METS root element (element mets) */
     /* CSIP1 */
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP1_ID = "CSIP1";
