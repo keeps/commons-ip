@@ -67,22 +67,15 @@ public class FileComponentValidator extends ValidatorComponentImpl {
 
     private boolean validateMetsRootFileLocation(Path path) throws IOException {
         boolean valid = true;
-        boolean found = false;
         if(isZipFileFlag()){
             if(!zipManager.checkIfExistsRootMetsFile(path)){
                 valid = false;
             }
         }
         else{
-            File dir = path.toFile();
-            for(File f: dir.listFiles()){
-                if(f.getName().equals("METS.xml")){
-                    found = true;
-                }
+            if(!folderManager.checkIfExistsRootMetsFile(path)){
+                valid = false;
             }
-        }
-        if(!found){
-            valid = false;
         }
         return valid;
     }

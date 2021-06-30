@@ -1,6 +1,7 @@
 package org.roda_project.commons_ip2.validator.component;
 
 import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
+import org.roda_project.commons_ip2.validator.common.FolderManager;
 import org.roda_project.commons_ip2.validator.common.ZipManager;
 import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReporter;
@@ -24,9 +25,15 @@ public interface ValidatorComponent {
 
   void setZipManager(ZipManager zipManager);
 
+  void setFolderManager(FolderManager folderManager);
+
   void setObserver(ValidationObserver observer);
 
   boolean validate() throws IOException;
+
+  boolean isZipFileFlag();
+
+  void setZipFileFlag(boolean zipFileFlag);
 
   void clean();
 }

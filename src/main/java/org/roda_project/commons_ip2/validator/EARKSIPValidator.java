@@ -1,11 +1,13 @@
 package org.roda_project.commons_ip2.validator;
 
 import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
+import org.roda_project.commons_ip2.validator.common.FolderManager;
 import org.roda_project.commons_ip2.validator.common.InstatiateMets;
 import org.roda_project.commons_ip2.validator.common.ZipManager;
 import org.roda_project.commons_ip2.validator.component.fileComponent.FileComponentValidator;
 import org.roda_project.commons_ip2.validator.component.metsrootComponent.MetsComponentValidator;
 import org.roda_project.commons_ip2.validator.component.ValidatorComponent;
+import org.roda_project.commons_ip2.validator.component.metsrootComponent.MetsHeaderComponentValidator;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.observer.ProgressValidationLoggerObserver;
 import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
@@ -32,16 +34,17 @@ public class EARKSIPValidator {
   private ValidationReporter reporter;
   private ZipManager zipManager;
   private ValidationObserver observer;
+  private FolderManager folderManager;
+
   private Mets mets;
   private List<ValidatorComponent> components;
 
-  public EARKSIPValidator(Path earksipPath, Path reportPath) throws JAXBException, IOException, SAXException {
+  public EARKSIPValidator(Path earksipPath, Path reportPath){
     this.earksipPath = earksipPath.toAbsolutePath().normalize();
     reporter = new ValidationReporter(reportPath.toAbsolutePath().normalize());
     zipManager = new ZipManager();
     observer = new ProgressValidationLoggerObserver();
-//    InstatiateMets instatiateMets = new InstatiateMets(zipManager);
-//    mets = instatiateMets.instatiateMetsFile(earksipPath);
+    folderManager = new FolderManager();
     setupComponents();
   }
 
@@ -49,6 +52,8 @@ public class EARKSIPValidator {
     components = new ArrayList<>();
     ValidatorComponent metsComponent = new MetsComponentValidator(Constants.CSIP_MODULE_NAME_1);
     components.add(metsComponent);
+    ValidatorComponent metsHeaderComponent = new MetsHeaderComponentValidator(Constants.CSIP_MODULE_NAME_2);
+    components.add(metsHeaderComponent);
   }
 
   public boolean validate() {
@@ -57,16 +62,21 @@ public class EARKSIPValidator {
     fileComponent.setObserver(observer);
     fileComponent.setReporter(reporter);
     fileComponent.setZipManager(zipManager);
+    fileComponent.setFolderManager(folderManager);
     fileComponent.setEARKSIPpath(earksipPath);
     try {
       boolean validFileComponent = fileComponent.validate();
       if(validFileComponent){
+        InstatiateMets instatiateMets = new InstatiateMets(zipManager,folderManager);
+        mets = instatiateMets.instatiateMetsFile(earksipPath,fileComponent.isZipFileFlag());
         for(ValidatorComponent component : components){
           component.setObserver(observer);
           component.setReporter(reporter);
           component.setZipManager(zipManager);
+          component.setFolderManager(folderManager);
           component.setEARKSIPpath(earksipPath);
           component.setMets(mets);
+          component.setZipFileFlag(fileComponent.isZipFileFlag());
           boolean valid = component.validate();
           component.clean();
         }
@@ -81,7 +91,7 @@ public class EARKSIPValidator {
       reporter.close();
       observer.notifyFinishValidation();
 
-    } catch (IOException e){
+    } catch (IOException | JAXBException | SAXException e){
       LOGGER.error("Could not parse file.", e);
     }
     return true;

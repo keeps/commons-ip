@@ -98,6 +98,7 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     }
     else validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP6_ID,"");
     observer.notifyFinishModule(MODULE_NAME);
+    cleanValidationObjects();
     return valid;
   }
 
@@ -116,19 +117,17 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
       valid = false;
     }
     else {
-      String metsxmlPath = zipManager.getMETSxmlPath(path);
-
-      if(metsxmlPath.contains("/")){
-        String comparator = metsxmlPath.split("/")[metsxmlPath.split("/").length - 2];
-        if(!OBJID.equals(comparator)){
+        String rootFolderName = null;
+        if(isZipFileFlag()){
+          rootFolderName = zipManager.getSipRootFolderName(path);
+        }
+        else {
+          rootFolderName = folderManager.getSipRootFolderName(path);
+          System.out.println(rootFolderName);
+        }
+        if(!rootFolderName.equals(OBJID)){
           valid = false;
         }
-      }
-      else{
-        if(!OBJID.equals(getName().split("\\.")[0])){
-          valid = false;
-        }
-      }
     }
     return valid;
   }
@@ -225,5 +224,14 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
       valid = false;
     }
     return valid;
+  }
+
+  /*
+  * Method for cleaning all the objects used in the validation
+  */
+
+  private void cleanValidationObjects(){
+    this.contentCategory.clear();
+    this.contentInformationType.clear();
   }
 }

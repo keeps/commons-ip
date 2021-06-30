@@ -4,6 +4,7 @@ import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
 import org.roda_project.commons_ip2.model.IPConstants;
 import org.roda_project.commons_ip2.utils.METSUtils;
 import org.roda_project.commons_ip2.utils.ResourceResolver;
+import org.roda_project.commons_ip2.validator.common.FolderManager;
 import org.roda_project.commons_ip2.validator.common.ZipManager;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
@@ -38,8 +39,8 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
   private ValidationReporter reporter = null;
   protected ValidationObserver observer = null;
   protected ZipManager zipManager = null;
+  protected FolderManager folderManager = null;
   protected Mets mets = null;
-  protected SAXParserFactory factory = null;
 
   private String name = null;
   private boolean zipFileFlag = false;
@@ -51,8 +52,6 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
   @Override
   public void setEARKSIPpath(Path path) {
     this.path = path;
-    name = path.toString().split("/")[path.toString().split("/").length - 1];
-    String[] tmp = name.split("\\.");
   }
 
   public String getName() {
@@ -63,10 +62,12 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
     this.name = name;
   }
 
+  @Override
   public boolean isZipFileFlag() {
     return zipFileFlag;
   }
 
+  @Override
   public void setZipFileFlag(boolean zipFileFlag) {
     this.zipFileFlag = zipFileFlag;
   }
@@ -91,6 +92,11 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
   }
 
   @Override
+  public void setFolderManager(FolderManager folderManager){
+    this.folderManager = folderManager;
+  }
+
+  @Override
   public void setObserver(ValidationObserver observer) {
     this.observer = observer;
   }
@@ -98,11 +104,6 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
   @Override
   public void clean() {
     this.zipManager.closeZipFile();
-  }
-
-  public SAXParser getSAXParser() throws ParserConfigurationException, SAXException {
-    factory = SAXParserFactory.newInstance();
-    return factory.newSAXParser();
   }
 
   protected void validationOutcomeFailed(String specification,String ID, String detail){

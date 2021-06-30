@@ -26,12 +26,14 @@ import java.nio.file.Path;
 public class InstatiateMets {
     private static final Logger LOGGER = LoggerFactory.getLogger(InstatiateMets.class);
     private ZipManager zipManager;
+    private FolderManager folderManager;
 
-    public InstatiateMets(ZipManager zipManager){
+    public InstatiateMets(ZipManager zipManager, FolderManager folderManager){
         this.zipManager = zipManager;
+        this.folderManager = folderManager;
     }
 
-    public Mets instatiateMetsFile(Path path) throws JAXBException, SAXException, IOException {
+    public Mets instatiateMetsFile(Path path, boolean isZip) throws JAXBException, SAXException, IOException {
         JAXBContext jaxbContext = JAXBContext.newInstance(Mets.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
@@ -41,7 +43,13 @@ public class InstatiateMets {
         Source metsSchemaSource = new StreamSource(metsSchemaInputStream);
         Schema schema = factory.newSchema(metsSchemaSource);
         jaxbUnmarshaller.setSchema(schema);
-        InputStream stream = zipManager.getMetsRootInputStream(path);
+        InputStream stream;
+        if(isZip){
+            stream = zipManager.getMetsRootInputStream(path);
+        }
+        else{
+            stream = folderManager.getMetsRootInputStream(path);
+        }
         return (Mets) jaxbUnmarshaller.unmarshal(stream);
     }
 }

@@ -67,7 +67,7 @@ public class ZipManager {
     }
   }
 
-  public String getMETSxmlPath(Path path) throws IOException {
+  public String getSipRootFolderName(Path path) throws IOException {
     if (zipFile == null) {
       zipFile = new ZipFile(path.toFile());
     }
@@ -76,8 +76,8 @@ public class ZipManager {
     String entry = null;
     while (entries.hasMoreElements()){
       ZipEntry entr = (ZipEntry) entries.nextElement();
-      if(entr.getName().matches(".*?METS.xml")){
-        if(entr.getName().split("/").length <= 3){
+      if(entr.getName().matches(".*/METS.xml")){
+        if(entr.getName().split("/").length == 2){
           entry = entr.getName();
         }
       }
@@ -86,7 +86,7 @@ public class ZipManager {
       LOGGER.debug("METS.xml not Found");
       throw new IOException("METS.xml not Found");
     }
-    return entry;
+    return entry.split("/")[0];
   }
 
   public boolean checkIfExistsRootMetsFile(Path path) throws IOException {
