@@ -123,6 +123,12 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
     observer.notifyFinishStep(ID);
   }
 
+  protected void validationOutcomeSkipped(String specification, String ID,String detail){
+    reporter.componentValidationResult(specification,ID, Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_SKIPPED,detail);
+    reporter.countSkipped();
+    observer.notifyFinishStep(ID);
+  }
+
   protected void validationInit(String moduleName, String ID){
     observer.notifyStartValidationModule(moduleName,ID);
     observer.notifyStartStep(ID);
@@ -132,5 +138,7 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
     reporter.componentPathValidationResult(id,Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_FAILED, detail);
     reporter.countErrors();
   }
+
+
 
 }

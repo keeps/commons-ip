@@ -38,6 +38,7 @@ public class Constants {
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_SUCCESS = "success";
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_WARNINGS = "warnings";
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_ERRORS = "errors";
+  public static final String VALIDATION_REPORT_SPECIFICATION_KEY_SKIPPED = "skipped";
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_NAME = "name";
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_LOCATION = "location";
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_DESCRIPTION = "description";
@@ -50,6 +51,7 @@ public class Constants {
   /* Report Status */
   public static final String VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_PASSED = "PASSED";
   public static final String VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_FAILED = "FAILED";
+  public static final String VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_SKIPPED = "SKIPPED";
 
   public static final String VALIDATION_REPORT_SPECIFICATION_RESULT_VALID = "VALID";
   public static final String VALIDATION_REPORT_SPECIFICATION_RESULT_INVALID = "INVALID";

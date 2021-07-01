@@ -82,10 +82,10 @@ public class EARKSIPValidator {
         }
       }
       if(reporter.getErrors() > 0){
-        reporter.componentValidationFinish("INVALID");
+        reporter.componentValidationFinish(Constants.VALIDATION_REPORT_SPECIFICATION_RESULT_INVALID);
       }
       else{
-        reporter.componentValidationFinish("VALID");
+        reporter.componentValidationFinish(Constants.VALIDATION_REPORT_SPECIFICATION_RESULT_VALID);
       }
       observer.notifyIndicators( reporter.getErrors(), reporter.getSuccess(), reporter.getWarnings());
       reporter.close();

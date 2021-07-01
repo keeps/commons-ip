@@ -26,6 +26,7 @@ public class ValidationReporter {
   private int success;
   private int errors;
   private int warnings;
+  private int skipped;
 
   public ValidationReporter(Path path) {
     init(path);
@@ -36,6 +37,8 @@ public class ValidationReporter {
   public int getErrors(){ return errors;}
 
   public int getWarnings(){ return warnings;}
+
+  public int getSkipped(){ return skipped;}
 
   public void countSuccess(){
     success++;
@@ -48,6 +51,8 @@ public class ValidationReporter {
   public void countErrors(){
     errors++;
   }
+
+  public void countSkipped() { skipped++; }
 
   private void init(Path path) {
     this.outputFile = path;
@@ -150,6 +155,7 @@ public class ValidationReporter {
       jsonGenerator.writeNumberField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_SUCCESS, success);
       jsonGenerator.writeNumberField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_WARNINGS, warnings);
       jsonGenerator.writeNumberField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_ERRORS, errors);
+      jsonGenerator.writeNumberField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_SKIPPED, skipped);
       jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_RESULT,status);
       jsonGenerator.writeEndObject();
       jsonGenerator.writeEndObject();
