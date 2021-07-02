@@ -11,6 +11,7 @@ public class Constants {
   public static final String PATH_RESOURCES_CSIP_VOCABULARY_CONTENT_CATEGORY = "./src/main/resources/controlledVocabularies/CSIPVocabularyContentCategory.xml";
   public static final String PATH_RESOURCES_CSIP_VOCABULARY_CONTENT_INFORMATION_TYPE = "./src/main/resources/controlledVocabularies/CSIPVocabularyContentInformationType.xml";
   public static final String PATH_RESOURCES_CSIP_VOCABULARY_OAIS_PACKAGE_TYPE = "./src/main/resources/controlledVocabularies/CSIPVocabularyOAISPackageType.xml";
+  public static final String PATH_RESOURCES_CSIP_VOCABULARY_DMD_SEC_STATUS = "./src/main/resources/controlledVocabularies/CSIPVocabularyStatus.xml";
   public static final String VALIDATION_REPORT_PREFIX = "commons-ip-validation-reporter";
 
   /* Report Header */

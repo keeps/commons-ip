@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="DILCISVocabularies.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<Vocabularies xmlns="https://DILCIS.eu/XML/Vocabularies/IP">
+    <Vocabulary Name="VocabularyStatus">
+        <Information>
+            <p>Vocabulary derived from E-ARK</p>
+        </Information>
+        <Entry>
+            <Term lang="en">SUPERSEDED</Term>
+            <Definition>This version has been replaced</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">CURRENT</Term>
+            <Definition>This version is currently in use</Definition>
+        </Entry>
+    </Vocabulary>
+</Vocabularies>
