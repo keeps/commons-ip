@@ -4,6 +4,7 @@ import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
 import org.roda_project.commons_ip2.validator.common.FolderManager;
 import org.roda_project.commons_ip2.validator.common.InstatiateMets;
 import org.roda_project.commons_ip2.validator.common.ZipManager;
+import org.roda_project.commons_ip2.validator.component.administritiveMetadataComponent.AdministritiveMetadataComponentValidator;
 import org.roda_project.commons_ip2.validator.component.descriptiveMetadataComponent.DescriptiveMetadataComponentValidator;
 import org.roda_project.commons_ip2.validator.component.fileComponent.FileComponentValidator;
 import org.roda_project.commons_ip2.validator.component.metsrootComponent.MetsComponentValidator;
@@ -57,6 +58,8 @@ public class EARKSIPValidator {
     components.add(metsHeaderComponent);
     ValidatorComponent descriptiveMetadataComponent = new DescriptiveMetadataComponentValidator(Constants.CSIP_MODULE_NAME_3);
     components.add(descriptiveMetadataComponent);
+    ValidatorComponent administritiveMetadataComponent = new AdministritiveMetadataComponentValidator(Constants.CSIP_MODULE_NAME_4);
+    components.add(administritiveMetadataComponent);
   }
 
   public boolean validate() {
