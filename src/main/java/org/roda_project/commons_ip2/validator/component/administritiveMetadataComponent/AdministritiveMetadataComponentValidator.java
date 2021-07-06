@@ -58,7 +58,8 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         }
 
         /* CSIP33 (Nota se este passar e tiver é que posso verificar o 33 ao 44
-        *  Se Houver 35 é que posso verificar o 36 37 38 39 40 41 42 43 44*/
+        *  Se Houver 35 é que posso verificar o 36 37 38 39 40 41 42 43 44
+        *  Se Houver 45 é que posso verificar o 46 47 48 49 50 51 52 53 54 55 56 57*/
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP33_ID);
         if(validateCSIP33()){
             validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP33_ID,"");
@@ -329,7 +330,11 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
                 MdSecType.MdRef mdRef = md.getMdRef();
                 if(mdRef.getCREATED() == null){
                     valid = false;
+                    break;
                 }
+            }
+            if(!valid){
+                break;
             }
         }
         return valid;
@@ -364,27 +369,132 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     }
 
     private boolean validateCSIP45() {
-        return false;
+        boolean valid = true;
+        int count = 0;
+        for(AmdSecType a: amdSec){
+            if(a.getRightsMD() == null){
+                count++;
+            }
+        }
+        if(count == amdSec.size()){
+            valid = false;
+        }
+        return valid;
     }
 
     private boolean validateCSIP46() {
-        return false;
+        boolean valid = true;
+        for(AmdSecType a: amdSec){
+            List<MdSecType> rigthsMD = a.getRightsMD();
+            if(rigthsMD != null) {
+                for (MdSecType rmd : rigthsMD) {
+                    if(checkId(rmd.getID())){
+                        valid = false;
+                        break;
+                    }
+                    else{
+                        addId(rmd.getID());
+                    }
+                }
+                if(!valid){
+                    break;
+                }
+            }
+        }
+        return valid;
     }
 
     private boolean validateCSIP47() {
-        return false;
+        boolean valid = true;
+        for(AmdSecType a: amdSec){
+            List<MdSecType> rigthsMD = a.getRightsMD();
+            if(rigthsMD != null) {
+                for (MdSecType rmd : rigthsMD) {
+                    String status = rmd.getSTATUS();
+                    if(status == null){
+                        valid = false;
+                        break;
+                    }
+                    else{
+                        if(!dmdSecStatus.contains(status)){
+                            valid = false;
+                            break;
+                        }
+                    }
+                }
+                if(!valid){
+                    break;
+                }
+            }
+        }
+        return valid;
     }
 
     private boolean validateCSIP48() {
-        return false;
+        boolean valid = true;
+        for(AmdSecType a: amdSec){
+            List<MdSecType> rigthsMD = a.getRightsMD();
+            if(rigthsMD != null) {
+                for(MdSecType rmd: rigthsMD){
+                    if(rmd.getMdRef() == null){
+                        valid = false;
+                        break;
+                    }
+                }
+                if(!valid){
+                    break;
+                }
+            }
+        }
+        return valid;
     }
 
     private boolean validateCSIP49() {
-        return false;
+        boolean valid = true;
+        for(AmdSecType a: amdSec){
+            List<MdSecType> rigthsMD = a.getRightsMD();
+            if(rigthsMD != null) {
+                for(MdSecType rmd: rigthsMD){
+                    MdSecType.MdRef mdRef = rmd.getMdRef();
+                    if(mdRef != null){
+                        String loctype = mdRef.getLOCTYPE();
+                        if(loctype == null){
+                            valid = false;
+                        }
+                        else{
+                            if(!loctype.equals("URL")){
+                                valid = false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return valid;
     }
 
     private boolean validateCSIP50() {
-        return false;
+        boolean valid = true;
+        for(AmdSecType a: amdSec){
+            List<MdSecType> rigthsMD = a.getRightsMD();
+            if(rigthsMD != null) {
+                for(MdSecType rmd: rigthsMD){
+                    MdSecType.MdRef mdRef = rmd.getMdRef();
+                    if(mdRef != null){
+                        String type = mdRef.getType();
+                        if(type == null){
+                            valid = false;
+                        }
+                        else{
+                            if(!type.equals("simple")){
+                                valid = false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return valid;
     }
 
     private boolean validateCSIP51() {
@@ -404,7 +514,19 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     }
 
     private boolean validateCSIP55() {
-        return false;
+        boolean valid = true;
+        for(AmdSecType a: amdSec){
+            List<MdSecType> rigthsMD = a.getRightsMD();
+            if(rigthsMD != null) {
+                for(MdSecType rmd: rigthsMD){
+                    MdSecType.MdRef mdRef = rmd.getMdRef();
+                    if(mdRef.getCREATED() == null){
+                        valid = false;
+                    }
+                }
+            }
+        }
+        return valid;
     }
 
     private boolean validateCSIP56() {
@@ -412,7 +534,32 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     }
 
     private boolean validateCSIP57() {
-        return false;
+        boolean valid = true;
+        List<String> tmp = new ArrayList<>();
+        for(CHECKSUMTYPE check: CHECKSUMTYPE.values()){
+            tmp.add(check.toString());
+        }
+        for(AmdSecType a: amdSec){
+            List<MdSecType> rigthsMD = a.getRightsMD();
+            if(rigthsMD != null) {
+                for(MdSecType rmd: rigthsMD){
+                    MdSecType.MdRef mdRef = rmd.getMdRef();
+                    String checksumType = mdRef.getCHECKSUMTYPE();
+                    if(checksumType == null){
+                        valid = false;
+                    }
+                    else{
+                        if(!tmp.contains(checksumType)){
+                            valid = false;
+                        }
+                    }
+                }
+                if(!valid){
+                    break;
+                }
+            }
+        }
+        return valid;
     }
 
 

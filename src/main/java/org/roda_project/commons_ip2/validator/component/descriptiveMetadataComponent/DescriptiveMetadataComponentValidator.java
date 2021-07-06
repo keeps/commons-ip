@@ -161,13 +161,16 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
     */
     private boolean validateCSIP18() {
         boolean valid = true;
-        Set<String> ids = new HashSet<>();
         for(MdSecType mdSec: dmdSec){
-            ids.add(mdSec.getID());
+            if(checkId(mdSec.getID())){
+                valid = false;
+                break;
+            }
+            else{
+                addId(mdSec.getID());
+            }
         }
-        if(ids.size() != dmdSec.size()){
-            valid = false;
-        }
+
         return valid;
     }
 

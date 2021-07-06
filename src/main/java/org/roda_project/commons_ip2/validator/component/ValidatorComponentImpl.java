@@ -28,6 +28,8 @@ import javax.xml.validation.SchemaFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author João Gomes <jgomes@keep.pt>
@@ -41,6 +43,7 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
   protected ZipManager zipManager = null;
   protected FolderManager folderManager = null;
   protected Mets mets = null;
+  protected List<String> ids = new ArrayList<>();
 
   private String name = null;
   private boolean zipFileFlag = false;
@@ -137,6 +140,14 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
   protected void validationPathOutcomeFailed(String id, String detail){
     reporter.componentPathValidationResult(id,Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_FAILED, detail);
     reporter.countErrors();
+  }
+
+  protected void addId(String id){
+    ids.add(id);
+  }
+
+  protected boolean checkId(String id){
+    return ids.contains(id);
   }
 
 
