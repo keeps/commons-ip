@@ -37,9 +37,11 @@ public class EARKSIPValidator {
   private ZipManager zipManager;
   private ValidationObserver observer;
   private FolderManager folderManager;
-
   private Mets mets;
+  private List<String> ids;
+
   private List<ValidatorComponent> components;
+
 
   public EARKSIPValidator(Path earksipPath, Path reportPath){
     this.earksipPath = earksipPath.toAbsolutePath().normalize();
@@ -47,6 +49,7 @@ public class EARKSIPValidator {
     zipManager = new ZipManager();
     observer = new ProgressValidationLoggerObserver();
     folderManager = new FolderManager();
+    ids = new ArrayList<>();
     setupComponents();
   }
 
@@ -82,6 +85,7 @@ public class EARKSIPValidator {
           component.setFolderManager(folderManager);
           component.setEARKSIPpath(earksipPath);
           component.setMets(mets);
+          component.setIds(ids);
           component.setZipFileFlag(fileComponent.isZipFileFlag());
           boolean valid = component.validate();
           component.clean();

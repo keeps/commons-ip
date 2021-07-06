@@ -10,6 +10,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 
 /**
  * @author João Gomes <jgomes@keep.pt>
@@ -34,6 +35,8 @@ public interface ValidatorComponent {
   boolean isZipFileFlag();
 
   void setZipFileFlag(boolean zipFileFlag);
+
+  void setIds(List<String> ids);
 
   void clean();
 }

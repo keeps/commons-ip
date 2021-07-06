@@ -43,7 +43,7 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
   protected ZipManager zipManager = null;
   protected FolderManager folderManager = null;
   protected Mets mets = null;
-  protected List<String> ids = new ArrayList<>();
+  protected List<String> ids = null;
 
   private String name = null;
   private boolean zipFileFlag = false;
@@ -107,6 +107,11 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
   @Override
   public void clean() {
     this.zipManager.closeZipFile();
+  }
+
+  @Override
+  public void setIds(List<String> ids){
+    this.ids = ids;
   }
 
   protected void validationOutcomeFailed(String specification,String ID, String detail){
