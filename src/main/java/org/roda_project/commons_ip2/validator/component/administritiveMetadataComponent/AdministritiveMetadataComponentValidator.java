@@ -211,6 +211,14 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         return false;
     }
 
+    /*
+    * mets/amdSec
+    * If administrative / preservation metadata is available, it must be described
+    * using the administrative metadata section ( <amdSec> ) element. All
+    * administrative metadata is present in a single <amdSec> element. It is
+    * possible to transfer metadata in a package using just the descriptive
+    * metadata section and/or administrative metadata section.
+    */
     private boolean validateCSIP31() {
         for(AmdSecType a : amdSec){
             System.out.println(a.getID());
@@ -218,6 +226,13 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         return false;
     }
 
+    /*
+    * mets/amdSec/digiprovMD
+    * For recording information about preservation the standard PREMIS is used.
+    * It is mandatory to include one <digiprovMD> element for each piece of
+    * PREMIS metadata. The use if PREMIS in METS is following the
+    * recommendations in the 2017 version of PREMIS in METS Guidelines.
+    */
     private boolean validateCSIP32() {
         boolean valid = true;
 
@@ -232,6 +247,12 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         return valid;
     }
 
+    /*
+    * mets/amdSec/digiprovMD/@ID
+    * An xml:id identifier for the digital provenance metadata section
+    * mets/amdSec/digiprovMD used for internal package references. It must
+    * be unique within the package.
+    */
     private boolean validateCSIP33() {
         boolean valid = true;
         for(AmdSecType a: amdSec){
@@ -247,6 +268,11 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         return valid;
     }
 
+    /*
+    * mets/amdSec/digiprovMD/@STATUS
+    * Indicates the status of the package using a fixed vocabulary.See also:
+    * dmdSec status
+    */
     private boolean validateCSIP34() {
         boolean valid = true;
         for(AmdSecType a: amdSec){
@@ -262,10 +288,20 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         return valid;
     }
 
+    /*
+    * mets/amdSec/digiprovMD/mdRef
+    * Reference to the digital provenance metadata file stored in the “metadata”
+    * section of the IP.
+    */
     private boolean validateCSIP35() {
         return false;
     }
 
+    /*
+    * mets/amdSec/digiprovMD/mdRef[@LOCTYPE=’URL’]
+    * The locator type is always used with the value “URL” from the vocabulary in
+    * the attribute.
+    */
     private boolean validateCSIP36() {
         boolean valid = true;
         for(AmdSecType a: amdSec){
@@ -286,6 +322,11 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         return valid;
     }
 
+    /*
+    * mets/amdSec/digiprovMD/mdRef[@xlink:type=’simple’]
+    * Attribute used with the value “simple”. Value list is maintained by the xlink
+    * standard.
+    */
     private boolean validateCSIP37() {
         boolean valid = true;
         for(AmdSecType a: amdSec){
@@ -306,22 +347,44 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         return valid;
     }
 
+    /*
+    * mets/amdSec/digiprovMD/mdRef/@xlink:href
+    * The actual location of the resource. This specification recommends
+    * recording a URL type filepath within this attribute.
+    */
     private boolean validateCSIP38() {
         return false;
     }
 
+    /*
+    * mets/amdSec/digiprovMD/mdRef/@MDTYPE
+    * Specifies the type of metadata in the referenced file. Values are taken from
+    * the list provided by the METS.
+    */
     private boolean validateCSIP39() {
         return false;
     }
 
+    /*
+    * mets/amdSec/digiprovMD/mdRef/@MIMETYPE
+    * The IANA mime type for the referenced file.See also: IANA media types
+    */
     private boolean validateCSIP40() {
         return false;
     }
 
+    /*
+    * mets/amdSec/digiprovMD/mdRef/@SIZE
+    * Size of the referenced file in bytes.
+    */
     private boolean validateCSIP41() {
         return false;
     }
 
+    /*
+    * mets/amdSec/digiprovMD/mdRef/@CREATED
+    * Creation date of the referenced file.
+    */
     private boolean validateCSIP42() {
         boolean valid = true;
         for(AmdSecType a: amdSec){
@@ -340,10 +403,19 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         return valid;
     }
 
+    /*
+    * mets/amdSec/digiprovMD/mdRef/@CHECKSUM
+    * The checksum of the referenced file.
+    */
     private boolean validateCSIP43() {
         return false;
     }
 
+    /*
+    * mets/amdSec/digiprovMD/mdRef/@CHECKSUMTYPE
+    * The type of checksum following the value list present in the METS-standard
+    * which has been used for calculating the checksum for the referenced file.
+    */
     private boolean validateCSIP44() {
         boolean valid = true;
         List<String> tmp = new ArrayList<>();
@@ -368,6 +440,15 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         return valid;
     }
 
+    /*
+    * mets/amdSec/rightsMD
+    * A simple rights statement may be used to describe general permissions for
+    * the package. Individual representations should state their specific rights in
+    * their representation METS file. Available standards include
+    * RightsStatements.org , Europeana rights statements info , METS Rights
+    * Schema created and maintained by the METS Board, the rights part of
+    * PREMIS as well as own local rights statements in use.
+    */
     private boolean validateCSIP45() {
         boolean valid = true;
         int count = 0;
@@ -382,6 +463,11 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         return valid;
     }
 
+    /*
+    * mets/amdSec/rightsMD/@ID
+    * An xml:id identifier for the rights metadata section ( <rightsMD> ) used for
+    * internal package references. It must be unique within the package.
+    */
     private boolean validateCSIP46() {
         boolean valid = true;
         for(AmdSecType a: amdSec){
@@ -404,6 +490,11 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         return valid;
     }
 
+    /*
+    * mets/amdSec/rightsMD/@STATUS
+    * Indicates the status of the package using a fixed vocabulary.See also:
+    * dmdSec status
+    */
     private boolean validateCSIP47() {
         boolean valid = true;
         for(AmdSecType a: amdSec){
@@ -430,6 +521,11 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         return valid;
     }
 
+    /*
+    * mets/amdSec/rightsMD/mdRef
+    * Reference to the rights metadata file stored in the “metadata” section of the
+    * IP.
+    */
     private boolean validateCSIP48() {
         boolean valid = true;
         for(AmdSecType a: amdSec){
@@ -449,6 +545,11 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         return valid;
     }
 
+    /*
+    * mets/amdSec/rightsMD/mdRef[@LOCTYPE=’URL’]
+    * The locator type is always used with the value “URL” from the vocabulary in
+    * the attribute.
+    */
     private boolean validateCSIP49() {
         boolean valid = true;
         for(AmdSecType a: amdSec){
@@ -473,6 +574,11 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         return valid;
     }
 
+    /*
+    * mets/amdSec/rightsMD/mdRef[@xlink:type=’simple’]
+    * Attribute used with the value “simple”. Value list is maintained by the xlink
+    * standard.
+    */
     private boolean validateCSIP50() {
         boolean valid = true;
         for(AmdSecType a: amdSec){
@@ -497,22 +603,44 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         return valid;
     }
 
+    /*
+    * mets/amdSec/rightsMD/mdRef/@xlink:href
+    * The actual location of the resource. We recommend recording a URL type
+    * filepath within this attribute.
+    */
     private boolean validateCSIP51() {
         return false;
     }
 
+    /*
+    * mets/amdSec/rightsMD/mdRef/@MDTYPE
+    * Specifies the type of metadata in the referenced file. Value is taken from the
+    * list provided by the METS.
+    */
     private boolean validateCSIP52() {
         return false;
     }
 
+    /*
+    * mets/amdSec/rightsMD/mdRef/@MIMETYPE
+    * The IANA mime type for the referenced file.See also: IANA media types
+    */
     private boolean validateCSIP53() {
         return false;
     }
 
+    /*
+    * mets/amdSec/rightsMD/mdRef/@SIZE
+    * Size of the referenced file in bytes.
+    */
     private boolean validateCSIP54() {
         return false;
     }
 
+    /*
+    * mets/amdSec/rightsMD/mdRef/@CREATED
+    * Creation date of the referenced file.
+    */
     private boolean validateCSIP55() {
         boolean valid = true;
         for(AmdSecType a: amdSec){
@@ -529,10 +657,19 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         return valid;
     }
 
+    /*
+    * mets/amdSec/rightsMD/mdRef/@CHECKSUM
+    * The checksum of the referenced file.
+    */
     private boolean validateCSIP56() {
         return false;
     }
 
+    /*
+    * mets/amdSec/rightsMD/mdRef/@CHECKSUMTYPE
+    * The type of checksum following the value list present in the METS-standard
+    * which has been used for calculating the checksum for the referenced file.
+    */
     private boolean validateCSIP57() {
         boolean valid = true;
         List<String> tmp = new ArrayList<>();

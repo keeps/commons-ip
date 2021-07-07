@@ -750,6 +750,310 @@ public class ConstantsCSIPspec {
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP79_CARDINALITY = "1..1";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP79_LEVEL = "MUST";
 
+    /* Use of the METS structural map (<structMap>) */
+    /* CSIP80 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP80_ID = "CSIP80";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP80_NAME = "Structural description of the package";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP80_LOCATION = "mets/structMap";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP80_DESCRIPTION = "The structural map <structMap> element is the only mandatory element in " +
+            "the METS. The <structMap> in the CSIP describes the highest logical " +
+            "structure of the IP. Each METS file must include ONE structural map " +
+            "<structMap> element used exactly as described here. Institutions can add " +
+            "their own additional custom structural maps as separate <structMap> " +
+            "sections.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP80_CARDINALITY = "1..n";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP80_LEVEL = "MUST";
+
+    /* CSIP81 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP81_ID = "CSIP81";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP81_NAME = "Type of structural description";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP81_LOCATION = "mets/structMap[@TYPE=’PHYSICAL’]";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP81_DESCRIPTION = "The mets/structMap/@TYPE attribute must take the value 'PHYSICAL' " +
+            "from the vocabulary.See also: Structural map typing";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP81_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP81_LEVEL = "MUST";
+
+    /* CSIP82 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP82_ID = "CSIP82";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP82_NAME = "Name of the structural description";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP82_LOCATION = "mets/structMap[@LABEL=’CSIP’]";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP82_DESCRIPTION = "The mets/structMap/@LABEL attribute value is set to “CSIP” from the " +
+            "vocabulary.See also: Structural map label";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP82_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP82_LEVEL = "MUST";
+
+    /* CSIP83 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP83_ID = "CSIP83";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP83_NAME = "mets/structMap[@LABEL=’CSIP’]/@ID";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP83_LOCATION = "mets/structMap[@LABEL=’CSIP’]/@ID";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP83_DESCRIPTION = "An xml:id identifier for the structural description (structMap) used for " +
+            "internal package references. It must be unique within the package.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP83_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP83_LEVEL = "MUST";
+
+    /* CSIP84 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP84_ID = "CSIP84";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP84_NAME = "Main structural division";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP84_LOCATION = "mets/structMap[@LABEL=’CSIP’]/div";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP84_DESCRIPTION = "The structural map comprises a single division.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP84_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP84_LEVEL = "MUST";
+
+    /* CSIP85 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP85_ID = "CSIP85";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP85_NAME = "Main structural division identifier";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP85_LOCATION = "mets/structMap[@LABEL=’CSIP’]/div/@ID";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP85_DESCRIPTION = "Mandatory, xml:id identifier must be unique within the package.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP85_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP85_LEVEL = "MUST";
+
+    /* CSIP86 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP86_ID = "CSIP86";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP86_NAME = "Main structural division label";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP86_LOCATION = "mets/structMap[@LABEL=’CSIP’]/div/@LABEL";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP86_DESCRIPTION = "The package’s top-level structural division <div> element’s @LABEL " +
+            "attribute value must be identical to the package identifier, i.e. the same " +
+            "value as the mets/@OBJID attribute.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP86_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP86_LEVEL = "MUST";
+
+    /* CSIP88 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP88_ID = "CSIP88";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP88_NAME = "Metadata division";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP88_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP88_DESCRIPTION = "The metadata referenced in the administrative and/or descriptive metadata section is described in the structural map with one sub division." +
+            "When the transfer consists of only administrative and/or descriptive metadata this is the only sub division that occurs.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP88_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP88_LEVEL = "MUST";
+
+    /* CSIP89 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP89_ID = "CSIP89";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP89_NAME = "Metadata division identifier";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP89_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@ID";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP89_DESCRIPTION = "Mandatory, xml:id identifier must be unique within the package.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP89_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP89_LEVEL = "MUST";
+
+    /* CSIP90 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP90_ID = "CSIP90";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP90_NAME = "Metadata division label";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP90_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP90_DESCRIPTION = "The metadata division <div> element’s @LABEL attribute value must be “Metadata”. " +
+            "See also: File group names";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP90_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP90_LEVEL = "MUST";
+
+    /* CSIP91 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP91_ID = "CSIP91";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP91_NAME = "Metadata division administrative metadata referencing";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP91_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@ADMID";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP91_DESCRIPTION = "When there is administrative metadata and the amdSec is present, all administrative metadata MUST be referenced via the administrative sections different identifiers." +
+            "All of the <amdSec> identifiers are listed in a single @ADMID using spaces as delimiters.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP91_CARDINALITY = "0..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP91_LEVEL = "SHOULD";
+
+    /* CSIP92 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP92_ID = "CSIP92";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP92_NAME = "Metadata division descriptive metadata referencing";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP92_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@DMDID";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP92_DESCRIPTION = "When there are descriptive metadata and one or more dmdSec is present, all descriptive metadata MUST be referenced via the descriptive section identifiers. " +
+            "Every <dmdSec> identifier is listed in a single @DMDID attribute using spaces as delimiters.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP92_CARDINALITY = "0..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP92_LEVEL = "SHOULD";
+
+    /* CSIP93 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP93_ID = "CSIP93";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP93_NAME = "Documentation division";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP93_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation']";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP93_DESCRIPTION = "The documentation referenced in the file section file groups is described in the structural map with one sub division.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP93_CARDINALITY = "0..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP93_LEVEL = "SHOULD";
+
+    /* CSIP94 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP94_ID = "CSIP94";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP94_NAME = "Documentation division identifier";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP94_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation']/@ID";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP94_DESCRIPTION = "Mandatory, xml:id identifier must be unique within the package.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP94_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP94_LEVEL = "MUST";
+
+    /* CSIP95 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP95_ID = "CSIP95";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP95_NAME = "Documentation division label";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP95_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation']";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP95_DESCRIPTION = "The documentation division <div> element in the package uses the value 'Documentation' from the vocabulary as the value for the @LABEL attribute. " +
+            "See also: File group names";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP95_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP95_LEVEL = "MUST";
+
+    /* CSIP96 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP96_ID = "CSIP96";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP96_NAME = "Documentation file referencing";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP96_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation']/fptr";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP96_DESCRIPTION = "All file groups containing documentation described in the package are referenced via the relevant file group identifiers. There MUST be one file group reference per <fptr> element.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP96_CARDINALITY = "0..n";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP96_LEVEL = "MUST";
+
+    /* CSIP116 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP116_ID = "CSIP116";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP116_NAME = "Documentation file group reference pointer";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP116_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation']/fptr/@FILEID";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP116_DESCRIPTION = "A reference, by ID, to the “Documentation” file group. " +
+            "Related to the requirements CSIP60 which describes the “Documentation” file group and CSIP65 which describes the file group identifier.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP116_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP116_LEVEL = "MUST";
+
+    /* CSIP97 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP97_ID = "CSIP97";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP97_NAME = "Schema division";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP97_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP97_DESCRIPTION = "The schemas referenced in the file section file groups are described in the structural map within a single sub-division.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP97_CARDINALITY = "0..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP97_LEVEL = "SHOULD";
+
+    /* CSIP98 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP98_ID = "CSIP98";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP98_NAME = "Schema division identifier";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP98_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']/@ID";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP98_DESCRIPTION = "Mandatory, xml:id identifier must be unique within the package.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP98_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP98_LEVEL = "MUST";
+
+    /* CSIP99 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP99_ID = "CSIP99";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP99_NAME = "Schema division label";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP99_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP99_DESCRIPTION = "The schema division <div> element’s @LABEL attribute has the value “Schemas” from the vocabulary. " +
+            "See also: File group names";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP99_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP99_LEVEL = "MUST";
+
+    /* CSIP100 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP100_ID = "CSIP100";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP100_NAME = "Schema file reference";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP100_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']/fptr";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP100_DESCRIPTION = "All file groups containing schemas described in the package are referenced via the relevant file group identifiers. One file group reference per fptr-element";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP100_CARDINALITY = "0..n";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP100_LEVEL = "MUST";
+
+    /* CSIP118 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP118_ID = "CSIP118";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP118_NAME = "Schema file group reference";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP118_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']/fptr/@FILEID";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP118_DESCRIPTION = "The pointer to the identifier for the “Schema” file group. " +
+            "Related to the requirements CSIP113 which describes the “Schema” file group and CSIP65 which describes the file group identifier.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP118_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP118_LEVEL = "MUST";
+
+    /* CSIP101 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP101_ID = "CSIP101";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP101_NAME = "Content division";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP101_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations']";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP101_DESCRIPTION = "When no representations are present the content referenced in the file section file group with @USE attribute value “Representations” is described in the structural map as a single sub division.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP101_CARDINALITY = "0..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP101_LEVEL = "SHOULD";
+
+    /* CSIP102 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP102_ID = "CSIP102";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP102_NAME = "Content division identifier";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP102_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations']/@ID";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP102_DESCRIPTION = "Mandatory, xml:id identifier must be unique within the package.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP102_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP102_LEVEL = "MUST";
+
+    /* CSIP103 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP103_ID = "CSIP103";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP103_NAME = "Content division label";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP103_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations']";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP103_DESCRIPTION = "The package’s content division <div> element must have the @LABEL attribute value “Representations”, taken from the vocabulary. See also: File group names";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP103_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP103_LEVEL = "MUST";
+
+    /* CSIP104 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP104_ID = "CSIP104";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP104_NAME = "Content division file references";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP104_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations']/fptr";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP104_DESCRIPTION = "All file groups containing content described in the package are referenced via the relevant file group identifiers. One file group reference per fptr-element.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP104_CARDINALITY = "0..n";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP104_LEVEL = "MUST";
+
+    /* CSIP119 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP119_ID = "CSIP119";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP119_NAME = "Content division file group references";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP119_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations']/fptr/@FILEID";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP119_DESCRIPTION = "The pointer to the identifier for the “Representations” file group. " +
+            "Related to the requirements CSIP114 which describes the “Representations” file group and CSIP65 which describes the file group identifier.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP119_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP119_LEVEL = "MUST";
+
+    /* CSIP105 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP105_ID = "CSIP105";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP105_NAME = "Representation division";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP105_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP105_DESCRIPTION = "When a package consists of multiple representations, each described by a representation level METS.xml document, there is a discrete representation div element for each representation. " +
+            "Each representation div references the representation level METS.xml document, documenting the structure of the package and its constituent representations.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP105_CARDINALITY = "0..n";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP105_LEVEL = "SHOULD";
+
+    /* CSIP106 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP106_ID = "CSIP106";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP106_NAME = "Representations division identifier";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP106_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div/@ID";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP106_DESCRIPTION = "Mandatory, xml:id identifier must be unique within the package.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP106_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP106_LEVEL = "MUST";
+
+    /* CSIP107 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP107_ID = "CSIP107";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP107_NAME = "Representations division label";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP107_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div/@LABEL";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP107_DESCRIPTION = "The package’s representation division <div> element @LABEL attribute value must be the path to the representation level METS document. " +
+            "This requirement gives the same value to be used as the requirement named “File group identifier” (CSIP64) " +
+            "See also: File group names";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP107_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP107_LEVEL = "MUST";
+
+    /* CSIP108 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP108_ID = "CSIP108";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP108_NAME = "Representations division file referencing";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP108_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div/mptr/@xlink:title";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP108_DESCRIPTION = "The file group containing the files described in the package are referenced via the relevant file group identifier. " +
+            "Related to the requirements CSIP114 which describes the “Representations” file group and CSIP65 which describes the file group identifier.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP108_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP108_LEVEL = "MUST";
+
+    /* CSIP109 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP109_ID = "CSIP109";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP109_NAME = "Representation METS pointer";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP109_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div/mptr";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP109_DESCRIPTION = "The division <div> of the specific representation includes one occurrence of the METS pointer <mptr> element, pointing to the appropriate representation METS file.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP109_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP109_LEVEL = "MUST";
+
+    /* CSIP110 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP110_ID = "CSIP110";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP110_NAME = "Resource location";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP110_LOCATION = "mets/structMap/div/div/mptr/@xlink:href";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP110_DESCRIPTION = "The actual location of the resource. We recommend recording a URL type filepath within this attribute.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP110_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP110_LEVEL = "MUST";
+
+    /* CSIP111 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP111_ID = "CSIP111";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP111_NAME = "Type of link";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP111_LOCATION = "mets/structMap/div/div/mptr[@xlink:type='simple']";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP111_DESCRIPTION = "Attribute used with the value “simple”. Value list is maintained by the xlink standard.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP111_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP111_LEVEL = "MUST";
+
+    /* CSIP112 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP112_ID = "CSIP112";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP112_NAME = "Type of locator";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP112_LOCATION = "mets/structMap/div/div/mptr[@LOCTYPE='URL']";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP112_DESCRIPTION = "The locator type is always used with the value “URL” from the vocabulary in the attribute.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP112_CARDINALITY = "1..1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP112_LEVEL = "MUST";
+
     /* Get Name, Location, Description, Cardinality and Level for given specification ID */
     public static String getSpecificationName(String id){
         if (id.equals("CSIP1")) {
@@ -997,6 +1301,111 @@ public class ConstantsCSIPspec {
         }
         if(id.equals("CSIP79")){
             return VALIDATION_REPORT_SPECIFICATION_CSIP79_NAME;
+        }
+        if(id.equals("CSIP80")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP80_NAME;
+        }
+        if(id.equals("CSIP81")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP81_NAME;
+        }
+        if(id.equals("CSIP82")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP82_NAME;
+        }
+        if(id.equals("CSIP83")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP83_NAME;
+        }
+        if(id.equals("CSIP84")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP84_NAME;
+        }
+        if(id.equals("CSIP85")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP85_NAME;
+        }
+        if(id.equals("CSIP86")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP86_NAME;
+        }
+        if(id.equals("CSIP88")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP88_NAME;
+        }
+        if(id.equals("CSIP89")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP89_NAME;
+        }
+        if(id.equals("CSIP90")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP90_NAME;
+        }
+        if(id.equals("CSIP91")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP91_NAME;
+        }
+        if(id.equals("CSIP92")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP92_NAME;
+        }
+        if(id.equals("CSIP93")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP93_NAME;
+        }
+        if(id.equals("CSIP94")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP94_NAME;
+        }
+        if(id.equals("CSIP95")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP95_NAME;
+        }
+        if(id.equals("CSIP96")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP96_NAME;
+        }
+        if(id.equals("CSIP116")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP116_NAME;
+        }
+        if(id.equals("CSIP97")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP97_NAME;
+        }
+        if(id.equals("CSIP98")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP98_NAME;
+        }
+        if(id.equals("CSIP99")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP99_NAME;
+        }
+        if(id.equals("CSIP100")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP100_NAME;
+        }
+        if(id.equals("CSIP118")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP118_NAME;
+        }
+        if(id.equals("CSIP101")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP101_NAME;
+        }
+        if(id.equals("CSIP102")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP102_NAME;
+        }
+        if(id.equals("CSIP103")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP103_NAME;
+        }
+        if(id.equals("CSIP104")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP104_NAME;
+        }
+        if(id.equals("CSIP119")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP119_NAME;
+        }
+        if(id.equals("CSIP105")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP105_NAME;
+        }
+        if(id.equals("CSIP106")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP106_NAME;
+        }
+        if(id.equals("CSIP107")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP107_NAME;
+        }
+        if(id.equals("CSIP108")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP108_NAME;
+        }
+        if(id.equals("CSIP109")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP109_NAME;
+        }
+        if(id.equals("CSIP110")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP110_NAME;
+        }
+        if(id.equals("CSIP111")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP111_NAME;
+        }
+        if(id.equals("CSIP112")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP112_NAME;
         }
         return "Not Defined";
     }
@@ -1248,6 +1657,111 @@ public class ConstantsCSIPspec {
         if(id.equals("CSIP79")){
             return VALIDATION_REPORT_SPECIFICATION_CSIP79_LOCATION;
         }
+        if(id.equals("CSIP80")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP80_LOCATION;
+        }
+        if(id.equals("CSIP81")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP81_LOCATION;
+        }
+        if(id.equals("CSIP82")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP82_LOCATION;
+        }
+        if(id.equals("CSIP83")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP83_LOCATION;
+        }
+        if(id.equals("CSIP84")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP84_LOCATION;
+        }
+        if(id.equals("CSIP85")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP85_LOCATION;
+        }
+        if(id.equals("CSIP86")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP86_LOCATION;
+        }
+        if(id.equals("CSIP88")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP88_LOCATION;
+        }
+        if(id.equals("CSIP89")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP89_LOCATION;
+        }
+        if(id.equals("CSIP90")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP90_LOCATION;
+        }
+        if(id.equals("CSIP91")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP91_LOCATION;
+        }
+        if(id.equals("CSIP92")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP92_LOCATION;
+        }
+        if(id.equals("CSIP93")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP93_LOCATION;
+        }
+        if(id.equals("CSIP94")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP94_LOCATION;
+        }
+        if(id.equals("CSIP95")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP95_LOCATION;
+        }
+        if(id.equals("CSIP96")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP96_LOCATION;
+        }
+        if(id.equals("CSIP116")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP116_LOCATION;
+        }
+        if(id.equals("CSIP97")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP97_LOCATION;
+        }
+        if(id.equals("CSIP98")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP98_LOCATION;
+        }
+        if(id.equals("CSIP99")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP99_LOCATION;
+        }
+        if(id.equals("CSIP100")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP100_LOCATION;
+        }
+        if(id.equals("CSIP118")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP118_LOCATION;
+        }
+        if(id.equals("CSIP101")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP101_LOCATION;
+        }
+        if(id.equals("CSIP102")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP102_LOCATION;
+        }
+        if(id.equals("CSIP103")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP103_LOCATION;
+        }
+        if(id.equals("CSIP104")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP104_LOCATION;
+        }
+        if(id.equals("CSIP119")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP119_LOCATION;
+        }
+        if(id.equals("CSIP105")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP105_LOCATION;
+        }
+        if(id.equals("CSIP106")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP106_LOCATION;
+        }
+        if(id.equals("CSIP107")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP107_LOCATION;
+        }
+        if(id.equals("CSIP108")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP108_LOCATION;
+        }
+        if(id.equals("CSIP109")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP109_LOCATION;
+        }
+        if(id.equals("CSIP110")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP110_LOCATION;
+        }
+        if(id.equals("CSIP111")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP111_LOCATION;
+        }
+        if(id.equals("CSIP112")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP112_LOCATION;
+        }
         return "Not Defined";
     }
 
@@ -1497,6 +2011,111 @@ public class ConstantsCSIPspec {
         }
         if(id.equals("CSIP79")){
             return VALIDATION_REPORT_SPECIFICATION_CSIP79_DESCRIPTION;
+        }
+        if(id.equals("CSIP80")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP80_DESCRIPTION;
+        }
+        if(id.equals("CSIP81")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP81_DESCRIPTION;
+        }
+        if(id.equals("CSIP82")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP82_DESCRIPTION;
+        }
+        if(id.equals("CSIP83")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP83_DESCRIPTION;
+        }
+        if(id.equals("CSIP84")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP84_DESCRIPTION;
+        }
+        if(id.equals("CSIP85")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP85_DESCRIPTION;
+        }
+        if(id.equals("CSIP86")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP86_DESCRIPTION;
+        }
+        if(id.equals("CSIP88")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP88_DESCRIPTION;
+        }
+        if(id.equals("CSIP89")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP89_DESCRIPTION;
+        }
+        if(id.equals("CSIP90")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP90_DESCRIPTION;
+        }
+        if(id.equals("CSIP91")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP91_DESCRIPTION;
+        }
+        if(id.equals("CSIP92")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP92_DESCRIPTION;
+        }
+        if(id.equals("CSIP93")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP93_DESCRIPTION;
+        }
+        if(id.equals("CSIP94")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP94_DESCRIPTION;
+        }
+        if(id.equals("CSIP95")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP95_DESCRIPTION;
+        }
+        if(id.equals("CSIP96")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP96_DESCRIPTION;
+        }
+        if(id.equals("CSIP116")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP116_DESCRIPTION;
+        }
+        if(id.equals("CSIP97")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP97_DESCRIPTION;
+        }
+        if(id.equals("CSIP98")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP98_DESCRIPTION;
+        }
+        if(id.equals("CSIP99")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP99_DESCRIPTION;
+        }
+        if(id.equals("CSIP100")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP100_DESCRIPTION;
+        }
+        if(id.equals("CSIP118")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP118_DESCRIPTION;
+        }
+        if(id.equals("CSIP101")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP101_DESCRIPTION;
+        }
+        if(id.equals("CSIP102")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP102_DESCRIPTION;
+        }
+        if(id.equals("CSIP103")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP103_DESCRIPTION;
+        }
+        if(id.equals("CSIP104")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP104_DESCRIPTION;
+        }
+        if(id.equals("CSIP119")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP119_DESCRIPTION;
+        }
+        if(id.equals("CSIP105")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP105_DESCRIPTION;
+        }
+        if(id.equals("CSIP106")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP106_DESCRIPTION;
+        }
+        if(id.equals("CSIP107")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP107_DESCRIPTION;
+        }
+        if(id.equals("CSIP108")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP108_DESCRIPTION;
+        }
+        if(id.equals("CSIP109")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP109_DESCRIPTION;
+        }
+        if(id.equals("CSIP110")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP110_DESCRIPTION;
+        }
+        if(id.equals("CSIP111")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP111_DESCRIPTION;
+        }
+        if(id.equals("CSIP112")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP112_DESCRIPTION;
         }
         return "Not Defined";
     }
@@ -1748,6 +2367,111 @@ public class ConstantsCSIPspec {
         if(id.equals("CSIP79")){
             return VALIDATION_REPORT_SPECIFICATION_CSIP79_CARDINALITY;
         }
+        if(id.equals("CSIP80")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP80_CARDINALITY;
+        }
+        if(id.equals("CSIP81")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP81_CARDINALITY;
+        }
+        if(id.equals("CSIP82")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP82_CARDINALITY;
+        }
+        if(id.equals("CSIP83")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP83_CARDINALITY;
+        }
+        if(id.equals("CSIP84")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP84_CARDINALITY;
+        }
+        if(id.equals("CSIP85")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP85_CARDINALITY;
+        }
+        if(id.equals("CSIP86")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP86_CARDINALITY;
+        }
+        if(id.equals("CSIP88")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP88_CARDINALITY;
+        }
+        if(id.equals("CSIP89")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP89_CARDINALITY;
+        }
+        if(id.equals("CSIP90")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP90_CARDINALITY;
+        }
+        if(id.equals("CSIP91")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP91_CARDINALITY;
+        }
+        if(id.equals("CSIP92")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP92_CARDINALITY;
+        }
+        if(id.equals("CSIP93")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP93_CARDINALITY;
+        }
+        if(id.equals("CSIP94")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP94_CARDINALITY;
+        }
+        if(id.equals("CSIP95")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP95_CARDINALITY;
+        }
+        if(id.equals("CSIP96")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP96_CARDINALITY;
+        }
+        if(id.equals("CSIP116")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP116_CARDINALITY;
+        }
+        if(id.equals("CSIP97")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP97_CARDINALITY;
+        }
+        if(id.equals("CSIP98")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP98_CARDINALITY;
+        }
+        if(id.equals("CSIP99")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP99_CARDINALITY;
+        }
+        if(id.equals("CSIP100")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP100_CARDINALITY;
+        }
+        if(id.equals("CSIP118")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP118_CARDINALITY;
+        }
+        if(id.equals("CSIP101")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP101_CARDINALITY;
+        }
+        if(id.equals("CSIP102")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP102_CARDINALITY;
+        }
+        if(id.equals("CSIP103")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP103_CARDINALITY;
+        }
+        if(id.equals("CSIP104")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP104_CARDINALITY;
+        }
+        if(id.equals("CSIP119")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP119_CARDINALITY;
+        }
+        if(id.equals("CSIP105")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP105_CARDINALITY;
+        }
+        if(id.equals("CSIP106")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP106_CARDINALITY;
+        }
+        if(id.equals("CSIP107")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP107_CARDINALITY;
+        }
+        if(id.equals("CSIP108")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP108_CARDINALITY;
+        }
+        if(id.equals("CSIP109")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP109_CARDINALITY;
+        }
+        if(id.equals("CSIP110")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP110_CARDINALITY;
+        }
+        if(id.equals("CSIP111")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP111_CARDINALITY;
+        }
+        if(id.equals("CSIP112")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP112_CARDINALITY;
+        }
         return "Not Defined";
     }
 
@@ -1997,6 +2721,111 @@ public class ConstantsCSIPspec {
         }
         if(id.equals("CSIP79")){
             return VALIDATION_REPORT_SPECIFICATION_CSIP79_LEVEL;
+        }
+        if(id.equals("CSIP80")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP80_LEVEL;
+        }
+        if(id.equals("CSIP81")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP81_LEVEL;
+        }
+        if(id.equals("CSIP82")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP82_LEVEL;
+        }
+        if(id.equals("CSIP83")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP83_LEVEL;
+        }
+        if(id.equals("CSIP84")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP84_LEVEL;
+        }
+        if(id.equals("CSIP85")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP85_LEVEL;
+        }
+        if(id.equals("CSIP86")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP86_LEVEL;
+        }
+        if(id.equals("CSIP88")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP88_LEVEL;
+        }
+        if(id.equals("CSIP89")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP89_LEVEL;
+        }
+        if(id.equals("CSIP90")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP90_LEVEL;
+        }
+        if(id.equals("CSIP91")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP91_LEVEL;
+        }
+        if(id.equals("CSIP92")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP92_LEVEL;
+        }
+        if(id.equals("CSIP93")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP93_LEVEL;
+        }
+        if(id.equals("CSIP94")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP94_LEVEL;
+        }
+        if(id.equals("CSIP95")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP95_LEVEL;
+        }
+        if(id.equals("CSIP96")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP96_LEVEL;
+        }
+        if(id.equals("CSIP116")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP116_LEVEL;
+        }
+        if(id.equals("CSIP97")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP97_LEVEL;
+        }
+        if(id.equals("CSIP98")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP98_LEVEL;
+        }
+        if(id.equals("CSIP99")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP99_LEVEL;
+        }
+        if(id.equals("CSIP100")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP100_LEVEL;
+        }
+        if(id.equals("CSIP118")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP118_LEVEL;
+        }
+        if(id.equals("CSIP101")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP101_LEVEL;
+        }
+        if(id.equals("CSIP102")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP102_LEVEL;
+        }
+        if(id.equals("CSIP103")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP103_LEVEL;
+        }
+        if(id.equals("CSIP104")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP104_LEVEL;
+        }
+        if(id.equals("CSIP119")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP119_LEVEL;
+        }
+        if(id.equals("CSIP105")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP105_LEVEL;
+        }
+        if(id.equals("CSIP106")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP106_LEVEL;
+        }
+        if(id.equals("CSIP107")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP107_LEVEL;
+        }
+        if(id.equals("CSIP108")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP108_LEVEL;
+        }
+        if(id.equals("CSIP109")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP109_LEVEL;
+        }
+        if(id.equals("CSIP110")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP110_LEVEL;
+        }
+        if(id.equals("CSIP111")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP111_LEVEL;
+        }
+        if(id.equals("CSIP112")){
+            return VALIDATION_REPORT_SPECIFICATION_CSIP112_LEVEL;
         }
         return "Not Defined";
     }
