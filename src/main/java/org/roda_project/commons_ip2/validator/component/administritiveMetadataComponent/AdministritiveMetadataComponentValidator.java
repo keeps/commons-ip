@@ -13,6 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -220,9 +223,6 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     * metadata section and/or administrative metadata section.
     */
     private boolean validateCSIP31() {
-        for(AmdSecType a : amdSec){
-            System.out.println(a.getID());
-        }
         return false;
     }
 
@@ -352,8 +352,33 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     * The actual location of the resource. This specification recommends
     * recording a URL type filepath within this attribute.
     */
-    private boolean validateCSIP38() {
-        return false;
+    private boolean validateCSIP38() throws IOException {
+        boolean valid = true;
+        for(AmdSecType a: amdSec){
+            List<MdSecType> digiprov = a.getDigiprovMD();
+            for(MdSecType md: digiprov){
+                MdSecType.MdRef mdRef = md.getMdRef();
+                if(mdRef != null){
+                    String href = URLDecoder.decode(mdRef.getHref(),"UTF-8");
+                    if(isZipFileFlag()){
+                        if(!zipManager.checkPathExists(getEARKSIPpath(),href)){
+                            valid = false;
+                            break;
+                        }
+                    }
+                    else{
+                        if(!folderManager.checkPathExists(getEARKSIPpath(), Paths.get(href))){
+                            valid = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            if(!valid){
+                break;
+            }
+        }
+        return valid;
     }
 
     /*
@@ -362,7 +387,24 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     * the list provided by the METS.
     */
     private boolean validateCSIP39() {
-        return false;
+        boolean valid = true;
+        for(AmdSecType a: amdSec){
+            List<MdSecType> digiprov = a.getDigiprovMD();
+            for(MdSecType md: digiprov){
+                MdSecType.MdRef mdRef = md.getMdRef();
+                if(mdRef != null){
+                    String mdType = mdRef.getMDTYPE();
+                    if(mdType == null){
+                        valid = false;
+                        break;
+                    }
+                }
+            }
+            if(!valid){
+                break;
+            }
+        }
+        return valid;
     }
 
     /*
@@ -608,8 +650,32 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     * The actual location of the resource. We recommend recording a URL type
     * filepath within this attribute.
     */
-    private boolean validateCSIP51() {
-        return false;
+    private boolean validateCSIP51() throws IOException {
+        boolean valid = true;
+        for(AmdSecType a: amdSec){
+            List<MdSecType> rigthsMD = a.getRightsMD();
+            if(rigthsMD != null) {
+                for(MdSecType rmd: rigthsMD){
+                    MdSecType.MdRef mdRef = rmd.getMdRef();
+                    if(mdRef != null){
+                        String href = URLDecoder.decode(mdRef.getHref(),"UTF-8");
+                        if(isZipFileFlag()){
+                            if(!zipManager.checkPathExists(getEARKSIPpath(),href)){
+                                valid = false;
+                                break;
+                            }
+                        }
+                        else{
+                            if(!folderManager.checkPathExists(getEARKSIPpath(),Paths.get(href))){
+                                valid = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return valid;
     }
 
     /*
@@ -618,7 +684,26 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     * list provided by the METS.
     */
     private boolean validateCSIP52() {
-        return false;
+        boolean valid = true;
+        for(AmdSecType a: amdSec){
+            List<MdSecType> rigthsMD = a.getRightsMD();
+            if(rigthsMD != null) {
+                for(MdSecType rmd: rigthsMD){
+                    MdSecType.MdRef mdRef = rmd.getMdRef();
+                    if(mdRef != null){
+                        String mdType = mdRef.getMDTYPE();
+                        if(mdType == null){
+                            valid = false;
+                            break;
+                        }
+                    }
+                }
+                if(!valid){
+                    break;
+                }
+            }
+        }
+        return valid;
     }
 
     /*

@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -581,8 +583,43 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     * The actual location of the resource. We recommend recording a URL type
     * filepath within this attribute.
     */
-    private boolean validateCSIP79() {
-        return false;
+    private boolean validateCSIP79() throws IOException {
+        boolean valid = true;
+        MetsType.FileSec fileSec = mets.getFileSec();
+        List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
+        for(MetsType.FileSec.FileGrp grp : fileGrp) {
+            List<FileType> files = grp.getFile();
+            for (FileType file : files) {
+                List<FileType.FLocat> flocat = file.getFLocat();
+                if(flocat == null){
+                    valid = false;
+                }
+                else{
+                    for(FileType.FLocat floc : flocat){
+                        String href = URLDecoder.decode(floc.getHref(),"UTF-8");
+                        if(isZipFileFlag()){
+                            if(!zipManager.checkPathExists(getEARKSIPpath(),href)){
+                                valid = false;
+                                break;
+                            }
+                        }
+                        else{
+                            if(!folderManager.checkPathExists(getEARKSIPpath(), Paths.get(href))){
+                                valid = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if(!valid){
+                    break;
+                }
+            }
+            if(!valid){
+                break;
+            }
+        }
+        return valid;
     }
 
 

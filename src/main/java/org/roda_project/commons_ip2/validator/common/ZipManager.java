@@ -114,4 +114,18 @@ public class ZipManager {
       }
     }
   }
+
+  public boolean checkPathExists(Path path, String filePath) throws IOException {
+    boolean found = false;
+    ZipFile zipFile = new ZipFile(path.toFile());
+    Enumeration entries = zipFile.entries();
+    while (entries.hasMoreElements()){
+      ZipEntry entry = (ZipEntry) entries.nextElement();
+      if(entry.getName().equals(filePath)){
+        found = true;
+        break;
+      }
+    }
+    return found;
+  }
 }

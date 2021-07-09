@@ -6,8 +6,13 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * @author João Gomes <jgomes@keep.pt>
@@ -46,5 +51,14 @@ public class FolderManager {
     public String getSipRootFolderName(Path path){
         String[] tmp = path.toString().split("/");
         return tmp[tmp.length-1];
+    }
+
+    public boolean checkPathExists(Path path, Path filePath) throws IOException{
+        String regex = path.toString() + "/";
+        return Files.walk(path).anyMatch(p ->{
+            String[] tmp = p.toString().split(regex);
+            String relativePath = tmp[tmp.length-1];
+            return relativePath.equals(filePath.toString());
+        });
     }
 }

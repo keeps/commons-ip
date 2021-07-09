@@ -123,7 +123,6 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
         }
         else {
           rootFolderName = folderManager.getSipRootFolderName(path);
-          System.out.println(rootFolderName);
         }
         if(!rootFolderName.equals(OBJID)){
           valid = false;

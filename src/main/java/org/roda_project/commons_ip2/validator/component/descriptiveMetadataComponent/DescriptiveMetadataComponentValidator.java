@@ -2,6 +2,7 @@ package org.roda_project.commons_ip2.validator.component.descriptiveMetadataComp
 
 import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType;
 import org.roda_project.commons_ip2.validator.common.ControlledVocabularyParser;
+import org.roda_project.commons_ip2.validator.common.ZipManager;
 import org.roda_project.commons_ip2.validator.component.ValidatorComponentImpl;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
@@ -10,6 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -269,18 +274,47 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
     * The actual location of the resource. This specification recommends
     * recording a URL type filepath in this attribute.
     */
-    private boolean validateCSIP24() {
-        return true;
+    private boolean validateCSIP24() throws IOException {
+        boolean valid = true;
+        for(MdSecType mdSec: dmdSec){
+            MdSecType.MdRef mdRef = mdSec.getMdRef();
+            String href = URLDecoder.decode(mdRef.getHref(),"UTF-8");
+            if(isZipFileFlag()){
+                if(!zipManager.checkPathExists(getEARKSIPpath(),href)){
+                    valid = false;
+                    break;
+                }
+            }
+            else{
+                if(!folderManager.checkPathExists(getEARKSIPpath(),Paths.get(href))){
+                    valid = false;
+                    break;
+                }
+            }
+        }
+        return valid;
     }
 
     /*
     * mets/dmdSec/mdRef/@MDTYPE
     * Specifies the type of metadata in the referenced file. Values are taken from
     * the list provided by the METS.
-    */
-    private boolean validateCSIP25() {
 
-        return true;
+    * NOTA: Falta saber que valores são válidos
+    * */
+    private boolean validateCSIP25() {
+        boolean valid = true;
+        for(MdSecType mdSec: dmdSec){
+            MdSecType.MdRef mdRef = mdSec.getMdRef();
+            if(mdRef != null){
+                String mdType = mdRef.getMDTYPE();
+                if(mdType == null){
+                    valid = false;
+                    break;
+                }
+            }
+        }
+        return valid;
     }
 
     /*
