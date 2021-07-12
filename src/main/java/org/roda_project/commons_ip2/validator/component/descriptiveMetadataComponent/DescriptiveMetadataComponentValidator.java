@@ -15,6 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -131,7 +132,13 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
 
         /* CSIP29 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP29_ID);
-        if(validateCSIP29()){
+        boolean csip29 = false;
+        try {
+            csip29 = validateCSIP29();
+        } catch (NoSuchAlgorithmException e) {
+            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP29_ID,"");
+        }
+        if(csip29){
             validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP29_ID,"");
         }
 
@@ -352,8 +359,56 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
     * mets/dmdSec/mdRef/@CHECKSUM
     * The checksum of the referenced file.
     */
-    private boolean validateCSIP29() {
-        return true;
+    private boolean validateCSIP29() throws IOException, NoSuchAlgorithmException {
+        boolean valid = true;
+        List<String> tmp = new ArrayList<>();
+        for(CHECKSUMTYPE check: CHECKSUMTYPE.values()){
+            tmp.add(check.toString());
+        }
+        for(MdSecType mdSec: dmdSec){
+            MdSecType.MdRef mdRef = mdSec.getMdRef();
+            String checksumType = mdRef.getCHECKSUMTYPE();
+            if(checksumType == null){
+                valid = false;
+                break;
+            }
+            else{
+                if(!tmp.contains(checksumType)){
+                    valid = false;
+                    break;
+                }
+                else{
+                   String checksum = mdRef.getCHECKSUM();
+                   if(checksum == null){
+                       valid = false;
+                       break;
+                   }
+                   else{
+                       String file = URLDecoder.decode(mdRef.getHref(),"UTF-8");
+                       if(file == null){
+                           valid = false;
+                           break;
+                       }
+                       else{
+                           if(isZipFileFlag()){
+                               if(!zipManager.verifyChecksum(getEARKSIPpath(),file,checksumType,checksum)){
+                                   valid = false;
+                                   break;
+                               }
+                           }
+                           else{
+                               if(!folderManager.verifyChecksum(getEARKSIPpath(),file,checksumType,checksum)){
+                                   valid = false;
+                                   break;
+                               }
+                           }
+
+                       }
+                   }
+                }
+            }
+        }
+        return valid;
     }
 
     /*
@@ -372,10 +427,12 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
             String checksumType = mdRef.getCHECKSUMTYPE();
             if(checksumType == null){
                 valid = false;
+                break;
             }
             else{
                 if(!tmp.contains(checksumType)){
                     valid = false;
+                    break;
                 }
             }
         }

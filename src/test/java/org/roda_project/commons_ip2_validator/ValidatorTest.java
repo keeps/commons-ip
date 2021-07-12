@@ -42,7 +42,7 @@ public class ValidatorTest {
   public void validateSimpleSip() throws IPException, ParseException, InterruptedException, JAXBException, IOException, SAXException {
     LOGGER.info("Validate Simple SIP");
     Path reportPath = Paths.get("/home/jgomes/Github/test/output/test.json");
-    Path earksipPath = Paths.get("./src/main/resources/sips/Simple-EARK-SIP.zip");
+    Path earksipPath = Paths.get("./src/main/resources/sips/Simple-EARK-SIP");
     // Path earksipPath = Paths.get("./src/main/resources/sips/mets-xml_mets_OBJID_attribute_not_exist.zip");
     // Path earksipPath = Paths.get("./src/main/resources/sips/minimal_IP_with_1_representation.zip");
 

@@ -3,9 +3,12 @@ package org.roda_project.commons_ip2.validator.common;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -127,5 +130,27 @@ public class ZipManager {
       }
     }
     return found;
+  }
+
+  public boolean verifyChecksum(Path path,String file,String alg, String checksum) throws IOException, NoSuchAlgorithmException {
+    boolean valid = true;
+    InputStream entry = getZipInputStream(path,file);
+    if(entry == null){
+      valid = false;
+    }
+    else{
+      MessageDigest messageDigest = MessageDigest.getInstance(alg);
+      byte[] buffer = new byte[8192];
+      int numOfBytesRead;
+      while ((numOfBytesRead = entry.read(buffer)) > 0) {
+        messageDigest.update(buffer, 0, numOfBytesRead);
+      }
+      byte[] hash = messageDigest.digest();
+      String fileChecksum = DatatypeConverter.printHexBinary(hash);
+      if(!checksum.equals(fileChecksum)){
+        valid = false;
+      }
+    }
+    return valid;
   }
 }

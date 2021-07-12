@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -124,7 +125,13 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
 
         /* CSIP43 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP43_ID);
-        if(validateCSIP43()){
+        boolean csip43 = false;
+        try {
+            csip43 = validateCSIP43();
+        } catch (NoSuchAlgorithmException e) {
+            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP43_ID,"");
+        }
+        if(csip43){
             validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP43_ID,"");
         }
 
@@ -202,7 +209,13 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
 
         /* CSIP56 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP56_ID);
-        if(validateCSIP56()){
+        boolean csip56 = false;
+        try {
+            csip56 = validateCSIP56();
+        } catch (NoSuchAlgorithmException e) {
+            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP56_ID,"");
+        }
+        if(csip56){
             validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP56_ID,"");
         }
 
@@ -449,8 +462,57 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     * mets/amdSec/digiprovMD/mdRef/@CHECKSUM
     * The checksum of the referenced file.
     */
-    private boolean validateCSIP43() {
-        return false;
+    private boolean validateCSIP43() throws IOException, NoSuchAlgorithmException {
+        boolean valid = true;
+        List<String> tmp = new ArrayList<>();
+        for(CHECKSUMTYPE check: CHECKSUMTYPE.values()){
+            tmp.add(check.toString());
+        }
+        for(AmdSecType a: amdSec){
+            List<MdSecType> digiprov = a.getDigiprovMD();
+            for(MdSecType md: digiprov){
+                MdSecType.MdRef mdRef = md.getMdRef();
+                String checksumType = mdRef.getCHECKSUMTYPE();
+                if(checksumType == null){
+                    valid = false;
+                    break;
+                }
+                else {
+                    if (!tmp.contains(checksumType)) {
+                        valid = false;
+                        break;
+                    } else {
+                        String checksum = mdRef.getCHECKSUM();
+                        if (checksum == null) {
+                            valid = false;
+                            break;
+                        } else {
+                            String file = URLDecoder.decode(mdRef.getHref(), "UTF-8");
+                            if (file == null) {
+                                valid = false;
+                                break;
+                            } else {
+                                if (isZipFileFlag()) {
+                                    if (!zipManager.verifyChecksum(getEARKSIPpath(), file, checksumType, checksum)) {
+                                        valid = false;
+                                        break;
+                                    }
+                                } else {
+                                    if (!folderManager.verifyChecksum(getEARKSIPpath(), file, checksumType, checksum)) {
+                                        valid = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if(!valid){
+                break;
+            }
+        }
+        return valid;
     }
 
     /*
@@ -746,8 +808,59 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     * mets/amdSec/rightsMD/mdRef/@CHECKSUM
     * The checksum of the referenced file.
     */
-    private boolean validateCSIP56() {
-        return false;
+    private boolean validateCSIP56() throws IOException, NoSuchAlgorithmException {
+        boolean valid = true;
+        List<String> tmp = new ArrayList<>();
+        for(CHECKSUMTYPE check: CHECKSUMTYPE.values()){
+            tmp.add(check.toString());
+        }
+        for(AmdSecType a: amdSec){
+            List<MdSecType> rigthsMD = a.getRightsMD();
+            if(rigthsMD != null) {
+                for(MdSecType rmd: rigthsMD){
+                    MdSecType.MdRef mdRef = rmd.getMdRef();
+                    String checksumType = mdRef.getCHECKSUMTYPE();
+                    if(checksumType == null){
+                        valid = false;
+                        break;
+                    }
+                    else {
+                        if (!tmp.contains(checksumType)) {
+                            valid = false;
+                            break;
+                        } else {
+                            String checksum = mdRef.getCHECKSUM();
+                            if (checksum == null) {
+                                valid = false;
+                                break;
+                            } else {
+                                String file = URLDecoder.decode(mdRef.getHref(), "UTF-8");
+                                if (file == null) {
+                                    valid = false;
+                                    break;
+                                } else {
+                                    if (isZipFileFlag()) {
+                                        if (!zipManager.verifyChecksum(getEARKSIPpath(), file, checksumType, checksum)) {
+                                            valid = false;
+                                            break;
+                                        }
+                                    } else {
+                                        if (!folderManager.verifyChecksum(getEARKSIPpath(), file, checksumType, checksum)) {
+                                            valid = false;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if(!valid){
+                    break;
+                }
+            }
+        }
+        return valid;
     }
 
     /*

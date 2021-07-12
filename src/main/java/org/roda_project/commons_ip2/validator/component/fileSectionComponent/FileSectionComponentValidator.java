@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,7 +124,13 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
 
         /* CSIP71 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP71_ID);
-        if(validateCSIP71()){
+        boolean csip71 = false;
+        try {
+            csip71 = validateCSIP71();
+        } catch (NoSuchAlgorithmException e) {
+            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP71_ID,"");
+        }
+        if(csip71){
             validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP71_ID,"");
         }
 
@@ -417,8 +424,63 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     * mets/fileSec/fileGrp/file/@CHECKSUM
     * The checksum of the referenced file.
     */
-    private boolean validateCSIP71() {
-        return false;
+    private boolean validateCSIP71() throws IOException, NoSuchAlgorithmException {
+        boolean valid = true;
+        List<String> tmp = new ArrayList<>();
+        for(CHECKSUMTYPE check: CHECKSUMTYPE.values()){
+            tmp.add(check.toString());
+        }
+        MetsType.FileSec fileSec = mets.getFileSec();
+        List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
+        for(MetsType.FileSec.FileGrp grp : fileGrp){
+            List<FileType> files = grp.getFile();
+            for(FileType file : files){
+                String checksumType = file.getCHECKSUMTYPE();
+                if(checksumType == null){
+                    valid = false;
+                    break;
+                }
+                else{
+                    if(!tmp.contains(checksumType)){
+                        valid = false;
+                        break;
+                    }
+                    else{
+                        String checksum = file.getCHECKSUM();
+                        if(checksum == null){
+                            valid = false;
+                            break;
+                        }
+                        else{
+                            String filePath = URLDecoder.decode(file.getFLocat().get(0).getHref(),"UTF-8");
+                            if(filePath == null){
+                                valid = false;
+                                break;
+                            }
+                            else{
+                                if(isZipFileFlag()){
+                                    if(!zipManager.verifyChecksum(getEARKSIPpath(),filePath,checksumType,checksum)){
+                                        valid = false;
+                                        break;
+                                    }
+                                }
+                                else{
+                                    if(!folderManager.verifyChecksum(getEARKSIPpath(),filePath,checksumType,checksum)){
+                                        valid = false;
+                                        break;
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+            if(!valid){
+                break;
+            }
+        }
+        return valid;
     }
 
     /*
