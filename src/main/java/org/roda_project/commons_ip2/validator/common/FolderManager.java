@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
 
 /**
  * @author João Gomes <jgomes@keep.pt>
@@ -74,7 +75,7 @@ public class FolderManager {
         List<Path> filePath = Files.walk(path).filter(p -> {
             String[] tmp = p.toString().split(regex);
             String relativePath = tmp[tmp.length-1];
-            return relativePath.equals(file.toString());
+            return relativePath.equals(file);
         }).collect(Collectors.toList());
 
         if(filePath == null){
@@ -100,5 +101,26 @@ public class FolderManager {
             }
         }
         return valid;
+    }
+
+    public boolean verifySize(Path path, String file, Long metsSize) throws IOException {
+        boolean valid = true;
+        String regex = path.toString() + "/";
+
+        List<Path> filePath = Files.walk(path).filter(p -> {
+            String[] tmp = p.toString().split(regex);
+            String relativePath = tmp[tmp.length-1];
+            return relativePath.equals(file);
+        }).collect(Collectors.toList());
+
+        if(filePath == null){
+            valid = false;
+        }
+        else{
+            if(Files.size(filePath.get(0)) != metsSize){
+                valid = false;
+            }
+        }
+        return  valid;
     }
 }

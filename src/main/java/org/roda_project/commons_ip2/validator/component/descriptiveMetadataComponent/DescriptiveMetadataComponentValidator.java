@@ -7,6 +7,7 @@ import org.roda_project.commons_ip2.validator.component.ValidatorComponentImpl;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.utils.CHECKSUMTYPE;
+import org.roda_project.commons_ip2.validator.utils.MetadataType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -311,6 +312,10 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
     * */
     private boolean validateCSIP25() {
         boolean valid = true;
+        List<String> tmp = new ArrayList<>();
+        for(MetadataType md: MetadataType.values()){
+            tmp.add(md.toString());
+        }
         for(MdSecType mdSec: dmdSec){
             MdSecType.MdRef mdRef = mdSec.getMdRef();
             if(mdRef != null){
@@ -318,6 +323,12 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
                 if(mdType == null){
                     valid = false;
                     break;
+                }
+                else{
+                    if(!tmp.contains(mdType)){
+                        valid = false;
+                        break;
+                    }
                 }
             }
         }
@@ -327,6 +338,8 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
     /*
     * mets/dmdSec/mdRef/@MIMETYPE
     * The IANA mime type of the referenced file.See also: IANA media types
+
+    * Fica para a próxima iteração(Deixar para o fim)
     */
     private boolean validateCSIP26() {
         return true;
@@ -336,8 +349,39 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
     * mets/dmdSec/mdRef/@SIZE
     * Size of the referenced file in bytes.
     */
-    private boolean validateCSIP27() {
-        return true;
+    private boolean validateCSIP27() throws IOException {
+        boolean valid = true;
+        for(MdSecType mdSec: dmdSec){
+            MdSecType.MdRef mdRef = mdSec.getMdRef();
+            String href = URLDecoder.decode(mdRef.getHref(),"UTF-8");
+            if(href == null){
+                valid = false;
+                break;
+            }
+            else{
+                Long size = mdRef.getSIZE();
+                if(size == null){
+                    valid = false;
+                    break;
+                }
+                else{
+                    if(isZipFileFlag()){
+                        if(!zipManager.verifySize(getEARKSIPpath(),href,size)){
+                            valid = false;
+                            break;
+                        }
+                    }
+                    else{
+                        if(!folderManager.verifySize(getEARKSIPpath(),href,size)){
+                            valid = false;
+                            break;
+                        }
+                    }
+                }
+
+            }
+        }
+        return valid;
     }
 
     /*

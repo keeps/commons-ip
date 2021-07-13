@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -152,5 +153,19 @@ public class ZipManager {
       }
     }
     return valid;
+  }
+
+  public boolean verifySize(Path path, String file, Long metsSize){
+    boolean valid = true;
+    ZipEntry entry = getZipEntry(path,file);
+    if(entry == null){
+      valid = false;
+    }
+    else{
+      if(entry.getSize() != metsSize){
+       valid = false;
+      }
+    }
+    return  valid;
   }
 }

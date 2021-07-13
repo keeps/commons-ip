@@ -9,6 +9,7 @@ import org.roda_project.commons_ip2.validator.component.ValidatorComponentImpl;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.utils.CHECKSUMTYPE;
+import org.roda_project.commons_ip2.validator.utils.MetadataType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -401,6 +402,10 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     */
     private boolean validateCSIP39() {
         boolean valid = true;
+        List<String> tmp = new ArrayList<>();
+        for(MetadataType md: MetadataType.values()){
+            tmp.add(md.toString());
+        }
         for(AmdSecType a: amdSec){
             List<MdSecType> digiprov = a.getDigiprovMD();
             for(MdSecType md: digiprov){
@@ -410,6 +415,12 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
                     if(mdType == null){
                         valid = false;
                         break;
+                    }
+                    else {
+                        if(!tmp.contains(mdType)){
+                            valid = false;
+                            break;
+                        }
                     }
                 }
             }
@@ -432,8 +443,46 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     * mets/amdSec/digiprovMD/mdRef/@SIZE
     * Size of the referenced file in bytes.
     */
-    private boolean validateCSIP41() {
-        return false;
+    private boolean validateCSIP41() throws IOException {
+        boolean valid = true;
+        for(AmdSecType a: amdSec){
+            List<MdSecType> digiprov = a.getDigiprovMD();
+            for(MdSecType md: digiprov){
+                MdSecType.MdRef mdRef = md.getMdRef();
+                if(mdRef != null){
+                    String href = URLDecoder.decode(mdRef.getHref(),"UTF-8");
+                    if(href == null){
+                        valid = false;
+                        break;
+                    }
+                    else{
+                        Long size = mdRef.getSIZE();
+                        if(size == null){
+                            valid = false;
+                            break;
+                        }
+                        else{
+                            if(isZipFileFlag()){
+                                if(!zipManager.verifySize(getEARKSIPpath(),href,size)){
+                                    valid = false;
+                                    break;
+                                }
+                            }
+                            else{
+                                if(!folderManager.verifySize(getEARKSIPpath(),href,size)){
+                                    valid = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if(!valid){
+                break;
+            }
+        }
+        return valid;
     }
 
     /*
@@ -747,6 +796,10 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     */
     private boolean validateCSIP52() {
         boolean valid = true;
+        List<String> tmp = new ArrayList<>();
+        for(MetadataType md: MetadataType.values()){
+            tmp.add(md.toString());
+        }
         for(AmdSecType a: amdSec){
             List<MdSecType> rigthsMD = a.getRightsMD();
             if(rigthsMD != null) {
@@ -757,6 +810,12 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
                         if(mdType == null){
                             valid = false;
                             break;
+                        }
+                        else{
+                            if(!tmp.contains(mdType)){
+                                valid = false;
+                                break;
+                            }
                         }
                     }
                 }
@@ -780,8 +839,48 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     * mets/amdSec/rightsMD/mdRef/@SIZE
     * Size of the referenced file in bytes.
     */
-    private boolean validateCSIP54() {
-        return false;
+    private boolean validateCSIP54() throws IOException {
+        boolean valid = true;
+        for(AmdSecType a: amdSec){
+            List<MdSecType> rigthsMD = a.getRightsMD();
+            if(rigthsMD != null) {
+                for(MdSecType rmd: rigthsMD){
+                    MdSecType.MdRef mdRef = rmd.getMdRef();
+                    if(mdRef != null){
+                        String href = URLDecoder.decode(mdRef.getHref(),"UTF-8");
+                        if(href == null){
+                            valid = false;
+                            break;
+                        }
+                        else{
+                            Long size = mdRef.getSIZE();
+                            if(size == null){
+                                valid = false;
+                                break;
+                            }
+                            else{
+                                if(isZipFileFlag()){
+                                    if(!zipManager.verifySize(getEARKSIPpath(),href,size)){
+                                        valid = false;
+                                        break;
+                                    }
+                                }
+                                else{
+                                    if(!folderManager.verifySize(getEARKSIPpath(),href,size)){
+                                        valid = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if(!valid){
+                    break;
+                }
+            }
+        }
+        return valid;
     }
 
     /*

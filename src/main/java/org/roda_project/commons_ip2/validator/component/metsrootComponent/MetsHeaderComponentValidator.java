@@ -199,13 +199,14 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     */
     private boolean validateCSIP11(){
         boolean valid = true;
-        int count = 0;
+        boolean found = false;
         for(MetsType.MetsHdr.Agent a : agents){
-            if(a.getROLE().equals("CREATOR")){
-                count ++;
+            if (a.getROLE().equals("CREATOR") && a.getTYPE().equals("OTHER") && a.getOTHERTYPE().equals("SOFTWARE")) {
+                found = true;
+                break;
             }
         }
-        if(count != 1) {
+        if(!found) {
             valid = false;
         }
         return valid;
@@ -218,13 +219,14 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
 
     private boolean validateCSIP12() {
         boolean valid = true;
-        int count = 0;
+        boolean found = false;
         for(MetsType.MetsHdr.Agent a : agents){
-            if(a.getTYPE().equals("OTHER")){
-                count++;
+            if (a.getROLE().equals("CREATOR") && a.getTYPE().equals("OTHER") && a.getOTHERTYPE().equals("SOFTWARE")) {
+                found = true;
+                break;
             }
         }
-        if(count != 1){
+        if(!found) {
             valid = false;
         }
         return valid;
@@ -238,15 +240,15 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
 
     private boolean validateCSIP13() {
         boolean valid = true;
+        boolean found = false;
         for(MetsType.MetsHdr.Agent a : agents){
-            if(a.getOTHERTYPE() == null){
-                valid = false;
+            if (a.getROLE().equals("CREATOR") && a.getTYPE().equals("OTHER") && a.getOTHERTYPE().equals("SOFTWARE")) {
+                found = true;
+                break;
             }
-            else{
-                if(!a.getOTHERTYPE().equals("SOFTWARE")){
-                    valid = false;
-                }
-            }
+        }
+        if(!found) {
+            valid = false;
         }
         return valid;
     }
@@ -260,13 +262,17 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     private boolean validateCSIP14() {
         boolean valid = true;
         for(MetsType.MetsHdr.Agent a : agents){
-            if(a.getName() == null) {
-                valid = false;
-            }
-            else{
-                 if(a.getName().equals("")){
-                     valid = false;
-                 }
+            if (a.getROLE().equals("CREATOR") && a.getTYPE().equals("OTHER") && a.getOTHERTYPE().equals("SOFTWARE")) {
+                if(a.getName() == null) {
+                    valid = false;
+                    break;
+                }
+                else{
+                    if(a.getName().equals("")){
+                        valid = false;
+                        break;
+                    }
+                }
             }
         }
         return valid;
@@ -281,9 +287,12 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     private boolean validateCSIP15() {
         boolean valid = true;
         for(MetsType.MetsHdr.Agent a : agents){
-            List<MetsType.MetsHdr.Agent.Note> notes = a.getNote();
-            if(notes == null || notes.size() == 0){
-                valid = false;
+            if (a.getROLE().equals("CREATOR") && a.getTYPE().equals("OTHER") && a.getOTHERTYPE().equals("SOFTWARE")) {
+                List<MetsType.MetsHdr.Agent.Note> notes = a.getNote();
+                if(notes == null || notes.size() == 0){
+                    valid = false;
+                    break;
+                }
             }
         }
         return valid;
@@ -297,18 +306,20 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     private boolean validateCSIP16() {
         boolean valid = true;
         for(MetsType.MetsHdr.Agent a : agents){
-            List<MetsType.MetsHdr.Agent.Note> notes = a.getNote();
-            if(notes == null || notes.size() == 0){
-                valid = false;
-            }
-            else{
-                for(MetsType.MetsHdr.Agent.Note note : notes){
-                    if(note.getNOTETYPE() == null){
-                        valid = false;
-                    }
-                    else{
-                        if(!note.getNOTETYPE().equals("SOFTWARE VERSION")) {
+            if (a.getROLE().equals("CREATOR") && a.getTYPE().equals("OTHER") && a.getOTHERTYPE().equals("SOFTWARE")) {
+                List<MetsType.MetsHdr.Agent.Note> notes = a.getNote();
+                if(notes == null || notes.size() == 0){
+                    valid = false;
+                }
+                else{
+                    for(MetsType.MetsHdr.Agent.Note note : notes){
+                        if(note.getNOTETYPE() == null){
                             valid = false;
+                        }
+                        else{
+                            if(!note.getNOTETYPE().equals("SOFTWARE VERSION")) {
+                                valid = false;
+                            }
                         }
                     }
                 }

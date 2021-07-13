@@ -393,8 +393,56 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     * mets/fileSec/fileGrp/file/@SIZE
     * Size of the referenced file in bytes.
     */
-    private boolean validateCSIP69() {
-        return false;
+    private boolean validateCSIP69() throws IOException {
+        boolean valid = true;
+        MetsType.FileSec fileSec = mets.getFileSec();
+        List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
+        for(MetsType.FileSec.FileGrp grp : fileGrp){
+            List<FileType> files = grp.getFile();
+            for(FileType file : files){
+                List<FileType.FLocat> flocat = file.getFLocat();
+                if(flocat == null){
+                    valid = false;
+                }
+                else{
+                    if(flocat.size() != 1){
+                        valid = false;
+                    }
+                    else{
+                        String href = URLDecoder.decode(flocat.get(0).getHref(),"UTF-8");
+                        if(href == null){
+                            valid = false;
+                            break;
+                        }
+                        else{
+                            Long size = file.getSIZE();
+                            if(size == null){
+                                valid = false;
+                                break;
+                            }
+                            else{
+                                if(isZipFileFlag()){
+                                    if(!zipManager.verifySize(getEARKSIPpath(),href,size)){
+                                        valid = false;
+                                        break;
+                                    }
+                                }
+                                else{
+                                    if(!folderManager.verifySize(getEARKSIPpath(),href,size)){
+                                        valid = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if(!valid){
+                break;
+            }
+        }
+        return valid;
     }
 
     /*
@@ -553,7 +601,29 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     * file protocol using the relative location of the file.
     */
     private boolean validateCSIP76() {
-        return false;
+        boolean valid = true;
+        MetsType.FileSec fileSec = mets.getFileSec();
+        List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
+        for(MetsType.FileSec.FileGrp grp : fileGrp) {
+            List<FileType> files = grp.getFile();
+            for (FileType file : files) {
+                List<FileType.FLocat> flocat = file.getFLocat();
+                if(flocat == null){
+                    valid = false;
+                    break;
+                }
+                else{
+                    if(flocat.size() != 1){
+                        valid = false;
+                        break;
+                    }
+                }
+            }
+            if(!valid){
+                break;
+            }
+        }
+        return valid;
     }
 
     /*
