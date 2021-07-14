@@ -168,4 +168,33 @@ public class ZipManager {
     }
     return  valid;
   }
+
+  public boolean verifyMetadataDescriptiveFolder(Path path,String objectID) throws IOException {
+    boolean found = false;
+    ZipFile zipFile = new ZipFile(path.toFile());
+    Enumeration entries = zipFile.entries();
+    String regex = objectID + "/metadata/descriptive/.*";
+    while (entries.hasMoreElements()){
+      ZipEntry entry = (ZipEntry) entries.nextElement();
+      if(entry.getName().matches(regex)){
+        found = true;
+        break;
+      }
+    }
+    return found;
+  }
+
+  public int countMetadataDescriptiveFiles(Path path, String objectID) throws IOException {
+    int count = 0;
+    ZipFile zipFile = new ZipFile(path.toFile());
+    Enumeration entries = zipFile.entries();
+    String regex = objectID + "/metadata/descriptive/.*";
+    while (entries.hasMoreElements()){
+      ZipEntry entry = (ZipEntry) entries.nextElement();
+      if(entry.getName().matches(regex)){
+        count++;
+      }
+    }
+    return count;
+  }
 }

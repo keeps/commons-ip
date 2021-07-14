@@ -117,7 +117,7 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
       valid = false;
     }
     else {
-        String rootFolderName = null;
+        String rootFolderName;
         if(isZipFileFlag()){
           rootFolderName = zipManager.getSipRootFolderName(path);
         }

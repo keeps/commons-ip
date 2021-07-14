@@ -268,18 +268,18 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     * be unique within the package.
     */
     private boolean validateCSIP33() {
-        boolean valid = true;
-        for(AmdSecType a: amdSec){
+        for(AmdSecType a: amdSec) {
             List<MdSecType> digiprov = a.getDigiprovMD();
             for(MdSecType md: digiprov){
-                String status = md.getSTATUS();
-                if(!dmdSecStatus.contains(status)){
-                    valid = false;
-                    break;
-                }
+               if(!checkId(md.getID())){
+                   addId(md.getID());
+               }
+               else{
+                   return false;
+               }
             }
         }
-        return valid;
+        return true;
     }
 
     /*
@@ -288,18 +288,17 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     * dmdSec status
     */
     private boolean validateCSIP34() {
-        boolean valid = true;
         for(AmdSecType a: amdSec){
             List<MdSecType> digiprov = a.getDigiprovMD();
             for(MdSecType md: digiprov){
-                MdSecType.MdRef mdRef = md.getMdRef();
-                if(mdRef == null){
-                    valid = false;
-                    break;
+                String status = md.getSTATUS();
+                if(!dmdSecStatus.contains(status)){
+                    return false;
                 }
             }
         }
-        return valid;
+        return true;
+
     }
 
     /*
@@ -307,8 +306,17 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     * Reference to the digital provenance metadata file stored in the “metadata”
     * section of the IP.
     */
-    private boolean validateCSIP35() {
-        return false;
+    private boolean validateCSIP35(){
+        for(AmdSecType a: amdSec){
+            List<MdSecType> digiprov = a.getDigiprovMD();
+            for(MdSecType md: digiprov){
+                MdSecType.MdRef mdRef = md.getMdRef();
+                if(mdRef == null){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /*

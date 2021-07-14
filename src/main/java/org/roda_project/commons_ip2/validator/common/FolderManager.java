@@ -123,4 +123,67 @@ public class FolderManager {
         }
         return  valid;
     }
+
+    public boolean verifyMetadataDescriptiveFolder(Path path) {
+        File[] folder = path.toFile().listFiles();
+        if(folder != null){
+            for(File f: folder){
+                if(f.getName().equals("metadata")){
+                    if(f.isDirectory()){
+                        File[] metadataFiles = f.listFiles();
+                        if(metadataFiles == null){
+                           return false;
+                        }
+                        else{
+                            if(metadataFiles.length == 0){
+                                return false;
+                            }
+                            else{
+                                for(File metadata: metadataFiles){
+                                    if(metadata.getName().equals("descriptive")){
+                                        return metadata.isDirectory();
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                    else{
+                        return false;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public int countMetadataDescriptiveFiles(Path path) {
+        int count = 0;
+        File[] folder = path.toFile().listFiles();
+        if(folder != null){
+            for(File f: folder){
+                if(f.getName().equals("metadata")){
+                    if(f.isDirectory()){
+                        File[] metadataFiles = f.listFiles();
+                        if(metadataFiles != null){
+                            if(metadataFiles.length != 0){
+                                for(File metadata: metadataFiles){
+                                    if(metadata.getName().equals("descriptive")){
+                                        if(metadata.isDirectory()){
+                                            File[] descriptiveFiles = metadata.listFiles();
+                                            if(descriptiveFiles != null){
+                                                count = descriptiveFiles.length;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        return count;
+    }
 }
