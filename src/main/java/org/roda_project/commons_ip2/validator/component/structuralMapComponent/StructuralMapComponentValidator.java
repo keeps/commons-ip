@@ -26,59 +26,96 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
 
     @Override
     public boolean validate() throws IOException {
-
+        boolean valid = true;
         /* CSIP80 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID);
         if(validateCSIP80()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID,"");
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID,"");
+        }
+        else{
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID,"");
+            valid = false;
         }
 
         /* CSIP81 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID);
         if(validateCSIP81()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID,"");
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID,"");
         }
+        else{
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID,"");
+            valid = false;
+        }
+
 
         /* CSIP82 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID);
         if(validateCSIP82()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID,"");
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID,"");
+        }
+        else{
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID,"");
+            valid = false;
         }
 
         /* CSIP83 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID);
         if(validateCSIP83()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID,"");
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID,"");
+        }
+        else{
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID,"");
+            valid = false;
         }
 
         /* CSIP84 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID);
         if(validateCSIP84()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID,"");
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID,"");
+        }
+        else{
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID,"");
+            valid = false;
         }
 
         /* CSIP85 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID);
         if(validateCSIP85()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,"");
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,"");
+        }
+        else{
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,"");
+            valid = false;
         }
 
         /* CSIP86 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID);
         if(validateCSIP86()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,"");
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,"");
+        }
+        else{
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,"");
+            valid = false;
         }
 
         /* CSIP88 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID);
         if(validateCSIP88()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,"");
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,"");
+        }
+        else{
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,"");
+            valid = false;
         }
 
         /* CSIP89 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID);
         if(validateCSIP89()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID,"");
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID,"");
+        }
+        else{
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID,"");
+            valid = false;
         }
 
         /* CSIP90 */
@@ -108,7 +145,11 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
         /* CSIP94 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID);
         if(validateCSIP94()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID,"");
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID,"");
+        }
+        else{
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID,"");
+            valid = false;
         }
 
         /* CSIP95 */
@@ -138,7 +179,11 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
         /* CSIP98 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID);
         if(validateCSIP98()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID,"");
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID,"");
+        }
+        else{
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID,"");
+            valid = false;
         }
 
         /* CSIP99 */
@@ -162,7 +207,11 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
         /* CSIP102 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID);
         if(validateCSIP102()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID,"");
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID,"");
+        }
+        else{
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID,"");
+            valid = false;
         }
 
         /* CSIP100 */
@@ -192,7 +241,11 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
         /* CSIP106 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID);
         if(validateCSIP106()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID,"");
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID,"");
+        }
+        else{
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID,"");
+            valid = false;
         }
 
         /* CSIP107 */
@@ -231,7 +284,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
             validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP112_ID,"");
         }
 
-        return false;
+        return valid;
     }
 
     /*
@@ -488,7 +541,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * See also: File group names
     */
     private boolean validateCSIP90() {
-        return false;
+        return true;
     }
 
     /*
@@ -497,7 +550,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * All of the <amdSec> identifiers are listed in a single @ADMID using spaces as delimiters.
     */
     private boolean validateCSIP91() {
-        return false;
+        return true;
     }
 
     /*
@@ -506,7 +559,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * All of the <amdSec> identifiers are listed in a single @ADMID using spaces as delimiters.
     */
     private boolean validateCSIP92() {
-        return false;
+        return true;
     }
 
     /*
@@ -514,7 +567,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * The documentation referenced in the file section file groups is described in the structural map with one sub division.
     */
     private boolean validateCSIP93() {
-        return false;
+        return true;
     }
 
     /*
@@ -562,7 +615,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * See also: File group names
     */
     private boolean validateCSIP95() {
-        return false;
+        return true;
     }
 
     /*
@@ -570,7 +623,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * All file groups containing documentation described in the package are referenced via the relevant file group identifiers. There MUST be one file group reference per <fptr> element.
     */
     private boolean validateCSIP96() {
-        return false;
+        return true;
     }
 
     /*
@@ -579,7 +632,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * Related to the requirements CSIP60 which describes the “Documentation” file group and CSIP65 which describes the file group identifier.
     */
     private boolean validateCSIP116() {
-        return false;
+        return true;
     }
 
     /*
@@ -587,7 +640,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * The schemas referenced in the file section file groups are described in the structural map within a single sub-division.
     */
     private boolean validateCSIP97() {
-        return false;
+        return true;
     }
 
     /*
@@ -635,7 +688,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * See also: File group names
     */
     private boolean validateCSIP99() {
-        return false;
+        return true;
     }
 
     /*
@@ -643,7 +696,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * All file groups containing schemas described in the package are referenced via the relevant file group identifiers. One file group reference per fptr-element
     */
     private boolean validateCSIP100() {
-        return false;
+        return true;
     }
 
     /*
@@ -652,7 +705,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * Related to the requirements CSIP113 which describes the “Schema” file group and CSIP65 which describes the file group identifier.
     */
     private boolean validateCSIP101() {
-        return false;
+        return true;
     }
 
     /*
@@ -700,7 +753,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * See also: File group names
     */
     private boolean validateCSIP103() {
-        return false;
+        return true;
     }
 
 
@@ -709,7 +762,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * All file groups containing content described in the package are referenced via the relevant file group identifiers. One file group reference per fptr-element.
     */
     private boolean validateCSIP104() {
-        return false;
+        return true;
     }
 
     /*
@@ -718,7 +771,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * Related to the requirements CSIP114 which describes the “Representations” file group and CSIP65 which describes the file group identifier.
     */
     private boolean validateCSIP119() {
-        return false;
+        return true;
     }
 
     /*
@@ -727,7 +780,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * Each representation div references the representation level METS.xml document, documenting the structure of the package and its constituent representations.
     */
     private boolean validateCSIP105() {
-        return false;
+        return true;
     }
 
     /*
@@ -781,7 +834,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * See also: File group names
     */
     private boolean validateCSIP107() {
-        return false;
+        return true;
     }
 
     /*
@@ -790,7 +843,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * Related to the requirements CSIP114 which describes the “Representations” file group and CSIP65 which describes the file group identifier.
     */
     private boolean validateCSIP108() {
-        return false;
+        return true;
     }
 
     /*
@@ -798,7 +851,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * The division <div> of the specific representation includes one occurrence of the METS pointer <mptr> element, pointing to the appropriate representation METS file.
     */
     private boolean validateCSIP109() {
-        return false;
+        return true;
     }
 
     /*
@@ -806,7 +859,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * The actual location of the resource. We recommend recording a URL type filepath within this attribute.
     */
     private boolean validateCSIP110() {
-        return false;
+        return true;
     }
 
     /*
@@ -814,7 +867,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * Attribute used with the value “simple”. Value list is maintained by the xlink standard.
     */
     private boolean validateCSIP111() {
-        return false;
+        return true;
     }
 
     /*
@@ -822,6 +875,6 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * The locator type is always used with the value “URL” from the vocabulary in the attribute.
     */
     private boolean validateCSIP112() {
-        return false;
+        return true;
     }
 }
