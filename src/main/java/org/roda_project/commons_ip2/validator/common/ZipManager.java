@@ -28,6 +28,9 @@ public class ZipManager {
     }
 
     ZipEntry zipArchiveEntry = zipFile.getEntry(entry);
+    if(zipArchiveEntry == null){
+      return null;
+    }
     return zipFile.getInputStream(zipArchiveEntry);
   }
 

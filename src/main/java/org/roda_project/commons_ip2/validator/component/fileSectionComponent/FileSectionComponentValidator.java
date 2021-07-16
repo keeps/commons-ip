@@ -131,16 +131,25 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
                 try {
                     csip71 = validateCSIP71();
                 } catch (NoSuchAlgorithmException e) {
-                    validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP71_ID,"");
+                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP71_ID,"");
+                    valid = false;
                 }
                 if(csip71){
-                    validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP71_ID,"");
+                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP71_ID,"");
+                }
+                else{
+                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP71_ID,"");
+                    valid = false;
                 }
 
                 /* CSIP72 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID);
                 if(validateCSIP72()){
-                    validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID,"");
+                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID,"");
+                }
+                else{
+                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID,"");
+                    valid = false;
                 }
 
                 /* CSIP73 */
@@ -349,15 +358,16 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     */
     private boolean validateCSIP66() {
         boolean valid = true;
-        MetsType.FileSec fileSec = mets.getFileSec();
-        List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
-        for(MetsType.FileSec.FileGrp grp : fileGrp){
-            List<FileType> files = grp.getFile();
-            if(files == null || files.size() == 0){
-                valid = false;
-                break;
-            }
-        }
+//        MetsType.FileSec fileSec = mets.getFileSec();
+//        List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
+//        for(MetsType.FileSec.FileGrp grp : fileGrp){
+//            List<FileType> files = grp.getFile();
+//            System.out.println(files.size());
+//            if(files == null || files.size() == 0){
+//                valid = false;
+//                break;
+//            }
+//        }
         return valid;
     }
 

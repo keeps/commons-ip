@@ -39,15 +39,35 @@ public class ValidatorTest {
   }
 
   @Test
-  public void validateSimpleSip() throws IPException, ParseException, InterruptedException, JAXBException, IOException, SAXException {
+  public void validateSimpleSip() {
     LOGGER.info("Validate Simple SIP");
-    Path reportPath = Paths.get("/home/jgomes/Github/test/output/test.json");
-    Path earksipPath = Paths.get("./src/main/resources/sips/Simple-EARK-SIP");
-    // Path earksipPath = Paths.get("./src/main/resources/sips/mets-xml_mets_OBJID_attribute_not_exist.zip");
-    // Path earksipPath = Paths.get("./src/main/resources/sips/minimal_IP_with_1_representation.zip");
+    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/test.json");
+    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/test.zip");
 
     EARKSIPValidator earksipValidator = new EARKSIPValidator(earksipPath,reportPath);
     earksipValidator.validate();
     LOGGER.info("Done validate simple sip");
+  }
+
+  @Test
+  public void validateMinimalIpWithRepresentation(){
+    LOGGER.info("Validate Minimal IP With 1 Representation");
+    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/minimal_IP_with_1_representation.json");
+    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/minimal_IP_with_1_representation.zip");
+
+    EARKSIPValidator earksipValidator = new EARKSIPValidator(earksipPath,reportPath);
+    earksipValidator.validate();
+    LOGGER.info("Done validate Minimal IP With 1 Representation");
+  }
+
+  @Test
+  public void validateMetsXmlObjectID(){
+    LOGGER.info("Validate Mets xml mets OBJID attribute not Exist");
+    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/mets-xml_mets_OBJID_attribute_not_exist.json");
+    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/mets-xml_mets_OBJID_attribute_not_exist.zip");
+
+    EARKSIPValidator earksipValidator = new EARKSIPValidator(earksipPath,reportPath);
+    earksipValidator.validate();
+    LOGGER.info("Done validate Mets xml mets OBJID attribute not Exist");
   }
 }
