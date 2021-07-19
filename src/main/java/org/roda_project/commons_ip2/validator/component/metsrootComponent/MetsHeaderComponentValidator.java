@@ -75,71 +75,73 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
             validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID);
             if(validateCSIP10()){
                 validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID,"");
+
+                /* CSIP11 */
+                validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID);
+                if(validateCSIP11()){
+                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID,"");
+                }
+                else{
+                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID, "");
+                    valid = false;
+                }
+
+                /* CSIP12 */
+                validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID);
+                if(validateCSIP12()){
+                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID,"");
+                }
+                else{
+                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID, "");
+                    valid = false;
+                }
+
+                /* CSIP13 */
+                validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID);
+                if(validateCSIP13()){
+                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID,"");
+                }
+                else{
+                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID, "");
+                    valid = false;
+                }
+
+                /* CSIP14 */
+                validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID);
+                if(validateCSIP14()){
+                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID,"");
+                }
+                else{
+                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID, "");
+                    valid = false;
+                }
+
+                /* CSIP15 */
+                validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID);
+                if(validateCSIP15()){
+                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID,"");
+                }
+                else{
+                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID, "");
+                    valid = false;
+                }
+
+                /* CSIP16 */
+                validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID);
+                if(validateCSIP16()){
+                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID,"");
+                }
+                else{
+                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID, "");
+                    valid = false;
+                }
+
             }
             else {
                 validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID, "");
                 valid = false;
             }
 
-            /* CSIP11 */
-            validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID);
-            if(validateCSIP11()){
-                validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID,"");
-            }
-            else{
-                validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID, "");
-                valid = false;
-            }
-
-            /* CSIP12 */
-            validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID);
-            if(validateCSIP12()){
-                validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID,"");
-            }
-            else{
-                validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID, "");
-                valid = false;
-            }
-
-            /* CSIP13 */
-            validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID);
-            if(validateCSIP13()){
-                validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID,"");
-            }
-            else{
-                validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID, "");
-                valid = false;
-            }
-
-            /* CSIP14 */
-            validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID);
-            if(validateCSIP14()){
-                validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID,"");
-            }
-            else{
-                validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID, "");
-                valid = false;
-            }
-
-            /* CSIP15 */
-            validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID);
-            if(validateCSIP15()){
-                validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID,"");
-            }
-            else{
-                validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID, "");
-                valid = false;
-            }
-
-            /* CSIP16 */
-            validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID);
-            if(validateCSIP16()){
-                validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID,"");
-            }
-            else{
-                validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID, "");
-                valid = false;
-            }
         }
         else{
             validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID, "");
@@ -217,10 +219,19 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
         boolean valid = true;
         boolean found = false;
         for(MetsType.MetsHdr.Agent a : agents){
-            if (a.getROLE().equals("CREATOR") && a.getTYPE().equals("OTHER") && a.getOTHERTYPE().equals("SOFTWARE")) {
-                found = true;
+            String role = a.getROLE();
+            String type = a.getTYPE();
+            String otherType = a.getOTHERTYPE();
+            if(role == null || type == null || otherType == null){
                 break;
             }
+            else{
+                if (role.equals("CREATOR") && type.equals("OTHER") && otherType.equals("SOFTWARE")) {
+                    found = true;
+                    break;
+                }
+            }
+
         }
         if(!found) {
             valid = false;
@@ -237,9 +248,17 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
         boolean valid = true;
         boolean found = false;
         for(MetsType.MetsHdr.Agent a : agents){
-            if (a.getROLE().equals("CREATOR") && a.getTYPE().equals("OTHER") && a.getOTHERTYPE().equals("SOFTWARE")) {
-                found = true;
+            String role = a.getROLE();
+            String type = a.getTYPE();
+            String otherType = a.getOTHERTYPE();
+            if(role == null || type == null || otherType == null){
                 break;
+            }
+            else {
+                if (role.equals("CREATOR") && type.equals("OTHER") && otherType.equals("SOFTWARE")) {
+                    found = true;
+                    break;
+                }
             }
         }
         if(!found) {
@@ -258,9 +277,17 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
         boolean valid = true;
         boolean found = false;
         for(MetsType.MetsHdr.Agent a : agents){
-            if (a.getROLE().equals("CREATOR") && a.getTYPE().equals("OTHER") && a.getOTHERTYPE().equals("SOFTWARE")) {
-                found = true;
+            String role = a.getROLE();
+            String type = a.getTYPE();
+            String otherType = a.getOTHERTYPE();
+            if(role == null || type == null || otherType == null){
                 break;
+            }
+            else {
+                if (role.equals("CREATOR") && type.equals("OTHER") && otherType.equals("SOFTWARE")) {
+                    found = true;
+                    break;
+                }
             }
         }
         if(!found) {
@@ -278,13 +305,20 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     private boolean validateCSIP14() {
         boolean valid = true;
         for(MetsType.MetsHdr.Agent a : agents){
-            if (a.getROLE().equals("CREATOR") && a.getTYPE().equals("OTHER") && a.getOTHERTYPE().equals("SOFTWARE")) {
-                if(a.getName() == null) {
-                    valid = false;
-                }
-                else{
-                    if(a.getName().equals("")){
+            String role = a.getROLE();
+            String type = a.getTYPE();
+            String otherType = a.getOTHERTYPE();
+            if(role == null || type == null || otherType == null){
+                break;
+            }
+            else {
+                if (role.equals("CREATOR") && type.equals("OTHER") && otherType.equals("SOFTWARE")) {
+                    if (a.getName() == null) {
                         valid = false;
+                    } else {
+                        if (a.getName().equals("")) {
+                            valid = false;
+                        }
                     }
                 }
             }
@@ -301,10 +335,18 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     private boolean validateCSIP15() {
         boolean valid = true;
         for(MetsType.MetsHdr.Agent a : agents){
-            if (a.getROLE().equals("CREATOR") && a.getTYPE().equals("OTHER") && a.getOTHERTYPE().equals("SOFTWARE")) {
-                List<MetsType.MetsHdr.Agent.Note> notes = a.getNote();
-                if(notes == null || notes.size() == 0){
-                    valid = false;
+            String role = a.getROLE();
+            String type = a.getTYPE();
+            String otherType = a.getOTHERTYPE();
+            if(role == null || type == null || otherType == null){
+                break;
+            }
+            else {
+                if (role.equals("CREATOR") && type.equals("OTHER") && otherType.equals("SOFTWARE")) {
+                    List<MetsType.MetsHdr.Agent.Note> notes = a.getNote();
+                    if (notes == null || notes.size() == 0) {
+                        valid = false;
+                    }
                 }
             }
         }
@@ -319,19 +361,25 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     private boolean validateCSIP16() {
         boolean valid = true;
         for(MetsType.MetsHdr.Agent a : agents){
-            if (a.getROLE().equals("CREATOR") && a.getTYPE().equals("OTHER") && a.getOTHERTYPE().equals("SOFTWARE")) {
-                List<MetsType.MetsHdr.Agent.Note> notes = a.getNote();
-                if(notes == null || notes.size() == 0){
-                    valid = false;
-                }
-                else{
-                    for(MetsType.MetsHdr.Agent.Note note : notes){
-                        if(note.getNOTETYPE() == null){
-                            valid = false;
-                        }
-                        else{
-                            if(!note.getNOTETYPE().equals("SOFTWARE VERSION")) {
+            String role = a.getROLE();
+            String type = a.getTYPE();
+            String otherType = a.getOTHERTYPE();
+            if(role == null || type == null || otherType == null){
+                break;
+            }
+            else {
+                if (role.equals("CREATOR") && type.equals("OTHER") && otherType.equals("SOFTWARE")) {
+                    List<MetsType.MetsHdr.Agent.Note> notes = a.getNote();
+                    if (notes == null || notes.size() == 0) {
+                        valid = false;
+                    } else {
+                        for (MetsType.MetsHdr.Agent.Note note : notes) {
+                            if (note.getNOTETYPE() == null) {
                                 valid = false;
+                            } else {
+                                if (!note.getNOTETYPE().equals("SOFTWARE VERSION")) {
+                                    valid = false;
+                                }
                             }
                         }
                     }

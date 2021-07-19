@@ -59,7 +59,7 @@ public class ValidationReporter {
     this.success = 0;
     this.errors = 0;
     this.warnings = 0;
-    if (outputFile.toFile().exists()) {
+    if (!outputFile.toFile().exists()) {
       try {
         Files.createFile(outputFile);
       } catch (IOException e) {
@@ -69,6 +69,23 @@ public class ValidationReporter {
         } catch (IOException e1) {
           LOGGER.error("Could not create report temporary file. Reporting will not function.", e1);
         }
+      }
+    }
+    else{
+      try{
+        Files.deleteIfExists(outputFile);
+        try {
+          Files.createFile(outputFile);
+        } catch (IOException e) {
+          LOGGER.warn("Could not create report file in current working directory. Attempting to use a temporary file", e);
+          try {
+            outputFile = Files.createTempFile(Constants.VALIDATION_REPORT_PREFIX, ".json");
+          } catch (IOException e1) {
+            LOGGER.error("Could not create report temporary file. Reporting will not function.", e1);
+          }
+        }
+      } catch (IOException e) {
+        LOGGER.warn("Could not eliminate old report file in current working directory.", e);
       }
     }
 
