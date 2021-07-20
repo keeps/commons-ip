@@ -438,6 +438,9 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
             List<MdSecType> digiprov = a.getDigiprovMD();
             for(MdSecType md: digiprov){
                 MdSecType.MdRef mdRef = md.getMdRef();
+                if(mdRef == null){
+                    return false;
+                }
                 String loctype = mdRef.getLOCTYPE();
                 if(loctype == null) {
                     valid = false;
@@ -463,6 +466,9 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
             List<MdSecType> digiprov = a.getDigiprovMD();
             for(MdSecType md: digiprov){
                 MdSecType.MdRef mdRef = md.getMdRef();
+                if(mdRef == null){
+                    return false;
+                }
                 String xLinktype = mdRef.getType();
                 if(xLinktype == null) {
                     valid = false;
@@ -611,6 +617,9 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
             List<MdSecType> digiprov = a.getDigiprovMD();
             for(MdSecType md: digiprov){
                 MdSecType.MdRef mdRef = md.getMdRef();
+                if(mdRef == null){
+                    return false;
+                }
                 if(mdRef.getCREATED() == null){
                     valid = false;
                     break;
@@ -637,6 +646,7 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
             List<MdSecType> digiprov = a.getDigiprovMD();
             for(MdSecType md: digiprov){
                 MdSecType.MdRef mdRef = md.getMdRef();
+                if(mdRef == null) return false;
                 String checksumType = mdRef.getCHECKSUMTYPE();
                 if(checksumType == null){
                     valid = false;
@@ -695,6 +705,7 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
             List<MdSecType> digiprov = a.getDigiprovMD();
             for(MdSecType md: digiprov){
                 MdSecType.MdRef mdRef = md.getMdRef();
+                if(mdRef == null) return false;
                 String checksumType = mdRef.getCHECKSUMTYPE();
                 if(checksumType == null){
                     valid = false;

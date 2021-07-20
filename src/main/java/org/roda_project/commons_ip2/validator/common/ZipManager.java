@@ -195,7 +195,9 @@ public class ZipManager {
     while (entries.hasMoreElements()){
       ZipEntry entry = (ZipEntry) entries.nextElement();
       if(entry.getName().matches(regex)){
-        count++;
+        if(!entry.isDirectory()){
+          count++;
+        }
       }
     }
     return count;

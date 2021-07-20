@@ -238,7 +238,7 @@ public class ValidatorTest {
 
   /* CSIP17 */
   @Test
-  public void validateCSIP17_1() {
+  public void validateCSIP17_2() {
     LOGGER.info("Validate CSIP17 - IP_18000_CSIP17_2");
     Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIP17/IP_18000_CSIP17_2.json");
     Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIP17/IP_18000_CSIP17_2.zip");
@@ -317,27 +317,27 @@ public class ValidatorTest {
   }
 
   /* CSIP21 */
-  @Test
-  public void validateCSIP21_1() {
-    LOGGER.info("Validate CSIP21 - IP_18000_CSIP21_1");
-    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIP21/IP_18000_CSIP21_1.json");
-    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIP21/IP_18000_CSIP21_1.zip");
-
-    EARKSIPValidator earksipValidator = new EARKSIPValidator(earksipPath,reportPath);
-    earksipValidator.validate();
-    LOGGER.info("Done validate CSIP21 - IP_18000_CSIP21_1");
-  }
-
-  @Test
-  public void validateCSIP21_2() {
-    LOGGER.info("Validate CSIP21 - IP_18000_CSIP21_2");
-    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIP21/IP_18000_CSIP21_2.json");
-    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIP21/IP_18000_CSIP21_2.zip");
-
-    EARKSIPValidator earksipValidator = new EARKSIPValidator(earksipPath,reportPath);
-    earksipValidator.validate();
-    LOGGER.info("Done validate CSIP21 - IP_18000_CSIP21_2");
-  }
+//  @Test
+//  public void validateCSIP21_1() {
+//    LOGGER.info("Validate CSIP21 - IP_18000_CSIP21_1");
+//    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIP21/IP_18000_CSIP21_1.json");
+//    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIP21/IP_18000_CSIP21_1.zip");
+//
+//    EARKSIPValidator earksipValidator = new EARKSIPValidator(earksipPath,reportPath);
+//    earksipValidator.validate();
+//    LOGGER.info("Done validate CSIP21 - IP_18000_CSIP21_1");
+//  }
+//
+//  @Test
+//  public void validateCSIP21_2() {
+//    LOGGER.info("Validate CSIP21 - IP_18000_CSIP21_2");
+//    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIP21/IP_18000_CSIP21_2.json");
+//    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIP21/IP_18000_CSIP21_2.zip");
+//
+//    EARKSIPValidator earksipValidator = new EARKSIPValidator(earksipPath,reportPath);
+//    earksipValidator.validate();
+//    LOGGER.info("Done validate CSIP21 - IP_18000_CSIP21_2");
+//  }
 
   /* CSIP23 */
   @Test

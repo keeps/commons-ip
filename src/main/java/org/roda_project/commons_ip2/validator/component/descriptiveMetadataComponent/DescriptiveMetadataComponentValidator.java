@@ -329,6 +329,7 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
         for(MdSecType mdSec: dmdSec){
             MdSecType.MdRef mdRef = mdSec.getMdRef();
             String xlinkType = mdRef.getType();
+            System.out.println(xlinkType);
             if(xlinkType == null) {
                 return false;
             }
@@ -349,16 +350,22 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
     private boolean validateCSIP24() throws IOException {
         for(MdSecType mdSec: dmdSec){
             MdSecType.MdRef mdRef = mdSec.getMdRef();
-            String href = URLDecoder.decode(mdRef.getHref(),"UTF-8");
-            if(isZipFileFlag()){
-                if(!zipManager.checkPathExists(getEARKSIPpath(),href)){
-                    return false;
+            String href = mdRef.getHref();
+            if(href != null){
+                String hrefDecoded = URLDecoder.decode(href,"UTF-8");
+                if(isZipFileFlag()){
+                    if(!zipManager.checkPathExists(getEARKSIPpath(),hrefDecoded)){
+                        return false;
+                    }
+                }
+                else{
+                    if(!folderManager.checkPathExists(getEARKSIPpath(),Paths.get(hrefDecoded))){
+                        return false;
+                    }
                 }
             }
             else{
-                if(!folderManager.checkPathExists(getEARKSIPpath(),Paths.get(href))){
-                    return false;
-                }
+                return false;
             }
         }
         return true;
@@ -410,17 +417,18 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
     private boolean validateCSIP27() throws IOException {
         for(MdSecType mdSec: dmdSec){
             MdSecType.MdRef mdRef = mdSec.getMdRef();
-            String href = URLDecoder.decode(mdRef.getHref(),"UTF-8");
+            String href = mdRef.getHref();
             if(href != null){
+                String hrefDecoded = URLDecoder.decode(mdRef.getHref(),"UTF-8");
                 Long size = mdRef.getSIZE();
                 if(size != null){
                     if(isZipFileFlag()){
-                        if(!zipManager.verifySize(getEARKSIPpath(),href,size)){
+                        if(!zipManager.verifySize(getEARKSIPpath(),hrefDecoded,size)){
                             return false;
                         }
                     }
                     else{
-                        if(!folderManager.verifySize(getEARKSIPpath(),href,size)){
+                        if(!folderManager.verifySize(getEARKSIPpath(),hrefDecoded,size)){
                             return false;
                         }
                     }
@@ -466,8 +474,9 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
                 if (tmp.contains(checksumType)) {
                     String checksum = mdRef.getCHECKSUM();
                     if (checksum != null) {
-                        String file = URLDecoder.decode(mdRef.getHref(), "UTF-8");
-                        if (file != null) {
+                        String href = mdRef.getHref();
+                        if (href != null) {
+                            String file = URLDecoder.decode(href, "UTF-8");
                             if (isZipFileFlag()) {
                                 if (!zipManager.verifyChecksum(getEARKSIPpath(), file, checksumType, checksum)) {
                                     return false;
