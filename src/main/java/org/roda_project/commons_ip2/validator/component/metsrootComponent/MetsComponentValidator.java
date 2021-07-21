@@ -5,6 +5,7 @@ import org.roda_project.commons_ip2.validator.common.ControlledVocabularyParser;
 import org.roda_project.commons_ip2.validator.component.ValidatorComponentImpl;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
+import org.roda_project.commons_ip2.validator.reporter.ReporterMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,56 +48,74 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   @Override
   public boolean validate() throws IOException {
     boolean valid = true;
-
+    ReporterMessage csip;
     /* CSIP1 Validation */
     validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID);
-    if(!validateCSIP1()){
-      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID,"mets/@OBJID attribute is mandatory!");
+    csip = validateCSIP1();
+    if(csip.isValid()){
+      validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID,csip.getMessage());
+
+    }
+    else{
+      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID,csip.getMessage());
       valid = false;
     }
-    else validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID,"");
 
     /* CSIP2 Validation */
     validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP2_ID);
-    if(!validateCSIP2()){
-      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP2_ID,"The mets/@TYPE attribute MUST be used to declare the category of the content held in the package.");
+    csip = validateCSIP2();
+    if(csip.isValid()){
+      validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP2_ID,csip.getMessage());
+
+    }
+    else{
+      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP2_ID,csip.getMessage());
       valid = false;
     }
-    else validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP2_ID,"");
 
     /* CSIP3 Validation */
     validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP3_ID);
-    if(!validateCSIP3()){
-      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP3_ID, "When the mets/@TYPE attribute has the value “OTHER” the " +
-                      "mets/@csip:OTHERTYPE attribute MUST be used to declare the content " +
-                      "category of the package/representation");
+    csip = validateCSIP3();
+    if(csip.isValid()){
+      validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP3_ID,csip.getMessage());
+    }
+    else{
+      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP3_ID, csip.getMessage());
       valid = false;
     }
-    else validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP3_ID,"");
 
     /* CSIP4 Validation */
     validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP4_ID);
-    if(!validateCSIP4()){
-      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP4_ID, "Should include @csip:CONTENTINFORMATIONTYPE!");
+    csip = validateCSIP4();
+    if(csip.isValid()){
+      validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP4_ID,csip.getMessage());
+    }
+    else{
+      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP4_ID, csip.getMessage());
       valid = false;
     }
-    else validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP4_ID,"");
 
     /* CSIP5 Validation */
     validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP5_ID);
-    if(!validateCSIP5()){
-      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP5_ID, "Should include @csip:OTHERCONTENTINFORMATIONTYPE!");
+    csip = validateCSIP5();
+    if(csip.isValid()){
+      validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP5_ID,csip.getMessage());
+    }
+    else{
+      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP5_ID, csip.getMessage());
       valid = false;
     }
-    else validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP5_ID,"");
 
     /* CSIP6 Validation */
     validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP6_ID);
-    if(!validateCSIP6()){
-      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP6_ID, "Must include The URL of the METS profile that the information package conforms with.");
+    csip = validateCSIP6();
+    if(csip.isValid()){
+      validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP6_ID,csip.getMessage());
+    }
+    else{
+      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP6_ID, csip.getMessage());
       valid = false;
     }
-    else validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP6_ID,"");
     observer.notifyFinishModule(MODULE_NAME);
     cleanValidationObjects();
     return valid;
@@ -110,11 +129,12 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   * representation level METS document this value records the name/ID of the
   * representation, i.e. the name of the top-level representation folder.
   */
-  private boolean validateCSIP1() throws IOException {
-    boolean valid = true;
+  private ReporterMessage validateCSIP1() throws IOException {
+    ReporterMessage message = new ReporterMessage();
     String OBJID = mets.getOBJID();
     if(OBJID == null){
-      valid = false;
+      message.setMessage("mets/@OBJID attribute is mandatory, can't be null!");
+      message.setValid(false);
     }
     else {
         String rootFolderName;
@@ -125,10 +145,11 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
           rootFolderName = folderManager.getSipRootFolderName(path);
         }
         if(!rootFolderName.equals(OBJID)){
-          valid = false;
+          message.setMessage("The folder containing the METS.xml file must have the same name mets/@OBJID!");
+          message.setValid(false);
         }
     }
-    return valid;
+    return message;
   }
 
   /*
@@ -142,18 +163,20 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   * additional content information type specifications are produced.See also:
   * Content Category
   */
-  private boolean validateCSIP2() {
-    boolean valid = true;
+  private ReporterMessage validateCSIP2() {
+    ReporterMessage message = new ReporterMessage();
     String TYPE = mets.getTYPE();
     if(TYPE == null || TYPE.equals("")){
-      valid = false;
+      message.setValid(false);
+      message.setMessage("mets/@TYPE attribute is mandatory, can't be null!");
     }
     else {
       if(!contentCategory.contains(TYPE)){
-        valid = false;
+        message.setValid(false);
+        message.setMessage("Value of mets/@TYPE is not valid; see Content category for valid mets/@TYPE");
       }
     }
-    return valid;
+    return message;
   }
 
   /*
@@ -162,16 +185,18 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   * mets/@csip:OTHERTYPE attribute MUST be used to declare the content
   * category of the package/representation.See also: Content Category
   */
-  private boolean validateCSIP3() {
-    boolean valid = true;
+  private ReporterMessage validateCSIP3() {
+    ReporterMessage message = new ReporterMessage();
     String TYPE = mets.getTYPE();
     String otherType = mets.getOTHERTYPE();
     if(TYPE != null){
-      if(TYPE.equalsIgnoreCase("Other") && otherType == null){
-        valid = false;
+      if(TYPE.equalsIgnoreCase("Other") && (otherType == null || otherType.equals(""))){
+        message.setValid(false);
+        message.setMessage("When mets/@type have the value OTHER  mets/@csip:OTHERTYPE can't be null or empty");
       }
+
     }
-    return valid;
+    return message;
   }
 
   /*
@@ -183,15 +208,16 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   * Content Information Type Specifications are developed.See also: Content
   * information type specification
   */
-  private boolean validateCSIP4() {
-    boolean valid = true;
+  private ReporterMessage validateCSIP4() {
+    ReporterMessage message = new ReporterMessage();
     String ContentInformationType = mets.getCONTENTINFORMATIONTYPE();
     if(ContentInformationType != null){
       if(!contentInformationType.contains(ContentInformationType)){
-        valid = false;
+        message.setValid(false);
+        message.setMessage("Value of mets/@csip:CONTENTINFORMATIONTYPE is not valid; see Content information type specification for valid mets/@@csip:CONTENTINFORMATIONTYPE");
       }
     }
-    return valid;
+    return message;
   }
 
   /*
@@ -200,29 +226,31 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   * “OTHER” the mets/@csip:OTHERCONTENTINFORMATIONTYPE must state
   * the content information type.
   */
-  private boolean validateCSIP5(){
-    boolean valid = true;
+  private ReporterMessage validateCSIP5(){
+    ReporterMessage message = new ReporterMessage();
     String ContentInformationType = mets.getCONTENTINFORMATIONTYPE();
     String OtherContentInformationType = mets.getOTHERCONTENTINFORMATIONTYPE();
     if(ContentInformationType != null){
-      if(ContentInformationType.equalsIgnoreCase("Other") && OtherContentInformationType == null){
-        valid = false;
+      if(ContentInformationType.equalsIgnoreCase("Other") && (OtherContentInformationType == null || OtherContentInformationType.equals(""))){
+        message.setValid(false);
+        message.setMessage("When mets/@csip:CONTENTINFORMATIONTYPE have the value OTHER  mets/@csip:OTHERCONTENTINFORMATIONTYPE can't be null or empty");
       }
     }
-    return valid;
+    return message;
   }
 
   /*
   * mets/@PROFILE
   * The URL of the METS profile that the information package conforms with.
   */
-  private boolean validateCSIP6(){
-    boolean valid = true;
+  private ReporterMessage validateCSIP6(){
+    ReporterMessage message = new ReporterMessage();
     String profile = mets.getPROFILE();
     if(profile == null || profile.equals("")){
-      valid = false;
+      message.setValid(false);
+      message.setMessage("mets/@PROFILE attribute is mandatory, can't be null or empty!");
     }
-    return valid;
+    return message;
   }
 
   /*
