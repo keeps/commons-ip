@@ -1,11 +1,10 @@
 package org.roda_project.commons_ip2.validator.component.metsrootComponent;
 
-import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
 import org.roda_project.commons_ip2.validator.common.ControlledVocabularyParser;
 import org.roda_project.commons_ip2.validator.component.ValidatorComponentImpl;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
-import org.roda_project.commons_ip2.validator.reporter.ReporterMessage;
+import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +47,7 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   @Override
   public boolean validate() throws IOException {
     boolean valid = true;
-    ReporterMessage csip;
+    ReporterDetails csip;
     /* CSIP1 Validation */
     validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID);
     csip = validateCSIP1();
@@ -129,12 +128,12 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   * representation level METS document this value records the name/ID of the
   * representation, i.e. the name of the top-level representation folder.
   */
-  private ReporterMessage validateCSIP1() throws IOException {
-    ReporterMessage message = new ReporterMessage();
+  private ReporterDetails validateCSIP1() throws IOException {
+    ReporterDetails details = new ReporterDetails();
     String OBJID = mets.getOBJID();
     if(OBJID == null){
-      message.setMessage("mets/@OBJID attribute is mandatory, can't be null!");
-      message.setValid(false);
+      details.setMessage("mets/@OBJID attribute is mandatory, can't be null!");
+      details.setValid(false);
     }
     else {
         String rootFolderName;
@@ -145,11 +144,11 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
           rootFolderName = folderManager.getSipRootFolderName(path);
         }
         if(!rootFolderName.equals(OBJID)){
-          message.setMessage("The folder containing the METS.xml file must have the same name mets/@OBJID!");
-          message.setValid(false);
+          details.setMessage("The folder containing the METS.xml file must have the same name mets/@OBJID!");
+          details.setValid(false);
         }
     }
-    return message;
+    return details;
   }
 
   /*
@@ -163,20 +162,20 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   * additional content information type specifications are produced.See also:
   * Content Category
   */
-  private ReporterMessage validateCSIP2() {
-    ReporterMessage message = new ReporterMessage();
+  private ReporterDetails validateCSIP2() {
+    ReporterDetails details = new ReporterDetails();
     String TYPE = mets.getTYPE();
     if(TYPE == null || TYPE.equals("")){
-      message.setValid(false);
-      message.setMessage("mets/@TYPE attribute is mandatory, can't be null!");
+      details.setValid(false);
+      details.setMessage("mets/@TYPE attribute is mandatory, can't be null!");
     }
     else {
       if(!contentCategory.contains(TYPE)){
-        message.setValid(false);
-        message.setMessage("Value of mets/@TYPE is not valid; see Content category for valid mets/@TYPE");
+        details.setValid(false);
+        details.setMessage("Value of mets/@TYPE is not valid; see Content category for valid mets/@TYPE");
       }
     }
-    return message;
+    return details;
   }
 
   /*
@@ -185,18 +184,18 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   * mets/@csip:OTHERTYPE attribute MUST be used to declare the content
   * category of the package/representation.See also: Content Category
   */
-  private ReporterMessage validateCSIP3() {
-    ReporterMessage message = new ReporterMessage();
+  private ReporterDetails validateCSIP3() {
+    ReporterDetails details = new ReporterDetails();
     String TYPE = mets.getTYPE();
     String otherType = mets.getOTHERTYPE();
     if(TYPE != null){
       if(TYPE.equalsIgnoreCase("Other") && (otherType == null || otherType.equals(""))){
-        message.setValid(false);
-        message.setMessage("When mets/@type have the value OTHER  mets/@csip:OTHERTYPE can't be null or empty");
+        details.setValid(false);
+        details.setMessage("When mets/@type have the value OTHER  mets/@csip:OTHERTYPE can't be null or empty");
       }
 
     }
-    return message;
+    return details;
   }
 
   /*
@@ -208,16 +207,16 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   * Content Information Type Specifications are developed.See also: Content
   * information type specification
   */
-  private ReporterMessage validateCSIP4() {
-    ReporterMessage message = new ReporterMessage();
+  private ReporterDetails validateCSIP4() {
+    ReporterDetails details = new ReporterDetails();
     String ContentInformationType = mets.getCONTENTINFORMATIONTYPE();
     if(ContentInformationType != null){
       if(!contentInformationType.contains(ContentInformationType)){
-        message.setValid(false);
-        message.setMessage("Value of mets/@csip:CONTENTINFORMATIONTYPE is not valid; see Content information type specification for valid mets/@@csip:CONTENTINFORMATIONTYPE");
+        details.setValid(false);
+        details.setMessage("Value of mets/@csip:CONTENTINFORMATIONTYPE is not valid; see Content information type specification for valid mets/@@csip:CONTENTINFORMATIONTYPE");
       }
     }
-    return message;
+    return details;
   }
 
   /*
@@ -226,31 +225,31 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   * “OTHER” the mets/@csip:OTHERCONTENTINFORMATIONTYPE must state
   * the content information type.
   */
-  private ReporterMessage validateCSIP5(){
-    ReporterMessage message = new ReporterMessage();
+  private ReporterDetails validateCSIP5(){
+    ReporterDetails details = new ReporterDetails();
     String ContentInformationType = mets.getCONTENTINFORMATIONTYPE();
     String OtherContentInformationType = mets.getOTHERCONTENTINFORMATIONTYPE();
     if(ContentInformationType != null){
       if(ContentInformationType.equalsIgnoreCase("Other") && (OtherContentInformationType == null || OtherContentInformationType.equals(""))){
-        message.setValid(false);
-        message.setMessage("When mets/@csip:CONTENTINFORMATIONTYPE have the value OTHER  mets/@csip:OTHERCONTENTINFORMATIONTYPE can't be null or empty");
+        details.setValid(false);
+        details.setMessage("When mets/@csip:CONTENTINFORMATIONTYPE have the value OTHER  mets/@csip:OTHERCONTENTINFORMATIONTYPE can't be null or empty");
       }
     }
-    return message;
+    return details;
   }
 
   /*
   * mets/@PROFILE
   * The URL of the METS profile that the information package conforms with.
   */
-  private ReporterMessage validateCSIP6(){
-    ReporterMessage message = new ReporterMessage();
+  private ReporterDetails validateCSIP6(){
+    ReporterDetails details = new ReporterDetails();
     String profile = mets.getPROFILE();
     if(profile == null || profile.equals("")){
-      message.setValid(false);
-      message.setMessage("mets/@PROFILE attribute is mandatory, can't be null or empty!");
+      details.setValid(false);
+      details.setMessage("mets/@PROFILE attribute is mandatory, can't be null or empty!");
     }
-    return message;
+    return details;
   }
 
   /*

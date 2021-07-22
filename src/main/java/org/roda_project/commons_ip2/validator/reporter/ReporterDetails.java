@@ -3,16 +3,16 @@ package org.roda_project.commons_ip2.validator.reporter;
 /**
  * @author João Gomes <jgomes@keep.pt>
  */
-public class ReporterMessage {
+public class ReporterDetails {
     private String message;
     private boolean valid;
 
-    public ReporterMessage() {
+    public ReporterDetails() {
         this.message = "";
         this.valid = true;
     }
 
-    public ReporterMessage(String message, boolean valid) {
+    public ReporterDetails(String message, boolean valid) {
         this.message = message;
         this.valid = valid;
     }
