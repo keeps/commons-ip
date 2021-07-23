@@ -5,6 +5,7 @@ import org.roda_project.commons_ip2.mets_v1_12.beans.MetsType;
 import org.roda_project.commons_ip2.validator.component.ValidatorComponentImpl;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
+import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.utils.CHECKSUMTYPE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     @Override
     public boolean validate() throws IOException {
         boolean valid = true;
-
+        ReporterDetails csip;
         /* CSIP58 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID);
         if(validateCSIP58()){
@@ -39,11 +40,12 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
 
             /* CSIP59 */
             validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP59_ID);
-            if(validateCSIP59()){
-                validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP59_ID,"");
+            csip = validateCSIP59();
+            if(csip.isValid()){
+                validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP59_ID,csip.getMessage());
             }
             else{
-                validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP59_ID, "");
+                validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP59_ID, csip.getMessage());
                 valid = false;
             }
 
@@ -92,8 +94,9 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
 
             /* CSIP65 */
             validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP65_ID);
-            if(validateCSIP65()){
-                validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP65_ID,"");
+            csip = validateCSIP65();
+            if(csip.isValid()){
+                validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP65_ID,csip.getMessage());
             }
 
             /* CSIP66 */
@@ -103,8 +106,9 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
 
                 /* CSIP67 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP67_ID);
-                if(validateCSIP67()){
-                    validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP67_ID,"");
+                csip = validateCSIP67();
+                if(csip.isValid()){
+                    validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP67_ID,csip.getMessage());
                 }
 
                 /* CSIP68 */
@@ -115,40 +119,42 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
 
                 /* CSIP69 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP69_ID);
-                if(validateCSIP69()){
+                csip = validateCSIP69();
+                if(csip.isValid()){
                     validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP69_ID,"");
                 }
 
                 /* CSIP70 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP70_ID);
-                if(validateCSIP70()){
-                    validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP70_ID,"");
+                csip = validateCSIP70();
+                if(csip.isValid()){
+                    validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP70_ID,csip.getMessage());
                 }
 
                 /* CSIP71 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP71_ID);
-                boolean csip71 = false;
                 try {
-                    csip71 = validateCSIP71();
+                    csip = validateCSIP71();
                 } catch (NoSuchAlgorithmException e) {
-                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP71_ID,"");
+                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP71_ID,csip.getMessage());
                     valid = false;
                 }
-                if(csip71){
-                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP71_ID,"");
+                if(csip.isValid()){
+                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP71_ID,csip.getMessage());
                 }
                 else{
-                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP71_ID,"");
+                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP71_ID,csip.getMessage());
                     valid = false;
                 }
 
                 /* CSIP72 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID);
-                if(validateCSIP72()){
-                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID,"");
+                csip = validateCSIP72();
+                if(csip.isValid()){
+                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID,csip.getMessage());
                 }
                 else{
-                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID,"");
+                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID,csip.getMessage());
                     valid = false;
                 }
 
@@ -172,26 +178,30 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
 
                 /* CSIP76 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP76_ID);
-                if(validateCSIP76()){
-                    validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP76_ID,"");
+                csip = validateCSIP76();
+                if(csip.isValid()){
+                    validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP76_ID,csip.getMessage());
                 }
 
                 /* CSIP77 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP77_ID);
-                if(validateCSIP77()){
-                    validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP77_ID,"");
+                csip = validateCSIP77();
+                if(csip.isValid()){
+                    validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP77_ID,csip.getMessage());
                 }
 
                 /* CSIP78 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP78_ID);
-                if(validateCSIP78()){
-                    validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP78_ID,"");
+                csip = validateCSIP78();
+                if(csip.isValid()){
+                    validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP78_ID,csip.getMessage());
                 }
 
                 /* CSIP79 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP79_ID);
-                if(validateCSIP79()){
-                    validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP79_ID,"");
+                csip = validateCSIP79();
+                if(csip.isValid()){
+                    validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP79_ID,csip.getMessage());
                 }
 
             }
@@ -226,8 +236,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     * An xml:id identifier for the file section used for internal package references.
     * It must be unique within the package.
     */
-    private boolean validateCSIP59() {
-        boolean valid = true;
+    private ReporterDetails validateCSIP59() {
         MetsType.FileSec fileSec = mets.getFileSec();
         if(fileSec != null){
             String id = fileSec.getID();
@@ -236,15 +245,15 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
                     addId(id);
                 }
                 else{
-                    valid = false;
-
+                    return new ReporterDetails("mets/fileSec/@ID must be unique in the package!",false);
                 }
             }
             else{
-                valid = false;
+                return new ReporterDetails("mets/fileSec/@ID can't be null!",false);
             }
         }
-        return valid;
+        return new ReporterDetails();
+
     }
 
     /*
@@ -330,8 +339,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     * An xml:id identifier for the file group used for internal package references.
     * It must be unique within the package.
     */
-    private boolean validateCSIP65() {
-        boolean valid = true;
+    private ReporterDetails validateCSIP65() {
         MetsType.FileSec fileSec = mets.getFileSec();
         List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
         for(MetsType.FileSec.FileGrp grp : fileGrp){
@@ -341,14 +349,14 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
                     addId(id);
                 }
                 else{
-                    valid = false;
+                    return new ReporterDetails("mets/fileSec/fileGrp/@ID must be unique in the package!",false);
                 }
             }
             else{
-                valid = false;
+                return new ReporterDetails(" mets/fileSec/fileGrp/@ID can't be null!",false);
             }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*
@@ -375,7 +383,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     * mets/fileSec/fileGrp/file/@ID
     * A unique xml:id identifier for this file across the package.
     */
-    private boolean validateCSIP67() {
+    private ReporterDetails validateCSIP67() {
         boolean valid = true;
         MetsType.FileSec fileSec = mets.getFileSec();
         List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
@@ -388,20 +396,15 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
                         addId(id);
                     }
                     else{
-                        valid = false;
-                        break;
+                        return new ReporterDetails("mets/fileSec/fileGrp/file/@ID must be unique in the package!",false);
                     }
                 }
                 else{
-                    valid = false;
-                    break;
+                    return new ReporterDetails("mets/fileSec/fileGrp/file/@ID can't be null!",false);
                 }
             }
-            if(!valid){
-                break;
-            }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*
@@ -416,8 +419,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     * mets/fileSec/fileGrp/file/@SIZE
     * Size of the referenced file in bytes.
     */
-    private boolean validateCSIP69() throws IOException {
-        boolean valid = true;
+    private ReporterDetails validateCSIP69() throws IOException {
         MetsType.FileSec fileSec = mets.getFileSec();
         List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
         for(MetsType.FileSec.FileGrp grp : fileGrp){
@@ -432,72 +434,58 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
                             if(size != null){
                                 if(isZipFileFlag()){
                                     if(!zipManager.verifySize(getEARKSIPpath(),href,size)){
-                                        valid = false;
-                                        break;
+                                        return new ReporterDetails("mets/fileSec/fileGrp/file/@SIZE and size of file isn't equal!",false);
                                     }
                                 }
                                 else{
                                     if(!folderManager.verifySize(getEARKSIPpath(),href,size)){
-                                        valid = false;
-                                        break;
+                                        return new ReporterDetails("mets/fileSec/fileGrp/file/@SIZE and size of file isn't equal!",false);
                                     }
                                 }
                             }
                             else{
-                                valid = false;
-                                break;
+                                return new ReporterDetails("mets/fileSec/fileGrp/file/@SIZE can't be null!",false);
                             }
                         }
                         else{
-                            valid = false;
-                            break;
+                            return new ReporterDetails("mets/fileSec/fileGrp/file/flocat/@href can't be null!",false);
                         }
                     }
                     else{
-                        valid = false;
-                        break;
+                        return new ReporterDetails("cannot have more than one mets/fileSec/fileGrp/file/flocat!",false);
                     }
                 }
                 else{
-                    valid = false;
+                    return new ReporterDetails("mets/fileSec/fileGrp/file/flocat can't be null!",false);
                 }
             }
-            if(!valid){
-                break;
-            }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*
     * mets/fileSec/fileGrp/file/@CREATED
     * Creation date of the referenced file.
     */
-    private boolean validateCSIP70() {
-        boolean valid = true;
+    private ReporterDetails validateCSIP70() {
         MetsType.FileSec fileSec = mets.getFileSec();
         List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
         for(MetsType.FileSec.FileGrp grp : fileGrp){
             List<FileType> files = grp.getFile();
             for(FileType file : files){
                 if(file.getCREATED() == null){
-                    valid = false;
-                    break;
+                    return new ReporterDetails("mets/fileSec/fileGrp/file/@CREATED can't be null",false);
                 }
             }
-            if(!valid){
-                break;
-            }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*
     * mets/fileSec/fileGrp/file/@CHECKSUM
     * The checksum of the referenced file.
     */
-    private boolean validateCSIP71() throws IOException, NoSuchAlgorithmException {
-        boolean valid = true;
+    private ReporterDetails validateCSIP71() throws IOException, NoSuchAlgorithmException {
         List<String> tmp = new ArrayList<>();
         for(CHECKSUMTYPE check: CHECKSUMTYPE.values()){
             tmp.add(check.toString());
@@ -509,37 +497,33 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
             for(FileType file : files){
                 String checksumType = file.getCHECKSUMTYPE();
                 if(checksumType == null){
-                    valid = false;
-                    break;
+                    return new ReporterDetails("mets/fileSec/fileGrp/file/@CHECKSUMTYPE can't be null ",false);
                 }
                 else{
                     if(!tmp.contains(checksumType)){
-                        valid = false;
-                        break;
+                        return new ReporterDetails("mets/fileSec/fileGrp/file/@CHECKSUMTYPE see valid values at METS schema",false);
                     }
                     else{
                         String checksum = file.getCHECKSUM();
                         if(checksum == null){
-                            valid = false;
-                            break;
+                            return new ReporterDetails("mets/fileSec/fileGrp/file/@CHECKSUM can't be null",false);
                         }
                         else{
-                            String filePath = URLDecoder.decode(file.getFLocat().get(0).getHref(),"UTF-8");
-                            if(filePath == null){
-                                valid = false;
-                                break;
+                            String href = file.getFLocat().get(0).getHref();
+
+                            if(href == null){
+                                return new ReporterDetails("mets/fileSec/fileGrp/file/flocat/href can't be null",false);
                             }
                             else{
+                                String filePath = URLDecoder.decode(href,"UTF-8");
                                 if(isZipFileFlag()){
                                     if(!zipManager.verifyChecksum(getEARKSIPpath(),filePath,checksumType,checksum)){
-                                        valid = false;
-                                        break;
+                                        return new ReporterDetails("mets/fileSec/fileGrp/file/@CHECKSUM and file checksum isn't equal",false);
                                     }
                                 }
                                 else{
                                     if(!folderManager.verifyChecksum(getEARKSIPpath(),filePath,checksumType,checksum)){
-                                        valid = false;
-                                        break;
+                                        return new ReporterDetails("mets/fileSec/fileGrp/file/@CHECKSUM and file checksum isn't equal",false);
                                     }
                                 }
 
@@ -548,11 +532,8 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
                     }
                 }
             }
-            if(!valid){
-                break;
-            }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*
@@ -560,7 +541,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     * The type of checksum following the value list present in the METS-standard
     * which has been used for calculating the checksum for the referenced file.
     */
-    private boolean validateCSIP72() {
+    private ReporterDetails validateCSIP72() {
         boolean valid = true;
         List<String> tmp = new ArrayList<>();
         for(CHECKSUMTYPE check: CHECKSUMTYPE.values()){
@@ -573,21 +554,16 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
             for (FileType file : files) {
                 String checksumType = file.getCHECKSUMTYPE();
                 if(checksumType == null){
-                    valid = false;
-                    break;
+                    return new ReporterDetails("mets/fileSec/fileGrp/file/@CHECKSUMTYPE can't be null!",false);
                 }
                 else{
                     if(!tmp.contains(checksumType)){
-                        valid = false;
-                        break;
+                        return new ReporterDetails("mets/fileSec/fileGrp/file/@CHECKSUMTYPE see valid values at METS schema",false);
                     }
                 }
             }
-            if(!valid){
-                break;
-            }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*
@@ -624,8 +600,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     * All references to files should be made using the XLink href attribute and the
     * file protocol using the relative location of the file.
     */
-    private boolean validateCSIP76() {
-        boolean valid = true;
+    private ReporterDetails validateCSIP76() {
         MetsType.FileSec fileSec = mets.getFileSec();
         List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
         for(MetsType.FileSec.FileGrp grp : fileGrp) {
@@ -633,21 +608,16 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
             for (FileType file : files) {
                 List<FileType.FLocat> flocat = file.getFLocat();
                 if(flocat == null){
-                    valid = false;
-                    break;
+                    return new ReporterDetails("mets/fileSec/fileGrp/file/FLocat can't be null!",false);
                 }
                 else{
                     if(flocat.size() != 1){
-                        valid = false;
-                        break;
+                        return new ReporterDetails("mets/fileSec/fileGrp/file/FLocat cannot have more than one",false);
                     }
                 }
             }
-            if(!valid){
-                break;
-            }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*
@@ -655,8 +625,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     * The locator type is always used with the value “URL” from the vocabulary in
     * the attribute.
     */
-    private boolean validateCSIP77() {
-        boolean valid = true;
+    private ReporterDetails validateCSIP77() {
         MetsType.FileSec fileSec = mets.getFileSec();
         List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
         for(MetsType.FileSec.FileGrp grp : fileGrp) {
@@ -664,32 +633,24 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
             for (FileType file : files) {
                 List<FileType.FLocat> flocat = file.getFLocat();
                 if(flocat == null){
-                    valid = false;
+                    return new ReporterDetails("mets/fileSec/fileGrp/file/FLocat can't be null!",false);
                 }
                 else{
                     for(FileType.FLocat floc : flocat){
                         String loctype = floc.getLOCTYPE();
                         if(loctype == null){
-                            valid = false;
-                            break;
+                            return new ReporterDetails("mets/fileSec/fileGrp/file/FLocat[@LOCTYPE=’URL’] can't be null!",false);
                         }
                         else{
                             if(!loctype.equals("URL")){
-                                valid = false;
-                                break;
+                                return new ReporterDetails("mets/fileSec/fileGrp/file/FLocat[@LOCTYPE=’URL’] value has to be URL",false);
                             }
                         }
                     }
                 }
-                if(!valid){
-                    break;
-                }
-            }
-            if(!valid){
-                break;
             }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*
@@ -697,8 +658,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     * Attribute used with the value “simple”. Value list is maintained by the xlink
     * standard.
     */
-    private boolean validateCSIP78() {
-        boolean valid = true;
+    private ReporterDetails validateCSIP78() {
         MetsType.FileSec fileSec = mets.getFileSec();
         List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
         for(MetsType.FileSec.FileGrp grp : fileGrp) {
@@ -706,32 +666,24 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
             for (FileType file : files) {
                 List<FileType.FLocat> flocat = file.getFLocat();
                 if(flocat == null){
-                    valid = false;
+                    return new ReporterDetails("mets/fileSec/fileGrp/file/FLocat can't be null!",false);
                 }
                 else{
                     for(FileType.FLocat floc : flocat){
                         String type = floc.getType();
                         if(type == null){
-                            valid = false;
-                            break;
+                            return new ReporterDetails("mets/fileSec/fileGrp/file/FLocat[@xlink:type=’simple’] can't be null!",false);
                         }
                         else{
                             if(!type.equals("simple")){
-                                valid = false;
-                                break;
+                                return new ReporterDetails("mets/fileSec/fileGrp/file/FLocat[@xlink:type=’simple’] value has to be simple",false);
                             }
                         }
                     }
                 }
-                if(!valid){
-                    break;
-                }
-            }
-            if(!valid){
-                break;
             }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*
@@ -739,8 +691,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     * The actual location of the resource. We recommend recording a URL type
     * filepath within this attribute.
     */
-    private boolean validateCSIP79() throws IOException {
-        boolean valid = true;
+    private ReporterDetails validateCSIP79() throws IOException {
         MetsType.FileSec fileSec = mets.getFileSec();
         List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
         for(MetsType.FileSec.FileGrp grp : fileGrp) {
@@ -748,34 +699,32 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
             for (FileType file : files) {
                 List<FileType.FLocat> flocat = file.getFLocat();
                 if(flocat == null){
-                    valid = false;
+                    return new ReporterDetails("mets/fileSec/fileGrp/file/FLocat can't be null!",false);
                 }
                 else{
                     for(FileType.FLocat floc : flocat){
-                        String href = URLDecoder.decode(floc.getHref(),"UTF-8");
-                        if(isZipFileFlag()){
-                            if(!zipManager.checkPathExists(getEARKSIPpath(),href)){
-                                valid = false;
-                                break;
+                        String href = floc.getHref();
+                        if(href != null){
+                            String filepath = URLDecoder.decode(href,"UTF-8");
+                            if(isZipFileFlag()){
+                                if(!zipManager.checkPathExists(getEARKSIPpath(),filepath)){
+                                    return new ReporterDetails("mets/fileSec/fileGrp/file/@xlink:href file does not exist or invalid path!",false);
+                                }
+                            }
+                            else{
+                                if(!folderManager.checkPathExists(getEARKSIPpath(), Paths.get(filepath))){
+                                    return new ReporterDetails("mets/fileSec/fileGrp/file/@xlink:href file does not exist or invalid path",false);
+                                }
                             }
                         }
                         else{
-                            if(!folderManager.checkPathExists(getEARKSIPpath(), Paths.get(href))){
-                                valid = false;
-                                break;
-                            }
+                            return new ReporterDetails("mets/fileSec/fileGrp/file/FLocat/@xlink:href can't be null!",false);
                         }
                     }
                 }
-                if(!valid){
-                    break;
-                }
-            }
-            if(!valid){
-                break;
             }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
 

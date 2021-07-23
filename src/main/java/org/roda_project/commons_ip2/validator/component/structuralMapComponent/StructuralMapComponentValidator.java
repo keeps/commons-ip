@@ -5,6 +5,7 @@ import org.roda_project.commons_ip2.mets_v1_12.beans.StructMapType;
 import org.roda_project.commons_ip2.validator.component.ValidatorComponentImpl;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
+import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,94 +28,104 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     @Override
     public boolean validate() throws IOException {
         boolean valid = true;
+        ReporterDetails csip;
         /* CSIP80 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID);
-        if(validateCSIP80()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID,"");
+        csip = validateCSIP80();
+        if(csip.isValid()){
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID,csip.getMessage());
         }
         else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID,"");
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID,csip.getMessage());
             valid = false;
         }
 
         /* CSIP81 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID);
-        if(validateCSIP81()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID,"");
+        csip = validateCSIP81();
+        if(csip.isValid()){
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID,csip.getMessage());
         }
         else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID,"");
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID,csip.getMessage());
             valid = false;
         }
 
 
         /* CSIP82 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID);
-        if(validateCSIP82()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID,"");
+        csip = validateCSIP82();
+        if(csip.isValid()){
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID,csip.getMessage());
         }
         else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID,"");
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID,csip.getMessage());
             valid = false;
         }
 
         /* CSIP83 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID);
-        if(validateCSIP83()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID,"");
+        csip = validateCSIP83();
+        if(csip.isValid()){
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID,csip.getMessage());
         }
         else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID,"");
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID,csip.getMessage());
             valid = false;
         }
 
         /* CSIP84 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID);
-        if(validateCSIP84()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID,"");
+        csip = validateCSIP84();
+        if(csip.isValid()){
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID,csip.getMessage());
         }
         else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID,"");
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID,csip.getMessage());
             valid = false;
         }
 
         /* CSIP85 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID);
-        if(validateCSIP85()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,"");
+        csip = validateCSIP85();
+        if(csip.isValid()){
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,csip.getMessage());
         }
         else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,"");
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,csip.getMessage());
             valid = false;
         }
 
         /* CSIP86 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID);
-        if(validateCSIP86()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,"");
+        csip = validateCSIP86();
+        if(csip.isValid()){
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,csip.getMessage());
         }
         else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,"");
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,csip.getMessage());
             valid = false;
         }
 
         /* CSIP88 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID);
-        if(validateCSIP88()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,"");
+        csip = validateCSIP88();
+        if(csip.isValid()){
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,csip.getMessage());
         }
         else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,"");
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,csip.getMessage());
             valid = false;
         }
 
         /* CSIP89 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID);
-        if(validateCSIP89()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID,"");
+        csip = validateCSIP89();
+        if(csip.isValid()){
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID,csip.getMessage());
         }
         else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID,"");
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID,csip.getMessage());
             valid = false;
         }
 
@@ -144,11 +155,12 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
 
         /* CSIP94 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID);
-        if(validateCSIP94()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID,"");
+        csip = validateCSIP94();
+        if(csip.isValid()){
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID,csip.getMessage());
         }
         else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID,"");
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID,csip.getMessage());
             valid = false;
         }
 
@@ -178,11 +190,12 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
 
         /* CSIP98 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID);
-        if(validateCSIP98()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID,"");
+        csip = validateCSIP98();
+        if(csip.isValid()){
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID,csip.getMessage());
         }
         else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID,"");
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID,csip.getMessage());
             valid = false;
         }
 
@@ -206,11 +219,12 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
 
         /* CSIP102 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID);
-        if(validateCSIP102()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID,"");
+        csip = validateCSIP102();
+        if(csip.isValid()){
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID,csip.getMessage());
         }
         else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID,"");
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID,csip.getMessage());
             valid = false;
         }
 
@@ -240,11 +254,12 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
 
         /* CSIP106 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID);
-        if(validateCSIP106()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID,"");
+        csip = validateCSIP106();
+        if(csip.isValid()){
+            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID,csip.getMessage());
         }
         else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID,"");
+            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID,csip.getMessage());
             valid = false;
         }
 
@@ -296,18 +311,17 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * their own additional custom structural maps as separate <structMap>
     * sections.
     */
-    private boolean validateCSIP80() {
-        boolean valid = true;
+    private ReporterDetails validateCSIP80() {
         List<StructMapType> structMap = mets.getStructMap();
         if(structMap == null){
-            valid = false;
+            return new ReporterDetails("mets/structMap can't be null!",false);
         }
         else{
             if(structMap.size() == 0){
-                valid = false;
+                return new ReporterDetails("You have to describe mets/structMap",false);
             }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*
@@ -315,25 +329,22 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
      * The mets/structMap/@TYPE attribute must take the value “PHYSICAL” from the vocabulary.
      * See also: Structural map typing
     */
-    private boolean validateCSIP81() {
-        boolean valid = true;
+    private ReporterDetails validateCSIP81() {
         List<StructMapType> structMap = mets.getStructMap();
         if(structMap != null){
             for(StructMapType struct : structMap){
                 String type = struct.getTYPE();
                 if(type == null){
-                    valid = false;
-                    break;
+                    return new ReporterDetails("mets/structMap[@TYPE='PHYSICAL'] can't be null!",false);
                 }
                 else {
                     if (!type.equals("PHYSICAL")) {
-                        valid = false;
-                         break;
+                        return new ReporterDetails("",false);
                     }
                 }
             }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*
@@ -341,45 +352,39 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * The mets/structMap/@LABEL attribute value is set to “CSIP” from the vocabulary.
     * See also: Structural map label
     */
-    private boolean validateCSIP82() {
-        boolean valid = true;
+    private ReporterDetails validateCSIP82() {
         List<StructMapType> structMap = mets.getStructMap();
         if(structMap != null){
             for(StructMapType struct : structMap){
                 String label = struct.getLABEL();
                 if(label == null){
-                    valid = false;
-                    break;
+                   return new ReporterDetails("",false);
                 }
                 else{
                     if(!label.equals("CSIP")){
-                        valid = false;
-                        break;
+                        return new ReporterDetails("",false);
                     }
                 }
             }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*
     * mets/structMap[@LABEL='CSIP']/@ID
     * An xml:id identifier for the structural description (structMap) used for internal package references. It must be unique within the package.
     */
-    private boolean validateCSIP83() {
-        boolean valid = true;
+    private ReporterDetails validateCSIP83() {
         List<StructMapType> structMap = mets.getStructMap();
         if(structMap != null){
             for(StructMapType struct : structMap){
                 String id = struct.getID();
                 if(id == null){
-                    valid = false;
-                    break;
+                   return new ReporterDetails("mets/structMap[@LABEL='CSIP']/@ID can't be null!",false);
                 }
                 else{
                     if(checkId(id)){
-                        valid = false;
-                        break;
+                        return new ReporterDetails("mets/structMap[@LABEL='CSIP']/@ID must be unique in the package",false);
                     }
                     else{
                         addId(id);
@@ -387,34 +392,31 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                 }
             }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*
     * mets/structMap[@LABEL='CSIP']/div
     * The structural map comprises a single division.
     */
-    private boolean validateCSIP84() {
-        boolean valid = true;
+    private ReporterDetails validateCSIP84() {
         List<StructMapType> structMap = mets.getStructMap();
         if(structMap != null){
             for(StructMapType struct : structMap){
                 DivType div = struct.getDiv();
                 if(div == null){
-                    valid = false;
-                    break;
+                   return new ReporterDetails("",false);
                 }
             }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*
     * mets/structMap[@LABEL='CSIP']/div/@ID
     * Mandatory, xml:id identifier must be unique within the package.
     */
-    private boolean validateCSIP85() {
-        boolean valid = true;
+    private ReporterDetails validateCSIP85() {
         List<StructMapType> structMap = mets.getStructMap();
         if(structMap != null){
             for(StructMapType struct : structMap){
@@ -422,13 +424,11 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                 if(div != null){
                     String id = div.getID();
                     if(id == null){
-                        valid = false;
-                        break;
+                        return new ReporterDetails("mets/structMap[@LABEL='CSIP']/div/@ID can't be null!",false);
                     }
                     else{
                         if(checkId(id)){
-                            valid = false;
-                            break;
+                            return new ReporterDetails("mets/structMap[@LABEL='CSIP']/div/@ID must be unique in the package!",false);
                         }
                         else{
                             addId(id);
@@ -437,15 +437,14 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                 }
             }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*
     * mets/structMap[@LABEL='CSIP']/div/@LABEL
     * The package’s top-level structural division <div> element’s @LABEL attribute value must be identical to the package identifier, i.e. the same value as the mets/@OBJID attribute.
     */
-    private boolean validateCSIP86() {
-        boolean valid = true;
+    private ReporterDetails validateCSIP86() {
         List<StructMapType> structMap = mets.getStructMap();
         String objid = mets.getOBJID();
         if(structMap != null){
@@ -454,13 +453,12 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                 if(div != null){
                     String label = div.getLABEL();
                     if(!label.equals(objid)){
-                        valid = false;
-                        break;
+                        return new ReporterDetails("",false);
                     }
                 }
             }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*
@@ -468,7 +466,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * The metadata referenced in the administrative and/or descriptive metadata section is described in the structural map with one sub division.
     * When the transfer consists of only administrative and/or descriptive metadata this is the only sub division that occurs.
     */
-    private boolean validateCSIP88() {
+    private ReporterDetails validateCSIP88() {
         boolean valid = true;
         boolean found = false;
         List<StructMapType> structMap = mets.getStructMap();
@@ -490,9 +488,9 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
             }
         }
         if(!found){
-            valid = false;
+          return new ReporterDetails("",false);
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*
@@ -500,8 +498,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@ID
     * Mandatory, xml:id identifier must be unique within the package.
     */
-    private boolean validateCSIP89() {
-        boolean valid = true;
+    private ReporterDetails validateCSIP89() {
         List<StructMapType> structMap = mets.getStructMap();
         if(structMap != null){
             for(StructMapType struct : structMap){
@@ -512,13 +509,11 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                         if(d.getLABEL().equals("Metadata")){
                             String id = d.getID();
                             if(id == null){
-                                valid = false;
-                                break;
+                               return new ReporterDetails("mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@ID can't be null!",false);
                             }
                             else{
                                 if(checkId(id)){
-                                    valid = false;
-                                    break;
+                                    return new ReporterDetails("mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@ID must be unique!",false);
                                 }
                                 else{
                                     addId(id);
@@ -526,13 +521,10 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                             }
                         }
                     }
-                    if(!valid){
-                        break;
-                    }
                 }
             }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*
@@ -574,8 +566,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation']/@ID
     * Mandatory, xml:id identifier must be unique within the package.
     */
-    private boolean validateCSIP94() {
-        boolean valid = true;
+    private ReporterDetails validateCSIP94() {
         List<StructMapType> structMap = mets.getStructMap();
         if(structMap != null){
             for(StructMapType struct : structMap){
@@ -586,13 +577,11 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                         if(d.getLABEL().equals("Documentation")){
                             String id = d.getID();
                             if(id == null){
-                                valid = false;
-                                break;
+                                return new ReporterDetails("mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation']/@ID can't be null",false);
                             }
                             else{
                                 if(checkId(id)){
-                                    valid = false;
-                                    break;
+                                    return new ReporterDetails("mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation']/@ID must be unique in the package",false);
                                 }
                                 else{
                                     addId(id);
@@ -600,13 +589,10 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                             }
                         }
                     }
-                    if(!valid){
-                        break;
-                    }
                 }
             }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*
@@ -647,8 +633,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']/@ID
     * Mandatory, xml:id identifier must be unique within the package.
     */
-    private boolean validateCSIP98() {
-        boolean valid = true;
+    private ReporterDetails validateCSIP98() {
         List<StructMapType> structMap = mets.getStructMap();
         if(structMap != null){
             for(StructMapType struct : structMap){
@@ -659,13 +644,11 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                         if(d.getLABEL().equals("Schemas")){
                             String id = d.getID();
                             if(id == null){
-                                valid = false;
-                                break;
+                              return new ReporterDetails("mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']/@ID can't be null!",false);
                             }
                             else{
                                 if(checkId(id)){
-                                    valid = false;
-                                    break;
+                                    return new ReporterDetails("mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']/@ID must be unique in the package!",false);
                                 }
                                 else{
                                     addId(id);
@@ -673,13 +656,10 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                             }
                         }
                     }
-                    if(!valid){
-                        break;
-                    }
                 }
             }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*
@@ -712,8 +692,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations']/@ID
     * Mandatory, xml:id identifier must be unique within the package.
     */
-    private boolean validateCSIP102() {
-        boolean valid = true;
+    private ReporterDetails validateCSIP102() {
         List<StructMapType> structMap = mets.getStructMap();
         if(structMap != null){
             for(StructMapType struct : structMap){
@@ -724,13 +703,11 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                         if(d.getLABEL().equals("Representations")){
                             String id = d.getID();
                             if(id == null){
-                                valid = false;
-                                break;
+                               return new ReporterDetails("mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations']/@ID can't be null",false);
                             }
                             else{
                                 if(checkId(id)){
-                                    valid = false;
-                                    break;
+                                    return new ReporterDetails("mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations']/@ID must be unique in the package",false);
                                 }
                                 else{
                                     addId(id);
@@ -738,13 +715,10 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                             }
                         }
                     }
-                    if(!valid){
-                        break;
-                    }
                 }
             }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*
@@ -787,8 +761,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * mets/structMap[@LABEL='CSIP']/div/div/@ID
     * Mandatory, xml:id identifier must be unique within the package.
     */
-    private boolean validateCSIP106() {
-        boolean valid = true;
+    private ReporterDetails validateCSIP106() {
         List<StructMapType> structMap = mets.getStructMap();
         List<String> validation = new ArrayList<>();
         validation.add("Metadata");
@@ -804,13 +777,11 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                         if(!validation.contains(d.getLABEL())){
                             String id = d.getID();
                             if(id == null){
-                                valid = false;
-                                break;
+                                return new ReporterDetails("mets/structMap[@LABEL='CSIP']/div/div/@ID can't be null!",false);
                             }
                             else{
                                 if(checkId(id)){
-                                    valid = false;
-                                    break;
+                                    return new ReporterDetails("mets/structMap[@LABEL='CSIP']/div/div/@ID must be unique in the package",false);
                                 }
                                 else{
                                     addId(id);
@@ -818,13 +789,10 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                             }
                         }
                     }
-                    if(!valid){
-                        break;
-                    }
                 }
             }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*

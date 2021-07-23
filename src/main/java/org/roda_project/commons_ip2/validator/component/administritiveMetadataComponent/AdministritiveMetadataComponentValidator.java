@@ -8,6 +8,7 @@ import org.roda_project.commons_ip2.validator.common.ControlledVocabularyParser;
 import org.roda_project.commons_ip2.validator.component.ValidatorComponentImpl;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
+import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.utils.CHECKSUMTYPE;
 import org.roda_project.commons_ip2.validator.utils.MetadataType;
 import org.slf4j.Logger;
@@ -50,6 +51,7 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         boolean valid = true;
 
         amdSec = mets.getAmdSec();
+        ReporterDetails csip;
 
         /* CSIP31 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP31_ID);
@@ -58,36 +60,40 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
 
             /* CSIP32 */
             validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP32_ID);
-            if(validateCSIP32()){
-                validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP32_ID,"");
+            csip = validateCSIP32();
+            if(csip.isValid()){
+                validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP32_ID,csip.getMessage());
 
                 /* CSIP33 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP33_ID);
-                if(validateCSIP33()){
-                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP33_ID,"");
+                csip = validateCSIP33();
+                if(csip.isValid()){
+                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP33_ID,csip.getMessage());
                 }
                 else{
-                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP33_ID, "");
+                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP33_ID, csip.getMessage());
                     valid = false;
                 }
 
                 /* CSIP34 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP34_ID);
-                if(validateCSIP34()){
-                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP34_ID,"");
+                csip = validateCSIP34();
+                if(csip.isValid()){
+                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP34_ID,csip.getMessage());
                 }
                 else{
-                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP34_ID, "");
+                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP34_ID, csip.getMessage());
                     valid = false;
                 }
 
                 /* CSIP35 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP35_ID);
-                if(validateCSIP35()){
-                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP35_ID,"");
+                csip = validateCSIP35();
+                if(csip.isValid()){
+                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP35_ID,csip.getMessage());
                 }
                 else{
-                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP35_ID, "");
+                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP35_ID, csip.getMessage());
                     valid = false;
                 }
 
@@ -355,18 +361,15 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     * PREMIS metadata. The use if PREMIS in METS is following the
     * recommendations in the 2017 version of PREMIS in METS Guidelines.
     */
-    private boolean validateCSIP32() {
-        boolean valid = true;
-
+    private ReporterDetails validateCSIP32() {
         // Falta contar e comparar quantos premis metadata tem o sip
-
         for(AmdSecType a: amdSec){
             List<MdSecType> digiprov = a.getDigiprovMD();
             if(digiprov == null){
-                valid = false;
+                return new ReporterDetails("",false);
             }
         }
-        return valid;
+        return new ReporterDetails();
     }
 
     /*
@@ -375,7 +378,7 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     * mets/amdSec/digiprovMD used for internal package references. It must
     * be unique within the package.
     */
-    private boolean validateCSIP33() {
+    private ReporterDetails validateCSIP33() {
         for(AmdSecType a: amdSec) {
             List<MdSecType> digiprov = a.getDigiprovMD();
             for(MdSecType md: digiprov){
@@ -383,11 +386,11 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
                    addId(md.getID());
                }
                else{
-                   return false;
+                   return new ReporterDetails("mets/amdSec/digiprovMD/@ID isn't unique in the package",false);
                }
             }
         }
-        return true;
+        return new ReporterDetails();
     }
 
     /*
@@ -395,17 +398,17 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     * Indicates the status of the package using a fixed vocabulary.See also:
     * dmdSec status
     */
-    private boolean validateCSIP34() {
+    private ReporterDetails validateCSIP34() {
         for(AmdSecType a: amdSec){
             List<MdSecType> digiprov = a.getDigiprovMD();
             for(MdSecType md: digiprov){
                 String status = md.getSTATUS();
                 if(!dmdSecStatus.contains(status)){
-                    return false;
+                    return new ReporterDetails("mets/amdSec/digiprovMD/@STATUS see valid values dmdSec status",false);
                 }
             }
         }
-        return true;
+        return new ReporterDetails();
 
     }
 
@@ -413,24 +416,26 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     * mets/amdSec/digiprovMD/mdRef
     * Reference to the digital provenance metadata file stored in the “metadata”
     * section of the IP.
+    * Está mal
     */
-    private boolean validateCSIP35(){
+    private ReporterDetails validateCSIP35(){
         for(AmdSecType a: amdSec){
             List<MdSecType> digiprov = a.getDigiprovMD();
             for(MdSecType md: digiprov){
                 MdSecType.MdRef mdRef = md.getMdRef();
                 if(mdRef == null){
-                    return false;
+                    return new ReporterDetails("",false);
                 }
             }
         }
-        return true;
+        return new ReporterDetails();
     }
 
     /*
     * mets/amdSec/digiprovMD/mdRef[@LOCTYPE=’URL’]
     * The locator type is always used with the value “URL” from the vocabulary in
     * the attribute.
+    * Ver este tb
     */
     private boolean validateCSIP36() {
         boolean valid = true;
