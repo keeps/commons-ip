@@ -14,7 +14,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -185,5 +187,39 @@ public class FolderManager {
             }
         }
         return count;
+    }
+
+    public HashMap<String,InputStream> getSubMets(Path path) throws FileNotFoundException {
+        HashMap<String,InputStream> subMets = new HashMap<>();
+        File[] folder = path.toFile().listFiles();
+        if(folder != null){
+            for(File f: folder) {
+                if (f.getName().equals("representations")) {
+                    if(f.isDirectory()){
+                        File[] representations = f.listFiles();
+                        if(representations != null){
+                            if(representations.length != 0){
+                                for(File representation : representations){
+                                    if(representation.isDirectory()){
+                                        File[] rep = representation.listFiles();
+                                        if(rep != null){
+                                            if(rep.length != 0){
+                                                for(File r : rep){
+                                                    if(r.getName().equals("METS.xml")){
+                                                        InputStream subStream = new FileInputStream(r.getPath());
+                                                        subMets.put(r.getPath(),subStream);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return subMets;
     }
 }

@@ -1,28 +1,60 @@
 package org.roda_project.commons_ip2.validator.reporter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author João Gomes <jgomes@keep.pt>
  */
 public class ReporterDetails {
-    private String message;
+    private String detail;
     private boolean valid;
+    private List<String> issues;
+    private String specification;
+    private boolean skipped;
+    private int errors;
 
     public ReporterDetails() {
-        this.message = "";
+        this.detail = "";
         this.valid = true;
+        this.issues = new ArrayList<>();
+        this.errors = 0;
     }
 
     public ReporterDetails(String message, boolean valid) {
-        this.message = message;
+        this.detail = message;
         this.valid = valid;
+        this.issues = new ArrayList<>();
     }
 
-    public String getMessage() {
-        return message;
+    public ReporterDetails(String specification,String issue,boolean valid,boolean skipped){
+        this.detail = "";
+        this.valid = valid;
+        this.issues = new ArrayList<>();
+        this.issues.add(issue);
+        this.errors = 0;
+        this.specification = specification;
+        this.skipped = skipped;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String message) {
+        this.detail = message;
+    }
+
+    public String getSpecification() {
+        return specification;
+    }
+
+    public void setSpecification(String specification) {
+        this.specification = specification;
+    }
+
+    public List<String> getIssues(){
+        return this.issues;
     }
 
     public boolean isValid() {
@@ -32,4 +64,25 @@ public class ReporterDetails {
     public void setValid(boolean valid) {
         this.valid = valid;
     }
+
+    public boolean isSkipped() {
+        return skipped;
+    }
+
+    public void setSkipped(boolean skipped) {
+        this.skipped = skipped;
+    }
+
+    public void addIssue(String issue){
+        issues.add(issue);
+    }
+
+    public int getErrors(){
+        return this.errors;
+    }
+    public void countErrors(){
+        this.errors++;
+    }
+
+
 }

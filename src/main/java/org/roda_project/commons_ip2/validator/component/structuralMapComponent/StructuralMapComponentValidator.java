@@ -26,280 +26,628 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     }
 
     @Override
-    public boolean validate() throws IOException {
-        boolean valid = true;
+    public void validate() throws IOException {
         ReporterDetails csip;
+
         /* CSIP80 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID);
         csip = validateCSIP80();
+        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+        addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID,csip);
+
         if(csip.isValid()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID,csip.getMessage());
+
+            /* CSIP81 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID);
+            csip = validateCSIP81();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID,csip);
+
+            /* CSIP82 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID);
+            csip = validateCSIP82();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID,csip);
+
+            /* CSIP83 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID);
+            csip = validateCSIP83();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID,csip);
+
+            /* CSIP84 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID);
+            csip = validateCSIP84();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID,csip);
+
+            /* CSIP85 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID);
+            csip = validateCSIP85();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,csip);
+
+            /* CSIP86 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID);
+            csip = validateCSIP86();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,csip);
+
+            /* CSIP88 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID);
+            csip = validateCSIP88();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,csip);
+
+            /* CSIP89 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID);
+            csip = validateCSIP89();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID,csip);
+
+            /* CSIP90 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP90_ID);
+            // csip = validateCSIP90();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP90_ID,csip);
+
+            /* CSIP91 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP91_ID);
+            // csip = validateCSIP91();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP91_ID,csip);
+
+            /* CSIP92 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP92_ID);
+            // csip = validateCSIP92();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP92_ID,csip);
+
+            /* CSIP93 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP93_ID);
+            //csip = validateCSIP93();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP93_ID,csip);
+
+            /* CSIP94 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID);
+            csip = validateCSIP94();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID,csip);
+
+            /* CSIP95 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP95_ID);
+            //csip = validateCSIP95();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP95_ID,csip);
+
+            /* CSIP96 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP96_ID);
+            //csip = validateCSIP96();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP96_ID,csip);
+
+            /* CSIP97 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP116_ID);
+            //csip = validateCSIP116();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP116_ID,csip);
+
+            /* CSIP97 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP97_ID);
+            //csip = validateCSIP97();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP97_ID,csip);
+
+            /* CSIP98 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID);
+            csip = validateCSIP98();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID,csip);
+
+            /* CSIP99 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP99_ID);
+            //csip = validateCSIP99();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP99_ID,csip);
+
+            /* CSIP100 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP100_ID);
+            //csip = validateCSIP100();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP100_ID,csip);
+
+            /* CSIP118 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP118_ID);
+            //csip = validateCSIP118();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP118_ID,csip);
+
+            /* CSIP101 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP101_ID);
+            //csip = validateCSIP101();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP101_ID,csip);
+
+            /* CSIP102 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID);
+            csip = validateCSIP102();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID,csip);
+
+            /* CSIP103 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP103_ID);
+            //csip = validateCSIP103();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP103_ID,csip);
+
+            /* CSIP104 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP104_ID);
+            //csip = validateCSIP104();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP104_ID,csip);
+
+            /* CSIP119 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP119_ID);
+            //csip = validateCSIP119();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP119_ID,csip);
+
+            /* CSIP105 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP105_ID);
+            //csip = validateCSIP105();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP105_ID,csip);
+
+            /* CSIP106 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID);
+            csip = validateCSIP106();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID,csip);
+
+            /* CSIP107 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP107_ID);
+            //csip = validateCSIP107();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP107_ID,csip);
+
+            /* CSIP108 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP108_ID);
+            //csip = validateCSIP108();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP108_ID,csip);
+
+            /* CSIP109 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP109_ID);
+            //csip = validateCSIP109();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP109_ID,csip);
+
+            /* CSIP110 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP110_ID);
+            //csip = validateCSIP110();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP110_ID,csip);
+
+            /* CSIP111 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP111_ID);
+            //csip = validateCSIP111();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP111_ID,csip);
+
+            /* CSIP112 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP112_ID);
+            //csip = validateCSIP112();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP112_ID,csip);
         }
         else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID,csip.getMessage());
-            valid = false;
-        }
+            String message = "SKIPPED because mets/structMap doesn't exist! (" + metsName + ")";
 
-        /* CSIP81 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID);
-        csip = validateCSIP81();
-        if(csip.isValid()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID,csip.getMessage());
-        }
-        else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID,csip.getMessage());
-            valid = false;
-        }
+            /* CSIP81 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID,csip);
 
+            /* CSIP82 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID,csip);
 
-        /* CSIP82 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID);
-        csip = validateCSIP82();
-        if(csip.isValid()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID,csip.getMessage());
-        }
-        else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID,csip.getMessage());
-            valid = false;
-        }
+            /* CSIP83 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID,csip);
 
-        /* CSIP83 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID);
-        csip = validateCSIP83();
-        if(csip.isValid()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID,csip.getMessage());
-        }
-        else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID,csip.getMessage());
-            valid = false;
-        }
+            /* CSIP84 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID,csip);
 
-        /* CSIP84 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID);
-        csip = validateCSIP84();
-        if(csip.isValid()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID,csip.getMessage());
-        }
-        else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID,csip.getMessage());
-            valid = false;
-        }
+            /* CSIP85 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,csip);
 
-        /* CSIP85 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID);
-        csip = validateCSIP85();
-        if(csip.isValid()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,csip.getMessage());
-        }
-        else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,csip.getMessage());
-            valid = false;
-        }
+            /* CSIP86 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,csip);
 
-        /* CSIP86 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID);
-        csip = validateCSIP86();
-        if(csip.isValid()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,csip.getMessage());
-        }
-        else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,csip.getMessage());
-            valid = false;
-        }
+            /* CSIP88 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,csip);
 
-        /* CSIP88 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID);
-        csip = validateCSIP88();
-        if(csip.isValid()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,csip.getMessage());
-        }
-        else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,csip.getMessage());
-            valid = false;
-        }
+            /* CSIP89 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID,csip);
 
-        /* CSIP89 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID);
-        csip = validateCSIP89();
-        if(csip.isValid()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID,csip.getMessage());
-        }
-        else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID,csip.getMessage());
-            valid = false;
-        }
+            /* CSIP90 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP90_ID,csip);
 
-        /* CSIP90 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP90_ID);
-        if(validateCSIP90()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP90_ID,"");
-        }
+            /* CSIP91 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP91_ID,csip);
 
-        /* CSIP91 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP91_ID);
-        if(validateCSIP91()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP91_ID,"");
-        }
+            /* CSIP92 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP92_ID,csip);
 
-        /* CSIP92 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP92_ID);
-        if(validateCSIP92()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP92_ID,"");
-        }
+            /* CSIP93 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP93_ID,csip);
 
-        /* CSIP93 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP93_ID);
-        if(validateCSIP93()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP93_ID,"");
-        }
+            /* CSIP94 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID,csip);
 
-        /* CSIP94 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID);
-        csip = validateCSIP94();
-        if(csip.isValid()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID,csip.getMessage());
-        }
-        else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID,csip.getMessage());
-            valid = false;
-        }
+            /* CSIP95 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP95_ID,csip);
 
-        /* CSIP95 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP95_ID);
-        if(validateCSIP95()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP95_ID,"");
-        }
+            /* CSIP96 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP96_ID,csip);
 
-        /* CSIP96 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP96_ID);
-        if(validateCSIP96()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP96_ID,"");
-        }
+            /* CSIP116 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID,csip);
 
-        /* CSIP116 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP116_ID);
-        if(validateCSIP116()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP116_ID,"");
-        }
+            /* CSIP97 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP97_ID,csip);
 
-        /* CSIP97 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP97_ID);
-        if(validateCSIP97()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP97_ID,"");
-        }
+            /* CSIP98 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID,csip);
 
-        /* CSIP98 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID);
-        csip = validateCSIP98();
-        if(csip.isValid()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID,csip.getMessage());
-        }
-        else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID,csip.getMessage());
-            valid = false;
-        }
+            /* CSIP99 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP99_ID,csip);
 
-        /* CSIP99 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP99_ID);
-        if(validateCSIP99()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP99_ID,"");
-        }
+            /* CSIP100 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP100_ID,csip);
 
-        /* CSIP100 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP100_ID);
-        if(validateCSIP100()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP100_ID,"");
-        }
+            /* CSIP118 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP118_ID,csip);
 
-        /* CSIP101 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP101_ID);
-        if(validateCSIP101()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP101_ID,"");
-        }
+            /* CSIP101 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP101_ID,csip);
 
-        /* CSIP102 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID);
-        csip = validateCSIP102();
-        if(csip.isValid()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID,csip.getMessage());
-        }
-        else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID,csip.getMessage());
-            valid = false;
-        }
+            /* CSIP102 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID,csip);
 
-        /* CSIP100 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP103_ID);
-        if(validateCSIP103()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP103_ID,"");
-        }
+            /* CSIP103 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP103_ID,csip);
 
-        /* CSIP104 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP104_ID);
-        if(validateCSIP104()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP104_ID,"");
-        }
+            /* CSIP104 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP104_ID,csip);
 
-        /* CSIP119 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP119_ID);
-        if(validateCSIP119()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP119_ID,"");
-        }
+            /* CSIP119 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP119_ID,csip);
 
-        /* CSIP105 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP105_ID);
-        if(validateCSIP105()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP105_ID,"");
-        }
+            /* CSIP105 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP105_ID,csip);
 
-        /* CSIP106 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID);
-        csip = validateCSIP106();
-        if(csip.isValid()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID,csip.getMessage());
-        }
-        else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID,csip.getMessage());
-            valid = false;
-        }
+            /* CSIP106 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID,csip);
 
-        /* CSIP107 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP107_ID);
-        if(validateCSIP107()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP107_ID,"");
-        }
+            /* CSIP107 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP107_ID,csip);
 
-        /* CSIP108 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP108_ID);
-        if(validateCSIP108()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP108_ID,"");
-        }
+            /* CSIP108 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP108_ID,csip);
 
-        /* CSIP109 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP109_ID);
-        if(validateCSIP109()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP109_ID,"");
-        }
+            /* CSIP109 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP109_ID,csip);
 
-        /* CSIP110 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP110_ID);
-        if(validateCSIP110()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP110_ID,"");
-        }
+            /* CSIP110 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP110_ID,csip);
 
-        /* CSIP111 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP111_ID);
-        if(validateCSIP111()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP111_ID,"");
-        }
+            /* CSIP111 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP111_ID,csip);
 
-        /* CSIP112 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP112_ID);
-        if(validateCSIP112()){
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP112_ID,"");
+            /* CSIP112 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP112_ID,csip);
         }
-
-        return valid;
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID);
+//        csip = validateCSIP80();
+//        if(csip.isValid()){
+//            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID,csip.getMessage());
+//        }
+//        else{
+//            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID,csip.getMessage());
+//            valid = false;
+//        }
+//
+//        /* CSIP81 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID);
+//        csip = validateCSIP81();
+//        if(csip.isValid()){
+//            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID,csip.getMessage());
+//        }
+//        else{
+//            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID,csip.getMessage());
+//            valid = false;
+//        }
+//
+//
+//        /* CSIP82 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID);
+//        csip = validateCSIP82();
+//        if(csip.isValid()){
+//            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID,csip.getMessage());
+//        }
+//        else{
+//            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID,csip.getMessage());
+//            valid = false;
+//        }
+//
+//        /* CSIP83 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID);
+//        csip = validateCSIP83();
+//        if(csip.isValid()){
+//            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID,csip.getMessage());
+//        }
+//        else{
+//            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID,csip.getMessage());
+//            valid = false;
+//        }
+//
+//        /* CSIP84 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID);
+//        csip = validateCSIP84();
+//        if(csip.isValid()){
+//            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID,csip.getMessage());
+//        }
+//        else{
+//            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID,csip.getMessage());
+//            valid = false;
+//        }
+//
+//        /* CSIP85 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID);
+//        csip = validateCSIP85();
+//        if(csip.isValid()){
+//            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,csip.getMessage());
+//        }
+//        else{
+//            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,csip.getMessage());
+//            valid = false;
+//        }
+//
+//        /* CSIP86 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID);
+//        csip = validateCSIP86();
+//        if(csip.isValid()){
+//            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,csip.getMessage());
+//        }
+//        else{
+//            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,csip.getMessage());
+//            valid = false;
+//        }
+//
+//        /* CSIP88 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID);
+//        csip = validateCSIP88();
+//        if(csip.isValid()){
+//            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,csip.getMessage());
+//        }
+//        else{
+//            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,csip.getMessage());
+//            valid = false;
+//        }
+//
+//        /* CSIP89 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID);
+//        csip = validateCSIP89();
+//        if(csip.isValid()){
+//            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID,csip.getMessage());
+//        }
+//        else{
+//            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID,csip.getMessage());
+//            valid = false;
+//        }
+//
+//        /* CSIP90 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP90_ID);
+//        if(validateCSIP90()){
+//            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP90_ID,"");
+//        }
+//
+//        /* CSIP91 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP91_ID);
+//        if(validateCSIP91()){
+//            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP91_ID,"");
+//        }
+//
+//        /* CSIP92 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP92_ID);
+//        if(validateCSIP92()){
+//            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP92_ID,"");
+//        }
+//
+//        /* CSIP93 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP93_ID);
+//        if(validateCSIP93()){
+//            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP93_ID,"");
+//        }
+//
+//        /* CSIP94 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID);
+//        csip = validateCSIP94();
+//        if(csip.isValid()){
+//            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID,csip.getMessage());
+//        }
+//        else{
+//            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID,csip.getMessage());
+//            valid = false;
+//        }
+//
+//        /* CSIP95 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP95_ID);
+//        if(validateCSIP95()){
+//            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP95_ID,"");
+//        }
+//
+//        /* CSIP96 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP96_ID);
+//        if(validateCSIP96()){
+//            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP96_ID,"");
+//        }
+//
+//        /* CSIP116 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP116_ID);
+//        if(validateCSIP116()){
+//            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP116_ID,"");
+//        }
+//
+//        /* CSIP97 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP97_ID);
+//        if(validateCSIP97()){
+//            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP97_ID,"");
+//        }
+//
+//        /* CSIP98 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID);
+//        csip = validateCSIP98();
+//        if(csip.isValid()){
+//            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID,csip.getMessage());
+//        }
+//        else{
+//            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID,csip.getMessage());
+//            valid = false;
+//        }
+//
+//        /* CSIP99 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP99_ID);
+//        if(validateCSIP99()){
+//            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP99_ID,"");
+//        }
+//
+//        /* CSIP100 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP100_ID);
+//        if(validateCSIP100()){
+//            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP100_ID,"");
+//        }
+//
+//        /* CSIP101 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP101_ID);
+//        if(validateCSIP101()){
+//            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP101_ID,"");
+//        }
+//
+//        /* CSIP102 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID);
+//        csip = validateCSIP102();
+//        if(csip.isValid()){
+//            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID,csip.getMessage());
+//        }
+//        else{
+//            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID,csip.getMessage());
+//            valid = false;
+//        }
+//
+//        /* CSIP100 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP103_ID);
+//        if(validateCSIP103()){
+//            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP103_ID,"");
+//        }
+//
+//        /* CSIP104 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP104_ID);
+//        if(validateCSIP104()){
+//            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP104_ID,"");
+//        }
+//
+//        /* CSIP119 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP119_ID);
+//        if(validateCSIP119()){
+//            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP119_ID,"");
+//        }
+//
+//        /* CSIP105 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP105_ID);
+//        if(validateCSIP105()){
+//            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP105_ID,"");
+//        }
+//
+//        /* CSIP106 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID);
+//        csip = validateCSIP106();
+//        if(csip.isValid()){
+//            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID,csip.getMessage());
+//        }
+//        else{
+//            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID,csip.getMessage());
+//            valid = false;
+//        }
+//
+//        /* CSIP107 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP107_ID);
+//        if(validateCSIP107()){
+//            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP107_ID,"");
+//        }
+//
+//        /* CSIP108 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP108_ID);
+//        if(validateCSIP108()){
+//            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP108_ID,"");
+//        }
+//
+//        /* CSIP109 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP109_ID);
+//        if(validateCSIP109()){
+//            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP109_ID,"");
+//        }
+//
+//        /* CSIP110 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP110_ID);
+//        if(validateCSIP110()){
+//            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP110_ID,"");
+//        }
+//
+//        /* CSIP111 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP111_ID);
+//        if(validateCSIP111()){
+//            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP111_ID,"");
+//        }
+//
+//        /* CSIP112 */
+//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP112_ID);
+//        if(validateCSIP112()){
+//            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP112_ID,"");
+//        }
     }
 
     /*

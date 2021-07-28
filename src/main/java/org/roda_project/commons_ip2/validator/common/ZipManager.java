@@ -8,9 +8,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -201,5 +205,25 @@ public class ZipManager {
       }
     }
     return count;
+  }
+
+  public HashMap<String,InputStream> getSubMets(Path path) throws IOException {
+    HashMap<String,InputStream> subMets = new HashMap<>();
+    ZipFile zipFile = new ZipFile(path.toFile());
+    Enumeration entries = zipFile.entries();
+
+    while (entries.hasMoreElements()){
+      ZipEntry entry = (ZipEntry) entries.nextElement();
+      if(entry.getName().matches(".*/METS.xml")){
+        if(entry.getName().split("/").length > 2){
+          InputStream stream = zipFile.getInputStream(entry);
+          if(stream != null){
+            subMets.put(entry.getName(),stream);
+          }
+        }
+      }
+    }
+
+    return subMets;
   }
 }

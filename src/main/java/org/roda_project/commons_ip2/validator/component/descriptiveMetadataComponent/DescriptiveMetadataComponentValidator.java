@@ -46,163 +46,193 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
     }
 
     @Override
-    public boolean validate() throws IOException {
-        boolean valid = true;
+    public void validate() throws IOException {
+
         dmdSec = mets.getDmdSec();
         ReporterDetails csip;
+
         /* CSIP17 */
         validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP17_ID);
         csip = validateCSIP17();
+        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+        addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP17_ID,csip);
+
         if(csip.isValid()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP17_ID,csip.getMessage());
 
             /* CSIP18 */
             validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP18_ID);
             csip = validateCSIP18();
-            if(csip.isValid()){
-                validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP18_ID,csip.getMessage());
-            }
-            else{
-                validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP18_ID, csip.getMessage());
-                valid = false;
-            }
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP18_ID,csip);
 
             /* CSIP19 */
             validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP19_ID);
             csip = validateCSIP19();
-            if(csip.isValid()){
-                validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP18_ID,csip.getMessage());
-            }
-            else {
-                validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP19_ID, csip.getMessage());
-                valid = false;
-            }
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP19_ID,csip);
 
             /* CSIP20 */
             validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP20_ID);
             csip = validateCSIP20();
-            if(csip.isValid()){
-                validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP20_ID,csip.getMessage());
-            }
-            else{
-                validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP20_ID,csip.getMessage());
-                valid = false;
-            }
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP20_ID,csip);
 
             /* CSIP21 */
             validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP21_ID);
-            if(validateCSIP21()){
-                validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP21_ID,"");
+//            csip = validateCSIP21();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP21_ID,csip);
+
+            if(csip.isValid()){
 
                 /* CSIP22 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP22_ID);
                 csip = validateCSIP22();
-                if(csip.isValid()){
-                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP22_ID,csip.getMessage());
-                }
-                else{
-                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP22_ID, csip.getMessage());
-                    valid = false;
-                }
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP22_ID,csip);
 
                 /* CSIP23 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP23_ID);
                 csip = validateCSIP23();
-                if(csip.isValid()){
-                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP23_ID,csip.getMessage());
-                }
-                else{
-                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP23_ID, csip.getMessage());
-                    valid = false;
-                }
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP23_ID,csip);
 
                 /* CSIP24 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP24_ID);
-                csip = validateCSIP24();
-                if(csip.isValid()){
-                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP24_ID,csip.getMessage());
-                }
-                else{
-                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP24_ID,csip.getMessage());
-                    valid = false;
-                }
+                csip = validateCSIP20();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP24_ID,csip);
 
                 /* CSIP25 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP25_ID);
-                csip = validateCSIP25();
-                if(csip.isValid()){
-                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP25_ID,csip.getMessage());
-                }
-                else{
-                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP25_ID, csip.getMessage());
-                    valid = false;
-                }
+                csip = validateCSIP20();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP25_ID,csip);
 
                 /* CSIP26 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP26_ID);
-                if(validateCSIP26()){
-                    validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP26_ID,"");
-                }
+//                csip = validateCSIP26();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP26_ID,csip);
 
                 /* CSIP27 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP27_ID);
                 csip = validateCSIP27();
-                if(csip.isValid()){
-                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP27_ID,csip.getMessage());
-                }
-                else{
-                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP27_ID,csip.getMessage());
-                    valid = false;
-                }
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP27_ID,csip);
 
                 /* CSIP28 */
+                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP28_ID);
                 csip = validateCSIP28();
-                if(csip.isValid()){
-                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP28_ID,csip.getMessage());
-                }
-                else{
-                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP28_ID,csip.getMessage());
-                    valid = false;
-                }
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP28_ID,csip);
 
                 /* CSIP29 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP29_ID);
-                try {
-                    csip = validateCSIP29();
-                } catch (NoSuchAlgorithmException e) {
-                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP29_ID, csip.getMessage());
-                    valid = false;
-                }
-                if(csip.isValid()){
-                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP29_ID,csip.getMessage());
-                }
-                else{
-                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP29_ID, csip.getMessage());
-                    valid = false;
-                }
+//                csip = validateCSIP29();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP29_ID,csip);
 
                 /* CSIP30 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP30_ID);
                 csip = validateCSIP30();
-                if(csip.isValid()){
-                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP30_ID, csip.getMessage());
-                }
-                else{
-                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP30_ID,  csip.getMessage());
-                    valid = false;
-                }
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP30_ID,csip);
             }
             else{
-                validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP21_ID,  csip.getMessage());
-                valid = false;
+                String message = "SKIPPED because mets/dmdSec/mdRef doesn't exist! (" + metsName + ")";
+                /* CSIP22 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP22_ID,csip);
+
+                /* CSIP23 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP23_ID,csip);
+
+                /* CSIP24 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP24_ID,csip);
+
+                /* CSIP25 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP25_ID,csip);
+
+                /* CSIP26 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP26_ID,csip);
+
+                /* CSIP27 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP27_ID,csip);
+
+                /* CSIP28 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP28_ID,csip);
+
+                /* CSIP29 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP29_ID,csip);
+
+                /* CSIP30 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP30_ID,csip);
             }
+
         }
         else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP17_ID,  csip.getMessage());
-            valid = false;
-        }
+            String message = "SKIPPED because mets/dmdSec doesn't exist! (" + metsName + ")";
+            /* CSIP18 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP18_ID,csip);
 
-        return valid;
+            /* CSIP19 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP19_ID,csip);
+
+            /* CSIP20 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP20_ID,csip);
+
+            /* CSIP21 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP21_ID,csip);
+
+            /* CSIP22 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP22_ID,csip);
+
+            /* CSIP23 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP23_ID,csip);
+
+            /* CSIP24 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP24_ID,csip);
+
+            /* CSIP25 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP25_ID,csip);
+
+            /* CSIP26 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP26_ID,csip);
+
+            /* CSIP27 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP27_ID,csip);
+
+            /* CSIP28 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP28_ID,csip);
+
+            /* CSIP29 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP29_ID,csip);
+
+            /* CSIP30 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP30_ID,csip);
+        }
     }
 
     /*
@@ -220,19 +250,19 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
             String objectID = mets.getOBJID();
             if(objectID == null){
                 details.setValid(false);
-                details.setMessage("mets/OBJID can't be null");
+                details.addIssue("mets/OBJID can't be null");
             }
             else{
                 if(mets.getDmdSec() == null) {
                     if (zipManager.verifyMetadataDescriptiveFolder(getEARKSIPpath(),objectID)) {
                         details.setValid(false);
-                        details.setMessage("You have files in the metadata/descriptive folder, you must have mets/dmdSec");
+                        details.addIssue("You have files in the metadata/descriptive folder, you must have mets/dmdSec");
                     }
                 }
                 else{
                     if(mets.getDmdSec().size() != zipManager.countMetadataDescriptiveFiles(getEARKSIPpath(),objectID)){
                         details.setValid(false);
-                        details.setMessage("The number of files described is not equal to the number of files in the metadata/descriptive folder");
+                        details.addIssue("The number of files described is not equal to the number of files in the metadata/descriptive folder");
                     }
                 }
             }
@@ -241,13 +271,13 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
             if(mets.getDmdSec() == null) {
                 if (folderManager.verifyMetadataDescriptiveFolder(getEARKSIPpath())) {
                     details.setValid(false);
-                    details.setMessage("You have files in the metadata/descriptive folder, you must have mets/dmdSec");
+                    details.addIssue("You have files in the metadata/descriptive folder, you must have mets/dmdSec");
                 }
             }
             else{
                 if(mets.getDmdSec().size() != folderManager.countMetadataDescriptiveFiles(getEARKSIPpath())){
                     details.setValid(false);
-                    details.setMessage("The number of files described is not equal to the number of files in the metadata/descriptive folder");
+                    details.addIssue("The number of files described is not equal to the number of files in the metadata/descriptive folder");
                 }
             }
         }
@@ -267,7 +297,7 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
             }
             else{
                 details.setValid(false);
-                details.setMessage("mets/dmdSec/@ID isn't unique in the package!");
+                details.addIssue("mets/dmdSec/@ID isn't unique in the package!");
                 break;
             }
         }
@@ -283,7 +313,7 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
         for(MdSecType mdSec: dmdSec){
             if (mdSec.getCREATED() == null) {
                 details.setValid(false);
-                details.setMessage("mets/dmdSec/@CREATED can't be null!");
+                details.addIssue("mets/dmdSec/@CREATED can't be null!");
             }
         }
         return details;
@@ -300,12 +330,12 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
             String status = mdSec.getSTATUS();
             if(status == null){
                 details.setValid(false);
-                details.setMessage("mets/dmdSec/@STATUS can't be null!");
+                details.addIssue("mets/dmdSec/@STATUS can't be null!");
             }
             else{
                 if(!dmdSecStatus.contains(status)){
                     details.setValid(false);
-                    details.setMessage("Check the valid values to mets/dmdSec/@STATUS at dmdSec Status  !");
+                    details.addIssue("Check the valid values to mets/dmdSec/@STATUS at dmdSec Status  !");
                 }
             }
         }
@@ -334,12 +364,12 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
             String loctype = mdRef.getLOCTYPE();
             if(loctype == null) {
                 details.setValid(false);
-                details.setMessage("mets/dmdSec/mdRef[@LOCTYPE=’URL’] can't be null!");
+                details.addIssue("mets/dmdSec/mdRef[@LOCTYPE=’URL’] can't be null!");
             }
             else{
                 if(!loctype.equals("URL")){
                     details.setValid(false);
-                    details.setMessage("mets/dmdSec/mdRef[@LOCTYPE=’URL’] value must be URL!");
+                    details.addIssue("mets/dmdSec/mdRef[@LOCTYPE=’URL’] value must be URL!");
                 }
             }
         }
@@ -358,12 +388,12 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
             String xlinkType = mdRef.getType();
             if(xlinkType == null) {
                 details.setValid(false);
-                details.setMessage("mets/dmdSec/mdRef[@xlink:type=’simple’] can't be null");
+                details.addIssue("mets/dmdSec/mdRef[@xlink:type=’simple’] can't be null");
             }
             else{
                 if(!xlinkType.equals("simple")){
                     details.setValid(false);
-                    details.setMessage("mets/dmdSec/mdRef[@xlink:type=’simple’] value must be 'simple'");
+                    details.addIssue("mets/dmdSec/mdRef[@xlink:type=’simple’] value must be 'simple'");
                 }
             }
         }
@@ -385,19 +415,19 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
                 if(isZipFileFlag()){
                     if(!zipManager.checkPathExists(getEARKSIPpath(),hrefDecoded)){
                         details.setValid(false);
-                        details.setMessage("mets/dmdSec/mdRef/@xlink:href path doesn't exists");
+                        details.addIssue("mets/dmdSec/mdRef/@xlink:href path doesn't exists");
                     }
                 }
                 else{
                     if(!folderManager.checkPathExists(getEARKSIPpath(),Paths.get(hrefDecoded))){
                         details.setValid(false);
-                        details.setMessage("mets/dmdSec/mdRef/@xlink:href path doesn't exists");
+                        details.addIssue("mets/dmdSec/mdRef/@xlink:href path doesn't exists");
                     }
                 }
             }
             else{
                 details.setValid(false);
-                details.setMessage("mets/dmdSec/mdRef/@xlink:href can't be null");
+                details.addIssue("mets/dmdSec/mdRef/@xlink:href can't be null");
             }
         }
         return details;
@@ -421,12 +451,12 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
                 if(mdType != null){
                     if(!tmp.contains(mdType)){
                         details.setValid(false);
-                        details.setMessage("mets/dmdSec/mdRef/@MDTYPE isn't a valid value. See also METS SCHEMA");
+                        details.addIssue("mets/dmdSec/mdRef/@MDTYPE isn't a valid value. See also METS SCHEMA");
                     }
                 }
                 else{
                     details.setValid(false);
-                    details.setMessage("mets/dmdSec/mdRef/@MDTYPE can't be null");
+                    details.addIssue("mets/dmdSec/mdRef/@MDTYPE can't be null");
                 }
             }
         }
@@ -459,24 +489,24 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
                     if(isZipFileFlag()){
                         if(!zipManager.verifySize(getEARKSIPpath(),hrefDecoded,size)){
                             details.setValid(false);
-                            details.setMessage("mets/dmdSec/mdRef/@SIZE and size of file isn't equal");
+                            details.addIssue("mets/dmdSec/mdRef/@SIZE and size of file isn't equal");
                         }
                     }
                     else{
                         if(!folderManager.verifySize(getEARKSIPpath(),hrefDecoded,size)){
                             details.setValid(false);
-                            details.setMessage("mets/dmdSec/mdRef/@SIZE and size of file isn't equal");
+                            details.addIssue("mets/dmdSec/mdRef/@SIZE and size of file isn't equal");
                         }
                     }
                 }
                 else{
                     details.setValid(false);
-                    details.setMessage("mets/dmdSec/mdRef/@SIZE can't be null");
+                    details.addIssue("mets/dmdSec/mdRef/@SIZE can't be null");
                 }
             }
             else{
                 details.setValid(false);
-                details.setMessage("mets/dmdSec/mdRef/@href can't be null");
+                details.addIssue("mets/dmdSec/mdRef/@href can't be null");
             }
         }
         return details;
@@ -492,7 +522,7 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
             MdSecType.MdRef mdRef = mdSec.getMdRef();
             if(mdRef.getCREATED() == null){
                 details.setValid(false);
-                details.setMessage("mets/dmdSec/mdRef/@CREATED can't be null");
+                details.addIssue("mets/dmdSec/mdRef/@CREATED can't be null");
             }
         }
         return details;

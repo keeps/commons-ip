@@ -14,6 +14,135 @@ public class ConstantsCSIPspec {
     public static final String VALIDATION_REPORT_METS_NOT_FOUND_DETAIL = "Root METS.xml not found";
 
     /* Use of the METS root element (element mets) */
+
+    /* CSIPSTR1 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_ID = "CSIPSTR1";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_NAME = "CSIP Information Package folder structure";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_LOCATION = "Any Information Package MUST be included within a single physical root folder (known as the “Information Package root folder”). For packages presented in an archive format, see CSIPSTR3, the archive MUST unpack to a single root folder.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_CARDINALITY = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_LEVEL = "MUST";
+
+    /* CSIPSTR2 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_ID = "CSIPSTR2";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_NAME = "CSIP Information Package folder structure";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_LOCATION = "The Information Package root folder SHOULD be named with the ID or name of the Information Package, that is the value of the package METS.xml’s root <mets> element’s @OBJID attribute.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_CARDINALITY = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_LEVEL = "MUST";
+
+    /* CSIPSTR3 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_ID = "CSIPSTR3";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_NAME = "CSIP Information Package folder structure";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_LOCATION = "The Information Package root folder MAY be compressed (for example by using TAR or ZIP). Which specific compression format to use needs to be stated in the Submission Agreement.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_CARDINALITY = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_LEVEL = "MAY";
+
+    /* CSIPSTR4 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_ID = "CSIPSTR4";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_NAME = "CSIP Information Package folder structure";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_LOCATION = "The Information Package root folder MUST include a file named METS.xml. This file MUST contain metadata that identifies the package, provides a high-level package description, and describes its structure, including pointers to constituent representations.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_CARDINALITY = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_LEVEL = "MUST";
+
+    /* CSIPSTR5 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_ID = "CSIPSTR5";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_NAME = "CSIP Information Package folder structure";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_LOCATION = "The Information Package root folder SHOULD include a folder named metadata, which SHOULD include metadata relevant to the whole package.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_CARDINALITY = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_LEVEL = "SHOULD";
+
+    /* CSIPSTR6 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_ID = "CSIPSTR6";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_NAME = "CSIP Information Package folder structure";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_LOCATION = "If preservation metadata are available, they SHOULD be included in sub-folder preservation.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_CARDINALITY = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_LEVEL = "SHOULD";
+
+    /* CSIPSTR7 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_ID = "CSIPSTR7";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_NAME = "CSIP Information Package folder structure";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_LOCATION = "If descriptive metadata are available, they SHOULD be included in sub-folder descriptive.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_CARDINALITY = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_LEVEL = "SHOULD";
+
+    /* CSIPSTR8 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_ID = "CSIPSTR8";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_NAME = "CSIP Information Package folder structure";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_LOCATION = "If any other metadata are available, they MAY be included in separate sub-folders, for example an additional folder named other.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_CARDINALITY = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_LEVEL = "MAY";
+
+    /* CSIPSTR9 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_ID = "CSIPSTR9";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_NAME = "CSIP Information Package folder structure";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_LOCATION = "The Information Package folder SHOULD include a folder named representations.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_CARDINALITY = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_LEVEL = "SHOULD";
+
+    /* CSIPSTR10 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_ID = "CSIPSTR10";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_NAME = "CSIP Information Package folder structure";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_LOCATION = "The representations folder SHOULD include a sub-folder for each individual representation (i.e. the “representation folder”). Each representation folder should have a string name that is unique within the package scope. For example the name of the representation and/or its creation date might be good candidates as a representation sub-folder name.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_CARDINALITY = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_LEVEL = "SHOULD";
+
+    /* CSIPSTR11 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_ID = "CSIPSTR11";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_NAME = "CSIP Information Package folder structure";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_LOCATION = "The representation folder SHOULD include a sub-folder named data which MAY include all data constituting the representation.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_CARDINALITY = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_LEVEL = "SHOULD";
+
+    /* CSIPSTR12 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_ID = "CSIPSTR12";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_NAME = "CSIP Information Package folder structure";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_LOCATION = "The representation folder SHOULD include a metadata file named METS.xml which includes information about the identity and structure of the representation and its components. The recommended best practice is to always have a METS.xml in the representation folder.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_CARDINALITY = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_LEVEL = "SHOULD";
+
+    /* CSIPSTR13 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_ID = "CSIPSTR13";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_NAME = "CSIP Information Package folder structure";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_LOCATION = "The representation folder SHOULD include a sub-folder named metadata which MAY include all metadata about the specific representation.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_CARDINALITY = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_LEVEL = "SHOULD";
+
+    /* CSIPSTR14 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_ID = "CSIPSTR13";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_NAME = "CSIP Information Package folder structure";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_LOCATION = "The Information Package MAY be extended with additional sub-folders.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_CARDINALITY = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_LEVEL = "MAY";
+
+    /* CSIPSTR15 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_ID = "CSIPSTR15";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_NAME = "CSIP Information Package folder structure";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_LOCATION = "We recommend including all XML schema documents for any structured metadata within package. These schema documents SHOULD be placed in a sub-folder called schemas within the Information Package root folder and/or the representation folder.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_CARDINALITY = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_LEVEL = "SHOULD";
+
+    /* CSIPSTR16 */
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_ID = "CSIPSTR16";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_NAME = "CSIP Information Package folder structure";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_LOCATION = "We recommend including any supplementary documentation for the package or a specific representation within the package. Supplementary documentation SHOULD be placed in a sub-folder called documentation within the Information Package root folder and/or the representation folder.";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_CARDINALITY = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_LEVEL = "SHOULD";
+
     /* CSIP1 */
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP1_ID = "CSIP1";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP1_NAME = "Package Identifier";
@@ -1056,6 +1185,54 @@ public class ConstantsCSIPspec {
 
     /* Get Name, Location, Description, Cardinality and Level for given specification ID */
     public static String getSpecificationName(String id){
+        if (id.equals("CSIPSTR1")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_NAME;
+        }
+        if (id.equals("CSIPSTR2")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_NAME;
+        }
+        if (id.equals("CSIPSTR3")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_NAME;
+        }
+        if (id.equals("CSIPSTR4")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_NAME;
+        }
+        if (id.equals("CSIPSTR5")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_NAME;
+        }
+        if (id.equals("CSIPSTR6")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_NAME;
+        }
+        if (id.equals("CSIPSTR7")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_NAME;
+        }
+        if (id.equals("CSIPSTR8")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_NAME;
+        }
+        if (id.equals("CSIPSTR9")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_NAME;
+        }
+        if (id.equals("CSIPSTR10")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_NAME;
+        }
+        if (id.equals("CSIPSTR11")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_NAME;
+        }
+        if (id.equals("CSIPSTR12")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_NAME;
+        }
+        if (id.equals("CSIPSTR13")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_NAME;
+        }
+        if (id.equals("CSIPSTR14")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_NAME;
+        }
+        if (id.equals("CSIPSTR15")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_NAME;
+        }
+        if (id.equals("CSIPSTR16")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_NAME;
+        }
         if (id.equals("CSIP1")) {
             return VALIDATION_REPORT_SPECIFICATION_CSIP1_NAME;
         }
@@ -1411,6 +1588,54 @@ public class ConstantsCSIPspec {
     }
 
     public static String getSpecificationLocation(String id){
+        if (id.equals("CSIPSTR1")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_LOCATION;
+        }
+        if (id.equals("CSIPSTR2")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_LOCATION;
+        }
+        if (id.equals("CSIPSTR3")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_LOCATION;
+        }
+        if (id.equals("CSIPSTR4")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_LOCATION;
+        }
+        if (id.equals("CSIPSTR5")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_LOCATION;
+        }
+        if (id.equals("CSIPSTR6")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_LOCATION;
+        }
+        if (id.equals("CSIPSTR7")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_LOCATION;
+        }
+        if (id.equals("CSIPSTR8")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_LOCATION;
+        }
+        if (id.equals("CSIPSTR9")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_LOCATION;
+        }
+        if (id.equals("CSIPSTR10")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_LOCATION;
+        }
+        if (id.equals("CSIPSTR11")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_LOCATION;
+        }
+        if (id.equals("CSIPSTR12")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_LOCATION;
+        }
+        if (id.equals("CSIPSTR13")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_LOCATION;
+        }
+        if (id.equals("CSIPSTR14")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_LOCATION;
+        }
+        if (id.equals("CSIPSTR15")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_LOCATION;
+        }
+        if (id.equals("CSIPSTR16")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_LOCATION;
+        }
         if (id.equals("CSIP1")) {
             return VALIDATION_REPORT_SPECIFICATION_CSIP1_LOCATION;
         }
@@ -1766,6 +1991,54 @@ public class ConstantsCSIPspec {
     }
 
     public static String getSpecificationDescription(String id){
+        if (id.equals("CSIPSTR1")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_DESCRIPTION;
+        }
+        if (id.equals("CSIPSTR2")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_DESCRIPTION;
+        }
+        if (id.equals("CSIPSTR3")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_DESCRIPTION;
+        }
+        if (id.equals("CSIPSTR4")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_DESCRIPTION;
+        }
+        if (id.equals("CSIPSTR5")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_DESCRIPTION;
+        }
+        if (id.equals("CSIPSTR6")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_DESCRIPTION;
+        }
+        if (id.equals("CSIPSTR7")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_DESCRIPTION;
+        }
+        if (id.equals("CSIPSTR8")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_DESCRIPTION;
+        }
+        if (id.equals("CSIPSTR9")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_DESCRIPTION;
+        }
+        if (id.equals("CSIPSTR10")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_DESCRIPTION;
+        }
+        if (id.equals("CSIPSTR11")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_DESCRIPTION;
+        }
+        if (id.equals("CSIPSTR12")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_DESCRIPTION;
+        }
+        if (id.equals("CSIPSTR13")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_DESCRIPTION;
+        }
+        if (id.equals("CSIPSTR14")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_DESCRIPTION;
+        }
+        if (id.equals("CSIPSTR15")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_DESCRIPTION;
+        }
+        if (id.equals("CSIPSTR16")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_DESCRIPTION;
+        }
         if (id.equals("CSIP1")) {
             return VALIDATION_REPORT_SPECIFICATION_CSIP1_DESCRIPTION;
         }
@@ -2121,6 +2394,54 @@ public class ConstantsCSIPspec {
     }
 
     public static String getSpecificationCardinality(String id){
+        if (id.equals("CSIPSTR1")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_CARDINALITY;
+        }
+        if (id.equals("CSIPSTR2")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_CARDINALITY;
+        }
+        if (id.equals("CSIPSTR3")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_CARDINALITY;
+        }
+        if (id.equals("CSIPSTR4")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_CARDINALITY;
+        }
+        if (id.equals("CSIPSTR5")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_CARDINALITY;
+        }
+        if (id.equals("CSIPSTR6")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_CARDINALITY;
+        }
+        if (id.equals("CSIPSTR7")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_CARDINALITY;
+        }
+        if (id.equals("CSIPSTR8")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_CARDINALITY;
+        }
+        if (id.equals("CSIPSTR9")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_CARDINALITY;
+        }
+        if (id.equals("CSIPSTR10")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_CARDINALITY;
+        }
+        if (id.equals("CSIPSTR11")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_CARDINALITY;
+        }
+        if (id.equals("CSIPSTR12")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_CARDINALITY;
+        }
+        if (id.equals("CSIPSTR13")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_CARDINALITY;
+        }
+        if (id.equals("CSIPSTR14")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_CARDINALITY;
+        }
+        if (id.equals("CSIPSTR15")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_CARDINALITY;
+        }
+        if (id.equals("CSIPSTR16")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_CARDINALITY;
+        }
         if (id.equals("CSIP1")) {
             return VALIDATION_REPORT_SPECIFICATION_CSIP1_CARDINALITY;
         }
@@ -2476,6 +2797,54 @@ public class ConstantsCSIPspec {
     }
 
     public static String getSpecificationLevel(String id){
+        if (id.equals("CSIPSTR1")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_LEVEL;
+        }
+        if (id.equals("CSIPSTR2")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_LEVEL;
+        }
+        if (id.equals("CSIPSTR3")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_LEVEL;
+        }
+        if (id.equals("CSIPSTR4")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_LEVEL;
+        }
+        if (id.equals("CSIPSTR5")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_LEVEL;
+        }
+        if (id.equals("CSIPSTR6")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_LEVEL;
+        }
+        if (id.equals("CSIPSTR7")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_LEVEL;
+        }
+        if (id.equals("CSIPSTR8")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_LEVEL;
+        }
+        if (id.equals("CSIPSTR9")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_LEVEL;
+        }
+        if (id.equals("CSIPSTR10")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_LEVEL;
+        }
+        if (id.equals("CSIPSTR11")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_LEVEL;
+        }
+        if (id.equals("CSIPSTR12")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_LEVEL;
+        }
+        if (id.equals("CSIPSTR13")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_LEVEL;
+        }
+        if (id.equals("CSIPSTR14")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_LEVEL;
+        }
+        if (id.equals("CSIPSTR15")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_LEVEL;
+        }
+        if (id.equals("CSIPSTR16")) {
+            return VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_LEVEL;
+        }
         if (id.equals("CSIP1")) {
             return VALIDATION_REPORT_SPECIFICATION_CSIP1_LEVEL;
         }

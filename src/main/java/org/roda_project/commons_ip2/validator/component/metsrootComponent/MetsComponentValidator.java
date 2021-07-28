@@ -45,79 +45,47 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   }
 
   @Override
-  public boolean validate() throws IOException {
-    boolean valid = true;
+  public void validate() throws IOException {
     ReporterDetails csip;
+
     /* CSIP1 Validation */
     validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID);
     csip = validateCSIP1();
-    if(csip.isValid()){
-      validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID,csip.getMessage());
-
-    }
-    else{
-      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID,csip.getMessage());
-      valid = false;
-    }
+    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID,csip);
 
     /* CSIP2 Validation */
     validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP2_ID);
     csip = validateCSIP2();
-    if(csip.isValid()){
-      validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP2_ID,csip.getMessage());
-
-    }
-    else{
-      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP2_ID,csip.getMessage());
-      valid = false;
-    }
+    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP2_ID,csip);
 
     /* CSIP3 Validation */
     validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP3_ID);
     csip = validateCSIP3();
-    if(csip.isValid()){
-      validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP3_ID,csip.getMessage());
-    }
-    else{
-      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP3_ID, csip.getMessage());
-      valid = false;
-    }
+    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP3_ID,csip);
 
     /* CSIP4 Validation */
     validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP4_ID);
     csip = validateCSIP4();
-    if(csip.isValid()){
-      validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP4_ID,csip.getMessage());
-    }
-    else{
-      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP4_ID, csip.getMessage());
-      valid = false;
-    }
+    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP4_ID,csip);
 
     /* CSIP5 Validation */
     validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP5_ID);
     csip = validateCSIP5();
-    if(csip.isValid()){
-      validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP5_ID,csip.getMessage());
-    }
-    else{
-      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP5_ID, csip.getMessage());
-      valid = false;
-    }
+    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP5_ID,csip);
 
     /* CSIP6 Validation */
     validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP6_ID);
     csip = validateCSIP6();
-    if(csip.isValid()){
-      validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP6_ID,csip.getMessage());
-    }
-    else{
-      validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP6_ID, csip.getMessage());
-      valid = false;
-    }
+    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP6_ID,csip);
+
     observer.notifyFinishModule(MODULE_NAME);
     cleanValidationObjects();
-    return valid;
   }
 
   /*
@@ -132,7 +100,7 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     ReporterDetails details = new ReporterDetails();
     String OBJID = mets.getOBJID();
     if(OBJID == null){
-      details.setMessage("mets/@OBJID attribute is mandatory, can't be null!");
+      details.addIssue("mets/@OBJID attribute is mandatory, can't be null! (" + metsName + ")");
       details.setValid(false);
     }
     else {
@@ -144,7 +112,7 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
           rootFolderName = folderManager.getSipRootFolderName(path);
         }
         if(!rootFolderName.equals(OBJID)){
-          details.setMessage("The folder containing the METS.xml file must have the same name mets/@OBJID!");
+          details.addIssue("The folder containing the METS.xml file must have the same name mets/@OBJID! (" + metsName + ")");
           details.setValid(false);
         }
     }
@@ -167,12 +135,12 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     String TYPE = mets.getTYPE();
     if(TYPE == null || TYPE.equals("")){
       details.setValid(false);
-      details.setMessage("mets/@TYPE attribute is mandatory, can't be null!");
+      details.addIssue("mets/@TYPE attribute is mandatory, can't be null!");
     }
     else {
       if(!contentCategory.contains(TYPE)){
         details.setValid(false);
-        details.setMessage("Value of mets/@TYPE is not valid; see Content category for valid mets/@TYPE");
+        details.addIssue("Value of mets/@TYPE is not valid; see Content category for valid mets/@TYPE");
       }
     }
     return details;
@@ -191,7 +159,7 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     if(TYPE != null){
       if(TYPE.equalsIgnoreCase("Other") && (otherType == null || otherType.equals(""))){
         details.setValid(false);
-        details.setMessage("When mets/@type have the value OTHER  mets/@csip:OTHERTYPE can't be null or empty");
+        details.addIssue("When mets/@type have the value OTHER  mets/@csip:OTHERTYPE can't be null or empty");
       }
 
     }
@@ -213,7 +181,7 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     if(ContentInformationType != null){
       if(!contentInformationType.contains(ContentInformationType)){
         details.setValid(false);
-        details.setMessage("Value of mets/@csip:CONTENTINFORMATIONTYPE is not valid; see Content information type specification for valid mets/@@csip:CONTENTINFORMATIONTYPE");
+        details.addIssue("Value of mets/@csip:CONTENTINFORMATIONTYPE is not valid; see Content information type specification for valid mets/@@csip:CONTENTINFORMATIONTYPE");
       }
     }
     return details;
@@ -232,7 +200,7 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     if(ContentInformationType != null){
       if(ContentInformationType.equalsIgnoreCase("Other") && (OtherContentInformationType == null || OtherContentInformationType.equals(""))){
         details.setValid(false);
-        details.setMessage("When mets/@csip:CONTENTINFORMATIONTYPE have the value OTHER  mets/@csip:OTHERCONTENTINFORMATIONTYPE can't be null or empty");
+        details.addIssue("When mets/@csip:CONTENTINFORMATIONTYPE have the value OTHER  mets/@csip:OTHERCONTENTINFORMATIONTYPE can't be null or empty");
       }
     }
     return details;
@@ -247,7 +215,7 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     String profile = mets.getPROFILE();
     if(profile == null || profile.equals("")){
       details.setValid(false);
-      details.setMessage("mets/@PROFILE attribute is mandatory, can't be null or empty!");
+      details.addIssue("mets/@PROFILE attribute is mandatory, can't be null or empty!");
     }
     return details;
   }

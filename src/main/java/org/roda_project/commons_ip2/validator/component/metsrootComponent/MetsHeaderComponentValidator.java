@@ -38,129 +38,149 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     }
 
     @Override
-    public boolean validate() throws IOException {
-        boolean valid = true;
+    public void validate() throws IOException {
         metsHdr = mets.getMetsHdr();
         agents = metsHdr.getAgent();
         ReporterDetails csip;
 
         /* CSIP117 */
-        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID);
+        validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID);
         csip = validateCSIP117();
-        if(csip.isValid()){
-            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID, csip.getMessage());
+        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+        addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID,csip);
 
+        if(csip.isValid()){
             /* CSIP7 */
             validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP7_ID);
             csip = validateCSIP7();
-            if(csip.isValid()) {
-                validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP7_ID, csip.getMessage());
-            }
-            else{
-                validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP7_ID, csip.getMessage());
-                valid = false;
-            }
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP7_ID,csip);
 
             /* CSIP8 */
-            validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP8_ID);
-            validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP8_ID,"");
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"SKIPPED can't validate",true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP8_ID,csip);
 
             /* CSIP9 */
             validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP9_ID);
             csip = validateCSIP9();
-            if(csip.isValid()){
-                validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP9_ID,csip.getMessage());
-            }
-            else{
-                validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP9_ID, csip.getMessage());
-                valid = false;
-            }
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP9_ID,csip);
 
             /* CSIP10 */
             validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID);
             csip = validateCSIP10();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID,csip);
+
             if(csip.isValid()){
-                validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID,csip.getMessage());
 
                 /* CSIP11 */
                 validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID);
                 csip = validateCSIP11();
-                if(csip.isValid()){
-                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID,csip.getMessage());
-                }
-                else{
-                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID, csip.getMessage());
-                    valid = false;
-                }
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID,csip);
 
                 /* CSIP12 */
                 validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID);
                 csip = validateCSIP12();
-                if(csip.isValid()){
-                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID,csip.getMessage());
-                }
-                else{
-                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID, csip.getMessage());
-                    valid = false;
-                }
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID,csip);
 
                 /* CSIP13 */
                 validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID);
                 csip = validateCSIP13();
-                if(csip.isValid()){
-                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID, csip.getMessage());
-                }
-                else{
-                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID, csip.getMessage());
-                    valid = false;
-                }
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID,csip);
 
                 /* CSIP14 */
                 validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID);
                 csip = validateCSIP14();
-                if(csip.isValid()){
-                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID,csip.getMessage());
-                }
-                else{
-                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID,csip.getMessage());
-                    valid = false;
-                }
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID,csip);
 
                 /* CSIP15 */
                 validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID);
                 csip = validateCSIP15();
-                if(csip.isValid()){
-                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID,csip.getMessage());
-                }
-                else{
-                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID, csip.getMessage());
-                    valid = false;
-                }
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID,csip);
 
                 /* CSIP16 */
                 validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID);
                 csip = validateCSIP16();
-                if(csip.isValid()){
-                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID,csip.getMessage());
-                }
-                else{
-                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID, csip.getMessage());
-                    valid = false;
-                }
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID,csip);
             }
-            else {
-                 validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID, csip.getMessage());
-                valid = false;
-            }
+            else{
+                String message = "SKIPPED because mets/metsHdr/agent doesn't exist! (" + metsName +")";
+                /* CSIP11 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID,csip);
 
+                /* CSIP12 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID,csip);
+
+                /* CSIP13 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID,csip);
+
+                /* CSIP14 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID,csip);
+
+                /* CSIP15 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID,csip);
+
+                /* CSIP16 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID,csip);
+            }
         }
         else{
-            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID, csip.getMessage());
-            valid = false;
-        }
+            String message = "SKIPPED because mets/metsHdr doesn't exist! (" + metsName +")";
 
+            /* CSIP7 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP9_ID,csip);
+
+            /* CSIP8 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP8_ID,csip);
+
+            /* CSIP9 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP9_ID,csip);
+
+            /* CSIP10 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID,csip);
+
+            /* CSIP11 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID,csip);
+
+            /* CSIP12 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID,csip);
+
+            /* CSIP13 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID,csip);
+
+            /* CSIP14 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID,csip);
+
+            /* CSIP15 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID,csip);
+
+            /* CSIP16 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID,csip);
+        }
         observer.notifyFinishModule(MODULE_NAME);
-        return valid;
     }
 
     /*
@@ -171,7 +191,7 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
         ReporterDetails details = new ReporterDetails();
         if(metsHdr == null){
             details.setValid(false);
-            details.setMessage("mets/metsHdr can't be null!");
+            details.addIssue("mets/metsHdr can't be null!");
         }
         return details;
     }
@@ -185,7 +205,7 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
         XMLGregorianCalendar createDate = metsHdr.getCREATEDATE();
         if(createDate == null){
             details.setValid(false);
-            details.setMessage("mets/metsHdr/@CREATEDATE can't be null!");
+            details.addIssue("mets/metsHdr/@CREATEDATE can't be null!");
         }
         return details;
     }
@@ -200,12 +220,12 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
         String oaisPackageType = metsHdr.getOAISPACKAGETYPE();
         if(oaisPackageType == null || oaisPackageType.equals("")){
             details.setValid(false);
-            details.setMessage("mets/metsHdr/@csip:OAISPACKAGETYPE can't be null or empty!");
+            details.addIssue("mets/metsHdr/@csip:OAISPACKAGETYPE can't be null or empty!");
         }
         else{
             if(!oaisPackageTypes.contains(oaisPackageType)){
                 details.setValid(false);
-                details.setMessage("mets/metsHdr/@csip:OAISPACKAGETYPE must have a value from OAIS Package type! ");
+                details.addIssue("mets/metsHdr/@csip:OAISPACKAGETYPE must have a value from OAIS Package type! ");
             }
         }
         return details;
@@ -221,12 +241,12 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
         ReporterDetails details = new ReporterDetails();
         if(agents == null){
             details.setValid(false);
-            details.setMessage("Must have at least one mets/metsHdr/agent!");
+            details.addIssue("Must have at least one mets/metsHdr/agent!");
         }
         else{
             if(agents.size() == 0){
                 details.setValid(false);
-                details.setMessage("Must have at least one mets/metsHdr/agent!");
+                details.addIssue("Must have at least one mets/metsHdr/agent!");
             }
         }
         return details;
@@ -256,7 +276,7 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
         }
         if(!found) {
             details.setValid(false);
-            details.setMessage("Must have a mets/metsHdr/agent[@ROLE='CREATOR'] with the value CREATOR");
+            details.addIssue("Must have a mets/metsHdr/agent[@ROLE='CREATOR'] with the value CREATOR");
         }
         return details;
     }
@@ -285,7 +305,7 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
         }
         if(!found) {
             details.setValid(false);
-            details.setMessage("Must have a mets/metsHdr/agent[@TYPE='OTHER'] with the value OTHER");
+            details.addIssue("Must have a mets/metsHdr/agent[@TYPE='OTHER'] with the value OTHER");
         }
         return details;
     }
@@ -315,7 +335,7 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
         }
         if(!found) {
             details.setValid(false);
-            details.setMessage("Must have a mets/metsHdr/agent[@OTHERTYPE=’SOFTWARE’] with the value Software\"");
+            details.addIssue("Must have a mets/metsHdr/agent[@OTHERTYPE=’SOFTWARE’] with the value Software\"");
         }
         return details;
     }
@@ -339,11 +359,11 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
                 if (role.equals("CREATOR") && type.equals("OTHER") && otherType.equals("SOFTWARE")) {
                     if (a.getName() == null) {
                         details.setValid(false);
-                        details.setMessage("mets/metsHdr/agent/name can't be null!");
+                        details.addIssue("mets/metsHdr/agent/name can't be null!");
                     } else {
                         if (a.getName().equals("")) {
                             details.setValid(false);
-                            details.setMessage("mets/metsHdr/agent/name can't be empty!");
+                            details.addIssue("mets/metsHdr/agent/name can't be empty!");
                         }
                     }
                 }
@@ -372,7 +392,7 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
                     List<MetsType.MetsHdr.Agent.Note> notes = a.getNote();
                     if (notes == null || notes.size() == 0) {
                         details.setValid(false);
-                        details.setMessage("mets/metsHdr/agent/note can't be null");
+                        details.addIssue("mets/metsHdr/agent/note can't be null");
                     }
                 }
             }
@@ -399,16 +419,16 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
                     List<MetsType.MetsHdr.Agent.Note> notes = a.getNote();
                     if (notes == null || notes.size() == 0) {
                         details.setValid(false);
-                        details.setMessage("mets/metsHdr/agent/note can't be null");
+                        details.addIssue("mets/metsHdr/agent/note can't be null");
                     } else {
                         for (MetsType.MetsHdr.Agent.Note note : notes) {
                             if (note.getNOTETYPE() == null) {
                                 details.setValid(false);
-                                details.setMessage("mets/metsHdr/agent/note[@csip:NOTETYPE=’SOFTWARE VERSION’] can't be null");
+                                details.addIssue("mets/metsHdr/agent/note[@csip:NOTETYPE=’SOFTWARE VERSION’] can't be null");
                             } else {
                                 if (!note.getNOTETYPE().equals("SOFTWARE VERSION")) {
                                     details.setValid(false);
-                                    details.setMessage("mets/metsHdr/agent/note[@csip:NOTETYPE=’SOFTWARE VERSION’] value must be SOFTWARE VERSION");
+                                    details.addIssue("mets/metsHdr/agent/note[@csip:NOTETYPE=’SOFTWARE VERSION’] value must be SOFTWARE VERSION");
                                 }
                             }
                         }

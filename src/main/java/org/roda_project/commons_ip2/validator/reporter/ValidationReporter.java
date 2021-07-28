@@ -11,6 +11,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -128,7 +133,7 @@ public class ValidationReporter {
     }
   }
 
-  public void componentValidationResult(String specification,String id,String status, String detail) {
+  public void componentValidationResult(String specification,String id,String status,List<String> issues,String detail) {
     try {
       jsonGenerator.writeStartObject();
       jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_SPECIFICATION, specification);
@@ -141,7 +146,15 @@ public class ValidationReporter {
       jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING);
       jsonGenerator.writeStartObject();
       jsonGenerator.writeObjectField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_OUTCOME, status);
-      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_DETAIL, detail);
+      if(!detail.equals("")){
+        jsonGenerator.writeObjectField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_DETAIL,detail);
+      }
+      jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_ISSUES);
+      jsonGenerator.writeStartArray();
+      for(String issue: issues){
+        jsonGenerator.writeString(issue);
+      }
+      jsonGenerator.writeEndArray();
       jsonGenerator.writeEndObject();
       jsonGenerator.writeEndObject();
     } catch (IOException e) {
@@ -156,6 +169,7 @@ public class ValidationReporter {
       jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING);
       jsonGenerator.writeStartObject();
       jsonGenerator.writeObjectField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_OUTCOME, status);
+
       jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_DETAIL, detail);
       jsonGenerator.writeEndObject();
       jsonGenerator.writeEndObject();
@@ -178,6 +192,34 @@ public class ValidationReporter {
       jsonGenerator.writeEndObject();
     } catch (IOException e) {
       LOGGER.error("Could not finish report!", e);
+    }
+  }
+
+  public void validationResults(TreeMap<String, ReporterDetails> results){
+    for(Map.Entry<String,ReporterDetails> entry: results.entrySet()){
+      ReporterDetails details = entry.getValue();
+      List<String> issues = details.getIssues();
+      String detail = details.getDetail();
+
+      if(details.isSkipped()){
+        componentValidationResult(details.getSpecification(),entry.getKey(), Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_SKIPPED,issues,detail);
+        skipped++;
+      }
+      else{
+        if(details.isValid()){
+          componentValidationResult(details.getSpecification(), entry.getKey(),Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_PASSED,issues,detail);
+          success++;
+        }
+        else{
+          componentValidationResult(details.getSpecification(), entry.getKey(),Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_FAILED,issues,detail);
+          if(ConstantsCSIPspec.getSpecificationLevel(entry.getKey()).equals("MUST")){
+           errors++;
+          }
+          else{
+            warnings++;
+          }
+        }
+      }
     }
   }
 
