@@ -29,7 +29,7 @@ public class ConstantsCSIPspec {
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_LOCATION = "The Information Package root folder SHOULD be named with the ID or name of the Information Package, that is the value of the package METS.xml’s root <mets> element’s @OBJID attribute.";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_DESCRIPTION = "";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_CARDINALITY = "";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_LEVEL = "MUST";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_LEVEL = "SHOULD";
 
     /* CSIPSTR3 */
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_ID = "CSIPSTR3";

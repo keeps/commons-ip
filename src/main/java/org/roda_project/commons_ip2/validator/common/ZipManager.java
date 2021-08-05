@@ -14,7 +14,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -223,7 +225,23 @@ public class ZipManager {
         }
       }
     }
-
     return subMets;
+  }
+
+  public boolean checkSingleRootFolder(Path path) throws IOException{
+    ZipFile zipFile = new ZipFile(path.toFile());
+    Enumeration entries = zipFile.entries();
+
+    long countSingleFolder = 0;
+    Set<String> tmp = new HashSet<>();
+    while (entries.hasMoreElements()){
+      ZipEntry entry = (ZipEntry) entries.nextElement();
+      String name = entry.getName().split("/")[0];
+      tmp.add(name);
+    }
+    if(tmp.size() == 1){
+      return true;
+    }
+    return false;
   }
 }

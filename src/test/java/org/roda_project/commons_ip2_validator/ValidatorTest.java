@@ -38,6 +38,19 @@ public class ValidatorTest {
     Utils.deletePath(tempFolder);
   }
 
+  /* CSIPSTR4*/
+  @Test
+  public void validateCSIP4_1() {
+    LOGGER.info("Validate CSIPSTR1 - IP_18000_CSIPSTR4_1");
+    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_1.json");
+    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_1.zip");
+
+    EARKSIPValidator earksipValidator = new EARKSIPValidator(earksipPath,reportPath);
+    earksipValidator.validate();
+    LOGGER.info("Done validate CSIP1STR1 - IP_18000_CSIPSTR4_1");
+  }
+
+
   /* Simple SIP */
   @Test
   public void validateSimpleSip() {

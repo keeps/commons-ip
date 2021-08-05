@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +53,32 @@ public class EARKSIPValidator {
     observer = new ProgressValidationLoggerObserver();
     folderManager = new FolderManager();
     ids = new ArrayList<>();
-    results = new TreeMap<>();
+    results = new TreeMap<>(new Comparator<String>() {
+      public int compare(String o1, String o2) {
+        int c1;
+        int c2;
+        if(o1.contains("R") && o2.contains("R")){
+          c1 = Integer.parseInt(o1.split("R")[1]);
+          c2 = Integer.parseInt(o2.split("R")[1]);
+          return compareInt(c1,c2);
+        }
+        else{
+          if(o1.contains("R") && !o2.contains("R")){
+            return -1;
+          }
+          else{
+            if(!o1.contains("R") && o2.contains("R")){
+              return 1;
+            }
+            else{
+              c1 = Integer.parseInt(o1.split("P")[1]);
+              c2 = Integer.parseInt(o2.split("P")[1]);
+              return compareInt(c1,c2);
+            }
+          }
+        }
+      }
+    });
     setupComponents();
   }
 
@@ -74,50 +100,49 @@ public class EARKSIPValidator {
 
   public boolean validate() {
     observer.notifyValidationStart();
-    ValidatorComponent fileComponent = new StructureComponentValidator(Constants.CSIP_MODULE_NAME_0);
-    fileComponent.setObserver(observer);
-    fileComponent.setReporter(reporter);
-    fileComponent.setZipManager(zipManager);
-    fileComponent.setFolderManager(folderManager);
-    fileComponent.setEARKSIPpath(earksipPath);
+    ValidatorComponent structureComponent = new StructureComponentValidator(Constants.CSIP_MODULE_NAME_0,earksipPath);
+    structureComponent.setObserver(observer);
+    structureComponent.setReporter(reporter);
+    structureComponent.setZipManager(zipManager);
+    structureComponent.setFolderManager(folderManager);
+    structureComponent.setEARKSIPpath(earksipPath);
+    structureComponent.setResults(results);
     try {
-      boolean validFileComponent = fileComponent.validate();
-      if(validFileComponent){
+      structureComponent.validate();
+      if(validFileComponent()){
         HashMap<String,InputStream> subMets;
-        if(fileComponent.isZipFileFlag()){
+        if(structureComponent.isZipFileFlag()){
           subMets = zipManager.getSubMets(earksipPath);
           if(subMets.size() > 0){
-            validateSubMets(subMets,fileComponent.isZipFileFlag());
-            if(reporter.getErrors() == 0){
-              InputStream metsRootStream = zipManager.getMetsRootInputStream(earksipPath);
-              InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
-              mets = metsRoot.instatiateMetsFile();
-              validateComponents(fileComponent.isZipFileFlag(),earksipPath.toString() + "/METS.xml");
-            }
+            validateSubMets(subMets,structureComponent.isZipFileFlag());
+            InputStream metsRootStream = zipManager.getMetsRootInputStream(earksipPath);
+            InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
+            mets = metsRoot.instatiateMetsFile();
+            validateComponents(structureComponent.isZipFileFlag(),earksipPath.toString() + "/METS.xml");
+
           }
           else{
             InputStream metsRootStream = zipManager.getMetsRootInputStream(earksipPath);
             InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
             mets = metsRoot.instatiateMetsFile();
-            validateComponents(fileComponent.isZipFileFlag(),earksipPath.toString() + "/METS.xml");
+            validateComponents(structureComponent.isZipFileFlag(),earksipPath.toString() + "/METS.xml");
           }
         }
         else{
           subMets = folderManager.getSubMets(earksipPath);
           if(subMets.size() > 0){
-            validateSubMets(subMets,fileComponent.isZipFileFlag());
-            if(reporter.getErrors() == 0){
-              InputStream metsRootStream = folderManager.getMetsRootInputStream(earksipPath);
-              InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
-              mets = metsRoot.instatiateMetsFile();
-              validateComponents(fileComponent.isZipFileFlag(),earksipPath.toString() + "/METS.xml");
-            }
+            validateSubMets(subMets,structureComponent.isZipFileFlag());
+            InputStream metsRootStream = folderManager.getMetsRootInputStream(earksipPath);
+            InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
+            mets = metsRoot.instatiateMetsFile();
+            validateComponents(structureComponent.isZipFileFlag(),earksipPath.toString() + "/METS.xml");
+
           }
           else{
             InputStream metsRootStream = folderManager.getMetsRootInputStream(earksipPath);
             InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
             mets = metsRoot.instatiateMetsFile();
-            validateComponents(fileComponent.isZipFileFlag(),earksipPath.toString() + "/METS.xml");
+            validateComponents(structureComponent.isZipFileFlag(),earksipPath.toString() + "/METS.xml");
           }
         }
       }
@@ -160,6 +185,31 @@ public class EARKSIPValidator {
       InstatiateMets instatiateMets = new InstatiateMets(entry.getValue());
       mets = instatiateMets.instatiateMetsFile();
       validateComponents(isZip,entry.getKey());
+    }
+  }
+
+  public boolean validFileComponent(){
+    for(Map.Entry<String,ReporterDetails> result: results.entrySet()){
+      String strCsip = result.getKey();
+      if(strCsip.equals("CSIPSTR1") || strCsip.equals("CSIPSTR4")){
+        System.out.println(result.getKey());
+        if(!result.getValue().isValid()){
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  public int compareInt(int c1, int c2){
+    if(c1 < c2){
+      return -1;
+    }
+    else{
+      if(c1 > c2){
+        return 1;
+      }
+      return 0;
     }
   }
 }
