@@ -79,7 +79,7 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
 
             /* CSIP21 */
             validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP21_ID);
-//            csip = validateCSIP21();
+            csip = validateCSIP21();
             csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
             addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP21_ID,csip);
 
@@ -253,14 +253,15 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
                 details.addIssue("mets/OBJID can't be null");
             }
             else{
+                String regex = metsPath + "metadata/descriptive/.*";
                 if(mets.getDmdSec() == null) {
-                    if (zipManager.verifyMetadataDescriptiveFolder(getEARKSIPpath(),objectID)) {
+                    if (zipManager.verifyMetadataFilesFolder(getEARKSIPpath(),regex)) {
                         details.setValid(false);
                         details.addIssue("You have files in the metadata/descriptive folder, you must have mets/dmdSec");
                     }
                 }
                 else{
-                    if(mets.getDmdSec().size() != zipManager.countMetadataDescriptiveFiles(getEARKSIPpath(),objectID)){
+                    if(mets.getDmdSec().size() != zipManager.countMetadataFiles(getEARKSIPpath(),regex)){
                         details.setValid(false);
                         details.addIssue("The number of files described is not equal to the number of files in the metadata/descriptive folder");
                     }
@@ -269,13 +270,13 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
         }
         else{
             if(mets.getDmdSec() == null) {
-                if (folderManager.verifyMetadataDescriptiveFolder(getEARKSIPpath())) {
+                if (folderManager.verifyMetadataFilesFolder(Paths.get(metsPath),"descriptive")) {
                     details.setValid(false);
                     details.addIssue("You have files in the metadata/descriptive folder, you must have mets/dmdSec");
                 }
             }
             else{
-                if(mets.getDmdSec().size() != folderManager.countMetadataDescriptiveFiles(getEARKSIPpath())){
+                if(mets.getDmdSec().size() != folderManager.countMetadataFiles(Paths.get(metsPath),"descriptive")){
                     details.setValid(false);
                     details.addIssue("The number of files described is not equal to the number of files in the metadata/descriptive folder");
                 }
@@ -347,8 +348,16 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
     * Reference to the descriptive metadata file located in the “metadata” section
     * of the IP.
     */
-    private boolean validateCSIP21() {
-        return true;
+    private ReporterDetails validateCSIP21() {
+        ReporterDetails details = new ReporterDetails();
+        for(MdSecType mdSec: dmdSec){
+            MdSecType.MdRef mdRef = mdSec.getMdRef();
+            if(mdRef == null){
+                details.setValid(false);
+                details.addIssue("You should reference the metadata file existing in the sip in mets/dmdSec/mdRef");
+            }
+        }
+        return details;
     }
 
     /*

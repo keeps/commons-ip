@@ -126,7 +126,7 @@ public class FolderManager {
         return  valid;
     }
 
-    public boolean verifyMetadataDescriptiveFolder(Path path) {
+    public boolean verifyMetadataFilesFolder(Path path, String name) {
         File[] folder = path.toFile().listFiles();
         if(folder != null){
             for(File f: folder){
@@ -142,7 +142,7 @@ public class FolderManager {
                             }
                             else{
                                 for(File metadata: metadataFiles){
-                                    if(metadata.getName().equals("descriptive")){
+                                    if(metadata.getName().equals(name)){
                                         return metadata.isDirectory();
                                     }
                                 }
@@ -159,7 +159,7 @@ public class FolderManager {
         return false;
     }
 
-    public int countMetadataDescriptiveFiles(Path path) {
+    public int countMetadataFiles(Path path, String name) {
         int count = 0;
         File[] folder = path.toFile().listFiles();
         if(folder != null){
@@ -170,7 +170,7 @@ public class FolderManager {
                         if(metadataFiles != null){
                             if(metadataFiles.length != 0){
                                 for(File metadata: metadataFiles){
-                                    if(metadata.getName().equals("descriptive")){
+                                    if(metadata.getName().equals(name)){
                                         if(metadata.isDirectory()){
                                             File[] descriptiveFiles = metadata.listFiles();
                                             if(descriptiveFiles != null){

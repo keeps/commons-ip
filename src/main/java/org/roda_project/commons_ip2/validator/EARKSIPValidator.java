@@ -4,6 +4,7 @@ import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
 import org.roda_project.commons_ip2.validator.common.FolderManager;
 import org.roda_project.commons_ip2.validator.common.InstatiateMets;
 import org.roda_project.commons_ip2.validator.common.ZipManager;
+import org.roda_project.commons_ip2.validator.component.descriptiveMetadataComponent.DescriptiveMetadataComponentValidator;
 import org.roda_project.commons_ip2.validator.component.fileComponent.StructureComponentValidator;
 import org.roda_project.commons_ip2.validator.component.metsrootComponent.MetsComponentValidator;
 import org.roda_project.commons_ip2.validator.component.ValidatorComponent;
@@ -88,8 +89,8 @@ public class EARKSIPValidator {
     components.add(metsComponent);
 //    ValidatorComponent metsHeaderComponent = new MetsHeaderComponentValidator(Constants.CSIP_MODULE_NAME_2);
 //    components.add(metsHeaderComponent);
-//    ValidatorComponent descriptiveMetadataComponent = new DescriptiveMetadataComponentValidator(Constants.CSIP_MODULE_NAME_3);
-//    components.add(descriptiveMetadataComponent);
+      ValidatorComponent descriptiveMetadataComponent = new DescriptiveMetadataComponentValidator(Constants.CSIP_MODULE_NAME_3);
+      components.add(descriptiveMetadataComponent);
 //    ValidatorComponent administritiveMetadataComponent = new AdministritiveMetadataComponentValidator(Constants.CSIP_MODULE_NAME_4);
 //    components.add(administritiveMetadataComponent);
 //    ValidatorComponent fileSectionComponent = new FileSectionComponentValidator(Constants.CSIP_MODULE_NAME_5);
@@ -118,14 +119,14 @@ public class EARKSIPValidator {
             InputStream metsRootStream = zipManager.getMetsRootInputStream(earksipPath);
             InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
             mets = metsRoot.instatiateMetsFile();
-            validateComponents(structureComponent.isZipFileFlag(),earksipPath.toString() + "/METS.xml");
+            validateComponents(structureComponent.isZipFileFlag(),earksipPath.toString());
 
           }
           else{
             InputStream metsRootStream = zipManager.getMetsRootInputStream(earksipPath);
             InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
             mets = metsRoot.instatiateMetsFile();
-            validateComponents(structureComponent.isZipFileFlag(),earksipPath.toString() + "/METS.xml");
+            validateComponents(structureComponent.isZipFileFlag(),earksipPath.toString());
           }
         }
         else{
@@ -135,14 +136,14 @@ public class EARKSIPValidator {
             InputStream metsRootStream = folderManager.getMetsRootInputStream(earksipPath);
             InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
             mets = metsRoot.instatiateMetsFile();
-            validateComponents(structureComponent.isZipFileFlag(),earksipPath.toString() + "/METS.xml");
+            validateComponents(structureComponent.isZipFileFlag(),earksipPath.toString());
 
           }
           else{
             InputStream metsRootStream = folderManager.getMetsRootInputStream(earksipPath);
             InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
             mets = metsRoot.instatiateMetsFile();
-            validateComponents(structureComponent.isZipFileFlag(),earksipPath.toString() + "/METS.xml");
+            validateComponents(structureComponent.isZipFileFlag(),earksipPath.toString());
           }
         }
       }
@@ -174,6 +175,13 @@ public class EARKSIPValidator {
           component.setIds(ids);
           component.setZipFileFlag(isZip);
           component.setMetsName(key);
+          String metsPath = "";
+          for(String s: key.split("/")){ 
+            if(!s.equals("METS.xml")){
+              metsPath += s + "/";
+            }
+          }
+          component.setMetsPath(metsPath);
           component.setResults(results);
           component.validate();
           component.clean();
@@ -192,7 +200,6 @@ public class EARKSIPValidator {
     for(Map.Entry<String,ReporterDetails> result: results.entrySet()){
       String strCsip = result.getKey();
       if(strCsip.equals("CSIPSTR1") || strCsip.equals("CSIPSTR4")){
-        System.out.println(result.getKey());
         if(!result.getValue().isValid()){
           return false;
         }

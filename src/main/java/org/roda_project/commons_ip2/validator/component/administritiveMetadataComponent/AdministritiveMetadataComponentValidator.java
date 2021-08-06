@@ -517,291 +517,6 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
             csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
             addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP57_ID,csip);
         }
-//        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP31_ID);
-//        if(validateCSIP31()){
-//            validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP31_ID, "");
-//
-//            /* CSIP32 */
-//            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP32_ID);
-//            csip = validateCSIP32();
-//            if(csip.isValid()){
-//                validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP32_ID,csip.getMessage());
-//
-//                /* CSIP33 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP33_ID);
-//                csip = validateCSIP33();
-//                if(csip.isValid()){
-//                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP33_ID,csip.getMessage());
-//                }
-//                else{
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP33_ID, csip.getMessage());
-//                    valid = false;
-//                }
-//
-//                /* CSIP34 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP34_ID);
-//                csip = validateCSIP34();
-//                if(csip.isValid()){
-//                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP34_ID,csip.getMessage());
-//                }
-//                else{
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP34_ID, csip.getMessage());
-//                    valid = false;
-//                }
-//
-//                /* CSIP35 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP35_ID);
-//                csip = validateCSIP35();
-//                if(csip.isValid()){
-//                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP35_ID,csip.getMessage());
-//                }
-//                else{
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP35_ID, csip.getMessage());
-//                    valid = false;
-//                }
-//
-//                /* CSIP36 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP36_ID);
-//                if(validateCSIP36()){
-//                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP36_ID,"");
-//                }
-//                else{
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP36_ID, "");
-//                    valid = false;
-//                }
-//
-//                /* CSIP37 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP37_ID);
-//                if(validateCSIP37()){
-//                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP37_ID,"");
-//                }
-//                else{
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP37_ID,"");
-//                    valid = false;
-//                }
-//
-//                /* CSIP38 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP38_ID);
-//                if(validateCSIP38()){
-//                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP38_ID,"");
-//                }
-//                else{
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP38_ID,"");
-//                    valid = false;
-//                }
-//
-//                /* CSIP39 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP39_ID);
-//                if(validateCSIP39()){
-//                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP39_ID,"");
-//                }
-//                else{
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP39_ID,"");
-//                    valid = false;
-//                }
-//
-//                /* CSIP40 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP40_ID);
-//                if(validateCSIP40()){
-//                    validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP40_ID,"");
-//                }
-//
-//
-//                /* CSIP41 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP41_ID);
-//                if(validateCSIP41()){
-//                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP41_ID,"");
-//                }
-//                else{
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP41_ID,"");
-//                    valid = false;
-//                }
-//
-//                /* CSIP42 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP42_ID);
-//                if(validateCSIP42()){
-//                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP42_ID,"");
-//                }
-//                else{
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP42_ID,"");
-//                    valid = false;
-//                }
-//
-//
-//
-//                /* CSIP43 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP43_ID);
-//                boolean csip43 = false;
-//                try {
-//                    csip43 = validateCSIP43();
-//                } catch (NoSuchAlgorithmException e) {
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP37_ID,"");
-//                    valid = false;
-//
-//                }
-//
-//                if(csip43){
-//                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP43_ID,"");
-//                }
-//                else{
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP43_ID,"");
-//                    valid = false;
-//                }
-//
-//                /* CSIP44 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP44_ID);
-//                if(validateCSIP44()){
-//                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP44_ID,"");
-//                }
-//                else {
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP44_ID, "");
-//                    valid = false;
-//                }
-//
-//            }
-//            else{
-//                validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP32_ID, "");
-//                valid = false;
-//            }
-//
-//            /* CSIP45 */
-//            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP45_ID);
-//            if(validateCSIP45()){
-//                validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP45_ID,"");
-//
-//                /* CSIP46 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP46_ID);
-//                if(validateCSIP46()){
-//                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP46_ID,"");
-//                }
-//                else{
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP46_ID, "");
-//                    valid = false;
-//                }
-//
-//                /* CSIP47 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP47_ID);
-//                if(validateCSIP47()){
-//                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP47_ID,"");
-//                }
-//                else{
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP47_ID, "");
-//                    valid = false;
-//                }
-//
-//                /* CSIP48 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP48_ID);
-//                if(validateCSIP48()){
-//                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP48_ID,"");
-//                }
-//                else{
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP48_ID, "");
-//                    valid = false;
-//                }
-//
-//                /* CSIP49 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP49_ID);
-//                if(validateCSIP49()){
-//                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP49_ID,"");
-//                }
-//                else{
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP49_ID, "");
-//                    valid = false;
-//                }
-//
-//                /* CSIP50 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP50_ID);
-//                if(validateCSIP50()){
-//                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP50_ID,"");
-//                }
-//                else{
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP50_ID, "");
-//                    valid = false;
-//                }
-//
-//                /* CSIP51 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP51_ID);
-//                if(validateCSIP51()){
-//                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP51_ID,"");
-//                }
-//                else{
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP51_ID, "");
-//                    valid = false;
-//                }
-//
-//                /* CSIP52 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP52_ID);
-//                if(validateCSIP52()){
-//                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP52_ID,"");
-//                }
-//                else{
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP52_ID, "");
-//                    valid = false;
-//                }
-//
-//
-//                /* CSIP53 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP53_ID);
-//                if(validateCSIP53()){
-//                    validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP53_ID,"");
-//                }
-//
-//                /* CSIP54 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP54_ID);
-//                if(validateCSIP54()){
-//                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP54_ID,"");
-//                }
-//                else{
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP54_ID, "");
-//                    valid = false;
-//                }
-//
-//                /* CSIP55 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP55_ID);
-//                if(validateCSIP55()){
-//                    validationOutcomeSkipped(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP55_ID,"");
-//                }
-//                else{
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP55_ID, "");
-//                    valid = false;
-//                }
-//
-//                /* CSIP56 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP56_ID);
-//                boolean csip56 = false;
-//                try {
-//                    csip56 = validateCSIP56();
-//                } catch (NoSuchAlgorithmException e) {
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP56_ID,"");
-//                    valid = false;
-//                }
-//                if(csip56){
-//                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP56_ID,"");
-//                }
-//                else{
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP56_ID, "");
-//                    valid = false;
-//                }
-//
-//                /* CSIP57 */
-//                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP57_ID);
-//                if(validateCSIP57()){
-//                    validationOutcomePassed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP57_ID,"");
-//                }
-//                else{
-//                    validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP57_ID, "");
-//                    valid = false;
-//                }
-//            }
-//            else{
-//                validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP45_ID, "");
-//                valid = false;
-//            }
-//        }
-//        else{
-//            validationOutcomeFailed(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP31_ID, "");
-//            valid = false;
-//        }
     }
 
     /*
@@ -812,8 +527,45 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     * possible to transfer metadata in a package using just the descriptive
     * metadata section and/or administrative metadata section.
     */
-    private ReporterDetails validateCSIP31() {
-        return new ReporterDetails();
+    private ReporterDetails validateCSIP31() throws IOException {
+        ReporterDetails details = new ReporterDetails();
+        if(isZipFileFlag()){
+            String objectID = mets.getOBJID();
+            if(objectID == null){
+                details.setValid(false);
+                details.addIssue("mets/OBJID can't be null");
+            }
+            else{
+                String regex = metsPath + "metadata/preservation/.*";
+                if(mets.getAmdSec() == null) {
+                    if (zipManager.verifyMetadataFilesFolder(getEARKSIPpath(),regex)) {
+                        details.setValid(false);
+                        details.addIssue("You have files in the metadata/preservation folder, you must have mets/amdSec");
+                    }
+                }
+                else{
+                    if(mets.getAmdSec().size() != zipManager.countMetadataFiles(getEARKSIPpath(),regex)){
+                        details.setValid(false);
+                        details.addIssue("The number of files described is not equal to the number of files in the metadata/preservation folder");
+                    }
+                }
+            }
+        }
+        else{
+            if(mets.getAmdSec() == null) {
+                if (folderManager.verifyMetadataFilesFolder(Paths.get(metsPath),"preservation")) {
+                    details.setValid(false);
+                    details.addIssue("You have files in the metadata/preservation folder, you must have mets/amdSec");
+                }
+            }
+            else{
+                if(mets.getAmdSec().size() != folderManager.countMetadataFiles(Paths.get(metsPath),"preservation")){
+                    details.setValid(false);
+                    details.addIssue("The number of files described is not equal to the number of files in the metadata/preservation folder");
+                }
+            }
+        }
+        return details;
     }
 
     /*

@@ -49,6 +49,7 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
   protected List<String> ids = null;
   private TreeMap<String, ReporterDetails> results;
   protected String metsName;
+  protected String metsPath;
 
   private String name = null;
   private boolean zipFileFlag = false;
@@ -167,6 +168,9 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
   public void setMetsName(String metsName) {
     this.metsName = metsName;
   }
+
+  @Override
+  public void setMetsPath(String metsPath) { this.metsPath = metsPath;}
 
   protected void addResult(String specification, ReporterDetails details){
     if(results.containsKey(specification)){

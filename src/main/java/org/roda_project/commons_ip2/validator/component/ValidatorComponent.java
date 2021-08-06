@@ -43,6 +43,8 @@ public interface ValidatorComponent {
 
   void setMetsName(String name);
 
+  void setMetsPath(String metsPath);
+
   void setResults(TreeMap<String, ReporterDetails> results);
 
   void clean();

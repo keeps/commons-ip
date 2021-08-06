@@ -178,11 +178,10 @@ public class ZipManager {
     return  valid;
   }
 
-  public boolean verifyMetadataDescriptiveFolder(Path path,String objectID) throws IOException {
+  public boolean verifyMetadataFilesFolder(Path path, String regex) throws IOException {
     boolean found = false;
     ZipFile zipFile = new ZipFile(path.toFile());
     Enumeration entries = zipFile.entries();
-    String regex = objectID + "/metadata/descriptive/.*";
     while (entries.hasMoreElements()){
       ZipEntry entry = (ZipEntry) entries.nextElement();
       if(entry.getName().matches(regex)){
@@ -193,11 +192,10 @@ public class ZipManager {
     return found;
   }
 
-  public int countMetadataDescriptiveFiles(Path path, String objectID) throws IOException {
+  public int countMetadataFiles(Path path, String regex) throws IOException {
     int count = 0;
     ZipFile zipFile = new ZipFile(path.toFile());
     Enumeration entries = zipFile.entries();
-    String regex = objectID + "/metadata/descriptive/.*";
     while (entries.hasMoreElements()){
       ZipEntry entry = (ZipEntry) entries.nextElement();
       if(entry.getName().matches(regex)){
@@ -232,7 +230,6 @@ public class ZipManager {
     ZipFile zipFile = new ZipFile(path.toFile());
     Enumeration entries = zipFile.entries();
 
-    long countSingleFolder = 0;
     Set<String> tmp = new HashSet<>();
     while (entries.hasMoreElements()){
       ZipEntry entry = (ZipEntry) entries.nextElement();
