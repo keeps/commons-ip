@@ -550,7 +550,6 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     * this section.
     */
     private ReporterDetails validateCSIP58() {
-
         return new ReporterDetails();
     }
 
@@ -707,7 +706,6 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     * A unique xml:id identifier for this file across the package.
     */
     private ReporterDetails validateCSIP67() {
-        boolean valid = true;
         MetsType.FileSec fileSec = mets.getFileSec();
         List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
         for(MetsType.FileSec.FileGrp grp : fileGrp){
