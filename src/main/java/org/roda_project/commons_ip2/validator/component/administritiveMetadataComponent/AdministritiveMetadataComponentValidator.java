@@ -575,12 +575,18 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     * PREMIS metadata. The use if PREMIS in METS is following the
     * recommendations in the 2017 version of PREMIS in METS Guidelines.
     */
-    private ReporterDetails validateCSIP32() {
-        // Falta contar e comparar quantos premis metadata tem o sip
+    private ReporterDetails validateCSIP32() throws IOException {
+        int countPremis;
+        if(isZipFileFlag()){
+            countPremis = zipManager.countMetadataFiles(getEARKSIPpath(),"metadata/preservation/.*");
+        }
+        else{
+            countPremis = folderManager.countMetadataFiles(Paths.get(metsPath),"preservation");
+        }
         for(AmdSecType a: amdSec){
             List<MdSecType> digiprov = a.getDigiprovMD();
-            if(digiprov == null){
-                return new ReporterDetails("",false);
+            if(countPremis != digiprov.size()){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/amdSec/digiprovMD/ It is mandatory to include one <digiprovMD> element for each piece of PREMIS metadata",false,false);
             }
         }
         return new ReporterDetails();
@@ -600,7 +606,7 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
                    addId(md.getID());
                }
                else{
-                   return new ReporterDetails("mets/amdSec/digiprovMD/@ID isn't unique in the package",false);
+                   return new ReporterDetails("mets/amdSec/digiprovMD/@ID isn't unique in the package (" + metsName + ")",false);
                }
             }
         }

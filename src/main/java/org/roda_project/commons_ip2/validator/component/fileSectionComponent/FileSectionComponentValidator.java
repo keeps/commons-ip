@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
@@ -550,7 +551,13 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     * this section.
     */
     private ReporterDetails validateCSIP58() {
-        return new ReporterDetails();
+        ReporterDetails details = new ReporterDetails();
+        MetsType.FileSec fileSec = mets.getFileSec();
+        if(fileSec == null){
+            details.setValid(false);
+            details.addIssue("mets/fileSec can't be null");
+        }
+        return details;
     }
 
     /*
@@ -584,8 +591,33 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     * more file group elements with mets/fileSec/fileGrp/@USE attribute value
     * “Documentation”.See also: File group names
     */
-    private boolean validateCSIP60() {
-        return true;
+    private ReporterDetails validateCSIP60() throws IOException {
+        List<MetsType.FileSec.FileGrp> fileGrps = mets.getFileSec().getFileGrp();
+        for(MetsType.FileSec.FileGrp fileGrp: fileGrps){
+            if(fileGrp.getUSE().equals("Documentation")){
+                List<FileType> files = fileGrp.getFile();
+                for(FileType file: files){
+                    List<FileType.FLocat> fLocats = file.getFLocat();
+                    if(isZipFileFlag()){
+                        for(FileType.FLocat flocat : fLocats){
+                            String filePath = URLDecoder.decode(flocat.getHref(),"UTF-8");
+                            if(!zipManager.checkPathExists(getEARKSIPpath(),filePath)){
+                                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/fileSec/fileGrp[@USE=’Documentation’] " + filePath + " doesn't exists",false,false);
+                            }
+                        }
+                    }
+                    else{
+                        for(FileType.FLocat flocat : fLocats){
+                            String filePath = URLDecoder.decode(flocat.getHref(),"UTF-8");
+                            if(!folderManager.checkPathExists(getEARKSIPpath(),Paths.get(filePath))){
+                                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/fileSec/fileGrp[@USE=’Documentation’] " + filePath + " doesn't exists",false,false);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return new ReporterDetails();
     }
 
     /*
@@ -594,8 +626,33 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     * one or more file groups with mets/fileSec/fileGrp/@USE attribute value
     * “Schemas”.See also: File group names
     */
-    private boolean validateCSIP113() {
-        return true;
+    private ReporterDetails validateCSIP113() throws IOException {
+        List<MetsType.FileSec.FileGrp> fileGrps = mets.getFileSec().getFileGrp();
+        for(MetsType.FileSec.FileGrp fileGrp: fileGrps){
+            if(fileGrp.getUSE().equals("Schemas")){
+                List<FileType> files = fileGrp.getFile();
+                for(FileType file: files){
+                    List<FileType.FLocat> fLocats = file.getFLocat();
+                    if(isZipFileFlag()){
+                        for(FileType.FLocat flocat : fLocats){
+                            String filePath = URLDecoder.decode(flocat.getHref(),"UTF-8");
+                            if(!zipManager.checkPathExists(getEARKSIPpath(),filePath)){
+                                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/fileSec/fileGrp[@USE=’Documentation’] " + filePath + " doesn't exists",false,false);
+                            }
+                        }
+                    }
+                    else{
+                        for(FileType.FLocat flocat : fLocats){
+                            String filePath = URLDecoder.decode(flocat.getHref(),"UTF-8");
+                            if(!folderManager.checkPathExists(getEARKSIPpath(),Paths.get(filePath))){
+                                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/fileSec/fileGrp[@USE=’Documentation’] " + filePath + " doesn't exists",false,false);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return new ReporterDetails();
     }
 
     /*
@@ -605,8 +662,33 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     * with mets/fileSec/fileGrp/@USE attribute value “Representations”.See
     * also: File group names
     */
-    private boolean validateCSIP114() {
-        return true;
+    private ReporterDetails validateCSIP114() throws IOException {
+        List<MetsType.FileSec.FileGrp> fileGrps = mets.getFileSec().getFileGrp();
+        for(MetsType.FileSec.FileGrp fileGrp: fileGrps){
+            if(fileGrp.getUSE().matches("Representations/")){
+                List<FileType> files = fileGrp.getFile();
+                for(FileType file: files){
+                    List<FileType.FLocat> fLocats = file.getFLocat();
+                    if(isZipFileFlag()){
+                        for(FileType.FLocat flocat : fLocats){
+                            String filePath = URLDecoder.decode(flocat.getHref(),"UTF-8");
+                            if(!zipManager.checkPathExists(getEARKSIPpath(),filePath)){
+                                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/fileSec/fileGrp[@USE=’Documentation’] " + filePath + " doesn't exists",false,false);
+                            }
+                        }
+                    }
+                    else{
+                        for(FileType.FLocat flocat : fLocats){
+                            String filePath = URLDecoder.decode(flocat.getHref(),"UTF-8");
+                            if(!folderManager.checkPathExists(getEARKSIPpath(),Paths.get(filePath))){
+                                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/fileSec/fileGrp[@USE=’Documentation’] " + filePath + " doesn't exists",false,false);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return new ReporterDetails();
     }
 
     /*
