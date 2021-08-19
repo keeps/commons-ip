@@ -6,6 +6,7 @@ import org.roda_project.commons_ip2.validator.common.InstatiateMets;
 import org.roda_project.commons_ip2.validator.common.ZipManager;
 import org.roda_project.commons_ip2.validator.component.descriptiveMetadataComponent.DescriptiveMetadataComponentValidator;
 import org.roda_project.commons_ip2.validator.component.fileComponent.StructureComponentValidator;
+import org.roda_project.commons_ip2.validator.component.fileSectionComponent.FileSectionComponentValidator;
 import org.roda_project.commons_ip2.validator.component.metsrootComponent.MetsComponentValidator;
 import org.roda_project.commons_ip2.validator.component.ValidatorComponent;
 import org.roda_project.commons_ip2.validator.constants.Constants;
@@ -89,12 +90,12 @@ public class EARKSIPValidator {
     components.add(metsComponent);
 //    ValidatorComponent metsHeaderComponent = new MetsHeaderComponentValidator(Constants.CSIP_MODULE_NAME_2);
 //    components.add(metsHeaderComponent);
-      ValidatorComponent descriptiveMetadataComponent = new DescriptiveMetadataComponentValidator(Constants.CSIP_MODULE_NAME_3);
-      components.add(descriptiveMetadataComponent);
+//      ValidatorComponent descriptiveMetadataComponent = new DescriptiveMetadataComponentValidator(Constants.CSIP_MODULE_NAME_3);
+//      components.add(descriptiveMetadataComponent);
 //    ValidatorComponent administritiveMetadataComponent = new AdministritiveMetadataComponentValidator(Constants.CSIP_MODULE_NAME_4);
 //    components.add(administritiveMetadataComponent);
-//    ValidatorComponent fileSectionComponent = new FileSectionComponentValidator(Constants.CSIP_MODULE_NAME_5);
-//    components.add(fileSectionComponent);
+    ValidatorComponent fileSectionComponent = new FileSectionComponentValidator(Constants.CSIP_MODULE_NAME_5);
+    components.add(fileSectionComponent);
 //    ValidatorComponent structuralMapComponent = new StructuralMapComponentValidator(Constants.CSIP_MODULE_NAME_6);
 //    components.add(structuralMapComponent);
   }
