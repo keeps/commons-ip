@@ -168,13 +168,13 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
 
                 /* CSIP74 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP74_ID);
-                //csip = validateCSIP74();
+                csip = validateCSIP74();
                 csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
                 addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP74_ID,csip);
 
                 /* CSIP75 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP75_ID);
-                //csip = validateCSIP75();
+                csip = validateCSIP75();
                 csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
                 addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP75_ID,csip);
 
@@ -1072,25 +1072,28 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
         List<MetsType.FileSec.FileGrp> fileGrps = mets.getFileSec().getFileGrp();
         List<AmdSecType> amdSec = mets.getAmdSec();
         for(MetsType.FileSec.FileGrp fileGrp: fileGrps){
-            QName keyAdmid = new QName("https://dilcis.eu/XML/METS/CSIPExtensionMETS","ADMID","csip");
-            String admid = fileGrp.getOtherAttributes().get(keyAdmid);
-            if(admid != null){
-                boolean found = false;
-                for(AmdSecType a : amdSec){
-                    List<MdSecType> digiProv = a.getDigiprovMD();
-                    for(MdSecType mdSecType: digiProv){
-                        MdSecType.MdRef mdRef = mdSecType.getMdRef();
-                        if(admid.equals(mdRef.getID())){
-                            found = true;
-                            break;
+            List<FileType> files =  fileGrp.getFile();
+            for(FileType file: files){
+                List<Object> admids = file.getADMID();
+                if(admids != null && admids.size() != 0){
+                    boolean found = false;
+                    for( Object o: admids){
+                        MdSecType.MdRef mdRef = (MdSecType.MdRef) o;
+                        String admid = mdRef.getID();
+                        for(AmdSecType amdSecType: amdSec){
+                            List<MdSecType> digiProv = amdSecType.getDigiprovMD();
+                            for(MdSecType mdSecType: digiProv){
+                                String id = mdSecType.getMdRef().getID();
+                                if(admid.equals(id)){
+                                    found = true;
+                                    break;
+                                }
+                            }
                         }
                     }
-                    if(found){
-                        break;
+                    if(!found){
+                        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/fileSec/fileGrp/file/@ADMID not found in amdSec of METS file (" + metsName + ")",false,false);
                     }
-                }
-                if(!found){
-                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/fileSec/fileGrp/file/@ADMID not found in amdSec of METS file (" + metsName + ")",false,false);
                 }
             }
         }
@@ -1106,19 +1109,25 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
         List<MetsType.FileSec.FileGrp> fileGrps = mets.getFileSec().getFileGrp();
         List<MdSecType> dmdSec = mets.getDmdSec();
         for(MetsType.FileSec.FileGrp fileGrp: fileGrps){
-            QName keyDmdid = new QName("https://dilcis.eu/XML/METS/CSIPExtensionMETS","DMDID","csip");
-            String dmdid = fileGrp.getOtherAttributes().get(keyDmdid);
-            if(dmdid != null){
-                boolean found = false;
-                for(MdSecType md : dmdSec){
-                    MdSecType.MdRef mdRef = md.getMdRef();
-                    if(dmdid.equals(mdRef.getID())){
-                        found = true;
-                        break;
+            List<FileType> files =  fileGrp.getFile();
+            for(FileType file: files){
+                List<Object> dmdids = file.getDMDID();
+                if(dmdids != null && dmdids.size() != 0){
+                    boolean found = false;
+                    for( Object o: dmdids){
+                        MdSecType.MdRef mdRef = (MdSecType.MdRef) o;
+                        String dmdid = mdRef.getID();
+                        for(MdSecType md : dmdSec){
+                            String id =  md.getMdRef().getID();
+                            if(dmdid.equals(id)){
+                                found = true;
+                                break;
+                            }
+                        }
                     }
-                }
-                if(!found){
-                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/fileSec/fileGrp/file/@DMDID not found in dmdSec of METS file (" + metsName + ")",false,false);
+                    if(!found){
+                        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/fileSec/fileGrp/file/@DMDID not found in dmdSec of METS file (" + metsName + ")",false,false);
+                    }
                 }
             }
         }
