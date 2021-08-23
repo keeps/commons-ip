@@ -161,7 +161,12 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
   }
 
   protected boolean checkId(String id){
-    return ids.contains(id);
+    for(String s: ids){
+      if(s.equals(id)){
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override

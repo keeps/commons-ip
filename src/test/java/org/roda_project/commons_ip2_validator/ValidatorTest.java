@@ -761,13 +761,13 @@ public class ValidatorTest {
 //  /* CSIP80 */
 //  @Test
 //  public void validateCSIP80_1() {
-//    LOGGER.info("Validate CSIP80 - multi_doc_file_grp");
-//    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIP80/multi_doc_file_grp.json");
-//    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIP80/multi_doc_file_grp.zip");
+//    LOGGER.info("Validate CSIP80 - IP_missing_strucMap_label_attribue_value");
+//    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIP80/IP_missing_strucMap_label_attribue_value.json");
+//    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIP80/IP_missing_strucMap_label_attribue_value.zip");
 //
 //    EARKSIPValidator earksipValidator = new EARKSIPValidator(earksipPath,reportPath);
 //    earksipValidator.validate();
-//    LOGGER.info("Done validate CSIP80 - multi_doc_file_grp");
+//    LOGGER.info("Done validate CSIP80 - IP_missing_strucMap_label_attribue_value");
 //  }
 //
 //  @Test

@@ -241,4 +241,23 @@ public class ZipManager {
     }
     return false;
   }
+
+  public boolean checkDirectory(Path path, String directory, String methsPath) throws IOException {
+    ZipFile zipFile = new ZipFile(path.toFile());
+    Enumeration entries = zipFile.entries();
+    ZipEntry e = zipFile.getEntry(methsPath + directory);
+    if(e == null){
+      while (entries.hasMoreElements()){
+        ZipEntry entry = (ZipEntry) entries.nextElement();
+        String name = entry.getName();
+        if(name.matches(".*/?" + directory.toLowerCase() + "/")){
+          return true;
+        }
+      }
+    }
+    else{
+      return true;
+    }
+    return false;
+  }
 }

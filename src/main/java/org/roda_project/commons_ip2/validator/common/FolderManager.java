@@ -222,4 +222,25 @@ public class FolderManager {
         }
         return subMets;
     }
+
+    public boolean checkDirectory(String metsPath,String directory, String root) throws IOException {
+        String path = metsPath + "/" + directory.toLowerCase();
+        if (Paths.get(path).toFile().exists()) {
+            return Paths.get(path).toFile().isDirectory();
+        }
+        else {
+            String folder = root + "/" + directory.toLowerCase();
+            if (Paths.get(folder).toFile().exists()) {
+                return Paths.get(folder).toFile().isDirectory();
+            }
+            else{
+                for(File file : Paths.get(metsPath).toFile().listFiles()){
+                    if(file.getName().equals(directory.toLowerCase())){
+                        return file.isDirectory();
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }
