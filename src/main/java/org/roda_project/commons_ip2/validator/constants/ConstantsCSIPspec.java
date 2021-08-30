@@ -678,9 +678,7 @@ public class ConstantsCSIPspec {
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP60_ID = "CSIP60";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP60_NAME = "Documentation file group";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP60_LOCATION = "mets/fileSec/fileGrp[@USE=’Documentation’]";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP60_DESCRIPTION = "All XML schemas used in the information package should be referenced from " +
-            "one or more file groups with mets/fileSec/fileGrp/@USE attribute value " +
-            "'Schemas'.See also: File group names";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIP60_DESCRIPTION = "All documentation pertaining to the transferred content is placed in one or more file group elements with mets/fileSec/fileGrp/@USE attribute value “Documentation”.";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP60_CARDINALITY = "1..n";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIP60_LEVEL = "MUST";
 

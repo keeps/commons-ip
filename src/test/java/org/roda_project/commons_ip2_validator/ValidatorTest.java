@@ -735,7 +735,7 @@ public class ValidatorTest {
 //    earksipValidator.validate();
 //    LOGGER.info("Done validate CSIP60 - no_doc_file_grp");
 //  }
-//
+
 //  @Test
 //  public void validateCSIP60_2() {
 //    LOGGER.info("Validate CSIP60 - minimal_IP_with_1_representation");
@@ -746,7 +746,7 @@ public class ValidatorTest {
 //    earksipValidator.validate();
 //    LOGGER.info("Done validate CSIP60 - minimal_IP_with_1_representation");
 //  }
-//
+
 //  @Test
 //  public void validateCSIP60_3() {
 //    LOGGER.info("Validate CSIP60 - multi_doc_file_grp");

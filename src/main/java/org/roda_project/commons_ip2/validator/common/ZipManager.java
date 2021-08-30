@@ -72,7 +72,6 @@ public class ZipManager {
       if (zipFile == null) {
         zipFile = new ZipFile(path.toFile());
       }
-
       return zipFile.getEntry(entry);
     } catch (IOException e) {
       LOGGER.debug("Failed to retrieve the entry: {} from {}", entry, path.toString(), e);
@@ -134,7 +133,7 @@ public class ZipManager {
     Enumeration entries = zipFile.entries();
     while (entries.hasMoreElements()){
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if(entry.getName().equals(filePath)){
+      if(entry.getName().matches(".*/?" + filePath)){
         found = true;
         break;
       }
