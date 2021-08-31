@@ -2,6 +2,7 @@ package org.roda_project.commons_ip2.validator.reporter;
 
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
+import org.roda_project.commons_ip2.validator.constants.ConstantsSIPspec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -138,11 +139,20 @@ public class ValidationReporter {
       jsonGenerator.writeStartObject();
       jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_SPECIFICATION, specification);
       jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID, id);
-      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_NAME, ConstantsCSIPspec.getSpecificationName(id));
-      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LOCATION, ConstantsCSIPspec.getSpecificationLocation(id));
-      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_DESCRIPTION, ConstantsCSIPspec.getSpecificationDescription(id));
-      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_CARDINALITY, ConstantsCSIPspec.getSpecificationCardinality(id));
-      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LEVEL, ConstantsCSIPspec.getSpecificationLevel(id));
+      if(id.contains("C")){
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_NAME, ConstantsCSIPspec.getSpecificationName(id));
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LOCATION, ConstantsCSIPspec.getSpecificationLocation(id));
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_DESCRIPTION, ConstantsCSIPspec.getSpecificationDescription(id));
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_CARDINALITY, ConstantsCSIPspec.getSpecificationCardinality(id));
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LEVEL, ConstantsCSIPspec.getSpecificationLevel(id));
+      }
+      else{
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_NAME, ConstantsSIPspec.getSpecificationName(id));
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LOCATION, ConstantsSIPspec.getSpecificationLocation(id));
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_DESCRIPTION, ConstantsSIPspec.getSpecificationDescription(id));
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_CARDINALITY, ConstantsSIPspec.getSpecificationCardinality(id));
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LEVEL, ConstantsSIPspec.getSpecificationLevel(id));
+      }
       jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING);
       jsonGenerator.writeStartObject();
       jsonGenerator.writeObjectField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_OUTCOME, status);

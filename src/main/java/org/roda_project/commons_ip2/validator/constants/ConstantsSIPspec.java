@@ -326,6 +326,549 @@ public class ConstantsSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP35_CARDINALITY = "0..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP35_LEVEL = "MAY";
 
+  public static String getSpecificationName(String id) {
+    if (id.equals("SIP1")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP1_NAME;
+    }
+    if (id.equals("SIP2")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP2_NAME;
+    }
+    if (id.equals("SIP3")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP3_NAME;
+    }
+    if (id.equals("SIP4")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP4_NAME;
+    }
+    if (id.equals("SIP5")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP5_NAME;
+    }
+    if (id.equals("SIP6")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP6_NAME;
+    }
+    if (id.equals("SIP7")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP7_NAME;
+    }
+    if (id.equals("SIP8")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP8_NAME;
+    }
+    if (id.equals("SIP9")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP9_NAME;
+    }
+    if (id.equals("SIP10")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP10_NAME;
+    }
+    if (id.equals("SIP11")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP11_NAME;
+    }
+    if (id.equals("SIP12")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP12_NAME;
+    }
+    if (id.equals("SIP13")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP13_NAME;
+    }
+    if (id.equals("SIP14")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP14_NAME;
+    }
+    if (id.equals("SIP15")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP15_NAME;
+    }
+    if (id.equals("SIP16")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP16_NAME;
+    }
+    if (id.equals("SIP17")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP17_NAME;
+    }
+    if (id.equals("SIP18")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP18_NAME;
+    }
+    if (id.equals("SIP19")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP19_NAME;
+    }
+    if (id.equals("SIP20")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP20_NAME;
+    }
+    if (id.equals("SIP21")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP21_NAME;
+    }
+    if (id.equals("SIP22")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP22_NAME;
+    }
+    if (id.equals("SIP23")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP23_NAME;
+    }
+    if (id.equals("SIP24")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP24_NAME;
+    }
+    if (id.equals("SIP25")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP25_NAME;
+    }
+    if (id.equals("SIP26")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP26_NAME;
+    }
+    if (id.equals("SIP27")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP27_NAME;
+    }
+    if (id.equals("SIP28")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP28_NAME;
+    }
+    if (id.equals("SIP29")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP29_NAME;
+    }
+    if (id.equals("SIP30")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP30_NAME;
+    }
+    if (id.equals("SIP31")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP31_NAME;
+    }
+    if (id.equals("SIP32")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP32_NAME;
+    }
+    if (id.equals("SIP33")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP33_NAME;
+    }
+    if (id.equals("SIP34")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP34_NAME;
+    }
+    if (id.equals("SIP35")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP35_NAME;
+    }
+    return "Not Defined";
+  }
 
+  public static String getSpecificationLocation(String id) {
+    if (id.equals("SIP1")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP1_LOCATION;
+    }
+    if (id.equals("SIP2")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP2_LOCATION;
+    }
+    if (id.equals("SIP3")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP3_LOCATION;
+    }
+    if (id.equals("SIP4")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP4_LOCATION;
+    }
+    if (id.equals("SIP5")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP5_LOCATION;
+    }
+    if (id.equals("SIP6")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP6_LOCATION;
+    }
+    if (id.equals("SIP7")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP7_LOCATION;
+    }
+    if (id.equals("SIP8")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP8_LOCATION;
+    }
+    if (id.equals("SIP9")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP9_LOCATION;
+    }
+    if (id.equals("SIP10")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP10_LOCATION;
+    }
+    if (id.equals("SIP11")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP11_LOCATION;
+    }
+    if (id.equals("SIP12")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP12_LOCATION;
+    }
+    if (id.equals("SIP13")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP13_LOCATION;
+    }
+    if (id.equals("SIP14")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP14_LOCATION;
+    }
+    if (id.equals("SIP15")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP15_LOCATION;
+    }
+    if (id.equals("SIP16")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP16_LOCATION;
+    }
+    if (id.equals("SIP17")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP17_LOCATION;
+    }
+    if (id.equals("SIP18")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP18_LOCATION;
+    }
+    if (id.equals("SIP19")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP19_LOCATION;
+    }
+    if (id.equals("SIP20")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP20_LOCATION;
+    }
+    if (id.equals("SIP21")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP21_LOCATION;
+    }
+    if (id.equals("SIP22")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP22_LOCATION;
+    }
+    if (id.equals("SIP23")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP23_LOCATION;
+    }
+    if (id.equals("SIP24")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP24_LOCATION;
+    }
+    if (id.equals("SIP25")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP25_LOCATION;
+    }
+    if (id.equals("SIP26")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP26_LOCATION;
+    }
+    if (id.equals("SIP27")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP27_LOCATION;
+    }
+    if (id.equals("SIP28")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP28_LOCATION;
+    }
+    if (id.equals("SIP29")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP29_LOCATION;
+    }
+    if (id.equals("SIP30")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP30_LOCATION;
+    }
+    if (id.equals("SIP31")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP31_LOCATION;
+    }
+    if (id.equals("SIP32")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP32_LOCATION;
+    }
+    if (id.equals("SIP33")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP33_LOCATION;
+    }
+    if (id.equals("SIP34")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP34_LOCATION;
+    }
+    if (id.equals("SIP35")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP35_LOCATION;
+    }
+    return "Not Defined";
+  }
+
+  public static String getSpecificationDescription(String id) {
+    if (id.equals("SIP1")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP1_DESCRIPTION;
+    }
+    if (id.equals("SIP2")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP2_DESCRIPTION;
+    }
+    if (id.equals("SIP3")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP3_DESCRIPTION;
+    }
+    if (id.equals("SIP4")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP4_DESCRIPTION;
+    }
+    if (id.equals("SIP5")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP5_DESCRIPTION;
+    }
+    if (id.equals("SIP6")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP6_DESCRIPTION;
+    }
+    if (id.equals("SIP7")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP7_DESCRIPTION;
+    }
+    if (id.equals("SIP8")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP8_DESCRIPTION;
+    }
+    if (id.equals("SIP9")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP9_DESCRIPTION;
+    }
+    if (id.equals("SIP10")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP10_DESCRIPTION;
+    }
+    if (id.equals("SIP11")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP11_DESCRIPTION;
+    }
+    if (id.equals("SIP12")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP12_DESCRIPTION;
+    }
+    if (id.equals("SIP13")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP13_DESCRIPTION;
+    }
+    if (id.equals("SIP14")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP14_DESCRIPTION;
+    }
+    if (id.equals("SIP15")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP15_DESCRIPTION;
+    }
+    if (id.equals("SIP16")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP16_DESCRIPTION;
+    }
+    if (id.equals("SIP17")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP17_DESCRIPTION;
+    }
+    if (id.equals("SIP18")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP18_DESCRIPTION;
+    }
+    if (id.equals("SIP19")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP19_DESCRIPTION;
+    }
+    if (id.equals("SIP20")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP20_DESCRIPTION;
+    }
+    if (id.equals("SIP21")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP21_DESCRIPTION;
+    }
+    if (id.equals("SIP22")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP22_DESCRIPTION;
+    }
+    if (id.equals("SIP23")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP23_DESCRIPTION;
+    }
+    if (id.equals("SIP24")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP24_DESCRIPTION;
+    }
+    if (id.equals("SIP25")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP25_DESCRIPTION;
+    }
+    if (id.equals("SIP26")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP26_DESCRIPTION;
+    }
+    if (id.equals("SIP27")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP27_DESCRIPTION;
+    }
+    if (id.equals("SIP28")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP28_DESCRIPTION;
+    }
+    if (id.equals("SIP29")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP29_DESCRIPTION;
+    }
+    if (id.equals("SIP30")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP30_DESCRIPTION;
+    }
+    if (id.equals("SIP31")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP31_DESCRIPTION;
+    }
+    if (id.equals("SIP32")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP32_DESCRIPTION;
+    }
+    if (id.equals("SIP33")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP33_DESCRIPTION;
+    }
+    if (id.equals("SIP34")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP34_DESCRIPTION;
+    }
+    if (id.equals("SIP35")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP35_DESCRIPTION;
+    }
+    return "Not Defined";
+  }
+
+  public static String getSpecificationCardinality(String id) {
+    if (id.equals("SIP1")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP1_CARDINALITY;
+    }
+    if (id.equals("SIP2")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP2_CARDINALITY;
+    }
+    if (id.equals("SIP3")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP3_CARDINALITY;
+    }
+    if (id.equals("SIP4")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP4_CARDINALITY;
+    }
+    if (id.equals("SIP5")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP5_CARDINALITY;
+    }
+    if (id.equals("SIP6")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP6_CARDINALITY;
+    }
+    if (id.equals("SIP7")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP7_CARDINALITY;
+    }
+    if (id.equals("SIP8")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP8_CARDINALITY;
+    }
+    if (id.equals("SIP9")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP9_CARDINALITY;
+    }
+    if (id.equals("SIP10")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP10_CARDINALITY;
+    }
+    if (id.equals("SIP11")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP11_CARDINALITY;
+    }
+    if (id.equals("SIP12")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP12_CARDINALITY;
+    }
+    if (id.equals("SIP13")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP13_CARDINALITY;
+    }
+    if (id.equals("SIP14")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP14_CARDINALITY;
+    }
+    if (id.equals("SIP15")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP15_CARDINALITY;
+    }
+    if (id.equals("SIP16")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP16_CARDINALITY;
+    }
+    if (id.equals("SIP17")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP17_CARDINALITY;
+    }
+    if (id.equals("SIP18")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP18_CARDINALITY;
+    }
+    if (id.equals("SIP19")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP19_CARDINALITY;
+    }
+    if (id.equals("SIP20")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP20_CARDINALITY;
+    }
+    if (id.equals("SIP21")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP21_CARDINALITY;
+    }
+    if (id.equals("SIP22")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP22_CARDINALITY;
+    }
+    if (id.equals("SIP23")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP23_CARDINALITY;
+    }
+    if (id.equals("SIP24")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP24_CARDINALITY;
+    }
+    if (id.equals("SIP25")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP25_CARDINALITY;
+    }
+    if (id.equals("SIP26")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP26_CARDINALITY;
+    }
+    if (id.equals("SIP27")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP27_CARDINALITY;
+    }
+    if (id.equals("SIP28")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP28_CARDINALITY;
+    }
+    if (id.equals("SIP29")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP29_CARDINALITY;
+    }
+    if (id.equals("SIP30")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP30_CARDINALITY;
+    }
+    if (id.equals("SIP31")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP31_CARDINALITY;
+    }
+    if (id.equals("SIP32")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP32_CARDINALITY;
+    }
+    if (id.equals("SIP33")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP33_CARDINALITY;
+    }
+    if (id.equals("SIP34")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP34_CARDINALITY;
+    }
+    if (id.equals("SIP35")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP35_CARDINALITY;
+    }
+    return "Not Defined";
+  }
+
+  public static String getSpecificationLevel(String id) {
+    if (id.equals("SIP1")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP1_LEVEL;
+    }
+    if (id.equals("SIP2")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP2_LEVEL;
+    }
+    if (id.equals("SIP3")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP3_LEVEL;
+    }
+    if (id.equals("SIP4")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP4_LEVEL;
+    }
+    if (id.equals("SIP5")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP5_LEVEL;
+    }
+    if (id.equals("SIP6")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP6_LEVEL;
+    }
+    if (id.equals("SIP7")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP7_LEVEL;
+    }
+    if (id.equals("SIP8")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP8_LEVEL;
+    }
+    if (id.equals("SIP9")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP9_LEVEL;
+    }
+    if (id.equals("SIP10")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP10_LEVEL;
+    }
+    if (id.equals("SIP11")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP11_LEVEL;
+    }
+    if (id.equals("SIP12")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP12_LEVEL;
+    }
+    if (id.equals("SIP13")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP13_LEVEL;
+    }
+    if (id.equals("SIP14")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP14_LEVEL;
+    }
+    if (id.equals("SIP15")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP15_LEVEL;
+    }
+    if (id.equals("SIP16")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP16_LEVEL;
+    }
+    if (id.equals("SIP17")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP17_LEVEL;
+    }
+    if (id.equals("SIP18")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP18_LEVEL;
+    }
+    if (id.equals("SIP19")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP19_LEVEL;
+    }
+    if (id.equals("SIP20")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP20_LEVEL;
+    }
+    if (id.equals("SIP21")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP21_LEVEL;
+    }
+    if (id.equals("SIP22")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP22_LEVEL;
+    }
+    if (id.equals("SIP23")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP23_LEVEL;
+    }
+    if (id.equals("SIP24")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP24_LEVEL;
+    }
+    if (id.equals("SIP25")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP25_LEVEL;
+    }
+    if (id.equals("SIP26")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP26_LEVEL;
+    }
+    if (id.equals("SIP27")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP27_LEVEL;
+    }
+    if (id.equals("SIP28")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP28_LEVEL;
+    }
+    if (id.equals("SIP29")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP29_LEVEL;
+    }
+    if (id.equals("SIP30")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP30_LEVEL;
+    }
+    if (id.equals("SIP31")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP31_LEVEL;
+    }
+    if (id.equals("SIP32")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP32_LEVEL;
+    }
+    if (id.equals("SIP33")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP33_LEVEL;
+    }
+    if (id.equals("SIP34")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP34_LEVEL;
+    }
+    if (id.equals("SIP35")) {
+      return VALIDATION_REPORT_SPECIFICATION_SIP35_LEVEL;
+    }
+    return "Not Defined";
+  }
 }
 

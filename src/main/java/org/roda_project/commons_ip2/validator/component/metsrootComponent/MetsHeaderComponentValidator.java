@@ -25,16 +25,26 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     private List<String> oaisPackageTypes;
     private MetsType.MetsHdr metsHdr;
     private List<MetsType.MetsHdr.Agent> agents;
+    private List<String> recordsStatus;
 
     public void setOaisPackageTypes(List<String> oaisPackageTypes) {
         this.oaisPackageTypes = new ArrayList<>(oaisPackageTypes);
     }
+
+    public void setRecordsStatus(List<String> recordsStatus) {
+        this.recordsStatus = new ArrayList<>(recordsStatus);
+    }
+
     public MetsHeaderComponentValidator(String module_name) {
         MODULE_NAME = module_name;
         oaisPackageTypes = new ArrayList<>();
         ControlledVocabularyParser controlledVocabularyParser = new ControlledVocabularyParser(Constants.PATH_RESOURCES_CSIP_VOCABULARY_OAIS_PACKAGE_TYPE,oaisPackageTypes);
         controlledVocabularyParser.parse();
         setOaisPackageTypes(controlledVocabularyParser.getData());
+
+        controlledVocabularyParser = new ControlledVocabularyParser(Constants.PATH_RESOURCES_CSIP_VOCABULARY_RECORD_STATUS,recordsStatus);
+        controlledVocabularyParser.parse();
+        setRecordsStatus(controlledVocabularyParser.getData());
     }
 
     @Override
@@ -439,4 +449,323 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
         return details;
     }
 
+    /* METS header SIP validation */
+
+    /*
+    * metsHdr/@RECORDSTATUS
+    * A way of indicating the status of the package and to instruct the OAIS on how
+    * to properly handle the package. If not set, the expected behaviour is equal to
+    * NEW.See also: Package status
+    */
+
+    private ReporterDetails validateSIP3(){
+        String recordStatus = metsHdr.getRECORDSTATUS();
+        if(recordStatus != null){
+            if(!recordsStatus.contains(recordStatus)){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/@RECORDSTATUS value isn't valid",false,false);
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"You can add the status of the package with metsHdr/@RECORDSTATUS",false,false);
+        }
+        return new ReporterDetails();
+    }
+
+    /*
+     * metsHdr/@csip:OAISPACKAGETYPE
+     * @csip:OAISPACKAGETYPE is used with the value “SIP”.See also: OAIS
+     * Package type
+     */
+
+    private ReporterDetails validateSIP4(){
+        String oaisPackageType = metsHdr.getOAISPACKAGETYPE();
+        if(oaisPackageType != null){
+            if(!oaisPackageType.equals("SIP")){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/@csip:OAISPACKAGETYPE must be used with the value SIP",false,false);
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/@csip:OAISPACKAGETYPE can't be null",false,false);
+        }
+        return new ReporterDetails();
+    }
+
+    /*
+     * metsHdr/altRecordID
+     * A reference to the Submission Agreement associated with the package.
+     * @TYPE is used with the value “SUBMISSIONAGREEMENT”. Example: RA
+     * 13-2011/5329; 2012-04-12 Example:
+     * http://submissionagreement.kb.se/dnr331-1144-2011/20120711/ Note: It is
+     * recommended to use a machine-readable format for a better description of a
+     * submission agreement. For example, the submission agreement developed
+     * by Docuteam GmbH
+     * http://www.loc.gov/standards/mets/profiles/00000041.xmlSee also:
+     * Alternative record ID’s
+     */
+
+    private ReporterDetails validateSIP5(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/altRecordID
+    * An optional reference to a previous submission agreement(s) which the
+    * information may have belonged to. @TYPE is used with the value
+    * “PREVIOUSSUBMISSIONAGREEMENT”. Example: FM 12-2387/12726,
+    * 2007-09-19 Example:
+    * http://submissionagreement.kb.se/dnr331-1144-2011/20120711/ Note: It is
+    * recommended to use a machine-readable format for a better description of a
+    * submission agreement. For example, the submission agreement developed
+    * by Docuteam GmbH
+    * http://www.loc.gov/standards/mets/profiles/00000041.xmlSee also:
+    * Alternative record ID’s
+    */
+    private ReporterDetails validateSIP6(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/altRecordID
+    * An optional reference code indicating where in the archival hierarchy the
+    * package shall be placed in the OAIS. @TYPE is used with the value
+    * “REFERENCECODE”. Example: FM 12-2387/12726, 2007-09-19See also:
+    * Alternative record ID’s
+    */
+    private ReporterDetails validateSIP7(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/altRecordID
+    * In cases where the SIP originates from other institutions maintaining a
+    * reference code structure, this element can be used to record these reference
+    * codes and therefore support the provenance of the package when a whole
+    * archival description is not submitted with the submission. @TYPE is used
+    * with the value “PREVIOUSREFERENCECODE”. Example:
+    * SE/FM/123/123.1/123.1.3See also: Alternative record ID’s
+    */
+    private ReporterDetails validateSIP8(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent
+    * A wrapper element that enables to encode the name of the organisation or
+    * person that originally created the data being transferred. Please note that
+    * this might be dierent from the organisation which has been charged with
+    * preparing and sending the SIP to the archives.
+    */
+    private ReporterDetails validateSIP9(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent/@ROLE
+    * The role of the person(s) or institution(s) responsible for the
+    * document/collection.
+    */
+    private ReporterDetails validateSIP10(){
+        for(MetsType.MetsHdr.Agent a: agents ){
+            String role = a.getROLE();
+            if(role == null || role.equals("")){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null or empty",false,false);
+            }
+        }
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent/@TYPE
+    * The type of the archival creator agent is “ORGANIZATION” or “INDIVIDUAL”
+    */
+    private ReporterDetails validateSIP11(){
+        for(MetsType.MetsHdr.Agent a: agents ){
+            String type = a.getTYPE();
+            if(type != null){
+                if(!type.equals("INDIVIDUAL") && !type.equals("ORGANIZATION")){
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@TYPE value must be ORGANIZATION or INDIVIDUAL",false,false);
+                }
+            }
+            else{
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@TYPE can't be null or empty",false,false);
+            }
+        }
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent/name
+    * The name of the organisation(s) that originally created the data being
+    * transferred. Please note that this might be dierent from the organisation
+    * which has been charged with preparing and sending the SIP to the archives.
+    */
+    private ReporterDetails validateSIP12(){
+        for(MetsType.MetsHdr.Agent a: agents ){
+            String name = a.getName();
+            if(name == null || name.equals("")){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@name can't be null or empty",false,false);
+            }
+        }
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent/note
+    * The archival creator agent has a note providing a unique identification code
+    * for the archival creator.
+    */
+    private ReporterDetails validateSIP13(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent/note/@csip:NOTETYPE
+    * The archival creator agent note is typed with the value of
+    * “IDENTIFICATIONCODE”.See also: Note type
+    */
+    private ReporterDetails validateSIP14(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent
+    * The name of the organisation or person submitting the package to the
+    * archive.
+    */
+    private ReporterDetails validateSIP15(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent/@ROLE
+    * The role of the person(s) or institution(s) responsible for creating and/or
+    * submitting the package.
+    */
+    private ReporterDetails validateSIP16(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent/@TYPE
+    * The type of the submitting agent is “ORGANIZATION” or “INDIVIDUAL”
+    */
+    private ReporterDetails validateSIP17(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent/name
+    * Name of the organisation submitting the package to the archive
+    */
+    private ReporterDetails validateSIP18(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent/note
+    * The submitting agent has a note providing a unique identification code for
+    * the archival creator.
+    */
+    private ReporterDetails validateSIP19(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent/note/@csip:NOTETYPE
+    * The submitting agent note is typed with the value of
+    * “IDENTIFICATIONCODE”.See also: Note type
+    */
+    private ReporterDetails validateSIP20(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent
+    * Contact person for the submission.
+    */
+    private ReporterDetails validateSIP21(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent/@ROLE
+    * The role of the contact person is “CREATOR”.
+    */
+    private ReporterDetails validateSIP22(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent/@TYPE
+    * The type of the contact person agent is “INDIVIDUAL”
+    */
+    private ReporterDetails validateSIP23(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent/name
+    * Name of the contact person.
+    */
+    private ReporterDetails validateSIP24(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent/note
+    * The submitting agent has one or more notes giving the contact information
+    */
+    private ReporterDetails validateSIP25(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent
+    * The organisation or person that preserves the package.
+    */
+    private ReporterDetails validateSIP26(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent/@ROLE
+    * The role of the preservation agent is “PRESERVATION”.
+    */
+    private ReporterDetails validateSIP27(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent/@TYPE
+    * The type of the submitting agent is “ORGANIZATION”.
+    */
+    private ReporterDetails validateSIP28(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent/name
+    * Name of the organisation preserving the package.
+    */
+    private ReporterDetails validateSIP29(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent/note
+    * The preservation agent has a note providing a unique identification code for
+    * the archival creator.
+    */
+    private ReporterDetails validateSIP30(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * metsHdr/agent/note/@csip:NOTETYPE
+    * The preservation agent note is typed with the value of
+    * “IDENTIFICATIONCODE”.See also: Note type
+    */
+    private ReporterDetails validateSIP31(){
+        return new ReporterDetails();
+    }
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="DILCISVocabularies.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<Vocabularies xmlns="https://DILCIS.eu/XML/Vocabularies/IP">
+    <Vocabulary Name="VocabularyRECORDSTATUS">
+        <Information>
+            <p>Vocabulary derived from E-ARK-SIP</p>
+        </Information>
+        <Entry>
+            <Term lang="en">NEW</Term>
+            <Definition>A new delivery.</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">SUPPLEMENT</Term>
+            <Definition>Extends the previous delivery.</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">REPLEACEMENT</Term>
+            <Definition>Replaces a previous delivery.</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="eb">TEST</Term>
+            <Definition>A test delivery. No AIP should be created.</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">VERSION</Term>
+            <Definition>A delivery with same content regarding files but one or more files have a new version.</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">DELETE</Term>
+            <Definition>An order from the Producer to remove an existing AIP.</Definition>
+        </Entry>
+        <Entry>
+            <Term lang="en">OTHER</Term>
+            <Definition>Status not in list.</Definition>
+        </Entry>
+    </Vocabulary>
+</Vocabularies>

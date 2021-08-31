@@ -18,128 +18,128 @@ public class ConstantsCSIPspec {
     /* CSIPSTR1 */
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_ID = "CSIPSTR1";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_NAME = "CSIP Information Package folder structure";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_LOCATION = "Any Information Package MUST be included within a single physical root folder (known as the “Information Package root folder”). For packages presented in an archive format, see CSIPSTR3, the archive MUST unpack to a single root folder.";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_LOCATION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_DESCRIPTION = "Any Information Package MUST be included within a single physical root folder (known as the “Information Package root folder”). For packages presented in an archive format, see CSIPSTR3, the archive MUST unpack to a single root folder.";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_CARDINALITY = "";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_LEVEL = "MUST";
 
     /* CSIPSTR2 */
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_ID = "CSIPSTR2";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_NAME = "CSIP Information Package folder structure";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_LOCATION = "The Information Package root folder SHOULD be named with the ID or name of the Information Package, that is the value of the package METS.xml’s root <mets> element’s @OBJID attribute.";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_LOCATION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_DESCRIPTION = "The Information Package root folder SHOULD be named with the ID or name of the Information Package, that is the value of the package METS.xml’s root <mets> element’s @OBJID attribute.";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_CARDINALITY = "";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_LEVEL = "SHOULD";
 
     /* CSIPSTR3 */
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_ID = "CSIPSTR3";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_NAME = "CSIP Information Package folder structure";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_LOCATION = "The Information Package root folder MAY be compressed (for example by using TAR or ZIP). Which specific compression format to use needs to be stated in the Submission Agreement.";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_LOCATION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_DESCRIPTION = "The Information Package root folder MAY be compressed (for example by using TAR or ZIP). Which specific compression format to use needs to be stated in the Submission Agreement.";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_CARDINALITY = "";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_LEVEL = "MAY";
 
     /* CSIPSTR4 */
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_ID = "CSIPSTR4";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_NAME = "CSIP Information Package folder structure";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_LOCATION = "The Information Package root folder MUST include a file named METS.xml. This file MUST contain metadata that identifies the package, provides a high-level package description, and describes its structure, including pointers to constituent representations.";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_LOCATION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_DESCRIPTION = "The Information Package root folder MUST include a file named METS.xml. This file MUST contain metadata that identifies the package, provides a high-level package description, and describes its structure, including pointers to constituent representations.";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_CARDINALITY = "";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_LEVEL = "MUST";
 
     /* CSIPSTR5 */
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_ID = "CSIPSTR5";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_NAME = "CSIP Information Package folder structure";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_LOCATION = "The Information Package root folder SHOULD include a folder named metadata, which SHOULD include metadata relevant to the whole package.";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_LOCATION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_DESCRIPTION = "The Information Package root folder SHOULD include a folder named metadata, which SHOULD include metadata relevant to the whole package.";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_CARDINALITY = "";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_LEVEL = "SHOULD";
 
     /* CSIPSTR6 */
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_ID = "CSIPSTR6";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_NAME = "CSIP Information Package folder structure";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_LOCATION = "If preservation metadata are available, they SHOULD be included in sub-folder preservation.";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_LOCATION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_DESCRIPTION = "If preservation metadata are available, they SHOULD be included in sub-folder preservation.";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_CARDINALITY = "";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_LEVEL = "SHOULD";
 
     /* CSIPSTR7 */
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_ID = "CSIPSTR7";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_NAME = "CSIP Information Package folder structure";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_LOCATION = "If descriptive metadata are available, they SHOULD be included in sub-folder descriptive.";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_LOCATION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_DESCRIPTION = "If descriptive metadata are available, they SHOULD be included in sub-folder descriptive.";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_CARDINALITY = "";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_LEVEL = "SHOULD";
 
     /* CSIPSTR8 */
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_ID = "CSIPSTR8";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_NAME = "CSIP Information Package folder structure";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_LOCATION = "If any other metadata are available, they MAY be included in separate sub-folders, for example an additional folder named other.";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_LOCATION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_DESCRIPTION = "If any other metadata are available, they MAY be included in separate sub-folders, for example an additional folder named other.";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_CARDINALITY = "";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_LEVEL = "MAY";
 
     /* CSIPSTR9 */
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_ID = "CSIPSTR9";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_NAME = "CSIP Information Package folder structure";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_LOCATION = "The Information Package folder SHOULD include a folder named representations.";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_LOCATION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_DESCRIPTION = "The Information Package folder SHOULD include a folder named representations.";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_CARDINALITY = "";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_LEVEL = "SHOULD";
 
     /* CSIPSTR10 */
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_ID = "CSIPSTR10";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_NAME = "CSIP Information Package folder structure";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_LOCATION = "The representations folder SHOULD include a sub-folder for each individual representation (i.e. the “representation folder”). Each representation folder should have a string name that is unique within the package scope. For example the name of the representation and/or its creation date might be good candidates as a representation sub-folder name.";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_LOCATION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_DESCRIPTION = "The representations folder SHOULD include a sub-folder for each individual representation (i.e. the “representation folder”). Each representation folder should have a string name that is unique within the package scope. For example the name of the representation and/or its creation date might be good candidates as a representation sub-folder name.";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_CARDINALITY = "";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_LEVEL = "SHOULD";
 
     /* CSIPSTR11 */
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_ID = "CSIPSTR11";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_NAME = "CSIP Information Package folder structure";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_LOCATION = "The representation folder SHOULD include a sub-folder named data which MAY include all data constituting the representation.";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_LOCATION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_DESCRIPTION = "The representation folder SHOULD include a sub-folder named data which MAY include all data constituting the representation.";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_CARDINALITY = "";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_LEVEL = "SHOULD";
 
     /* CSIPSTR12 */
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_ID = "CSIPSTR12";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_NAME = "CSIP Information Package folder structure";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_LOCATION = "The representation folder SHOULD include a metadata file named METS.xml which includes information about the identity and structure of the representation and its components. The recommended best practice is to always have a METS.xml in the representation folder.";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_LOCATION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_DESCRIPTION = "The representation folder SHOULD include a metadata file named METS.xml which includes information about the identity and structure of the representation and its components. The recommended best practice is to always have a METS.xml in the representation folder.";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_CARDINALITY = "";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_LEVEL = "SHOULD";
 
     /* CSIPSTR13 */
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_ID = "CSIPSTR13";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_NAME = "CSIP Information Package folder structure";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_LOCATION = "The representation folder SHOULD include a sub-folder named metadata which MAY include all metadata about the specific representation.";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_LOCATION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_DESCRIPTION = "The representation folder SHOULD include a sub-folder named metadata which MAY include all metadata about the specific representation.";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_CARDINALITY = "";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_LEVEL = "SHOULD";
 
     /* CSIPSTR14 */
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_ID = "CSIPSTR13";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_NAME = "CSIP Information Package folder structure";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_LOCATION = "The Information Package MAY be extended with additional sub-folders.";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_LOCATION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_DESCRIPTION = "The Information Package MAY be extended with additional sub-folders.";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_CARDINALITY = "";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_LEVEL = "MAY";
 
     /* CSIPSTR15 */
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_ID = "CSIPSTR15";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_NAME = "CSIP Information Package folder structure";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_LOCATION = "We recommend including all XML schema documents for any structured metadata within package. These schema documents SHOULD be placed in a sub-folder called schemas within the Information Package root folder and/or the representation folder.";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_LOCATION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_DESCRIPTION = "We recommend including all XML schema documents for any structured metadata within package. These schema documents SHOULD be placed in a sub-folder called schemas within the Information Package root folder and/or the representation folder.";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_CARDINALITY = "";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_LEVEL = "SHOULD";
 
     /* CSIPSTR16 */
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_ID = "CSIPSTR16";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_NAME = "CSIP Information Package folder structure";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_LOCATION = "We recommend including any supplementary documentation for the package or a specific representation within the package. Supplementary documentation SHOULD be placed in a sub-folder called documentation within the Information Package root folder and/or the representation folder.";
-    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_DESCRIPTION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_LOCATION = "";
+    public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_DESCRIPTION = "We recommend including any supplementary documentation for the package or a specific representation within the package. Supplementary documentation SHOULD be placed in a sub-folder called documentation within the Information Package root folder and/or the representation folder.";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_CARDINALITY = "";
     public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_LEVEL = "SHOULD";
 

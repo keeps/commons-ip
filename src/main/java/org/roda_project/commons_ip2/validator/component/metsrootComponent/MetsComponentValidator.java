@@ -220,6 +220,35 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     return details;
   }
 
+  /* mets/@LABEL
+   * An optional short text describing the contents of the package,
+   * e.g. “Accounting records of 2017”.
+   */
+  private ReporterDetails validateSIP1(){
+    String label = mets.getLABEL();
+    if(label == null){
+      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"Can put an optional short text on mets/@LABEL",false,false);
+    }
+    return new ReporterDetails();
+  }
+
+  /* mets/@PROFILE
+   * An optional short text describing the contents of the package,
+   * e.g. “Accounting records of 2017”.
+   */
+  private ReporterDetails validateSIP2(){
+    String profile = mets.getPROFILE();
+    if(profile != null){
+      if(!profile.equals("https://earksip.dilcis.eu/profile/E-ARK-SIP.xml")){
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"mets/@PROFILE value isn't 'https://earksip.dilcis.eu/profile/E-ARK-SIP.xml'",false,false);
+      }
+    }
+    else{
+      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"mets/@PROFILE can't be null",false,false);
+    }
+    return new ReporterDetails();
+  }
+
   /*
   * Method for cleaning all the objects used in the validation
   */
