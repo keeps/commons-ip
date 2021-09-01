@@ -504,6 +504,28 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
      */
 
     private ReporterDetails validateSIP5(){
+        List<MetsType.MetsHdr.AltRecordID> altRecordIDS = metsHdr.getAltRecordID();
+        boolean found = false;
+        int count = 0;
+        if(altRecordIDS != null && altRecordIDS.size() != 0){
+            for(MetsType.MetsHdr.AltRecordID altRecordID: altRecordIDS){
+                String type = altRecordID.getTYPE();
+                if(type.equals("SUBMISSIONAGREEMENT")){
+                    found = true;
+                    count++;
+                }
+            }
+            if(!found){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/altRecordID " +
+                        "A reference to the Submission Agreement associated with the package. @TYPE is used with the value “SUBMISSIONAGREEMENT”",false,false);
+            }
+            if(count > 1){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"Can't have more than one metsHdr/altRecordID of the TYPE SUBMISSIONAGREEMENT " ,false,false);
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/altRecordID can be added to the package if you pretend",false,false);
+        }
         return new ReporterDetails();
     }
 
@@ -521,6 +543,25 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * Alternative record ID’s
     */
     private ReporterDetails validateSIP6(){
+        List<MetsType.MetsHdr.AltRecordID> altRecordIDS = metsHdr.getAltRecordID();
+        boolean found = false;
+        if(altRecordIDS != null && altRecordIDS.size() != 0){
+            for(MetsType.MetsHdr.AltRecordID altRecordID: altRecordIDS){
+                String type = altRecordID.getTYPE();
+                if(type.equals("PREVIOUSSUBMISSIONAGREEMENT")){
+                    found = true;
+                }
+            }
+            if(!found){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/altRecordID " +
+                        "An optional reference to a previous submission agreement(s) which the " +
+                        "information may have belonged to. @TYPE is used with the value " +
+                        "“PREVIOUSSUBMISSIONAGREEMENT”",false,false);
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/altRecordID can be added to the package if you pretend",false,false);
+        }
         return new ReporterDetails();
     }
 
@@ -532,6 +573,30 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * Alternative record ID’s
     */
     private ReporterDetails validateSIP7(){
+        List<MetsType.MetsHdr.AltRecordID> altRecordIDS = metsHdr.getAltRecordID();
+        boolean found = false;
+        int count = 0;
+        if(altRecordIDS != null && altRecordIDS.size() != 0){
+            for(MetsType.MetsHdr.AltRecordID altRecordID: altRecordIDS){
+                String type = altRecordID.getTYPE();
+                if(type.equals("REFERENCECODE")){
+                    found = true;
+                    count++;
+                }
+            }
+            if(!found){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/altRecordID " +
+                        "An optional reference code indicating where in the archival hierarchy the " +
+                        "package shall be placed in the OAIS. @TYPE is used with the value " +
+                        "“REFERENCECODE”",false,false);
+            }
+            if(count > 1){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"Can't have more than one metsHdr/altRecordID of the type REFERENCECODE " ,false,false);
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/altRecordID can be added to the package if you pretend",false,false);
+        }
         return new ReporterDetails();
     }
 
@@ -545,6 +610,27 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * SE/FM/123/123.1/123.1.3See also: Alternative record ID’s
     */
     private ReporterDetails validateSIP8(){
+        List<MetsType.MetsHdr.AltRecordID> altRecordIDS = metsHdr.getAltRecordID();
+        boolean found = false;
+        if(altRecordIDS != null && altRecordIDS.size() != 0){
+            for(MetsType.MetsHdr.AltRecordID altRecordID: altRecordIDS){
+                String type = altRecordID.getTYPE();
+                if(type.equals("PREVIOUSSUBMISSIONAGREEMENT")){
+                    found = true;
+                }
+            }
+            if(!found){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/altRecordID " +
+                        "In cases where the SIP originates from other institutions maintaining a " +
+                        "reference code structure, this element can be used to record these reference " +
+                        "codes and therefore support the provenance of the package when a whole " +
+                        "archival description is not submitted with the submission. @TYPE is used " +
+                        "with the value “PREVIOUSREFERENCECODE””",false,false);
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/altRecordID can be added to the package if you pretend",false,false);
+        }
         return new ReporterDetails();
     }
 
@@ -556,6 +642,33 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * preparing and sending the SIP to the archives.
     */
     private ReporterDetails validateSIP9(){
+        boolean found = false;
+        int count = 0;
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("ARCHIVIST")){
+                        found = true;
+                        count++;
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
+                }
+            }
+            if(!found){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent you can add agent with the ROLE ARCHIVIST ",false,false);
+            }
+            else{
+                if(count != 1){
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"Can't have more than one metsHdr/agent with the ROLE ARCHIVIST",false,false);
+                }
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
+        }
         return new ReporterDetails();
     }
 
@@ -565,11 +678,32 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * document/collection.
     */
     private ReporterDetails validateSIP10(){
-        for(MetsType.MetsHdr.Agent a: agents ){
-            String role = a.getROLE();
-            if(role == null || role.equals("")){
-                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null or empty",false,false);
+        boolean found = false;
+        int count = 0;
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("ARCHIVIST")){
+                        found = true;
+                        count++;
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
+                }
             }
+            if(!found){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent you can add agent with the ROLE ARCHIVIST ",false,false);
+            }
+            else{
+                if(count != 1){
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"Can't have more than one metsHdr/agent with the ROLE ARCHIVIST",false,false);
+                }
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
         }
         return new ReporterDetails();
     }
@@ -579,16 +713,24 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * The type of the archival creator agent is “ORGANIZATION” or “INDIVIDUAL”
     */
     private ReporterDetails validateSIP11(){
-        for(MetsType.MetsHdr.Agent a: agents ){
-            String type = a.getTYPE();
-            if(type != null){
-                if(!type.equals("INDIVIDUAL") && !type.equals("ORGANIZATION")){
-                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@TYPE value must be ORGANIZATION or INDIVIDUAL",false,false);
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("ARCHIVIST")){
+                       String type = agent.getTYPE();
+                       if(!type.equals("ORGANIZATION") && !type.equals("INDIVIDUAL")){
+                           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"When the metsHdr/agent/@ROLE is ARCHIVIST  metsHdr/agent/@TYPE must be ORGANIZATION or INDIVIDUAL",false,false);
+                       }
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
                 }
             }
-            else{
-                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@TYPE can't be null or empty",false,false);
-            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
         }
         return new ReporterDetails();
     }
@@ -600,11 +742,24 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * which has been charged with preparing and sending the SIP to the archives.
     */
     private ReporterDetails validateSIP12(){
-        for(MetsType.MetsHdr.Agent a: agents ){
-            String name = a.getName();
-            if(name == null || name.equals("")){
-                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@name can't be null or empty",false,false);
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("ARCHIVIST")){
+                        String name = agent.getName();
+                        if(name == null){
+                            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/name can't be null",false,false);
+                        }
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
+                }
             }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
         }
         return new ReporterDetails();
     }
@@ -615,6 +770,27 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * for the archival creator.
     */
     private ReporterDetails validateSIP13(){
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("ARCHIVIST")){
+                        List<MetsType.MetsHdr.Agent.Note> notes = agent.getNote();
+                        if(notes != null && notes.size() != 0){
+                            if(notes.size() != 1){
+                                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/note can't be more than one ",false,false);
+                            }
+                        }
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
+                }
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
+        }
         return new ReporterDetails();
     }
 
@@ -624,6 +800,30 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * “IDENTIFICATIONCODE”.See also: Note type
     */
     private ReporterDetails validateSIP14(){
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("ARCHIVIST")){
+                        List<MetsType.MetsHdr.Agent.Note> notes = agent.getNote();
+                        if(notes != null && notes.size() != 0){
+                            for(MetsType.MetsHdr.Agent.Note note : notes){
+                                String noteType = note.getNOTETYPE();
+                                if(noteType == null || noteType.equals("")){
+                                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@csip:NOTETYPE can't be null or empty",false,false);
+                                }
+                            }
+                        }
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
+                }
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
+        }
         return new ReporterDetails();
     }
 
@@ -633,6 +833,33 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * archive.
     */
     private ReporterDetails validateSIP15(){
+        boolean found = false;
+        int count = 0;
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("OTHER")){
+                        found = true;
+                        count++;
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
+                }
+            }
+            if(!found){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent you can add agent with the ROLE OTHER ",false,false);
+            }
+            else{
+                if(count != 1){
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"Can't have more than one metsHdr/agent with the ROLE OTHER",false,false);
+                }
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
+        }
         return new ReporterDetails();
     }
 
@@ -642,6 +869,33 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * submitting the package.
     */
     private ReporterDetails validateSIP16(){
+        boolean found = false;
+        int count = 0;
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("OTHER")){
+                        found = true;
+                        count++;
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
+                }
+            }
+            if(!found){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent you can add agent with the ROLE OTHER ",false,false);
+            }
+            else{
+                if(count != 1){
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"Can't have more than one metsHdr/agent with the ROLE OTHER",false,false);
+                }
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
+        }
         return new ReporterDetails();
     }
 
@@ -650,6 +904,25 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * The type of the submitting agent is “ORGANIZATION” or “INDIVIDUAL”
     */
     private ReporterDetails validateSIP17(){
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("OTHER")){
+                        String type = agent.getTYPE();
+                        if(!type.equals("ORGANIZATION") && !type.equals("INDIVIDUAL")){
+                            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"When the metsHdr/agent/@ROLE is OTHER  metsHdr/agent/@TYPE must be ORGANIZATION or INDIVIDUAL",false,false);
+                        }
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
+                }
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
+        }
         return new ReporterDetails();
     }
 
@@ -658,6 +931,25 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * Name of the organisation submitting the package to the archive
     */
     private ReporterDetails validateSIP18(){
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("OTHER")){
+                        String name = agent.getName();
+                        if(name == null){
+                            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/name can't be null",false,false);
+                        }
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
+                }
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
+        }
         return new ReporterDetails();
     }
 
@@ -667,6 +959,27 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * the archival creator.
     */
     private ReporterDetails validateSIP19(){
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("OTHER")){
+                        List<MetsType.MetsHdr.Agent.Note> notes = agent.getNote();
+                        if(notes != null && notes.size() != 0){
+                            if(notes.size() != 1){
+                                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/note can't be more than one ",false,false);
+                            }
+                        }
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
+                }
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
+        }
         return new ReporterDetails();
     }
 
@@ -676,6 +989,30 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * “IDENTIFICATIONCODE”.See also: Note type
     */
     private ReporterDetails validateSIP20(){
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("OTHER")){
+                        List<MetsType.MetsHdr.Agent.Note> notes = agent.getNote();
+                        if(notes != null && notes.size() != 0){
+                            for(MetsType.MetsHdr.Agent.Note note : notes){
+                                String noteType = note.getNOTETYPE();
+                                if(noteType == null || noteType.equals("")){
+                                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@csip:NOTETYPE can't be null or empty",false,false);
+                                }
+                            }
+                        }
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
+                }
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
+        }
         return new ReporterDetails();
     }
 

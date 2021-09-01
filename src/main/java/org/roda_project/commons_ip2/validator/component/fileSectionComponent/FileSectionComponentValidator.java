@@ -1114,4 +1114,45 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     }
 
 
+    /* SIP Specification Validations */
+
+    /*
+    * fileSec/fileGrp/file/@sip:FILEFORMATNAME
+    * An optional attribute may be used if the MIMETYPE is not suicient for the
+    * purposes of processing the information package. Example: “Extensible
+    * Markup Language” Example: “PDF/A” Example: “ISO/IEC 26300:2006”
+    */
+
+    private ReporterDetails validateSIP32(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * fileSec/fileGrp/file/@sip:FILEFORMATVERSION
+    * The version of the file format when the use of PREMIS has not been agreed
+    * upon in the submission agreement. Example: “1.0”
+    */
+    private ReporterDetails validateSIP33(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * fileSec/fileGrp/file/@sip:FILEFORMATREGISTRY
+    * The name of the format registry used to identify the file format when the use
+    * of PREMIS has not been agreed upon in the submission agreement. Example:
+    * “PRONOM”
+    */
+    private ReporterDetails validateSIP34(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * fileSec/fileGrp/file/@sip:FILEFORMATKEY
+    * Key of the file format in the registry when use of PREMIS has not been agreed
+    * upon in the submission agreement. Example: “fmt/101”
+    */
+    private ReporterDetails validateSIP35(){
+        return new ReporterDetails();
+    }
+
 }
