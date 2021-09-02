@@ -4,6 +4,7 @@ import org.roda_project.commons_ip2.validator.common.ControlledVocabularyParser;
 import org.roda_project.commons_ip2.validator.component.ValidatorComponentImpl;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
+import org.roda_project.commons_ip2.validator.constants.ConstantsSIPspec;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,6 +84,18 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     csip = validateCSIP6();
     csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
     addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP6_ID,csip);
+
+    /* SIP1 */
+    validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP1_ID);
+    csip = validateSIP1();
+    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP1_ID,csip);
+
+    /* SIP2 */
+    validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP2_ID);
+    csip = validateSIP2();
+    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP2_ID,csip);
 
     observer.notifyFinishModule(MODULE_NAME);
     cleanValidationObjects();

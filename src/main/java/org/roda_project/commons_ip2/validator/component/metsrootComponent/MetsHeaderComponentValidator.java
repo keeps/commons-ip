@@ -6,6 +6,7 @@ import org.roda_project.commons_ip2.validator.common.ControlledVocabularyParser;
 import org.roda_project.commons_ip2.validator.component.ValidatorComponentImpl;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
+import org.roda_project.commons_ip2.validator.constants.ConstantsSIPspec;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,6 +120,145 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
                 csip = validateCSIP16();
                 csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
                 addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID,csip);
+
+                /* SIP9 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP9_ID);
+                csip = validateSIP9();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP9_ID,csip);
+
+                /* SIP10 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP10_ID);
+                csip = validateSIP10();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP10_ID,csip);
+
+                /* SIP11 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP11_ID);
+                csip = validateSIP11();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP11_ID,csip);
+
+                /* SIP12 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP12_ID);
+                csip = validateSIP12();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP12_ID,csip);
+
+                /* SIP13 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP13_ID);
+                csip = validateSIP13();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP13_ID,csip);
+
+                /* SIP14 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP14_ID);
+                csip = validateSIP14();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP14_ID,csip);
+
+                /* SIP15 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP15_ID);
+                csip = validateSIP15();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP15_ID,csip);
+
+                /* SIP16 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP16_ID);
+                csip = validateSIP16();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP16_ID,csip);
+
+                /* SIP17 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP17_ID);
+                csip = validateSIP17();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP17_ID,csip);
+
+                /* SIP18 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP18_ID);
+                csip = validateSIP18();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP18_ID,csip);
+
+                /* SIP19 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP19_ID);
+                csip = validateSIP19();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP19_ID,csip);
+
+                /* SIP20 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP20_ID);
+                csip = validateSIP20();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP20_ID,csip);
+
+                /* SIP21 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP21_ID);
+                csip = validateSIP21();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP21_ID,csip);
+
+                /* SIP22 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP22_ID);
+                csip = validateSIP22();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP22_ID,csip);
+
+                /* SIP23 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP20_ID);
+                csip = validateSIP23();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP23_ID,csip);
+
+                /* SIP24 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP24_ID);
+                csip = validateSIP24();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP24_ID,csip);
+
+                /* SIP25 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP25_ID);
+                csip = validateSIP25();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP25_ID,csip);
+
+                /* SIP26 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP26_ID);
+                csip = validateSIP26();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP26_ID,csip);
+
+                /* SIP27 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP27_ID);
+                csip = validateSIP27();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP27_ID,csip);
+
+                /* SIP28 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP28_ID);
+                csip = validateSIP28();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP28_ID,csip);
+
+                /* SIP29 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP29_ID);
+                csip = validateSIP29();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP29_ID,csip);
+
+                /* SIP30 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP30_ID);
+                csip = validateSIP30();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP30_ID,csip);
+
+                /* SIP31 */
+                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP31_ID);
+                csip = validateSIP31();
+                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP31_ID,csip);
+
             }
             else{
                 String message = "SKIPPED because mets/metsHdr/agent doesn't exist! (" + metsName +")";
@@ -145,7 +285,131 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
                 /* CSIP16 */
                 csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
                 addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID,csip);
+
+                /* SIP9 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP9_ID,csip);
+
+                /* SIP10 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP10_ID,csip);
+
+                /* SIP11 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP11_ID,csip);
+
+                /* SIP12 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP12_ID,csip);
+
+                /* SIP13 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP13_ID,csip);
+
+                /* SIP14 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP14_ID,csip);
+
+                /* SIP15 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP15_ID,csip);
+
+                /* SIP16 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP16_ID,csip);
+
+                /* SIP17 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP17_ID,csip);
+
+                /* SIP18 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP18_ID,csip);
+
+                /* SIP19 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP19_ID,csip);
+
+                /* SIP20 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP20_ID,csip);
+
+                /* SIP21 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP21_ID,csip);
+
+                /* SIP22 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP22_ID,csip);
+
+                /* SIP23 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP23_ID,csip);
+
+                /* SIP24 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP24_ID,csip);
+
+                /* SIP25 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP25_ID,csip);
+
+                /* SIP26 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP26_ID,csip);
+
+                /* SIP28 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP28_ID,csip);
+
+                /* SIP29 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP29_ID,csip);
+
+                /* SIP30 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP30_ID,csip);
+
+                /* SIP31 */
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP31_ID,csip);
             }
+
+            /* SIP3 */
+            validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP3_ID);
+            csip = validateSIP3();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP3_ID,csip);
+
+            /* SIP4 */
+            validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP4_ID);
+            csip = validateSIP4();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP4_ID,csip);
+
+            /* SIP5 */
+            validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP5_ID);
+            csip = validateSIP5();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP5_ID,csip);
+
+            /* SIP6 */
+            validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP6_ID);
+            csip = validateSIP6();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP6_ID,csip);
+
+            /* SIP7 */
+            validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP7_ID);
+            csip = validateSIP7();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP7_ID,csip);
+
+            /* SIP8 */
+            validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP8_ID);
+            csip = validateSIP8();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP8_ID,csip);
         }
         else{
             String message = "SKIPPED because mets/metsHdr doesn't exist! (" + metsName +")";
@@ -189,6 +453,118 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
             /* CSIP16 */
             csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
             addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID,csip);
+
+            /* SIP3 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP3_ID,csip);
+
+            /* SIP4 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP4_ID,csip);
+
+            /* SIP5 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP5_ID,csip);
+
+            /* SIP6 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP6_ID,csip);
+
+            /* SIP7 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP7_ID,csip);
+
+            /* SIP8 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP8_ID,csip);
+
+            /* SIP9 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP9_ID,csip);
+
+            /* SIP10 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP10_ID,csip);
+
+            /* SIP11 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP11_ID,csip);
+
+            /* SIP12 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP12_ID,csip);
+
+            /* SIP13 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP13_ID,csip);
+
+            /* SIP14 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP14_ID,csip);
+
+            /* SIP15 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP15_ID,csip);
+
+            /* SIP16 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP16_ID,csip);
+
+            /* SIP17 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP17_ID,csip);
+
+            /* SIP18 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP18_ID,csip);
+
+            /* SIP19 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP19_ID,csip);
+
+            /* SIP20 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP20_ID,csip);
+
+            /* SIP21 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP21_ID,csip);
+
+            /* SIP22 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP22_ID,csip);
+
+            /* SIP23 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP23_ID,csip);
+
+            /* SIP24 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP24_ID,csip);
+
+            /* SIP25 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP25_ID,csip);
+
+            /* SIP26 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP26_ID,csip);
+
+            /* SIP28 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP28_ID,csip);
+
+            /* SIP29 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP29_ID,csip);
+
+            /* SIP30 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP30_ID,csip);
+
+            /* SIP31 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP31_ID,csip);
         }
         observer.notifyFinishModule(MODULE_NAME);
     }
@@ -1021,6 +1397,26 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * Contact person for the submission.
     */
     private ReporterDetails validateSIP21(){
+        boolean found = false;
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("CREATOR")){
+                        found = true;
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
+                }
+            }
+            if(!found){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent you can add agent with the ROLE CREATOR ",false,false);
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
+        }
         return new ReporterDetails();
     }
 
@@ -1029,6 +1425,26 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * The role of the contact person is “CREATOR”.
     */
     private ReporterDetails validateSIP22(){
+        boolean found = false;
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("CREATOR")){
+                        found = true;
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
+                }
+            }
+            if(!found){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent you can add agent with the ROLE CREATOR ",false,false);
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
+        }
         return new ReporterDetails();
     }
 
@@ -1037,6 +1453,25 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * The type of the contact person agent is “INDIVIDUAL”
     */
     private ReporterDetails validateSIP23(){
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("CREATOR")){
+                        String type = agent.getTYPE();
+                        if(!type.equals("INDIVIDUAL")){
+                            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"When the metsHdr/agent/@ROLE is ARCHIVIST  metsHdr/agent/@TYPE must be ORGANIZATION or INDIVIDUAL",false,false);
+                        }
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
+                }
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
+        }
         return new ReporterDetails();
     }
 
@@ -1045,6 +1480,25 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * Name of the contact person.
     */
     private ReporterDetails validateSIP24(){
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("CREATOR")){
+                        String name = agent.getName();
+                        if(name == null){
+                            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/name can't be null",false,false);
+                        }
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
+                }
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
+        }
         return new ReporterDetails();
     }
 
@@ -1053,7 +1507,28 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * The submitting agent has one or more notes giving the contact information
     */
     private ReporterDetails validateSIP25(){
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("CREATOR")){
+                        List<MetsType.MetsHdr.Agent.Note> notes = agent.getNote();
+                        if(notes != null && notes.size() != 0){
+                            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"can add contact information in one or more metsHdr/agent/note ",false,false);
+                        }
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
+                }
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
+        }
         return new ReporterDetails();
+
+
     }
 
     /*
@@ -1061,6 +1536,33 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * The organisation or person that preserves the package.
     */
     private ReporterDetails validateSIP26(){
+        boolean found = false;
+        int count = 0;
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("PRESERVATION")){
+                        found = true;
+                        count++;
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
+                }
+            }
+            if(!found){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent you can add agent with the ROLE PRESERVATION ",false,false);
+            }
+            else{
+                if(count != 1){
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"Can't have more than one metsHdr/agent with the ROLE PRESERVATION",false,false);
+                }
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
+        }
         return new ReporterDetails();
     }
 
@@ -1069,6 +1571,33 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * The role of the preservation agent is “PRESERVATION”.
     */
     private ReporterDetails validateSIP27(){
+        boolean found = false;
+        int count = 0;
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("PRESERVATION")){
+                        found = true;
+                        count++;
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
+                }
+            }
+            if(!found){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent you can add agent with the ROLE PRESERVATION ",false,false);
+            }
+            else{
+                if(count != 1){
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"Can't have more than one metsHdr/agent with the ROLE OTHER",false,false);
+                }
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
+        }
         return new ReporterDetails();
     }
 
@@ -1077,6 +1606,25 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * The type of the submitting agent is “ORGANIZATION”.
     */
     private ReporterDetails validateSIP28(){
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("PRESERVATION")){
+                        String type = agent.getTYPE();
+                        if(!type.equals("ORGANIZATION")){
+                            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"When the metsHdr/agent/@ROLE is PRESERVATION  metsHdr/agent/@TYPE must be ORGANIZATION",false,false);
+                        }
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
+                }
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
+        }
         return new ReporterDetails();
     }
 
@@ -1085,6 +1633,26 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * Name of the organisation preserving the package.
     */
     private ReporterDetails validateSIP29(){
+
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("PRESERVATION")){
+                        String name = agent.getName();
+                        if(name == null){
+                            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/name can't be null",false,false);
+                        }
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
+                }
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
+        }
         return new ReporterDetails();
     }
 
@@ -1094,6 +1662,28 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * the archival creator.
     */
     private ReporterDetails validateSIP30(){
+
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("PRESERVATION")){
+                        List<MetsType.MetsHdr.Agent.Note> notes = agent.getNote();
+                        if(notes != null && notes.size() != 0){
+                            if(notes.size() != 1){
+                                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/note can't be more than one ",false,false);
+                            }
+                        }
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
+                }
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
+        }
         return new ReporterDetails();
     }
 
@@ -1103,6 +1693,30 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * “IDENTIFICATIONCODE”.See also: Note type
     */
     private ReporterDetails validateSIP31(){
+        if(agents != null && agents.size() != 0){
+            for(MetsType.MetsHdr.Agent agent : agents){
+                String role = agent.getROLE();
+                if(role != null){
+                    if(role.equals("PRESERVATION")){
+                        List<MetsType.MetsHdr.Agent.Note> notes = agent.getNote();
+                        if(notes != null && notes.size() != 0){
+                            for(MetsType.MetsHdr.Agent.Note note : notes){
+                                String noteType = note.getNOTETYPE();
+                                if(noteType == null || noteType.equals("")){
+                                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@csip:NOTETYPE can't be null or empty",false,false);
+                                }
+                            }
+                        }
+                    }
+                }
+                else{
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/@ROLE can't be null ",false,false);
+                }
+            }
+        }
+        else{
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent A wrapper element that enables to encode the name of the organisation or person that originally created the data being transferred. Please note that this might be different from the organisation which has been charged with preparing and sending the SIP to the archives.",false,false);
+        }
         return new ReporterDetails();
     }
 }
