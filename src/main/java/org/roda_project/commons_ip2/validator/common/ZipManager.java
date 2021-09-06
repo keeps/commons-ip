@@ -259,4 +259,44 @@ public class ZipManager {
     }
     return false;
   }
+
+  public boolean checkSubMetsFolder(Path path, String objectID) throws IOException {
+    ZipFile zipFile = new ZipFile(path.toFile());
+    Enumeration entries = zipFile.entries();
+    while (entries.hasMoreElements()){
+      ZipEntry entry = (ZipEntry) entries.nextElement();
+      String name = entry.getName();
+      if(name.matches(".*/?" + objectID + "/METS.xml")){
+        return true;
+      }
+      else{
+        if(name.matches(".*/?" + objectID.toLowerCase() + "/METS.xml")){
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  public boolean checkRootFolderName(Path path, String OBJECTID) throws IOException {
+    if (zipFile == null) {
+      zipFile = new ZipFile(path.toFile());
+    }
+
+    Enumeration entries = zipFile.entries();
+    String entry = null;
+    while (entries.hasMoreElements()){
+      ZipEntry entr = (ZipEntry) entries.nextElement();
+      if(entr.getName().matches(".*/METS.xml")){
+        if(entr.getName().split("/").length == 2){
+          entry = entr.getName();
+        }
+      }
+    }
+    if(entry == null){
+      LOGGER.debug("METS.xml not Found");
+      throw new IOException("METS.xml not Found");
+    }
+    return entry.split("/")[0].equals(OBJECTID);
+  }
 }

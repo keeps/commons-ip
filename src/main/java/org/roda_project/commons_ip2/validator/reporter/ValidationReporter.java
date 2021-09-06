@@ -210,7 +210,6 @@ public class ValidationReporter {
       ReporterDetails details = entry.getValue();
       List<String> issues = details.getIssues();
       String detail = details.getDetail();
-
       if(details.isSkipped()){
         componentValidationResult(details.getSpecification(),entry.getKey(), Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_SKIPPED,issues,detail);
         skipped++;
@@ -222,11 +221,19 @@ public class ValidationReporter {
         }
         else{
           componentValidationResult(details.getSpecification(), entry.getKey(),Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_FAILED,issues,detail);
-          if(ConstantsCSIPspec.getSpecificationLevel(entry.getKey()).equals("MUST")){
-           errors++;
+          if(details.getSpecification().contains("C")) {
+            if (ConstantsCSIPspec.getSpecificationLevel(entry.getKey()).equals("MUST")) {
+              errors++;
+            } else {
+              warnings++;
+            }
           }
           else{
-            warnings++;
+            if (ConstantsSIPspec.getSpecificationLevel(entry.getKey()).equals("MUST")) {
+              errors++;
+            } else {
+              warnings++;
+            }
           }
         }
       }

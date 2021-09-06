@@ -4,11 +4,13 @@ import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
 import org.roda_project.commons_ip2.validator.common.FolderManager;
 import org.roda_project.commons_ip2.validator.common.InstatiateMets;
 import org.roda_project.commons_ip2.validator.common.ZipManager;
+import org.roda_project.commons_ip2.validator.component.administritiveMetadataComponent.AdministritiveMetadataComponentValidator;
 import org.roda_project.commons_ip2.validator.component.descriptiveMetadataComponent.DescriptiveMetadataComponentValidator;
 import org.roda_project.commons_ip2.validator.component.fileComponent.StructureComponentValidator;
 import org.roda_project.commons_ip2.validator.component.fileSectionComponent.FileSectionComponentValidator;
 import org.roda_project.commons_ip2.validator.component.metsrootComponent.MetsComponentValidator;
 import org.roda_project.commons_ip2.validator.component.ValidatorComponent;
+import org.roda_project.commons_ip2.validator.component.metsrootComponent.MetsHeaderComponentValidator;
 import org.roda_project.commons_ip2.validator.component.structuralMapComponent.StructuralMapComponentValidator;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.observer.ProgressValidationLoggerObserver;
@@ -74,9 +76,28 @@ public class EARKSIPValidator {
               return 1;
             }
             else{
-              c1 = Integer.parseInt(o1.split("P")[1]);
-              c2 = Integer.parseInt(o2.split("P")[1]);
-              return compareInt(c1,c2);
+              if(o1.contains("C") && o2.contains("C")){
+                c1 = Integer.parseInt(o1.split("P")[1]);
+                c2 = Integer.parseInt(o2.split("P")[1]);
+                return compareInt(c1,c2);
+              }
+              else{
+                if(o1.contains("C") && !o2.contains("C")){
+                  return -1;
+                }
+                else{
+                  if(!o1.contains("C") && o2.contains("C")){
+                    return 1;
+                  }
+                  else{
+                    c1 = Integer.parseInt(o1.split("P")[1]);
+                    c2 = Integer.parseInt(o2.split("P")[1]);
+                    return compareInt(c1,c2);
+                  }
+                }
+              }
+
+
             }
           }
         }
@@ -93,10 +114,10 @@ public class EARKSIPValidator {
 //    components.add(metsHeaderComponent);
 //      ValidatorComponent descriptiveMetadataComponent = new DescriptiveMetadataComponentValidator(Constants.CSIP_MODULE_NAME_3);
 //      components.add(descriptiveMetadataComponent);
-//    ValidatorComponent administritiveMetadataComponent = new AdministritiveMetadataComponentValidator(Constants.CSIP_MODULE_NAME_4);
-//    components.add(administritiveMetadataComponent);
-    ValidatorComponent fileSectionComponent = new FileSectionComponentValidator(Constants.CSIP_MODULE_NAME_5);
-    components.add(fileSectionComponent);
+    ValidatorComponent administritiveMetadataComponent = new AdministritiveMetadataComponentValidator(Constants.CSIP_MODULE_NAME_4);
+    components.add(administritiveMetadataComponent);
+//    ValidatorComponent fileSectionComponent = new FileSectionComponentValidator(Constants.CSIP_MODULE_NAME_5);
+//    components.add(fileSectionComponent);
 //    ValidatorComponent structuralMapComponent = new StructuralMapComponentValidator(Constants.CSIP_MODULE_NAME_6);
 //    components.add(structuralMapComponent);
   }
@@ -121,14 +142,14 @@ public class EARKSIPValidator {
             InputStream metsRootStream = zipManager.getMetsRootInputStream(earksipPath);
             InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
             mets = metsRoot.instatiateMetsFile();
-            validateComponents(structureComponent.isZipFileFlag(),earksipPath.toString());
+            validateComponents(structureComponent.isZipFileFlag(),earksipPath.toString(),true);
 
           }
           else{
             InputStream metsRootStream = zipManager.getMetsRootInputStream(earksipPath);
             InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
             mets = metsRoot.instatiateMetsFile();
-            validateComponents(structureComponent.isZipFileFlag(),earksipPath.toString());
+            validateComponents(structureComponent.isZipFileFlag(),earksipPath.toString(),true);
           }
         }
         else{
@@ -138,14 +159,14 @@ public class EARKSIPValidator {
             InputStream metsRootStream = folderManager.getMetsRootInputStream(earksipPath);
             InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
             mets = metsRoot.instatiateMetsFile();
-            validateComponents(structureComponent.isZipFileFlag(),earksipPath.toString());
+            validateComponents(structureComponent.isZipFileFlag(),earksipPath.toString(),true);
 
           }
           else{
             InputStream metsRootStream = folderManager.getMetsRootInputStream(earksipPath);
             InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
             mets = metsRoot.instatiateMetsFile();
-            validateComponents(structureComponent.isZipFileFlag(),earksipPath.toString());
+            validateComponents(structureComponent.isZipFileFlag(),earksipPath.toString(),true);
           }
         }
       }
@@ -166,7 +187,7 @@ public class EARKSIPValidator {
     return true;
   }
 
-  public void validateComponents(boolean isZip,String key) throws IOException {
+  public void validateComponents(boolean isZip,String key, boolean isRootMets) throws IOException {
     for(ValidatorComponent component : components){
           component.setObserver(observer);
           component.setReporter(reporter);
@@ -177,6 +198,7 @@ public class EARKSIPValidator {
           component.setIds(ids);
           component.setZipFileFlag(isZip);
           component.setMetsName(key);
+          component.setIsRootMets(isRootMets);
           String metsPath = "";
           for(String s: key.split("/")){ 
             if(!s.equals("METS.xml")){
@@ -194,7 +216,7 @@ public class EARKSIPValidator {
     for(Map.Entry<String, InputStream> entry : subMets.entrySet()){
       InstatiateMets instatiateMets = new InstatiateMets(entry.getValue());
       mets = instatiateMets.instatiateMetsFile();
-      validateComponents(isZip,entry.getKey());
+      validateComponents(isZip,entry.getKey(),false);
     }
   }
 

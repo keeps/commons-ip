@@ -99,20 +99,18 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
 
                 /* CSIP24 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP24_ID);
-                csip = validateCSIP20();
+                csip = validateCSIP24();
                 csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
                 addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP24_ID,csip);
 
                 /* CSIP25 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP25_ID);
-                csip = validateCSIP20();
+                csip = validateCSIP25();
                 csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
                 addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP25_ID,csip);
 
                 /* CSIP26 */
-                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP26_ID);
-//                csip = validateCSIP26();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"",true, true);
                 addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP26_ID,csip);
 
                 /* CSIP27 */
@@ -129,7 +127,12 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
 
                 /* CSIP29 */
                 validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP29_ID);
-//                csip = validateCSIP29();
+                try{
+                    csip = validateCSIP29();
+                }
+                catch (Exception e){
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"Can't calculate checksum of file",false,false);
+                }
                 csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
                 addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP29_ID,csip);
 
@@ -247,24 +250,30 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
     private ReporterDetails validateCSIP17() throws IOException {
         ReporterDetails details = new ReporterDetails();
         if(isZipFileFlag()){
-            String objectID = mets.getOBJID();
-            if(objectID == null){
-                details.setValid(false);
-                details.addIssue("mets/OBJID can't be null");
-            }
-            else{
-                String regex = metsPath + "metadata/descriptive/.*";
-                if(mets.getDmdSec() == null) {
-                    if (zipManager.verifyMetadataFilesFolder(getEARKSIPpath(),regex)) {
-                        details.setValid(false);
-                        details.addIssue("You have files in the metadata/descriptive folder, you must have mets/dmdSec");
-                    }
+            String regex;
+            if(isRootMets()){
+                String OBJECTID = mets.getOBJID();
+                if(OBJECTID != null){
+                    regex = OBJECTID +  "/metadata/descriptive/.*";
                 }
                 else{
-                    if(mets.getDmdSec().size() != zipManager.countMetadataFiles(getEARKSIPpath(),regex)){
-                        details.setValid(false);
-                        details.addIssue("The number of files described is not equal to the number of files in the metadata/descriptive folder");
-                    }
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/@OBJECTID can't be null",false,false);
+
+                }
+            }
+            else{
+                regex = metsPath + "metadata/descriptive/.*";
+            }
+            if(mets.getDmdSec() == null) {
+                if (zipManager.verifyMetadataFilesFolder(getEARKSIPpath(),regex)) {
+                    details.setValid(false);
+                    details.addIssue("You have files in the metadata/descriptive folder, you must have mets/dmdSec (" + metsName + ")" );
+                }
+            }
+            else{
+                if(mets.getDmdSec().size() != zipManager.countMetadataFiles(getEARKSIPpath(), regex)){
+                    details.setValid(false);
+                    details.addIssue("The number of files described is not equal to the number of files in the metadata/descriptive folder (" + metsName + ")");
                 }
             }
         }

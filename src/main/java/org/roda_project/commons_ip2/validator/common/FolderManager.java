@@ -243,4 +243,9 @@ public class FolderManager {
         }
         return false;
     }
+
+    public Boolean checkRootFolderName(Path path, String OBJECTID){
+        String[] tmp = path.toString().split("/");
+        return tmp[tmp.length-1].equals(OBJECTID) ;
+    }
 }

@@ -1,5 +1,6 @@
 package org.roda_project.commons_ip2.validator.component.metsrootComponent;
 
+import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip2.validator.common.ControlledVocabularyParser;
 import org.roda_project.commons_ip2.validator.component.ValidatorComponentImpl;
 import org.roda_project.commons_ip2.validator.constants.Constants;
@@ -10,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +36,10 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
 
   public MetsComponentValidator(String moduleName) {
     this.MODULE_NAME = moduleName;
+
+  }
+
+  public void initValidationObjects(){
     this.contentCategory = new ArrayList<>();
     ControlledVocabularyParser controlledVocabularyParser = new ControlledVocabularyParser(Constants.PATH_RESOURCES_CSIP_VOCABULARY_CONTENT_CATEGORY,contentCategory);
     controlledVocabularyParser.parse();
@@ -49,6 +55,7 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   public void validate() throws IOException {
     ReporterDetails csip;
 
+    initValidationObjects();
     /* CSIP1 Validation */
     validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID);
     csip = validateCSIP1();
@@ -117,14 +124,19 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
       details.setValid(false);
     }
     else {
-        String rootFolderName;
+        boolean exist = false;
         if(isZipFileFlag()){
-          rootFolderName = zipManager.getSipRootFolderName(path);
+          if(metsName.contains(".zip")){
+            exist = zipManager.checkRootFolderName(path,OBJID);
+          }
+          else{
+            exist = zipManager.checkSubMetsFolder(path,OBJID);
+          }
         }
         else {
-          rootFolderName = folderManager.getSipRootFolderName(path);
+          exist = folderManager.checkRootFolderName(Paths.get(metsPath),OBJID);
         }
-        if(!rootFolderName.equals(OBJID)){
+        if(!exist){
           details.addIssue("The folder containing the METS.xml file must have the same name mets/@OBJID! (" + metsName + ")");
           details.setValid(false);
         }
@@ -144,19 +156,16 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   * Content Category
   */
   private ReporterDetails validateCSIP2() {
-    ReporterDetails details = new ReporterDetails();
     String TYPE = mets.getTYPE();
-    if(TYPE == null || TYPE.equals("")){
-      details.setValid(false);
-      details.addIssue("mets/@TYPE attribute is mandatory, can't be null!");
+    if(StringUtils.isBlank(TYPE)){
+      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/@TYPE attribute is mandatory, can't be null! (" + metsName + ")",false,false);
     }
     else {
       if(!contentCategory.contains(TYPE)){
-        details.setValid(false);
-        details.addIssue("Value of mets/@TYPE is not valid; see Content category for valid mets/@TYPE");
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"Value of mets/@TYPE is not valid; see Content category for valid mets/@TYPE (" + metsName + ")",false,false);
       }
     }
-    return details;
+    return new ReporterDetails();
   }
 
   /*
@@ -252,8 +261,8 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   private ReporterDetails validateSIP2(){
     String profile = mets.getPROFILE();
     if(profile != null){
-      if(!profile.equals("https://earksip.dilcis.eu/profile/E-ARK-SIP.xml")){
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"mets/@PROFILE value isn't 'https://earksip.dilcis.eu/profile/E-ARK-SIP.xml'",false,false);
+      if(!profile.equals("https://earkcsip.dilcis.eu/profile/E-ARK-CSIP.xml")){
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"mets/@PROFILE value isn't 'https://earksip.dilcis.eu/profile/E-ARK-CSIP.xml'",false,false);
       }
     }
     else{

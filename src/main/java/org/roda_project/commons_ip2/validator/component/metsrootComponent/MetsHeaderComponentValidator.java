@@ -43,6 +43,7 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
         controlledVocabularyParser.parse();
         setOaisPackageTypes(controlledVocabularyParser.getData());
 
+        recordsStatus = new ArrayList<>();
         controlledVocabularyParser = new ControlledVocabularyParser(Constants.PATH_RESOURCES_CSIP_VOCABULARY_RECORD_STATUS,recordsStatus);
         controlledVocabularyParser.parse();
         setRecordsStatus(controlledVocabularyParser.getData());
@@ -77,304 +78,403 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
             csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
             addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP9_ID,csip);
 
-            /* CSIP10 */
-            validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID);
-            csip = validateCSIP10();
-            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID,csip);
-
-            if(csip.isValid()){
-
-                /* CSIP11 */
-                validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID);
-                csip = validateCSIP11();
+            if(isRootMets()){
+                /* CSIP10 */
+                validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID);
+                csip = validateCSIP10();
                 csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID,csip);
+                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID,csip);
 
-                /* CSIP12 */
-                validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID);
-                csip = validateCSIP12();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID,csip);
+                if(csip.isValid()){
+                    /* CSIP11 */
+                    validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID);
+                    csip = validateCSIP11();
+                    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+                    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID,csip);
 
-                /* CSIP13 */
-                validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID);
-                csip = validateCSIP13();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID,csip);
+                    /* CSIP12 */
+                    validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID);
+                    csip = validateCSIP12();
+                    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+                    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID,csip);
 
-                /* CSIP14 */
-                validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID);
-                csip = validateCSIP14();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID,csip);
+                    /* CSIP13 */
+                    validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID);
+                    csip = validateCSIP13();
+                    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+                    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID,csip);
 
-                /* CSIP15 */
-                validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID);
-                csip = validateCSIP15();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID,csip);
+                    /* CSIP14 */
+                    validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID);
+                    csip = validateCSIP14();
+                    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+                    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID,csip);
 
-                /* CSIP16 */
-                validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID);
-                csip = validateCSIP16();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID,csip);
+                    /* CSIP15 */
+                    validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID);
+                    csip = validateCSIP15();
+                    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+                    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID,csip);
 
-                /* SIP9 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP9_ID);
-                csip = validateSIP9();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP9_ID,csip);
+                    /* CSIP16 */
+                    validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID);
+                    csip = validateCSIP16();
+                    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+                    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID,csip);
 
-                /* SIP10 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP10_ID);
-                csip = validateSIP10();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP10_ID,csip);
+                    /* SIP9 */
+                    validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP9_ID);
+                    csip = validateSIP9();
+                    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP9_ID,csip);
 
-                /* SIP11 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP11_ID);
-                csip = validateSIP11();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP11_ID,csip);
+                    if(csip.isValid()){
+                        /* SIP10 */
+                        validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP10_ID);
+                        csip = validateSIP10();
+                        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP10_ID,csip);
 
-                /* SIP12 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP12_ID);
-                csip = validateSIP12();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP12_ID,csip);
+                        /* SIP11 */
+                        validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP11_ID);
+                        csip = validateSIP11();
+                        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP11_ID,csip);
 
-                /* SIP13 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP13_ID);
-                csip = validateSIP13();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP13_ID,csip);
+                        /* SIP12 */
+                        validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP12_ID);
+                        csip = validateSIP12();
+                        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP12_ID,csip);
 
-                /* SIP14 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP14_ID);
-                csip = validateSIP14();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP14_ID,csip);
+                        /* SIP13 */
+                        validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP13_ID);
+                        csip = validateSIP13();
+                        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP13_ID,csip);
 
-                /* SIP15 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP15_ID);
-                csip = validateSIP15();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP15_ID,csip);
+                        /* SIP14 */
+                        validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP14_ID);
+                        csip = validateSIP14();
+                        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP14_ID,csip);
+                    }
+                    else{
+                        String message = "SKIPPED because mets/metsHdr/agent with the role ARCHIVIST doesn't exist!";
+                        /* SIP10 */
+                        csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP10_ID,csip);
 
-                /* SIP16 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP16_ID);
-                csip = validateSIP16();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP16_ID,csip);
+                        /* SIP11 */
+                        csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP11_ID,csip);
 
-                /* SIP17 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP17_ID);
-                csip = validateSIP17();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP17_ID,csip);
+                        /* SIP12 */
+                        csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP12_ID,csip);
 
-                /* SIP18 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP18_ID);
-                csip = validateSIP18();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP18_ID,csip);
+                        /* SIP13 */
+                        csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP13_ID,csip);
 
-                /* SIP19 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP19_ID);
-                csip = validateSIP19();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP19_ID,csip);
+                        /* SIP14 */
+                        csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP14_ID,csip);
+                    }
 
-                /* SIP20 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP20_ID);
-                csip = validateSIP20();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP20_ID,csip);
 
-                /* SIP21 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP21_ID);
-                csip = validateSIP21();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP21_ID,csip);
+                    /* SIP15 */
+                    validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP15_ID);
+                    csip = validateSIP15();
+                    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP15_ID,csip);
 
-                /* SIP22 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP22_ID);
-                csip = validateSIP22();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP22_ID,csip);
+                    if(csip.isValid()){
+                        /* SIP16 */
+                        validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP16_ID);
+                        csip = validateSIP16();
+                        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP16_ID,csip);
 
-                /* SIP23 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP20_ID);
-                csip = validateSIP23();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP23_ID,csip);
+                        /* SIP17 */
+                        validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP17_ID);
+                        csip = validateSIP17();
+                        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP17_ID,csip);
 
-                /* SIP24 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP24_ID);
-                csip = validateSIP24();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP24_ID,csip);
+                        /* SIP18 */
+                        validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP18_ID);
+                        csip = validateSIP18();
+                        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP18_ID,csip);
 
-                /* SIP25 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP25_ID);
-                csip = validateSIP25();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP25_ID,csip);
+                        /* SIP19 */
+                        validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP19_ID);
+                        csip = validateSIP19();
+                        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP19_ID,csip);
 
-                /* SIP26 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP26_ID);
-                csip = validateSIP26();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP26_ID,csip);
+                        /* SIP20 */
+                        validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP20_ID);
+                        csip = validateSIP20();
+                        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP20_ID,csip);
+                    }
+                    else{
+                        String message = "SKIPPED because mets/metsHdr/agent with the role CREATOR doesn't exist!";
 
-                /* SIP27 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP27_ID);
-                csip = validateSIP27();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP27_ID,csip);
+                        /* SIP16 */
+                        csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP16_ID,csip);
 
-                /* SIP28 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP28_ID);
-                csip = validateSIP28();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP28_ID,csip);
+                        /* SIP17 */
+                        csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP17_ID,csip);
 
-                /* SIP29 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP29_ID);
-                csip = validateSIP29();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP29_ID,csip);
+                        /* SIP18 */
+                        csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP18_ID,csip);
 
-                /* SIP30 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP30_ID);
-                csip = validateSIP30();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP30_ID,csip);
+                        /* SIP19 */
+                        csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP19_ID,csip);
 
-                /* SIP31 */
-                validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP31_ID);
-                csip = validateSIP31();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP31_ID,csip);
+                        /* SIP20 */
+                        csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP20_ID,csip);
+                    }
 
+                    /* SIP21 */
+                    validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP21_ID);
+                    csip = validateSIP21();
+                    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP21_ID,csip);
+
+                    if(csip.isValid()){
+                        /* SIP22 */
+                        validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP22_ID);
+                        csip = validateSIP22();
+                        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP22_ID,csip);
+
+                        /* SIP23 */
+                        validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP20_ID);
+                        csip = validateSIP23();
+                        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP23_ID,csip);
+
+                        /* SIP24 */
+                        validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP24_ID);
+                        csip = validateSIP24();
+                        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP24_ID,csip);
+
+                        /* SIP25 */
+                        validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP25_ID);
+                        csip = validateSIP25();
+                        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP25_ID,csip);
+                    }
+                    else{
+                        String message = "SKIPPED because mets/metsHdr/agent with the role OTHER doesn't exist!";
+
+                        /* SIP22 */
+                        csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP22_ID,csip);
+
+                        /* SIP23 */
+                        csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP23_ID,csip);
+
+                        /* SIP24 */
+                        csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP24_ID,csip);
+
+                        /* SIP25 */
+                        csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP25_ID,csip);
+                    }
+
+                    /* SIP26 */
+                    validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP26_ID);
+                    csip = validateSIP26();
+                    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP26_ID,csip);
+
+                    if(csip.isValid()) {
+                        /* SIP27 */
+                        validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP27_ID);
+                        csip = validateSIP27();
+                        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP27_ID, csip);
+
+                        /* SIP28 */
+                        validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP28_ID);
+                        csip = validateSIP28();
+                        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP28_ID, csip);
+
+                        /* SIP29 */
+                        validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP29_ID);
+                        csip = validateSIP29();
+                        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP29_ID, csip);
+
+                        /* SIP30 */
+                        validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP30_ID);
+                        csip = validateSIP30();
+                        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP30_ID, csip);
+
+                        /* SIP31 */
+                        validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP31_ID);
+                        csip = validateSIP31();
+                        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP31_ID, csip);
+                    }
+                    else{
+                        String message = "SKIPPED because mets/metsHdr/agent with the role PRESERVATION doesn't exist!";
+
+                        /* SIP27 */
+                        csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP27_ID,csip);
+
+                        /* SIP28 */
+                        csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP28_ID,csip);
+
+                        /* SIP29 */
+                        csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP29_ID,csip);
+
+                        /* SIP30 */
+                        csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP30_ID,csip);
+
+                        /* SIP31 */
+                        csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP31_ID,csip);
+                    }
+                }
+                else{
+                    String message = "SKIPPED because mets/metsHdr/agent doesn't exist! (" + metsName +")";
+                    /* CSIP11 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+                    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID,csip);
+
+                    /* CSIP12 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+                    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID,csip);
+
+                    /* CSIP13 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+                    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID,csip);
+
+                    /* CSIP14 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+                    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID,csip);
+
+                    /* CSIP15 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+                    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID,csip);
+
+                    /* CSIP16 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+                    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID,csip);
+
+                    /* SIP9 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP9_ID,csip);
+
+                    /* SIP10 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP10_ID,csip);
+
+                    /* SIP11 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP11_ID,csip);
+
+                    /* SIP12 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP12_ID,csip);
+
+                    /* SIP13 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP13_ID,csip);
+
+                    /* SIP14 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP14_ID,csip);
+
+                    /* SIP15 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP15_ID,csip);
+
+                    /* SIP16 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP16_ID,csip);
+
+                    /* SIP17 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP17_ID,csip);
+
+                    /* SIP18 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP18_ID,csip);
+
+                    /* SIP19 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP19_ID,csip);
+
+                    /* SIP20 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP20_ID,csip);
+
+                    /* SIP21 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP21_ID,csip);
+
+                    /* SIP22 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP22_ID,csip);
+
+                    /* SIP23 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP23_ID,csip);
+
+                    /* SIP24 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP24_ID,csip);
+
+                    /* SIP25 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP25_ID,csip);
+
+                    /* SIP26 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP26_ID,csip);
+
+                    /* SIP27 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP27_ID,csip);
+
+                    /* SIP28 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP28_ID,csip);
+
+                    /* SIP29 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP29_ID,csip);
+
+                    /* SIP30 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP30_ID,csip);
+
+                    /* SIP31 */
+                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+                    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP31_ID,csip);
+                }
             }
-            else{
-                String message = "SKIPPED because mets/metsHdr/agent doesn't exist! (" + metsName +")";
-                /* CSIP11 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID,csip);
-
-                /* CSIP12 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID,csip);
-
-                /* CSIP13 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID,csip);
-
-                /* CSIP14 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID,csip);
-
-                /* CSIP15 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID,csip);
-
-                /* CSIP16 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID,csip);
-
-                /* SIP9 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP9_ID,csip);
-
-                /* SIP10 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP10_ID,csip);
-
-                /* SIP11 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP11_ID,csip);
-
-                /* SIP12 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP12_ID,csip);
-
-                /* SIP13 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP13_ID,csip);
-
-                /* SIP14 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP14_ID,csip);
-
-                /* SIP15 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP15_ID,csip);
-
-                /* SIP16 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP16_ID,csip);
-
-                /* SIP17 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP17_ID,csip);
-
-                /* SIP18 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP18_ID,csip);
-
-                /* SIP19 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP19_ID,csip);
-
-                /* SIP20 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP20_ID,csip);
-
-                /* SIP21 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP21_ID,csip);
-
-                /* SIP22 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP22_ID,csip);
-
-                /* SIP23 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP23_ID,csip);
-
-                /* SIP24 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP24_ID,csip);
-
-                /* SIP25 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP25_ID,csip);
-
-                /* SIP26 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP26_ID,csip);
-
-                /* SIP28 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP28_ID,csip);
-
-                /* SIP29 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP29_ID,csip);
-
-                /* SIP30 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP30_ID,csip);
-
-                /* SIP31 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
-                addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP31_ID,csip);
-            }
-
             /* SIP3 */
             validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP3_ID);
             csip = validateSIP3();
@@ -550,6 +650,10 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
             csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
             addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP26_ID,csip);
 
+            /* SIP27 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
+            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP27_ID,csip);
+
             /* SIP28 */
             csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,message,true, true);
             addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP28_ID,csip);
@@ -625,15 +729,26 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
      */
     private ReporterDetails validateCSIP10(){
         ReporterDetails details = new ReporterDetails();
-        if(agents == null){
+        if(agents == null && isRootMets()){
             details.setValid(false);
             details.addIssue("Must have at least one mets/metsHdr/agent!");
         }
         else{
-            if(agents.size() == 0){
-                details.setValid(false);
-                details.addIssue("Must have at least one mets/metsHdr/agent!");
+            if(agents == null && !isRootMets()){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"",true,true);
             }
+            else {
+                if (agents.size() == 0 && isRootMets()) {
+                    details.setValid(false);
+                    details.addIssue("Must have at least one mets/metsHdr/agent!");
+                }
+                else{
+                    if(agents.size() == 0 && !isRootMets()){
+                        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"",true,true);
+                    }
+                }
+            }
+
         }
         return details;
     }

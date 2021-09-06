@@ -53,6 +53,7 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
 
   private String name = null;
   private boolean zipFileFlag = false;
+  private boolean isRootMets = false;
 
   protected Path getEARKSIPpath() {
     return  path;
@@ -80,6 +81,11 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
   public void setZipFileFlag(boolean zipFileFlag) {
     this.zipFileFlag = zipFileFlag;
   }
+
+  @Override
+  public boolean isRootMets() { return  this.isRootMets;}
+  @Override
+  public void setIsRootMets(boolean isRootMets) { this.isRootMets = isRootMets;}
 
   protected ValidationReporter getReporter() {
     return reporter;
@@ -193,7 +199,6 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
         else{
           for(String issue: details.getIssues()){
             tmp.addIssue(issue);
-            tmp.countErrors();
           }
         }
       }

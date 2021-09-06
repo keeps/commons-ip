@@ -39,6 +39,10 @@ public interface ValidatorComponent {
 
   void setZipFileFlag(boolean zipFileFlag);
 
+  boolean isRootMets();
+
+  void setIsRootMets(boolean isRootMets);
+
   void setIds(List<String> ids);
 
   void setMetsName(String name);
