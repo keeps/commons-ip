@@ -1,5 +1,6 @@
 package org.roda_project.commons_ip2.validator.component.descriptiveMetadataComponent;
 
+import org.roda_project.commons_ip2.mets_v1_12.beans.AmdSecType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType;
 import org.roda_project.commons_ip2.validator.common.ControlledVocabularyParser;
 import org.roda_project.commons_ip2.validator.common.ZipManager;
@@ -19,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -57,149 +59,90 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
         csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
         addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP17_ID,csip);
 
+        /* CSIP18 */
+        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP18_ID);
+        csip = validateCSIP18();
+        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+        addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP18_ID,csip);
+
+        /* CSIP19 */
+        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP19_ID);
+        csip = validateCSIP19();
+        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+        addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP19_ID,csip);
+
+        /* CSIP20 */
+        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP20_ID);
+        csip = validateCSIP20();
+        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+        addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP20_ID,csip);
+
+        /* CSIP21 */
+        validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP21_ID);
+        csip = validateCSIP21();
+        csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+        addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP21_ID,csip);
+
         if(csip.isValid()){
-
-            /* CSIP18 */
-            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP18_ID);
-            csip = validateCSIP18();
+            /* CSIP22 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP22_ID);
+            csip = validateCSIP22();
             csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP18_ID,csip);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP22_ID,csip);
 
-            /* CSIP19 */
-            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP19_ID);
-            csip = validateCSIP19();
+            /* CSIP23 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP23_ID);
+            csip = validateCSIP23();
             csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP19_ID,csip);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP23_ID,csip);
 
-            /* CSIP20 */
-            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP20_ID);
-            csip = validateCSIP20();
+            /* CSIP24 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP24_ID);
+            csip = validateCSIP24();
             csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP20_ID,csip);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP24_ID,csip);
 
-            /* CSIP21 */
-            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP21_ID);
-            csip = validateCSIP21();
+            /* CSIP25 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP25_ID);
+            csip = validateCSIP25();
             csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP21_ID,csip);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP25_ID,csip);
 
-            if(csip.isValid()){
+            /* CSIP26 */
+            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"",true, true);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP26_ID,csip);
 
-                /* CSIP22 */
-                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP22_ID);
-                csip = validateCSIP22();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP22_ID,csip);
+            /* CSIP27 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP27_ID);
+            csip = validateCSIP27();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP27_ID,csip);
 
-                /* CSIP23 */
-                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP23_ID);
-                csip = validateCSIP23();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP23_ID,csip);
+            /* CSIP28 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP28_ID);
+            csip = validateCSIP28();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP28_ID,csip);
 
-                /* CSIP24 */
-                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP24_ID);
-                csip = validateCSIP24();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP24_ID,csip);
-
-                /* CSIP25 */
-                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP25_ID);
-                csip = validateCSIP25();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP25_ID,csip);
-
-                /* CSIP26 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"",true, true);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP26_ID,csip);
-
-                /* CSIP27 */
-                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP27_ID);
-                csip = validateCSIP27();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP27_ID,csip);
-
-                /* CSIP28 */
-                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP28_ID);
-                csip = validateCSIP28();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP28_ID,csip);
-
-                /* CSIP29 */
-                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP29_ID);
-                try{
-                    csip = validateCSIP29();
-                }
-                catch (Exception e){
-                    csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"Can't calculate checksum of file",false,false);
-                }
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP29_ID,csip);
-
-                /* CSIP30 */
-                validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP30_ID);
-                csip = validateCSIP30();
-                csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP30_ID,csip);
+            /* CSIP29 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP29_ID);
+            try{
+                csip = validateCSIP29();
             }
-            else{
-                String message = "SKIPPED because mets/dmdSec/mdRef doesn't exist! (" + metsName + ")";
-                /* CSIP22 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP22_ID,csip);
-
-                /* CSIP23 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP23_ID,csip);
-
-                /* CSIP24 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP24_ID,csip);
-
-                /* CSIP25 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP25_ID,csip);
-
-                /* CSIP26 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP26_ID,csip);
-
-                /* CSIP27 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP27_ID,csip);
-
-                /* CSIP28 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP28_ID,csip);
-
-                /* CSIP29 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP29_ID,csip);
-
-                /* CSIP30 */
-                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
-                addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP30_ID,csip);
+            catch (Exception e){
+                csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"Can't calculate checksum of file",false,false);
             }
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP29_ID,csip);
 
+            /* CSIP30 */
+            validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP30_ID);
+            csip = validateCSIP30();
+            csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP30_ID,csip);
         }
         else{
-            String message = "SKIPPED because mets/dmdSec doesn't exist! (" + metsName + ")";
-            /* CSIP18 */
-            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP18_ID,csip);
-
-            /* CSIP19 */
-            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP19_ID,csip);
-
-            /* CSIP20 */
-            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP20_ID,csip);
-
-            /* CSIP21 */
-            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP21_ID,csip);
-
+            String message = "SKIPPED because mets/dmdSec/mdRef doesn't exist! (" + metsName + ")";
             /* CSIP22 */
             csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
             addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP22_ID,csip);
@@ -254,26 +197,62 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
             if(isRootMets()){
                 String OBJECTID = mets.getOBJID();
                 if(OBJECTID != null){
-                    regex = OBJECTID +  "/metadata/descriptive/.*";
+                    regex = OBJECTID +  "/metadata/.*";
                 }
                 else{
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/@OBJECTID can't be null",false,false);
-
                 }
             }
             else{
-                regex = metsPath + "metadata/descriptive/.*";
+                regex = metsPath + "metadata/.*";
             }
-            if(mets.getDmdSec() == null) {
-                if (zipManager.verifyMetadataFilesFolder(getEARKSIPpath(),regex)) {
-                    details.setValid(false);
-                    details.addIssue("You have files in the metadata/descriptive folder, you must have mets/dmdSec (" + metsName + ")" );
+            if(dmdSec == null || dmdSec.size() == 0) {
+                if (zipManager.countMetadataFiles(getEARKSIPpath(),regex) != 0) {
+                    if(mets.getAmdSec()== null && mets.getAmdSec().size() == 0){
+                        details.setValid(false);
+                        details.addIssue("You have files in the metadata/folder, you must have mets/dmdSec or mets/amdSec (" + metsName + ")" );
+                    }
                 }
             }
-            else{
-                if(mets.getDmdSec().size() != zipManager.countMetadataFiles(getEARKSIPpath(), regex)){
-                    details.setValid(false);
-                    details.addIssue("The number of files described is not equal to the number of files in the metadata/descriptive folder (" + metsName + ")");
+            else {
+                if (zipManager.countMetadataFiles(getEARKSIPpath(), regex) == 0) {
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "Doesn't have files in metadata folder but have in dmdSec; Put the files under metadata folder", false, false);
+                }
+                else {
+                    HashMap<String,Boolean> metadataFiles = zipManager.getMetadataFiles(getEARKSIPpath(), regex);
+                    for (MdSecType md : dmdSec) {
+                        MdSecType.MdRef mdRef = md.getMdRef();
+                        if (mdRef != null) {
+                            String hrefDecoded = URLDecoder.decode(mdRef.getHref(), "UTF-8");
+                            if (metadataFiles.containsKey(hrefDecoded)) {
+                                metadataFiles.replace(hrefDecoded, true);
+                            } else {
+                                if (metadataFiles.containsKey(mets.getOBJID() + "/" + hrefDecoded)) {
+                                    metadataFiles.replace(mets.getOBJID() + "/" + hrefDecoded, true);
+                                }
+                            }
+                        }
+                    }
+                    if (metadataFiles.containsValue(false)) {
+                        for (AmdSecType amd : mets.getAmdSec()) {
+                            for (MdSecType md : amd.getDigiprovMD()) {
+                                MdSecType.MdRef mdRef = md.getMdRef();
+                                if (mdRef != null) {
+                                    String hrefDecoded = URLDecoder.decode(mdRef.getHref(), "UTF-8");
+                                    if (metadataFiles.containsKey(hrefDecoded)) {
+                                        metadataFiles.replace(hrefDecoded, true);
+                                    } else {
+                                        if (metadataFiles.containsKey(mets.getOBJID() + "/" + hrefDecoded)) {
+                                            metadataFiles.replace(mets.getOBJID() + "/" + hrefDecoded, true);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (metadataFiles.containsValue(false)) {
+                            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "Have metadata files not referenced in mets file", false, false);
+                        }
+                    }
                 }
             }
         }
@@ -505,7 +484,20 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
                 Long size = mdRef.getSIZE();
                 if(size != null){
                     if(isZipFileFlag()){
-                        if(!zipManager.verifySize(getEARKSIPpath(),hrefDecoded,size)){
+                        String file;
+                        if(isRootMets()){
+                            String OBJECTID = mets.getOBJID();
+                            if(OBJECTID != null){
+                                file = OBJECTID +  "/" + hrefDecoded;
+                            }
+                            else{
+                                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/@OBJECTID can't be null",false,false);
+                            }
+                        }
+                        else{
+                            file = metsPath + hrefDecoded ;
+                        }
+                        if(!zipManager.verifySize(getEARKSIPpath(),file,size)){
                             details.setValid(false);
                             details.addIssue("mets/dmdSec/mdRef/@SIZE and size of file isn't equal");
                         }
@@ -565,8 +557,21 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
                         String href = mdRef.getHref();
                         if (href != null) {
                             String file = URLDecoder.decode(href, "UTF-8");
+                            String filePath;
                             if (isZipFileFlag()) {
-                                if (!zipManager.verifyChecksum(getEARKSIPpath(), file, checksumType, checksum)) {
+                                if(isRootMets()){
+                                    String OBJECTID = mets.getOBJID();
+                                    if(OBJECTID != null){
+                                        filePath = OBJECTID +  "/" + file;
+                                    }
+                                    else{
+                                        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/@OBJECTID can't be null",false,false);
+                                    }
+                                }
+                                else{
+                                    filePath = metsPath + file ;
+                                }
+                                if (!zipManager.verifyChecksum(getEARKSIPpath(), filePath, checksumType, checksum)) {
                                     return new ReporterDetails("mets/dmdSec/mdRef/@CHECKSUM and checksum of file isn't equal",false);
                                 }
                             } else {

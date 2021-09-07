@@ -51,5 +51,6 @@ public interface ValidatorComponent {
 
   void setResults(TreeMap<String, ReporterDetails> results);
 
+  void setFiles(HashMap<String,Boolean> files);
   void clean();
 }

@@ -21,6 +21,7 @@ import java.net.URLDecoder;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -682,7 +683,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     * “Representations/preingest” or “Representations/submission/data”.
     * Falta perguntar o use: Data
     */
-    private ReporterDetails validateCSIP64() {
+    private ReporterDetails validateCSIP64() throws IOException {
         List<MetsType.FileSec.FileGrp> fileGrps = mets.getFileSec().getFileGrp();
         List<String> tmp = new ArrayList<>();
         tmp.add("Schemas");
@@ -691,8 +692,26 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
         for(MetsType.FileSec.FileGrp fileGrp: fileGrps){
             String use = fileGrp.getUSE();
             if(use != null){
-                if(!tmp.contains(use) || !use.matches("Representations/*")){
-                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/fileSec/fileGrp/@USE value isn't valid (" + metsName + ")",false,false);
+                if(!tmp.contains(use)){
+                    if(fileGrp.getFile().size() > 0){
+                        if(isZipFileFlag()){
+                            String expr;
+                            if(isRootMets()){
+                                expr = mets.getOBJID() + "/" + use.toLowerCase();
+                            }
+                            else{
+                                expr = metsPath + use.toLowerCase();
+                            }
+                            if(!zipManager.checkPathIsDirectory(getEARKSIPpath(),expr)){
+                                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/fileSec/fileGrp/@USE value doesn't match with directory in sip (" + metsName + ")",false,false);
+                            }
+                        }
+                        else{
+                            if(!folderManager.checkDirectory(metsPath,use.toLowerCase(),getEARKSIPpath().toString())){
+                                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/fileSec/fileGrp/@USE value doesn't match with directory in sip (" + metsName + ")",false,false);
+                            }
+                        }
+                    }
                 }
             }
             else{
@@ -732,18 +751,37 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
     * The file group ( <fileGrp> ) contains the file elements which describe the file
     * objects.
     */
-    private ReporterDetails validateCSIP66() {
-        boolean valid = true;
-//        MetsType.FileSec fileSec = mets.getFileSec();
-//        List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
-//        for(MetsType.FileSec.FileGrp grp : fileGrp){
-//            List<FileType> files = grp.getFile();
-//            System.out.println(files.size());
-//            if(files == null || files.size() == 0){
-//                valid = false;
-//                break;
-//            }
-//        }
+    private ReporterDetails validateCSIP66() throws IOException {
+        if(isZipFileFlag()){
+            MetsType.FileSec fileSec = mets.getFileSec();
+            List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
+            for(MetsType.FileSec.FileGrp grp: fileGrp){
+                List<FileType> fileTypes = grp.getFile();
+                if(fileTypes.size() != 0){
+                    for(FileType file: fileTypes){
+                        List<FileType.FLocat> fLocats = file.getFLocat();
+                        if(fLocats.size() != 0){
+                            for(FileType.FLocat fLocat : fLocats){
+                                String hrefDecoded = URLDecoder.decode(fLocat.getHref(), "UTF-8");
+                                String filePath;
+                                if(isRootMets()){
+                                    filePath = mets.getOBJID() + "/" + hrefDecoded;
+                                }
+                                else{
+                                    filePath = metsPath + hrefDecoded;
+                                }
+                                if(files.containsKey(filePath)){
+                                    files.replace(filePath,true);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if(files.containsValue(false) && isRootMets()){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"You have files in SIP doens't referenced in METS files",false,false);
+            }
+        }
         return new ReporterDetails();
     }
 
@@ -812,7 +850,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
                                     }
                                 }
                                 else{
-                                    if(!folderManager.verifySize(getEARKSIPpath(),href,size)){
+                                    if(!folderManager.verifySize(Paths.get(metsPath),href,size)){
                                         return new ReporterDetails("mets/fileSec/fileGrp/file/@SIZE and size of file isn't equal!",false);
                                     }
                                 }
@@ -902,7 +940,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
                                     }
                                 }
                                 else{
-                                    if(!folderManager.verifyChecksum(getEARKSIPpath(),filePath,checksumType,checksum)){
+                                    if(!folderManager.verifyChecksum(Paths.get(metsPath),filePath,checksumType,checksum)){
                                         return new ReporterDetails("mets/fileSec/fileGrp/file/@CHECKSUM and file checksum isn't equal",false);
                                     }
                                 }
@@ -1153,7 +1191,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
                                 }
                             }
                             else{
-                                if(!folderManager.checkPathExists(getEARKSIPpath(), Paths.get(filepath))){
+                                if(!folderManager.checkPathExists(Paths.get(metsPath), Paths.get(filepath))){
                                     return new ReporterDetails("mets/fileSec/fileGrp/file/@xlink:href file does not exist or invalid path",false);
                                 }
                             }

@@ -55,6 +55,9 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
   private boolean zipFileFlag = false;
   private boolean isRootMets = false;
 
+  protected HashMap<String,Boolean> files = null;
+
+
   protected Path getEARKSIPpath() {
     return  path;
   }
@@ -116,6 +119,7 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
     this.observer = observer;
   }
 
+
   @Override
   public void clean() {
     this.zipManager.closeZipFile();
@@ -129,28 +133,8 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
   @Override
   public void setResults(TreeMap<String,ReporterDetails> results){this.results = results;}
 
-//  protected void validationOutcomeFailed(String specification,String ID, String detail){
-//    reporter.componentValidationResult(specification, ID, Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_FAILED, detail);
-//    if(ConstantsCSIPspec.getSpecificationLevel(ID).equals("MUST")){
-//      reporter.countErrors();
-//    }
-//    else{
-//      reporter.countWarnings();
-//    }
-//    observer.notifyFinishStep(ID);
-//  }
-//
-//  protected void validationOutcomePassed(String specification,String ID, String detail){
-//    reporter.componentValidationResult(specification, ID, Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_PASSED, detail);
-//    reporter.countSuccess();
-//    observer.notifyFinishStep(ID);
-//  }
-//
-//  protected void validationOutcomeSkipped(String specification, String ID,String detail){
-//    reporter.componentValidationResult(specification,ID, Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_SKIPPED,detail);
-//    reporter.countSkipped();
-//    observer.notifyFinishStep(ID);
-//  }
+  @Override
+  public void setFiles(HashMap<String,Boolean> files){this.files = files;}
 
   protected void validationInit(String moduleName, String ID){
     observer.notifyStartValidationModule(moduleName,ID);

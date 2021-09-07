@@ -225,14 +225,18 @@ public class ValidationReporter {
             if (ConstantsCSIPspec.getSpecificationLevel(entry.getKey()).equals("MUST")) {
               errors++;
             } else {
-              warnings++;
+              if(!ConstantsCSIPspec.getSpecificationLevel(entry.getKey()).equals("MAY")) {
+                warnings++;
+              }
             }
           }
           else{
             if (ConstantsSIPspec.getSpecificationLevel(entry.getKey()).equals("MUST")) {
               errors++;
             } else {
-              warnings++;
+              if(!ConstantsSIPspec.getSpecificationLevel(entry.getKey()).equals("MAY")) {
+                warnings++;
+              }
             }
           }
         }

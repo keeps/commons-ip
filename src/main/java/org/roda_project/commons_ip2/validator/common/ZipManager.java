@@ -184,8 +184,10 @@ public class ZipManager {
     while (entries.hasMoreElements()){
       ZipEntry entry = (ZipEntry) entries.nextElement();
       if(entry.getName().matches(regex)){
-        found = true;
-        break;
+        if(!entry.isDirectory()){
+          found = true;
+          break;
+        }
       }
     }
     return found;
@@ -298,5 +300,58 @@ public class ZipManager {
       throw new IOException("METS.xml not Found");
     }
     return entry.split("/")[0].equals(OBJECTID);
+  }
+
+  public HashMap<String, Boolean> getMetadataFiles(Path path,String regex) throws IOException {
+    HashMap<String, Boolean> metadataFiles = new HashMap<>();
+    ZipFile zipFile = new ZipFile(path.toFile());
+    Enumeration entries = zipFile.entries();
+    while (entries.hasMoreElements()){
+      ZipEntry entry = (ZipEntry) entries.nextElement();
+      if(entry.getName().matches(regex)){
+        if(!entry.isDirectory()){
+          metadataFiles.put(entry.getName(),false);
+        }
+      }
+    }
+    return metadataFiles;
+  }
+
+  public HashMap<String, Boolean> getFiles(Path path) throws IOException {
+    HashMap<String, Boolean> metadataFiles = new HashMap<>();
+    ZipFile zipFile = new ZipFile(path.toFile());
+    Enumeration entries = zipFile.entries();
+    while (entries.hasMoreElements()){
+      ZipEntry entry = (ZipEntry) entries.nextElement();
+      if(!entry.getName().matches(".*/METS.xml")){
+        if(!entry.getName().contains("metadata")){
+          if(!entry.isDirectory()){
+            metadataFiles.put(entry.getName(),false);
+          }
+        }
+      }
+      else{
+        if(entry.getName().split("/").length != 2){
+          metadataFiles.put(entry.getName(),false);
+        }
+      }
+    }
+    return metadataFiles;
+  }
+
+  public boolean checkPathIsDirectory(Path path, String filePath) throws IOException {
+    boolean found = false;
+    ZipFile zipFile = new ZipFile(path.toFile());
+    Enumeration entries = zipFile.entries();
+    while (entries.hasMoreElements()){
+      ZipEntry entry = (ZipEntry) entries.nextElement();
+      if(entry.getName().matches(".*/?" + filePath + "/")){
+        if(entry.isDirectory()){
+          found = true;
+          break;
+        }
+      }
+    }
+    return found;
   }
 }

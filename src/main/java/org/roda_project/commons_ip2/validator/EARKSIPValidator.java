@@ -49,6 +49,7 @@ public class EARKSIPValidator {
   private TreeMap<String, ReporterDetails> results;
 
   private List<ValidatorComponent> components;
+  private HashMap<String,Boolean> files;
 
 
   public EARKSIPValidator(Path earksipPath, Path reportPath){
@@ -58,6 +59,7 @@ public class EARKSIPValidator {
     observer = new ProgressValidationLoggerObserver();
     folderManager = new FolderManager();
     ids = new ArrayList<>();
+
     results = new TreeMap<>(new Comparator<String>() {
       public int compare(String o1, String o2) {
         int c1;
@@ -114,10 +116,10 @@ public class EARKSIPValidator {
 //    components.add(metsHeaderComponent);
 //      ValidatorComponent descriptiveMetadataComponent = new DescriptiveMetadataComponentValidator(Constants.CSIP_MODULE_NAME_3);
 //      components.add(descriptiveMetadataComponent);
-    ValidatorComponent administritiveMetadataComponent = new AdministritiveMetadataComponentValidator(Constants.CSIP_MODULE_NAME_4);
-    components.add(administritiveMetadataComponent);
-//    ValidatorComponent fileSectionComponent = new FileSectionComponentValidator(Constants.CSIP_MODULE_NAME_5);
-//    components.add(fileSectionComponent);
+//      ValidatorComponent administritiveMetadataComponent = new AdministritiveMetadataComponentValidator(Constants.CSIP_MODULE_NAME_4);
+//      components.add(administritiveMetadataComponent);
+    ValidatorComponent fileSectionComponent = new FileSectionComponentValidator(Constants.CSIP_MODULE_NAME_5);
+    components.add(fileSectionComponent);
 //    ValidatorComponent structuralMapComponent = new StructuralMapComponentValidator(Constants.CSIP_MODULE_NAME_6);
 //    components.add(structuralMapComponent);
   }
@@ -136,6 +138,7 @@ public class EARKSIPValidator {
       if(validFileComponent()){
         HashMap<String,InputStream> subMets;
         if(structureComponent.isZipFileFlag()){
+          files = zipManager.getFiles(earksipPath);
           subMets = zipManager.getSubMets(earksipPath);
           if(subMets.size() > 0){
             validateSubMets(subMets,structureComponent.isZipFileFlag());
@@ -196,6 +199,7 @@ public class EARKSIPValidator {
           component.setEARKSIPpath(earksipPath);
           component.setMets(mets);
           component.setIds(ids);
+          component.setFiles(files);
           component.setZipFileFlag(isZip);
           component.setMetsName(key);
           component.setIsRootMets(isRootMets);

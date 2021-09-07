@@ -224,7 +224,7 @@ public class FolderManager {
     }
 
     public boolean checkDirectory(String metsPath,String directory, String root) throws IOException {
-        String path = metsPath + "/" + directory.toLowerCase();
+        String path = metsPath + directory.toLowerCase();
         if (Paths.get(path).toFile().exists()) {
             return Paths.get(path).toFile().isDirectory();
         }

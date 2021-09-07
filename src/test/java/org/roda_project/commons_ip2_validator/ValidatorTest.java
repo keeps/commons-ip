@@ -227,16 +227,16 @@ public class ValidatorTest {
     LOGGER.info("Done validate CSIP1 - Simple-EARK-SIP");
   }
 
-//  @Test
-//  public void validateSimpleSip_2() {
-//    LOGGER.info("Validate CSIP1 - Simple-EARK-SIP");
-//    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/Simple-EARK-SIP_2.json");
-//    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/Other/Simple-EARK-SIP");
-//
-//    EARKSIPValidator earksipValidator = new EARKSIPValidator(earksipPath,reportPath);
-//    earksipValidator.validate();
-//    LOGGER.info("Done validate CSIP1 - Simple-EARK-SIP");
-//  }
+  @Test
+  public void validateSimpleSip_2() {
+    LOGGER.info("Validate CSIP1 - Simple-EARK-SIP");
+    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/Simple-EARK-SIP_2.json");
+    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/Other/Simple-EARK-SIP");
+
+    EARKSIPValidator earksipValidator = new EARKSIPValidator(earksipPath,reportPath);
+    earksipValidator.validate();
+    LOGGER.info("Done validate CSIP1 - Simple-EARK-SIP");
+  }
 
 //  /* CSIP1*/
 //  @Test
