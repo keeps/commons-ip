@@ -1272,6 +1272,9 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
                                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/note can't be more than one ",false,false);
                             }
                         }
+                        else{
+                            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"You can add one metsHdr/agent/note ",false,false);
+                        }
                     }
                 }
                 else{
@@ -1461,6 +1464,9 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
                                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/note can't be more than one ",false,false);
                             }
                         }
+                        else{
+                            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"You can add one metsHdr/agent/note ",false,false);
+                        }
                     }
                 }
                 else{
@@ -1575,7 +1581,7 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
                     if(role.equals("CREATOR")){
                         String type = agent.getTYPE();
                         if(!type.equals("INDIVIDUAL")){
-                            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"When the metsHdr/agent/@ROLE is ARCHIVIST  metsHdr/agent/@TYPE must be ORGANIZATION or INDIVIDUAL",false,false);
+                            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"When the metsHdr/agent/@ROLE is CREATOR  metsHdr/agent/@TYPE must be ORGANIZATION or INDIVIDUAL",false,false);
                         }
                     }
                 }
@@ -1628,7 +1634,8 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
                 if(role != null){
                     if(role.equals("CREATOR")){
                         List<MetsType.MetsHdr.Agent.Note> notes = agent.getNote();
-                        if(notes != null && notes.size() != 0){
+                        System.out.println(metsName + notes.size());
+                        if(notes == null || notes.size() == 0){
                             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"can add contact information in one or more metsHdr/agent/note ",false,false);
                         }
                     }
@@ -1777,7 +1784,6 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
     * the archival creator.
     */
     private ReporterDetails validateSIP30(){
-
         if(agents != null && agents.size() != 0){
             for(MetsType.MetsHdr.Agent agent : agents){
                 String role = agent.getROLE();
@@ -1788,6 +1794,9 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
                             if(notes.size() != 1){
                                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"metsHdr/agent/note can't be more than one ",false,false);
                             }
+                        }
+                        else{
+                            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,"You can add one metsHdr/agent/note",false,false);
                         }
                     }
                 }

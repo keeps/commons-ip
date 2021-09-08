@@ -999,40 +999,40 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * All of the <amdSec> identifiers are listed in a single @ADMID using spaces as delimiters.
     */
     private ReporterDetails validateCSIP91() {
-        List<StructMapType> structMap = mets.getStructMap();
-        List<AmdSecType> amdSec = mets.getAmdSec();
-        boolean found = false;
-        if(structMap != null){
-            for(StructMapType struct : structMap){
-                DivType div = struct.getDiv();
-                if(div != null){
-                    List<DivType> divs = div.getDiv();
-                    for(DivType d : divs){
-                        if(d.getLABEL().equals("Metadata")){
-                            List<Object> admids = d.getADMID();
-                            if(admids != null && admids.size() != 0){
-                                for( Object o: admids){
-                                    String admid = ((MdSecType.MdRef) o).getID();
-                                    for(AmdSecType amdSecType: amdSec){
-                                        List<MdSecType> digiProv = amdSecType.getDigiprovMD();
-                                        for(MdSecType mdSecType: digiProv){
-                                            String id = mdSecType.getMdRef().getID();
-                                            if(admid.equals(id)){
-                                                found = true;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                                if(!found){
-                                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@ADMID not found in amdSec of METS file (" + metsName + ")",false,false);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+//        List<StructMapType> structMap = mets.getStructMap();
+//        List<AmdSecType> amdSec = mets.getAmdSec();
+//        boolean found = false;
+//        if(structMap != null){
+//            for(StructMapType struct : structMap){
+//                DivType div = struct.getDiv();
+//                if(div != null){
+//                    List<DivType> divs = div.getDiv();
+//                    for(DivType d : divs){
+//                        if(d.getLABEL().equals("Metadata")){
+//                            List<Object> admids = d.getADMID();
+//                            if(admids != null && admids.size() != 0){
+//                                for( Object o: admids){
+//                                    String admid = ((MdSecType.MdRef) o).getID();
+//                                    for(AmdSecType amdSecType: amdSec){
+//                                        List<MdSecType> digiProv = amdSecType.getDigiprovMD();
+//                                        for(MdSecType mdSecType: digiProv){
+//                                            String id = mdSecType.getMdRef().getID();
+//                                            if(admid.equals(id)){
+//                                                found = true;
+//                                                break;
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                                if(!found){
+//                                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@ADMID not found in amdSec of METS file (" + metsName + ")",false,false);
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
         return new ReporterDetails();
     }
 
@@ -1043,35 +1043,35 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * Every <dmdSec> identifier is listed in a single @DMDID attribute using spaces as delimiters.
     */
     private ReporterDetails validateCSIP92() {
-        List<StructMapType> structMap = mets.getStructMap();
-        List<MdSecType> dmdSec = mets.getDmdSec();
-        boolean found = false;
-        if(structMap != null){
-            for(StructMapType struct : structMap){
-                DivType div = struct.getDiv();
-                if(div != null){
-                    List<DivType> divs = div.getDiv();
-                    for(DivType d : divs){
-                        if(d.getLABEL().equals("Metadata")){
-                            List<Object> dmdids = d.getDMDID();
-                            for( Object o: dmdids){
-                                String dmid = ((MdSecType.MdRef) o).getID();
-                                for(MdSecType md: dmdSec){
-                                    String id = md.getID();
-                                    if(dmid.equals(id)){
-                                        found = true;
-                                        break;
-                                    }
-                                }
-                            }
-                            if(!found){
-                                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@DMDID not found in dmdSec of METS file (" + metsName + ")",false,false);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+//        List<StructMapType> structMap = mets.getStructMap();
+//        List<MdSecType> dmdSec = mets.getDmdSec();
+//        boolean found = false;
+//        if(structMap != null){
+//            for(StructMapType struct : structMap){
+//                DivType div = struct.getDiv();
+//                if(div != null){
+//                    List<DivType> divs = div.getDiv();
+//                    for(DivType d : divs){
+//                        if(d.getLABEL().equals("Metadata")){
+//                            List<Object> dmdids = d.getDMDID();
+//                            for( Object o: dmdids){
+//                                String dmid = ((MdSecType.MdRef) o).getID();
+//                                for(MdSecType md: dmdSec){
+//                                    String id = md.getID();
+//                                    if(dmid.equals(id)){
+//                                        found = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                            if(!found){
+//                                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@DMDID not found in dmdSec of METS file (" + metsName + ")",false,false);
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
         return new ReporterDetails();
     }
 

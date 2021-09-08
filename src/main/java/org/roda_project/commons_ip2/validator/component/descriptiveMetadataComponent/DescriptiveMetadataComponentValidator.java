@@ -224,11 +224,14 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
                         MdSecType.MdRef mdRef = md.getMdRef();
                         if (mdRef != null) {
                             String hrefDecoded = URLDecoder.decode(mdRef.getHref(), "UTF-8");
-                            if (metadataFiles.containsKey(hrefDecoded)) {
-                                metadataFiles.replace(hrefDecoded, true);
-                            } else {
+                            if(isRootMets()){
                                 if (metadataFiles.containsKey(mets.getOBJID() + "/" + hrefDecoded)) {
                                     metadataFiles.replace(mets.getOBJID() + "/" + hrefDecoded, true);
+                                }
+                            }
+                             else {
+                                if (metadataFiles.containsKey(metsPath + hrefDecoded)) {
+                                    metadataFiles.replace(metsPath + hrefDecoded, true);
                                 }
                             }
                         }
@@ -239,11 +242,14 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
                                 MdSecType.MdRef mdRef = md.getMdRef();
                                 if (mdRef != null) {
                                     String hrefDecoded = URLDecoder.decode(mdRef.getHref(), "UTF-8");
-                                    if (metadataFiles.containsKey(hrefDecoded)) {
-                                        metadataFiles.replace(hrefDecoded, true);
-                                    } else {
+                                    if(isRootMets()){
                                         if (metadataFiles.containsKey(mets.getOBJID() + "/" + hrefDecoded)) {
                                             metadataFiles.replace(mets.getOBJID() + "/" + hrefDecoded, true);
+                                        }
+                                    }
+                                    else {
+                                        if (metadataFiles.containsKey(metsPath + hrefDecoded)) {
+                                            metadataFiles.replace(metsPath + hrefDecoded, true);
                                         }
                                     }
                                 }

@@ -110,18 +110,18 @@ public class EARKSIPValidator {
 
   private  void setupComponents() {
     components = new ArrayList<>();
-//    ValidatorComponent metsComponent = new MetsComponentValidator(Constants.CSIP_MODULE_NAME_1);
-//    components.add(metsComponent);
-//    ValidatorComponent metsHeaderComponent = new MetsHeaderComponentValidator(Constants.CSIP_MODULE_NAME_2);
-//    components.add(metsHeaderComponent);
-//      ValidatorComponent descriptiveMetadataComponent = new DescriptiveMetadataComponentValidator(Constants.CSIP_MODULE_NAME_3);
-//      components.add(descriptiveMetadataComponent);
-//      ValidatorComponent administritiveMetadataComponent = new AdministritiveMetadataComponentValidator(Constants.CSIP_MODULE_NAME_4);
-//      components.add(administritiveMetadataComponent);
+    ValidatorComponent metsComponent = new MetsComponentValidator(Constants.CSIP_MODULE_NAME_1);
+    components.add(metsComponent);
+    ValidatorComponent metsHeaderComponent = new MetsHeaderComponentValidator(Constants.CSIP_MODULE_NAME_2);
+    components.add(metsHeaderComponent);
+    ValidatorComponent descriptiveMetadataComponent = new DescriptiveMetadataComponentValidator(Constants.CSIP_MODULE_NAME_3);
+    components.add(descriptiveMetadataComponent);
+    ValidatorComponent administritiveMetadataComponent = new AdministritiveMetadataComponentValidator(Constants.CSIP_MODULE_NAME_4);
+    components.add(administritiveMetadataComponent);
     ValidatorComponent fileSectionComponent = new FileSectionComponentValidator(Constants.CSIP_MODULE_NAME_5);
     components.add(fileSectionComponent);
-//    ValidatorComponent structuralMapComponent = new StructuralMapComponentValidator(Constants.CSIP_MODULE_NAME_6);
-//    components.add(structuralMapComponent);
+    ValidatorComponent structuralMapComponent = new StructuralMapComponentValidator(Constants.CSIP_MODULE_NAME_6);
+    components.add(structuralMapComponent);
   }
 
   public boolean validate() {
