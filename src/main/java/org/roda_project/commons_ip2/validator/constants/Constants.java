@@ -41,6 +41,7 @@ public class Constants {
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_WARNINGS = "warnings";
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_ERRORS = "errors";
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_SKIPPED = "skipped";
+  public static final String VALIDATION_REPORT_SPECIFICATION_KEY_NOTES = "notes";
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_NAME = "name";
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_LOCATION = "location";
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_DESCRIPTION = "description";

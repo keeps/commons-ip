@@ -248,4 +248,16 @@ public class FolderManager {
         String[] tmp = path.toString().split("/");
         return tmp[tmp.length-1].equals(OBJECTID) ;
     }
+
+    public boolean checkIfExistsFolderInRoot(Path path,String folder){
+        File[] root = path.toFile().listFiles();
+        for(File file: root){
+            if(file.getName().equals(folder)){
+                if(file.isDirectory()){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

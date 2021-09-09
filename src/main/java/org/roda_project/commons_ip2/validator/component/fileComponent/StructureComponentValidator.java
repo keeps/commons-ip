@@ -46,13 +46,15 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
             addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_ID,strCsip);
 
             /* CSIPSTR4 */
-            validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_ID);
+            validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_ID);
             strCsip = validateCSIPSTR4();
             strCsip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
             addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_ID,strCsip);
 
             /* CSIPSTR5 */
-            strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,message,true, true);
+            validationInit(MODULE_NAME,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_ID);
+            strCsip = validateCSIPSTR5();
+            strCsip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
             addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_ID,strCsip);
 
             /* CSIPSTR6 */
@@ -170,11 +172,15 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
         }
     }
 
+    /*
+    * Any Information Package MUST be included within a single physical root folder (known as the “Information Package root folder”).
+    * For packages presented in an archive format, see CSIPSTR3, the archive MUST unpack to a single root folder.
+    */
     private ReporterDetails validateCSIPSTR1() throws IOException {
         ReporterDetails details = new ReporterDetails();
         if(Files.exists(path)){
             String contentType = Files.probeContentType(path);
-            if(contentType.equals("application/zip")){
+            if(contentType.equals("application/zip") || contentType.equals("application/x-xz")){
                 setZipFileFlag(true);
                 if(!zipManager.checkSingleRootFolder(path)){
                     details.setValid(false);
@@ -195,6 +201,23 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
         return details;
     }
 
+    /*
+    * The Information Package root folder SHOULD be named with the ID or name of the Information Package, that is the value of the package METS.xml’s root <mets> element’s @OBJID attribute.
+    */
+    private ReporterDetails validateCSIPSTR2(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * The Information Package root folder MAY be compressed (for example by using TAR or ZIP). Which specific compression format to use needs to be stated in the Submission Agreement.
+    */
+    private ReporterDetails validateCSIPSTR3(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * The Information Package root folder MUST include a file named METS.xml. This file MUST contain metadata that identifies the package, provides a high-level package description, and describes its structure, including pointers to constituent representations.
+    */
     private ReporterDetails validateCSIPSTR4() throws IOException {
         ReporterDetails details = new ReporterDetails();
         if(isZipFileFlag()){
@@ -210,5 +233,114 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
             }
         }
         return details;
+    }
+
+    /*
+    * The Information Package root folder SHOULD include a folder named metadata, which SHOULD include metadata relevant to the whole package.
+    */
+    private ReporterDetails validateCSIPSTR5() throws IOException {
+        if(isZipFileFlag()){
+            if(!zipManager.checkIfExistsFolderInRoot(path,"metadata")){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"Include Metadata relevant to the whole package in folder metadata",false,false);
+            }
+        }
+        else{
+            if(!folderManager.checkIfExistsFolderInRoot(path,"metadata")){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"Include Metadata relevant to the whole package in folder metadata",false,false);
+            }
+        }
+        return new ReporterDetails();
+    }
+
+    /*
+    * If preservation metadata are available, they SHOULD be included in sub-folder preservation.
+    */
+    private ReporterDetails validateCSIPSTR6() throws IOException {
+        return new ReporterDetails();
+    }
+
+    /*
+    * If descriptive metadata are available, they SHOULD be included in sub-folder descriptive.
+    */
+    private ReporterDetails validateCSIPSTR7(){
+        return new ReporterDetails();
+    }
+
+    /*
+    *If any other metadata are available, they MAY be included in separate sub-folders, for example an additional folder named other.
+    */
+    private ReporterDetails validateCSIPSTR8(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * The Information Package folder SHOULD include a folder named representations.
+    */
+    private ReporterDetails validateCSIPSTR9() throws IOException {
+        if(isZipFileFlag()){
+            if(!zipManager.checkIfExistsFolderInRoot(path,"representations")){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"The Information Package folder SHOULD include a folder named representations.",false,false);
+            }
+        }
+        else{
+            if(!folderManager.checkIfExistsFolderInRoot(path,"representations")){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"The Information Package folder SHOULD include a folder named representations.",false,false);
+            }
+        }
+        return new ReporterDetails();
+    }
+
+    /*
+    * The representations folder SHOULD include a sub-folder for each individual representation (i.e. the “representation folder”).
+    * Each representation folder should have a string name that is unique within the package scope.
+    * For example the name of the representation and/or its creation date might be good candidates as a representation sub-folder name.
+    */
+    private ReporterDetails validateCSIPSTR10(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * The representation folder SHOULD include a sub-folder named data which MAY include all data constituting the representation.
+    */
+    private ReporterDetails validateCSIPSTR11(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * The representation folder SHOULD include a metadata file named METS.xml which includes information about the identity and structure of the representation and its components.
+    * The recommended best practice is to always have a METS.xml in the representation folder.
+    */
+    private ReporterDetails validateCSIPSTR12(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * The representation folder SHOULD include a sub-folder named metadata which MAY include all metadata about the specific representation.
+    */
+    private ReporterDetails validateCSIPSTR13(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * The Information Package MAY be extended with additional sub-folders.
+    */
+    private ReporterDetails validateCSIPSTR14(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * We recommend including all XML schema documents for any structured metadata within package.
+    * These schema documents SHOULD be placed in a sub-folder called schemas within the Information Package root folder and/or the representation folder.
+    */
+    private ReporterDetails validateCSIPSTR15(){
+        return new ReporterDetails();
+    }
+
+    /*
+    * We recommend including any supplementary documentation for the package or a specific representation within the package.
+    * Supplementary documentation SHOULD be placed in a sub-folder called documentation within the Information Package root folder and/or the representation folder.
+    */
+    private ReporterDetails validateCSIPSTR16(){
+        return new ReporterDetails();
     }
 }

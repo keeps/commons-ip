@@ -354,4 +354,22 @@ public class ZipManager {
     }
     return found;
   }
+
+  public boolean checkIfExistsFolderInRoot(Path path,String folder) throws IOException {
+    boolean found = false;
+    ZipFile zipFile = new ZipFile(path.toFile());
+    Enumeration entries = zipFile.entries();
+    while (entries.hasMoreElements()){
+      ZipEntry entry = (ZipEntry) entries.nextElement();
+      if(entry.getName().matches(".*/" + folder + "/")){
+        if(entry.isDirectory()){
+          if(entry.getName().split("/").length == 2){
+            found = true;
+            break;
+          }
+        }
+      }
+    }
+    return found;
+  }
 }

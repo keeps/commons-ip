@@ -33,6 +33,7 @@ public class ValidationReporter {
   private int errors;
   private int warnings;
   private int skipped;
+  private int notes;
 
   public ValidationReporter(Path path) {
     init(path);
@@ -197,6 +198,7 @@ public class ValidationReporter {
       jsonGenerator.writeNumberField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_WARNINGS, warnings);
       jsonGenerator.writeNumberField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_ERRORS, errors);
       jsonGenerator.writeNumberField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_SKIPPED, skipped);
+      jsonGenerator.writeNumberField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_NOTES,notes);
       jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_RESULT,status);
       jsonGenerator.writeEndObject();
       jsonGenerator.writeEndObject();
@@ -225,8 +227,11 @@ public class ValidationReporter {
             if (ConstantsCSIPspec.getSpecificationLevel(entry.getKey()).equals("MUST")) {
               errors++;
             } else {
-              if(!ConstantsCSIPspec.getSpecificationLevel(entry.getKey()).equals("MAY")) {
+              if(ConstantsCSIPspec.getSpecificationLevel(entry.getKey()).equals("SHOULD")) {
                 warnings++;
+              }
+              else{
+                notes++;
               }
             }
           }
@@ -234,8 +239,11 @@ public class ValidationReporter {
             if (ConstantsSIPspec.getSpecificationLevel(entry.getKey()).equals("MUST")) {
               errors++;
             } else {
-              if(!ConstantsSIPspec.getSpecificationLevel(entry.getKey()).equals("MAY")) {
+              if(ConstantsSIPspec.getSpecificationLevel(entry.getKey()).equals("SHOULD")) {
                 warnings++;
+              }
+              else{
+                notes++;
               }
             }
           }
