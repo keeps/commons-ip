@@ -16,11 +16,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 /**
  * @author João Gomes <jgomes@keep.pt>
@@ -259,5 +261,118 @@ public class FolderManager {
             }
         }
         return false;
+    }
+
+    public boolean checkIfExistsFolderInside(Path path,String rootFolder,String insideFolder){
+        File[] root = path.toFile().listFiles();
+        for(File file: root){
+            if(file.getName().equals(rootFolder)){
+                if(file.isDirectory()){
+                    File[] insideFiles = file.listFiles();
+                    for(File f: insideFiles){
+                        if(f.getName().equals(insideFolder)){
+                            if(f.isDirectory()){
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean verifyIfExistsFilesInFolder(Path path,String folder){
+        File[] root = path.toFile().listFiles();
+        for(File file: root){
+            if(file.getName().equals(folder)){
+                if(file.isDirectory()){
+                    File[] insideFiles = file.listFiles();
+                    for(File f: insideFiles){
+                        if(!f.isDirectory()){
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean checkIfExistsFolderInsideRepresentation(Path path,String folder){
+        File[] root = path.toFile().listFiles();
+        for(File file: root){
+            if(file.getName().equals("representations")){
+                if(file.isDirectory()){
+                    File[] insideFiles = file.listFiles();
+                    for(File f: insideFiles){
+                        if(f.isDirectory()){
+                            File[] representationFiles = file.listFiles();
+                            for(File representationFile: representationFiles){
+                                if(representationFile.getName().equals(folder)){
+                                    if(representationFile.isDirectory()){
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean checkIfExistsFilesInsideRepresentationFolder(Path path){
+        File[] root = path.toFile().listFiles();
+        for(File file: root){
+            if(file.getName().equals("representations")){
+                if(file.isDirectory()){
+                    File[] insideFiles = file.listFiles();
+                    for(File f: insideFiles){
+                        if(f.isDirectory()){
+                            File[] representationFiles = file.listFiles();
+                            for(File representationFile: representationFiles){
+                                if(!representationFile.isDirectory()){
+                                    if(!representationFile.getName().equals("METS.xml")){
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean checkIfExistsSubMets(Path path){
+        File[] root = path.toFile().listFiles();
+        int countSubMets = 0;
+        int countRepresentationsFolder = 0;
+        for(File file: root){
+            if(file.getName().equals("representations")){
+                if(file.isDirectory()){
+                    File[] insideFiles = file.listFiles();
+                    for(File f: insideFiles){
+                        if(f.isDirectory()){
+                            File[] representationFiles = file.listFiles();
+                            for(File representationFile: representationFiles){
+                                if(representationFile.isDirectory()){
+                                    countRepresentationsFolder++;
+                                }
+                                else{
+                                    if(file.getName().equals("METS.xml")){
+                                        countSubMets++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return countSubMets == countRepresentationsFolder;
     }
 }

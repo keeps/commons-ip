@@ -177,20 +177,20 @@ public class ZipManager {
     return  valid;
   }
 
-  public boolean verifyMetadataFilesFolder(Path path, String regex) throws IOException {
-    boolean found = false;
+  public boolean verifyIfExistsFilesInFolder(Path path, String regex) throws IOException {
     ZipFile zipFile = new ZipFile(path.toFile());
     Enumeration entries = zipFile.entries();
     while (entries.hasMoreElements()){
       ZipEntry entry = (ZipEntry) entries.nextElement();
       if(entry.getName().matches(regex)){
-        if(!entry.isDirectory()){
-          found = true;
-          break;
+        if(entry.getName().split("/").length == 3){
+          if(!entry.isDirectory()){
+            return true;
+          }
         }
       }
     }
-    return found;
+    return false;
   }
 
   public int countMetadataFiles(Path path, String regex) throws IOException {
@@ -371,5 +371,76 @@ public class ZipManager {
       }
     }
     return found;
+  }
+
+  public boolean checkIfExistsFolderInside(Path path,String folder) throws IOException {
+    boolean found = false;
+    ZipFile zipFile = new ZipFile(path.toFile());
+    Enumeration entries = zipFile.entries();
+    while (entries.hasMoreElements()){
+      ZipEntry entry = (ZipEntry) entries.nextElement();
+      if(entry.getName().matches(".*/" + folder + "/")){
+        if(entry.isDirectory()){
+          if(entry.getName().split("/").length == 3){
+            found = true;
+            break;
+          }
+        }
+      }
+    }
+    return found;
+  }
+
+  public boolean checkIfExistsFolderInsideRepresentation(Path path,String folder) throws IOException {
+    ZipFile zipFile = new ZipFile(path.toFile());
+    Enumeration entries = zipFile.entries();
+    while (entries.hasMoreElements()){
+      ZipEntry entry = (ZipEntry) entries.nextElement();
+      if(entry.getName().matches(".*/representations/.*/" + folder + "/")){
+        if(entry.isDirectory()){
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  public boolean checkIfExistsFilesInsideRepresentationFolder(Path path) throws IOException {
+    ZipFile zipFile = new ZipFile(path.toFile());
+    Enumeration entries = zipFile.entries();
+    while (entries.hasMoreElements()){
+      ZipEntry entry = (ZipEntry) entries.nextElement();
+      if(entry.getName().matches(".*/representations/.*/")){
+        if(!entry.getName().matches(".*/METS.xml")){
+          if(!entry.isDirectory()) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  public boolean checkIfExistsSubMets(Path path) throws IOException{
+    ZipFile zipFile = new ZipFile(path.toFile());
+    Enumeration entries = zipFile.entries();
+    int countSubMets = 0;
+    int countRepresentations = 0;
+    while (entries.hasMoreElements()){
+      ZipEntry entry = (ZipEntry) entries.nextElement();
+      if(entry.getName().matches(".*/METS.xml")) {
+        if (entry.getName().split("/").length > 2) {
+          countSubMets++;
+        }
+      }
+      else{
+        if(entry.getName().matches(".*/representations/.*/")){
+          if(entry.isDirectory()){
+            countRepresentations++;
+          }
+        }
+      }
+    }
+    return countSubMets == countRepresentations;
   }
 }

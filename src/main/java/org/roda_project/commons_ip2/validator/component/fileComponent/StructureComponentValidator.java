@@ -256,20 +256,62 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
     * If preservation metadata are available, they SHOULD be included in sub-folder preservation.
     */
     private ReporterDetails validateCSIPSTR6() throws IOException {
+        if(isZipFileFlag()){
+            if(!zipManager.checkIfExistsFolderInside(path,"metadata/preservation")){
+                if(zipManager.verifyIfExistsFilesInFolder(path,".*/metadata/")) {
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "If preservation metadata are available should include inside metadata/preservation", false, false);
+                }
+            }
+        }
+        else{
+            if(!folderManager.checkIfExistsFolderInside(path,"metadata", "preservation")){
+                if(folderManager.verifyIfExistsFilesInFolder(path,"metadata")){
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"If preservation metadata are available should include inside metadata/preservation",false,false);
+                }
+            }
+        }
         return new ReporterDetails();
     }
 
     /*
     * If descriptive metadata are available, they SHOULD be included in sub-folder descriptive.
     */
-    private ReporterDetails validateCSIPSTR7(){
+    private ReporterDetails validateCSIPSTR7() throws IOException {
+        if(isZipFileFlag()){
+            if(!zipManager.checkIfExistsFolderInside(path,"metadata/descriptive")){
+                if(zipManager.verifyIfExistsFilesInFolder(path,".*/metadata/")) {
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"If descriptive metadata are available should include inside metadata/descriptive",false,false);
+                }
+            }
+        }
+        else{
+            if(!folderManager.checkIfExistsFolderInside(path,"metadata", "descriptive")){
+                if(folderManager.verifyIfExistsFilesInFolder(path,"metadata")) {
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "If descriptive metadata are available should include inside metadata/descriptive", false, false);
+                }
+            }
+        }
         return new ReporterDetails();
     }
 
     /*
     *If any other metadata are available, they MAY be included in separate sub-folders, for example an additional folder named other.
     */
-    private ReporterDetails validateCSIPSTR8(){
+    private ReporterDetails validateCSIPSTR8() throws IOException {
+        if(isZipFileFlag()){
+            if(zipManager.verifyIfExistsFilesInFolder(path,"metadata/descriptive") || zipManager.verifyIfExistsFilesInFolder(path,"metadata/preservation")){
+                if(zipManager.verifyIfExistsFilesInFolder(path,".*/metadata/")){
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"If any other metadata are available, they MAY be included in separate sub-folders, for example an additional folder named other.",false,false);
+                }
+            }
+        }
+        else{
+            if(folderManager.checkIfExistsFolderInside(path,"metadata","descriptive") || folderManager.checkIfExistsFolderInside(path,"metadata","preservation")){
+                if(folderManager.verifyIfExistsFilesInFolder(path,"metadata")){
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"If any other metadata are available, they MAY be included in separate sub-folders, for example an additional folder named other.",false,false);
+                }
+            }
+        }
         return new ReporterDetails();
     }
 
@@ -295,14 +337,28 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
     * Each representation folder should have a string name that is unique within the package scope.
     * For example the name of the representation and/or its creation date might be good candidates as a representation sub-folder name.
     */
-    private ReporterDetails validateCSIPSTR10(){
+    private ReporterDetails validateCSIPSTR10() throws IOException {
         return new ReporterDetails();
     }
 
     /*
     * The representation folder SHOULD include a sub-folder named data which MAY include all data constituting the representation.
     */
-    private ReporterDetails validateCSIPSTR11(){
+    private ReporterDetails validateCSIPSTR11() throws IOException {
+        if(isZipFileFlag()){
+            if(!zipManager.checkIfExistsFolderInsideRepresentation(path,"data")){
+                if(zipManager.checkIfExistsFilesInsideRepresentationFolder(path)) {
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"The representation folder SHOULD include a sub-folder named data which MAY include all data constituting the representation",false,false);
+                }
+            }
+        }
+        else{
+            if(!folderManager.checkIfExistsFolderInsideRepresentation(path,"data")){
+                if(folderManager.checkIfExistsFilesInsideRepresentationFolder(path)) {
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "The representation folder SHOULD include a sub-folder named data which MAY include all data constituting the representation", false, false);
+                }
+            }
+        }
         return new ReporterDetails();
     }
 
@@ -310,14 +366,38 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
     * The representation folder SHOULD include a metadata file named METS.xml which includes information about the identity and structure of the representation and its components.
     * The recommended best practice is to always have a METS.xml in the representation folder.
     */
-    private ReporterDetails validateCSIPSTR12(){
+    private ReporterDetails validateCSIPSTR12() throws IOException {
+        if(isZipFileFlag()){
+            if(!zipManager.checkIfExistsSubMets(path)){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"The recommended best practice is to always have a METS.xml in the representation folder.",false,false);
+            }
+        }
+        else{
+            if(!folderManager.checkIfExistsSubMets(path)){
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "The recommended best practice is to always have a METS.xml in the representation folder.", false, false);
+            }
+        }
         return new ReporterDetails();
     }
 
     /*
     * The representation folder SHOULD include a sub-folder named metadata which MAY include all metadata about the specific representation.
     */
-    private ReporterDetails validateCSIPSTR13(){
+    private ReporterDetails validateCSIPSTR13() throws IOException {
+        if(isZipFileFlag()){
+            if(!zipManager.checkIfExistsFolderInsideRepresentation(path,"metadata")){
+                if(zipManager.checkIfExistsFilesInsideRepresentationFolder(path)) {
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"The representation folder SHOULD include a sub-folder named metadata which MAY include all metadata about the specific representation.",false,false);
+                }
+            }
+        }
+        else{
+            if(!folderManager.checkIfExistsFolderInsideRepresentation(path,"metadata")){
+                if(folderManager.checkIfExistsFilesInsideRepresentationFolder(path)) {
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "The representation folder SHOULD include a sub-folder named metadata which MAY include all metadata about the specific representation.", false, false);
+                }
+            }
+        }
         return new ReporterDetails();
     }
 
@@ -332,7 +412,25 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
     * We recommend including all XML schema documents for any structured metadata within package.
     * These schema documents SHOULD be placed in a sub-folder called schemas within the Information Package root folder and/or the representation folder.
     */
-    private ReporterDetails validateCSIPSTR15(){
+    private ReporterDetails validateCSIPSTR15() throws IOException {
+        if(isZipFileFlag()){
+            if(!zipManager.checkIfExistsFolderInRoot(path,"schemas")){
+                if(!zipManager.checkIfExistsFolderInsideRepresentation(path,"schemas")){
+                    if(zipManager.checkIfExistsFilesInsideRepresentationFolder(path)){
+                        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "We recommend including all XML schema documents for any structured metadata within package. These schema documents SHOULD be placed in a sub-folder called schemas within the Information Package root folder and/or the representation folder.", false, false);
+                    }
+                }
+            }
+        }
+        else{
+            if(!folderManager.checkIfExistsFolderInRoot(path,"schemas")){
+                if(!folderManager.checkIfExistsFolderInsideRepresentation(path,"schemas")){
+                    if(folderManager.checkIfExistsFilesInsideRepresentationFolder(path)){
+                        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "We recommend including all XML schema documents for any structured metadata within package. These schema documents SHOULD be placed in a sub-folder called schemas within the Information Package root folder and/or the representation folder.", false, false);
+                    }
+                }
+            }
+        }
         return new ReporterDetails();
     }
 
@@ -340,7 +438,25 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
     * We recommend including any supplementary documentation for the package or a specific representation within the package.
     * Supplementary documentation SHOULD be placed in a sub-folder called documentation within the Information Package root folder and/or the representation folder.
     */
-    private ReporterDetails validateCSIPSTR16(){
-        return new ReporterDetails();
+    private ReporterDetails validateCSIPSTR16() throws IOException {
+        if(isZipFileFlag()){
+            if(!zipManager.checkIfExistsFolderInRoot(path,"documentation")){
+                if(!zipManager.checkIfExistsFolderInsideRepresentation(path,"documentation")){
+                    if(zipManager.checkIfExistsFilesInsideRepresentationFolder(path)){
+                        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "We recommend including any supplementary documentation for the package or a specific representation within the package. Supplementary documentation SHOULD be placed in a sub-folder called documentation within the Information Package root folder and/or the representation folder.", false, false);
+                    }
+                }
+            }
+        }
+        else{
+            if(!folderManager.checkIfExistsFolderInRoot(path,"documentation")){
+                if(!folderManager.checkIfExistsFolderInsideRepresentation(path,"documentation")){
+                    if(folderManager.checkIfExistsFilesInsideRepresentationFolder(path)){
+                        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "We recommend including any supplementary documentation for the package or a specific representation within the package. Supplementary documentation SHOULD be placed in a sub-folder called documentation within the Information Package root folder and/or the representation folder.", false, false);
+                    }
+                }
+            }
+        }
+        return  new ReporterDetails();
     }
 }

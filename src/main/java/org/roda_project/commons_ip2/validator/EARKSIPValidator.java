@@ -54,7 +54,7 @@ public class EARKSIPValidator {
 
   public EARKSIPValidator(Path earksipPath, Path reportPath){
     this.earksipPath = earksipPath.toAbsolutePath().normalize();
-    reporter = new ValidationReporter(reportPath.toAbsolutePath().normalize());
+    reporter = new ValidationReporter(reportPath.toAbsolutePath().normalize(),this.earksipPath);
     zipManager = new ZipManager();
     observer = new ProgressValidationLoggerObserver();
     folderManager = new FolderManager();

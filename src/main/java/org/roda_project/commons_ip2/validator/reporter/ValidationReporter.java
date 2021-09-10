@@ -27,6 +27,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 public class ValidationReporter {
   private static final Logger LOGGER = LoggerFactory.getLogger(ValidationReporter.class);
   private Path outputFile;
+  private Path sipPath;
   private OutputStream outputStream;
   private JsonGenerator jsonGenerator;
   private int success;
@@ -35,7 +36,8 @@ public class ValidationReporter {
   private int skipped;
   private int notes;
 
-  public ValidationReporter(Path path) {
+  public ValidationReporter(Path path,Path sipPath) {
+    this.sipPath = sipPath;
     init(path);
   }
 
@@ -98,6 +100,8 @@ public class ValidationReporter {
 
     if (outputFile != null) {
       try {
+        // Depois receber parametro new BufferedOutputStream(System.out)
+
         outputStream = new BufferedOutputStream(new FileOutputStream(outputFile.toFile()));
         JsonFactory jsonFactory = new JsonFactory();
         jsonGenerator = jsonFactory.createGenerator(outputStream, JsonEncoding.UTF8);
@@ -125,6 +129,8 @@ public class ValidationReporter {
         jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_VERSION_COMMONS_IP, Constants.VALIDATION_REPORT_SPECIFICATION_COMMONS_IP_VERSION);
         // header -> date (date of sip validation)
         jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_DATE, new org.joda.time.DateTime().toString());
+        // header -> path of sip
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_PATH, sipPath.toString());
         jsonGenerator.writeEndObject();
         // initialize validation array
         jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_VALIDATION);
