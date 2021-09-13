@@ -1,20 +1,20 @@
 package org.roda_project.commons_ip2.validator.handlers;
 
+import java.util.List;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
-import java.util.List;
 
 /**
  * @author João Gomes <jgomes@keep.pt>
  */
 
 public class ControlledVocabularyHandler extends DefaultHandler {
-  private String tag;
-  private List<String> data;
+  private final String tag;
+  private final List<String> data;
   private boolean indexFound;
-  private StringBuilder tmp = new StringBuilder();
+  private final StringBuilder tmp = new StringBuilder();
 
   public ControlledVocabularyHandler(String tag, List<String> data) {
     this.tag = tag;

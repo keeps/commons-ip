@@ -4,10 +4,10 @@ package org.roda_project.commons_ip2.validator.constants;
  * @author João Gomes <jgomes@keep.pt>
  */
 public class ConstantsSIPspec {
-  private ConstantsSIPspec(){
+  private ConstantsSIPspec() {
   }
 
-  /*  Extended use of the METS root element (element mets) */
+  /* Extended use of the METS root element (element mets) */
 
   /* SIP1 */
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP1_ID = "SIP1";
@@ -31,9 +31,9 @@ public class ConstantsSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP3_ID = "SIP3";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP3_NAME = "Package status";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP3_LOCATION = "metsHdr/@RECORDSTATUS";
-  public static final String VALIDATION_REPORT_SPECIFICATION_SIP3_DESCRIPTION = "A way of indicating the status of the package and to instruct the OAIS on how " +
-          "to properly handle the package. If not set, the expected behaviour is equal to " +
-          "NEW.See also: Package status";
+  public static final String VALIDATION_REPORT_SPECIFICATION_SIP3_DESCRIPTION = "A way of indicating the status of the package and to instruct the OAIS on how "
+    + "to properly handle the package. If not set, the expected behaviour is equal to "
+    + "NEW.See also: Package status";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP3_CARDINALITY = "0..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP3_LEVEL = "MAY";
 
@@ -49,15 +49,12 @@ public class ConstantsSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP5_ID = "SIP5";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP5_NAME = "Submission agreement";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP5_LOCATION = "metsHdr/altRecordID";
-  public static final String VALIDATION_REPORT_SPECIFICATION_SIP5_DESCRIPTION = "A reference to the Submission Agreement associated with the package. " +
-          "@TYPE is used with the value “SUBMISSIONAGREEMENT”. Example: RA " +
-          "13-2011/5329; 2012-04-12 Example: " +
-          "http://submissionagreement.kb.se/dnr331-1144-2011/20120711/ Note: It is " +
-          "recommended to use a machine-readable format for a better description of a " +
-          "submission agreement. For example, the submission agreement developed " +
-          "by Docuteam GmbH " +
-          "http://www.loc.gov/standards/mets/profiles/00000041.xmlSee also: " +
-          "Alternative record ID’s";
+  public static final String VALIDATION_REPORT_SPECIFICATION_SIP5_DESCRIPTION = "A reference to the Submission Agreement associated with the package. "
+    + "@TYPE is used with the value “SUBMISSIONAGREEMENT”. Example: RA " + "13-2011/5329; 2012-04-12 Example: "
+    + "http://submissionagreement.kb.se/dnr331-1144-2011/20120711/ Note: It is "
+    + "recommended to use a machine-readable format for a better description of a "
+    + "submission agreement. For example, the submission agreement developed " + "by Docuteam GmbH "
+    + "http://www.loc.gov/standards/mets/profiles/00000041.xmlSee also: " + "Alternative record ID’s";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP5_CARDINALITY = "0..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP5_LEVEL = "MAY";
 
@@ -65,16 +62,13 @@ public class ConstantsSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP6_ID = "SIP6";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP6_NAME = "Previous Submission agreement";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP6_LOCATION = "metsHdr/altRecordID";
-  public static final String VALIDATION_REPORT_SPECIFICATION_SIP6_DESCRIPTION = "An optional reference to a previous submission agreement(s) which the\n" +
-          "information may have belonged to. @TYPE is used with the value " +
-          "“PREVIOUSSUBMISSIONAGREEMENT”. Example: FM 12-2387/12726, " +
-          "2007-09-19 Example: " +
-          "http://submissionagreement.kb.se/dnr331-1144-2011/20120711/ Note: It is " +
-          "recommended to use a machine-readable format for a better description of a " +
-          "submission agreement. For example, the submission agreement developed " +
-          "by Docuteam GmbH " +
-          "http://www.loc.gov/standards/mets/profiles/00000041.xmlSee also: " +
-          "Alternative record ID’s";
+  public static final String VALIDATION_REPORT_SPECIFICATION_SIP6_DESCRIPTION = "An optional reference to a previous submission agreement(s) which the\n"
+    + "information may have belonged to. @TYPE is used with the value "
+    + "“PREVIOUSSUBMISSIONAGREEMENT”. Example: FM 12-2387/12726, " + "2007-09-19 Example: "
+    + "http://submissionagreement.kb.se/dnr331-1144-2011/20120711/ Note: It is "
+    + "recommended to use a machine-readable format for a better description of a "
+    + "submission agreement. For example, the submission agreement developed " + "by Docuteam GmbH "
+    + "http://www.loc.gov/standards/mets/profiles/00000041.xmlSee also: " + "Alternative record ID’s";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP6_CARDINALITY = "0..*";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP6_LEVEL = "MAY";
 
@@ -82,10 +76,9 @@ public class ConstantsSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP7_ID = "SIP7";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP7_NAME = "Archival reference code";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP7_LOCATION = "metsHdr/altRecordID";
-  public static final String VALIDATION_REPORT_SPECIFICATION_SIP7_DESCRIPTION = "An optional reference code indicating where in the archival hierarchy the " +
-          "package shall be placed in the OAIS. @TYPE is used with the value " +
-          "“REFERENCECODE”. Example: FM 12-2387/12726, 2007-09-19See also: " +
-          "Alternative record ID’s";
+  public static final String VALIDATION_REPORT_SPECIFICATION_SIP7_DESCRIPTION = "An optional reference code indicating where in the archival hierarchy the "
+    + "package shall be placed in the OAIS. @TYPE is used with the value "
+    + "“REFERENCECODE”. Example: FM 12-2387/12726, 2007-09-19See also: " + "Alternative record ID’s";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP7_CARDINALITY = "1..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP7_LEVEL = "MAY";
 
@@ -93,12 +86,11 @@ public class ConstantsSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP8_ID = "SIP8";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP8_NAME = " Previous archival reference code";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP8_LOCATION = "metsHdr/altRecordID";
-  public static final String VALIDATION_REPORT_SPECIFICATION_SIP8_DESCRIPTION = "In cases where the SIP originates from other institutions maintaining a " +
-          "reference code structure, this element can be used to record these reference " +
-          "codes and therefore support the provenance of the package when a whole " +
-          "archival description is not submitted with the submission. @TYPE is used " +
-          "with the value “PREVIOUSREFERENCECODE”. Example: " +
-          "SE/FM/123/123.1/123.1.3See also: Alternative record ID’s";
+  public static final String VALIDATION_REPORT_SPECIFICATION_SIP8_DESCRIPTION = "In cases where the SIP originates from other institutions maintaining a "
+    + "reference code structure, this element can be used to record these reference "
+    + "codes and therefore support the provenance of the package when a whole "
+    + "archival description is not submitted with the submission. @TYPE is used "
+    + "with the value “PREVIOUSREFERENCECODE”. Example: " + "SE/FM/123/123.1/123.1.3See also: Alternative record ID’s";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP8_CARDINALITY = "0..*";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP8_LEVEL = "MAY";
 
@@ -106,10 +98,10 @@ public class ConstantsSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP9_ID = "SIP9";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP9_NAME = "Archival creator agent";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP9_LOCATION = "metsHdr/agent";
-  public static final String VALIDATION_REPORT_SPECIFICATION_SIP9_DESCRIPTION = "A wrapper element that enables to encode the name of the organisation or " +
-          "person that originally created the data being transferred. Please note that " +
-          "this might be different from the organisation which has been charged with " +
-          "preparing and sending the SIP to the archives.";
+  public static final String VALIDATION_REPORT_SPECIFICATION_SIP9_DESCRIPTION = "A wrapper element that enables to encode the name of the organisation or "
+    + "person that originally created the data being transferred. Please note that "
+    + "this might be different from the organisation which has been charged with "
+    + "preparing and sending the SIP to the archives.";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP9_CARDINALITY = "0..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP9_LEVEL = "MAY";
 
@@ -133,9 +125,9 @@ public class ConstantsSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP12_ID = "SIP12";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP12_NAME = "Archival creator agent name";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP12_LOCATION = "metsHdr/agent/name";
-  public static final String VALIDATION_REPORT_SPECIFICATION_SIP12_DESCRIPTION = "The name of the organisation(s) that originally created the data being " +
-          "transferred. Please note that this might be different from the organisation " +
-          "which has been charged with preparing and sending the SIP to the archives.";
+  public static final String VALIDATION_REPORT_SPECIFICATION_SIP12_DESCRIPTION = "The name of the organisation(s) that originally created the data being "
+    + "transferred. Please note that this might be different from the organisation "
+    + "which has been charged with preparing and sending the SIP to the archives.";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP12_CARDINALITY = "0..*";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP12_LEVEL = "MAY";
 
@@ -297,8 +289,8 @@ public class ConstantsSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP32_ID = "SIP32";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP32_NAME = "File format name";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP32_LOCATION = "fileSec/fileGrp/file/@sip:FILEFORMATNAME";
-  public static final String VALIDATION_REPORT_SPECIFICATION_SIP32_DESCRIPTION = "An optional attribute may be used if the MIMETYPE is not sufficient for the " +
-          "purposes of processing the information package. Example: “Extensible Markup Language” Example: “PDF/A” Example: “ISO/IEC 26300:2006”";
+  public static final String VALIDATION_REPORT_SPECIFICATION_SIP32_DESCRIPTION = "An optional attribute may be used if the MIMETYPE is not sufficient for the "
+    + "purposes of processing the information package. Example: “Extensible Markup Language” Example: “PDF/A” Example: “ISO/IEC 26300:2006”";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP32_CARDINALITY = "0..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP32_LEVEL = "MAY";
 
@@ -871,4 +863,3 @@ public class ConstantsSIPspec {
     return "Not Defined";
   }
 }
-

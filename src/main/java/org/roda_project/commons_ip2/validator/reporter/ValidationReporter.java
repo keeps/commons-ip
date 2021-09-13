@@ -1,25 +1,25 @@
 package org.roda_project.commons_ip2.validator.reporter;
 
-import org.roda_project.commons_ip2.validator.constants.Constants;
-import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
-import org.roda_project.commons_ip2.validator.constants.ConstantsSIPspec;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.roda_project.commons_ip2.validator.constants.Constants;
+import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
+import org.roda_project.commons_ip2.validator.constants.ConstantsSIPspec;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
+
 /**
  * @author João Gomes <jgomes@keep.pt>
  */
@@ -27,7 +27,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 public class ValidationReporter {
   private static final Logger LOGGER = LoggerFactory.getLogger(ValidationReporter.class);
   private Path outputFile;
-  private Path sipPath;
+  private final Path sipPath;
   private OutputStream outputStream;
   private JsonGenerator jsonGenerator;
   private int success;
@@ -36,32 +36,42 @@ public class ValidationReporter {
   private int skipped;
   private int notes;
 
-  public ValidationReporter(Path path,Path sipPath) {
+  public ValidationReporter(Path path, Path sipPath) {
     this.sipPath = sipPath;
     init(path);
   }
 
-  public int getSuccess(){ return success;}
+  public int getSuccess() {
+    return success;
+  }
 
-  public int getErrors(){ return errors;}
+  public int getErrors() {
+    return errors;
+  }
 
-  public int getWarnings(){ return warnings;}
+  public int getWarnings() {
+    return warnings;
+  }
 
-  public int getSkipped(){ return skipped;}
+  public int getSkipped() {
+    return skipped;
+  }
 
-  public void countSuccess(){
+  public void countSuccess() {
     success++;
   }
 
-  public void countWarnings(){
+  public void countWarnings() {
     warnings++;
   }
 
-  public void countErrors(){
+  public void countErrors() {
     errors++;
   }
 
-  public void countSkipped() { skipped++; }
+  public void countSkipped() {
+    skipped++;
+  }
 
   private void init(Path path) {
     this.outputFile = path;
@@ -79,14 +89,14 @@ public class ValidationReporter {
           LOGGER.error("Could not create report temporary file. Reporting will not function.", e1);
         }
       }
-    }
-    else{
-      try{
+    } else {
+      try {
         Files.deleteIfExists(outputFile);
         try {
           Files.createFile(outputFile);
         } catch (IOException e) {
-          LOGGER.warn("Could not create report file in current working directory. Attempting to use a temporary file", e);
+          LOGGER.warn("Could not create report file in current working directory. Attempting to use a temporary file",
+            e);
           try {
             outputFile = Files.createTempFile(Constants.VALIDATION_REPORT_PREFIX, ".json");
           } catch (IOException e1) {
@@ -110,25 +120,32 @@ public class ValidationReporter {
         jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_HEADER_KEY_HEADER);
         jsonGenerator.writeStartObject();
         // header -> title
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_KEY_TITLE, Constants.VALIDATION_REPORT_HEADER_TITLE);
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_KEY_TITLE,
+          Constants.VALIDATION_REPORT_HEADER_TITLE);
         // header -> specifications
         jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_HEADER_KEY_SPECIFICATIONS);
         jsonGenerator.writeStartArray();
         // header -> specifications -> CSIP
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID, Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL, Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_CSIP);
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
+          Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
+          Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_CSIP);
         jsonGenerator.writeEndObject();
         // header -> specifications -> SIP
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID, Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL, Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_SIP);
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
+          Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
+          Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_SIP);
         jsonGenerator.writeEndObject();
         jsonGenerator.writeEndArray();
         // header -> version_commons_ip
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_VERSION_COMMONS_IP, Constants.VALIDATION_REPORT_SPECIFICATION_COMMONS_IP_VERSION);
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_VERSION_COMMONS_IP,
+          Constants.VALIDATION_REPORT_SPECIFICATION_COMMONS_IP_VERSION);
         // header -> date (date of sip validation)
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_DATE, new org.joda.time.DateTime().toString());
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_DATE,
+          new org.joda.time.DateTime().toString());
         // header -> path of sip
         jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_PATH, sipPath.toString());
         jsonGenerator.writeEndObject();
@@ -136,39 +153,50 @@ public class ValidationReporter {
         jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_VALIDATION);
         jsonGenerator.writeStartArray();
       } catch (IOException e) {
-        LOGGER.error("Could not create an output stream for file '" + outputFile.normalize().toAbsolutePath().toString() + "'", e);
+        LOGGER.error(
+          "Could not create an output stream for file '" + outputFile.normalize().toAbsolutePath() + "'", e);
       }
     }
   }
 
-  public void componentValidationResult(String specification,String id,String status,List<String> issues,String detail) {
+  public void componentValidationResult(String specification, String id, String status, List<String> issues,
+    String detail) {
     try {
       jsonGenerator.writeStartObject();
       jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_SPECIFICATION, specification);
       jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID, id);
-      if(id.contains("C")){
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_NAME, ConstantsCSIPspec.getSpecificationName(id));
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LOCATION, ConstantsCSIPspec.getSpecificationLocation(id));
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_DESCRIPTION, ConstantsCSIPspec.getSpecificationDescription(id));
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_CARDINALITY, ConstantsCSIPspec.getSpecificationCardinality(id));
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LEVEL, ConstantsCSIPspec.getSpecificationLevel(id));
-      }
-      else{
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_NAME, ConstantsSIPspec.getSpecificationName(id));
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LOCATION, ConstantsSIPspec.getSpecificationLocation(id));
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_DESCRIPTION, ConstantsSIPspec.getSpecificationDescription(id));
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_CARDINALITY, ConstantsSIPspec.getSpecificationCardinality(id));
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LEVEL, ConstantsSIPspec.getSpecificationLevel(id));
+      if (id.contains("C")) {
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_NAME,
+          ConstantsCSIPspec.getSpecificationName(id));
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LOCATION,
+          ConstantsCSIPspec.getSpecificationLocation(id));
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_DESCRIPTION,
+          ConstantsCSIPspec.getSpecificationDescription(id));
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_CARDINALITY,
+          ConstantsCSIPspec.getSpecificationCardinality(id));
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LEVEL,
+          ConstantsCSIPspec.getSpecificationLevel(id));
+      } else {
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_NAME,
+          ConstantsSIPspec.getSpecificationName(id));
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LOCATION,
+          ConstantsSIPspec.getSpecificationLocation(id));
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_DESCRIPTION,
+          ConstantsSIPspec.getSpecificationDescription(id));
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_CARDINALITY,
+          ConstantsSIPspec.getSpecificationCardinality(id));
+        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LEVEL,
+          ConstantsSIPspec.getSpecificationLevel(id));
       }
       jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING);
       jsonGenerator.writeStartObject();
       jsonGenerator.writeObjectField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_OUTCOME, status);
-      if(!detail.equals("")){
-        jsonGenerator.writeObjectField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_DETAIL,detail);
+      if (!detail.equals("")) {
+        jsonGenerator.writeObjectField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_DETAIL, detail);
       }
       jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_ISSUES);
       jsonGenerator.writeStartArray();
-      for(String issue: issues){
+      for (String issue : issues) {
         jsonGenerator.writeString(issue);
       }
       jsonGenerator.writeEndArray();
@@ -179,7 +207,7 @@ public class ValidationReporter {
     }
   }
 
-  public void componentPathValidationResult(String id,String status,String detail){
+  public void componentPathValidationResult(String id, String status, String detail) {
     try {
       jsonGenerator.writeStartObject();
       jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID, id);
@@ -195,7 +223,7 @@ public class ValidationReporter {
     }
   }
 
-  public void componentValidationFinish(String status){
+  public void componentValidationFinish(String status) {
     try {
       jsonGenerator.writeEndArray();
       jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_SUMMARY);
@@ -204,8 +232,8 @@ public class ValidationReporter {
       jsonGenerator.writeNumberField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_WARNINGS, warnings);
       jsonGenerator.writeNumberField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_ERRORS, errors);
       jsonGenerator.writeNumberField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_SKIPPED, skipped);
-      jsonGenerator.writeNumberField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_NOTES,notes);
-      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_RESULT,status);
+      jsonGenerator.writeNumberField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_NOTES, notes);
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_RESULT, status);
       jsonGenerator.writeEndObject();
       jsonGenerator.writeEndObject();
     } catch (IOException e) {
@@ -213,42 +241,40 @@ public class ValidationReporter {
     }
   }
 
-  public void validationResults(TreeMap<String, ReporterDetails> results){
-    for(Map.Entry<String,ReporterDetails> entry: results.entrySet()){
+  public void validationResults(TreeMap<String, ReporterDetails> results) {
+    for (Map.Entry<String, ReporterDetails> entry : results.entrySet()) {
       ReporterDetails details = entry.getValue();
       List<String> issues = details.getIssues();
       String detail = details.getDetail();
-      if(details.isSkipped()){
-        componentValidationResult(details.getSpecification(),entry.getKey(), Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_SKIPPED,issues,detail);
+      if (details.isSkipped()) {
+        componentValidationResult(details.getSpecification(), entry.getKey(),
+          Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_SKIPPED, issues, detail);
         skipped++;
-      }
-      else{
-        if(details.isValid()){
-          componentValidationResult(details.getSpecification(), entry.getKey(),Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_PASSED,issues,detail);
+      } else {
+        if (details.isValid()) {
+          componentValidationResult(details.getSpecification(), entry.getKey(),
+            Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_PASSED, issues, detail);
           success++;
-        }
-        else{
-          componentValidationResult(details.getSpecification(), entry.getKey(),Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_FAILED,issues,detail);
-          if(details.getSpecification().contains("C")) {
+        } else {
+          componentValidationResult(details.getSpecification(), entry.getKey(),
+            Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_FAILED, issues, detail);
+          if (details.getSpecification().contains("C")) {
             if (ConstantsCSIPspec.getSpecificationLevel(entry.getKey()).equals("MUST")) {
               errors++;
             } else {
-              if(ConstantsCSIPspec.getSpecificationLevel(entry.getKey()).equals("SHOULD")) {
+              if (ConstantsCSIPspec.getSpecificationLevel(entry.getKey()).equals("SHOULD")) {
                 warnings++;
-              }
-              else{
+              } else {
                 notes++;
               }
             }
-          }
-          else{
+          } else {
             if (ConstantsSIPspec.getSpecificationLevel(entry.getKey()).equals("MUST")) {
               errors++;
             } else {
-              if(ConstantsSIPspec.getSpecificationLevel(entry.getKey()).equals("SHOULD")) {
+              if (ConstantsSIPspec.getSpecificationLevel(entry.getKey()).equals("SHOULD")) {
                 warnings++;
-              }
-              else{
+              } else {
                 notes++;
               }
             }
@@ -271,7 +297,8 @@ public class ValidationReporter {
         LOGGER.info("A report was generated with a listing of information about the individual validations.");
         LOGGER.info("The report file is located at {}", outputFile.normalize().toAbsolutePath());
       } else {
-        LOGGER.info("A report with a listing of information  about the individual validations could not be generated, please submit a bug report to help us fix this.");
+        LOGGER.info(
+          "A report with a listing of information  about the individual validations could not be generated, please submit a bug report to help us fix this.");
       }
     }
   }

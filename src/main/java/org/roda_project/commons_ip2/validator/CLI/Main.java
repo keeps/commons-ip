@@ -5,8 +5,8 @@ package org.roda_project.commons_ip2.validator.CLI;
  */
 public class Main {
 
-  public static void main(String[] args){
-      CLI cli = new CLI();
-      cli.start(args);
+  public static void main(String[] args) {
+    CLI cli = new CLI();
+    cli.start(args);
   }
 }

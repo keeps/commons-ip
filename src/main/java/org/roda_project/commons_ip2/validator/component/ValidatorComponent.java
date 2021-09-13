@@ -1,19 +1,17 @@
 package org.roda_project.commons_ip2.validator.component;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.List;
+import java.util.TreeMap;
+
 import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
 import org.roda_project.commons_ip2.validator.common.FolderManager;
 import org.roda_project.commons_ip2.validator.common.ZipManager;
 import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReporter;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeMap;
 
 /**
  * @author João Gomes <jgomes@keep.pt>
@@ -51,6 +49,7 @@ public interface ValidatorComponent {
 
   void setResults(TreeMap<String, ReporterDetails> results);
 
-  void setFiles(HashMap<String,Boolean> files);
+  void setFiles(HashMap<String, Boolean> files);
+
   void clean();
 }

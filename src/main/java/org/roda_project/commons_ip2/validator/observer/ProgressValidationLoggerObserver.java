@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author João Gomes <jgomes@keep.pt>
  */
-public class ProgressValidationLoggerObserver  implements  ValidationObserver{
+public class ProgressValidationLoggerObserver implements ValidationObserver {
   private static final Logger LOGGER = LoggerFactory.getLogger(ProgressValidationLoggerObserver.class);
 
   @Override
@@ -26,12 +26,12 @@ public class ProgressValidationLoggerObserver  implements  ValidationObserver{
 
   @Override
   public void notifyFinishStep(String ID) {
-    LOGGER.info("Finish validation of: {}", ID );
+    LOGGER.info("Finish validation of: {}", ID);
   }
 
   @Override
   public void notifyFinishModule(String moduleName) {
-    LOGGER.info("Finish validation of module: {}", moduleName  );
+    LOGGER.info("Finish validation of module: {}", moduleName);
   }
 
   @Override
