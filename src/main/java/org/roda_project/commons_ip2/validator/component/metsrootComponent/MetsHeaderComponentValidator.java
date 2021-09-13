@@ -876,6 +876,18 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
           if (notes == null || notes.size() == 0) {
             details.setValid(false);
             details.addIssue("mets/metsHdr/agent/note can't be null");
+          } else {
+            if (notes.size() > 1) {
+              details.setValid(false);
+              details.addIssue("mets/metsHdr/agent/note exists more than once");
+            } else {
+              for (MetsType.MetsHdr.Agent.Note note : notes) {
+                if (note.getValue().isEmpty()) {
+                  details.setValid(false);
+                  details.addIssue("mets/metsHdr/agent/note can't be empty");
+                }
+              }
+            }
           }
         }
       }

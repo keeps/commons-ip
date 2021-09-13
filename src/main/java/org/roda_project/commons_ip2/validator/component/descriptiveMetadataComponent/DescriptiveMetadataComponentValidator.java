@@ -1,6 +1,7 @@
 package org.roda_project.commons_ip2.validator.component.descriptiveMetadataComponent;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLDecoder;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
@@ -11,25 +12,24 @@ import java.util.List;
 import org.roda_project.commons_ip2.mets_v1_12.beans.AmdSecType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType;
 import org.roda_project.commons_ip2.validator.common.ControlledVocabularyParser;
+import org.roda_project.commons_ip2.validator.common.MetsParser;
 import org.roda_project.commons_ip2.validator.component.ValidatorComponentImpl;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
+import org.roda_project.commons_ip2.validator.handlers.MetsHandler;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.utils.CHECKSUMTYPE;
 import org.roda_project.commons_ip2.validator.utils.MetadataType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author João Gomes <jgomes@keep.pt>
  */
 public class DescriptiveMetadataComponentValidator extends ValidatorComponentImpl {
-  private static final Logger LOGGER = LoggerFactory.getLogger(DescriptiveMetadataComponentValidator.class);
 
   private final String MODULE_NAME;
   private List<MdSecType> dmdSec;
   private List<String> dmdSecStatus;
-
+  private HashMap<String,String> dmdSecType;
   public void setDmdSecStatus(List<String> dmdSecStatus) {
     this.dmdSecStatus = dmdSecStatus;
   }
@@ -105,7 +105,9 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
       addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP25_ID, csip);
 
       /* CSIP26 */
-      csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", true, true);
+      validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP26_ID);
+      csip = validateCSIP26();
+      csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
       addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP26_ID, csip);
 
       /* CSIP27 */
@@ -369,16 +371,40 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
    * mets/dmdSec/mdRef[@xlink:type=’simple’] Attribute used with the value
    * “simple”. Value list is maintained by the xlink standard.
    */
-  private ReporterDetails validateCSIP23() {
+  private ReporterDetails validateCSIP23() throws IOException {
+    dmdSecType = new HashMap<>();
+    MetsHandler dmdSecHandler = new MetsHandler("dmdSec","mdRef",dmdSecType);
+    MetsParser metsParser = new MetsParser();
+    InputStream metsStream = null;
+    if(!dmdSec.isEmpty()) {
+      if (isZipFileFlag()) {
+        if (isRootMets()) {
+          metsStream = zipManager.getMetsRootInputStream(getEARKSIPpath());
+        } else {
+          metsStream = zipManager.getZipInputStream(getEARKSIPpath(), metsPath + "METS.xml");
+        }
+      }
+      else{
+        if(isRootMets()){
+          metsStream = folderManager.getMetsRootInputStream(getEARKSIPpath());
+        }
+        else{
+          metsStream = folderManager.getInputStream(Paths.get(metsPath));
+        }
+      }
+    }
+    if(metsStream != null){
+      metsParser.parse(dmdSecHandler,metsStream);
+    }
     ReporterDetails details = new ReporterDetails();
+
     for (MdSecType mdSec : dmdSec) {
       MdSecType.MdRef mdRef = mdSec.getMdRef();
-      String xlinkType = mdRef.getType();
-      if (xlinkType == null) {
+      if (dmdSecType.get(mdRef.getID()) == null) {
         details.setValid(false);
         details.addIssue("mets/dmdSec/mdRef[@xlink:type=’simple’] can't be null");
       } else {
-        if (!xlinkType.equals("simple")) {
+        if (!dmdSecType.get(mdRef.getID()).equals("simple")) {
           details.setValid(false);
           details.addIssue("mets/dmdSec/mdRef[@xlink:type=’simple’] value must be 'simple'");
         }
@@ -448,11 +474,22 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
   /*
    * mets/dmdSec/mdRef/@MIMETYPE The IANA mime type of the referenced file.See
    * also: IANA media types
-   * 
-   * Fica para a próxima iteração(Deixar para o fim)
    */
-  private boolean validateCSIP26() {
-    return true;
+  private ReporterDetails validateCSIP26() {
+    for (MdSecType mdSecType : dmdSec) {
+      MdSecType.MdRef mdRef = mdSecType.getMdRef();
+      String mimetype = mdRef.getMIMETYPE();
+      if (mimetype != null) {
+        if (!ianaMediaTypes.contains(mimetype)) {
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "mets/dmdSec/mdRef/@MIMETYPE value isn't valid see IANA MEDIA TYPES (" + metsPath + ")", false, false);
+        }
+      } else {
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+          "mets/dmdSec/mdRef/@MIMETYPE can't be null (" + metsPath + ")", false, false);
+      }
+    }
+    return new ReporterDetails();
   }
 
   /*
@@ -485,9 +522,16 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
               details.addIssue("mets/dmdSec/mdRef/@SIZE and size of file isn't equal");
             }
           } else {
-            if (!folderManager.verifySize(getEARKSIPpath(), hrefDecoded, size)) {
-              details.setValid(false);
-              details.addIssue("mets/dmdSec/mdRef/@SIZE and size of file isn't equal");
+            if (isRootMets()) {
+              if (!folderManager.verifySize(getEARKSIPpath().resolve(hrefDecoded), size)) {
+                details.setValid(false);
+                details.addIssue("mets/dmdSec/mdRef/@SIZE and size of file isn't equal");
+              }
+            } else {
+              if (!folderManager.verifySize(Paths.get(metsPath).resolve(hrefDecoded), size)) {
+                details.setValid(false);
+                details.addIssue("mets/dmdSec/mdRef/@SIZE and size of file isn't equal");
+              }
             }
           }
         } else {

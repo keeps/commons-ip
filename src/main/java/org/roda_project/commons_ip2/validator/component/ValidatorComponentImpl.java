@@ -1,5 +1,6 @@
 package org.roda_project.commons_ip2.validator.component;
 
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +38,7 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
   private boolean isRootMets = false;
 
   protected HashMap<String, Boolean> files = null;
+  protected List<String> ianaMediaTypes = null;
 
   protected Path getEARKSIPpath() {
     return path;
@@ -200,5 +202,10 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
       results.put(specification, details);
     }
 
+  }
+
+  @Override
+  public void setIANAMediaTypes(List<String> ianaMediaTypes) {
+    this.ianaMediaTypes = ianaMediaTypes;
   }
 }

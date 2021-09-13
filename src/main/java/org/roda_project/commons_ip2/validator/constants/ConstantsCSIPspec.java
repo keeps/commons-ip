@@ -19,7 +19,7 @@ public class ConstantsCSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR0_ID = "CSIPSTR0";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR0_NAME = "METS Schema";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR0_LOCATION = "";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR0_DESCRIPTION = "METS Schema error";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR0_DESCRIPTION = "Validation of METS Schema";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR0_CARDINALITY = "";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR0_LEVEL = "MUST";
 

@@ -1,14 +1,17 @@
 package org.roda_project.commons_ip2.validator;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.UnmarshalException;
@@ -31,8 +34,6 @@ import org.roda_project.commons_ip2.validator.observer.ProgressValidationLoggerO
 import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReporter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 /**
@@ -40,7 +41,6 @@ import org.xml.sax.SAXException;
  */
 
 public class EARKSIPValidator {
-  private static final Logger LOGGER = LoggerFactory.getLogger(EARKSIPValidator.class);
   private final Path earksipPath;
 
   private final ValidationReporter reporter;
@@ -53,6 +53,7 @@ public class EARKSIPValidator {
 
   private List<ValidatorComponent> components;
   private HashMap<String, Boolean> files;
+  private List<String> ianaMediaTypes;
 
   public EARKSIPValidator(Path earksipPath, Path reportPath) {
     this.earksipPath = earksipPath.toAbsolutePath().normalize();
@@ -61,41 +62,41 @@ public class EARKSIPValidator {
     observer = new ProgressValidationLoggerObserver();
     folderManager = new FolderManager();
     ids = new ArrayList<>();
-
-    results = new TreeMap<>(new Comparator<String>() {
-      public int compare(String o1, String o2) {
-        int c1;
-        int c2;
-        if (o1.contains("R") && o2.contains("R")) {
-          c1 = Integer.parseInt(o1.split("R")[1]);
-          c2 = Integer.parseInt(o2.split("R")[1]);
-          return compareInt(c1, c2);
+    ianaMediaTypes = new BufferedReader(new InputStreamReader(
+      getClass().getClassLoader().getResourceAsStream(Constants.PATH_RESOURCES_CSIP_VOCABULARY_IANA_MEDIA_TYPES),
+      StandardCharsets.UTF_8)).lines().collect(Collectors.toList());
+    results = new TreeMap<>((o1, o2) -> {
+      int c1;
+      int c2;
+      if (o1.contains("R") && o2.contains("R")) {
+        c1 = Integer.parseInt(o1.split("R")[1]);
+        c2 = Integer.parseInt(o2.split("R")[1]);
+        return compareInt(c1, c2);
+      } else {
+        if (o1.contains("R") && !o2.contains("R")) {
+          return -1;
         } else {
-          if (o1.contains("R") && !o2.contains("R")) {
-            return -1;
+          if (!o1.contains("R") && o2.contains("R")) {
+            return 1;
           } else {
-            if (!o1.contains("R") && o2.contains("R")) {
-              return 1;
+            if (o1.contains("C") && o2.contains("C")) {
+              c1 = Integer.parseInt(o1.split("P")[1]);
+              c2 = Integer.parseInt(o2.split("P")[1]);
+              return compareInt(c1, c2);
             } else {
-              if (o1.contains("C") && o2.contains("C")) {
-                c1 = Integer.parseInt(o1.split("P")[1]);
-                c2 = Integer.parseInt(o2.split("P")[1]);
-                return compareInt(c1, c2);
+              if (o1.contains("C") && !o2.contains("C")) {
+                return -1;
               } else {
-                if (o1.contains("C") && !o2.contains("C")) {
-                  return -1;
+                if (!o1.contains("C") && o2.contains("C")) {
+                  return 1;
                 } else {
-                  if (!o1.contains("C") && o2.contains("C")) {
-                    return 1;
-                  } else {
-                    c1 = Integer.parseInt(o1.split("P")[1]);
-                    c2 = Integer.parseInt(o2.split("P")[1]);
-                    return compareInt(c1, c2);
-                  }
+                  c1 = Integer.parseInt(o1.split("P")[1]);
+                  c2 = Integer.parseInt(o2.split("P")[1]);
+                  return compareInt(c1, c2);
                 }
               }
-
             }
+
           }
         }
       }
@@ -167,6 +168,11 @@ public class EARKSIPValidator {
           }
         }
       }
+
+      ReporterDetails csipStr0 = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", true, false);
+      csipStr0.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+      results.put(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR0_ID, csipStr0);
+
       reporter.validationResults(results);
       if (reporter.getErrors() > 0) {
         reporter.componentValidationFinish(Constants.VALIDATION_REPORT_SPECIFICATION_RESULT_INVALID);
@@ -211,6 +217,7 @@ public class EARKSIPValidator {
       component.setZipFileFlag(isZip);
       component.setMetsName(key);
       component.setIsRootMets(isRootMets);
+      component.setIANAMediaTypes(ianaMediaTypes);
       String metsPath = "";
       for (String s : key.split("/")) {
         if (!s.equals("METS.xml")) {
@@ -224,7 +231,7 @@ public class EARKSIPValidator {
     }
   }
 
-  public void validateSubMets(HashMap<String, InputStream> subMets, boolean isZip)
+  public void validateSubMets(Map<String, InputStream> subMets, boolean isZip)
     throws IOException, JAXBException, SAXException {
     for (Map.Entry<String, InputStream> entry : subMets.entrySet()) {
       InstatiateMets instatiateMets = new InstatiateMets(entry.getValue());
@@ -236,10 +243,8 @@ public class EARKSIPValidator {
   public boolean validFileComponent() {
     for (Map.Entry<String, ReporterDetails> result : results.entrySet()) {
       String strCsip = result.getKey();
-      if (strCsip.equals("CSIPSTR1") || strCsip.equals("CSIPSTR4")) {
-        if (!result.getValue().isValid()) {
+      if ((strCsip.equals("CSIPSTR1") || strCsip.equals("CSIPSTR4")) && !result.getValue().isValid()) {
           return false;
-        }
       }
     }
     return true;

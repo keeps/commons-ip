@@ -8,11 +8,12 @@ public class Constants {
   }
 
   /* File Paths */
-  public static final String PATH_RESOURCES_CSIP_VOCABULARY_CONTENT_CATEGORY = "./src/main/resources/controlledVocabularies/CSIPVocabularyContentCategory.xml";
-  public static final String PATH_RESOURCES_CSIP_VOCABULARY_CONTENT_INFORMATION_TYPE = "./src/main/resources/controlledVocabularies/CSIPVocabularyContentInformationType.xml";
-  public static final String PATH_RESOURCES_CSIP_VOCABULARY_OAIS_PACKAGE_TYPE = "./src/main/resources/controlledVocabularies/CSIPVocabularyOAISPackageType.xml";
-  public static final String PATH_RESOURCES_CSIP_VOCABULARY_DMD_SEC_STATUS = "./src/main/resources/controlledVocabularies/CSIPVocabularyStatus.xml";
-  public static final String PATH_RESOURCES_CSIP_VOCABULARY_RECORD_STATUS = "./src/main/resources/controlledVocabularies/SIPVocabularyRecordStatus.xml";
+  public static final String PATH_RESOURCES_CSIP_VOCABULARY_CONTENT_CATEGORY = "controlledVocabularies/CSIPVocabularyContentCategory.xml";
+  public static final String PATH_RESOURCES_CSIP_VOCABULARY_CONTENT_INFORMATION_TYPE = "controlledVocabularies/CSIPVocabularyContentInformationType.xml";
+  public static final String PATH_RESOURCES_CSIP_VOCABULARY_OAIS_PACKAGE_TYPE = "controlledVocabularies/CSIPVocabularyOAISPackageType.xml";
+  public static final String PATH_RESOURCES_CSIP_VOCABULARY_DMD_SEC_STATUS = "controlledVocabularies/CSIPVocabularyStatus.xml";
+  public static final String PATH_RESOURCES_CSIP_VOCABULARY_RECORD_STATUS = "controlledVocabularies/SIPVocabularyRecordStatus.xml";
+  public static final String PATH_RESOURCES_CSIP_VOCABULARY_IANA_MEDIA_TYPES = "controlledVocabularies/IANA_MEDIA_TYPES.txt";
   public static final String VALIDATION_REPORT_PREFIX = "commons-ip-validation-reporter";
 
   /* Report Header */

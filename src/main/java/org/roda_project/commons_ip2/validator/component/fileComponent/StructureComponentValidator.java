@@ -1,8 +1,12 @@
 package org.roda_project.commons_ip2.validator.component.fileComponent;
 
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.roda_project.commons_ip2.validator.component.ValidatorComponentImpl;
 import org.roda_project.commons_ip2.validator.constants.Constants;
@@ -10,6 +14,7 @@ import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * @author João Gomes <jgomes@keep.pt>
@@ -25,6 +30,8 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
     this.path = path;
   }
 
+  private static final byte[] ZIP_MAGIC_NUMBER = {'P', 'K', 0x3, 0x4};
+
   @Override
   public void validate() throws IOException {
     ReporterDetails strCsip;
@@ -35,14 +42,15 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
     strCsip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
     addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_ID, strCsip);
     if (strCsip.isValid()) {
-      String message = "SKIPPED because it will be validated afterwards";
 
       /* CSIPSTR2 */
-      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
+      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "Requirement check was skipped as it will be checked under CSIP1", true, true);
       addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_ID, strCsip);
 
       /* CSIPSTR3 */
-      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
+      validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_ID);
+      strCsip = validateCSIPSTR3();
+      strCsip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
       addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_ID, strCsip);
 
       /* CSIPSTR4 */
@@ -82,7 +90,9 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
       addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_ID, strCsip);
 
       /* CSIPSTR10 */
-      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
+      validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_ID);
+      strCsip = validateCSIPSTR10();
+      strCsip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
       addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_ID, strCsip);
 
       /* CSIPSTR11 */
@@ -104,7 +114,7 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
       addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_ID, strCsip);
 
       /* CSIPSTR14 */
-      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
+      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", true, true);
       addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_ID, strCsip);
 
       /* CSIPSTR15 */
@@ -197,8 +207,7 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
   private ReporterDetails validateCSIPSTR1() throws IOException {
     ReporterDetails details = new ReporterDetails();
     if (Files.exists(path)) {
-      String contentType = Files.probeContentType(path);
-      if (contentType.equals("application/zip") || contentType.equals("application/x-xz")) {
+      if (isZipFile()) {
         setZipFileFlag(true);
         if (!zipManager.checkSingleRootFolder(path)) {
           details.setValid(false);
@@ -231,8 +240,24 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
    * TAR or ZIP). Which specific compression format to use needs to be stated in
    * the Submission Agreement.
    */
-  private ReporterDetails validateCSIPSTR3() {
-    return new ReporterDetails();
+  private ReporterDetails validateCSIPSTR3() throws IOException {
+    if(isZipFileFlag()){
+      if(Files.probeContentType(getEARKSIPpath()).equals("application/zip")){
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                "Information package is compressed in ZIP format",
+                true, false);
+      }
+      else{
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                "Information package is compressed in TAR format",
+                true, false);
+      }
+    }
+    else {
+      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+              "The Information Package root folder MAY be compressed.",
+              false, false);
+    }
   }
 
   /*
@@ -375,6 +400,43 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
    * candidates as a representation sub-folder name.
    */
   private ReporterDetails validateCSIPSTR10() throws IOException {
+    List<String> representationsFoldersNames;
+    List<String> tmp;
+    if (isZipFileFlag()) {
+      representationsFoldersNames = zipManager.getRepresentationsFoldersNames(getEARKSIPpath());
+      if (representationsFoldersNames.size() != 0) {
+        if (zipManager.countFilesInsideRepresentations(getEARKSIPpath()) != 0) {
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "The representations folder SHOULD include a sub-folder for each individual representation.", false, false);
+        } else {
+          tmp = representationsFoldersNames.stream().distinct().collect(Collectors.toList());
+          if (representationsFoldersNames.size() != tmp.size()) {
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+              "Names of representatios folders must be unique", false, false);
+          }
+        }
+      } else {
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+          "The representations folder SHOULD include a sub-folder for each individual representation.", false, false);
+      }
+    } else {
+      representationsFoldersNames = folderManager.getRepresentationsFoldersNames(getEARKSIPpath());
+      if (representationsFoldersNames.size() != 0) {
+        if (folderManager.countFilesInsideRepresentations(getEARKSIPpath()) != 0) {
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "The representations folder SHOULD include a sub-folder for each individual representation.", false, false);
+        } else {
+          tmp = representationsFoldersNames.stream().distinct().collect(Collectors.toList());
+          if (representationsFoldersNames.size() != tmp.size()) {
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+              "Names of representatios folders must be unique", false, false);
+          }
+        }
+      } else {
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+          "The representations folder SHOULD include a sub-folder for each individual representation.", false, false);
+      }
+    }
     return new ReporterDetails();
   }
 
@@ -516,5 +578,25 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
       }
     }
     return new ReporterDetails();
+  }
+
+  private boolean isZipFile() {
+    boolean isZip = true;
+
+    byte[] buffer = new byte[ZIP_MAGIC_NUMBER.length];
+    try (RandomAccessFile raf = new RandomAccessFile(path.toFile(), "r")) {
+      raf.readFully(buffer);
+      for (int i = 0; i < ZIP_MAGIC_NUMBER.length; i++) {
+        if (buffer[i] != ZIP_MAGIC_NUMBER[i]) {
+          isZip = false;
+          break;
+        }
+      }
+    } catch (IOException e) {
+      LOGGER.debug("Failed to validate {} Failed to validate due to an exception on CSIP1 " + MODULE_NAME, "Please check the file submitted",e);
+      isZip = false;
+    }
+
+    return isZip;
   }
 }

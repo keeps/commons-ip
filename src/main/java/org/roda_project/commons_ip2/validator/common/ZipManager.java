@@ -5,9 +5,11 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -431,5 +433,39 @@ public class ZipManager {
       }
     }
     return countSubMets == countRepresentations;
+  }
+
+  public List<String> getRepresentationsFoldersNames(Path path) throws IOException {
+    List<String> representationsFoldersNames = new ArrayList<>();
+    ZipFile zipFile = new ZipFile(path.toFile());
+    Enumeration entries = zipFile.entries();
+    while (entries.hasMoreElements()) {
+      ZipEntry entry = (ZipEntry) entries.nextElement();
+      if (entry.getName().matches(".*/representations/.*/")) {
+        if (entry.getName().split("/").length == 3) {
+          if (entry.isDirectory()) {
+            representationsFoldersNames.add(entry.getName());
+          }
+        }
+      }
+    }
+    return representationsFoldersNames;
+  }
+
+  public int countFilesInsideRepresentations(Path path) throws IOException {
+    int count = 0;
+    ZipFile zipFile = new ZipFile(path.toFile());
+    Enumeration entries = zipFile.entries();
+    while (entries.hasMoreElements()) {
+      ZipEntry entry = (ZipEntry) entries.nextElement();
+      if (entry.getName().matches(".*/representations/.*/")) {
+        if (entry.getName().split("/").length == 3) {
+          if (!entry.isDirectory()) {
+            count++;
+          }
+        }
+      }
+    }
+    return count;
   }
 }

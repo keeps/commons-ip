@@ -1,6 +1,7 @@
 package org.roda_project.commons_ip2.validator.CLI;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,52 +29,60 @@ public class CLI {
   public CLI() {
     this.parameters = new Options();
     this.parser = new DefaultParser();
+
     Option op = new Option("i", "input", true, "List of files to be used as inputs");
     op.setArgs(Option.UNLIMITED_VALUES);
     op.setRequired(true);
     parameters.addOption(op);
-    parameters.addOption("o", true, "Output to file");
+    Option reportOption = new Option("o", true, "Output to file");
+    reportOption.setRequired(false);
+    reportOption.setOptionalArg(true);
+    parameters.addOption(reportOption);
   }
 
   public int start(String[] args) {
     try {
       commandLine = parser.parse(parameters, args);
-      String[] parsedArgs = commandLine.getOptionValues("i");
-      String path = commandLine.getOptionValue("o");
+      String[] sipPaths = commandLine.getOptionValues("i");
+      String reportDirectoryPath = commandLine.getOptionValue("o");
 
-      if (parsedArgs.length == 0) {
+      if (sipPaths == null && sipPaths.length == 0) {
         return ExitCodes.EXIT_MISSING_SIP_PATH;
       }
 
-      if (path.isEmpty()) {
-        return ExitCodes.EXIT_MISSING_REPORT_DIRECTORY;
-      }
-
-      if (!Paths.get(path).toFile().isDirectory()) {
-        try {
-          Files.createDirectories(Paths.get(path));
-        } catch (IOException e) {
-          return ExitCodes.EXIT_CODE_CREATE_DIRECTORY_FAILS;
+      if (reportDirectoryPath != null) {
+        if (!Files.isDirectory(Paths.get(reportDirectoryPath))) {
+          try {
+            Files.createDirectories(Paths.get(reportDirectoryPath));
+          } catch (IOException e) {
+            return ExitCodes.EXIT_CODE_CREATE_DIRECTORY_FAILS;
+          }
         }
       }
+
       LocalDateTime localDateTime = LocalDateTime.now();
-      int count = 1;
+
       String date = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-      for (String s : parsedArgs) {
-        String sipName;
-        if (s.contains(".zip")) {
-          sipName = s.split("/")[s.split("/").length - 1].split(".zip")[0];
-        } else {
-          sipName = s.split("/")[s.split("/").length - 1];
+      for (String sip : sipPaths) {
+        Path sipPath = Paths.get(sip);
+        if (!Files.exists(sipPath)) {
+          return ExitCodes.EXIT_SIP_PATH_DOES_NOT_EXIST;
         }
-        String reportName = date + "-#" + count + "-" + sipName + ".json";
 
-        Path reportPath = Paths.get(path).resolve(reportName);
-        Path earksipPath = Paths.get(s);
+        Path reportPath;
+        int count = 1;
+        do {
+          String reportName = sipPath.getFileName() + "_validation-report_" + date + "_" + count++ + ".json";
+          if (reportDirectoryPath != null) {
+            reportPath = Paths.get(reportDirectoryPath).resolve(reportName);
+          } else {
+            reportPath = sipPath.getParent().resolve(reportName);
+          }
 
-        EARKSIPValidator earksipValidator = new EARKSIPValidator(earksipPath, reportPath);
+        } while (Files.exists(reportPath));
+
+        EARKSIPValidator earksipValidator = new EARKSIPValidator(sipPath, reportPath);
         earksipValidator.validate();
-        count++;
       }
 
     } catch (ParseException e) {
@@ -82,5 +91,39 @@ public class CLI {
       return ExitCodes.EXIT_CODE_INVALID_DATE_FORMAT;
     }
     return ExitCodes.EXIT_CODE_OK;
+  }
+
+  public static void printUsageValidator(PrintStream printStream) {
+    StringBuilder out = new StringBuilder();
+
+    out.append("Usage: Commons-ip validator COMMAND [OPTIONS]\n");
+
+    out.append("\n");
+    out.append("Commands:");
+    out.append("\n\n");
+    out.append("\t").append(CLIConstants.CLI_OPTION_SIP_PATHS).append("\t\t")
+      .append("(required) Paths to the SIPs archive file or files").append("\n");
+    out.append("\t").append(CLIConstants.CLI_OPTION_REPORT_DIRECTORY).append("\t\t")
+      .append(
+        "(optional) Path to save the validation report. If not set a report will be " + "generated in the sip folder.")
+      .append("\n");
+
+    out.append("\n");
+    printStream.append(out).flush();
+  }
+
+  public static void printUsage(PrintStream printStream) {
+    StringBuilder out = new StringBuilder();
+
+    out.append("Usage: Commons-ip validator COMMAND [OPTIONS]\n");
+
+    out.append("\n");
+    out.append("Commands:");
+    out.append("\n\n");
+    out.append("\t").append(CLIConstants.CLI_OPTION_VALIDATOR).append("\t\t").append("Validate a SIP file")
+      .append("\n");
+
+    out.append("\n");
+    printStream.append(out).flush();
   }
 }

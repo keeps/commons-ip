@@ -1,10 +1,12 @@
 package org.roda_project.commons_ip2.validator.component.fileSectionComponent;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLDecoder;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.namespace.QName;
@@ -14,10 +16,12 @@ import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MetsType;
 import org.roda_project.commons_ip2.validator.common.ControlledVocabularyParser;
+import org.roda_project.commons_ip2.validator.common.MetsParser;
 import org.roda_project.commons_ip2.validator.component.ValidatorComponentImpl;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.constants.ConstantsSIPspec;
+import org.roda_project.commons_ip2.validator.handlers.MetsHandler;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.utils.CHECKSUMTYPE;
 import org.slf4j.Logger;
@@ -826,6 +830,24 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * file.See also: IANA media types
    */
   private ReporterDetails validateCSIP68() {
+    MetsType.FileSec fileSec = mets.getFileSec();
+    List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
+    for (MetsType.FileSec.FileGrp grp : fileGrp) {
+      List<FileType> files = grp.getFile();
+      for (FileType file : files) {
+        String mimeType = file.getMIMETYPE();
+        if (mimeType != null) {
+          if (!ianaMediaTypes.contains(mimeType)) {
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+              "mets/fileSec/fileGrp/file/@MIMETYPE value isn't valid. See IANA Media Types (" + metsName + ")", false,
+              false);
+          }
+        } else {
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "mets/fileSec/fileGrp/file/@MIMETYPE of file can't be null (" + metsName + ")", false, false);
+        }
+      }
+    }
     return new ReporterDetails();
   }
 
@@ -856,8 +878,16 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
                     return new ReporterDetails("mets/fileSec/fileGrp/file/@SIZE and size of file isn't equal!", false);
                   }
                 } else {
-                  if (!folderManager.verifySize(Paths.get(metsPath), href, size)) {
-                    return new ReporterDetails("mets/fileSec/fileGrp/file/@SIZE and size of file isn't equal!", false);
+                  if (isRootMets()) {
+                    if (!folderManager.verifySize(getEARKSIPpath().resolve(href), size)) {
+                      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                        "mets/fileSec/fileGrp/file/@SIZE and size of file isn't equal!", false, false);
+                    }
+                  } else {
+                    if (!folderManager.verifySize(Paths.get(metsPath).resolve(href), size)) {
+                      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                        "mets/fileSec/fileGrp/file/@SIZE and size of file isn't equal!", false, false);
+                    }
                   }
                 }
               } else {
@@ -926,7 +956,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
                 String filePath = URLDecoder.decode(href, "UTF-8");
                 if (isZipFileFlag()) {
                   String finalPath;
-                  if (!metsPath.split("/")[metsPath.split("/").length - 1].contains(".zip")) {
+                  if (!isRootMets()) {
                     finalPath = metsPath + filePath;
                   } else {
                     finalPath = mets.getOBJID() + "/" + filePath;
@@ -957,7 +987,6 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * the checksum for the referenced file.
    */
   private ReporterDetails validateCSIP72() {
-    boolean valid = true;
     List<String> tmp = new ArrayList<>();
     for (CHECKSUMTYPE check : CHECKSUMTYPE.values()) {
       tmp.add(check.toString());
@@ -986,7 +1015,18 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * by the owner it can be recorded in this attribute.
    */
   private ReporterDetails validateCSIP73() {
-
+    MetsType.FileSec fileSec = mets.getFileSec();
+    List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
+    for (MetsType.FileSec.FileGrp grp : fileGrp) {
+      List<FileType> files = grp.getFile();
+      for (FileType file : files) {
+        String ownerID = file.getOWNERID();
+        if (ownerID != null) {
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "A owner identifier was defined for that file", true, false);
+        }
+      }
+    }
     return new ReporterDetails();
   }
 
@@ -1123,25 +1163,48 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * mets/fileSec/fileGrp/file/FLocat[@xlink:type=’simple’] Attribute used with
    * the value “simple”. Value list is maintained by the xlink standard.
    */
-  private ReporterDetails validateCSIP78() {
+  private ReporterDetails validateCSIP78() throws IOException {
     MetsType.FileSec fileSec = mets.getFileSec();
     List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
+    HashMap<String, String> fileSecTypes = new HashMap<>();
+    MetsHandler fileSecHandler = new MetsHandler("file", "FLocat", fileSecTypes);
+    MetsParser metsParser = new MetsParser();
+    InputStream metsStream = null;
+    if (!fileGrp.isEmpty()) {
+      if (isZipFileFlag()) {
+        if (isRootMets()) {
+          metsStream = zipManager.getMetsRootInputStream(getEARKSIPpath());
+        } else {
+          metsStream = zipManager.getZipInputStream(getEARKSIPpath(), metsPath + "METS.xml");
+        }
+      } else {
+        if (isRootMets()) {
+          metsStream = folderManager.getMetsRootInputStream(getEARKSIPpath());
+        } else {
+          metsStream = folderManager.getInputStream(Paths.get(metsPath));
+        }
+      }
+    }
+    if (metsStream != null) {
+      metsParser.parse(fileSecHandler, metsStream);
+    }
+
     for (MetsType.FileSec.FileGrp grp : fileGrp) {
       List<FileType> files = grp.getFile();
       for (FileType file : files) {
         List<FileType.FLocat> flocat = file.getFLocat();
-        if (flocat == null) {
-          return new ReporterDetails("mets/fileSec/fileGrp/file/FLocat can't be null!", false);
+        if (flocat.isEmpty()) {
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "mets/fileSec/fileGrp/file/FLocat can't be null!", false, false);
         } else {
           for (FileType.FLocat floc : flocat) {
-            String type = floc.getType();
-            if (type == null) {
-              return new ReporterDetails("mets/fileSec/fileGrp/file/FLocat[@xlink:type=’simple’] can't be null!",
-                false);
+            if (fileSecTypes.get(floc.getHref()) == null) {
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                "mets/fileSec/fileGrp/file/FLocat[@xlink:type=’simple’] can't be null!", false, false);
             } else {
-              if (!type.equals("simple")) {
-                return new ReporterDetails(
-                  "mets/fileSec/fileGrp/file/FLocat[@xlink:type=’simple’] value has to be simple", false);
+              if (!fileSecTypes.get(floc.getHref()).equals("simple")) {
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                  "mets/fileSec/fileGrp/file/FLocat[@xlink:type=’simple’] value has to be simple", false, false);
               }
             }
           }

@@ -1,6 +1,7 @@
 package org.roda_project.commons_ip2.validator.component;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
@@ -50,6 +51,8 @@ public interface ValidatorComponent {
   void setResults(TreeMap<String, ReporterDetails> results);
 
   void setFiles(HashMap<String, Boolean> files);
+
+  void setIANAMediaTypes(List<String> ianaMediaTypes);
 
   void clean();
 }

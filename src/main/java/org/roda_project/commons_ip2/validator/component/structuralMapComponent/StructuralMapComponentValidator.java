@@ -1,26 +1,27 @@
 package org.roda_project.commons_ip2.validator.component.structuralMapComponent;
 
-import org.roda_project.commons_ip2.mets_v1_12.beans.AmdSecType;
-import org.roda_project.commons_ip2.mets_v1_12.beans.DivType;
-import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
-import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType;
-import org.roda_project.commons_ip2.mets_v1_12.beans.MetsType;
-import org.roda_project.commons_ip2.mets_v1_12.beans.StructMapType;
-import org.roda_project.commons_ip2.validator.component.ValidatorComponentImpl;
-import org.roda_project.commons_ip2.validator.constants.Constants;
-import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
-import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.InputStream;
 import java.net.URLDecoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import org.roda_project.commons_ip2.mets_v1_12.beans.AmdSecType;
+import org.roda_project.commons_ip2.mets_v1_12.beans.DivType;
+import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType;
+import org.roda_project.commons_ip2.mets_v1_12.beans.MetsType;
+import org.roda_project.commons_ip2.mets_v1_12.beans.StructMapType;
+import org.roda_project.commons_ip2.validator.common.MetsParser;
+import org.roda_project.commons_ip2.validator.component.ValidatorComponentImpl;
+import org.roda_project.commons_ip2.validator.constants.Constants;
+import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
+import org.roda_project.commons_ip2.validator.handlers.MetsHandler;
+import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author João Gomes <jgomes@keep.pt>
@@ -1645,7 +1646,23 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * Each representation div references the representation level METS.xml document, documenting the structure of the package and its constituent representations.
     */
     private ReporterDetails validateCSIP105() {
-        return new ReporterDetails();
+      List<StructMapType> structMap = mets.getStructMap();
+      if (!structMap.isEmpty()) {
+        for (StructMapType struct : structMap) {
+          DivType firstDiv = struct.getDiv();
+          if (firstDiv != null) {
+            List<DivType> divs = firstDiv.getDiv();
+            for (DivType div : divs) {
+              if (div.getLABEL().matches("Representations/.*/") && div.getMptr().isEmpty()) {
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                  "When a package consists of multiple representations, each described by a representation level METS.xml document, there is a discrete representation div element for each representation!",
+                  false, false);
+              }
+            }
+          }
+        }
+      }
+      return new ReporterDetails();
     }
 
     /*
@@ -1656,11 +1673,11 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
         List<StructMapType> structMap = mets.getStructMap();
         if(structMap != null){
             for(StructMapType struct : structMap){
-                DivType div = struct.getDiv();
-                if(div != null){
-                    List<DivType> divs = div.getDiv();
-                    for(DivType d : divs){
-                        String id = d.getID();
+              DivType firstDiv = struct.getDiv();
+              if (firstDiv != null) {
+                List<DivType> divs = firstDiv.getDiv();
+                for (DivType div : divs) {
+                  String id = div.getID();
                         if(id == null){
                             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/structMap[@LABEL='CSIP']/div/div/@ID can't be null!",false,false);
                         }
@@ -1822,9 +1839,31 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     * mets/structMap/div/div/mptr[@xlink:type='simple']
     * Attribute used with the value “simple”. Value list is maintained by the xlink standard.
     */
-    private ReporterDetails validateCSIP111() {
+    private ReporterDetails validateCSIP111() throws IOException {
         List<StructMapType> structMap = mets.getStructMap();
-        if(structMap != null){
+        HashMap<String, String> structMapTypes = new HashMap<>();
+        MetsHandler fileSecHandler = new MetsHandler("div", "mptr", structMapTypes);
+        MetsParser metsParser = new MetsParser();
+        InputStream metsStream = null;
+        if (!structMap.isEmpty()) {
+          if (isZipFileFlag()) {
+            if (isRootMets()) {
+              metsStream = zipManager.getMetsRootInputStream(getEARKSIPpath());
+            } else {
+              metsStream = zipManager.getZipInputStream(getEARKSIPpath(), metsPath + "METS.xml");
+            }
+          } else {
+            if (isRootMets()) {
+              metsStream = folderManager.getMetsRootInputStream(getEARKSIPpath());
+            } else {
+              metsStream = folderManager.getInputStream(Paths.get(metsPath));
+            }
+          }
+        }
+        if (metsStream != null) {
+          metsParser.parse(fileSecHandler, metsStream);
+        }
+        if(!structMap.isEmpty()){
             for(StructMapType struct : structMap){
                 DivType div = struct.getDiv();
                 if(div != null){
@@ -1832,16 +1871,19 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                     for(DivType d : divs){
                         if(d.getLABEL().matches("Representations/")) {
                             List<DivType.Mptr> mptrs = d.getMptr();
-                            for(DivType.Mptr mptr: mptrs){
-                                String type = mptr.getType();
-                                if(type != null){
-                                    if(!type.equals("simple")){
-                                        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "mets/structMap/div/div/mptr[@xlink:type='simple'] value must be 'simple'", false, false);
-                                    }
+                            if (!mptrs.isEmpty()) {
+                              for (DivType.Mptr mptr : mptrs) {
+                                if (structMapTypes.get(mptr.getHref()) != null) {
+                                  if (!structMapTypes.get(mptr.getHref()).equals("simple")) {
+                                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                                      "mets/structMap/div/div/mptr[@xlink:type='simple'] value must be 'simple'", false,
+                                      false);
+                                  }
+                                } else {
+                                  return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                                    "mets/structMap/div/div/mptr[@xlink:type='simple'] can't be null", false, false);
                                 }
-                                else{
-                                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "mets/structMap/div/div/mptr[@xlink:type='simple'] can't be null", false, false);
-                                }
+                              }
                             }
                         }
                     }

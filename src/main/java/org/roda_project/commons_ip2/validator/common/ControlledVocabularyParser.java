@@ -1,6 +1,5 @@
 package org.roda_project.commons_ip2.validator.common;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -44,10 +43,10 @@ public class ControlledVocabularyParser {
     try {
       SAXParser saxParser = factory.newSAXParser();
       ControlledVocabularyHandler controlledVocabularyHandler = new ControlledVocabularyHandler("Term", data);
-      InputStream stream = new FileInputStream(path);
+      InputStream stream = getClass().getClassLoader().getSystemResourceAsStream(path);
       saxParser.parse(stream, controlledVocabularyHandler);
     } catch (ParserConfigurationException | SAXException | IOException e) {
-      LOGGER.error("Could not parse content category file.", e);
+      LOGGER.error("Could not parse file.", e);
     }
   }
 }

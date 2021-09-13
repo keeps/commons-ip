@@ -40,7 +40,7 @@ public class ValidatorTest {
 
   /* CSIPSTR4*/
 //  @Test
-//  public void validateCSIP4_1() {
+//  public void validateCSIPSTR4_1() {
 //    LOGGER.info("Validate CSIPSTR4 - IP_18000_CSIPSTR4_1");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_1.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_1.zip");
@@ -51,7 +51,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP4_2() {
+//  public void validateCSIPSTR4_2() {
 //    LOGGER.info("Validate CSIPSTR4 - IP_18000_CSIPSTR4_2");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_2.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_2.zip");
@@ -62,7 +62,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP4_3() {
+//  public void validateCSIPSTR4_3() {
 //    LOGGER.info("Validate CSIPSTR4 - IP_18000_CSIPSTR4_3");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_3.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_3.zip");
@@ -73,7 +73,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP4_4() {
+//  public void validateCSIPSTR4_4() {
 //    LOGGER.info("Validate CSIPSTR4 - IP_18000_CSIPSTR4_4");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_4.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_4.zip");
@@ -84,7 +84,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP4_5() {
+//  public void validateCSIPSTR4_5() {
 //    LOGGER.info("Validate CSIPSTR4 - IP_18000_CSIPSTR4_5");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_5.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_5.zip");
@@ -95,7 +95,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP4_6() {
+//  public void validateCSIPSTR4_6() {
 //    LOGGER.info("Validate CSIPSTR4 - IP_18000_CSIPSTR4_6");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_6.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_6.zip");
@@ -106,7 +106,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP4_7() {
+//  public void validateCSIPSTR4_7() {
 //    LOGGER.info("Validate CSIPSTR4 - IP_18000_CSIPSTR4_7");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_7.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_7.zip");
@@ -117,7 +117,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP4_8() {
+//  public void validateCSIPSTR4_8() {
 //    LOGGER.info("Validate CSIPSTR4 - IP_18000_CSIPSTR4_8");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_8.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_8.zip");
@@ -128,7 +128,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP4_9() {
+//  public void validateCSIPSTR4_9() {
 //    LOGGER.info("Validate CSIPSTR4 - IP_18000_CSIPSTR4_9");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_9.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_9.zip");
@@ -139,7 +139,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP4_10() {
+//  public void validateCSIPSTR4_10() {
 //    LOGGER.info("Validate CSIPSTR4 - IP_18000_CSIPSTR4_10");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_10.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_10.zip");
@@ -150,7 +150,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP4_11() {
+//  public void validateCSIPSTR4_11() {
 //    LOGGER.info("Validate CSIPSTR4 - IP_18000_CSIPSTR4_11");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_11.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_11.zip");
@@ -161,7 +161,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP4_12() {
+//  public void validateCSIPSTR4_12() {
 //    LOGGER.info("Validate CSIPSTR4 - IP_18000_CSIPSTR4_12");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_12.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_12.zip");
@@ -172,7 +172,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP4_13() {
+//  public void validateCSIPSTR4_13() {
 //    LOGGER.info("Validate CSIPSTR4 - IP_18000_CSIPSTR4_13");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_13.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_13.zip");
@@ -183,7 +183,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP4_14() {
+//  public void validateCSIPSTR4_14() {
 //    LOGGER.info("Validate CSIPSTR4 - IP_18000_CSIPSTR4_14");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_14.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_14.zip");
@@ -194,7 +194,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP4_15() {
+//  public void validateCSIPSTR4_15() {
 //    LOGGER.info("Validate CSIPSTR4 - IP_18000_CSIPSTR4_15");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_15.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_15.zip");
@@ -205,7 +205,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP4_16() {
+//  public void validateCSIPSTR4_16() {
 //    LOGGER.info("Validate CSIPSTR4 - IP_18000_CSIPSTR4_16");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_16.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR4/IP_18000_CSIPSTR4_16.zip");
@@ -218,7 +218,7 @@ public class ValidatorTest {
   /* CSIPSTR5 */
 
 //  @Test
-//  public void validateCSIP5_1() {
+//  public void validateCSIPSTR5_1() {
 //    LOGGER.info("Validate CSIPSTR5 - IP_18000_CSIPSTR5_1");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_1.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_1.zip");
@@ -229,7 +229,7 @@ public class ValidatorTest {
 //  }
 
 //  @Test
-//  public void validateCSIP5_2() {
+//  public void validateCSIPSTR5_2() {
 //    LOGGER.info("Validate CSIPSTR5 - IP_18000_CSIPSTR5_2");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_2.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_2.zip");
@@ -240,7 +240,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP5_3() {
+//  public void validateCSIPSTR5_3() {
 //    LOGGER.info("Validate CSIPSTR5 - IP_18000_CSIPSTR5_3");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_3.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_3.zip");
@@ -251,7 +251,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP5_4() {
+//  public void validateCSIPSTR5_4() {
 //    LOGGER.info("Validate CSIPSTR5 - IP_18000_CSIPSTR5_4");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_4.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_4.zip");
@@ -262,7 +262,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP5_5() {
+//  public void validateCSIPSTR5_5() {
 //    LOGGER.info("Validate CSIPSTR5 - IP_18000_CSIPSTR5_5");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_5.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_5.zip");
@@ -273,7 +273,7 @@ public class ValidatorTest {
 //  }
 
 //  @Test
-//  public void validateCSIP5_6() {
+//  public void validateCSIPSTR5_6() {
 //    LOGGER.info("Validate CSIPSTR5 - IP_18000_CSIPSTR5_6");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_6.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_6.zip");
@@ -284,7 +284,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP5_7() {
+//  public void validateCSIPSTR5_7() {
 //    LOGGER.info("Validate CSIPSTR5 - IP_18000_CSIPSTR5_7");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_7.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_7.zip");
@@ -295,7 +295,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP5_8() {
+//  public void validateCSIPSTR5_8() {
 //    LOGGER.info("Validate CSIPSTR5 - IP_18000_CSIPSTR5_8");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_8.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_8.zip");
@@ -306,7 +306,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP5_9() {
+//  public void validateCSIPSTR5_9() {
 //    LOGGER.info("Validate CSIPSTR5 - IP_18000_CSIPSTR5_9");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_9.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_9.zip");
@@ -317,7 +317,7 @@ public class ValidatorTest {
 //  }
 ////
 //  @Test
-//  public void validateCSIP5_10() {
+//  public void validateCSIPSTR5_10() {
 //    LOGGER.info("Validate CSIPSTR5 - IP_18000_CSIPSTR5_10");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_10.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_10.zip");
@@ -328,7 +328,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP5_11() {
+//  public void validateCSIPSTR5_11() {
 //    LOGGER.info("Validate CSIPSTR5 - IP_18000_CSIPSTR5_11");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_11.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_11.zip");
@@ -339,7 +339,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP5_12() {
+//  public void validateCSIPSTR5_12() {
 //    LOGGER.info("Validate CSIPSTR5 - IP_18000_CSIPSTR5_12");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_12.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_12.zip");
@@ -350,7 +350,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP5_13() {
+//  public void validateCSIPSTR5_13() {
 //    LOGGER.info("Validate CSIPSTR5 - IP_18000_CSIPSTR5_13");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_13.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_13.zip");
@@ -361,7 +361,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP5_14() {
+//  public void validateCSIPSTR5_14() {
 //    LOGGER.info("Validate CSIPSTR5 - IP_18000_CSIPSTR5_14");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_14.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_14.zip");
@@ -372,7 +372,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP5_15() {
+//  public void validateCSIPSTR5_15() {
 //    LOGGER.info("Validate CSIPSTR5 - IP_18000_CSIPSTR5_15");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_15.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR5/IP_18000_CSIPSTR5_15.zip");
@@ -384,7 +384,7 @@ public class ValidatorTest {
 
 //  /* CSIPSTR9 */
 //  @Test
-//  public void validateCSIP9_1() {
+//  public void validateCSIPSTR9_1() {
 //    LOGGER.info("Validate CSIPSTR9 - IP_18000_CSIPSTR9_1");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_1.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_1.zip");
@@ -395,7 +395,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP9_2() {
+//  public void validateCSIPSTR9_2() {
 //    LOGGER.info("Validate CSIPSTR9 - IP_18000_CSIPSTR9_2");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_2.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_2.zip");
@@ -406,7 +406,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP9_3() {
+//  public void validateCSIPSTR9_3() {
 //    LOGGER.info("Validate CSIPSTR9 - IP_18000_CSIPSTR9_3");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_3.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_3.zip");
@@ -417,7 +417,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP9_4() {
+//  public void validateCSIPSTR9_4() {
 //    LOGGER.info("Validate CSIPSTR9 - IP_18000_CSIPSTR9_4");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_4.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_4.zip");
@@ -428,7 +428,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP9_5() {
+//  public void validateCSIPSTR9_5() {
 //    LOGGER.info("Validate CSIPSTR9 - IP_18000_CSIPSTR9_5");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_5.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_5.zip");
@@ -439,7 +439,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP9_6() {
+//  public void validateCSIPSTR9_6() {
 //    LOGGER.info("Validate CSIPSTR9 - IP_18000_CSIPSTR9_6");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_6.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_6.zip");
@@ -450,7 +450,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP9_7() {
+//  public void validateCSIPSTR9_7() {
 //    LOGGER.info("Validate CSIPSTR9 - IP_18000_CSIPSTR9_7");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_7.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_7.zip");
@@ -461,7 +461,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP9_8() {
+//  public void validateCSIPSTR9_8() {
 //    LOGGER.info("Validate CSIPSTR9 - IP_18000_CSIPSTR9_8");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_8.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_8.zip");
@@ -472,7 +472,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP9_9() {
+//  public void validateCSIPSTR9_9() {
 //    LOGGER.info("Validate CSIPSTR9 - IP_18000_CSIPSTR9_9");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_9.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_9.zip");
@@ -483,7 +483,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP9_10() {
+//  public void validateCSIPSTR9_10() {
 //    LOGGER.info("Validate CSIPSTR9 - IP_18000_CSIPSTR9_10");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_10.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_10.zip");
@@ -494,7 +494,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP9_11() {
+//  public void validateCSIPSTR9_11() {
 //    LOGGER.info("Validate CSIPSTR9 - IP_18000_CSIPSTR9_11");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_11.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_11.zip");
@@ -505,7 +505,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP9_12() {
+//  public void validateCSIPSTR9_12() {
 //    LOGGER.info("Validate CSIPSTR9 - IP_18000_CSIPSTR9_12");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_12.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_12.zip");
@@ -516,7 +516,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP9_13() {
+//  public void validateCSIPSTR9_13() {
 //    LOGGER.info("Validate CSIPSTR9 - IP_18000_CSIPSTR9_13");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_13.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_13.zip");
@@ -527,7 +527,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP9_14() {
+//  public void validateCSIPSTR9_14() {
 //    LOGGER.info("Validate CSIPSTR9 - IP_18000_CSIPSTR9_14");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_14.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_14.zip");
@@ -538,7 +538,7 @@ public class ValidatorTest {
 //  }
 //
 //  @Test
-//  public void validateCSIP9_15() {
+//  public void validateCSIPSTR9_15() {
 //    LOGGER.info("Validate CSIPSTR9 - IP_18000_CSIPSTR9_15");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_15.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR9/IP_18000_CSIPSTR9_15.zip");
@@ -548,11 +548,11 @@ public class ValidatorTest {
 //    LOGGER.info("Done validate CSIPSTR9 - IP_18000_CSIPSTR9_15");
 //  }
 //
-//  /* CSIP14 */
+//  /* CSIPSTR14 */
 //
-  /* CSIP15 */
+  /* CSIPSTR15 */
 //  @Test
-//  public void validateCSIP15_1() {
+//  public void validateCSIPSTR15_1() {
 //    LOGGER.info("Validate CSIPSTR15 - subfolder_schemas_in_IP_folder");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR15/subfolder_schemas_in_IP_folder.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR15/subfolder_schemas_in_IP_folder.zip");
@@ -562,9 +562,9 @@ public class ValidatorTest {
 //    LOGGER.info("Done validate CSIPSTR15 - subfolder_schemas_in_IP_folder");
 //  }
 //
-//  /* CSIP16 */
+//  /* CSIPSTR16 */
 //  @Test
-//  public void validateCSIP16_1() {
+//  public void validateCSIPSTR16_1() {
 //    LOGGER.info("Validate CSIPSTR16 - subfolder_documentation_in_IP_folder");
 //    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/CSIPSTR/CSIPSTR16/subfolder_documentation_in_IP_folder.json");
 //    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/CSIPSTR/CSIPSTR16/subfolder_documentation_in_IP_folder.zip");
@@ -574,29 +574,29 @@ public class ValidatorTest {
 //    LOGGER.info("Done validate CSIPSTR16 - subfolder_documentation_in_IP_folder");
 //  }
 
-//  /* Simple SIP */
-//  @Test
-//  public void validateSimpleSip() {
-//    LOGGER.info("Validate - Simple-EARK-SIP");
-//    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/Simple-EARK-SIP.json");
-//    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/Other/Simple-EARK-SIP.zip");
-//
-//    EARKSIPValidator earksipValidator = new EARKSIPValidator(earksipPath,reportPath);
-//    earksipValidator.validate();
-//    LOGGER.info("Done validate - Simple-EARK-SIP");
-//  }
-
-  /* Full-EARK-SIP */
+  /* Simple SIP */
   @Test
-  public void validateFullEarkSip() {
-    LOGGER.info("Validate - Full-EARK-SIP");
-    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/Full-EARK-SIP.json");
-    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/Other/Full-EARK-SIP.zip");
+  public void validateSimpleSip() {
+    LOGGER.info("Validate - Simple-EARK-SIP");
+    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/Simple-EARK-SIP.json");
+    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/Other/Simple-EARK-SIP.zip");
 
     EARKSIPValidator earksipValidator = new EARKSIPValidator(earksipPath,reportPath);
     earksipValidator.validate();
-    LOGGER.info("Done validate - Full-EARK-SIP");
+    LOGGER.info("Done validate - Simple-EARK-SIP");
   }
+
+//  /* Full-EARK-SIP */
+//  @Test
+//  public void validateFullEarkSip() {
+//    LOGGER.info("Validate - Full-EARK-SIP");
+//    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/Reports/Full-EARK-SIP.json");
+//    Path earksipPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/Other/Full-EARK-SIP");
+//
+//    EARKSIPValidator earksipValidator = new EARKSIPValidator(earksipPath,reportPath);
+//    earksipValidator.validate();
+//    LOGGER.info("Done validate - Full-EARK-SIP");
+//  }
 
 
 //  @Test
@@ -806,7 +806,7 @@ public class ValidatorTest {
 //    earksipValidator.validate();
 //    LOGGER.info("Done validate CSIP16 - mets-xml_metsHdr_agent_note_NOTETYPE_incorrect");
 //  }
-//
+
 //  /* CSIP17 */
 //  @Test
 //  public void validateCSIP17_2() {
@@ -831,7 +831,7 @@ public class ValidatorTest {
 //    LOGGER.info("Done validate CSIP19 - IP_18000_CSIP19_1");
 //  }
 //
-//  /* CSIP20 */
+  /* CSIP20 */
 //  @Test
 //  public void validateCSIP20_1() {
 //    LOGGER.info("Validate CSIP20 - IP_18000_CSIP20_1");
@@ -842,7 +842,7 @@ public class ValidatorTest {
 //    earksipValidator.validate();
 //    LOGGER.info("Done validate CSIP20 - IP_18000_CSIP20_1");
 //  }
-//
+////
 //  @Test
 //  public void validateCSIP20_2() {
 //    LOGGER.info("Validate CSIP20 - IP_18000_CSIP20_2");

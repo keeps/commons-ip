@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -101,20 +102,12 @@ public class FolderManager {
     return valid;
   }
 
-  public boolean verifySize(Path path, String file, Long metsSize) throws IOException {
+  public boolean verifySize(Path path, Long metsSize) throws IOException {
     boolean valid = true;
-    String regex = path.toString() + "/";
-
-    List<Path> filePath = Files.walk(path).filter(p -> {
-      String[] tmp = p.toString().split(regex);
-      String relativePath = tmp[tmp.length - 1];
-      return relativePath.equals(file);
-    }).collect(Collectors.toList());
-
-    if (filePath == null) {
+    if (path == null) {
       valid = false;
     } else {
-      if (Files.size(filePath.get(0)) != metsSize) {
+      if (Files.size(path) != metsSize) {
         valid = false;
       }
     }
@@ -361,5 +354,49 @@ public class FolderManager {
       }
     }
     return countSubMets == countRepresentationsFolder;
+  }
+
+  public List<String> getRepresentationsFoldersNames(Path path) {
+    List<String> representationsFoldersNames = new ArrayList<>();
+    File[] rootFiles = path.toFile().listFiles();
+    for(File rootFile: rootFiles ){
+      if(rootFile.getName().equals("representations")){
+        if(rootFile.isDirectory()){
+          File[] representationsFiles = rootFile.listFiles();
+          for(File representation: representationsFiles){
+            if(representation.isDirectory()){
+              representationsFoldersNames.add(representation.getName());
+            }
+          }
+        }
+      }
+    }
+    return representationsFoldersNames;
+  }
+
+  public int countFilesInsideRepresentations(Path path) {
+    int count = 0;
+    File[] rootFiles = path.toFile().listFiles();
+    for(File rootFile: rootFiles ){
+      if(rootFile.getName().equals("representations")){
+        if(rootFile.isDirectory()){
+          File[] representationsFiles = rootFile.listFiles();
+          for(File representation: representationsFiles){
+            if(!representation.isDirectory()){
+              count++;
+            }
+          }
+        }
+      }
+    }
+    return count;
+  }
+
+  public InputStream getInputStream(Path path) throws FileNotFoundException {
+    if(path == null){
+      LOGGER.debug("File not Found");
+      throw new FileNotFoundException("File not Found");
+    }
+    return new FileInputStream(path.toFile());
   }
 }
