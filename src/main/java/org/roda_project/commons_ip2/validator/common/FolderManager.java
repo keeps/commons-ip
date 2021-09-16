@@ -7,13 +7,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -59,33 +57,21 @@ public class FolderManager {
     return tmp[tmp.length - 1];
   }
 
-  public boolean checkPathExists(Path path, Path filePath) throws IOException {
-    String regex = path.toString() + "/";
-    return Files.walk(path).anyMatch(p -> {
-      String[] tmp = p.toString().split(regex);
-      String relativePath = tmp[tmp.length - 1];
-      return relativePath.equals(filePath.toString());
-    });
+  public boolean checkPathExists(Path path) throws IOException {
+    return Files.exists(path);
   }
 
-  public boolean verifyChecksum(Path path, String file, String alg, String checksum)
+  public boolean verifyChecksum(Path path, String alg, String checksum)
     throws IOException, NoSuchAlgorithmException {
     boolean valid = true;
-    String regex = path.toString() + "/";
 
-    List<Path> filePath = Files.walk(path).filter(p -> {
-      String[] tmp = p.toString().split(regex);
-      String relativePath = tmp[tmp.length - 1];
-      return relativePath.equals(file);
-    }).collect(Collectors.toList());
-
-    if (filePath == null) {
+    if (!Files.exists(path)) {
       valid = false;
     } else {
-      if (filePath.size() == 0) {
+      if (Files.size(path) == 0) {
         valid = false;
       } else {
-        InputStream stream = new FileInputStream(filePath.get(0).toFile().getPath());
+        InputStream stream = new FileInputStream(path.toFile());
         MessageDigest messageDigest = MessageDigest.getInstance(alg);
         byte[] buffer = new byte[8192];
         int numOfBytesRead;
@@ -97,6 +83,7 @@ public class FolderManager {
         if (!checksum.equals(fileChecksum)) {
           valid = false;
         }
+        stream.close();
       }
     }
     return valid;
@@ -208,28 +195,12 @@ public class FolderManager {
     return subMets;
   }
 
-  public boolean checkDirectory(String metsPath, String directory, String root) throws IOException {
-    String path = metsPath + directory.toLowerCase();
-    if (Paths.get(path).toFile().exists()) {
-      return Paths.get(path).toFile().isDirectory();
-    } else {
-      String folder = root + "/" + directory.toLowerCase();
-      if (Paths.get(folder).toFile().exists()) {
-        return Paths.get(folder).toFile().isDirectory();
-      } else {
-        for (File file : Paths.get(metsPath).toFile().listFiles()) {
-          if (file.getName().equals(directory.toLowerCase())) {
-            return file.isDirectory();
-          }
-        }
-      }
-    }
-    return false;
+  public boolean checkDirectory(Path path) throws IOException {
+    return Files.exists(path);
   }
 
   public Boolean checkRootFolderName(Path path, String OBJECTID) {
-    String[] tmp = path.toString().split("/");
-    return tmp[tmp.length - 1].equals(OBJECTID);
+    return path.endsWith(OBJECTID);
   }
 
   public boolean checkIfExistsFolderInRoot(Path path, String folder) {
@@ -338,16 +309,13 @@ public class FolderManager {
           File[] insideFiles = file.listFiles();
           for (File f : insideFiles) {
             if (f.isDirectory()) {
-              File[] representationFiles = file.listFiles();
+              countRepresentationsFolder++;
+              File[] representationFiles = f.listFiles();
               for (File representationFile : representationFiles) {
-                if (representationFile.isDirectory()) {
-                  countRepresentationsFolder++;
-                } else {
-                  if (file.getName().equals("METS.xml")) {
+                if (representationFile.getName().equals("METS.xml")) {
                     countSubMets++;
                   }
                 }
-              }
             }
           }
         }

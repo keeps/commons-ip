@@ -21,12 +21,6 @@ public class ReporterDetails {
     this.errors = 0;
   }
 
-  public ReporterDetails(String message, boolean valid) {
-    this.detail = message;
-    this.valid = valid;
-    this.issues = new ArrayList<>();
-  }
-
   public ReporterDetails(String specification, String issue, boolean valid, boolean skipped) {
     this.detail = "";
     this.valid = valid;

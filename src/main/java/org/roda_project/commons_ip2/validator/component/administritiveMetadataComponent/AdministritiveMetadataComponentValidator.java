@@ -1,6 +1,5 @@
 package org.roda_project.commons_ip2.validator.component.administritiveMetadataComponent;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
@@ -9,7 +8,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.roda_project.commons_ip2.mets_v1_12.beans.AmdSecType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType;
@@ -658,7 +656,7 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
           metsStream = folderManager.getMetsRootInputStream(getEARKSIPpath());
         }
         else{
-          metsStream = folderManager.getInputStream(Paths.get(metsPath));
+          metsStream = folderManager.getInputStream(Paths.get(metsPath).resolve("METS.xml"));
         }
       }
     }
@@ -704,7 +702,7 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
                 "mets/amdSec/digiprovMD/mdRef/@xlink:href path doesn't exists", false, false);
             }
           } else {
-            if (!folderManager.checkPathExists(getEARKSIPpath(), Paths.get(href))) {
+            if (!folderManager.checkPathExists(Paths.get(metsPath).resolve(href))) {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                 "mets/amdSec/digiprovMD/mdRef/@xlink:href path doesn't exists", false, false);
             }
@@ -888,7 +886,7 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
                     false);
                 }
               } else {
-                if (!folderManager.verifyChecksum(getEARKSIPpath(), href, checksumType, checksum)) {
+                if (!folderManager.verifyChecksum(Paths.get(metsPath).resolve(href), checksumType, checksum)) {
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                     "mets/amdSec/digiprovMD/mdRef/@CHECKSUM doesn't match with file checksum (" + metsName + ")", false,
                     false);
@@ -1077,7 +1075,7 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
           metsStream = folderManager.getMetsRootInputStream(getEARKSIPpath());
         }
         else{
-          metsStream = folderManager.getInputStream(Paths.get(metsPath));
+          metsStream = folderManager.getInputStream(Paths.get(metsPath).resolve("METS.xml"));
         }
       }
     }
@@ -1125,7 +1123,7 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
                   "mets/amdSec/rightsMD/mdRef/@xlink:href path doesn't exists (" + metsName + ")", false, false);
               }
             } else {
-              if (!folderManager.checkPathExists(getEARKSIPpath(), Paths.get(href))) {
+              if (!folderManager.checkPathExists(Paths.get(metsPath).resolve(href))) {
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                   "mets/amdSec/rightsMD/mdRef/@xlink:href path doesn't exists (" + metsName + ")", false, false);
               }
@@ -1298,7 +1296,7 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
                       false, false);
                   }
                 } else {
-                  if (!folderManager.verifyChecksum(getEARKSIPpath(), file, checksumType, checksum)) {
+                  if (!folderManager.verifyChecksum(Paths.get(metsPath).resolve(file), checksumType, checksum)) {
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                       "mets/amdSec/rightsMD/mdRef/@CHECKSUM value doesn't match with the checksum of file (" + metsName
                         + ")",

@@ -51,6 +51,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java_version>1.8</java_version>
+		<plug.version.assembly>3.0.0</plug.version.assembly>
 	</properties>
 
 	<profiles>
@@ -175,6 +176,53 @@
 						</configuration>
 					</plugin>
 
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>cli</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<version>3.3</version>
+						<configuration>
+							<source>${java_version}</source>
+							<target>${java_version}</target>
+						</configuration>
+					</plugin>
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>${plug.version.assembly}</version>
+						<executions>
+							<execution>
+								<id>make-assembly</id>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+								<configuration>
+									<finalName>commons-ip-cli</finalName>
+									<attach>true</attach>
+									<archive>
+										<manifest>
+											<addClasspath>true</addClasspath>
+											<classpathPrefix>lib/</classpathPrefix>
+											<mainClass>org.roda_project.commons_ip2.validator.CLI.Main</mainClass>
+										</manifest>
+									</archive>
+									<descriptorRefs>
+										<descriptorRef>jar-with-dependencies</descriptorRef>
+									</descriptorRefs>
+									<descriptors>
+										<!--<descriptor>src/main/assembly/assembly-exclude-descriptor.xml</descriptor> -->
+									</descriptors>
+									<appendAssemblyId>false</appendAssemblyId>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
 				</plugins>
 			</build>
 		</profile>

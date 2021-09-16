@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -134,6 +135,9 @@ public class EARKSIPValidator {
     try {
       structureComponent.validate();
       if (validFileComponent()) {
+        if(!ianaMediaTypes.contains("text/plain")){
+          ianaMediaTypes.add("text/plain");
+        }
         HashMap<String, InputStream> subMets;
         if (structureComponent.isZipFileFlag()) {
           files = zipManager.getFiles(earksipPath);
@@ -158,13 +162,12 @@ public class EARKSIPValidator {
             InputStream metsRootStream = folderManager.getMetsRootInputStream(earksipPath);
             InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
             mets = metsRoot.instatiateMetsFile();
-            validateComponents(structureComponent.isZipFileFlag(), earksipPath.toString(), true);
-
+            validateComponents(structureComponent.isZipFileFlag(), earksipPath.resolve("METS.xml").toString(), true);
           } else {
             InputStream metsRootStream = folderManager.getMetsRootInputStream(earksipPath);
             InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
             mets = metsRoot.instatiateMetsFile();
-            validateComponents(structureComponent.isZipFileFlag(), earksipPath.toString(), true);
+            validateComponents(structureComponent.isZipFileFlag(), earksipPath.resolve("METS.xml").toString(), true);
           }
         }
       }
@@ -218,13 +221,19 @@ public class EARKSIPValidator {
       component.setMetsName(key);
       component.setIsRootMets(isRootMets);
       component.setIANAMediaTypes(ianaMediaTypes);
-      String metsPath = "";
-      for (String s : key.split("/")) {
-        if (!s.equals("METS.xml")) {
-          metsPath += s + "/";
+      if(isZip) {
+        StringBuilder metsPath = new StringBuilder();
+        for (String path : key.split("/")) {
+          if (!path.equals("METS.xml")) {
+            metsPath.append(path).append("/");
+          }
         }
+        component.setMetsPath(metsPath.toString());
       }
-      component.setMetsPath(metsPath);
+      else{
+          component.setMetsPath(Paths.get(key).getParent().toString());
+      }
+
       component.setResults(results);
       component.validate();
       component.clean();

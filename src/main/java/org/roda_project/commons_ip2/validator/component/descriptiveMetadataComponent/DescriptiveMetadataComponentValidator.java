@@ -187,7 +187,6 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
    */
 
   private ReporterDetails validateCSIP17() throws IOException {
-    ReporterDetails details = new ReporterDetails();
     if (isZipFileFlag()) {
       String regex;
       if (isRootMets()) {
@@ -201,12 +200,12 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
       } else {
         regex = metsPath + "metadata/.*";
       }
-      if (dmdSec == null || dmdSec.size() == 0) {
+      if (dmdSec == null || dmdSec.isEmpty()) {
         if (zipManager.countMetadataFiles(getEARKSIPpath(), regex) != 0) {
-          if (mets.getAmdSec() == null && mets.getAmdSec().size() == 0) {
-            details.setValid(false);
-            details.addIssue(
-              "You have files in the metadata/folder, you must have mets/dmdSec or mets/amdSec (" + metsName + ")");
+          if (mets.getAmdSec() == null || mets.getAmdSec().isEmpty()) {
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+              "You have files in the metadata/folder, you must have mets/dmdSec or mets/amdSec (" + metsName + ")",
+              false, false);
           }
         }
       } else {
@@ -259,18 +258,18 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
     } else {
       if (mets.getDmdSec() == null) {
         if (folderManager.verifyMetadataFilesFolder(Paths.get(metsPath), "descriptive")) {
-          details.setValid(false);
-          details.addIssue("You have files in the metadata/descriptive folder, you must have mets/dmdSec");
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "You have files in the metadata/descriptive folder, you must have mets/dmdSec", false, false);
         }
       } else {
         if (mets.getDmdSec().size() != folderManager.countMetadataFiles(Paths.get(metsPath), "descriptive")) {
-          details.setValid(false);
-          details.addIssue(
-            "The number of files described is not equal to the number of files in the metadata/descriptive folder");
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "The number of files described is not equal to the number of files in the metadata/descriptive folder",
+            false, false);
         }
       }
     }
-    return details;
+    return new ReporterDetails();
   }
 
   /*
@@ -279,17 +278,15 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
    * package.
    */
   private ReporterDetails validateCSIP18() {
-    ReporterDetails details = new ReporterDetails();
     for (MdSecType mdSec : dmdSec) {
       if (!checkId(mdSec.getID())) {
         addId(mdSec.getID());
       } else {
-        details.setValid(false);
-        details.addIssue("mets/dmdSec/@ID isn't unique in the package!");
-        break;
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+          "mets/dmdSec/@ID isn't unique in the package!", false, false);
       }
     }
-    return details;
+    return new ReporterDetails();
   }
 
   /*
@@ -297,14 +294,13 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
    * section.
    */
   private ReporterDetails validateCSIP19() {
-    ReporterDetails details = new ReporterDetails();
     for (MdSecType mdSec : dmdSec) {
       if (mdSec.getCREATED() == null) {
-        details.setValid(false);
-        details.addIssue("mets/dmdSec/@CREATED can't be null!");
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+          "mets/dmdSec/@CREATED can't be null!", false, false);
       }
     }
-    return details;
+    return new ReporterDetails();
   }
 
   /*
@@ -389,7 +385,7 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
           metsStream = folderManager.getMetsRootInputStream(getEARKSIPpath());
         }
         else{
-          metsStream = folderManager.getInputStream(Paths.get(metsPath));
+          metsStream = folderManager.getInputStream(Paths.get(metsPath).resolve("METS.xml"));
         }
       }
     }
@@ -425,12 +421,18 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
       if (href != null) {
         String hrefDecoded = URLDecoder.decode(href, "UTF-8");
         if (isZipFileFlag()) {
-          if (!zipManager.checkPathExists(getEARKSIPpath(), hrefDecoded)) {
+          StringBuilder path = new StringBuilder();
+          if (isRootMets()) {
+            path.append(mets.getOBJID()).append("/").append(hrefDecoded);
+          } else {
+            path.append(metsPath).append(hrefDecoded);
+          }
+          if (!zipManager.checkPathExists(getEARKSIPpath(), path.toString())) {
             details.setValid(false);
             details.addIssue("mets/dmdSec/mdRef/@xlink:href path doesn't exists");
           }
         } else {
-          if (!folderManager.checkPathExists(getEARKSIPpath(), Paths.get(hrefDecoded))) {
+          if (!folderManager.checkPathExists(Paths.get(metsPath).resolve(hrefDecoded))) {
             details.setValid(false);
             details.addIssue("mets/dmdSec/mdRef/@xlink:href path doesn't exists");
           }
@@ -496,7 +498,6 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
    * mets/dmdSec/mdRef/@SIZE Size of the referenced file in bytes.
    */
   private ReporterDetails validateCSIP27() throws IOException {
-    ReporterDetails details = new ReporterDetails();
     for (MdSecType mdSec : dmdSec) {
       MdSecType.MdRef mdRef = mdSec.getMdRef();
       String href = mdRef.getHref();
@@ -518,32 +519,32 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
               file = metsPath + hrefDecoded;
             }
             if (!zipManager.verifySize(getEARKSIPpath(), file, size)) {
-              details.setValid(false);
-              details.addIssue("mets/dmdSec/mdRef/@SIZE and size of file isn't equal");
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                "mets/dmdSec/mdRef/@SIZE and size of file isn't equal", false, false);
             }
           } else {
             if (isRootMets()) {
               if (!folderManager.verifySize(getEARKSIPpath().resolve(hrefDecoded), size)) {
-                details.setValid(false);
-                details.addIssue("mets/dmdSec/mdRef/@SIZE and size of file isn't equal");
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                  "mets/dmdSec/mdRef/@SIZE and size of file isn't equal", false, false);
               }
             } else {
               if (!folderManager.verifySize(Paths.get(metsPath).resolve(hrefDecoded), size)) {
-                details.setValid(false);
-                details.addIssue("mets/dmdSec/mdRef/@SIZE and size of file isn't equal");
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                  "mets/dmdSec/mdRef/@SIZE and size of file isn't equal", false, false);
               }
             }
           }
         } else {
-          details.setValid(false);
-          details.addIssue("mets/dmdSec/mdRef/@SIZE can't be null");
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "mets/dmdSec/mdRef/@SIZE can't be null", false, false);
         }
       } else {
-        details.setValid(false);
-        details.addIssue("mets/dmdSec/mdRef/@href can't be null");
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+          "mets/dmdSec/mdRef/@href can't be null", false, false);
       }
     }
-    return details;
+    return new ReporterDetails();
   }
 
   /*
@@ -593,25 +594,28 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
                   filePath = metsPath + file;
                 }
                 if (!zipManager.verifyChecksum(getEARKSIPpath(), filePath, checksumType, checksum)) {
-                  return new ReporterDetails("mets/dmdSec/mdRef/@CHECKSUM and checksum of file isn't equal", false);
+                  return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/dmdSec/mdRef/@CHECKSUM and checksum of file isn't equal", false,false);
                 }
               } else {
-                if (!folderManager.verifyChecksum(getEARKSIPpath(), file, checksumType, checksum)) {
-                  return new ReporterDetails("mets/dmdSec/mdRef/@CHECKSUM and checksum of file isn't equal", false);
+                if (!folderManager.verifyChecksum(Paths.get(metsPath).resolve(file), checksumType, checksum)) {
+                  return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/dmdSec/mdRef/@CHECKSUM and checksum of file isn't equal", false,false);
                 }
               }
             } else {
-              return new ReporterDetails("mets/dmdSec/mdRef/@href can't be null!", false);
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                "mets/dmdSec/mdRef/@href can't be null!", false, false);
             }
           } else {
-            return new ReporterDetails("mets/dmdSec/mdRef/@CHECKSUM can't be null", false);
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+              "mets/dmdSec/mdRef/@CHECKSUM can't be null", false, false);
           }
         } else {
-          return new ReporterDetails("mets/dmdSec/mdRef/@CHECKSUMTYPE isn't valid. See valid values at METS SCHEMA",
-            false);
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "mets/dmdSec/mdRef/@CHECKSUMTYPE isn't valid. See valid values at METS SCHEMA", false, false);
         }
       } else {
-        return new ReporterDetails("mets/dmdSec/mdRef/@CHECKSUMTYPE can't be null!", false);
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+          "mets/dmdSec/mdRef/@CHECKSUMTYPE can't be null!", false, false);
       }
     }
     return new ReporterDetails();
@@ -632,11 +636,12 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
       String checksumType = mdRef.getCHECKSUMTYPE();
       if (checksumType != null) {
         if (!tmp.contains(checksumType)) {
-          return new ReporterDetails("mets/dmdSec/mdRef/@CHECKSUMTYPE isn't valid. See valid values at METS SCHEMA",
-            false);
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "mets/dmdSec/mdRef/@CHECKSUMTYPE isn't valid. See valid values at METS SCHEMA", false, false);
         }
       } else {
-        return new ReporterDetails("mets/dmdSec/mdRef/@CHECKSUMTYPE can't be null!", false);
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+          "mets/dmdSec/mdRef/@CHECKSUMTYPE can't be null!", false, false);
       }
     }
     return new ReporterDetails();

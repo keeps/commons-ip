@@ -17,13 +17,17 @@ public class Main {
         if (args.length == 1) {
           CLI.printUsageValidator(System.out);
         } else {
-          if (args.length < 3) {
+          if (args.length <= 3) {
             CLI.printUsageValidator(System.out);
           } else {
-            List<String> filteredArgs = new ArrayList<>(Arrays.asList(args));
-            filteredArgs.remove(0);
-            CLI cli = new CLI();
-            cli.start(filteredArgs.toArray(new String[] {}));
+            if (args[1].equals("-i") && args[2].equals("-o")) {
+              CLI.printUsageValidator(System.out);
+            } else {
+              List<String> filteredArgs = new ArrayList<>(Arrays.asList(args));
+              filteredArgs.remove(0);
+              CLI cli = new CLI();
+              cli.start(filteredArgs.toArray(new String[] {}));
+            }
           }
         }
       } else {

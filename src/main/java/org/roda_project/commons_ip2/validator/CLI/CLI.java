@@ -24,7 +24,6 @@ import org.roda_project.commons_ip2.validator.utils.ExitCodes;
 public class CLI {
   private final Options parameters;
   private final CommandLineParser parser;
-  private CommandLine commandLine;
 
   public CLI() {
     this.parameters = new Options();
@@ -42,21 +41,18 @@ public class CLI {
 
   public int start(String[] args) {
     try {
-      commandLine = parser.parse(parameters, args);
+      CommandLine commandLine = parser.parse(parameters, args);
       String[] sipPaths = commandLine.getOptionValues("i");
       String reportDirectoryPath = commandLine.getOptionValue("o");
 
-      if (sipPaths == null && sipPaths.length == 0) {
-        return ExitCodes.EXIT_MISSING_SIP_PATH;
+      if (sipPaths == null || sipPaths.length == 0) {
+        printMissingSipPath(System.out);
       }
 
-      if (reportDirectoryPath != null) {
-        if (!Files.isDirectory(Paths.get(reportDirectoryPath))) {
-          try {
-            Files.createDirectories(Paths.get(reportDirectoryPath));
-          } catch (IOException e) {
-            return ExitCodes.EXIT_CODE_CREATE_DIRECTORY_FAILS;
-          }
+      if (reportDirectoryPath != null && !Files.isDirectory(Paths.get(reportDirectoryPath))) {
+        int code = createDirectory(reportDirectoryPath);
+        if (code == ExitCodes.EXIT_CODE_CREATE_DIRECTORY_FAILS) {
+          return code;
         }
       }
 
@@ -125,5 +121,26 @@ public class CLI {
 
     out.append("\n");
     printStream.append(out).flush();
+  }
+
+  private void printMissingSipPath(PrintStream printStream) {
+    StringBuilder out = new StringBuilder();
+
+    out.append("ERROR\n");
+
+    out.append("\n");
+    out.append("Missing SIP Path");
+    out.append("\n\n");
+    out.append("\n");
+    printStream.append(out).flush();
+  }
+
+  private int createDirectory(String path) {
+    try {
+      Files.createDirectories(Paths.get(path));
+    } catch (IOException e) {
+      return ExitCodes.EXIT_CODE_CREATE_DIRECTORY_FAILS;
+    }
+    return ExitCodes.EXIT_CODE_OK;
   }
 }

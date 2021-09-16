@@ -132,7 +132,7 @@ public class ZipManager {
     Enumeration entries = zipFile.entries();
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().matches(".*/?" + filePath)) {
+      if (entry.getName().equals(filePath)) {
         found = true;
         break;
       }
@@ -426,7 +426,7 @@ public class ZipManager {
         }
       } else {
         if (entry.getName().matches(".*/representations/.*/")) {
-          if (entry.isDirectory()) {
+          if (entry.getName().split("/").length == 3 && entry.isDirectory()) {
             countRepresentations++;
           }
         }

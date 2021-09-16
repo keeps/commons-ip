@@ -3,7 +3,6 @@ package org.roda_project.commons_ip2.validator.component.structuralMapComponent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -1196,7 +1195,9 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
             if(fileGrps != null && fileGrps.size() != 0){
                 for(MetsType.FileSec.FileGrp fileGrp : fileGrps){
                     if(fileGrp.getUSE().equals("Documentation")){
+                      if (!fileGrp.getFile().isEmpty()) {
                         fileGrpDocumentation++;
+                      }
                     }
                 }
             }
@@ -1214,6 +1215,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
             }
 
             if(fileGrpDocumentation != structDocumentation){
+              System.out.println(metsPath);
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION," Must be one file group reference per mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation']/fptr ",false,false);
             }
         }
@@ -1380,7 +1382,9 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
             if(fileGrps != null && fileGrps.size() != 0){
                 for(MetsType.FileSec.FileGrp fileGrp : fileGrps){
                     if(fileGrp.getUSE().equals("Schemas")){
+                      if (!fileGrp.getFile().isEmpty()) {
                         fileGrpSchemas++;
+                      }
                     }
                 }
             }
@@ -1719,8 +1723,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                             }
                         }
                         else{
-                            Path root = getEARKSIPpath();
-                            if(!folderManager.checkDirectory(metsPath,label,root.toString())){
+                          if (!folderManager.checkDirectory(Paths.get(metsPath).resolve(path))) {
                                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "mets/structMap[@LABEL='CSIP']/div/div/@LABEL path not exist or not a directory", false, false);
                             }
                         }
@@ -1822,7 +1825,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                                     }
                                 }
                                 else{
-                                    if(!folderManager.checkPathExists(getEARKSIPpath(), Paths.get(filePath))){
+                                  if (!folderManager.checkPathExists(Paths.get(metsPath).resolve(filePath))) {
                                         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/structMap/div/div/mptr/@xlink:href " + filePath + " doesn't exists (" + metsName +")" ,false,false);
                                     }
                                 }
@@ -1856,7 +1859,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
             if (isRootMets()) {
               metsStream = folderManager.getMetsRootInputStream(getEARKSIPpath());
             } else {
-              metsStream = folderManager.getInputStream(Paths.get(metsPath));
+              metsStream = folderManager.getInputStream(Paths.get(metsPath).resolve("METS.xml"));
             }
           }
         }
