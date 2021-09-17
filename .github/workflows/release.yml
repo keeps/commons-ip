@@ -1,0 +1,38 @@
+name: Commons-ip Validator Release Workflow
+on:
+  push:
+    tags:
+      - "**"
+    branches-ignore:
+      - "**"
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Build Jar
+      run: mvn --batch-mode clean package -P cli
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: artifact
+        path: |
+          target/commons-ip-cli.jar
+        retention-days: 1
+    - name: Get release version
+      id: tag
+      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\/}
+    - name: Release to GitHub
+      uses: softprops/action-gh-release@v1
+      with:
+        name: Version ${{ steps.tag.outputs.VERSION }}
+        tag_name: ${{ steps.tag.outputs.VERSION }}
+        draft: true
+        files: |
+          target/commons-ip-cli.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
