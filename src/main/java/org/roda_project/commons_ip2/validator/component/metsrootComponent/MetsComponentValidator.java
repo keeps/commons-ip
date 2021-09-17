@@ -12,6 +12,7 @@ import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.constants.ConstantsSIPspec;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
+import org.roda_project.commons_ip2.validator.utils.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,14 +25,14 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
   private final String MODULE_NAME;
 
   private List<String> contentCategory;
-  private List<String> contentInformationType;
+  private List<String> contentInformationTypesList;
 
   public void setContentCategory(List<String> contentCategory) {
     this.contentCategory = new ArrayList<String>(contentCategory);
   }
 
-  public void setContentInformationType(List<String> contentInformationType) {
-    this.contentInformationType = new ArrayList<String>(contentInformationType);
+  public void setContentInformationTypesList(List<String> contentInformationTypesList) {
+    this.contentInformationTypesList = new ArrayList<String>(contentInformationTypesList);
   }
 
   public MetsComponentValidator(String moduleName) {
@@ -46,11 +47,11 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     controlledVocabularyParser.parse();
     setContentCategory(controlledVocabularyParser.getData());
 
-    this.contentInformationType = new ArrayList<>();
+    this.contentInformationTypesList = new ArrayList<>();
     controlledVocabularyParser = new ControlledVocabularyParser(
-      Constants.PATH_RESOURCES_CSIP_VOCABULARY_CONTENT_INFORMATION_TYPE, contentInformationType);
+      Constants.PATH_RESOURCES_CSIP_VOCABULARY_CONTENT_INFORMATION_TYPE, contentInformationTypesList);
     controlledVocabularyParser.parse();
-    setContentInformationType(controlledVocabularyParser.getData());
+    setContentInformationTypesList(controlledVocabularyParser.getData());
   }
 
   @Override
@@ -121,12 +122,13 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     ReporterDetails details = new ReporterDetails();
     String OBJID = mets.getOBJID();
     if (OBJID == null) {
-      details.addIssue("mets/@OBJID attribute is mandatory, can't be null! (" + metsName + ")");
+      details.addIssue(
+        Message.createErrorMessage("mets/@OBJID attribute is mandatory, can't be null", metsName, isRootMets()));
       details.setValid(false);
     } else {
       boolean exist = false;
       if (isZipFileFlag()) {
-        if (metsName.contains(".zip")) {
+        if (isRootMets()) {
           exist = zipManager.checkRootFolderName(path, OBJID);
         } else {
           exist = zipManager.checkSubMetsFolder(path, OBJID);
@@ -135,8 +137,8 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
         exist = folderManager.checkRootFolderName(Paths.get(metsPath), OBJID);
       }
       if (!exist) {
-        details
-          .addIssue("The folder containing the METS.xml file must have the same name mets/@OBJID! (" + metsName + ")");
+        details.addIssue(Message.createErrorMessage(
+          "The folder containing the METS.xml file must have the same name mets/@OBJID", metsName, isRootMets()));
         details.setValid(false);
       }
     }
@@ -157,12 +159,14 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     String TYPE = mets.getTYPE();
     if (StringUtils.isBlank(TYPE)) {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-        "mets/@TYPE attribute is mandatory, can't be null! (" + metsName + ")", false, false);
+        Message.createErrorMessage("mets/@TYPE attribute is mandatory, can't be null", metsName, isRootMets()), false,
+        false);
     } else {
       if (!contentCategory.contains(TYPE)) {
+        StringBuilder message = new StringBuilder();
+        message.append("Value ").append(TYPE).append(" is not valid.");
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "Value of mets/@TYPE is not valid; see Content category for valid mets/@TYPE (" + metsName + ")", false,
-          false);
+          Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
       }
     }
     return new ReporterDetails();
@@ -178,11 +182,11 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     String TYPE = mets.getTYPE();
     String otherType = mets.getOTHERTYPE();
     if (TYPE != null) {
-      if (TYPE.equalsIgnoreCase("Other") && (otherType == null || otherType.equals(""))) {
+      if (TYPE.equals("OTHER") && (otherType == null || otherType.equals(""))) {
         details.setValid(false);
-        details.addIssue("When mets/@type have the value OTHER  mets/@csip:OTHERTYPE can't be null or empty");
+        details.addIssue(Message.createErrorMessage(
+          "When mets/@type have the value OTHER  mets/@csip:OTHERTYPE can't be null or empty", metsName, isRootMets()));
       }
-
     }
     return details;
   }
@@ -199,10 +203,12 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     ReporterDetails details = new ReporterDetails();
     String ContentInformationType = mets.getCONTENTINFORMATIONTYPE();
     if (ContentInformationType != null) {
-      if (!contentInformationType.contains(ContentInformationType)) {
+      if (!contentInformationTypesList.contains(ContentInformationType)) {
+        StringBuilder message = new StringBuilder();
+        message.append("Value ").append(ContentInformationType)
+          .append(" for mets/@csip:CONTENTINFORMATIONTYPE is not valid.");
         details.setValid(false);
-        details.addIssue(
-          "Value of mets/@csip:CONTENTINFORMATIONTYPE is not valid; see Content information type specification for valid mets/@@csip:CONTENTINFORMATIONTYPE");
+        details.addIssue(Message.createErrorMessage(message.toString(), metsName, isRootMets()));
       }
     }
     return details;
@@ -219,11 +225,12 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     String ContentInformationType = mets.getCONTENTINFORMATIONTYPE();
     String OtherContentInformationType = mets.getOTHERCONTENTINFORMATIONTYPE();
     if (ContentInformationType != null) {
-      if (ContentInformationType.equalsIgnoreCase("Other")
+      if (ContentInformationType.equals("OTHER")
         && (OtherContentInformationType == null || OtherContentInformationType.equals(""))) {
         details.setValid(false);
-        details.addIssue(
-          "When mets/@csip:CONTENTINFORMATIONTYPE have the value OTHER  mets/@csip:OTHERCONTENTINFORMATIONTYPE can't be null or empty");
+        details.addIssue(Message.createErrorMessage(
+          "When mets/@csip:CONTENTINFORMATIONTYPE have the value OTHER  mets/@csip:OTHERCONTENTINFORMATIONTYPE can't be null or empty",
+          metsName, isRootMets()));
       }
     }
     return details;
@@ -238,7 +245,7 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     String profile = mets.getPROFILE();
     if (profile == null || profile.equals("")) {
       details.setValid(false);
-      details.addIssue("mets/@PROFILE attribute is mandatory, can't be null or empty!");
+      details.addIssue(Message.createErrorMessage("mets/@PROFILE attribute is mandatory, can't be null or empty",metsName,isRootMets()));
     }
     return details;
   }
@@ -280,6 +287,6 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
 
   private void cleanValidationObjects() {
     this.contentCategory.clear();
-    this.contentInformationType.clear();
+    this.contentInformationTypesList.clear();
   }
 }

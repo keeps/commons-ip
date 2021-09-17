@@ -982,11 +982,10 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     }
     if (found) {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-        "You have specified mets/amdSec/rightsMD.", true, true);
+        "You have specified mets/amdSec/rightsMD.", true, false);
     }
     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-      "Individual representations should state their specific rights in their representation METS file.", true, true);
-
+      "Individual representations should state their specific rights in their representation METS file.", false, false);
   }
 
   /*
@@ -1006,6 +1005,9 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
             addId(rmd.getID());
           }
         }
+      }
+      else{
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"",false,false);
       }
     }
     return new ReporterDetails();

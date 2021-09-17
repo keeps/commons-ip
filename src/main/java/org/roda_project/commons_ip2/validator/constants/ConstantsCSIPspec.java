@@ -16,12 +16,12 @@ public class ConstantsCSIPspec {
   /* Use of the METS root element (element mets) */
 
   /* CSIPSTR0 - Invalid METS Schema */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR0_ID = "CSIPSTR0";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR0_NAME = "METS Schema";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR0_LOCATION = "";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR0_DESCRIPTION = "Validation of METS Schema";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR0_CARDINALITY = "";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR0_LEVEL = "MUST";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP0_ID = "CSIP0";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP0_NAME = "METS Schema";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP0_LOCATION = "";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP0_DESCRIPTION = "Validation of METS Schema";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP0_CARDINALITY = "";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP0_LEVEL = "MUST";
 
   /* CSIPSTR1 */
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_ID = "CSIPSTR1";
@@ -1186,7 +1186,7 @@ public class ConstantsCSIPspec {
    */
   public static String getSpecificationName(String id) {
     if (id.equals("CSIPSTR0")) {
-      return VALIDATION_REPORT_SPECIFICATION_CSIPSTR0_NAME;
+      return VALIDATION_REPORT_SPECIFICATION_CSIP0_NAME;
     }
     if (id.equals("CSIPSTR1")) {
       return VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_NAME;
@@ -1592,7 +1592,7 @@ public class ConstantsCSIPspec {
 
   public static String getSpecificationLocation(String id) {
     if (id.equals("CSIPSTR0")) {
-      return VALIDATION_REPORT_SPECIFICATION_CSIPSTR0_LOCATION;
+      return VALIDATION_REPORT_SPECIFICATION_CSIP0_LOCATION;
     }
     if (id.equals("CSIPSTR1")) {
       return VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_LOCATION;
@@ -1998,7 +1998,7 @@ public class ConstantsCSIPspec {
 
   public static String getSpecificationDescription(String id) {
     if (id.equals("CSIPSTR0")) {
-      return VALIDATION_REPORT_SPECIFICATION_CSIPSTR0_DESCRIPTION;
+      return VALIDATION_REPORT_SPECIFICATION_CSIP0_DESCRIPTION;
     }
     if (id.equals("CSIPSTR1")) {
       return VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_DESCRIPTION;
@@ -2404,7 +2404,7 @@ public class ConstantsCSIPspec {
 
   public static String getSpecificationCardinality(String id) {
     if (id.equals("CSIPSTR0")) {
-      return VALIDATION_REPORT_SPECIFICATION_CSIPSTR0_CARDINALITY;
+      return VALIDATION_REPORT_SPECIFICATION_CSIP0_CARDINALITY;
     }
     if (id.equals("CSIPSTR1")) {
       return VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_CARDINALITY;
@@ -2810,7 +2810,7 @@ public class ConstantsCSIPspec {
 
   public static String getSpecificationLevel(String id) {
     if (id.equals("CSIPSTR0")) {
-      return VALIDATION_REPORT_SPECIFICATION_CSIPSTR0_LEVEL;
+      return VALIDATION_REPORT_SPECIFICATION_CSIP0_LEVEL;
     }
     if (id.equals("CSIPSTR1")) {
       return VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_LEVEL;

@@ -258,7 +258,7 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
     else {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
               "The Information Package root folder MAY be compressed.",
-              false, false);
+              true, false);
     }
   }
 
@@ -360,7 +360,7 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
         if (zipManager.verifyIfExistsFilesInFolder(path, ".*/metadata/")) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
             "If any other metadata are available, they MAY be included in separate sub-folders, for example an additional folder named other.",
-            false, false);
+            true, false);
         }
       }
     } else {
@@ -369,7 +369,7 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
         if (folderManager.verifyIfExistsFilesInFolder(path, "metadata")) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
             "If any other metadata are available, they MAY be included in separate sub-folders, for example an additional folder named other.",
-            false, false);
+            true, false);
         }
       }
     }

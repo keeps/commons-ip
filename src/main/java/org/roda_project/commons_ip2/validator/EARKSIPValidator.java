@@ -135,7 +135,7 @@ public class EARKSIPValidator {
     try {
       structureComponent.validate();
       if (validFileComponent()) {
-        if(!ianaMediaTypes.contains("text/plain")){
+        if (!ianaMediaTypes.contains("text/plain")) {
           ianaMediaTypes.add("text/plain");
         }
         Map<String, InputStream> subMets;
@@ -170,11 +170,11 @@ public class EARKSIPValidator {
             validateComponents(structureComponent.isZipFileFlag(), earksipPath.resolve("METS.xml").toString(), true);
           }
         }
+        ReporterDetails csipStr0 = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", true,
+          false);
+        csipStr0.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+        results.put(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID, csipStr0);
       }
-
-      ReporterDetails csipStr0 = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", true, false);
-      csipStr0.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-      results.put(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR0_ID, csipStr0);
 
       reporter.validationResults(results);
       if (reporter.getErrors() > 0) {
@@ -182,7 +182,8 @@ public class EARKSIPValidator {
       } else {
         reporter.componentValidationFinish(Constants.VALIDATION_REPORT_SPECIFICATION_RESULT_VALID);
       }
-      observer.notifyIndicators(reporter.getErrors(), reporter.getSuccess(), reporter.getWarnings(),reporter.getNotes(),reporter.getSkipped());
+      observer.notifyIndicators(reporter.getErrors(), reporter.getSuccess(), reporter.getWarnings(),
+        reporter.getNotes(), reporter.getSkipped());
       reporter.close();
       observer.notifyFinishValidation();
 
@@ -196,11 +197,12 @@ public class EARKSIPValidator {
       ReporterDetails csipStr0 = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, false,
         false);
       csipStr0.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-      results.put(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR0_ID, csipStr0);
+      results.put(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID, csipStr0);
 
       reporter.validationResults(results);
       reporter.componentValidationFinish(Constants.VALIDATION_REPORT_SPECIFICATION_RESULT_INVALID);
-      observer.notifyIndicators(reporter.getErrors(), reporter.getSuccess(), reporter.getWarnings(), reporter.getNotes(), reporter.getSkipped());
+      observer.notifyIndicators(reporter.getErrors(), reporter.getSuccess(), reporter.getWarnings(),
+        reporter.getNotes(), reporter.getSkipped());
       reporter.close();
       observer.notifyFinishValidation();
     }
@@ -221,7 +223,7 @@ public class EARKSIPValidator {
       component.setMetsName(key);
       component.setIsRootMets(isRootMets);
       component.setIANAMediaTypes(ianaMediaTypes);
-      if(isZip) {
+      if (isZip) {
         StringBuilder metsPath = new StringBuilder();
         for (String path : key.split("/")) {
           if (!path.equals("METS.xml")) {
@@ -229,9 +231,8 @@ public class EARKSIPValidator {
           }
         }
         component.setMetsPath(metsPath.toString());
-      }
-      else{
-          component.setMetsPath(Paths.get(key).getParent().toString());
+      } else {
+        component.setMetsPath(Paths.get(key).getParent().toString());
       }
 
       component.setResults(results);
@@ -253,7 +254,7 @@ public class EARKSIPValidator {
     for (Map.Entry<String, ReporterDetails> result : results.entrySet()) {
       String strCsip = result.getKey();
       if ((strCsip.equals("CSIPSTR1") || strCsip.equals("CSIPSTR4")) && !result.getValue().isValid()) {
-          return false;
+        return false;
       }
     }
     return true;
