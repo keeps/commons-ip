@@ -238,22 +238,13 @@ public class ZipManager {
     return tmp.size() == 1;
   }
 
-  public boolean checkDirectory(Path path, String directory, String methsPath) throws IOException {
+  public boolean checkDirectory(Path path, String directoryPath) throws IOException {
     ZipFile zipFile = new ZipFile(path.toFile());
-    Enumeration entries = zipFile.entries();
-    ZipEntry e = zipFile.getEntry(methsPath + directory);
+    ZipEntry e = zipFile.getEntry(directoryPath);
     if (e == null) {
-      while (entries.hasMoreElements()) {
-        ZipEntry entry = (ZipEntry) entries.nextElement();
-        String name = entry.getName();
-        if (name.matches(".*/?" + directory.toLowerCase() + "/")) {
-          return true;
-        }
-      }
-    } else {
-      return true;
+      return false;
     }
-    return false;
+    return true;
   }
 
   public boolean checkSubMetsFolder(Path path, String objectID) throws IOException {
@@ -467,5 +458,26 @@ public class ZipManager {
       }
     }
     return count;
+  }
+
+  public List<String> verifyAdditionalFoldersInRoot(Path path) throws IOException {
+    List<String> commonFolders = new ArrayList<>();
+    commonFolders.add("metadata");
+    commonFolders.add("documentation");
+    commonFolders.add("schemas");
+    commonFolders.add("representations");
+    List<String> additionalFolders = new ArrayList<>();
+    ZipFile zipFile = new ZipFile(path.toFile());
+    Enumeration entries = zipFile.entries();
+    while (entries.hasMoreElements()) {
+      ZipEntry entry = (ZipEntry) entries.nextElement();
+      String[] folder = entry.getName().split("/");
+      if(folder.length == 2 && entry.isDirectory()){
+        if(!commonFolders.contains(folder[1])){
+          additionalFolders.add(folder[1]);
+        }
+      }
+    }
+    return additionalFolders;
   }
 }

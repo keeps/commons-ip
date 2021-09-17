@@ -8,7 +8,7 @@ public class CLIConstants {
   }
 
   /* Options */
-  public static final String CLI_OPTION_VALIDATOR = "validator";
+  public static final String CLI_OPTION_VALIDATE = "validate";
   public static final String CLI_OPTION_SIP_PATHS = "-i";
   public static final String CLI_OPTION_REPORT_DIRECTORY = "-o";
 }

@@ -13,7 +13,7 @@ public class Main {
     if (args.length == 0) {
       CLI.printUsage(System.out);
     } else {
-      if (args[0].equals(CLIConstants.CLI_OPTION_VALIDATOR)) {
+      if (args[0].equals(CLIConstants.CLI_OPTION_VALIDATE)) {
         if (args.length == 1) {
           CLI.printUsageValidator(System.out);
         } else {

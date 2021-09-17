@@ -40,9 +40,11 @@ public class ProgressValidationLoggerObserver implements ValidationObserver {
   }
 
   @Override
-  public void notifyIndicators(int errors, int success, int warnings) {
+  public void notifyIndicators(int errors, int success, int warnings,int notes, int skipped) {
     LOGGER.info("Number of requirements success [{}]", success);
     LOGGER.info("Number of requirements failed [{}]", errors);
     LOGGER.info("Number of warnings [{}]", warnings);
+    LOGGER.info("Number of notes [{}]", notes);
+    LOGGER.info("Number of skipped [{}]", skipped);
   }
 }

@@ -256,16 +256,54 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
         }
       }
     } else {
-      if (mets.getDmdSec() == null) {
-        if (folderManager.verifyMetadataFilesFolder(Paths.get(metsPath), "descriptive")) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "You have files in the metadata/descriptive folder, you must have mets/dmdSec", false, false);
+      if (mets.getDmdSec() == null || mets.getDmdSec().isEmpty()) {
+        if (folderManager.countMetadataFiles(Paths.get(metsPath)) != 0) {
+          if (mets.getAmdSec() == null || mets.getAmdSec().isEmpty()) {
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+              "You have files in the metadata/folder, you must have mets/dmdSec or mets/amdSec (" + metsName + ")",
+              false, false);
+          }
         }
       } else {
-        if (mets.getDmdSec().size() != folderManager.countMetadataFiles(Paths.get(metsPath), "descriptive")) {
+        if (folderManager.countMetadataFiles(Paths.get(metsPath)) == 0) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "The number of files described is not equal to the number of files in the metadata/descriptive folder",
-            false, false);
+            "Doesn't have files in metadata folder but have in dmdSec; Put the files under metadata folder", false,
+            false);
+        }
+        else {
+          HashMap<String, Boolean> metadataFiles = folderManager.getMetadataFiles(Paths.get(metsPath));
+          for (MdSecType md : dmdSec) {
+            MdSecType.MdRef mdRef = md.getMdRef();
+            if (mdRef != null) {
+              String hrefDecoded = URLDecoder.decode(mdRef.getHref(), "UTF-8");
+              if (hrefDecoded != null) {
+                String path = Paths.get(metsPath).resolve(hrefDecoded).toString();
+                if (metadataFiles.containsKey(path)) {
+                  metadataFiles.replace(path, true);
+                }
+              }
+            }
+          }
+          if (metadataFiles.containsValue(false)) {
+            for (AmdSecType amd : mets.getAmdSec()) {
+              for (MdSecType md : amd.getDigiprovMD()) {
+                MdSecType.MdRef mdRef = md.getMdRef();
+                if (mdRef != null) {
+                  String hrefDecoded = URLDecoder.decode(mdRef.getHref(), "UTF-8");
+                  if (hrefDecoded != null) {
+                    String path = Paths.get(metsPath).resolve(hrefDecoded).toString();
+                    if (metadataFiles.containsKey(path)) {
+                      metadataFiles.replace(path, true);
+                    }
+                  }
+                }
+              }
+            }
+          }
+          if (metadataFiles.containsValue(false)) {
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+              "Have metadata files not referenced in mets file", false, false);
+          }
         }
       }
     }
@@ -330,11 +368,13 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
    */
   private ReporterDetails validateCSIP21() {
     ReporterDetails details = new ReporterDetails();
-    for (MdSecType mdSec : dmdSec) {
-      MdSecType.MdRef mdRef = mdSec.getMdRef();
-      if (mdRef == null) {
-        details.setValid(false);
-        details.addIssue("You should reference the metadata file existing in the sip in mets/dmdSec/mdRef");
+    if(dmdSec != null && !dmdSec.isEmpty()) {
+      for (MdSecType mdSec : dmdSec) {
+        MdSecType.MdRef mdRef = mdSec.getMdRef();
+        if (mdRef == null) {
+          details.setValid(false);
+          details.addIssue("You should reference the metadata file existing in the sip in mets/dmdSec/mdRef");
+        }
       }
     }
     return details;
@@ -506,19 +546,19 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
         Long size = mdRef.getSIZE();
         if (size != null) {
           if (isZipFileFlag()) {
-            String file;
+            StringBuilder file = new StringBuilder();
             if (isRootMets()) {
               String OBJECTID = mets.getOBJID();
               if (OBJECTID != null) {
-                file = OBJECTID + "/" + hrefDecoded;
+                file.append(OBJECTID).append("/").append(hrefDecoded);
               } else {
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                   "mets/@OBJECTID can't be null", false, false);
               }
             } else {
-              file = metsPath + hrefDecoded;
+              file.append(metsPath).append(hrefDecoded);
             }
-            if (!zipManager.verifySize(getEARKSIPpath(), file, size)) {
+            if (!zipManager.verifySize(getEARKSIPpath(), file.toString(), size)) {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                 "mets/dmdSec/mdRef/@SIZE and size of file isn't equal", false, false);
             }
@@ -580,20 +620,20 @@ public class DescriptiveMetadataComponentValidator extends ValidatorComponentImp
             String href = mdRef.getHref();
             if (href != null) {
               String file = URLDecoder.decode(href, "UTF-8");
-              String filePath;
+              StringBuilder filePath = new StringBuilder();
               if (isZipFileFlag()) {
                 if (isRootMets()) {
                   String OBJECTID = mets.getOBJID();
                   if (OBJECTID != null) {
-                    filePath = OBJECTID + "/" + file;
+                    filePath.append(OBJECTID).append("/").append(file);
                   } else {
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                       "mets/@OBJECTID can't be null", false, false);
                   }
                 } else {
-                  filePath = metsPath + file;
+                  filePath.append(metsPath).append(file);
                 }
-                if (!zipManager.verifyChecksum(getEARKSIPpath(), filePath, checksumType, checksum)) {
+                if (!zipManager.verifyChecksum(getEARKSIPpath(), filePath.toString(), checksumType, checksum)) {
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"mets/dmdSec/mdRef/@CHECKSUM and checksum of file isn't equal", false,false);
                 }
               } else {

@@ -114,7 +114,9 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
       addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_ID, strCsip);
 
       /* CSIPSTR14 */
-      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", true, true);
+      validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_ID);
+      strCsip = validateCSIPSTR14();
+      strCsip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
       addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_ID, strCsip);
 
       /* CSIPSTR15 */
@@ -514,7 +516,28 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
   /*
    * The Information Package MAY be extended with additional sub-folders.
    */
-  private ReporterDetails validateCSIPSTR14() {
+  private ReporterDetails validateCSIPSTR14() throws IOException {
+    List<String> additionalFolders;
+    if(isZipFileFlag()){
+      additionalFolders = zipManager.verifyAdditionalFoldersInRoot(getEARKSIPpath());
+    }
+    else{
+      additionalFolders = folderManager.verifyAdditionalFoldersInRoot(getEARKSIPpath());
+    }
+    if(!additionalFolders.isEmpty()){
+      StringBuilder folders = new StringBuilder();
+      folders.append("An additional sub-folder was found:");
+      int i = 0;
+      for(String folder: additionalFolders){
+        if(i == additionalFolders.size()-1){
+          folders.append(" ").append(folder).append(".");
+        }
+        else {
+          folders.append(" ").append(folder).append(" ");
+        }
+      }
+      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,folders.toString(),true,false);
+    }
     return new ReporterDetails();
   }
 

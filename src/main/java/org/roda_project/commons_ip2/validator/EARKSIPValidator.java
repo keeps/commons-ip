@@ -138,7 +138,7 @@ public class EARKSIPValidator {
         if(!ianaMediaTypes.contains("text/plain")){
           ianaMediaTypes.add("text/plain");
         }
-        HashMap<String, InputStream> subMets;
+        Map<String, InputStream> subMets;
         if (structureComponent.isZipFileFlag()) {
           files = zipManager.getFiles(earksipPath);
           subMets = zipManager.getSubMets(earksipPath);
@@ -182,7 +182,7 @@ public class EARKSIPValidator {
       } else {
         reporter.componentValidationFinish(Constants.VALIDATION_REPORT_SPECIFICATION_RESULT_VALID);
       }
-      observer.notifyIndicators(reporter.getErrors(), reporter.getSuccess(), reporter.getWarnings());
+      observer.notifyIndicators(reporter.getErrors(), reporter.getSuccess(), reporter.getWarnings(),reporter.getNotes(),reporter.getSkipped());
       reporter.close();
       observer.notifyFinishValidation();
 
@@ -200,7 +200,7 @@ public class EARKSIPValidator {
 
       reporter.validationResults(results);
       reporter.componentValidationFinish(Constants.VALIDATION_REPORT_SPECIFICATION_RESULT_INVALID);
-      observer.notifyIndicators(reporter.getErrors(), reporter.getSuccess(), reporter.getWarnings());
+      observer.notifyIndicators(reporter.getErrors(), reporter.getSuccess(), reporter.getWarnings(), reporter.getNotes(), reporter.getSkipped());
       reporter.close();
       observer.notifyFinishValidation();
     }

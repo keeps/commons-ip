@@ -18,6 +18,6 @@ public interface ValidationObserver {
 
   void notifyFinishValidation();
 
-  void notifyIndicators(int errors, int success, int warnings);
+  void notifyIndicators(int errors, int success, int warnings, int notes, int skipped);
 
 }

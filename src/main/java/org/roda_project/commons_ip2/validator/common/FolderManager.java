@@ -12,6 +12,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -131,7 +132,7 @@ public class FolderManager {
     return false;
   }
 
-  public int countMetadataFiles(Path path, String name) {
+  public int countMetadataFiles(Path path) {
     int count = 0;
     File[] folder = path.toFile().listFiles();
     if (folder != null) {
@@ -142,26 +143,26 @@ public class FolderManager {
             if (metadataFiles != null) {
               if (metadataFiles.length != 0) {
                 for (File metadata : metadataFiles) {
-                  if (metadata.getName().equals(name)) {
                     if (metadata.isDirectory()) {
                       File[] descriptiveFiles = metadata.listFiles();
                       if (descriptiveFiles != null) {
-                        count = descriptiveFiles.length;
+                        count += descriptiveFiles.length;
                       }
+                    }
+                    else {
+                      count++;
                     }
                   }
                 }
               }
             }
-
           }
         }
       }
-    }
     return count;
   }
 
-  public HashMap<String, InputStream> getSubMets(Path path) throws FileNotFoundException {
+  public Map<String, InputStream> getSubMets(Path path) throws FileNotFoundException {
     HashMap<String, InputStream> subMets = new HashMap<>();
     File[] folder = path.toFile().listFiles();
     if (folder != null) {
@@ -366,5 +367,55 @@ public class FolderManager {
       throw new FileNotFoundException("File not Found");
     }
     return new FileInputStream(path.toFile());
+  }
+
+  public HashMap<String,Boolean> getMetadataFiles(Path path) throws FileNotFoundException {
+    if(path == null){
+      LOGGER.debug("File not Found");
+      throw new FileNotFoundException("File not Found");
+    }
+    HashMap<String,Boolean> data = new HashMap<>();
+    File[] rootFiles = path.toFile().listFiles();
+    for(File root: rootFiles){
+      if(root.getName().equals("metadata")){
+        if(root.isDirectory()){
+          File[] metadataFiles = root.listFiles();
+          if(metadataFiles != null && metadataFiles.length != 0){
+            for(File metadata: metadataFiles){
+              if(!metadata.isDirectory()){
+                data.put(metadata.getPath(),false);
+              }
+              else{
+                File[] subMetadataFiles = metadata.listFiles();
+                if(subMetadataFiles != null && subMetadataFiles.length != 0){
+                  for(File subMetadata: subMetadataFiles){
+                    data.put(subMetadata.getPath(),false);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    return data;
+  }
+
+  public List<String> verifyAdditionalFoldersInRoot(Path path){
+    List<String> additionalFolders = new ArrayList<>();
+    List<String> commonFolders = new ArrayList<>();
+    commonFolders.add("metadata");
+    commonFolders.add("documentation");
+    commonFolders.add("schemas");
+    commonFolders.add("representations");
+    File[] rootFiles = path.toFile().listFiles();
+    if(rootFiles != null) {
+      for (File rootFolder : rootFiles) {
+        if (rootFolder.isDirectory() && !commonFolders.contains(rootFolder.getName())){
+          additionalFolders.add(rootFolder.getName());
+        }
+      }
+    }
+    return additionalFolders;
   }
 }

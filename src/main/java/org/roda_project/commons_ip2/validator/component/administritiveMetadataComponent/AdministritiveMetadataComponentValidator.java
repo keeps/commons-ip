@@ -490,19 +490,56 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         }
       }
     } else {
-      if (mets.getAmdSec() == null) {
-        if (folderManager.verifyMetadataFilesFolder(Paths.get(metsPath), "preservation")
-          || folderManager.verifyMetadataFilesFolder(Paths.get(metsPath), "administritive")) {
-          details.setValid(false);
-          details.addIssue("You have files in the metadata/preservation folder, you must have mets/amdSec");
-        }
-      } else {
-        int count = folderManager.countMetadataFiles(Paths.get(metsPath), "preservation")
-          + folderManager.countMetadataFiles(Paths.get(metsPath), "administrative");
-        if (mets.getAmdSec().size() != count) {
+      if (amdSec == null || amdSec.isEmpty()) {
+        if (folderManager.countMetadataFiles(Paths.get(metsPath)) != 0
+          && (mets.getDmdSec() == null || mets.getDmdSec().isEmpty())) {
           details.setValid(false);
           details.addIssue(
-            "The number of files described is not equal to the number of files in the metadata/preservation folder");
+            "You have files in the metadata/folder, you must have mets/dmdSec or mets/amdSec (" + metsName + ")");
+        }
+      } else {
+        if (folderManager.countMetadataFiles(Paths.get(metsPath)) == 0) {
+          for (AmdSecType amd : amdSec) {
+            if (amd.getDigiprovMD() != null && !amd.getDigiprovMD().isEmpty()) {
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                "Doesn't have files in metadata folder but have in amdSec; Put the files under metadata folder", false,
+                false);
+            }
+          }
+        } else {
+          HashMap<String, Boolean> metadataFiles = folderManager.getMetadataFiles(Paths.get(metsPath));
+          for (AmdSecType amd : mets.getAmdSec()) {
+            for (MdSecType md : amd.getDigiprovMD()) {
+              MdSecType.MdRef mdRef = md.getMdRef();
+              if (mdRef != null) {
+                String hrefDecoded = URLDecoder.decode(mdRef.getHref(), UTF_8);
+                if (hrefDecoded != null) {
+                  String path = Paths.get(metsPath).resolve(hrefDecoded).toString();
+                  if (metadataFiles.containsKey(path)) {
+                    metadataFiles.replace(path, true);
+                  }
+                }
+              }
+            }
+          }
+          if (metadataFiles.containsValue(false)) {
+            for (MdSecType md : mets.getDmdSec()) {
+              MdSecType.MdRef mdRef = md.getMdRef();
+              if (mdRef != null) {
+                String hrefDecoded = URLDecoder.decode(mdRef.getHref(), UTF_8);
+                if (hrefDecoded != null) {
+                  String path = Paths.get(metsPath).resolve(hrefDecoded).toString();
+                  if (metadataFiles.containsKey(path)) {
+                    metadataFiles.replace(path, true);
+                  }
+                }
+              }
+            }
+            if (metadataFiles.containsValue(false)) {
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                "Have metadata files not referenced in mets file", false, false);
+            }
+          }
         }
       }
     }
@@ -516,38 +553,26 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
    * recommendations in the 2017 version of PREMIS in METS Guidelines.
    */
   private ReporterDetails validateCSIP32() throws IOException {
-    int countPremis;
-    if (isZipFileFlag()) {
-      String regex;
-      if (isRootMets()) {
-        String OBJECTID = mets.getOBJID();
-        if (OBJECTID != null) {
-          regex = OBJECTID + "/";
-        } else {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, METS_OBJECTID_CAN_T_BE_NULL,
-            false, false);
+    if (amdSec != null && !amdSec.isEmpty()) {
+      int countDigiProvMd = 0;
+      int countMdRefs = 0;
+      for (AmdSecType a : amdSec) {
+        List<MdSecType> digiprov = a.getDigiprovMD();
+        if (!digiprov.isEmpty()) {
+          countDigiProvMd++;
+          for (MdSecType md : digiprov) {
+            if (md.getMdRef() != null) {
+              countMdRefs++;
+            }
+          }
         }
-      } else {
-        regex = metsPath;
       }
-      countPremis = zipManager.countMetadataFiles(getEARKSIPpath(), regex + "metadata/preservation/.*")
-        + zipManager.countMetadataFiles(getEARKSIPpath(), regex + "metadata/administrative/.*");
-    } else {
-      countPremis = folderManager.countMetadataFiles(Paths.get(metsPath), "preservation")
-        + folderManager.countMetadataFiles(Paths.get(metsPath), "administrative");
-    }
-    for (AmdSecType a : amdSec) {
-      List<MdSecType> digiprov = a.getDigiprovMD();
-      if (countPremis != digiprov.size()) {
+      if (countDigiProvMd != countMdRefs) {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "Number of mets/amdSec/digiprovMD/ isn't equal with number of premis metadata", false, false);
-      } else {
-        if (digiprov.isEmpty()) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "Skipped (" + metsPath + ") doesn't have premis metadata", true, true);
-        }
+          "It is mandatory to include one <digiprovMD> element for each piece of PREMIS metadata.", false, false);
       }
     }
+
     return new ReporterDetails();
   }
 
@@ -697,7 +722,18 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         if (mdRef != null) {
           String href = URLDecoder.decode(mdRef.getHref(), UTF_8);
           if (isZipFileFlag()) {
-            if (!zipManager.checkPathExists(getEARKSIPpath(), href)) {
+            StringBuilder path = new StringBuilder();
+            if (isRootMets()) {
+              if (mets.getOBJID() != null) {
+                path.append(mets.getOBJID()).append("/").append(href);
+              } else {
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                  "mets/OBJECTID can't be null", false, false);
+              }
+            } else {
+              path.append(metsPath).append(href);
+            }
+            if (!zipManager.checkPathExists(getEARKSIPpath(), path.toString())) {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                 "mets/amdSec/digiprovMD/mdRef/@xlink:href path doesn't exists", false, false);
             }

@@ -128,7 +128,7 @@ public class ConstantsCSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_LEVEL = "SHOULD";
 
   /* CSIPSTR14 */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_ID = "CSIPSTR13";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_ID = "CSIPSTR14";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_NAME = "CSIP Information Package folder structure";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_LOCATION = "";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_DESCRIPTION = "The Information Package MAY be extended with additional sub-folders.";

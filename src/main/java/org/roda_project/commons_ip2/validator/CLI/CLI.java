@@ -116,7 +116,7 @@ public class CLI {
     out.append("\n");
     out.append("Commands:");
     out.append("\n\n");
-    out.append("\t").append(CLIConstants.CLI_OPTION_VALIDATOR).append("\t\t").append("Validate a SIP file")
+    out.append("\t").append(CLIConstants.CLI_OPTION_VALIDATE).append("\t\t").append("Validate a SIP file")
       .append("\n");
 
     out.append("\n");

@@ -57,6 +57,10 @@ public class ValidationReporter {
     return skipped;
   }
 
+  public int getNotes() {
+    return notes;
+  }
+
   public void countSuccess() {
     success++;
   }
