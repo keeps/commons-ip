@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/METS/" xmlns:csip="https://dilcis.eu/XML/METS/CSIPExtensionMETS" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sip="https://dilcis.eu/XML/METS/SIPExtensionMETS" OBJID="representation 1" LABEL="" TYPE="Mixed" csip:CONTENTINFORMATIONTYPE="MIXED" PROFILE="https://earkcsip.dilcis.eu/profile/E-ARK-CSIP.xml" xsi:schemaLocation="http://www.loc.gov/METS/ ../../schemas/mets1_12.xsd http://www.w3.org/1999/xlink ../../schemas/xlink.xsd https://dilcis.eu/XML/METS/CSIPExtensionMETS ../../schemas/DILCISExtensionMETS.xsd https://dilcis.eu/XML/METS/SIPExtensionMETS ../../schemas/DILCISExtensionSIPMETS.xsd">
+    <metsHdr CREATEDATE="2021-06-15T14:23:08.582+01:00" LASTMODDATE="2021-06-15T14:23:08.582+01:00" RECORDSTATUS="NEW" csip:OAISPACKAGETYPE="SIP"/>
+    <amdSec ID="uuid-FCA3DBE0-A595-4CF8-8C3F-8ACB6136BB72"/>
+    <fileSec ID="uuid-80C8E5C2-3B6D-4EE3-B738-559ECC3504AA">
+        <fileGrp ID="uuid-917BC5D4-E820-4E9D-860C-E026FDBD1AF7" USE="Data">
+            <file ID="uuid-7E8D35E1-37B0-4C2C-91B2-443E8710D408" MIMETYPE="application/pdf" SIZE="784099" CREATED="2021-06-15T14:23:08.582+01:00" CHECKSUM="9E9A436DD2193346971A281CA50E51053344F0A24CD3374CEA1794EDDC6F97C4" CHECKSUMTYPE="SHA-256">
+                <FLocat xlink:type="simple" xlink:href="data%2Fdocumentation.pdf" LOCTYPE="URL"/>
+            </file>
+        </fileGrp>
+        <fileGrp ID="uuid-9CCCB6B1-0299-44C8-ABCC-E2A942E00D31" USE="Schemas"/>
+        <fileGrp ID="uuid-CF2A9393-EDF0-4AAE-8D98-A51AE0BE777F" USE="Documentation"/>
+    </fileSec>
+    <structMap ID="uuid-50AA351D-682D-43FD-83FD-15252369A727" TYPE="PHYSICAL" LABEL="CSIP">
+        <div ID="uuid-690AC11D-88EA-4A56-A3FA-D5C58594FC65" TYPE="ORIGINAL" LABEL="representation 1">
+            <div ID="uuid-05BEA430-8C4B-4FFC-90F6-D83B68D29345" LABEL="Metadata"/>
+            <div ID="uuid-9B099CF5-50C3-43CF-9E37-F4B1DB694A16" LABEL="Metadata/Other"/>
+            <div ID="uuid-77C26A11-C279-440F-BAF3-699A41C6AD41" LABEL="Data">
+                <fptr FILEID="uuid-917BC5D4-E820-4E9D-860C-E026FDBD1AF7"/>
+            </div>
+            <div ID="uuid-7DAD8752-4A92-4701-A142-0B8677EA8332" LABEL="Schemas"/>
+            <div ID="uuid-FF3BBC0E-74C6-4551-A6B6-21B88FA2C964" LABEL="Documentation"/>
+        </div>
+    </structMap>
+</mets>

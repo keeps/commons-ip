@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/METS/" xmlns:csip="https://dilcis.eu/XML/METS/CSIPExtensionMETS" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sip="https://dilcis.eu/XML/METS/SIPExtensionMETS" OBJID="Simple-EARK-SIP" LABEL="An example of E-ARK SIP creation using commons-ip library for Webinar #11" TYPE="Mixed" PROFILE="https://earkcsip.dilcis.eu/profile/E-ARK-CSIP.xml" xsi:schemaLocation="http://www.loc.gov/METS/ schemas/mets1_12.xsd http://www.w3.org/1999/xlink schemas/xlink.xsd https://dilcis.eu/XML/METS/CSIPExtensionMETS schemas/DILCISExtensionMETS.xsd https://dilcis.eu/XML/METS/SIPExtensionMETS schemas/DILCISExtensionSIPMETS.xsd">
+    <metsHdr CREATEDATE="2021-06-15T14:23:08.571+01:00" LASTMODDATE="2021-06-15T14:23:08.571+01:00" RECORDSTATUS="NEW" csip:OAISPACKAGETYPE="SIP">
+        <agent ROLE="CREATOR" TYPE="OTHER" OTHERTYPE="SOFTWARE">
+            <name>RODA Commons IP</name>
+            <note csip:NOTETYPE="SOFTWARE VERSION">2.0.0</note>
+        </agent>
+        <agent ROLE="OTHER" OTHERROLE="OTHER ROLE" TYPE="INDIVIDUAL" OTHERTYPE="OTHER TYPE">
+            <name>Example of agent Name</name>
+            <note csip:NOTETYPE="SOFTWARE VERSION"></note>
+        </agent>
+    </metsHdr>
+    <dmdSec ID="uuid-62720D95-B85C-492B-AB4A-39364A35B111" CREATED="2021-06-15T14:23:08.580+01:00" STATUS="CURRENT">
+        <mdRef ID="uuid-60245708-E3AF-46B1-AA20-05E88A5E8F8F" LOCTYPE="URL" xlink:type="simple" xlink:href="metadata%2Fdescriptive%2Fmetadata_descriptive_dc.xml" MDTYPE="DC" MIMETYPE="application/xml" SIZE="545" CREATED="2021-06-15T14:23:08.580+01:00" CHECKSUM="F6148BF69A22DF979F6DFDDF343795B685C55263DE7903D0BB1F6B21FF1C6917" CHECKSUMTYPE="SHA-256"/>
+    </dmdSec>
+    <dmdSec ID="uuid-DFA0A83C-87D9-4BE3-8579-384F4C9FAF51" CREATED="2021-06-15T14:23:08.582+01:00" STATUS="CURRENT">
+        <mdRef ID="uuid-641513D1-9A77-44A7-ACE6-F801CBC023E2" LOCTYPE="URL" xlink:type="simple" xlink:href="metadata%2Fother%2Fmetadata_other.txt" MDTYPE="OTHER" MIMETYPE="text/plain" SIZE="62" CREATED="2021-06-15T14:23:08.582+01:00" CHECKSUM="06B5DACD5CB1BC148AF8CEAAF8764D0A49DBF36024041C33E95C8848445AE866" CHECKSUMTYPE="SHA-256"/>
+    </dmdSec>
+    <amdSec ID="uuid-E09F10BD-3C55-44B6-B5E3-BBE3216137AA">
+        <digiprovMD ID="uuid-F923091D-97FB-413F-AE55-381D9C00653D">
+            <mdRef ID="uuid-0385DE00-DEF4-4541-870E-2621FFFFB7AC" LOCTYPE="URL" xlink:type="simple" xlink:href="metadata%2Fpreservation%2Fmetadata_preservation_premis.xml" MDTYPE="OTHER" MIMETYPE="application/xml" SIZE="3591" CREATED="2021-06-15T14:23:08.581+01:00" CHECKSUM="0D38189227CC1ECBB1F616FCAF0298279755E95151D0E37B598BA274F70745D4" CHECKSUMTYPE="SHA-256"/>
+        </digiprovMD>
+    </amdSec>
+    <fileSec ID="uuid-CF97C5DF-B277-4E02-8866-BEC3E0FC465E">
+        <fileGrp ID="uuid-F23E8FD3-0825-4B2F-94A6-73771C39B8FF" USE="Data"/>
+        <fileGrp ID="uuid-A04F1A19-9B4C-4FBC-AED0-BEC1B361A53D" USE="Schemas">
+            <file ID="uuid-DE72905D-FE9A-46B7-B74B-87BA0302D612" MIMETYPE="application/xml" SIZE="3036" CREATED="2021-06-15T14:23:08.590+01:00" CHECKSUM="0368E46D9FC9B468CBD2C3AF07358E339F6BCA8E6BF540BF75C3023ED457DF4D" CHECKSUMTYPE="SHA-256">
+                <FLocat xlink:type="simple" xlink:href="schemas%2Fschema.xsd" LOCTYPE="URL"/>
+            </file>
+            <file ID="uuid-6551684A-7840-4DEE-B0F0-6AACAED8EDCE" MIMETYPE="application/xml" SIZE="1697" CREATED="2021-06-15T14:23:08.590+01:00" CHECKSUM="E5E98D42A221650C72F378EDC3A2E32B9033AAA22E86A6FF869CD0316A722AEC" CHECKSUMTYPE="SHA-256">
+                <FLocat xlink:type="simple" xlink:href="schemas%2FDILCISExtensionMETS.xsd" LOCTYPE="URL"/>
+            </file>
+            <file ID="uuid-9EBA1EA1-A9C1-447E-976F-C9E565B1E519" MIMETYPE="application/xml" SIZE="499" CREATED="2021-06-15T14:23:08.590+01:00" CHECKSUM="F19580DA5E39BF2CCD763D260FB93E0FC78E08C9AA8AE37790382FF3E246D497" CHECKSUMTYPE="SHA-256">
+                <FLocat xlink:type="simple" xlink:href="schemas%2FDILCISExtensionSIPMETS.xsd" LOCTYPE="URL"/>
+            </file>
+            <file ID="uuid-CAEA41A7-FFD6-4808-B215-F7ACAD914131" MIMETYPE="application/xml" SIZE="137125" CREATED="2021-06-15T14:23:08.590+01:00" CHECKSUM="95A3D3EBAD56C0F0346582B5E29DD46739A000B9FFEC381426C2200355B44826" CHECKSUMTYPE="SHA-256">
+                <FLocat xlink:type="simple" xlink:href="schemas%2Fmets1_12.xsd" LOCTYPE="URL"/>
+            </file>
+            <file ID="uuid-AE706C2C-0E47-41AF-BB82-94E2B93CC238" MIMETYPE="application/xml" SIZE="3180" CREATED="2021-06-15T14:23:08.592+01:00" CHECKSUM="F1F5BB6003165CDD8F6C1FCC32F8FD1F965E1681010F3B9806D9460BCFFA8A3C" CHECKSUMTYPE="SHA-256">
+                <FLocat xlink:type="simple" xlink:href="schemas%2Fxlink.xsd" LOCTYPE="URL"/>
+            </file>
+        </fileGrp>
+        <fileGrp ID="uuid-924B26EF-AC35-4DC0-ADF0-3CEB0B196761" USE="Documentation">
+            <file ID="uuid-EB375EAB-46AA-4C94-96DC-F4FD2C7FD5A1" MIMETYPE="application/pdf" SIZE="784099" CREATED="2021-06-15T14:23:08.592+01:00" CHECKSUM="9E9A436DD2193346971A281CA50E51053344F0A24CD3374CEA1794EDDC6F97C4" CHECKSUMTYPE="SHA-256">
+                <FLocat xlink:type="simple" xlink:href="documentation%2Fdocumentation.pdf" LOCTYPE="URL"/>
+            </file>
+        </fileGrp>
+        <fileGrp ID="uuid-6D262EA0-FACD-45CF-B5F6-45221E78E9B8" USE="Representations/representation 1">
+            <file ID="uuid-AD191FC7-B7CC-4AF9-AF72-0C812F0E1211" MIMETYPE="application/xml" SIZE="2402" CREATED="2021-06-15T14:23:08.758+01:00" CHECKSUM="075BF042B192BCFAE2BD7962D6644E7063A379A0D2676A4A7E9AC02BBEC5D179" CHECKSUMTYPE="SHA-256">
+                <FLocat xlink:type="simple" xlink:href="representations%2Frepresentation+1%2FMETS.xml" LOCTYPE="URL"/>
+            </file>
+        </fileGrp>
+    </fileSec>
+    <structMap ID="uuid-119E74F8-1FED-4143-9FE7-7502372D3381" TYPE="PHYSICAL" LABEL="CSIP">
+        <div ID="uuid-0A524390-F689-4DBC-A88A-1FF496A0A036" LABEL="Simple-EARK-SIP">
+            <div ID="uuid-442CF201-ABF8-40C1-99DE-247CE197E951" DMDID="uuid-62720D95-B85C-492B-AB4A-39364A35B111" ADMID="uuid-F923091D-97FB-413F-AE55-381D9C00653D" LABEL="Metadata"/>
+            <div ID="uuid-1B9A64D5-DFCD-43F5-8493-553B443DEA81" DMDID="uuid-DFA0A83C-87D9-4BE3-8579-384F4C9FAF51" LABEL="Metadata/Other"/>
+            <div ID="uuid-1FAB22A1-4431-4A55-817B-7743CDD1F3E5" LABEL="Data"/>
+            <div ID="uuid-95D21269-4435-4998-BFA4-7199277C4505" LABEL="Schemas">
+                <fptr FILEID="uuid-A04F1A19-9B4C-4FBC-AED0-BEC1B361A53D"/>
+            </div>
+            <div ID="uuid-DE46D965-EAA4-4F0E-A117-218EE282EFE2" LABEL="Documentation">
+                <fptr FILEID="uuid-924B26EF-AC35-4DC0-ADF0-3CEB0B196761"/>
+            </div>
+            <div ID="uuid-EAE1E5C7-F923-4674-9706-1F3EB1E8AF72" LABEL="Representations/representation 1">
+                <mptr LOCTYPE="URL" xlink:type="simple" xlink:href="representations%2Frepresentation+1%2FMETS.xml" xlink:title="uuid-6D262EA0-FACD-45CF-B5F6-45221E78E9B8"/>
+            </div>
+        </div>
+    </structMap>
+</mets>

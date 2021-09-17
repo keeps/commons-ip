@@ -204,7 +204,7 @@ public class EARKSIPValidator {
       reporter.close();
       observer.notifyFinishValidation();
     }
-    return true;
+    return reporter.getErrors() == 0;
   }
 
   public void validateComponents(boolean isZip, String key, boolean isRootMets) throws IOException {

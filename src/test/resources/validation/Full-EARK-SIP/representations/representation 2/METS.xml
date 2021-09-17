@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/METS/" xmlns:csip="https://dilcis.eu/XML/METS/CSIPExtensionMETS" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sip="https://dilcis.eu/XML/METS/SIPExtensionMETS" OBJID="representation 2" LABEL="" TYPE="Mixed" csip:CONTENTINFORMATIONTYPE="MIXED" PROFILE="https://earkcsip.dilcis.eu/profile/E-ARK-CSIP.xml" xsi:schemaLocation="http://www.loc.gov/METS/ ../../schemas/mets1_12.xsd http://www.w3.org/1999/xlink ../../schemas/xlink.xsd https://dilcis.eu/XML/METS/CSIPExtensionMETS ../../schemas/DILCISExtensionMETS.xsd https://dilcis.eu/XML/METS/SIPExtensionMETS ../../schemas/DILCISExtensionSIPMETS.xsd">
+    <metsHdr CREATEDATE="2021-09-08T10:55:09.515+01:00" LASTMODDATE="2021-09-08T10:55:09.515+01:00" RECORDSTATUS="NEW" csip:OAISPACKAGETYPE="SIP"/>
+    <amdSec ID="uuid-B18FEA01-005A-4C98-ADD2-B4413179BB52">
+        <digiprovMD ID="uuid-40741289-C763-4EC0-BD37-821B94C2F5B0">
+            <mdRef ID="uuid-6EC5D027-6A1E-4957-8F54-F266EE96FE45" LOCTYPE="URL" xlink:type="simple" xlink:href="metadata%2Fpreservation%2FPREMIS_R2-xml" MDTYPE="OTHER" MIMETYPE="application/xml" SIZE="3591" CREATED="2021-09-08T10:55:09.516+01:00" CHECKSUM="0D38189227CC1ECBB1F616FCAF0298279755E95151D0E37B598BA274F70745D4" CHECKSUMTYPE="SHA-256"/>
+        </digiprovMD>
+    </amdSec>
+    <fileSec ID="uuid-C4B3AE7E-8126-4612-B051-AC8415C805D6">
+        <fileGrp ID="uuid-24BE3F59-D5FC-4F75-84BA-780AACF529D1" USE="Data">
+            <file ID="uuid-66D00F84-0B86-4934-BFA2-76BC6D1FB757" MIMETYPE="application/zip" SIZE="43611" CREATED="2021-09-08T10:55:09.516+01:00" CHECKSUM="49F289A4478F08163F7F5114D5E44479A500FBE9F2BDD86559C1495D15732A6C" CHECKSUMTYPE="SHA-256">
+                <FLocat xlink:type="simple" xlink:href="data%2Ftest.siard" LOCTYPE="URL"/>
+            </file>
+        </fileGrp>
+        <fileGrp ID="uuid-CFA1FF03-4F26-4AFE-B951-2C80B143679C" USE="Schemas"/>
+        <fileGrp ID="uuid-EE87E9AA-1555-40D4-9D95-8080CFC94719" USE="Documentation">
+            <file ID="uuid-317C9DC5-30B8-4C73-9600-4CD2DD41688A" MIMETYPE="application/pdf" SIZE="784099" CREATED="2021-09-08T10:55:09.516+01:00" CHECKSUM="9E9A436DD2193346971A281CA50E51053344F0A24CD3374CEA1794EDDC6F97C4" CHECKSUMTYPE="SHA-256">
+                <FLocat xlink:type="simple" xlink:href="documentation%2FSIARD-format-spec.pdf" LOCTYPE="URL"/>
+            </file>
+        </fileGrp>
+    </fileSec>
+    <structMap ID="uuid-F8405B8A-1436-4D60-A526-4F846A91F493" TYPE="PHYSICAL" LABEL="CSIP">
+        <div ID="uuid-6DDB404A-8E69-4782-B2E8-50D346A7BE6E" TYPE="ORIGINAL" LABEL="representation 2">
+            <div ID="uuid-2BEA4931-AC62-4919-AB40-C56947B18206" ADMID="uuid-40741289-C763-4EC0-BD37-821B94C2F5B0" LABEL="Metadata"/>
+            <div ID="uuid-CDA486AF-2546-4A15-90BC-BBCB153B9739" LABEL="Metadata/Other"/>
+            <div ID="uuid-13419476-19C1-41DB-8666-3D54B18DC63A" LABEL="Data">
+                <fptr FILEID="uuid-24BE3F59-D5FC-4F75-84BA-780AACF529D1"/>
+            </div>
+            <div ID="uuid-EAA7FF35-04DC-46AD-9434-E98793F9C649" LABEL="Schemas"/>
+            <div ID="uuid-5FB2D58F-99DA-4C8D-BAAE-F57241ECEC7E" LABEL="Documentation">
+                <fptr FILEID="uuid-EE87E9AA-1555-40D4-9D95-8080CFC94719"/>
+            </div>
+        </div>
+    </structMap>
+</mets>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/METS/" xmlns:csip="https://dilcis.eu/XML/METS/CSIPExtensionMETS" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sip="https://dilcis.eu/XML/METS/SIPExtensionMETS" OBJID="representation 1" LABEL="" TYPE="Mixed" csip:CONTENTINFORMATIONTYPE="MIXED" PROFILE="https://earkcsip.dilcis.eu/profile/E-ARK-CSIP.xml" xsi:schemaLocation="http://www.loc.gov/METS/ ../../schemas/mets1_12.xsd http://www.w3.org/1999/xlink ../../schemas/xlink.xsd https://dilcis.eu/XML/METS/CSIPExtensionMETS ../../schemas/DILCISExtensionMETS.xsd https://dilcis.eu/XML/METS/SIPExtensionMETS ../../schemas/DILCISExtensionSIPMETS.xsd">
+    <metsHdr CREATEDATE="2021-09-08T10:55:09.507+01:00" LASTMODDATE="2021-09-08T10:55:09.507+01:00" RECORDSTATUS="NEW" csip:OAISPACKAGETYPE="SIP"/>
+    <amdSec ID="uuid-73BD74A2-F919-4C9D-B2DB-37B52383C68E">
+        <digiprovMD ID="uuid-E2EAB887-80C2-4578-92D4-5F35B1E1B23E">
+            <mdRef ID="uuid-1BB127F9-8B7A-4999-900D-24828D5E76F1" LOCTYPE="URL" xlink:type="simple" xlink:href="metadata%2Fpreservation%2FPREMIS_R1-xml" MDTYPE="OTHER" MIMETYPE="application/xml" SIZE="3591" CREATED="2021-09-08T10:55:09.511+01:00" CHECKSUM="0D38189227CC1ECBB1F616FCAF0298279755E95151D0E37B598BA274F70745D4" CHECKSUMTYPE="SHA-256"/>
+        </digiprovMD>
+    </amdSec>
+    <fileSec ID="uuid-E5068FA3-B0DD-46D1-8BEF-A6E4858A441C">
+        <fileGrp ID="uuid-32DA1444-0B29-42BF-8614-DA8BD99265C2" USE="Data">
+            <file ID="uuid-B44D6BF2-E1D5-4874-B54A-58D30B72A497" MIMETYPE="application/pdf" SIZE="784099" CREATED="2021-09-08T10:55:09.509+01:00" CHECKSUM="9E9A436DD2193346971A281CA50E51053344F0A24CD3374CEA1794EDDC6F97C4" CHECKSUMTYPE="SHA-256">
+                <FLocat xlink:type="simple" xlink:href="data%2Fdocumentation.pdf" LOCTYPE="URL"/>
+            </file>
+        </fileGrp>
+        <fileGrp ID="uuid-B968EA34-303E-429A-926B-36C33DF169A9" USE="Schemas"/>
+        <fileGrp ID="uuid-731D2823-F975-4CA3-AD4F-AD2D2E92016A" USE="Documentation">
+            <file ID="uuid-3A187EBD-C0CB-45AE-AEB3-626E4834732D" MIMETYPE="application/pdf" SIZE="784099" CREATED="2021-09-08T10:55:09.511+01:00" CHECKSUM="9E9A436DD2193346971A281CA50E51053344F0A24CD3374CEA1794EDDC6F97C4" CHECKSUMTYPE="SHA-256">
+                <FLocat xlink:type="simple" xlink:href="documentation%2FPDF-format-spec.pdf" LOCTYPE="URL"/>
+            </file>
+        </fileGrp>
+    </fileSec>
+    <structMap ID="uuid-FE24F214-39C7-40B1-9DE1-A02C8857EFBB" TYPE="PHYSICAL" LABEL="CSIP">
+        <div ID="uuid-F3769A08-A08B-4FBF-B6E9-66CC722930A1" TYPE="ORIGINAL" LABEL="representation 1">
+            <div ID="uuid-2F55533F-71AF-45B4-B340-D6AC9441FC3B" ADMID="uuid-E2EAB887-80C2-4578-92D4-5F35B1E1B23E" LABEL="Metadata"/>
+            <div ID="uuid-524C09A0-FC1E-4C1E-A5F5-149195561456" LABEL="Metadata/Other"/>
+            <div ID="uuid-15A88FCD-7E63-4C8E-95CF-85D4BB678ACA" LABEL="Data">
+                <fptr FILEID="uuid-32DA1444-0B29-42BF-8614-DA8BD99265C2"/>
+            </div>
+            <div ID="uuid-CBC3147A-8224-40C6-98F7-3BBF76A0C2AC" LABEL="Schemas"/>
+            <div ID="uuid-4A00D36B-1D20-4481-B4D7-2901995A69A5" LABEL="Documentation">
+                <fptr FILEID="uuid-731D2823-F975-4CA3-AD4F-AD2D2E92016A"/>
+            </div>
+        </div>
+    </structMap>
+</mets>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<simpledc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../schemas/dc.xsd">
+    <title>First SIP example</title>
+    <identifier>9bd73cef-b56c-4a0e-87c3-22dcea384c6c</identifier>
+    <creator>KEEP Solutions</creator>
+    <date>2021-05-20</date>
+    <date>2021-05-20</date>
+    <description>An example of descriptive metadata file to be used on Webinar demonstration</description>
+    <publisher></publisher>
+    <rights></rights>
+    <language>English</language>
+</simpledc>
