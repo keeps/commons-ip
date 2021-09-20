@@ -19,6 +19,7 @@ import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.handlers.MetsHandler;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
+import org.roda_project.commons_ip2.validator.utils.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,7 +94,8 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
           if (csip.isValid()) {
             /* CSIP89 */
             csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "Skipped because is validated later", true, true);
+              Message.createErrorMessage("Skipped because is validated later in CSIP106", metsName, isRootMets()), true,
+              true);
             addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID, csip);
 
             /* CSIP90 */
@@ -114,8 +116,9 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
             csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
             addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP92_ID, csip);
           } else {
-            String message = "SKIPPED because mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata'] isn't valid! ("
-              + metsName + ")";
+            String message = Message.createErrorMessage(
+              "SKIPPED because mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata'] isn't valid", metsName,
+              isRootMets());
 
             /* CSIP89 */
             csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
@@ -143,7 +146,8 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
           if (csip.isValid()) {
             /* CSIP94 */
             csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "Skipped because is validated later", true, true);
+              Message.createErrorMessage("Skipped because is validated later in CSIP106", metsName, isRootMets()), true,
+              true);
             addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID, csip);
 
             /* CSIP95 */
@@ -164,8 +168,9 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
             csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
             addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP116_ID, csip);
           } else {
-            String message = "SKIPPED because mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation'] isn't valid! ("
-              + metsName + ")";
+            String message = Message.createErrorMessage(
+              "SKIPPED because mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation'] isn't valid", metsName,
+              isRootMets());
 
             /* CSIP94 */
             csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
@@ -193,7 +198,8 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
           if (csip.isValid()) {
             /* CSIP98 */
             csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "Skipped because is validated later", true, true);
+              Message.createErrorMessage("Skipped because is validated later in CSIP106", metsName, isRootMets()), true,
+              true);
             addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID, csip);
 
             /* CSIP99 */
@@ -214,8 +220,9 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
             csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
             addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP118_ID, csip);
           } else {
-            String message = "SKIPPED because mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas'] isn't valid! ("
-              + metsName + ")";
+            String message = Message.createErrorMessage(
+              "SKIPPED because mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas'] isn't valid", metsName,
+              isRootMets());
 
             /* CSIP98 */
             csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
@@ -243,7 +250,8 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
           if (csip.isValid()) {
             /* CSIP102 */
             csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "Skipped because is validated later", true, true);
+              Message.createErrorMessage("Skipped because is validated later in CSIP106", metsName, isRootMets()), true,
+              true);
             addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID, csip);
 
             /* CSIP103 */
@@ -264,8 +272,9 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
             csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
             addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP119_ID, csip);
           } else {
-            String message = "SKIPPED because mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations'] isn't valid! ("
-              + metsName + ")";
+            String message = Message.createErrorMessage(
+              "SKIPPED because mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations'] isn't valid", metsName,
+              isRootMets());
 
             /* CSIP102 */
             csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
@@ -332,7 +341,8 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
           csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
           addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP112_ID, csip);
         } else {
-          String message = "SKIPPED because mets/structMap[@LABEL='CSIP']/div isn't valid! (" + metsName + ")";
+          String message = Message.createErrorMessage("SKIPPED because mets/structMap[@LABEL='CSIP']/div isn't valid",
+            metsName, isRootMets());
 
           /* CSIP85 */
           csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
@@ -455,7 +465,8 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
           addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP112_ID, csip);
         }
       } else {
-        String message = "SKIPPED because mets/structMap[@LABEL='CSIP'] isn't valid! (" + metsName + ")";
+        String message = Message.createErrorMessage("SKIPPED because mets/structMap[@LABEL='CSIP'] isn't valid",
+          metsName, isRootMets());
 
         /* CSIP83 */
         csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
@@ -586,7 +597,8 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
         addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP112_ID, csip);
       }
     } else {
-      String message = "SKIPPED because mets/structMap doesn't exist! (" + metsName + ")";
+      String message = Message.createErrorMessage("SKIPPED because mets/structMap doesn't exist", metsName,
+        isRootMets());
 
       /* CSIP81 */
       csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
@@ -737,11 +749,11 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     List<StructMapType> structMap = mets.getStructMap();
     if (structMap == null) {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-        "mets/structMap can't be null! (" + metsName + ")", false, false);
+        Message.createErrorMessage("mets/structMap can't be null", metsName, isRootMets()), false, false);
     } else {
       if (structMap.size() != 1) {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "You have more than one mets/structMap (" + metsName + ")", false, false);
+          Message.createErrorMessage("You have more than one mets/structMap", metsName, isRootMets()), false, false);
       }
     }
     return new ReporterDetails();
@@ -758,10 +770,12 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
         String type = struct.getTYPE();
         if (type == null) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "mets/structMap[@TYPE='PHYSICAL'] can't be null! (" + metsName + ")", false, false);
+            Message.createErrorMessage("mets/structMap[@TYPE='PHYSICAL'] can't be null", metsName, isRootMets()), false,
+            false);
         } else {
           if (!type.equals("PHYSICAL")) {
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", false, false);
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+              "mets/structMap[@TYPE='PHYSICAL'] value must be PHYSICAL", metsName, isRootMets()), false, false);
           }
         }
       }
@@ -779,10 +793,14 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
       for (StructMapType struct : structMap) {
         String label = struct.getLABEL();
         if (label == null) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", false, false);
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            Message.createErrorMessage("mets/structMap[@LABEL='CSIP'] can't be null", metsName, isRootMets()), false,
+            false);
         } else {
           if (!label.equals("CSIP")) {
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", false, false);
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+              Message.createErrorMessage("mets/structMap[@LABEL='CSIP'] value must be CSIP", metsName, isRootMets()),
+              false, false);
           }
         }
       }
@@ -802,11 +820,12 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
         String id = struct.getID();
         if (id == null) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "mets/structMap[@LABEL='CSIP']/@ID can't be null!", false, false);
+            Message.createErrorMessage("mets/structMap[@LABEL='CSIP']/@ID can't be null", metsName, isRootMets()),
+            false, false);
         } else {
           if (checkId(id)) {
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "mets/structMap[@LABEL='CSIP']/@ID must be unique in the package", false, false);
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+              "mets/structMap[@LABEL='CSIP']/@ID must be unique in the package", metsName, isRootMets()), false, false);
           } else {
             addId(id);
           }
@@ -826,7 +845,8 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
       for (StructMapType struct : structMap) {
         DivType div = struct.getDiv();
         if (div == null) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", false, false);
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            Message.createErrorMessage("Must have a single division", metsName, isRootMets()), false, false);
         }
       }
     }
@@ -846,11 +866,14 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
           String id = div.getID();
           if (id == null) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "mets/structMap[@LABEL='CSIP']/div/@ID can't be null!", false, false);
+              Message.createErrorMessage("mets/structMap[@LABEL='CSIP']/div/@ID can't be null", metsName, isRootMets()),
+              false, false);
           } else {
             if (checkId(id)) {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "mets/structMap[@LABEL='CSIP']/div/@ID must be unique in the package!", false, false);
+                Message.createErrorMessage("mets/structMap[@LABEL='CSIP']/div/@ID must be unique in the package",
+                  metsName, isRootMets()),
+                false, false);
             } else {
               addId(id);
             }
@@ -874,8 +897,17 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
         DivType div = struct.getDiv();
         if (div != null) {
           String label = div.getLABEL();
-          if (!label.equals(objid)) {
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", false, false);
+          if (label == null) {
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+              "mets/structMap[@LABEL='CSIP']/div/@LABEL can't be null", metsName, isRootMets()), false, false);
+          } else {
+            if (!label.equals(objid)) {
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                Message.createErrorMessage(
+                  "mets/structMap[@LABEL='CSIP']/div/@LABEL value must be equal to the package identifier", metsName,
+                  isRootMets()),
+                false, false);
+            }
           }
         }
       }
@@ -903,8 +935,9 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
           for (DivType d : divs) {
             if (d.getLABEL().equals("Metadata")) {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "The section of administrative or descriptive metadata remains to be added (" + metsName + ")", false,
-                false);
+                Message.createErrorMessage("The section of administrative or descriptive metadata remains to be added",
+                  metsName, isRootMets()),
+                false, false);
             }
           }
         }
@@ -924,8 +957,8 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
         }
       }
       if (!found) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata'] not found (" + metsName + ")", false, false);
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+          "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata'] not found", metsName, isRootMets()), false, false);
       }
     }
     return new ReporterDetails();
@@ -948,11 +981,17 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
               String id = d.getID();
               if (id == null) {
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@ID can't be null!", false, false);
+                  Message.createErrorMessage(
+                    "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@ID can't be null", metsName,
+                    isRootMets()),
+                  false, false);
               } else {
                 if (checkId(id)) {
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@ID must be unique!", false, false);
+                    Message.createErrorMessage(
+                      "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@ID must be unique", metsName,
+                      isRootMets()),
+                    false, false);
                 } else {
                   addId(id);
                 }
@@ -984,8 +1023,8 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
             }
           }
           if (!found) {
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']", false, false);
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+              "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']", metsName, isRootMets()), false, false);
           }
         }
       }
@@ -1025,10 +1064,11 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                 for (Object o : admids) {
                   String admid = ((MdSecType) o).getID();
                   if (!amdSecIDs.contains(admid)) {
+                    StringBuilder message = new StringBuilder();
+                    message.append("mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@ADMID (").append(admid)
+                      .append(") not found in amdSec of METS file");
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@ADMID not found in amdSec of METS file ("
-                        + metsName + ")",
-                      false, false);
+                      Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
                   }
                 }
               }
@@ -1070,10 +1110,11 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                 for (Object o : dmdids) {
                   String dmid = ((MdSecType) o).getID();
                   if (!dmdSecIDs.contains(dmid)) {
+                    StringBuilder message = new StringBuilder();
+                    message.append("mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@DMDID (").append(dmid)
+                      .append(") not found in dmdSec of METS file");
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@DMDID not found in dmdSec of METS file ("
-                        + metsName + ")",
-                      false, false);
+                      Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
                   }
                 }
               }
@@ -1115,11 +1156,13 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
           }
           if (existDocumentation && !found) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation'] must be added", false, false);
+              Message.createErrorMessage("mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation'] must be added",
+                metsName, isRootMets()),
+              false, false);
           } else {
             if (!existDocumentation && found) {
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "mets/fileSec/fileGrp[@USE='Documentation'] must be added", false, false);
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+                "mets/fileSec/fileGrp[@USE='Documentation'] must be added", metsName, isRootMets()), false, false);
             }
           }
         }
@@ -1146,11 +1189,17 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
               String id = d.getID();
               if (id == null) {
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation']/@ID can't be null!", false, false);
+                  Message.createErrorMessage(
+                    "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation']/@ID can't be null", metsName,
+                    isRootMets()),
+                  false, false);
               } else {
                 if (checkId(id)) {
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation']/@ID must be unique!", false, false);
+                    Message.createErrorMessage(
+                      "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation']/@ID must be unique in the package",
+                      metsName, isRootMets()),
+                    false, false);
                 } else {
                   addId(id);
                 }
@@ -1190,7 +1239,10 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
       }
     }
     if (!found) {
-      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", false, false);
+      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+        Message.createErrorMessage("mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation'] not found", metsName,
+          isRootMets()),
+        false, false);
     }
     return new ReporterDetails();
   }
@@ -1230,9 +1282,10 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
       }
 
       if (fileGrpDocumentation != structDocumentation) {
-        System.out.println(metsPath);
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          " Must be one file group reference per mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation']/fptr ",
+          Message.createErrorMessage(
+            " Must be one file group reference per mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation']/fptr ",
+            metsName, isRootMets()),
           false, false);
       }
     }
@@ -1270,7 +1323,9 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                   }
                   if (!found) {
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation']/fptr/@FILEID doesn't match with any mets/fileSec/fileGrp/@ID ",
+                      Message.createErrorMessage(
+                        "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation']/fptr/@FILEID doesn't match with any mets/fileSec/fileGrp/@ID ",
+                        metsName, isRootMets()),
                       false, false);
                   }
                 }
@@ -1313,11 +1368,13 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
           }
           if (existSchemas && !found) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas'] must be added", false, false);
+              Message.createErrorMessage("mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas'] must be added",
+                metsName, isRootMets()),
+              false, false);
           } else {
             if (!existSchemas && found) {
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "mets/fileSec/fileGrp[@USE='Schemas'] must be added", false, false);
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+                "mets/fileSec/fileGrp[@USE='Schemas'] must be added", metsName, isRootMets()), false, false);
             }
           }
         }
@@ -1343,12 +1400,17 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
               String id = d.getID();
               if (id == null) {
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']/@ID can't be null!", false, false);
+                  Message.createErrorMessage(
+                    "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']/@ID can't be null", metsName,
+                    isRootMets()),
+                  false, false);
               } else {
                 if (checkId(id)) {
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']/@ID must be unique in the package!", false,
-                    false);
+                    Message.createErrorMessage(
+                      "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']/@ID must be unique in the package",
+                      metsName, isRootMets()),
+                    false, false);
                 } else {
                   addId(id);
                 }
@@ -1387,7 +1449,8 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
       }
     }
     if (!found) {
-      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", false, false);
+      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+        "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas'] not found", metsName, isRootMets()), false, false);
     }
     return new ReporterDetails();
   }
@@ -1427,8 +1490,10 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
 
       if (fileGrpSchemas != structSchemas) {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          " Must be one file group reference per mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']/fptr ", false,
-          false);
+          Message.createErrorMessage(
+            " Must be one file group reference per mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']/fptr ",
+            metsName, isRootMets()),
+          false, false);
       }
     }
     return new ReporterDetails();
@@ -1465,7 +1530,9 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                   }
                   if (!found) {
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']/fptr/@FILEID doesn't match with any mets/fileSec/fileGrp/@ID ",
+                      Message.createErrorMessage(
+                        "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']/fptr/@FILEID doesn't match with any mets/fileSec/fileGrp/@ID ",
+                        metsName, isRootMets()),
                       false, false);
                   }
                 }
@@ -1509,11 +1576,14 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
           }
           if (existRepresentations && !found) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations'] must be added", false, false);
+              Message.createErrorMessage(
+                "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations'] must be added", metsName,
+                isRootMets()),
+              false, false);
           } else {
             if (!existRepresentations && found) {
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "mets/fileSec/fileGrp[@USE='Representations'] must be added", false, false);
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+                "mets/fileSec/fileGrp[@USE='Representations'] must be added", metsName, isRootMets()), false, false);
             }
           }
         }
@@ -1538,11 +1608,16 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
               String id = d.getID();
               if (id == null) {
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations']/@ID can't be null", false, false);
+                  Message.createErrorMessage(
+                    "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations']/@ID can't be null", metsName,
+                    isRootMets()),
+                  false, false);
               } else {
                 if (checkId(id)) {
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations']/@ID must be unique in the package",
+                    Message.createErrorMessage(
+                      "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations']/@ID must be unique in the package",
+                      metsName, isRootMets()),
                     false, false);
                 } else {
                   addId(id);
@@ -1628,8 +1703,10 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
 
       if (fileGrpRepresentations != structRepresentations && !isMptr) {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          " Must be one file group reference per mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']/fptr ", false,
-          false);
+          Message.createErrorMessage(
+            " Must be one file group reference per mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']/fptr ",
+            metsName, isRootMets()),
+          false, false);
       }
     }
     return new ReporterDetails();
@@ -1665,9 +1742,11 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                     }
                   }
                   if (!found) {
+                    StringBuilder message = new StringBuilder();
+                    message.append("mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations']/fptr/@FILEID (")
+                      .append(fileid).append(") doesn't match with any mets/fileSec/fileGrp/@ID");
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations']/fptr/@FILEID doesn't match with any mets/fileSec/fileGrp/@ID ",
-                      false, false);
+                      Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
                   }
                 }
               }
@@ -1696,9 +1775,9 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
             List<DivType> divs = firstDiv.getDiv();
             for (DivType div : divs) {
               if (div.getLABEL().matches("Representations/.*/") && div.getMptr().isEmpty()) {
-                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  "When a package consists of multiple representations, each described by a representation level METS.xml document, there is a discrete representation div element for each representation!",
-                  false, false);
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+                  "When a package consists of multiple representations, each described by a representation level METS.xml document, there is a discrete representation div element for each representation",
+                  metsName, isRootMets()), false, false);
               }
             }
           }
@@ -1722,13 +1801,14 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
           for (DivType div : divs) {
             String id = div.getID();
             if (id == null) {
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "mets/structMap[@LABEL='CSIP']/div/div/@ID can't be null!", false, false);
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+                "mets/structMap[@LABEL='CSIP']/div/div/@ID can't be null", metsName, isRootMets()), false, false);
             } else {
               if (checkId(id)) {
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  "mets/structMap[@LABEL='CSIP']/div/div/@ID must be unique in the package (" + metsName + ")", false,
-                  false);
+                  Message.createErrorMessage("mets/structMap[@LABEL='CSIP']/div/div/@ID must be unique in the package",
+                    metsName, isRootMets()),
+                  false, false);
               } else {
                 addId(id);
               }
@@ -1750,6 +1830,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
    */
   private ReporterDetails validateCSIP107() throws IOException {
     List<StructMapType> structMap = mets.getStructMap();
+    StringBuilder message = new StringBuilder();
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         DivType div = struct.getDiv();
@@ -1764,19 +1845,24 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                   path.append(mets.getOBJID()).append("/").append(label.toLowerCase());
                 } else {
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    "mets/OBJECTID can't be null", false, false);
+                    Message.createErrorMessage("mets/OBJECTID can't be null", metsName, isRootMets()), false, false);
                 }
               } else {
                 path.append(metsPath).append(label.toLowerCase());
               }
               if (!zipManager.checkDirectory(getEARKSIPpath(), path.toString())) {
+                message.append("mets/structMap[@LABEL='CSIP']/div/div/@LABEL (").append(label).append(")")
+                  .append("does not lead to a directory (").append(path).append(")");
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  "mets/structMap[@LABEL='CSIP']/div/div/@LABEL path not exist or not a directory", false, false);
+                  Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
               }
             } else {
               if (!folderManager.checkDirectory(Paths.get(metsPath).resolve(label.toLowerCase()))) {
+                message.append("mets/structMap[@LABEL='CSIP']/div/div/@LABEL (").append(label).append(")")
+                  .append("does not lead to a directory (").append(Paths.get(metsPath).resolve(label.toLowerCase()))
+                  .append(")");
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  "mets/structMap[@LABEL='CSIP']/div/div/@LABEL path not exist or not a directory", false, false);
+                  Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
               }
             }
           }
@@ -1816,13 +1902,18 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                       }
                     }
                     if (!found) {
+                      StringBuilder message = new StringBuilder();
+                      message.append("mets/structMap[@LABEL='CSIP']/div/div/mptr/@xlink:title (").append(title)
+                        .append(") does not correspond a file group ID");
                       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                        "mets/structMap[@LABEL='CSIP']/div/div/mptr/@xlink:title can't find match id in fileSection",
-                        false, false);
+                        Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
                     }
                   } else {
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      "mets/structMap[@LABEL='CSIP']/div/div/mptr/@xlink:title can't be null", false, false);
+                      Message.createErrorMessage(
+                        "mets/structMap[@LABEL='CSIP']/div/div/mptr/@xlink:title can't be null", metsName,
+                        isRootMets()),
+                      false, false);
                   }
                 }
               }
@@ -1850,9 +1941,12 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
             if (d.getLABEL().matches("Representations/.*")) {
               List<DivType.Mptr> mptrs = d.getMptr();
               if (d.getFptr().isEmpty()) {
-                if (mptrs == null && mptrs.size() != 1) {
+                if (mptrs == null || mptrs.size() != 1) {
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    "mets/structMap[@LABEL='CSIP']/div/div/mptr can't be null or more than one", false, false);
+                    Message.createErrorMessage(
+                      "mets/structMap[@LABEL='CSIP']/div/div/mptr can't be null or more than one", metsName,
+                      isRootMets()),
+                    false, false);
                 }
               }
             }
@@ -1869,6 +1963,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
    */
   private ReporterDetails validateCSIP110() throws IOException {
     List<StructMapType> structMap = mets.getStructMap();
+    StringBuilder message = new StringBuilder();
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         DivType div = struct.getDiv();
@@ -1887,21 +1982,24 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                         filePath.append(mets.getOBJID()).append("/").append(href);
                       } else {
                         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                          "mets/@OBJECTID can't be null", false, false);
+                          Message.createErrorMessage("mets/@OBJECTID can't be null", metsName, isRootMets()), false,
+                          false);
                       }
                     } else {
                       filePath.append(metsPath).append(href);
                     }
                     if (!zipManager.checkPathExists(getEARKSIPpath(), filePath.toString())) {
+                      message.append("mets/structMap/div/div/mptr/@xlink:href ").append(filePath)
+                        .append(" doesn't exists");
                       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                        "mets/structMap/div/div/mptr/@xlink:href " + filePath + " doesn't exists (" + metsName + ")",
-                        false, false);
+                        Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
                     }
                   } else {
                     if (!folderManager.checkPathExists(Paths.get(metsPath).resolve(href))) {
+                      message.append("mets/structMap/div/div/mptr/@xlink:href ")
+                        .append(Paths.get(metsPath).resolve(href)).append(" doesn't exists");
                       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                        "mets/structMap/div/div/mptr/@xlink:href " + href + " doesn't exists (" + metsName + ")", false,
-                        false);
+                        Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
                     }
                   }
                 }
@@ -1955,11 +2053,16 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                   if (structMapTypes.get(mptr.getHref()) != null) {
                     if (!structMapTypes.get(mptr.getHref()).equals("simple")) {
                       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                        "mets/structMap/div/div/mptr[@xlink:type='simple'] value must be 'simple'", false, false);
+                        Message.createErrorMessage(
+                          "mets/structMap/div/div/mptr[@xlink:type='simple'] value must be 'simple'", metsName,
+                          isRootMets()),
+                        false, false);
                     }
                   } else {
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      "mets/structMap/div/div/mptr[@xlink:type='simple'] can't be null", false, false);
+                      Message.createErrorMessage("mets/structMap/div/div/mptr[@xlink:type='simple'] can't be null",
+                        metsName, isRootMets()),
+                      false, false);
                   }
                 }
               }
@@ -1990,11 +2093,15 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                 if (locType != null) {
                   if (!locType.equals("URL")) {
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      "mets/structMap/div/div/mptr[@LOCTYPE='URL']value must be 'URL'", false, false);
+                      Message.createErrorMessage("mets/structMap/div/div/mptr[@LOCTYPE='URL']value must be 'URL'",
+                        metsName, isRootMets()),
+                      false, false);
                   }
                 } else {
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    "mets/structMap/div/div/mptr[@LOCTYPE='URL'] can't be null", false, false);
+                    Message.createErrorMessage("mets/structMap/div/div/mptr[@LOCTYPE='URL'] can't be null", metsName,
+                      isRootMets()),
+                    false, false);
                 }
               }
             }

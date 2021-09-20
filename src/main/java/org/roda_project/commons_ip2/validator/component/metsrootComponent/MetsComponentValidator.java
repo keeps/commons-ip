@@ -227,7 +227,7 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     if (ContentInformationType != null) {
       if (ContentInformationType.equals("OTHER")
         && (OtherContentInformationType == null || OtherContentInformationType.equals(""))) {
-        details.setValid(false);
+        details.setValid(true);
         details.addIssue(Message.createErrorMessage(
           "When mets/@csip:CONTENTINFORMATIONTYPE have the value OTHER  mets/@csip:OTHERCONTENTINFORMATIONTYPE can't be null or empty",
           metsName, isRootMets()));
@@ -245,7 +245,8 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     String profile = mets.getPROFILE();
     if (profile == null || profile.equals("")) {
       details.setValid(false);
-      details.addIssue(Message.createErrorMessage("mets/@PROFILE attribute is mandatory, can't be null or empty",metsName,isRootMets()));
+      details.addIssue(Message.createErrorMessage("mets/@PROFILE attribute is mandatory, can't be null or empty",
+        metsName, isRootMets()));
     }
     return details;
   }
@@ -258,7 +259,7 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     String label = mets.getLABEL();
     if (label == null) {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
-        "Can put an optional short text on mets/@LABEL", false, false);
+        Message.createErrorMessage("Doesn't have an mets/@LABEL", metsName, isRootMets()), false, false);
     }
     return new ReporterDetails();
   }
@@ -269,14 +270,17 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
    */
   private ReporterDetails validateSIP2() {
     String profile = mets.getPROFILE();
+    String profileValue = "https://earkcsip.dilcis.eu/profile/E-ARK-CSIP.xml";
     if (profile != null) {
-      if (!profile.equals("https://earkcsip.dilcis.eu/profile/E-ARK-CSIP.xml")) {
+      if (!profile.equals(profileValue)) {
+        StringBuilder message = new StringBuilder();
+        message.append("mets/@PROFILE value isn't ").append(message);
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
-          "mets/@PROFILE value isn't 'https://earksip.dilcis.eu/profile/E-ARK-CSIP.xml'", false, false);
+          Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
       }
     } else {
-      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION, "mets/@PROFILE can't be null", false,
-        false);
+      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
+        Message.createErrorMessage("mets/@PROFILE can't be null", metsName, isRootMets()), false, false);
     }
     return new ReporterDetails();
   }

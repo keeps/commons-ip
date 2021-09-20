@@ -12,7 +12,7 @@ public class Message {
     stringBuilder.append(message);
     stringBuilder.append("(");
     if(isRootMets) {
-      stringBuilder.append("METS.xml in Root");
+      stringBuilder.append("Root METS.xml");
     }
     else{
       stringBuilder.append(path);

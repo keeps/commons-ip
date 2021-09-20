@@ -244,7 +244,7 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
    */
   private ReporterDetails validateCSIPSTR3() throws IOException {
     if(isZipFileFlag()){
-      if(Files.probeContentType(getEARKSIPpath()).equals("application/zip")){
+      if(getEARKSIPpath().toString().contains("zip")){
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                 "Information package is compressed in ZIP format",
                 true, false);
@@ -258,7 +258,7 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
     else {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
               "The Information Package root folder MAY be compressed.",
-              true, false);
+              false, false);
     }
   }
 
@@ -360,7 +360,7 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
         if (zipManager.verifyIfExistsFilesInFolder(path, ".*/metadata/")) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
             "If any other metadata are available, they MAY be included in separate sub-folders, for example an additional folder named other.",
-            true, false);
+            false, false);
         }
       }
     } else {
@@ -369,7 +369,7 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
         if (folderManager.verifyIfExistsFilesInFolder(path, "metadata")) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
             "If any other metadata are available, they MAY be included in separate sub-folders, for example an additional folder named other.",
-            true, false);
+            false, false);
         }
       }
     }
@@ -536,7 +536,7 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
           folders.append(" ").append(folder).append(" ");
         }
       }
-      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,folders.toString(),true,false);
+      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,folders.toString(),false,false);
     }
     return new ReporterDetails();
   }

@@ -19,16 +19,15 @@ import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.handlers.MetsHandler;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.utils.CHECKSUMTYPE;
+import org.roda_project.commons_ip2.validator.utils.Message;
 import org.roda_project.commons_ip2.validator.utils.MetadataType;
 
 /**
  * @author João Gomes <jgomes@keep.pt>
  */
 public class AdministritiveMetadataComponentValidator extends ValidatorComponentImpl {
-  public static final String METS_AMD_SEC_DIGIPROV_MD_MD_REF_SIZE_DOESN_T_MATCH_WITH_THE_SIZE_OF_FILE = "mets/amdSec/digiprovMD/mdRef/@SIZE doesn't match with the size of file (";
   public static final String METS_OBJECTID_CAN_T_BE_NULL = "mets/@OBJECTID can't be null";
   public static final String UTF_8 = "UTF-8";
-  public static final String METS_AMD_SEC_RIGHTS_MD_MD_REF_SIZE_DOESN_T_MATCH_WITH_THE_SIZE_OF_FILE = "mets/amdSec/rightsMD/mdRef/@SIZE doesn't match with the size of file (";
 
   private final String moduleName;
   private List<AmdSecType> amdSec;
@@ -134,7 +133,7 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
           csip = validateCSIP43();
         } catch (Exception e) {
           csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "Can't calculate checksum of file", false, false);
+            Message.createErrorMessage("Can't calculate checksum of file",metsName,isRootMets()), false, false);
         }
         csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
         addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP43_ID, csip);
@@ -145,7 +144,7 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
         addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP44_ID, csip);
       } else {
-        String message = "SKIPPED because mets/amdSec/digiprovMD/mdRef doesn't exist! (" + metsName + ")";
+        String message = Message.createErrorMessage("SKIPPED because mets/amdSec/digiprovMD/mdRef doesn't exist",metsName,isRootMets());
         /* CSIP36 */
         csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
         addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP36_ID, csip);
@@ -183,7 +182,7 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP44_ID, csip);
       }
     } else {
-      String message = "SKIPPED because mets/amdSec/digiprovMD doesn't exist! (" + metsName + ")";
+      String message = Message.createErrorMessage("SKIPPED because mets/amdSec/digiprovMD doesn't exist",metsName,isRootMets());
 
       /* CSIP33 */
       csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
@@ -308,7 +307,7 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
           csip = validateCSIP56();
         } catch (Exception e) {
           csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "Can't calculate checksum of file", false, false);
+            Message.createErrorMessage("Can't calculate checksum of file",metsName,isRootMets()), false, false);
         }
         csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
         addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP56_ID, csip);
@@ -319,7 +318,7 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
         addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP57_ID, csip);
       } else {
-        String message = "SKIPPED because mets/amdSec/rightsMD/mdRef doesn't exist! (" + metsName + ")";
+        String message = Message.createErrorMessage("SKIPPED because mets/amdSec/rightsMD/mdRef doesn't exist",metsName,isRootMets());
 
         /* CSIP49 */
         csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
@@ -358,7 +357,7 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP57_ID, csip);
       }
     } else {
-      String message = "SKIPPED because mets/amdSec/rightsMD doesn't exist! (" + metsName + ")";
+      String message = Message.createErrorMessage("SKIPPED because mets/amdSec/rightsMD doesn't exist",metsName,isRootMets());
 
       /* CSIP46 */
       csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
@@ -418,7 +417,6 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
    * metadata section and/or administrative metadata section.
    */
   private ReporterDetails validateCSIP31() throws IOException {
-    ReporterDetails details = new ReporterDetails();
     if (isZipFileFlag()) {
       String regex;
       if (isRootMets()) {
@@ -433,18 +431,23 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         regex = metsPath + "metadata/.*";
       }
       if (amdSec == null || amdSec.isEmpty()) {
-        if (zipManager.countMetadataFiles(getEARKSIPpath(), regex) != 0 && (mets.getDmdSec() == null || mets.getDmdSec().isEmpty())) {
-            details.setValid(false);
-            details.addIssue(
-              "You have files in the metadata/folder, you must have mets/dmdSec or mets/amdSec (" + metsName + ")");
+        if (zipManager.countMetadataFiles(getEARKSIPpath(), regex) != 0
+          && (mets.getDmdSec() == null || mets.getDmdSec().isEmpty())) {
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            Message.createErrorMessage(
+              "You have files in the metadata/folder, you must have mets/dmdSec or mets/amdSec", metsName,
+              isRootMets()),
+            false, false);
         }
       } else {
         if (zipManager.countMetadataFiles(getEARKSIPpath(), regex) == 0) {
           for (AmdSecType amd : amdSec) {
             if (amd.getDigiprovMD() != null && !amd.getDigiprovMD().isEmpty()) {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "Doesn't have files in metadata folder but have in amdSec; Put the files under metadata folder", false,
-                false);
+                Message.createErrorMessage(
+                  "Doesn't have files in metadata folder but have in amdSec; Put the files under metadata folder",
+                  metsName, isRootMets()),
+                false, false);
             }
           }
         } else {
@@ -484,7 +487,8 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
             }
             if (metadataFiles.containsValue(false)) {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "Have metadata files not referenced in mets file", false, false);
+                Message.createErrorMessage("Have metadata files not referenced in mets file", metsName, isRootMets()),
+                false, false);
             }
           }
         }
@@ -493,17 +497,21 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
       if (amdSec == null || amdSec.isEmpty()) {
         if (folderManager.countMetadataFiles(Paths.get(metsPath)) != 0
           && (mets.getDmdSec() == null || mets.getDmdSec().isEmpty())) {
-          details.setValid(false);
-          details.addIssue(
-            "You have files in the metadata/folder, you must have mets/dmdSec or mets/amdSec (" + metsName + ")");
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            Message.createErrorMessage(
+              "You have files in the metadata/folder, you must have mets/dmdSec or mets/amdSec", metsName,
+              isRootMets()),
+            false, false);
         }
       } else {
         if (folderManager.countMetadataFiles(Paths.get(metsPath)) == 0) {
           for (AmdSecType amd : amdSec) {
             if (amd.getDigiprovMD() != null && !amd.getDigiprovMD().isEmpty()) {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "Doesn't have files in metadata folder but have in amdSec; Put the files under metadata folder", false,
-                false);
+                Message.createErrorMessage(
+                  "Doesn't have files in metadata folder but have in amdSec; Put the files under metadata folder",
+                  metsName, isRootMets()),
+                false, false);
             }
           }
         } else {
@@ -537,13 +545,14 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
             }
             if (metadataFiles.containsValue(false)) {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "Have metadata files not referenced in mets file", false, false);
+                Message.createErrorMessage("Have metadata files not referenced in mets file", metsName, isRootMets()),
+                false, false);
             }
           }
         }
       }
     }
-    return details;
+    return new ReporterDetails();
   }
 
   /*
@@ -569,7 +578,10 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
       }
       if (countDigiProvMd != countMdRefs) {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "It is mandatory to include one <digiprovMD> element for each piece of PREMIS metadata.", false, false);
+          Message.createErrorMessage(
+            "It is mandatory to include one <digiprovMD> element for each piece of PREMIS metadata", metsName,
+            isRootMets()),
+          false, false);
       }
     }
 
@@ -588,8 +600,8 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         if (!checkId(md.getID())) {
           addId(md.getID());
         } else {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "mets/amdSec/digiprovMD/@ID isn't unique in the package (" + metsName + ")", false, false);
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+            "mets/amdSec/digiprovMD/@ID isn't unique in the package", metsName, isRootMets()), false, false);
         }
       }
     }
@@ -606,8 +618,10 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
       for (MdSecType md : digiprov) {
         String status = md.getSTATUS();
         if (!dmdSecStatus.contains(status)) {
+          StringBuilder message = new StringBuilder();
+          message.append("Value ").append(status).append(" for mets/amdSec/digiprovMD/@STATUS isn't valid");
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "mets/amdSec/digiprovMD/@STATUS see valid values dmdSec status", false, false);
+            Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
         }
       }
     }
@@ -626,7 +640,10 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         MdSecType.MdRef mdRef = md.getMdRef();
         if (mdRef == null) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "mets/amdSec/digiprovMD/mdRef is the reference to the digital provenance metadata file", false, false);
+            Message.createErrorMessage(
+              "mets/amdSec/digiprovMD/mdRef is the reference to the digital provenance metadata file", metsName,
+              isRootMets()),
+            false, false);
         }
       }
     }
@@ -647,11 +664,13 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
           if (loctype != null) {
             if (!loctype.equals("URL")) {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "mets/amdSec/digiprovMD/mdRef[@LOCTYPE='URL'] value must be URL", false, false);
+                Message.createErrorMessage("mets/amdSec/digiprovMD/mdRef[@LOCTYPE='URL'] value must be URL", metsName,
+                  isRootMets()),
+                false, false);
             }
           } else {
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "mets/amdSec/digiprovMD/mdRef[@LOCTYPE='URL'] can't be null", false, false);
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+              "mets/amdSec/digiprovMD/mdRef[@LOCTYPE='URL'] can't be null", metsName, isRootMets()), false, false);
           }
         }
       }
@@ -664,29 +683,27 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
    * value “simple”. Value list is maintained by the xlink standard.
    */
   private ReporterDetails validateCSIP37() throws IOException {
-    HashMap<String,String> amdSecTypes = new HashMap<>();
-    MetsHandler amdSecHandler = new MetsHandler("digiprovMD","mdRef",amdSecTypes);
+    HashMap<String, String> amdSecTypes = new HashMap<>();
+    MetsHandler amdSecHandler = new MetsHandler("digiprovMD", "mdRef", amdSecTypes);
     MetsParser metsParser = new MetsParser();
     InputStream metsStream = null;
-    if(!amdSec.isEmpty()) {
+    if (!amdSec.isEmpty()) {
       if (isZipFileFlag()) {
         if (isRootMets()) {
           metsStream = zipManager.getMetsRootInputStream(getEARKSIPpath());
         } else {
           metsStream = zipManager.getZipInputStream(getEARKSIPpath(), metsPath + "METS.xml");
         }
-      }
-      else{
-        if(isRootMets()){
+      } else {
+        if (isRootMets()) {
           metsStream = folderManager.getMetsRootInputStream(getEARKSIPpath());
-        }
-        else{
+        } else {
           metsStream = folderManager.getInputStream(Paths.get(metsPath).resolve("METS.xml"));
         }
       }
     }
-    if(metsStream != null){
-      metsParser.parse(amdSecHandler,metsStream);
+    if (metsStream != null) {
+      metsParser.parse(amdSecHandler, metsStream);
     }
     ReporterDetails details = new ReporterDetails();
     for (AmdSecType a : amdSec) {
@@ -696,12 +713,13 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
 
         if (amdSecTypes.get(mdRef.getID()) == null) {
           details.setValid(false);
-          details.addIssue("mets/amdSec/digiprovMD/mdRef[@xlink:type=’simple’] can't be null  (" + metsName + ")");
+          details.addIssue(Message.createErrorMessage(
+            "mets/amdSec/digiprovMD/mdRef[@xlink:type=’simple’] can't be null", metsName, isRootMets()));
         } else {
           if (!amdSecTypes.get(mdRef.getID()).equals("simple")) {
             details.setValid(false);
-            details.addIssue(
-              "mets/amdSec/digiprovMD/mdRef[@xlink:type=’simple’] value must be 'simple'  (" + metsName + ")");
+            details.addIssue(Message.createErrorMessage(
+              "mets/amdSec/digiprovMD/mdRef[@xlink:type=’simple’] value must be 'simple'", metsName, isRootMets()));
           }
         }
       }
@@ -719,6 +737,7 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
       List<MdSecType> digiprov = a.getDigiprovMD();
       for (MdSecType md : digiprov) {
         MdSecType.MdRef mdRef = md.getMdRef();
+        StringBuilder message = new StringBuilder();
         if (mdRef != null) {
           String href = URLDecoder.decode(mdRef.getHref(), UTF_8);
           if (isZipFileFlag()) {
@@ -728,19 +747,23 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
                 path.append(mets.getOBJID()).append("/").append(href);
               } else {
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  "mets/OBJECTID can't be null", false, false);
+                  Message.createErrorMessage("mets/OBJECTID can't be null", metsName, isRootMets()), false, false);
               }
             } else {
               path.append(metsPath).append(href);
             }
             if (!zipManager.checkPathExists(getEARKSIPpath(), path.toString())) {
+              message.append("mets/amdSec/digiprovMD/mdRef/@xlink:href (").append(path.toString())
+                .append(") doesn't exists");
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "mets/amdSec/digiprovMD/mdRef/@xlink:href path doesn't exists", false, false);
+                Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
             }
           } else {
             if (!folderManager.checkPathExists(Paths.get(metsPath).resolve(href))) {
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "mets/amdSec/digiprovMD/mdRef/@xlink:href path doesn't exists", false, false);
+              message.append("mets/amdSec/digiprovMD/mdRef/@xlink:href (").append(Paths.get(metsPath).resolve(href))
+                .append(") doesn't exists");
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message.toString(), false,
+                false);
             }
           }
         }
@@ -766,11 +789,15 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
           String mdType = mdRef.getMDTYPE();
           if (mdType == null) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "mets/amdSec/digiprovMD/mdRef/@MDTYPE can't be null (" + metsName + ")", false, false);
+              Message.createErrorMessage("mets/amdSec/digiprovMD/mdRef/@MDTYPE can't be null", metsName, isRootMets()),
+              false, false);
           } else {
             if (!tmp.contains(mdType)) {
+              StringBuilder message = new StringBuilder();
+              message.append("Value ").append(mdType)
+                .append(" for mets/amdSec/digiprovMD/mdRef/@MDTYPE value isn't valid");
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "mets/amdSec/digiprovMD/mdRef/@MDTYPE value isn't valid (" + metsName + ")", false, false);
+                Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
             }
           }
         }
@@ -791,13 +818,14 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         String mimeType = mdRef.getMIMETYPE();
         if (mimeType != null) {
           if (!ianaMediaTypes.contains(mimeType)) {
+            StringBuilder message = new StringBuilder();
+            message.append("Value ").append(mimeType).append(" for mets/amdSec/digiprovMD/mdRef/@MIMETYPE isn't valid");
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "mets/amdSec/digiprovMD/mdRef/@MIMETYPE value isn't valid. See IANA Media Types (" + metsName + ")",
-              false, false);
+              Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
           }
         } else {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "mets/amdSec/digiprovMD/mdRef/@MIMETYPE of file can't be null (" + metsName + ")", false, false);
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+            "mets/amdSec/digiprovMD/mdRef/@MIMETYPE of file can't be null", metsName, isRootMets()), false, false);
         }
       }
     }
@@ -816,9 +844,10 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
           String href = URLDecoder.decode(mdRef.getHref(), UTF_8);
           Long size = mdRef.getSIZE();
           if (size == null) {
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "mets/amdSec/digiprovMD/mdRef/@SIZE of file can't be null (" + metsName + ")", false, false);
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+              "mets/amdSec/digiprovMD/mdRef/@SIZE of file can't be null", metsName, isRootMets()), false, false);
           } else {
+            StringBuilder message = new StringBuilder();
             if (isZipFileFlag()) {
               String file;
               if (isRootMets()) {
@@ -827,28 +856,31 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
                   file = OBJECTID + "/" + href;
                 } else {
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    METS_OBJECTID_CAN_T_BE_NULL, false, false);
+                    Message.createErrorMessage(METS_OBJECTID_CAN_T_BE_NULL, metsName, isRootMets()), false, false);
                 }
               } else {
                 file = metsPath + href;
               }
               if (!zipManager.verifySize(getEARKSIPpath(), file, size)) {
+                message.append("mets/dmdSec/mdRef/@SIZE ").append(size).append(" and size of file (").append(file)
+                  .append(") isn't equal");
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  METS_AMD_SEC_DIGIPROV_MD_MD_REF_SIZE_DOESN_T_MATCH_WITH_THE_SIZE_OF_FILE + metsName + ")", false,
-                  false);
+                  Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
               }
             } else {
               if (isRootMets()) {
                 if (!folderManager.verifySize(getEARKSIPpath().resolve(href), size)) {
+                  message.append("mets/dmdSec/mdRef/@SIZE ").append(size).append(" and size of file (")
+                    .append(getEARKSIPpath().resolve(href)).append(") isn't equal");
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    METS_AMD_SEC_DIGIPROV_MD_MD_REF_SIZE_DOESN_T_MATCH_WITH_THE_SIZE_OF_FILE + metsName + ")", false,
-                    false);
+                    Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
                 }
               } else {
                 if (!folderManager.verifySize(Paths.get(metsPath).resolve(href), size)) {
+                  message.append("mets/dmdSec/mdRef/@SIZE ").append(size).append(" and size of file (")
+                    .append(Paths.get(metsPath).resolve(href)).append(") isn't equal");
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    METS_AMD_SEC_DIGIPROV_MD_MD_REF_SIZE_DOESN_T_MATCH_WITH_THE_SIZE_OF_FILE + metsName + ")", false,
-                    false);
+                    Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
                 }
               }
             }
@@ -869,7 +901,8 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         MdSecType.MdRef mdRef = md.getMdRef();
         if (mdRef.getCREATED() == null) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "mets/amdSec/digiprovMD/mdRef/@CREATED can't be null (" + metsName + ")", false, false);
+            Message.createErrorMessage("mets/amdSec/digiprovMD/mdRef/@CREATED can't be null", metsName, isRootMets()),
+            false, false);
         }
       }
     }
@@ -890,42 +923,45 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         MdSecType.MdRef mdRef = md.getMdRef();
         String checksumType = mdRef.getCHECKSUMTYPE();
         if (checksumType == null) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "mets/amdSec/digiprovMD/mdRef/@CHECKSUMTYPE can't be null (" + metsName + ")", false, false);
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+            "mets/amdSec/digiprovMD/mdRef/@CHECKSUMTYPE can't be null", metsName, isRootMets()), false, false);
         } else {
           if (!tmp.contains(checksumType)) {
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "mets/amdSec/digiprovMD/mdRef/@CHECKSUMTYPE value isn't valid (" + metsName + ")", false, false);
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+              "mets/amdSec/digiprovMD/mdRef/@CHECKSUMTYPE value isn't valid", metsName, isRootMets()), false, false);
           } else {
             String checksum = mdRef.getCHECKSUM();
             if (checksum == null) {
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "mets/amdSec/digiprovMD/mdRef/@CHECKSUM can't be null (" + metsName + ")", false, false);
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+                "mets/amdSec/digiprovMD/mdRef/@CHECKSUM can't be null", metsName, isRootMets()), false, false);
             } else {
               String href = URLDecoder.decode(mdRef.getHref(), UTF_8);
+              StringBuilder message = new StringBuilder();
               if (isZipFileFlag()) {
-                String file;
+                StringBuilder file = new StringBuilder();
                 if (isRootMets()) {
                   String OBJECTID = mets.getOBJID();
                   if (OBJECTID != null) {
-                    file = OBJECTID + "/" + href;
+                    file.append(OBJECTID).append("/").append(href);
                   } else {
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      METS_OBJECTID_CAN_T_BE_NULL, false, false);
+                      Message.createErrorMessage(METS_OBJECTID_CAN_T_BE_NULL, metsName, isRootMets()), false, false);
                   }
                 } else {
-                  file = metsPath + href;
+                  file.append(metsPath).append("/").append(href);
                 }
-                if (!zipManager.verifyChecksum(getEARKSIPpath(), file, checksumType, checksum)) {
+                if (!zipManager.verifyChecksum(getEARKSIPpath(), file.toString(), checksumType, checksum)) {
+                  message.append("mets/dmdSec/mdRef/@CHECKSUM ").append(checksum).append(" and size of file (")
+                    .append(file).append(") isn't equal");
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    "mets/amdSec/digiprovMD/mdRef/@CHECKSUM doesn't match with file checksum (" + metsName + ")", false,
-                    false);
+                    Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
                 }
               } else {
                 if (!folderManager.verifyChecksum(Paths.get(metsPath).resolve(href), checksumType, checksum)) {
+                  message.append("mets/dmdSec/mdRef/@CHECKSUM ").append(checksum).append(" and size of file (")
+                    .append(Paths.get(metsPath).resolve(href)).append(") isn't equal");
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    "mets/amdSec/digiprovMD/mdRef/@CHECKSUM doesn't match with file checksum (" + metsName + ")", false,
-                    false);
+                    Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
                 }
               }
             }
@@ -952,12 +988,16 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         MdSecType.MdRef mdRef = md.getMdRef();
         String checksumType = mdRef.getCHECKSUMTYPE();
         if (checksumType == null) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "mets/amdSec/digiprovMD/mdRef/@CHECKSUMTYPE can't be null (" + metsName + ")", false, false);
+
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+            "mets/amdSec/digiprovMD/mdRef/@CHECKSUMTYPE can't be null", metsName, isRootMets()), false, false);
         } else {
           if (!tmp.contains(checksumType)) {
+            StringBuilder message = new StringBuilder();
+            message.append("Value ").append(checksumType)
+              .append(" for mets/amdSec/digiprovMD/mdRef/@CHECKSUMTYPE value isn't valid");
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "mets/amdSec/digiprovMD/mdRef/@CHECKSUMTYPE value isn't valid (" + metsName + ")", false, false);
+              Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
           }
         }
       }
@@ -976,16 +1016,19 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
   private ReporterDetails validateCSIP45() {
     boolean found = false;
     for (AmdSecType a : amdSec) {
-      if (a.getRightsMD() != null) {
+      if (a.getRightsMD() != null && !a.getRightsMD().isEmpty()) {
         found = true;
       }
     }
     if (found) {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-        "You have specified mets/amdSec/rightsMD.", true, false);
+        Message.createErrorMessage("You have specified mets/amdSec/rightsMD", metsName, isRootMets()), true, false);
     }
     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-      "Individual representations should state their specific rights in their representation METS file.", false, false);
+      Message.createErrorMessage(
+        "Individual representations should state their specific rights in their representation METS file", metsName,
+        isRootMets()),
+      false, false);
   }
 
   /*
@@ -996,18 +1039,20 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
   private ReporterDetails validateCSIP46() {
     for (AmdSecType a : amdSec) {
       List<MdSecType> rigthsMD = a.getRightsMD();
-      if (rigthsMD != null) {
+      if (rigthsMD != null && !rigthsMD.isEmpty()) {
         for (MdSecType rmd : rigthsMD) {
           if (checkId(rmd.getID())) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "mets/amdSec/rightsMD/@ID must be unique in the package and not null (" + metsName + ")", false, false);
+              Message.createErrorMessage("mets/amdSec/rightsMD/@ID must be unique in the package and not null",
+                metsName, isRootMets()),
+              false, false);
           } else {
             addId(rmd.getID());
           }
         }
-      }
-      else{
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,"",false,false);
+      } else {
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+          Message.createErrorMessage("Skipped doesn't have mets/amdSec/rightsMD", metsName, isRootMets()), true, true);
       }
     }
     return new ReporterDetails();
@@ -1020,16 +1065,19 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
   private ReporterDetails validateCSIP47() {
     for (AmdSecType a : amdSec) {
       List<MdSecType> rigthsMD = a.getRightsMD();
-      if (rigthsMD != null) {
+      if (rigthsMD != null && !rigthsMD.isEmpty()) {
         for (MdSecType rmd : rigthsMD) {
           String status = rmd.getSTATUS();
           if (status == null) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "mets/amdSec/rightsMD/@STATUS can't be null (" + metsName + ")", false, false);
+              Message.createErrorMessage("mets/amdSec/rightsMD/@STATUS can't be null", metsName, isRootMets()), false,
+              false);
           } else {
             if (!dmdSecStatus.contains(status)) {
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "mets/amdSec/rightsMD/@STATUS value isn't valid (" + metsName + ")", false, false);
+              StringBuilder message = new StringBuilder();
+              message.append("Value ").append(status).append(" for mets/amdSec/rightsMD/@STATUS value isn't valid");
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message.toString(), false,
+                false);
             }
           }
         }
@@ -1045,18 +1093,14 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
    * Rever este
    */
   private ReporterDetails validateCSIP48() {
-    boolean valid = true;
     for (AmdSecType a : amdSec) {
       List<MdSecType> rigthsMD = a.getRightsMD();
-      if (rigthsMD != null) {
+      if (rigthsMD != null && !rigthsMD.isEmpty()) {
         for (MdSecType rmd : rigthsMD) {
           if (rmd.getMdRef() == null) {
-            valid = false;
-            break;
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+              Message.createErrorMessage("mets/amdSec/rightsMD/mdRef is null", metsName, isRootMets()), false, false);
           }
-        }
-        if (!valid) {
-          break;
         }
       }
     }
@@ -1070,18 +1114,20 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
   private ReporterDetails validateCSIP49() {
     for (AmdSecType a : amdSec) {
       List<MdSecType> rigthsMD = a.getRightsMD();
-      if (rigthsMD != null) {
+      if (rigthsMD != null && !rigthsMD.isEmpty()) {
         for (MdSecType rmd : rigthsMD) {
           MdSecType.MdRef mdRef = rmd.getMdRef();
           if (mdRef != null) {
             String loctype = mdRef.getLOCTYPE();
             if (loctype == null) {
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "mets/amdSec/rightsMD/mdRef[@LOCTYPE=’URL’] can't be null (" + metsName + ")", false, false);
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+                "mets/amdSec/rightsMD/mdRef[@LOCTYPE=’URL’] can't be null", metsName, isRootMets()), false, false);
             } else {
               if (!loctype.equals("URL")) {
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  "mets/amdSec/rightsMD/mdRef[@LOCTYPE=’URL’] value must be 'URL' (" + metsName + ")", false, false);
+                  Message.createErrorMessage("mets/amdSec/rightsMD/mdRef[@LOCTYPE=’URL’] value must be 'URL'", metsName,
+                    isRootMets()),
+                  false, false);
               }
             }
           }
@@ -1096,44 +1142,45 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
    * value “simple”. Value list is maintained by the xlink standard.
    */
   private ReporterDetails validateCSIP50() throws IOException {
-    HashMap<String,String> amdSecTypes = new HashMap<>();
-    MetsHandler amdSecHandler = new MetsHandler("rightsMD","mdRef",amdSecTypes);
+    HashMap<String, String> amdSecTypes = new HashMap<>();
+    MetsHandler amdSecHandler = new MetsHandler("rightsMD", "mdRef", amdSecTypes);
     MetsParser metsParser = new MetsParser();
     InputStream metsStream = null;
-    if(!amdSec.isEmpty()) {
+    if (!amdSec.isEmpty()) {
       if (isZipFileFlag()) {
         if (isRootMets()) {
           metsStream = zipManager.getMetsRootInputStream(getEARKSIPpath());
         } else {
           metsStream = zipManager.getZipInputStream(getEARKSIPpath(), metsPath + "METS.xml");
         }
-      }
-      else{
-        if(isRootMets()){
+      } else {
+        if (isRootMets()) {
           metsStream = folderManager.getMetsRootInputStream(getEARKSIPpath());
-        }
-        else{
+        } else {
           metsStream = folderManager.getInputStream(Paths.get(metsPath).resolve("METS.xml"));
         }
       }
     }
-    if(metsStream != null){
-      metsParser.parse(amdSecHandler,metsStream);
+    if (metsStream != null) {
+      metsParser.parse(amdSecHandler, metsStream);
     }
     for (AmdSecType a : amdSec) {
       List<MdSecType> rigthsMD = a.getRightsMD();
-      if (rigthsMD != null) {
+      if (rigthsMD != null && !rigthsMD.isEmpty()) {
         for (MdSecType rmd : rigthsMD) {
           MdSecType.MdRef mdRef = rmd.getMdRef();
           if (mdRef != null) {
             if (amdSecTypes.get(mdRef.getID()) == null) {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "mets/amdSec/rightsMD/mdRef[@xlink:type=’simple’] can't be null (" + metsName + ")", false, false);
+                Message.createErrorMessage("mets/amdSec/rightsMD/mdRef[@xlink:type=’simple’] can't be null ", metsName,
+                  isRootMets()),
+                false, false);
             } else {
               if (!amdSecTypes.get(mdRef.getID()).equals("simple")) {
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  "mets/amdSec/rightsMD/mdRef[@xlink:type=’simple’] value isn't 'simple' (" + metsName + ")", false,
-                  false);
+                  Message.createErrorMessage("mets/amdSec/rightsMD/mdRef[@xlink:type=’simple’] value isn't 'simple'",
+                    metsName, isRootMets()),
+                  false, false);
               }
             }
           }
@@ -1150,20 +1197,30 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
   private ReporterDetails validateCSIP51() throws IOException {
     for (AmdSecType a : amdSec) {
       List<MdSecType> rigthsMD = a.getRightsMD();
-      if (rigthsMD != null) {
+      if (rigthsMD != null && !rigthsMD.isEmpty()) {
         for (MdSecType rmd : rigthsMD) {
           MdSecType.MdRef mdRef = rmd.getMdRef();
           if (mdRef != null) {
             String href = URLDecoder.decode(mdRef.getHref(), UTF_8);
+            StringBuilder message = new StringBuilder();
             if (isZipFileFlag()) {
-              if (!zipManager.checkPathExists(getEARKSIPpath(), href)) {
+              StringBuilder filePath = new StringBuilder();
+              if (isRootMets()) {
+                filePath.append(mets.getOBJID()).append("/").append(href);
+              } else {
+                filePath.append(metsPath).append(href);
+              }
+              if (!zipManager.checkPathExists(getEARKSIPpath(), filePath.toString())) {
+                message.append("mets/amdSec/rightsMD/mdRef/@xlink:href ").append(filePath).append(" doesn't exists");
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  "mets/amdSec/rightsMD/mdRef/@xlink:href path doesn't exists (" + metsName + ")", false, false);
+                  Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
               }
             } else {
               if (!folderManager.checkPathExists(Paths.get(metsPath).resolve(href))) {
+                message.append("mets/amdSec/rightsMD/mdRef/@xlink:href ").append(Paths.get(metsPath).resolve(href))
+                  .append(" doesn't exists");
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  "mets/amdSec/rightsMD/mdRef/@xlink:href path doesn't exists (" + metsName + ")", false, false);
+                  Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
               }
             }
           }
@@ -1184,18 +1241,22 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     }
     for (AmdSecType a : amdSec) {
       List<MdSecType> rigthsMD = a.getRightsMD();
-      if (rigthsMD != null) {
+      if (rigthsMD != null && !rigthsMD.isEmpty()) {
         for (MdSecType rmd : rigthsMD) {
           MdSecType.MdRef mdRef = rmd.getMdRef();
           if (mdRef != null) {
             String mdType = mdRef.getMDTYPE();
             if (mdType == null) {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "mets/amdSec/rightsMD/mdRef/@MDTYPE can't be null (" + metsName + ")", false, false);
+                Message.createErrorMessage("mets/amdSec/rightsMD/mdRef/@MDTYPE can't be null", metsName, isRootMets()),
+                false, false);
             } else {
               if (!tmp.contains(mdType)) {
+                StringBuilder message = new StringBuilder();
+                message.append("Value ").append(mdType)
+                  .append(" for mets/amdSec/rightsMD/mdRef/@MDTYPE value isn't valid");
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  "mets/amdSec/rightsMD/mdRef/@MDTYPE value isn't valid (" + metsName + ")", false, false);
+                  Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
               }
             }
           }
@@ -1212,19 +1273,21 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
   private ReporterDetails validateCSIP53() {
     for (AmdSecType a : amdSec) {
       List<MdSecType> rigthsMD = a.getRightsMD();
-      if (rigthsMD != null) {
+      if (rigthsMD != null && !rigthsMD.isEmpty()) {
         for (MdSecType rmd : rigthsMD) {
           MdSecType.MdRef mdRef = rmd.getMdRef();
           if (mdRef != null) {
             String mimeType = mdRef.getMIMETYPE();
             if (mimeType == null) {
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "mets/amdSec/rightsMD/mdRef/@MIMETYPE can't be null (" + metsName + ")", false, false);
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+                "mets/amdSec/rightsMD/mdRef/@MIMETYPE can't be null", metsName, isRootMets()), false, false);
             } else {
               if (!ianaMediaTypes.contains(mimeType)) {
+                StringBuilder message = new StringBuilder();
+                message.append("Value ").append(mimeType)
+                  .append("mets/amdSec/rightsMD/mdRef/@MIMETYPE value isn't valid");
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  "mets/amdSec/rightsMD/mdRef/@MIMETYPE value isn't valid. See IANA Media Types (" + metsName + ")",
-                  false, false);
+                  Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
               }
             }
           }
@@ -1240,7 +1303,7 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
   private ReporterDetails validateCSIP54() throws IOException {
     for (AmdSecType a : amdSec) {
       List<MdSecType> rigthsMD = a.getRightsMD();
-      if (rigthsMD != null) {
+      if (rigthsMD != null && !rigthsMD.isEmpty()) {
         for (MdSecType rmd : rigthsMD) {
           MdSecType.MdRef mdRef = rmd.getMdRef();
           if (mdRef != null) {
@@ -1248,26 +1311,37 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
             Long size = mdRef.getSIZE();
             if (size == null) {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "mets/amdSec/rightsMD/mdRef/@SIZE can't be null (" + metsName + ")", false, false);
+                Message.createErrorMessage("mets/amdSec/rightsMD/mdRef/@SIZE can't be null", metsName, isRootMets()),
+                false, false);
             } else {
+              StringBuilder message = new StringBuilder();
               if (isZipFileFlag()) {
-                if (!zipManager.verifySize(getEARKSIPpath(), href, size)) {
+                StringBuilder filePath = new StringBuilder();
+                if (isRootMets()) {
+                  filePath.append(mets.getOBJID()).append("/").append(href);
+                } else {
+                  filePath.append(metsPath).append(href);
+                }
+                if (!zipManager.verifySize(getEARKSIPpath(), filePath.toString(), size)) {
+                  message.append("mets/dmdSec/mdRef/@SIZE ").append(size).append(" and size of file (").append(filePath)
+                    .append(") isn't equal");
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    METS_AMD_SEC_RIGHTS_MD_MD_REF_SIZE_DOESN_T_MATCH_WITH_THE_SIZE_OF_FILE + metsName + ")", false,
-                    false);
+                    Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
                 }
               } else {
                 if (isRootMets()) {
                   if (!folderManager.verifySize(getEARKSIPpath().resolve(href), size)) {
+                    message.append("mets/dmdSec/mdRef/@SIZE ").append(size).append(" and size of file (")
+                      .append(getEARKSIPpath().resolve(href)).append(") isn't equal");
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      METS_AMD_SEC_RIGHTS_MD_MD_REF_SIZE_DOESN_T_MATCH_WITH_THE_SIZE_OF_FILE + metsName + ")", false,
-                      false);
+                      Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
                   }
                 } else {
                   if (!folderManager.verifySize(Paths.get(metsPath).resolve(href), size)) {
+                    message.append("mets/dmdSec/mdRef/@SIZE ").append(size).append(" and size of file (")
+                      .append(Paths.get(metsPath).resolve(href)).append(") isn't equal");
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      METS_AMD_SEC_RIGHTS_MD_MD_REF_SIZE_DOESN_T_MATCH_WITH_THE_SIZE_OF_FILE + metsName + ")", false,
-                      false);
+                      Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
                   }
                 }
               }
@@ -1285,12 +1359,13 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
   private ReporterDetails validateCSIP55() {
     for (AmdSecType a : amdSec) {
       List<MdSecType> rigthsMD = a.getRightsMD();
-      if (rigthsMD != null) {
+      if (rigthsMD != null && !rigthsMD.isEmpty()) {
         for (MdSecType rmd : rigthsMD) {
           MdSecType.MdRef mdRef = rmd.getMdRef();
           if (mdRef.getCREATED() == null) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "mets/amdSec/rightsMD/mdRef/@CREATED can't be null (" + metsName + ")", false, false);
+              Message.createErrorMessage("mets/amdSec/rightsMD/mdRef/@CREATED can't be null", metsName, isRootMets()),
+              false, false);
           }
         }
       }
@@ -1308,37 +1383,47 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     }
     for (AmdSecType a : amdSec) {
       List<MdSecType> rigthsMD = a.getRightsMD();
-      if (rigthsMD != null) {
+      if (rigthsMD != null && !rigthsMD.isEmpty()) {
         for (MdSecType rmd : rigthsMD) {
           MdSecType.MdRef mdRef = rmd.getMdRef();
           String checksumType = mdRef.getCHECKSUMTYPE();
           if (checksumType == null) {
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "mets/amdSec/rightsMD/mdRef/@CHECKSUMTYPE can't be null (" + metsName + ")", false, false);
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+              "mets/amdSec/rightsMD/mdRef/@CHECKSUMTYPE can't be null", metsName, isRootMets()), false, false);
           } else {
             if (!tmp.contains(checksumType)) {
+              StringBuilder message = new StringBuilder();
+              message.append("Value ").append(checksumType)
+                .append(" for mets/amdSec/rightsMD/mdRef/@CHECKSUMTYPE value isn't valid");
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "mets/amdSec/rightsMD/mdRef/@CHECKSUMTYPE value isn't valid (" + metsName + ")", false, false);
+                Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
             } else {
               String checksum = mdRef.getCHECKSUM();
               if (checksum == null) {
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                   "mets/amdSec/rightsMD/mdRef/@CHECKSUM can't be null (" + metsName + ")", false, false);
               } else {
-                String file = URLDecoder.decode(mdRef.getHref(), UTF_8);
+                String href = URLDecoder.decode(mdRef.getHref(), UTF_8);
+                StringBuilder message = new StringBuilder();
                 if (isZipFileFlag()) {
-                  if (!zipManager.verifyChecksum(getEARKSIPpath(), file, checksumType, checksum)) {
+                  StringBuilder filePath = new StringBuilder();
+                  if (isRootMets()) {
+                    filePath.append(mets.getOBJID()).append("/").append(href);
+                  } else {
+                    filePath.append(metsPath).append(href);
+                  }
+                  if (!zipManager.verifyChecksum(getEARKSIPpath(), filePath.toString(), checksumType, checksum)) {
+                    message.append("mets/dmdSec/mdRef/@CHECKSUM ").append(checksum).append(" and checksum of file (")
+                      .append(Paths.get(metsPath).resolve(filePath.toString())).append(") isn't equal");
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      "mets/amdSec/rightsMD/mdRef/@CHECKSUM value doesn't match with the checksum of file (" + metsName
-                        + ")",
-                      false, false);
+                      Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
                   }
                 } else {
-                  if (!folderManager.verifyChecksum(Paths.get(metsPath).resolve(file), checksumType, checksum)) {
+                  if (!folderManager.verifyChecksum(Paths.get(metsPath).resolve(href), checksumType, checksum)) {
+                    message.append("mets/dmdSec/mdRef/@CHECKSUM ").append(checksum).append(" and checksum of file (")
+                      .append(Paths.get(metsPath).resolve(Paths.get(metsPath).resolve(href))).append(") isn't equal");
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      "mets/amdSec/rightsMD/mdRef/@CHECKSUM value doesn't match with the checksum of file (" + metsName
-                        + ")",
-                      false, false);
+                      Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
                   }
                 }
               }
@@ -1362,17 +1447,20 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
     }
     for (AmdSecType a : amdSec) {
       List<MdSecType> rigthsMD = a.getRightsMD();
-      if (rigthsMD != null) {
+      if (rigthsMD != null && !rigthsMD.isEmpty()) {
         for (MdSecType rmd : rigthsMD) {
           MdSecType.MdRef mdRef = rmd.getMdRef();
           String checksumType = mdRef.getCHECKSUMTYPE();
           if (checksumType == null) {
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "mets/amdSec/rightsMD/mdRef/@CHECKSUMTYPE can't be null (" + metsName + ")", false, false);
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+              "mets/amdSec/rightsMD/mdRef/@CHECKSUMTYPE can't be null", metsName, isRootMets()), false, false);
           } else {
             if (!tmp.contains(checksumType)) {
+              StringBuilder message = new StringBuilder();
+              message.append("Value ").append(checksumType)
+                .append("mets/amdSec/rightsMD/mdRef/@CHECKSUMTYPE isn't valid");
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "mets/amdSec/rightsMD/mdRef/@CHECKSUMTYPE value isn't valid (" + metsName + ")", false, false);
+                Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
             }
           }
         }

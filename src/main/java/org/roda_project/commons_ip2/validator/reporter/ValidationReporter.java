@@ -118,7 +118,7 @@ public class ValidationReporter {
 
         outputStream = new BufferedOutputStream(new FileOutputStream(outputFile.toFile()));
         JsonFactory jsonFactory = new JsonFactory();
-        jsonGenerator = jsonFactory.createGenerator(outputStream, JsonEncoding.UTF8);
+        jsonGenerator = jsonFactory.createGenerator(outputStream, JsonEncoding.UTF8).useDefaultPrettyPrinter();
         jsonGenerator.writeStartObject();
         // header object
         jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_HEADER_KEY_HEADER);
@@ -157,8 +157,7 @@ public class ValidationReporter {
         jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_VALIDATION);
         jsonGenerator.writeStartArray();
       } catch (IOException e) {
-        LOGGER.error(
-          "Could not create an output stream for file '" + outputFile.normalize().toAbsolutePath() + "'", e);
+        LOGGER.error("Could not create an output stream for file '" + outputFile.normalize().toAbsolutePath() + "'", e);
       }
     }
   }
@@ -169,6 +168,7 @@ public class ValidationReporter {
       jsonGenerator.writeStartObject();
       jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_SPECIFICATION, specification);
       jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID, id);
+      String level;
       if (id.contains("C")) {
         jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_NAME,
           ConstantsCSIPspec.getSpecificationName(id));
@@ -180,6 +180,7 @@ public class ValidationReporter {
           ConstantsCSIPspec.getSpecificationCardinality(id));
         jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LEVEL,
           ConstantsCSIPspec.getSpecificationLevel(id));
+        level = ConstantsCSIPspec.getSpecificationLevel(id);
       } else {
         jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_NAME,
           ConstantsSIPspec.getSpecificationName(id));
@@ -191,6 +192,7 @@ public class ValidationReporter {
           ConstantsSIPspec.getSpecificationCardinality(id));
         jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LEVEL,
           ConstantsSIPspec.getSpecificationLevel(id));
+        level = ConstantsSIPspec.getSpecificationLevel(id);
       }
       jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING);
       jsonGenerator.writeStartObject();
@@ -198,16 +200,34 @@ public class ValidationReporter {
       if (!detail.equals("")) {
         jsonGenerator.writeObjectField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_DETAIL, detail);
       }
-      jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_ISSUES);
-      jsonGenerator.writeStartArray();
-      for (String issue : issues) {
-        jsonGenerator.writeString(issue);
+      if (!level.equals("MAY")) {
+        jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_ISSUES);
+        jsonGenerator.writeStartArray();
+        for (String issue : issues) {
+          jsonGenerator.writeString(issue);
+        }
+        jsonGenerator.writeEndArray();
+        jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_NOTES);
+        jsonGenerator.writeStartArray();
+        jsonGenerator.writeEndArray();
       }
-      jsonGenerator.writeEndArray();
+      else{
+        jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_ISSUES);
+        jsonGenerator.writeStartArray();
+        jsonGenerator.writeEndArray();
+        jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_NOTES);
+        jsonGenerator.writeStartArray();
+        for (String issue : issues) {
+          jsonGenerator.writeString(issue);
+        }
+        jsonGenerator.writeEndArray();
+
+      }
+
       jsonGenerator.writeEndObject();
       jsonGenerator.writeEndObject();
     } catch (IOException e) {
-      LOGGER.error("Could not write specification " + specification + "result in file '", e);
+      LOGGER.error("Could not write specification " + specification + "result in file ", e);
     }
   }
 
@@ -250,36 +270,47 @@ public class ValidationReporter {
       ReporterDetails details = entry.getValue();
       List<String> issues = details.getIssues();
       String detail = details.getDetail();
+      String level;
+      if (details.getSpecification().contains("C")) {
+        level = ConstantsCSIPspec.getSpecificationLevel(entry.getKey());
+      } else {
+        level = ConstantsSIPspec.getSpecificationLevel(entry.getKey());
+      }
       if (details.isSkipped()) {
         componentValidationResult(details.getSpecification(), entry.getKey(),
           Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_SKIPPED, issues, detail);
         skipped++;
       } else {
         if (details.isValid()) {
-          componentValidationResult(details.getSpecification(), entry.getKey(),
-            Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_PASSED, issues, detail);
-          success++;
-        } else {
-          componentValidationResult(details.getSpecification(), entry.getKey(),
-            Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_FAILED, issues, detail);
-          if (details.getSpecification().contains("C")) {
-            if (ConstantsCSIPspec.getSpecificationLevel(entry.getKey()).equals("MUST")) {
-              errors++;
+          if (!issues.isEmpty()) {
+            if (level.equals("MAY")) {
+              componentValidationResult(details.getSpecification(), entry.getKey(),
+                Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_PASSED, issues, detail);
+              notes++;
             } else {
-              if (ConstantsCSIPspec.getSpecificationLevel(entry.getKey()).equals("SHOULD")) {
-                warnings++;
-              } else {
-                notes++;
-              }
+              componentValidationResult(details.getSpecification(), entry.getKey(),
+                Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_PASSED, issues, detail);
+              success++;
             }
           } else {
-            if (ConstantsSIPspec.getSpecificationLevel(entry.getKey()).equals("MUST")) {
+            componentValidationResult(details.getSpecification(), entry.getKey(),
+              Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_PASSED, issues, detail);
+            success++;
+          }
+        } else {
+          if(level.equals("MAY")) {
+            componentValidationResult(details.getSpecification(), entry.getKey(),
+                    Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_PASSED, issues, detail);
+            notes++;
+          }
+          else {
+            componentValidationResult(details.getSpecification(), entry.getKey(),
+                    Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_FAILED, issues, detail);
+            if (level.equals("MUST")) {
               errors++;
             } else {
-              if (ConstantsSIPspec.getSpecificationLevel(entry.getKey()).equals("SHOULD")) {
+              if (level.equals("SHOULD")) {
                 warnings++;
-              } else {
-                notes++;
               }
             }
           }
