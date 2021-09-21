@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip2.validator.common.ControlledVocabularyParser;
@@ -15,6 +18,7 @@ import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.utils.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
 /**
  * @author João Gomes <jgomes@keep.pt>
@@ -22,93 +26,64 @@ import org.slf4j.LoggerFactory;
 public class MetsComponentValidator extends ValidatorComponentImpl {
   private static final Logger LOGGER = LoggerFactory.getLogger(MetsComponentValidator.class);
 
-  private final String MODULE_NAME;
+  private final String moduleName;
 
   private List<String> contentCategory;
   private List<String> contentInformationTypesList;
 
-  public void setContentCategory(List<String> contentCategory) {
-    this.contentCategory = new ArrayList<String>(contentCategory);
-  }
+  public MetsComponentValidator() throws IOException, ParserConfigurationException, SAXException {
+    this.moduleName = Constants.CSIP_MODULE_NAME_2;
 
-  public void setContentInformationTypesList(List<String> contentInformationTypesList) {
-    this.contentInformationTypesList = new ArrayList<String>(contentInformationTypesList);
-  }
-
-  public MetsComponentValidator(String moduleName) {
-    this.MODULE_NAME = moduleName;
-
-  }
-
-  public void initValidationObjects() {
     this.contentCategory = new ArrayList<>();
-    ControlledVocabularyParser controlledVocabularyParser = new ControlledVocabularyParser(
-      Constants.PATH_RESOURCES_CSIP_VOCABULARY_CONTENT_CATEGORY, contentCategory);
-    controlledVocabularyParser.parse();
-    setContentCategory(controlledVocabularyParser.getData());
-
-    this.contentInformationTypesList = new ArrayList<>();
-    controlledVocabularyParser = new ControlledVocabularyParser(
-      Constants.PATH_RESOURCES_CSIP_VOCABULARY_CONTENT_INFORMATION_TYPE, contentInformationTypesList);
-    controlledVocabularyParser.parse();
-    setContentInformationTypesList(controlledVocabularyParser.getData());
+    this.contentCategory = ControlledVocabularyParser.parse(Constants.PATH_RESOURCES_CSIP_VOCABULARY_CONTENT_CATEGORY);
+    this.contentInformationTypesList = ControlledVocabularyParser
+      .parse(Constants.PATH_RESOURCES_CSIP_VOCABULARY_CONTENT_INFORMATION_TYPE);
   }
 
   @Override
-  public void validate() throws IOException {
-    ReporterDetails csip;
+  public Map<String,ReporterDetails> validate() throws IOException {
+    /* CSIP1 */
+    notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID);
+    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID,
+      validateCSIP1().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
-    initValidationObjects();
-    /* CSIP1 Validation */
-    validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID);
-    csip = validateCSIP1();
-    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID, csip);
+    /* CSIP2 */
+    notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP2_ID);
+    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP2_ID,
+      validateCSIP2().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
-    /* CSIP2 Validation */
-    validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP2_ID);
-    csip = validateCSIP2();
-    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP2_ID, csip);
+    /* CSIP3 */
+    notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP3_ID);
+    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP3_ID,
+      validateCSIP3().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
-    /* CSIP3 Validation */
-    validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP3_ID);
-    csip = validateCSIP3();
-    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP3_ID, csip);
+    /* CSIP4 */
+    notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP4_ID);
+    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP4_ID,
+      validateCSIP4().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
-    /* CSIP4 Validation */
-    validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP4_ID);
-    csip = validateCSIP4();
-    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP4_ID, csip);
+    /* CSIP5 */
+    notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP5_ID);
+    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP5_ID,
+      validateCSIP5().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
-    /* CSIP5 Validation */
-    validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP5_ID);
-    csip = validateCSIP5();
-    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP5_ID, csip);
-
-    /* CSIP6 Validation */
-    validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP6_ID);
-    csip = validateCSIP6();
-    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP6_ID, csip);
+    /* CSIP6 */
+    notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP6_ID);
+    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP6_ID,
+      validateCSIP6().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
     /* SIP1 */
-    validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP1_ID);
-    csip = validateSIP1();
-    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP1_ID, csip);
+    notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP1_ID);
+    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP1_ID,
+      validateSIP1().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
     /* SIP2 */
-    validationInit(MODULE_NAME, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP2_ID);
-    csip = validateSIP2();
-    csip.setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP2_ID, csip);
+    notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP2_ID);
+    addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP2_ID,
+      validateSIP2().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
-    observer.notifyFinishModule(MODULE_NAME);
-    cleanValidationObjects();
+    notifyObserversFinishModule(moduleName);
+    return getResults();
   }
 
   /*
@@ -120,25 +95,26 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
    */
   private ReporterDetails validateCSIP1() throws IOException {
     ReporterDetails details = new ReporterDetails();
-    String OBJID = mets.getOBJID();
-    if (OBJID == null) {
+    String objid = mets.getOBJID();
+    if (objid == null) {
       details.addIssue(
-        Message.createErrorMessage("mets/@OBJID attribute is mandatory, can't be null", metsName, isRootMets()));
+        Message.createErrorMessage("mets/@OBJID can't be null in %1$s the value is null.", metsName, isRootMets()));
       details.setValid(false);
     } else {
-      boolean exist = false;
+      boolean exist;
       if (isZipFileFlag()) {
         if (isRootMets()) {
-          exist = zipManager.checkRootFolderName(path, OBJID);
+          exist = zipManager.checkRootFolderName(path, objid);
         } else {
-          exist = zipManager.checkSubMetsFolder(path, OBJID);
+          exist = zipManager.checkSubMetsFolder(path, objid);
         }
       } else {
-        exist = folderManager.checkRootFolderName(Paths.get(metsPath), OBJID);
+        exist = folderManager.checkRootFolderName(Paths.get(metsPath), objid);
       }
       if (!exist) {
         details.addIssue(Message.createErrorMessage(
-          "The folder containing the METS.xml file must have the same name mets/@OBJID", metsName, isRootMets()));
+          "The folder containing the METS.xml file must have the same name mets/@OBJID, See %1$s", metsName,
+          isRootMets()));
         details.setValid(false);
       }
     }
@@ -156,15 +132,15 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
    * produced.See also: Content Category
    */
   private ReporterDetails validateCSIP2() {
-    String TYPE = mets.getTYPE();
-    if (StringUtils.isBlank(TYPE)) {
+    String type = mets.getTYPE();
+    if (StringUtils.isBlank(type)) {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-        Message.createErrorMessage("mets/@TYPE attribute is mandatory, can't be null", metsName, isRootMets()), false,
-        false);
+        Message.createErrorMessage("mets/@TYPE can't be null, in %1$s the value is null", metsName, isRootMets()),
+        false, false);
     } else {
-      if (!contentCategory.contains(TYPE)) {
+      if (!contentCategory.contains(type)) {
         StringBuilder message = new StringBuilder();
-        message.append("Value ").append(TYPE).append(" is not valid.");
+        message.append("Value ").append(type).append(" is not valid in %1$s.");
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
           Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
       }
@@ -179,13 +155,14 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
    */
   private ReporterDetails validateCSIP3() {
     ReporterDetails details = new ReporterDetails();
-    String TYPE = mets.getTYPE();
+    String type = mets.getTYPE();
     String otherType = mets.getOTHERTYPE();
-    if (TYPE != null) {
-      if (TYPE.equals("OTHER") && (otherType == null || otherType.equals(""))) {
+    if (type != null) {
+      if (type.equals("OTHER") && (otherType == null || otherType.equals(""))) {
         details.setValid(false);
         details.addIssue(Message.createErrorMessage(
-          "When mets/@type have the value OTHER  mets/@csip:OTHERTYPE can't be null or empty", metsName, isRootMets()));
+          "When mets/@type have the value OTHER mets/@csip:OTHERTYPE can't be null or empty (%1$s)", metsName,
+          isRootMets()));
       }
     }
     return details;
@@ -206,7 +183,7 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
       if (!contentInformationTypesList.contains(ContentInformationType)) {
         StringBuilder message = new StringBuilder();
         message.append("Value ").append(ContentInformationType)
-          .append(" for mets/@csip:CONTENTINFORMATIONTYPE is not valid.");
+          .append(" in %1$s for mets/@csip:CONTENTINFORMATIONTYPE is not valid.");
         details.setValid(false);
         details.addIssue(Message.createErrorMessage(message.toString(), metsName, isRootMets()));
       }
@@ -221,19 +198,19 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
    * type.
    */
   private ReporterDetails validateCSIP5() {
-    ReporterDetails details = new ReporterDetails();
-    String ContentInformationType = mets.getCONTENTINFORMATIONTYPE();
-    String OtherContentInformationType = mets.getOTHERCONTENTINFORMATIONTYPE();
-    if (ContentInformationType != null) {
-      if (ContentInformationType.equals("OTHER")
-        && (OtherContentInformationType == null || OtherContentInformationType.equals(""))) {
-        details.setValid(true);
-        details.addIssue(Message.createErrorMessage(
-          "When mets/@csip:CONTENTINFORMATIONTYPE have the value OTHER  mets/@csip:OTHERCONTENTINFORMATIONTYPE can't be null or empty",
-          metsName, isRootMets()));
-      }
+    String contentInformationType = mets.getCONTENTINFORMATIONTYPE();
+    String otherContentInformationType = mets.getOTHERCONTENTINFORMATIONTYPE();
+    if (contentInformationType == null) {
+      return new ReporterDetails();
     }
-    return details;
+    if (contentInformationType.equals("OTHER")
+      && (otherContentInformationType == null || otherContentInformationType.equals(""))) {
+      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+        "When mets/@csip:CONTENTINFORMATIONTYPE have the value OTHER  mets/@csip:OTHERCONTENTINFORMATIONTYPE can't be null or empty (%1$s)",
+        metsName, isRootMets()), false, false);
+    }
+    return new ReporterDetails();
+
   }
 
   /*
@@ -245,8 +222,8 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     String profile = mets.getPROFILE();
     if (profile == null || profile.equals("")) {
       details.setValid(false);
-      details.addIssue(Message.createErrorMessage("mets/@PROFILE attribute is mandatory, can't be null or empty",
-        metsName, isRootMets()));
+      details.addIssue(Message.createErrorMessage(
+        "mets/@PROFILE can't be null or empty, in %1$s the value is null or empty", metsName, isRootMets()));
     }
     return details;
   }
@@ -259,7 +236,7 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     String label = mets.getLABEL();
     if (label == null) {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
-        Message.createErrorMessage("Doesn't have an mets/@LABEL", metsName, isRootMets()), false, false);
+        Message.createErrorMessage("Doesn't have an mets/@LABEL in %1$s", metsName, isRootMets()), false, false);
     }
     return new ReporterDetails();
   }
@@ -274,23 +251,15 @@ public class MetsComponentValidator extends ValidatorComponentImpl {
     if (profile != null) {
       if (!profile.equals(profileValue)) {
         StringBuilder message = new StringBuilder();
-        message.append("mets/@PROFILE value isn't ").append(message);
+        message.append("mets/@PROFILE value isn't ").append(profileValue).append(" %1$s");
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
           Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
       }
     } else {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
-        Message.createErrorMessage("mets/@PROFILE can't be null", metsName, isRootMets()), false, false);
+        Message.createErrorMessage("mets/@PROFILE can't be null, in %1$s is null", metsName, isRootMets()), false,
+        false);
     }
     return new ReporterDetails();
-  }
-
-  /*
-   * Method for cleaning all the objects used in the validation
-   */
-
-  private void cleanValidationObjects() {
-    this.contentCategory.clear();
-    this.contentInformationTypesList.clear();
   }
 }

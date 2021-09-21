@@ -1,5 +1,9 @@
 package org.roda_project.commons_ip2.validator.reporter;
 
+import org.roda_project.commons_ip2.validator.component.fileComponent.StructureComponentValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +11,7 @@ import java.util.List;
  * @author João Gomes <jgomes@keep.pt>
  */
 public class ReporterDetails {
+  private static final Logger LOGGER = LoggerFactory.getLogger(ReporterDetails.class);
   private String detail;
   private boolean valid;
   private final List<String> issues;
@@ -43,8 +48,9 @@ public class ReporterDetails {
     return specification;
   }
 
-  public void setSpecification(String specification) {
+  public ReporterDetails setSpecification(String specification) {
     this.specification = specification;
+    return this;
   }
 
   public List<String> getIssues() {
@@ -68,15 +74,13 @@ public class ReporterDetails {
   }
 
   public void addIssue(String issue) {
-    issues.add(issue);
+    LOGGER.debug("issue {}",issue);
+    this.issues.add(issue);
   }
 
-  public int getErrors() {
-    return this.errors;
-  }
-
-  public void countErrors() {
-    this.errors++;
+  public void addIssues(List<String> issues) {
+    LOGGER.debug("issues {}",issues);
+    this.issues.addAll(issues);
   }
 
 }

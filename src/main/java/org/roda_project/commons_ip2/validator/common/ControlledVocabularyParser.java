@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -20,33 +19,14 @@ import org.xml.sax.SAXException;
  */
 public class ControlledVocabularyParser {
   private static final Logger LOGGER = LoggerFactory.getLogger(ControlledVocabularyParser.class);
-  private final List<String> data;
-  private final String path;
 
-  public ControlledVocabularyParser(String path, List<String> data) {
-    this.path = path;
-    this.data = data;
-  }
-
-  public List<String> getData() {
-    return data;
-  }
-
-  public List<String> getFilteredData(String filter) {
-    List<String> newData = new ArrayList<>();
-    newData = data.stream().filter(d -> !d.equals(filter)).collect(Collectors.toList());
-    return newData;
-  }
-
-  public void parse() {
+  public static List<String> parse(String resourcePath) throws IOException, SAXException, ParserConfigurationException {
     SAXParserFactory factory = SAXParserFactory.newInstance();
-    try {
+    List<String> data = new ArrayList<>();
       SAXParser saxParser = factory.newSAXParser();
       ControlledVocabularyHandler controlledVocabularyHandler = new ControlledVocabularyHandler("Term", data);
-      InputStream stream = getClass().getClassLoader().getSystemResourceAsStream(path);
+      InputStream stream = ClassLoader.getSystemResourceAsStream(resourcePath);
       saxParser.parse(stream, controlledVocabularyHandler);
-    } catch (ParserConfigurationException | SAXException | IOException e) {
-      LOGGER.error("Could not parse file.", e);
-    }
+      return data;
   }
 }

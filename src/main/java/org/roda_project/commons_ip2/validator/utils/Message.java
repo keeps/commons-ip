@@ -8,16 +8,6 @@ public class Message {
   private Message() { /* do nothing */ };
 
   public static String createErrorMessage(String message,String path, boolean isRootMets){
-    StringBuilder stringBuilder = new StringBuilder();
-    stringBuilder.append(message);
-    stringBuilder.append("(");
-    if(isRootMets) {
-      stringBuilder.append("Root METS.xml");
-    }
-    else{
-      stringBuilder.append(path);
-    }
-    stringBuilder.append(")");
-    return stringBuilder.toString();
+    return String.format(message, isRootMets ? "Root METS.xml" : path);
   }
 }

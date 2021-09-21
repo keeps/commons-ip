@@ -16,7 +16,12 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.roda_project.commons_ip2.validator.EARKSIPValidator;
+import org.roda_project.commons_ip2.validator.observer.ProgressValidationLoggerObserver;
 import org.roda_project.commons_ip2.validator.utils.ExitCodes;
+import org.xml.sax.SAXException;
+import sun.rmi.runtime.Log;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * @author João Gomes <jgomes@keep.pt>
@@ -78,6 +83,7 @@ public class CLI {
         } while (Files.exists(reportPath));
 
         EARKSIPValidator earksipValidator = new EARKSIPValidator(sipPath, reportPath);
+        earksipValidator.addObserver(new ProgressValidationLoggerObserver());
         earksipValidator.validate();
       }
 
@@ -85,6 +91,8 @@ public class CLI {
       return ExitCodes.EXIT_PARSE_ARG;
     } catch (DateTimeException d) {
       return ExitCodes.EXIT_CODE_INVALID_DATE_FORMAT;
+    } catch (IOException | ParserConfigurationException | SAXException e) {
+      return ExitCodes.EXIT_CANNOT_CREATE_EARKVALIDATOR_OBJECT;
     }
     return ExitCodes.EXIT_CODE_OK;
   }

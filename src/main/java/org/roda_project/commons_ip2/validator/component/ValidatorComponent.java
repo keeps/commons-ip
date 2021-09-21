@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
@@ -30,9 +31,11 @@ public interface ValidatorComponent {
 
   void setFolderManager(FolderManager folderManager);
 
-  void setObserver(ValidationObserver observer);
+  void addObserver(ValidationObserver observer);
 
-  void validate() throws IOException;
+  void removeObserver(ValidationObserver observer);
+
+  Map<String, ReporterDetails> validate() throws IOException;
 
   boolean isZipFileFlag();
 
@@ -47,8 +50,6 @@ public interface ValidatorComponent {
   void setMetsName(String name);
 
   void setMetsPath(String metsPath);
-
-  void setResults(TreeMap<String, ReporterDetails> results);
 
   void setFiles(HashMap<String, Boolean> files);
 

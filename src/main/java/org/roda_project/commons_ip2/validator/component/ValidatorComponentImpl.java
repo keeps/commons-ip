@@ -1,15 +1,17 @@
 package org.roda_project.commons_ip2.validator.component;
 
-import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
 import org.roda_project.commons_ip2.validator.common.FolderManager;
 import org.roda_project.commons_ip2.validator.common.ZipManager;
 import org.roda_project.commons_ip2.validator.constants.Constants;
+import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReporter;
@@ -24,12 +26,11 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
 
   protected Path path = null;
   private ValidationReporter reporter = null;
-  protected ValidationObserver observer = null;
   protected ZipManager zipManager = null;
   protected FolderManager folderManager = null;
   protected Mets mets = null;
   protected List<String> ids = null;
-  private TreeMap<String, ReporterDetails> results;
+  private Map<String, ReporterDetails> results = new HashMap<>();
   protected String metsName;
   protected String metsPath;
 
@@ -39,6 +40,7 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
 
   protected HashMap<String, Boolean> files = null;
   protected List<String> ianaMediaTypes = null;
+  private List<ValidationObserver> observers = new ArrayList<>();
 
   protected Path getEARKSIPpath() {
     return path;
@@ -102,8 +104,13 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
   }
 
   @Override
-  public void setObserver(ValidationObserver observer) {
-    this.observer = observer;
+  public void addObserver(ValidationObserver observer) {
+    this.observers.add(observer);
+  }
+
+  @Override
+  public void removeObserver(ValidationObserver observer) {
+    this.observers.remove(observer);
   }
 
   @Override
@@ -116,25 +123,23 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
     this.ids = ids;
   }
 
-  @Override
-  public void setResults(TreeMap<String, ReporterDetails> results) {
-    this.results = results;
-  }
 
   @Override
   public void setFiles(HashMap<String, Boolean> files) {
     this.files = files;
   }
 
-  protected void validationInit(String moduleName, String ID) {
-    observer.notifyStartValidationModule(moduleName, ID);
-    observer.notifyStartStep(ID);
+  protected void notifyObserversValidationStarted(String moduleName, String ID) {
+    for (ValidationObserver observer : observers) {
+      observer.notifyStartValidationModule(moduleName, ID);
+      observer.notifyStartStep(ID);
+    }
   }
 
-  protected void validationPathOutcomeFailed(String id, String detail) {
-    reporter.componentPathValidationResult(id, Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_FAILED,
-      detail);
-    reporter.countErrors();
+  protected void notifyObserversFinishModule(String moduleName) {
+    for (ValidationObserver observer : observers) {
+      observer.notifyFinishModule(moduleName);
+    }
   }
 
   protected void addId(String id) {
@@ -160,45 +165,34 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
     this.metsPath = metsPath;
   }
 
+  protected void addResults(ReporterDetails details, String... specifications) {
+    for (String specification : specifications) {
+      addResult(specification, details);
+    }
+  }
+
+  protected Map<String, ReporterDetails> getResults() {
+    return this.results;
+  }
+
+  protected boolean isResultValid(String specification) {
+    return results.get(specification).isValid() && !results.get(specification).isSkipped();
+  }
+
   protected void addResult(String specification, ReporterDetails details) {
     if (results.containsKey(specification)) {
-      ReporterDetails tmp = results.get(specification);
-      if (tmp.isSkipped()) {
-        if (!details.isSkipped()) {
-          if (!details.isValid()) {
-            for (String issue : details.getIssues()) {
-              tmp.addIssue(issue);
-              tmp.countErrors();
-            }
-          }
-          tmp.setSkipped(false);
-        } else {
-          for (String issue : details.getIssues()) {
-            tmp.addIssue(issue);
-          }
-        }
-      } else {
-        if (tmp.isValid()) {
-          if (!details.isValid()) {
-            tmp.setValid(details.isValid());
-            for (String issue : details.getIssues()) {
-              tmp.addIssue(issue);
-              tmp.countErrors();
-            }
-          }
-        } else {
-          if (!details.isValid()) {
-            for (String issue : details.getIssues()) {
-              tmp.addIssue(issue);
-              tmp.countErrors();
-            }
-          }
-        }
+      ReporterDetails currentResult = results.get(specification);
+      if(specification.equals(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP46_ID)) {
+        LOGGER.debug("Current result: {}",  currentResult.getIssues());
+        LOGGER.debug("Details: {}", details.getIssues());
       }
-      results.replace(specification, tmp);
+
+
+      // Merge current result with new test case validation outcome
+      currentResult.addIssues(details.getIssues());
+      currentResult.setSkipped(currentResult.isSkipped() && details.isSkipped());
+      currentResult.setValid(currentResult.isValid() && details.isValid());
     } else {
-      if (!details.isValid())
-        details.countErrors();
       results.put(specification, details);
     }
 

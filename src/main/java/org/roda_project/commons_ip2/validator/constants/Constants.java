@@ -53,6 +53,7 @@ public class Constants {
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_OUTCOME = "outcome";
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_DETAIL = "detail";
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_ISSUES = "issues";
+  public static final String VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_WARNINGS = "warnings";
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_NOTES = "notes";
   /* Report Status */
   public static final String VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_PASSED = "PASSED";

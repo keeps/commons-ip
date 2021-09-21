@@ -8,6 +8,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.UnmarshalException;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
 import org.roda_project.commons_ip2.validator.common.FolderManager;
@@ -31,10 +34,10 @@ import org.roda_project.commons_ip2.validator.component.metsrootComponent.MetsHe
 import org.roda_project.commons_ip2.validator.component.structuralMapComponent.StructuralMapComponentValidator;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
-import org.roda_project.commons_ip2.validator.observer.ProgressValidationLoggerObserver;
 import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReporter;
+import org.roda_project.commons_ip2.validator.utils.ResultsUtils;
 import org.xml.sax.SAXException;
 
 /**
@@ -43,97 +46,76 @@ import org.xml.sax.SAXException;
 
 public class EARKSIPValidator {
   private final Path earksipPath;
+  private final Path reportPath;
 
   private final ValidationReporter reporter;
   private final ZipManager zipManager;
-  private final ValidationObserver observer;
+  private final List<ValidationObserver> observers;
   private final FolderManager folderManager;
   private Mets mets;
   private final List<String> ids;
   private final TreeMap<String, ReporterDetails> results;
 
-  private List<ValidatorComponent> components;
+  private ValidatorComponent structureComponent;
+  private List<ValidatorComponent> metsComponents = new ArrayList<>();
   private HashMap<String, Boolean> files;
   private List<String> ianaMediaTypes;
 
-  public EARKSIPValidator(Path earksipPath, Path reportPath) {
+  public EARKSIPValidator(Path earksipPath, Path reportPath) throws IOException, ParserConfigurationException, SAXException {
     this.earksipPath = earksipPath.toAbsolutePath().normalize();
-    reporter = new ValidationReporter(reportPath.toAbsolutePath().normalize(), this.earksipPath);
-    zipManager = new ZipManager();
-    observer = new ProgressValidationLoggerObserver();
-    folderManager = new FolderManager();
-    ids = new ArrayList<>();
-    ianaMediaTypes = new BufferedReader(new InputStreamReader(
+    this.reportPath = reportPath.toAbsolutePath().normalize();
+
+    this.reporter = new ValidationReporter(this.reportPath, this.earksipPath);
+    this.zipManager = new ZipManager();
+    this.observers = new ArrayList<>();
+
+    this.folderManager = new FolderManager();
+    this.ids = new ArrayList<>();
+    this.ianaMediaTypes = new BufferedReader(new InputStreamReader(
       getClass().getClassLoader().getResourceAsStream(Constants.PATH_RESOURCES_CSIP_VOCABULARY_IANA_MEDIA_TYPES),
       StandardCharsets.UTF_8)).lines().collect(Collectors.toList());
-    results = new TreeMap<>((o1, o2) -> {
-      int c1;
-      int c2;
-      if (o1.contains("R") && o2.contains("R")) {
-        c1 = Integer.parseInt(o1.split("R")[1]);
-        c2 = Integer.parseInt(o2.split("R")[1]);
-        return compareInt(c1, c2);
-      } else {
-        if (o1.contains("R") && !o2.contains("R")) {
-          return -1;
-        } else {
-          if (!o1.contains("R") && o2.contains("R")) {
-            return 1;
-          } else {
-            if (o1.contains("C") && o2.contains("C")) {
-              c1 = Integer.parseInt(o1.split("P")[1]);
-              c2 = Integer.parseInt(o2.split("P")[1]);
-              return compareInt(c1, c2);
-            } else {
-              if (o1.contains("C") && !o2.contains("C")) {
-                return -1;
-              } else {
-                if (!o1.contains("C") && o2.contains("C")) {
-                  return 1;
-                } else {
-                  c1 = Integer.parseInt(o1.split("P")[1]);
-                  c2 = Integer.parseInt(o2.split("P")[1]);
-                  return compareInt(c1, c2);
-                }
-              }
-            }
-
-          }
-        }
-      }
-    });
+    this.results = new TreeMap<>(new RequirementsComparator());
+    setupStructureComponent();
     setupComponents();
   }
 
-  private void setupComponents() {
-    components = new ArrayList<>();
-    ValidatorComponent metsComponent = new MetsComponentValidator(Constants.CSIP_MODULE_NAME_1);
-    components.add(metsComponent);
-    ValidatorComponent metsHeaderComponent = new MetsHeaderComponentValidator(Constants.CSIP_MODULE_NAME_2);
-    components.add(metsHeaderComponent);
-    ValidatorComponent descriptiveMetadataComponent = new DescriptiveMetadataComponentValidator(
-      Constants.CSIP_MODULE_NAME_3);
-    components.add(descriptiveMetadataComponent);
-    ValidatorComponent administritiveMetadataComponent = new AdministritiveMetadataComponentValidator(
-      Constants.CSIP_MODULE_NAME_4);
-    components.add(administritiveMetadataComponent);
-    ValidatorComponent fileSectionComponent = new FileSectionComponentValidator(Constants.CSIP_MODULE_NAME_5);
-    components.add(fileSectionComponent);
-    ValidatorComponent structuralMapComponent = new StructuralMapComponentValidator(Constants.CSIP_MODULE_NAME_6);
-    components.add(structuralMapComponent);
+  private void setupStructureComponent() {
+    this.structureComponent = new StructureComponentValidator(earksipPath);
+    this.structureComponent.setReporter(reporter);
+    this.structureComponent.setZipManager(zipManager);
+    this.structureComponent.setFolderManager(folderManager);
+    this.structureComponent.setEARKSIPpath(earksipPath);
+  }
+
+  private void setupComponents() throws IOException, ParserConfigurationException, SAXException {
+    this.metsComponents.add(new MetsComponentValidator());
+    this.metsComponents.add(new MetsHeaderComponentValidator());
+    this.metsComponents.add(new DescriptiveMetadataComponentValidator());
+    this.metsComponents.add(new AdministritiveMetadataComponentValidator());
+    this.metsComponents.add(new FileSectionComponentValidator());
+    this.metsComponents.add(new StructuralMapComponentValidator());
+  }
+
+  public void addObserver(ValidationObserver observer) {
+    observers.add(observer);
+    structureComponent.addObserver(observer);
+    metsComponents.forEach(c -> c.addObserver(observer));
+  }
+
+  public void removeObserver(ValidationObserver observer) {
+    observers.remove(observer);
+
+
+    // structureComponent.setObserver(observer);
+    // metsComponents.forEach(c -> c.setObserver(observer));
   }
 
   public boolean validate() {
-    observer.notifyValidationStart();
-    ValidatorComponent structureComponent = new StructureComponentValidator(Constants.CSIP_MODULE_NAME_0, earksipPath);
-    structureComponent.setObserver(observer);
-    structureComponent.setReporter(reporter);
-    structureComponent.setZipManager(zipManager);
-    structureComponent.setFolderManager(folderManager);
-    structureComponent.setEARKSIPpath(earksipPath);
-    structureComponent.setResults(results);
+    observers.forEach(ValidationObserver::notifyValidationStart);
     try {
-      structureComponent.validate();
+      Map<String, ReporterDetails> structureValidationResults = structureComponent.validate();
+      results.putAll(structureValidationResults);
+
       if (validFileComponent()) {
         if (!ianaMediaTypes.contains("text/plain")) {
           ianaMediaTypes.add("text/plain");
@@ -182,10 +164,9 @@ public class EARKSIPValidator {
       } else {
         reporter.componentValidationFinish(Constants.VALIDATION_REPORT_SPECIFICATION_RESULT_VALID);
       }
-      observer.notifyIndicators(reporter.getErrors(), reporter.getSuccess(), reporter.getWarnings(),
-        reporter.getNotes(), reporter.getSkipped());
+      notifyIndicatorsObservers();
       reporter.close();
-      observer.notifyFinishValidation();
+      observers.forEach(ValidationObserver::notifyFinishValidation);
 
     } catch (IOException | JAXBException | SAXException e) {
       String message;
@@ -201,17 +182,16 @@ public class EARKSIPValidator {
 
       reporter.validationResults(results);
       reporter.componentValidationFinish(Constants.VALIDATION_REPORT_SPECIFICATION_RESULT_INVALID);
-      observer.notifyIndicators(reporter.getErrors(), reporter.getSuccess(), reporter.getWarnings(),
-        reporter.getNotes(), reporter.getSkipped());
+      observers.forEach(ValidationObserver::notifyValidationStart);
+      notifyIndicatorsObservers();
       reporter.close();
-      observer.notifyFinishValidation();
+      observers.forEach(ValidationObserver::notifyFinishValidation);
     }
     return reporter.getErrors() == 0;
   }
 
   public void validateComponents(boolean isZip, String key, boolean isRootMets) throws IOException {
-    for (ValidatorComponent component : components) {
-      component.setObserver(observer);
+    for (ValidatorComponent component : metsComponents) {
       component.setReporter(reporter);
       component.setZipManager(zipManager);
       component.setFolderManager(folderManager);
@@ -234,9 +214,8 @@ public class EARKSIPValidator {
       } else {
         component.setMetsPath(Paths.get(key).getParent().toString());
       }
-
-      component.setResults(results);
-      component.validate();
+      Map<String,ReporterDetails> componentResults = component.validate();
+      ResultsUtils.addResults(results,componentResults);
       component.clean();
     }
   }
@@ -260,6 +239,15 @@ public class EARKSIPValidator {
     return true;
   }
 
+  public void notifyIndicatorsObservers(){
+    for(ValidationObserver observer: observers){
+      observer.notifyIndicators(this.reporter.getErrors(), this.reporter.getSuccess(), this.reporter.getWarnings(),
+              this.reporter.getNotes(), this.reporter.getSkipped());
+    }
+  }
+
+
+
   public int compareInt(int c1, int c2) {
     if (c1 < c2) {
       return -1;
@@ -268,6 +256,32 @@ public class EARKSIPValidator {
         return 1;
       }
       return 0;
+    }
+  }
+
+  private class RequirementsComparator implements Comparator<String> {
+
+    private int calculateWeight(String o) {
+      int c;
+
+      if (o.startsWith("CSIPSTR")) {
+        c = 1000;
+        c += Integer.parseInt(o.substring("CSIPSTR".length()));
+      } else if (o.startsWith("CSIP")) {
+        c = 2000;
+        c += Integer.parseInt(o.substring("CSIP".length()));
+      } else if (o.startsWith("SIP")) {
+        c = 4000;
+        c += Integer.parseInt(o.substring("SIP".length()));
+      } else {
+        c = 9000;
+      }
+      return c;
+    }
+
+    @Override
+    public int compare(String o1, String o2) {
+      return compareInt(calculateWeight(o1), calculateWeight(o2));
     }
   }
 }

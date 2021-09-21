@@ -15,6 +15,9 @@ import org.roda_project.commons_ip2.utils.Utils;
 import org.roda_project.commons_ip2.validator.EARKSIPValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * @author João Gomes <jgomes@keep.pt>
@@ -34,26 +37,26 @@ public class ValidatorTest {
     Utils.deletePath(tempFolder);
   }
 
-  /* Simple SIP */
-  @Test
-  public void validateSimpleSipZIP() throws IOException, URISyntaxException {
-    LOGGER.info("Validate - Simple-EARK-SIP");
-
-    URI resource = getClass().getResource("/").toURI();
-    Path earkSIPath = Paths.get(resource).resolve("validation").resolve("Simple-EARK-SIP.zip");
-    Path reportPath = Files.createTempDirectory("reports").resolve("Simple-EARK-SIP.json");
-
-
-    EARKSIPValidator earksipValidator = new EARKSIPValidator(earkSIPath, reportPath);
-    boolean validate = earksipValidator.validate();
-    LOGGER.info("Done validate - Simple-EARK-SIP");
-
-    Assert.assertFalse(validate);
-  }
+//  /* Simple SIP */
+//  @Test
+//  public void validateSimpleSipZIP() throws IOException, URISyntaxException, ParserConfigurationException, SAXException {
+//    LOGGER.info("Validate - Simple-EARK-SIP");
+//
+//    URI resource = getClass().getResource("/").toURI();
+//    Path earkSIPath = Paths.get(resource).resolve("validation").resolve("Simple-EARK-SIP.zip");
+//    Path reportPath = Files.createTempDirectory("reports").resolve("Simple-EARK-SIP.json");
+//
+//
+//    EARKSIPValidator earksipValidator = new EARKSIPValidator(earkSIPath, reportPath);
+//    boolean validate = earksipValidator.validate();
+//    LOGGER.info("Done validate - Simple-EARK-SIP");
+//
+//    Assert.assertFalse(validate);
+//  }
 
   /* Full SIP */
   @Test
-  public void validateFullSipZIP() throws IOException, URISyntaxException {
+  public void validateFullSipZIP() throws IOException, URISyntaxException, ParserConfigurationException, SAXException {
     LOGGER.info("Validate - Full-EARK-SIP");
 
     URI resource = getClass().getResource("/").toURI();
@@ -66,37 +69,37 @@ public class ValidatorTest {
 
     Assert.assertFalse(validate);
   }
-
-  /* Simple SIP */
-  @Test
-  public void validateSimpleSipFolder() throws IOException, URISyntaxException {
-    LOGGER.info("Validate - Simple-EARK-SIP");
-
-    URI resource = getClass().getResource("/").toURI();
-    Path earkSIPath = Paths.get(resource).resolve("validation").resolve("Simple-EARK-SIP");
-    Path reportPath = Files.createTempDirectory("reports").resolve("Simple-EARK-SIP.json");
-
-
-    EARKSIPValidator earksipValidator = new EARKSIPValidator(earkSIPath, reportPath);
-    boolean validate = earksipValidator.validate();
-    LOGGER.info("Done validate - Simple-EARK-SIP");
-
-    Assert.assertFalse(validate);
-  }
-
-  /* Full SIP */
-  @Test
-  public void validateFullSipFolder() throws IOException, URISyntaxException {
-    LOGGER.info("Validate - Full-EARK-SIP");
-
-    URI resource = getClass().getResource("/").toURI();
-    Path earkSIPath = Paths.get(resource).resolve("validation").resolve("Full-EARK-SIP");
-    Path reportPath = Files.createTempDirectory("reports").resolve("Full-EARK-SIP.json");
-
-    EARKSIPValidator earksipValidator = new EARKSIPValidator(earkSIPath, reportPath);
-    boolean validate = earksipValidator.validate();
-    LOGGER.info("Done validate - Full-EARK-SIP");
-
-    Assert.assertFalse(validate);
-  }
+//
+//  /* Simple SIP */
+//  @Test
+//  public void validateSimpleSipFolder() throws IOException, URISyntaxException, ParserConfigurationException, SAXException {
+//    LOGGER.info("Validate - Simple-EARK-SIP");
+//
+//    URI resource = getClass().getResource("/").toURI();
+//    Path earkSIPath = Paths.get(resource).resolve("validation").resolve("Simple-EARK-SIP");
+//    Path reportPath = Files.createTempDirectory("reports").resolve("Simple-EARK-SIP.json");
+//
+//
+//    EARKSIPValidator earksipValidator = new EARKSIPValidator(earkSIPath, reportPath);
+//    boolean validate = earksipValidator.validate();
+//    LOGGER.info("Done validate - Simple-EARK-SIP");
+//
+//    Assert.assertFalse(validate);
+//  }
+//
+//  /* Full SIP */
+//  @Test
+//  public void validateFullSipFolder() throws IOException, URISyntaxException, ParserConfigurationException, SAXException {
+//    LOGGER.info("Validate - Full-EARK-SIP");
+//
+//    URI resource = getClass().getResource("/").toURI();
+//    Path earkSIPath = Paths.get(resource).resolve("validation").resolve("Full-EARK-SIP");
+//    Path reportPath = Files.createTempDirectory("reports").resolve("Full-EARK-SIP.json");
+//
+//    EARKSIPValidator earksipValidator = new EARKSIPValidator(earkSIPath, reportPath);
+//    boolean validate = earksipValidator.validate();
+//    LOGGER.info("Done validate - Full-EARK-SIP");
+//
+//    Assert.assertFalse(validate);
+//  }
 }

@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.roda_project.commons_ip2.validator.component.ValidatorComponentImpl;
@@ -15,121 +15,107 @@ import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * @author João Gomes <jgomes@keep.pt>
  */
 public class StructureComponentValidator extends ValidatorComponentImpl {
   private static final Logger LOGGER = LoggerFactory.getLogger(StructureComponentValidator.class);
 
-  private final String MODULE_NAME;
+  private final String moduleName;
   private final Path path;
 
-  public StructureComponentValidator(String moduleName, Path path) {
-    this.MODULE_NAME = moduleName;
+  public StructureComponentValidator(Path path) {
+    this.moduleName = Constants.CSIP_MODULE_NAME_0;
     this.path = path;
   }
 
   private static final byte[] ZIP_MAGIC_NUMBER = {'P', 'K', 0x3, 0x4};
 
   @Override
-  public void validate() throws IOException {
+  public Map<String, ReporterDetails> validate() throws IOException {
     ReporterDetails strCsip;
 
     /* CSIPSTR1 */
-    validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_ID);
-    strCsip = validateCSIPSTR1();
-    strCsip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_ID, strCsip);
-    if (strCsip.isValid()) {
+    notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_ID);
+    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_ID,
+      validateCSIPSTR1().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+    if (isResultValid(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_ID)) {
 
       /* CSIPSTR2 */
-      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "Requirement check was skipped as it will be checked under CSIP1", true, true);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_ID, strCsip);
+      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_ID,
+        new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+          "Requirement check was skipped as it will be checked under CSIP1", true, true));
 
       /* CSIPSTR3 */
-      validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_ID);
-      strCsip = validateCSIPSTR3();
-      strCsip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_ID, strCsip);
+      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_ID);
+      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_ID,
+        validateCSIPSTR3().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR4 */
-      validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_ID);
-      strCsip = validateCSIPSTR4();
-      strCsip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_ID, strCsip);
+      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_ID);
+      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_ID,
+        validateCSIPSTR3().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR5 */
-      validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_ID);
-      strCsip = validateCSIPSTR5();
-      strCsip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_ID, strCsip);
+      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_ID);
+      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_ID,
+        validateCSIPSTR5().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR6 */
-      validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_ID);
-      strCsip = validateCSIPSTR6();
-      strCsip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_ID, strCsip);
+      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_ID);
+      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_ID,
+        validateCSIPSTR6().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR7 */
-      validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_ID);
-      strCsip = validateCSIPSTR7();
-      strCsip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_ID, strCsip);
+      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_ID);
+      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_ID,
+        validateCSIPSTR7().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR8 */
-      validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_ID);
-      strCsip = validateCSIPSTR8();
-      strCsip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_ID, strCsip);
+      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_ID);
+      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_ID,
+        validateCSIPSTR8().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR9 */
-      validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_ID);
-      strCsip = validateCSIPSTR9();
-      strCsip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_ID, strCsip);
+      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_ID);
+      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_ID,
+        validateCSIPSTR9().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR10 */
-      validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_ID);
-      strCsip = validateCSIPSTR10();
-      strCsip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_ID, strCsip);
+      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_ID);
+      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_ID,
+        validateCSIPSTR10().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR11 */
-      validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_ID);
-      strCsip = validateCSIPSTR11();
-      strCsip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_ID, strCsip);
+      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_ID);
+      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_ID,
+        validateCSIPSTR11().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR12 */
-      validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_ID);
-      strCsip = validateCSIPSTR12();
-      strCsip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_ID, strCsip);
+      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_ID);
+      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_ID,
+        validateCSIPSTR12().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR13 */
-      validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_ID);
-      strCsip = validateCSIPSTR13();
-      strCsip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_ID, strCsip);
+      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_ID);
+      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_ID,
+        validateCSIPSTR13().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR14 */
-      validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_ID);
-      strCsip = validateCSIPSTR14();
-      strCsip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_ID, strCsip);
+      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_ID);
+      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_ID,
+        validateCSIPSTR14().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR15 */
-      validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_ID);
-      strCsip = validateCSIPSTR15();
-      strCsip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_ID, strCsip);
+      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_ID);
+      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_ID,
+        validateCSIPSTR15().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR16 */
-      validationInit(MODULE_NAME, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_ID);
-      strCsip = validateCSIPSTR16();
-      strCsip.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_ID, strCsip);
+      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_ID);
+      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_ID,
+        validateCSIPSTR16().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+
     } else {
       String message;
       if (isZipFileFlag()) {
@@ -138,66 +124,26 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
         message = "Root must be a single directory";
       }
 
-      /* CSIPSTR2 */
-      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_ID, strCsip);
-
-      /* CSIPSTR3 */
-      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_ID, strCsip);
-
-      /* CSIPSTR4 */
-      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_ID, strCsip);
-
-      /* CSIPSTR5 */
-      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_ID, strCsip);
-
-      /* CSIPSTR6 */
-      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_ID, strCsip);
-
-      /* CSIPSTR7 */
-      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_ID, strCsip);
-
-      /* CSIPSTR8 */
-      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_ID, strCsip);
-
-      /* CSIPSTR9 */
-      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_ID, strCsip);
-
-      /* CSIPSTR10 */
-      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_ID, strCsip);
-
-      /* CSIPSTR11 */
-      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_ID, strCsip);
-
-      /* CSIPSTR12 */
-      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_ID, strCsip);
-
-      /* CSIPSTR13 */
-      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_ID, strCsip);
-
-      /* CSIPSTR14 */
-      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_ID, strCsip);
-
-      /* CSIPSTR15 */
-      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_ID, strCsip);
-
-      /* CSIPSTR16 */
-      strCsip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_ID, strCsip);
+      addResults(new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
+        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_ID,
+        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_ID,
+        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_ID,
+        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_ID,
+        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_ID,
+        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_ID,
+        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_ID,
+        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_ID,
+        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_ID,
+        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_ID,
+        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_ID,
+        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_ID,
+        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_ID,
+        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_ID,
+        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_ID);
     }
+    notifyObserversFinishModule(moduleName);
+
+    return getResults();
   }
 
   /*
@@ -243,22 +189,17 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
    * the Submission Agreement.
    */
   private ReporterDetails validateCSIPSTR3() throws IOException {
-    if(isZipFileFlag()){
-      if(getEARKSIPpath().toString().contains("zip")){
+    if (isZipFileFlag()) {
+      if (getEARKSIPpath().toString().contains("zip")) {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "Information package is compressed in ZIP format",
-                true, false);
-      }
-      else{
+          "Information package is compressed in ZIP format", true, false);
+      } else {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                "Information package is compressed in TAR format",
-                true, false);
+          "Information package is compressed in TAR format", true, false);
       }
-    }
-    else {
+    } else {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "The Information Package root folder MAY be compressed.",
-              false, false);
+        "The Information Package root folder MAY be compressed.", false, false);
     }
   }
 
@@ -518,25 +459,23 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
    */
   private ReporterDetails validateCSIPSTR14() throws IOException {
     List<String> additionalFolders;
-    if(isZipFileFlag()){
+    if (isZipFileFlag()) {
       additionalFolders = zipManager.verifyAdditionalFoldersInRoot(getEARKSIPpath());
-    }
-    else{
+    } else {
       additionalFolders = folderManager.verifyAdditionalFoldersInRoot(getEARKSIPpath());
     }
-    if(!additionalFolders.isEmpty()){
+    if (!additionalFolders.isEmpty()) {
       StringBuilder folders = new StringBuilder();
       folders.append("An additional sub-folder was found:");
       int i = 0;
-      for(String folder: additionalFolders){
-        if(i == additionalFolders.size()-1){
+      for (String folder : additionalFolders) {
+        if (i == additionalFolders.size() - 1) {
           folders.append(" ").append(folder).append(".");
-        }
-        else {
+        } else {
           folders.append(" ").append(folder).append(" ");
         }
       }
-      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,folders.toString(),false,false);
+      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, folders.toString(), false, false);
     }
     return new ReporterDetails();
   }
@@ -616,7 +555,8 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
         }
       }
     } catch (IOException e) {
-      LOGGER.debug("Failed to validate {} Failed to validate due to an exception on CSIP1 " + MODULE_NAME, "Please check the file submitted",e);
+      LOGGER.debug("Failed to validate {} Failed to validate due to an exception on CSIP1 " + moduleName,
+        "Please check the file submitted", e);
       isZip = false;
     }
 
