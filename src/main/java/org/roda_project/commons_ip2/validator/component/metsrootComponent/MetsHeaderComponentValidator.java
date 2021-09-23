@@ -1,7 +1,7 @@
 package org.roda_project.commons_ip2.validator.component.metsrootComponent;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +16,7 @@ import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.constants.ConstantsSIPspec;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.utils.Message;
+import org.roda_project.commons_ip2.validator.utils.ResultsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -40,104 +41,107 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
   }
 
   @Override
-  public Map<String,ReporterDetails> validate() throws IOException {
+  public Map<String, ReporterDetails> validate() throws IOException {
     metsHdr = mets.getMetsHdr();
     agents = metsHdr.getAgent();
-    ReporterDetails csip;
+    Map<String, ReporterDetails> results = new HashMap<>();
 
+    ReporterDetails skippedCSIP;
     /* CSIP117 */
     notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID);
-    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID,
+    ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID,
       validateCSIP117().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
-    if (isResultValid(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID)) {
+    if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID)) {
       /* CSIP7 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP7_ID);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP7_ID,
+      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP7_ID,
         validateCSIP7().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIP8 */
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP8_ID,
-        new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          Message.createErrorMessage("SKIPPED in  %1$s  can't validate", metsName, isRootMets()), true, true));
+      skippedCSIP = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+        Message.createErrorMessage("SKIPPED in  %1$s  can't validate", metsName, isRootMets()), true, true);
+      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP8_ID, skippedCSIP);
 
       /* CSIP9 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP9_ID);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP9_ID,
+      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP9_ID,
         validateCSIP9().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       if (isRootMets()) {
         /* CSIP10 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID);
-        addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID,
+        ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID,
           validateCSIP10().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
-        if (isResultValid(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID)) {
+        if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID)) {
           /* CSIP11 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID,
+          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID,
             validateCSIP11().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP12 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID,
+          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID,
             validateCSIP12().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP13 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID,
+          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID,
             validateCSIP13().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP14 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID,
+          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID,
             validateCSIP14().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP15 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID,
+          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID,
             validateCSIP15().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP16 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID,
+          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID,
             validateCSIP16().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* SIP9 */
           notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP9_ID);
-          addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP9_ID,
+          ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP9_ID,
             validateSIP9().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
-          if (isResultValid(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP9_ID)) {
+          if (ResultsUtils.isResultValid(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP9_ID)) {
             /* SIP10 */
             notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP10_ID);
-            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP10_ID,
+            ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP10_ID,
               validateSIP10().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
             /* SIP11 */
             notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP11_ID);
-            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP11_ID,
+            ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP11_ID,
               validateSIP11().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
             /* SIP12 */
             notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP12_ID);
-            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP12_ID,
+            ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP12_ID,
               validateSIP12().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
             /* SIP13 */
             notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP13_ID);
-            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP13_ID,
+            ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP13_ID,
               validateSIP13().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
             /* SIP14 */
             notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP14_ID);
-            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP14_ID,
+            ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP14_ID,
               validateSIP14().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
           } else {
             String message = Message.createErrorMessage(
-              "SKIPPED because mets/metsHdr/agent with the role ARCHIVIST doesn't exist", metsName, isRootMets());
+              "SKIPPED in %1$s because mets/metsHdr/agent with the role ARCHIVIST doesn't exist", metsName,
+              isRootMets());
 
-            addResults(new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
+            ResultsUtils.addResults(results,
+              new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
               ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP10_ID,
               ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP11_ID,
               ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP12_ID,
@@ -147,40 +151,41 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
 
           /* SIP15 */
           notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP15_ID);
-          addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP15_ID,
+          ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP15_ID,
             validateSIP15().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
-          if (isResultValid(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP15_ID)) {
+          if (ResultsUtils.isResultValid(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP15_ID)) {
             /* SIP16 */
             notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP16_ID);
-            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP16_ID,
+            ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP16_ID,
               validateSIP16().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
             /* SIP17 */
             notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP17_ID);
-            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP17_ID,
+            ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP17_ID,
               validateSIP17().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
             /* SIP18 */
             notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP18_ID);
-            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP18_ID,
+            ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP18_ID,
               validateSIP18().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
             /* SIP19 */
             notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP19_ID);
-            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP19_ID,
+            ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP19_ID,
               validateSIP19().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
             /* SIP20 */
             notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP20_ID);
-            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP20_ID,
+            ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP20_ID,
               validateSIP20().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
           } else {
             String message = Message.createErrorMessage(
               "SKIPPED because mets/metsHdr/agent with the role CREATOR doesn't exist", metsName, isRootMets());
 
-            addResults(new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
+            ResultsUtils.addResults(results,
+              new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
               ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP16_ID,
               ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP17_ID,
               ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP18_ID,
@@ -190,35 +195,36 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
 
           /* SIP21 */
           notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP21_ID);
-          addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP21_ID,
+          ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP21_ID,
             validateSIP21().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
-          if (isResultValid(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP21_ID)) {
+          if (ResultsUtils.isResultValid(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP21_ID)) {
             /* SIP22 */
             notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP22_ID);
-            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP22_ID,
+            ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP22_ID,
               validateSIP22().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
             /* SIP23 */
             notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP20_ID);
-            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP23_ID,
+            ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP23_ID,
               validateSIP23().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
             /* SIP24 */
             notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP24_ID);
-            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP24_ID,
+            ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP24_ID,
               validateSIP24().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
             /* SIP25 */
             notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP25_ID);
-            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP25_ID,
+            ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP25_ID,
               validateSIP25().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
           } else {
             String message = Message.createErrorMessage(
               "SKIPPED in %1$s because mets/metsHdr/agent with the role OTHER doesn't exist", metsName, isRootMets());
 
-            addResults(new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
+            ResultsUtils.addResults(results,
+              new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
               ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP22_ID,
               ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP23_ID,
               ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP24_ID,
@@ -227,33 +233,33 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
 
           /* SIP26 */
           notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP26_ID);
-          addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP26_ID,
+          ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP26_ID,
             validateSIP26().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
-          if (isResultValid(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP26_ID)) {
+          if (ResultsUtils.isResultValid(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP26_ID)) {
             /* SIP27 */
             notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP27_ID);
-            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP27_ID,
+            ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP27_ID,
               validateSIP27().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
             /* SIP28 */
             notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP28_ID);
-            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP28_ID,
+            ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP28_ID,
               validateSIP28().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
             /* SIP29 */
             notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP29_ID);
-            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP29_ID,
+            ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP29_ID,
               validateSIP29().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
             /* SIP30 */
             notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP30_ID);
-            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP30_ID,
+            ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP30_ID,
               validateSIP30().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
             /* SIP31 */
             notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP31_ID);
-            addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP31_ID,
+            ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP31_ID,
               validateSIP31().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
           } else {
@@ -261,7 +267,8 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
               "SKIPPED in %1$s because mets/metsHdr/agent with the role PRESERVATION doesn't exist", metsName,
               isRootMets());
 
-            addResults(new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
+            ResultsUtils.addResults(results,
+              new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
               ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP27_ID,
               ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP28_ID,
               ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP29_ID,
@@ -272,7 +279,8 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
           String message = Message.createErrorMessage(
             "SKIPPED in %1$s because it does not contain a mets/metsHdr/agent element", metsName, isRootMets());
 
-          addResults(new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
+          ResultsUtils.addResults(results,
+            new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
             ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID,
             ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID,
             ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID,
@@ -307,39 +315,40 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
 
       /* SIP3 */
       notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP3_ID);
-      addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP3_ID,
+      ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP3_ID,
         validateSIP3().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
       /* SIP4 */
       notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP4_ID);
-      addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP4_ID,
+      ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP4_ID,
         validateSIP4().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
       /* SIP5 */
       notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP5_ID);
-      addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP5_ID,
+      ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP5_ID,
         validateSIP5().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
       /* SIP6 */
       notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP6_ID);
-      addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP6_ID,
+      ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP6_ID,
         validateSIP6().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
       /* SIP7 */
       notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP7_ID);
-      addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP7_ID,
+      ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP7_ID,
         validateSIP7().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
       /* SIP8 */
       notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP8_ID);
-      addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP8_ID,
+      ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP8_ID,
         validateSIP8().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
     } else {
       String message = Message.createErrorMessage("SKIPPED because mets/metsHdr doesn't exist ", metsName,
         isRootMets());
 
-      addResults(new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
+      ResultsUtils.addResults(results,
+        new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
         ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP7_ID,
         ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP8_ID,
         ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP9_ID,
@@ -381,7 +390,7 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
         ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP31_ID);
     }
     notifyObserversFinishModule(moduleName);
-    return getResults();
+    return results;
   }
 
   /*
@@ -1530,13 +1539,14 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
           }
         } else {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
-            Message.createErrorMessage("metsHdr/agent/@ROLE in %1$s can't be null ", metsName, isRootMets()), false, false);
+            Message.createErrorMessage("metsHdr/agent/@ROLE in %1$s can't be null ", metsName, isRootMets()), false,
+            false);
         }
       }
     } else {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
-        Message.createErrorMessage("Skipped in %1$s because metsHdr/agent does not exists", metsName, isRootMets()), true,
-        true);
+        Message.createErrorMessage("Skipped in %1$s because metsHdr/agent does not exists", metsName, isRootMets()),
+        true, true);
     }
     return new ReporterDetails();
   }
@@ -1553,18 +1563,20 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
             String name = agent.getName();
             if (name == null) {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
-                Message.createErrorMessage("metsHdr/agent/name in %1$s can't be null", metsName, isRootMets()), false, false);
+                Message.createErrorMessage("metsHdr/agent/name in %1$s can't be null", metsName, isRootMets()), false,
+                false);
             }
           }
         } else {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
-            Message.createErrorMessage("metsHdr/agent/@ROLE in %1$s can't be null ", metsName, isRootMets()), false, false);
+            Message.createErrorMessage("metsHdr/agent/@ROLE in %1$s can't be null ", metsName, isRootMets()), false,
+            false);
         }
       }
     } else {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
-        Message.createErrorMessage("Skipped in %1$s because metsHdr/@agent does not exists", metsName, isRootMets()), true,
-        true);
+        Message.createErrorMessage("Skipped in %1$s because metsHdr/@agent does not exists", metsName, isRootMets()),
+        true, true);
     }
     return new ReporterDetails();
   }
@@ -1582,24 +1594,25 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
             List<MetsType.MetsHdr.Agent.Note> notes = agent.getNote();
             if (notes != null && !notes.isEmpty()) {
               if (notes.size() != 1) {
-                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
-                  Message.createErrorMessage("metsHdr/agent/note in %1$s can't be more than one ", metsName, isRootMets()),
-                  false, false);
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION, Message.createErrorMessage(
+                  "metsHdr/agent/note in %1$s can't be more than one ", metsName, isRootMets()), false, false);
               }
             } else {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
-                Message.createErrorMessage("You can add one metsHdr/agent/note in %1$s", metsName, isRootMets()), false, false);
+                Message.createErrorMessage("You can add one metsHdr/agent/note in %1$s", metsName, isRootMets()), false,
+                false);
             }
           }
         } else {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
-            Message.createErrorMessage("metsHdr/agent/@ROLE in %1$s can't be null ", metsName, isRootMets()), false, false);
+            Message.createErrorMessage("metsHdr/agent/@ROLE in %1$s can't be null ", metsName, isRootMets()), false,
+            false);
         }
       }
     } else {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
-        Message.createErrorMessage("Skipped in %1$s because metsHdr/@agent does not exists", metsName, isRootMets()), true,
-        true);
+        Message.createErrorMessage("Skipped in %1$s because metsHdr/@agent does not exists", metsName, isRootMets()),
+        true, true);
     }
     return new ReporterDetails();
   }
@@ -1619,21 +1632,24 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
               for (MetsType.MetsHdr.Agent.Note note : notes) {
                 String noteType = note.getNOTETYPE();
                 if (noteType == null || noteType.equals("")) {
-                  return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION, Message.createErrorMessage(
-                    "metsHdr/agent/@csip:NOTETYPE in %1$s can't be null or empty", metsName, isRootMets()), false, false);
+                  return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
+                    Message.createErrorMessage("metsHdr/agent/@csip:NOTETYPE in %1$s can't be null or empty", metsName,
+                      isRootMets()),
+                    false, false);
                 }
               }
             }
           }
         } else {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
-            Message.createErrorMessage("metsHdr/agent/@ROLE in %1$s can't be null ", metsName, isRootMets()), false, false);
+            Message.createErrorMessage("metsHdr/agent/@ROLE in %1$s can't be null ", metsName, isRootMets()), false,
+            false);
         }
       }
     } else {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
-        Message.createErrorMessage("Skipped in %1$s because metsHdr/@agent does not exists", metsName, isRootMets()), true,
-        true);
+        Message.createErrorMessage("Skipped in %1$s because metsHdr/@agent does not exists", metsName, isRootMets()),
+        true, true);
     }
     return new ReporterDetails();
   }

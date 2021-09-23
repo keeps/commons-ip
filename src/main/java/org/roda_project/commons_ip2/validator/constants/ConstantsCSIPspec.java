@@ -173,7 +173,7 @@ public class ConstantsCSIPspec {
     + "used falls outside of the defined vocabulary the mets/@TYPE value must be "
     + "set to “OTHER” and the specific value declared in mets/@csip:OTHERTYPE. "
     + "The vocabulary will develop under the curation of the DILCIS Board as "
-    + " additional content information type specifications are produced.See also: Content Category";
+    + " additional content information type specifications are produced.";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP2_CARDINALITY = "0..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP2_LEVEL = "MUST";
 
@@ -182,8 +182,7 @@ public class ConstantsCSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP3_NAME = "Other Content Category";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP3_LOCATION = "mets[@TYPE=’OTHER’]/@csip:OTHERTYPE";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP3_DESCRIPTION = "When the mets/@TYPE attribute has the value “OTHER” the "
-    + "mets/@csip:OTHERTYPE attribute MUST be used to declare the content "
-    + "category of the package/representation.See also: Content Category ";
+    + "mets/@csip:OTHERTYPE attribute MUST be used to declare the content " + "category of the package/representation.";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP3_CARDINALITY = "0..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP3_LEVEL = "SHOULD";
 
@@ -195,7 +194,7 @@ public class ConstantsCSIPspec {
     + "creating the package. Legal values are defined in a fixed vocabulary. The "
     + "attribute is mandatory for representation level METS documents. The "
     + "vocabulary will evolve under the care of the DILCIS Board as additional "
-    + "Content Information Type Specifications are developed.See also: Content " + "information type specification";
+    + "Content Information Type Specifications are developed.";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP4_CARDINALITY = "0..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP4_LEVEL = "SHOULD";
 
@@ -245,7 +244,7 @@ public class ConstantsCSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP9_ID = "CSIP9";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP9_NAME = "OAIS Package type information";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP9_LOCATION = "mets/metsHdr/@csip:OAISPACKAGETYPE";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP9_DESCRIPTION = "mets/metsHdr/@csip:OAISPACKAGETYPE is an additional CSIP attribute that declares the type of the IP.See also: OAIS Package type";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP9_DESCRIPTION = "mets/metsHdr/@csip:OAISPACKAGETYPE is an additional CSIP attribute that declares the type of the IP.";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP9_CARDINALITY = "1..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP9_LEVEL = "MUST";
 
@@ -277,7 +276,7 @@ public class ConstantsCSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP13_ID = "CSIP13";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP13_NAME = "Agent other type";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP13_LOCATION = "mets/metsHdr/agent[@OTHERTYPE=’SOFTWARE’]";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP13_DESCRIPTION = "The mandatory agent element MUST have a @OTHERTYPE attribute with the value “SOFTWARE”.See also: Other agent type";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP13_DESCRIPTION = "The mandatory agent element MUST have a @OTHERTYPE attribute with the value “SOFTWARE”.";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP13_CARDINALITY = "1..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP13_LEVEL = "MUST";
 
@@ -301,7 +300,7 @@ public class ConstantsCSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP16_ID = "CSIP16";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP16_NAME = "Classification of the agent additional information";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP16_LOCATION = "mets/metsHdr/agent/note[@csip:NOTETYPE=’SOFTWARE VERSION’]";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP16_DESCRIPTION = "The mandatory agent element’s note child has a @csip:NOTETYPE attribute with a fixed value of “SOFTWARE VERSION”.See also: Note type";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP16_DESCRIPTION = "The mandatory agent element’s note child has a @csip:NOTETYPE attribute with a fixed value of “SOFTWARE VERSION”.";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP16_CARDINALITY = "1..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP16_LEVEL = "MUST";
 
@@ -338,7 +337,7 @@ public class ConstantsCSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP20_ID = "CSIP20";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP20_NAME = "Status of the descriptive metadata";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP20_LOCATION = "mets/dmdSec/@STATUS";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP20_DESCRIPTION = "Indicates the status of the package using a fixed vocabulary.See also: dmdSec status";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP20_DESCRIPTION = "Indicates the status of the package using a fixed vocabulary.";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP20_CARDINALITY = "0..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP20_LEVEL = "SHOULD";
 
@@ -386,7 +385,7 @@ public class ConstantsCSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP26_ID = "CSIP26";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP26_NAME = "File mime type";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP26_LOCATION = "mets/dmdSec/mdRef/@MIMETYPE";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP26_DESCRIPTION = "The IANA mime type of the referenced file.See also: IANA media types";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP26_DESCRIPTION = "The IANA mime type of the referenced file.";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP26_CARDINALITY = "1..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP26_LEVEL = "MUST";
 
@@ -459,8 +458,7 @@ public class ConstantsCSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP34_ID = "CSIP34";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP34_NAME = "Status of the digital provenance metadata";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP34_LOCATION = "mets/amdSec/digiprovMD/@STATUS";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP34_DESCRIPTION = "Indicates the status of the package using a fixed vocabulary.See also: "
-    + "dmdSec status";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP34_DESCRIPTION = "Indicates the status of the package using a fixed vocabulary.";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP34_CARDINALITY = "0..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP34_LEVEL = "SHOULD";
 
@@ -512,7 +510,7 @@ public class ConstantsCSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP40_ID = "CSIP40";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP40_NAME = "File mime type";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP40_LOCATION = "mets/amdSec/digiprovMD/mdRef/@MIMETYPE";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP40_DESCRIPTION = "The IANA mime type for the referenced file.See also: IANA media types";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP40_DESCRIPTION = "The IANA mime type for the referenced file.";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP40_CARDINALITY = "1..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP40_LEVEL = "MUST";
 
@@ -574,7 +572,7 @@ public class ConstantsCSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP47_ID = "CSIP47";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP47_NAME = "Status of the rights metadata";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP47_LOCATION = "mets/amdSec/rightsMD/@STATUS";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP47_DESCRIPTION = "Indicates the status of the package using a fixed vocabulary.See also: dmdSec status";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP47_DESCRIPTION = "Indicates the status of the package using a fixed vocabulary.";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP47_CARDINALITY = "0..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP47_LEVEL = "SHOULD";
 
@@ -622,7 +620,7 @@ public class ConstantsCSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP53_ID = "CSIP53";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP53_NAME = "File mime type";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP53_LOCATION = "mets/amdSec/rightsMD/mdRef/@MIMETYPE";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP53_DESCRIPTION = "The IANA mime type for the referenced file.See also: IANA media types";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP53_DESCRIPTION = "The IANA mime type for the referenced file.";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP53_CARDINALITY = "1..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP53_LEVEL = "MUST";
 
@@ -691,8 +689,7 @@ public class ConstantsCSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP113_NAME = "Schema file group";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP113_LOCATION = "mets/fileSec/fileGrp[@USE=’Schemas’]";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP113_DESCRIPTION = "All XML schemas used in the information package should be referenced from "
-    + "one or more file groups with mets/fileSec/fileGrp/@USE attribute value "
-    + "“Schemas”.See also: File group names";
+    + "one or more file groups with mets/fileSec/fileGrp/@USE attribute value ";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP113_CARDINALITY = "1..n";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP113_LEVEL = "MUST";
 
@@ -726,7 +723,7 @@ public class ConstantsCSIPspec {
     + "mets/fileSec/fileGrp/@USE attribute value is “Representations”. When "
     + "the “Package type” value is “Mixed” and/or the file group describes a "
     + "“Representation”, then this element states the content information type "
-    + "specification used for the file group.See also: Content information type " + "specification";
+    + "specification used for the file group.";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP62_CARDINALITY = "0..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP62_LEVEL = "SHOULD";
 
@@ -778,7 +775,7 @@ public class ConstantsCSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP68_ID = "CSIP68";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP68_NAME = "File mimetype";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP68_LOCATION = "mets/fileSec/fileGrp/file/@MIMETYPE";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP68_DESCRIPTION = "The IANA mime type for the referenced file.See also: IANA media types";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP68_DESCRIPTION = "The IANA mime type for the referenced file.";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP68_CARDINALITY = "1..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP68_LEVEL = "MUST";
 
@@ -895,7 +892,7 @@ public class ConstantsCSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP81_NAME = "Type of structural description";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP81_LOCATION = "mets/structMap[@TYPE=’PHYSICAL’]";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP81_DESCRIPTION = "The mets/structMap/@TYPE attribute must take the value 'PHYSICAL' "
-    + "from the vocabulary.See also: Structural map typing";
+    + "from the vocabulary.";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP81_CARDINALITY = "1..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP81_LEVEL = "MUST";
 
@@ -904,7 +901,7 @@ public class ConstantsCSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP82_NAME = "Name of the structural description";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP82_LOCATION = "mets/structMap[@LABEL=’CSIP’]";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP82_DESCRIPTION = "The mets/structMap/@LABEL attribute value is set to “CSIP” from the "
-    + "vocabulary.See also: Structural map label";
+    + "vocabulary.";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP82_CARDINALITY = "1..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP82_LEVEL = "MUST";
 
@@ -964,8 +961,7 @@ public class ConstantsCSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP90_ID = "CSIP90";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP90_NAME = "Metadata division label";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP90_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP90_DESCRIPTION = "The metadata division <div> element’s @LABEL attribute value must be “Metadata”. "
-    + "See also: File group names";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP90_DESCRIPTION = "The metadata division <div> element’s @LABEL attribute value must be “Metadata”. ";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP90_CARDINALITY = "1..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP90_LEVEL = "MUST";
 
@@ -1007,8 +1003,7 @@ public class ConstantsCSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP95_ID = "CSIP95";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP95_NAME = "Documentation division label";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP95_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation']";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP95_DESCRIPTION = "The documentation division <div> element in the package uses the value 'Documentation' from the vocabulary as the value for the @LABEL attribute. "
-    + "See also: File group names";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP95_DESCRIPTION = "The documentation division <div> element in the package uses the value 'Documentation' from the vocabulary as the value for the @LABEL attribute.";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP95_CARDINALITY = "1..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP95_LEVEL = "MUST";
 
@@ -1049,8 +1044,7 @@ public class ConstantsCSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP99_ID = "CSIP99";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP99_NAME = "Schema division label";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP99_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP99_DESCRIPTION = "The schema division <div> element’s @LABEL attribute has the value “Schemas” from the vocabulary. "
-    + "See also: File group names";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP99_DESCRIPTION = "The schema division <div> element’s @LABEL attribute has the value “Schemas” from the vocabulary. ";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP99_CARDINALITY = "1..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP99_LEVEL = "MUST";
 
@@ -1091,7 +1085,7 @@ public class ConstantsCSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP103_ID = "CSIP103";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP103_NAME = "Content division label";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP103_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations']";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP103_DESCRIPTION = "The package’s content division <div> element must have the @LABEL attribute value “Representations”, taken from the vocabulary. See also: File group names";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP103_DESCRIPTION = "The package’s content division <div> element must have the @LABEL attribute value “Representations”, taken from the vocabulary.";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP103_CARDINALITY = "1..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP103_LEVEL = "MUST";
 
@@ -1134,8 +1128,7 @@ public class ConstantsCSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP107_NAME = "Representations division label";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP107_LOCATION = "mets/structMap[@LABEL='CSIP']/div/div/@LABEL";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP107_DESCRIPTION = "The package’s representation division <div> element @LABEL attribute value must be the path to the representation level METS document. "
-    + "This requirement gives the same value to be used as the requirement named “File group identifier” (CSIP64) "
-    + "See also: File group names";
+    + "This requirement gives the same value to be used as the requirement named “File group identifier” (CSIP64) ";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP107_CARDINALITY = "1..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP107_LEVEL = "MUST";
 
@@ -1185,7 +1178,7 @@ public class ConstantsCSIPspec {
    * specification ID
    */
   public static String getSpecificationName(String id) {
-    if (id.equals("CSIPSTR0")) {
+    if (id.equals("CSIP0")) {
       return VALIDATION_REPORT_SPECIFICATION_CSIP0_NAME;
     }
     if (id.equals("CSIPSTR1")) {

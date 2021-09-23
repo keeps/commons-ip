@@ -27,6 +27,7 @@ import org.roda_project.commons_ip2.validator.handlers.MetsHandler;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.utils.CHECKSUMTYPE;
 import org.roda_project.commons_ip2.validator.utils.Message;
+import org.roda_project.commons_ip2.validator.utils.ResultsUtils;
 import org.xml.sax.SAXException;
 
 /**
@@ -48,84 +49,84 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
   @Override
   public Map<String,ReporterDetails> validate() throws IOException {
     ReporterDetails csip;
-
+    Map<String, ReporterDetails> results = new HashMap<>();
     /* CSIP58 */
     notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID);
-    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID,
+    ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID,
       validateCSIP58().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
-    if (isResultValid(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID)) {
+    if (ResultsUtils.isResultValid(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID)) {
 
       /* CSIP59 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP59_ID);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP59_ID,
+      ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP59_ID,
         validateCSIP59().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIP60 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP60_ID);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP60_ID,
+      ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP60_ID,
         validateCSIP60().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIP113 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP113_ID);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP113_ID,
+      ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP113_ID,
         validateCSIP113().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIP114 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP114_ID);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP114_ID,
+      ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP114_ID,
         validateCSIP114().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIP61 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP61_ID);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP61_ID,
+      ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP61_ID,
         validateCSIP61().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIP62 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP62_ID);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP62_ID,
+      ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP62_ID,
         validateCSIP62().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIP63 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP63_ID);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP63_ID,
+      ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP63_ID,
         validateCSIP63().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIP64 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP64_ID);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP64_ID,
+      ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP64_ID,
         validateCSIP64().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIP65 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP65_ID);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP65_ID,
+      ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP65_ID,
         validateCSIP65().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIP66 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP66_ID);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP66_ID,
+      ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP66_ID,
         validateCSIP66().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
-      if (isResultValid(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP66_ID)) {
+      if (ResultsUtils.isResultValid(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP66_ID)) {
 
         /* CSIP67 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP67_ID);
-        addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP67_ID,
+        ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP67_ID,
           validateCSIP67().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
         /* CSIP68 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP68_ID);
-        addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP68_ID,
+        ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP68_ID,
           validateCSIP68().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
         /* CSIP69 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP69_ID);
-        addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP69_ID,
+        ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP69_ID,
           validateCSIP69().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
         /* CSIP70 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP70_ID);
-        addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP70_ID,
+        ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP70_ID,
           validateCSIP70().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
         /* CSIP71 */
@@ -136,55 +137,55 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
           csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
             Message.createErrorMessage("Can't calculate checksum of file %1$s", metsName, isRootMets()), false, false);
         }
-        addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP71_ID, csip);
+        ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP71_ID, csip);
 
         /* CSIP72 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID);
-        addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID,
+        ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID,
           validateCSIP72().setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
 
         /* CSIP73 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP73_ID);
-        addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP73_ID,
+        ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP73_ID,
           validateCSIP73().setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
 
         /* CSIP74 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP74_ID);
-        addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP74_ID,
+        ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP74_ID,
           validateCSIP74().setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
 
         /* CSIP75 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP75_ID);
-        addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP75_ID,
+        ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP75_ID,
           validateCSIP75().setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
 
         /* CSIP76 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP76_ID);
-        addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP76_ID,
+        ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP76_ID,
           validateCSIP76().setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
 
-        if (isResultValid(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP76_ID)) {
+        if (ResultsUtils.isResultValid(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP76_ID)) {
 
           /* CSIP77 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP77_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP77_ID,
+          ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP77_ID,
             validateCSIP77().setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
 
           /* CSIP78 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP78_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP78_ID,
+          ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP78_ID,
             validateCSIP78().setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
 
           /* CSIP79 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP79_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP79_ID,
+          ResultsUtils.addResult(results,ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP79_ID,
             validateCSIP79().setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
 
         } else {
           String message = Message.createErrorMessage(
             "SKIPPED in %1$s because mets/fileSec/fileGrp/file/FLocat doesn't exist", metsName, isRootMets());
 
-          addResults(new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
+          ResultsUtils.addResults(results,new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
             ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP77_ID,
             ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP78_ID,
             ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP79_ID);
@@ -192,29 +193,29 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
 
         /* SIP32 */
         notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP32_ID);
-        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP32_ID,
+        ResultsUtils.addResult(results,ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP32_ID,
           validateSIP32().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
         /* SIP33 */
         notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP33_ID);
-        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP33_ID,
+        ResultsUtils.addResult(results,ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP33_ID,
           validateSIP33().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
         /* SIP34 */
         notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP34_ID);
-        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP34_ID,
+        ResultsUtils.addResult(results,ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP34_ID,
           validateSIP34().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
         /* SIP35 */
         notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP35_ID);
-        addResult(ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP35_ID,
+        ResultsUtils.addResult(results,ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP35_ID,
           validateSIP35().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
       } else {
         String message = Message.createErrorMessage("SKIPPED in %1$s because mets/fileSec/fileGrp/file/ doesn't exist",
           metsName, isRootMets());
 
-        addResults(new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
+        ResultsUtils.addResults(results,new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
           ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP67_ID,
           ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP68_ID,
           ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP69_ID,
@@ -237,7 +238,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
       String message = Message.createErrorMessage("SKIPPED in %1$s because mets/fileSec doesn't exist", metsName,
         isRootMets());
 
-      addResults(new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
+      ResultsUtils.addResults(results,new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
         ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP59_ID,
         ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP60_ID,
         ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP113_ID,
@@ -267,7 +268,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
         ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP35_ID);
     }
     notifyObserversFinishModule(moduleName);
-    return getResults();
+    return results;
   }
 
   /*
@@ -669,7 +670,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
                 } else {
                   filePath.append(metsPath).append(hrefDecoded);
                 }
-                if (files.containsKey(filePath)) {
+                if (files.containsKey(filePath.toString())) {
                   files.replace(filePath.toString(), true);
                 }
               }
@@ -878,7 +879,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
                   }
                   if (!zipManager.verifyChecksum(getEARKSIPpath(), finalPath.toString(), checksumType, checksum)) {
                     message.append("mets/dmdSec/mdRef/@CHECKSUM ").append(checksum)
-                      .append(" in %1$s and checksum of file (").append(filePath).append(") isn't equal");
+                      .append(" in %1$s and checksum of file (").append(finalPath).append(") isn't equal");
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                       Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
                   }

@@ -21,6 +21,7 @@ import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.handlers.MetsHandler;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.utils.Message;
+import org.roda_project.commons_ip2.validator.utils.ResultsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,72 +38,73 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
   }
 
   @Override
-  public Map<String,ReporterDetails> validate() throws IOException {
+  public Map<String, ReporterDetails> validate() throws IOException {
     ReporterDetails csip;
+    Map<String, ReporterDetails> results = new HashMap<>();
 
     /* CSIP80 */
     notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID);
-    addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID,
+    ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID,
       validateCSIP80().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
-    if (isResultValid(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID)) {
+    if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID)) {
 
       /* CSIP81 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID,
+      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID,
         validateCSIP81().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIP82 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID);
-      addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID,
+      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID,
         validateCSIP82().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
-      if (isResultValid(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID)) {
+      if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID)) {
         /* CSIP83 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID);
-        addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID,
+        ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID,
           validateCSIP83().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
         /* CSIP84 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID);
-        addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID,
+        ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID,
           validateCSIP84().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
-        if (isResultValid(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID)) {
+        if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID)) {
           /* CSIP85 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,
+          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,
             validateCSIP85().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP86 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,
+          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,
             validateCSIP86().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP88 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,
+          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,
             validateCSIP88().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
-          if (isResultValid(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID)) {
+          if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID)) {
             /* CSIP89 */
             csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
               "Skipped in %1$s because is validated later in CSIP106", metsName, isRootMets()), true, true);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID, csip);
+            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID, csip);
 
             /* CSIP90 */
             notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP90_ID);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP90_ID,
+            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP90_ID,
               validateCSIP90().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
             /* CSIP91 */
             notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP91_ID);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP91_ID,
+            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP91_ID,
               validateCSIP91().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
             /* CSIP92 */
             notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP92_ID);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP92_ID,
+            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP92_ID,
               validateCSIP92().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           } else {
@@ -110,7 +112,8 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
               "SKIPPED in %1$s because mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata'] isn't valid", metsName,
               isRootMets());
 
-            addResults(new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
+            ResultsUtils.addResults(results,
+              new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
               ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID,
               ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP90_ID,
               ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP91_ID,
@@ -119,28 +122,28 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
 
           /* CSIP93 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP93_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP93_ID,
+          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP93_ID,
             validateCSIP93().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
-          if (isResultValid(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP93_ID)) {
+          if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP93_ID)) {
             /* CSIP94 */
             csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
               "Skipped in %1$s because is validated later in CSIP106", metsName, isRootMets()), true, true);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID, csip);
+            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID, csip);
 
             /* CSIP95 */
             notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP95_ID);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP95_ID,
+            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP95_ID,
               validateCSIP95().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
             /* CSIP96 */
             notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP96_ID);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP96_ID,
+            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP96_ID,
               validateCSIP96().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
             /* CSIP116 */
             notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP116_ID);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP116_ID,
+            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP116_ID,
               validateCSIP116().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           } else {
@@ -148,7 +151,8 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
               "SKIPPED in %1$s because mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation'] isn't valid",
               metsName, isRootMets());
 
-            addResults(new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
+            ResultsUtils.addResults(results,
+              new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
               ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID,
               ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP95_ID,
               ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP96_ID,
@@ -157,28 +161,28 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
 
           /* CSIP97 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP97_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP97_ID,
+          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP97_ID,
             validateCSIP97().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
-          if (isResultValid(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP97_ID)) {
+          if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP97_ID)) {
             /* CSIP98 */
             csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
               "Skipped in %1$s because is validated later in CSIP106", metsName, isRootMets()), true, true);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID, csip);
+            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID, csip);
 
             /* CSIP99 */
             notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP99_ID);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP99_ID,
+            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP99_ID,
               validateCSIP99().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
             /* CSIP100 */
             notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP100_ID);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP100_ID,
+            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP100_ID,
               validateCSIP100().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
             /* CSIP118 */
             notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP118_ID);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP118_ID,
+            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP118_ID,
               validateCSIP118().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           } else {
@@ -186,7 +190,8 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
               "SKIPPED in %1$s because mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas'] isn't valid", metsName,
               isRootMets());
 
-            addResults(new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
+            ResultsUtils.addResults(results,
+              new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
               ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID,
               ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP99_ID,
               ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP100_ID,
@@ -195,28 +200,28 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
 
           /* CSIP101 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP101_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP101_ID,
+          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP101_ID,
             validateCSIP101().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
-          if (isResultValid(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP101_ID)) {
+          if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP101_ID)) {
             /* CSIP102 */
             csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
               "Skipped in %1$s because is validated later in CSIP106", metsName, isRootMets()), true, true);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID, csip);
+            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID, csip);
 
             /* CSIP103 */
             notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP103_ID);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP103_ID,
+            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP103_ID,
               validateCSIP103().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
             /* CSIP104 */
             notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP104_ID);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP104_ID,
+            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP104_ID,
               validateCSIP104().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
             /* CSIP119 */
             notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP119_ID);
-            addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP119_ID,
+            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP119_ID,
               validateCSIP119().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           } else {
@@ -224,7 +229,8 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
               "SKIPPED in %1$s because mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations'] isn't valid",
               metsName, isRootMets());
 
-            addResults(new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
+            ResultsUtils.addResults(results,
+              new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
               ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID,
               ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP103_ID,
               ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP104_ID,
@@ -233,49 +239,50 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
 
           /* CSIP105 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP105_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP105_ID,
+          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP105_ID,
             validateCSIP105().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP106 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID,
+          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID,
             validateCSIP106().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP107 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP107_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP107_ID,
+          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP107_ID,
             validateCSIP107().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP108 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP108_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP108_ID,
+          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP108_ID,
             validateCSIP108().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP109 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP109_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP109_ID,
+          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP109_ID,
             validateCSIP109().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP110 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP110_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP110_ID,
+          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP110_ID,
             validateCSIP110().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP111 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP111_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP111_ID,
+          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP111_ID,
             validateCSIP111().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP112 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP112_ID);
-          addResult(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP112_ID,
+          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP112_ID,
             validateCSIP112().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
         } else {
           String message = Message.createErrorMessage(
             "SKIPPED in %1$s because mets/structMap[@LABEL='CSIP']/div isn't valid", metsName, isRootMets());
 
-          addResults(new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
+          ResultsUtils.addResults(results,
+            new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
             ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,
             ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,
             ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,
@@ -310,7 +317,8 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
         String message = Message.createErrorMessage("SKIPPED in %1$s because mets/structMap[@LABEL='CSIP'] isn't valid",
           metsName, isRootMets());
 
-        addResults(new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
+        ResultsUtils.addResults(results,
+          new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
           ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID,
           ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID,
           ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,
@@ -347,7 +355,8 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
       String message = Message.createErrorMessage("SKIPPED in %1$s because mets/structMap doesn't exist", metsName,
         isRootMets());
 
-      addResults(new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
+      ResultsUtils.addResults(results,
+        new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
         ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID,
         ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID,
         ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID,
@@ -383,7 +392,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
         ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP112_ID);
     }
     notifyObserversFinishModule(moduleName);
-    return getResults();
+    return results;
   }
 
   /*
@@ -1296,28 +1305,39 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
    * content division <div> element must have the @LABEL attribute value
    * “Representations”, taken from the vocabulary. See also: File group names
    */
-  private ReporterDetails validateCSIP103() {
+  private ReporterDetails validateCSIP103() throws IOException {
     boolean found = false;
     List<StructMapType> structMap = mets.getStructMap();
+    boolean existSubMets;
     if (structMap != null) {
-      for (StructMapType struct : structMap) {
-        DivType div = struct.getDiv();
-        if (div != null) {
-          List<DivType> divs = div.getDiv();
-          for (DivType d : divs) {
-            if (d.getLABEL().matches("Representations/")) {
-              found = true;
-              break;
+      if (isZipFileFlag()) {
+        existSubMets = zipManager.checkIfExistsSubMets(getEARKSIPpath());
+      } else {
+        existSubMets = folderManager.checkIfExistsSubMets(getEARKSIPpath());
+      }
+      if (existSubMets) {
+        return new ReporterDetails();
+      } else {
+        for (StructMapType struct : structMap) {
+          DivType div = struct.getDiv();
+          if (div != null) {
+            List<DivType> divs = div.getDiv();
+            for (DivType d : divs) {
+              if (d.getLABEL().equals("Representations")) {
+                found = true;
+                break;
+              }
             }
-          }
-          if (found) {
-            break;
+            if (!found) {
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                Message.createErrorMessage(
+                  "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations'] not found in %1$s", metsName,
+                  isRootMets()),
+                false, false);
+            }
           }
         }
       }
-    }
-    if (!found) {
-      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", false, false);
     }
     return new ReporterDetails();
   }
@@ -1506,22 +1526,23 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                   path.append(mets.getOBJID()).append("/").append(label.toLowerCase());
                 } else {
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    Message.createErrorMessage("mets/OBJECTID in %1$s can't be null", metsName, isRootMets()), false, false);
+                    Message.createErrorMessage("mets/OBJECTID in %1$s can't be null", metsName, isRootMets()), false,
+                    false);
                 }
               } else {
                 path.append(metsPath).append(label.toLowerCase());
               }
               if (!zipManager.checkDirectory(getEARKSIPpath(), path.toString())) {
-                message.append("mets/structMap[@LABEL='CSIP']/div/div/@LABEL in %1$s (").append(label).append(")")
-                  .append("does not lead to a directory (").append(path).append(")");
+                message.append("mets/structMap[@LABEL='CSIP']/div/div/@LABEL in %1$s ( ").append(label).append(" )")
+                  .append("does not lead to a directory ( ").append(path).append(" )");
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                   Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
               }
             } else {
               if (!folderManager.checkDirectory(Paths.get(metsPath).resolve(label.toLowerCase()))) {
-                message.append("mets/structMap[@LABEL='CSIP']/div/div/@LABEL in %1$s (").append(label).append(")")
-                  .append("does not lead to a directory (").append(Paths.get(metsPath).resolve(label.toLowerCase()))
-                  .append(")");
+                message.append("mets/structMap[@LABEL='CSIP']/div/div/@LABEL in %1$s ( ").append(label).append(" )")
+                  .append("does not lead to a directory ( ").append(Paths.get(metsPath).resolve(label.toLowerCase()))
+                  .append(" )");
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                   Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
               }
@@ -1643,8 +1664,8 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                         filePath.append(mets.getOBJID()).append("/").append(href);
                       } else {
                         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                          Message.createErrorMessage("mets/@OBJECTID in %1$s can't be null", metsName, isRootMets()), false,
-                          false);
+                          Message.createErrorMessage("mets/@OBJECTID in %1$s can't be null", metsName, isRootMets()),
+                          false, false);
                       }
                     } else {
                       filePath.append(metsPath).append(href);
@@ -1721,8 +1742,9 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                     }
                   } else {
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      Message.createErrorMessage("mets/structMap/div/div/mptr[@xlink:type='simple'] in %1$s can't be null",
-                        metsName, isRootMets()),
+                      Message.createErrorMessage(
+                        "mets/structMap/div/div/mptr[@xlink:type='simple'] in %1$s can't be null", metsName,
+                        isRootMets()),
                       false, false);
                   }
                 }
@@ -1754,14 +1776,15 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
                 if (locType != null) {
                   if (!locType.equals("URL")) {
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      Message.createErrorMessage("mets/structMap/div/div/mptr[@LOCTYPE='URL'] value in %1$s must be 'URL'",
-                        metsName, isRootMets()),
+                      Message.createErrorMessage(
+                        "mets/structMap/div/div/mptr[@LOCTYPE='URL'] value in %1$s must be 'URL'", metsName,
+                        isRootMets()),
                       false, false);
                   }
                 } else {
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    Message.createErrorMessage("mets/structMap/div/div/mptr[@LOCTYPE='URL'] in %1$s can't be null", metsName,
-                      isRootMets()),
+                    Message.createErrorMessage("mets/structMap/div/div/mptr[@LOCTYPE='URL'] in %1$s can't be null",
+                      metsName, isRootMets()),
                     false, false);
                 }
               }

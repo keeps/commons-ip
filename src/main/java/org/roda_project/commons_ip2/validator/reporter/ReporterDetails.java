@@ -36,6 +36,23 @@ public class ReporterDetails {
     this.skipped = skipped;
   }
 
+  public ReporterDetails(String specification,List<String> issues, boolean valid,boolean skipped){
+    this.detail = "";
+    this.specification = specification;
+    this.issues = new ArrayList<>(issues);
+    this.errors = 0;
+    this.valid = valid;
+    this.skipped = skipped;
+  }
+
+  public ReporterDetails(ReporterDetails clone) {
+    this(clone.getSpecification(),clone.getIssues(), clone.isValid(), clone.isSkipped());
+  }
+
+  public ReporterDetails clone() {
+    return new ReporterDetails(this);
+  }
+
   public String getDetail() {
     return detail;
   }
@@ -74,12 +91,10 @@ public class ReporterDetails {
   }
 
   public void addIssue(String issue) {
-    LOGGER.debug("issue {}",issue);
     this.issues.add(issue);
   }
 
   public void addIssues(List<String> issues) {
-    LOGGER.debug("issues {}",issues);
     this.issues.addAll(issues);
   }
 

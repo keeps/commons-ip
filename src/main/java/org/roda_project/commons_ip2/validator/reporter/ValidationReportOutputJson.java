@@ -24,8 +24,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
  * @author João Gomes <jgomes@keep.pt>
  */
 
-public class ValidationReporter {
-  private static final Logger LOGGER = LoggerFactory.getLogger(ValidationReporter.class);
+public class ValidationReportOutputJson {
+  private static final Logger LOGGER = LoggerFactory.getLogger(ValidationReportOutputJson.class);
   private Path outputFile;
   private final Path sipPath;
   private OutputStream outputStream;
@@ -36,7 +36,7 @@ public class ValidationReporter {
   private int skipped;
   private int notes;
 
-  public ValidationReporter(Path path, Path sipPath) {
+  public ValidationReportOutputJson(Path path, Path sipPath) {
     this.sipPath = sipPath;
     init(path);
   }

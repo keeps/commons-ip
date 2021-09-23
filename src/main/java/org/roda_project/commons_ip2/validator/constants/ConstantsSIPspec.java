@@ -32,8 +32,7 @@ public class ConstantsSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP3_NAME = "Package status";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP3_LOCATION = "metsHdr/@RECORDSTATUS";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP3_DESCRIPTION = "A way of indicating the status of the package and to instruct the OAIS on how "
-    + "to properly handle the package. If not set, the expected behaviour is equal to "
-    + "NEW.See also: Package status";
+    + "to properly handle the package. If not set, the expected behaviour is equal to " + "NEW.";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP3_CARDINALITY = "0..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP3_LEVEL = "MAY";
 
@@ -41,7 +40,7 @@ public class ConstantsSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP4_ID = "SIP4";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP4_NAME = "OAIS Package type information";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP4_LOCATION = "metsHdr/@csip:OAISPACKAGETYPE";
-  public static final String VALIDATION_REPORT_SPECIFICATION_SIP4_DESCRIPTION = "@csip:OAISPACKAGETYPE is used with the value “SIP”.See also: OAIS Package type";
+  public static final String VALIDATION_REPORT_SPECIFICATION_SIP4_DESCRIPTION = "@csip:OAISPACKAGETYPE is used with the value “SIP”.";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP4_CARDINALITY = "1..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP4_LEVEL = "MUST";
 
@@ -54,7 +53,7 @@ public class ConstantsSIPspec {
     + "http://submissionagreement.kb.se/dnr331-1144-2011/20120711/ Note: It is "
     + "recommended to use a machine-readable format for a better description of a "
     + "submission agreement. For example, the submission agreement developed " + "by Docuteam GmbH "
-    + "http://www.loc.gov/standards/mets/profiles/00000041.xmlSee also: " + "Alternative record ID’s";
+    + "http://www.loc.gov/standards/mets/profiles/00000041.xml";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP5_CARDINALITY = "0..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP5_LEVEL = "MAY";
 
@@ -68,7 +67,7 @@ public class ConstantsSIPspec {
     + "http://submissionagreement.kb.se/dnr331-1144-2011/20120711/ Note: It is "
     + "recommended to use a machine-readable format for a better description of a "
     + "submission agreement. For example, the submission agreement developed " + "by Docuteam GmbH "
-    + "http://www.loc.gov/standards/mets/profiles/00000041.xmlSee also: " + "Alternative record ID’s";
+    + "http://www.loc.gov/standards/mets/profiles/00000041.xml";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP6_CARDINALITY = "0..*";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP6_LEVEL = "MAY";
 
@@ -78,7 +77,7 @@ public class ConstantsSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP7_LOCATION = "metsHdr/altRecordID";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP7_DESCRIPTION = "An optional reference code indicating where in the archival hierarchy the "
     + "package shall be placed in the OAIS. @TYPE is used with the value "
-    + "“REFERENCECODE”. Example: FM 12-2387/12726, 2007-09-19See also: " + "Alternative record ID’s";
+    + "“REFERENCECODE”. Example: FM 12-2387/12726, 2007-09-19";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP7_CARDINALITY = "1..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP7_LEVEL = "MAY";
 
@@ -90,7 +89,7 @@ public class ConstantsSIPspec {
     + "reference code structure, this element can be used to record these reference "
     + "codes and therefore support the provenance of the package when a whole "
     + "archival description is not submitted with the submission. @TYPE is used "
-    + "with the value “PREVIOUSREFERENCECODE”. Example: " + "SE/FM/123/123.1/123.1.3See also: Alternative record ID’s";
+    + "with the value “PREVIOUSREFERENCECODE”. Example: " + "SE/FM/123/123.1/123.1.3";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP8_CARDINALITY = "0..*";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP8_LEVEL = "MAY";
 
@@ -143,7 +142,7 @@ public class ConstantsSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP14_ID = "SIP14";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP14_NAME = "Classification of the archival creator agent additional information";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP14_LOCATION = "metsHdr/agent/note/@csip:NOTETYPE";
-  public static final String VALIDATION_REPORT_SPECIFICATION_SIP14_DESCRIPTION = "The archival creator agent note is typed with the value of “IDENTIFICATIONCODE”.See also: Note type";
+  public static final String VALIDATION_REPORT_SPECIFICATION_SIP14_DESCRIPTION = "The archival creator agent note is typed with the value of “IDENTIFICATIONCODE”.";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP14_CARDINALITY = "1..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP14_LEVEL = "MUST";
 
@@ -191,7 +190,7 @@ public class ConstantsSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP20_ID = "SIP20";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP20_NAME = "Classification of the submitting agent additional information";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP20_LOCATION = "metsHdr/agent/note/@csip:NOTETYPE";
-  public static final String VALIDATION_REPORT_SPECIFICATION_SIP20_DESCRIPTION = "The submitting agent note is typed with the value of “IDENTIFICATIONCODE”.See also: Note type";
+  public static final String VALIDATION_REPORT_SPECIFICATION_SIP20_DESCRIPTION = "The submitting agent note is typed with the value of “IDENTIFICATIONCODE”.";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP20_CARDINALITY = "1..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP20_LEVEL = "MUST";
 
@@ -279,7 +278,7 @@ public class ConstantsSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP31_ID = "SIP31";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP31_NAME = "Classification of the preservation agent additional information";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP31_LOCATION = "metsHdr/agent/note/@csip:NOTETYPE";
-  public static final String VALIDATION_REPORT_SPECIFICATION_SIP31_DESCRIPTION = "The preservation agent note is typed with the value of “IDENTIFICATIONCODE”.See also: Note type";
+  public static final String VALIDATION_REPORT_SPECIFICATION_SIP31_DESCRIPTION = "The preservation agent note is typed with the value of “IDENTIFICATIONCODE”.";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP31_CARDINALITY = "1..1";
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP31_LEVEL = "MUST";
 
