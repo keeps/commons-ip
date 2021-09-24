@@ -1584,7 +1584,7 @@ public class ConstantsCSIPspec {
   }
 
   public static String getSpecificationLocation(String id) {
-    if (id.equals("CSIPSTR0")) {
+    if (id.equals("CSIP0")) {
       return VALIDATION_REPORT_SPECIFICATION_CSIP0_LOCATION;
     }
     if (id.equals("CSIPSTR1")) {
@@ -1990,7 +1990,7 @@ public class ConstantsCSIPspec {
   }
 
   public static String getSpecificationDescription(String id) {
-    if (id.equals("CSIPSTR0")) {
+    if (id.equals("CSIP0")) {
       return VALIDATION_REPORT_SPECIFICATION_CSIP0_DESCRIPTION;
     }
     if (id.equals("CSIPSTR1")) {
@@ -2396,7 +2396,7 @@ public class ConstantsCSIPspec {
   }
 
   public static String getSpecificationCardinality(String id) {
-    if (id.equals("CSIPSTR0")) {
+    if (id.equals("CSIP0")) {
       return VALIDATION_REPORT_SPECIFICATION_CSIP0_CARDINALITY;
     }
     if (id.equals("CSIPSTR1")) {
@@ -2802,7 +2802,7 @@ public class ConstantsCSIPspec {
   }
 
   public static String getSpecificationLevel(String id) {
-    if (id.equals("CSIPSTR0")) {
+    if (id.equals("CSIP0")) {
       return VALIDATION_REPORT_SPECIFICATION_CSIP0_LEVEL;
     }
     if (id.equals("CSIPSTR1")) {
