@@ -16,7 +16,6 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.UnmarshalException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
@@ -38,6 +37,7 @@ import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReportOutputJson;
 import org.roda_project.commons_ip2.validator.utils.ResultsUtils;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 /**
  * @author João Gomes <jgomes@keep.pt>
@@ -168,14 +168,29 @@ public class EARKSIPValidator {
       observers.forEach(ValidationObserver::notifyFinishValidation);
 
     } catch (IOException | JAXBException | SAXException e) {
-      String message;
-      if (e instanceof UnmarshalException) {
-        message = e.getCause().getMessage();
-      } else {
-        message = e.getMessage();
+      StringBuilder message = new StringBuilder();
+
+      Throwable cause = e;
+      if (e.getMessage() != null) {
+        message.append("[").append(e.getClass().getSimpleName()).append("] ").append(e.getMessage());
       }
-      ReporterDetails csipStr0 = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, false,
-        false);
+      while (cause.getCause() != null) {
+        cause = cause.getCause();
+        if (message.length() > 0) {
+          message.append(" caused by ");
+        }
+
+        message.append("[").append(cause.getClass().getSimpleName()).append("] ").append(cause.getMessage());
+
+        if (cause instanceof SAXParseException) {
+          SAXParseException e1 = (SAXParseException) cause;
+          message.append(" (line: ").append(e1.getLineNumber()).append(", column: ").append(e1.getColumnNumber())
+            .append(") - ");
+        }
+      }
+
+      ReporterDetails csipStr0 = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+        message.toString(), false, false);
       csipStr0.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
       results.put(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID, csipStr0);
 
@@ -240,7 +255,8 @@ public class EARKSIPValidator {
 
   public void notifyIndicatorsObservers() {
     for (ValidationObserver observer : observers) {
-      observer.notifyIndicators(this.validationReportOutputJson.getErrors(), this.validationReportOutputJson.getSuccess(), this.validationReportOutputJson.getWarnings(),
+      observer.notifyIndicators(this.validationReportOutputJson.getErrors(),
+        this.validationReportOutputJson.getSuccess(), this.validationReportOutputJson.getWarnings(),
         this.validationReportOutputJson.getNotes(), this.validationReportOutputJson.getSkipped());
     }
   }
