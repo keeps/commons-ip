@@ -29,7 +29,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: artifact
-          path: target/commons-ip-cli.jar
+          path: target/commons-ip-2.0.0-beta1.jar
           retention-days: 1
       - name: Get release version
         id: tag
