@@ -13,6 +13,7 @@ import org.roda_project.commons_ip2.validator.component.ValidatorComponentImpl;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
+import org.roda_project.commons_ip2.validator.utils.Message;
 import org.roda_project.commons_ip2.validator.utils.ResultsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -167,12 +168,12 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
       } else {
         if (!Files.isDirectory(path)) {
           details.setValid(false);
-          details.addIssue(ConstantsCSIPspec.VALIDATION_REPORT_PATH_DOES_NOT_EXIST_DETAIL);
+          details.addIssue(Message.createErrorMessage("The SIP path (%1$s) does not exist or is not a directory or is not an archived file format",path.toString(),false));
         }
       }
     } else {
       details.setValid(false);
-      details.addIssue(ConstantsCSIPspec.VALIDATION_REPORT_PATH_DOES_NOT_EXIST_DETAIL);
+      details.addIssue(Message.createErrorMessage("The SIP path (%1$s) does not exist or is not a directory or is not an archived file format",path.toString(),false));
     }
     return details;
   }

@@ -9,6 +9,8 @@ import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -19,9 +21,6 @@ import org.roda_project.commons_ip2.validator.EARKSIPValidator;
 import org.roda_project.commons_ip2.validator.observer.ProgressValidationLoggerObserver;
 import org.roda_project.commons_ip2.validator.utils.ExitCodes;
 import org.xml.sax.SAXException;
-import sun.rmi.runtime.Log;
-
-import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * @author João Gomes <jgomes@keep.pt>
@@ -49,7 +48,6 @@ public class CLI {
       CommandLine commandLine = parser.parse(parameters, args);
       String[] sipPaths = commandLine.getOptionValues("i");
       String reportDirectoryPath = commandLine.getOptionValue("o");
-
       if (sipPaths == null || sipPaths.length == 0) {
         printMissingSipPath(System.out);
       }
@@ -57,6 +55,7 @@ public class CLI {
       if (reportDirectoryPath != null && !Files.isDirectory(Paths.get(reportDirectoryPath))) {
         int code = createDirectory(reportDirectoryPath);
         if (code == ExitCodes.EXIT_CODE_CREATE_DIRECTORY_FAILS) {
+          printErrors(System.out,"Cannot create the directory for the report.");
           return code;
         }
       }
@@ -66,10 +65,6 @@ public class CLI {
       String date = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
       for (String sip : sipPaths) {
         Path sipPath = Paths.get(sip);
-        if (!Files.exists(sipPath)) {
-          return ExitCodes.EXIT_SIP_PATH_DOES_NOT_EXIST;
-        }
-
         Path reportPath;
         int count = 1;
         do {
@@ -77,7 +72,7 @@ public class CLI {
           if (reportDirectoryPath != null) {
             reportPath = Paths.get(reportDirectoryPath).resolve(reportName);
           } else {
-            reportPath = sipPath.getParent().resolve(reportName);
+            reportPath = sipPath.normalize().toAbsolutePath().getParent().resolve(reportName);
           }
 
         } while (Files.exists(reportPath));
@@ -88,10 +83,13 @@ public class CLI {
       }
 
     } catch (ParseException e) {
+      printErrors(System.out,"Can't parse resource files for validation");
       return ExitCodes.EXIT_PARSE_ARG;
     } catch (DateTimeException d) {
+      printErrors(System.out,"Invalid date format error");
       return ExitCodes.EXIT_CODE_INVALID_DATE_FORMAT;
     } catch (IOException | ParserConfigurationException | SAXException e) {
+      printErrors(System.out,"Error on object initialize");
       return ExitCodes.EXIT_CANNOT_CREATE_EARKVALIDATOR_OBJECT;
     }
     return ExitCodes.EXIT_CODE_OK;
@@ -124,8 +122,7 @@ public class CLI {
     out.append("\n");
     out.append("Commands:");
     out.append("\n\n");
-    out.append("\t").append(CLIConstants.CLI_OPTION_VALIDATE).append("\t\t").append("Validate a SIP file")
-      .append("\n");
+    out.append("\t").append(CLIConstants.CLI_OPTION_VALIDATE).append("\t\t").append("Validate a SIP file").append("\n");
 
     out.append("\n");
     printStream.append(out).flush();
@@ -138,6 +135,18 @@ public class CLI {
 
     out.append("\n");
     out.append("Missing SIP Path");
+    out.append("\n\n");
+    out.append("\n");
+    printStream.append(out).flush();
+  }
+
+  private void printErrors(PrintStream printStream,String message) {
+    StringBuilder out = new StringBuilder();
+
+    out.append("ERROR\n");
+
+    out.append("\n");
+    out.append(message);
     out.append("\n\n");
     out.append("\n");
     printStream.append(out).flush();
