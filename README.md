@@ -233,6 +233,7 @@ representation2.addFile(representationFile3);
 // 2) build SIP, providing an output directory
 Path zipSIP = sip.build(tempFolder);
 ```
+
 **Note:** SIP implements the Observer Pattern. This way, if one wants to be notified of SIP build progress, one just needs to implement SIPObserver interface and register itself in the SIP. Something like (just presenting some of the events):
 
 ```java
