@@ -43,10 +43,13 @@ import org.roda_project.commons_ip2.model.RepresentationStatus;
 import org.roda_project.commons_ip2.model.SIP;
 import org.roda_project.commons_ip2.model.ValidationEntry.LEVEL;
 import org.roda_project.commons_ip2.utils.Utils;
+import org.roda_project.commons_ip2.validator.EARKSIPValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
 import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Unit tests for EARK Information Packages (SIP, AIP and DIP)
@@ -70,15 +73,18 @@ public class EARKSIPTest {
 
 
   @Test
-  public void buildAndParseEARKSIP_For_Test_Compliance() throws IPException, ParseException, InterruptedException {
+  public void buildAndParseEARKSIP_For_Test_Compliance() throws IPException, ParseException, InterruptedException, IOException, ParserConfigurationException, SAXException {
     LOGGER.info("Creating full E-ARK SIP");
     Path zipSIP = createFullEARKSIP_For_Test_Compliance();
     LOGGER.info("Done creating full E-ARK SIP");
-
     LOGGER.info("Parsing (and validating) full E-ARK SIP");
     parseAndValidateFullEARKSIP(zipSIP);
-    LOGGER.info("Done parsing (and validating) full E-ARK SIP");
 
+    Path reportPath = Paths.get("/home/jgomes/Desktop/Compliance").resolve("Full-EARK-SIP.json");
+//    Path earkSIPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/Other").resolve("Full-EARK-SIP.zip");
+    EARKSIPValidator earksipValidator = new EARKSIPValidator(zipSIP, reportPath);
+    boolean validate = earksipValidator.validate();
+    LOGGER.info("Done parsing (and validating) full E-ARK SIP");
   }
 
 //  @Test

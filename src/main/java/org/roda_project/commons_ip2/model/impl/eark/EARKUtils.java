@@ -149,12 +149,20 @@ public final class EARKUtils {
         }
         String representationId = representation.getObjectID();
         // 20160407 hsilva: not being used by Common Specification v0.13
-
+        boolean isRepresentationMetadataOther = (representation.getOtherMetadata() != null
+          && !representation.getOtherMetadata().isEmpty());
+        boolean isRepresentationMetadata = ((representation.getDescriptiveMetadata() != null
+          && !representation.getDescriptiveMetadata().isEmpty()) &&  (representation.getPreservationMetadata() != null
+                && !representation.getDescriptiveMetadata().isEmpty()));
+        boolean isRepresentationDocumentation = (representation.getDocumentation() != null
+          && !representation.getDocumentation().isEmpty());
+        boolean isRepresentationSchemas = (representation.getSchemas() != null
+          && !representation.getSchemas().isEmpty());
         IPHeader header = new IPHeader(IPEnums.IPStatus.NEW).setAgents(representation.getAgents());
         MetsWrapper representationMETSWrapper = EARKMETSUtils.generateMETS(representationId,
           representation.getDescription(), ip.getProfile(), false, Optional.empty(), null, header,
           mainMETSWrapper.getMets().getMetsHdr().getOAISPACKAGETYPE(), representation.getContentType(),
-          representation.getContentInformationType());
+          representation.getContentInformationType(),isRepresentationMetadata,isRepresentationMetadataOther,isRepresentationSchemas,isRepresentationDocumentation);
         representationMETSWrapper.getMainDiv().setTYPE(representation.getStatus().asString());
 
         // representation data
@@ -723,13 +731,14 @@ public final class EARKUtils {
                 // treat as a SIP (generic behaviour)
                 if (Files.exists(filePath)) {
                   List<String> fileRelativeFolders = Utils
-                      .getFileRelativeFolders(representationBasePath.resolve(IPConstants.DATA), filePath);
+                    .getFileRelativeFolders(representationBasePath.resolve(IPConstants.DATA), filePath);
                   Optional<IPFileInterface> file = validateFile(ip, filePath, fileType, fileRelativeFolders);
 
                   if (file.isPresent()) {
                     representation.addFile(file.get());
                     ValidationUtils.addInfo(ip.getValidationReport(),
-                        ValidationConstants.REPRESENTATION_FILE_FOUND_WITH_MATCHING_CHECKSUMS, ip.getBasePath(), filePath);
+                      ValidationConstants.REPRESENTATION_FILE_FOUND_WITH_MATCHING_CHECKSUMS, ip.getBasePath(),
+                      filePath);
                   }
                 } else {
                   // treat as a SIP shallow
@@ -758,14 +767,15 @@ public final class EARKUtils {
     }
   }
 
-  private static Optional<IPFileInterface> validateFileShallow(IPInterface ip, FLocat fLocat, Path filePath, FileType fileType) {
+  private static Optional<IPFileInterface> validateFileShallow(IPInterface ip, FLocat fLocat, Path filePath,
+    FileType fileType) {
     Optional<IPFileInterface> file = Optional.empty();
 
     if (URI.create(fLocat.getHref()).getScheme() != null) {
       file = Optional.of(new IPFileShallow(URI.create(fLocat.getHref()), fileType));
     } else {
       ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.REPRESENTATION_SCHEME_NOT_FOUND,
-          ValidationEntry.LEVEL.ERROR, ip.getBasePath(), filePath);
+        ValidationEntry.LEVEL.ERROR, ip.getBasePath(), filePath);
     }
 
     return file;

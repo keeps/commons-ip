@@ -71,7 +71,7 @@ public final class EARKMETSUtils {
 
   public static MetsWrapper generateMETS(String id, String label, String profile, boolean mainMets,
     Optional<List<String>> ancestors, Path metsPath, IPHeader ipHeader, String type, IPContentType contentType,
-    IPContentInformationType contentInformationType) throws IPException {
+    IPContentInformationType contentInformationType,boolean isMetadata,boolean isMetadataOther,boolean isSchemas , boolean isDocumentation) throws IPException {
     Mets mets = new Mets();
     MetsWrapper metsWrapper = new MetsWrapper(mets, metsPath);
 
@@ -126,22 +126,26 @@ public final class EARKMETSUtils {
     // file section
     FileSec fileSec = new FileSec();
     fileSec.setID(Utils.generateRandomAndPrefixedUUID());
-
-    FileGrp dataFileGroup = createFileGroup(IPConstants.DATA_WITH_FIRST_LETTER_CAPITAL);
-    fileSec.getFileGrp().add(dataFileGroup);
-    metsWrapper.setDataFileGroup(dataFileGroup);
-    FileGrp schemasFileGroup = createFileGroup(IPConstants.SCHEMAS_WITH_FIRST_LETTER_CAPITAL);
-    fileSec.getFileGrp().add(schemasFileGroup);
-    metsWrapper.setSchemasFileGroup(schemasFileGroup);
-    if (IPType.AIP.toString().equals(type)) {
-      FileGrp submissionFileGroup = createFileGroup(IPConstants.SUBMISSION);
-      fileSec.getFileGrp().add(submissionFileGroup);
-      metsWrapper.setSubmissionFileGroup(submissionFileGroup);
+    if(!mainMets) {
+      FileGrp dataFileGroup = createFileGroup(IPConstants.DATA_WITH_FIRST_LETTER_CAPITAL);
+      fileSec.getFileGrp().add(dataFileGroup);
+      metsWrapper.setDataFileGroup(dataFileGroup);
     }
-    FileGrp documentationFileGroup = createFileGroup(IPConstants.DOCUMENTATION_WITH_FIRST_LETTER_CAPITAL);
-    fileSec.getFileGrp().add(documentationFileGroup);
-    metsWrapper.setDocumentationFileGroup(documentationFileGroup);
-
+    if(isSchemas) {
+      FileGrp schemasFileGroup = createFileGroup(IPConstants.SCHEMAS_WITH_FIRST_LETTER_CAPITAL);
+      fileSec.getFileGrp().add(schemasFileGroup);
+      metsWrapper.setSchemasFileGroup(schemasFileGroup);
+      if (IPType.AIP.toString().equals(type)) {
+        FileGrp submissionFileGroup = createFileGroup(IPConstants.SUBMISSION);
+        fileSec.getFileGrp().add(submissionFileGroup);
+        metsWrapper.setSubmissionFileGroup(submissionFileGroup);
+      }
+    }
+    if(isDocumentation) {
+      FileGrp documentationFileGroup = createFileGroup(IPConstants.DOCUMENTATION_WITH_FIRST_LETTER_CAPITAL);
+      fileSec.getFileGrp().add(documentationFileGroup);
+      metsWrapper.setDocumentationFileGroup(documentationFileGroup);
+    }
     mets.setFileSec(fileSec);
 
     // E-ARK struct map
@@ -153,37 +157,45 @@ public final class EARKMETSUtils {
     DivType mainDiv = createDivForStructMap(id);
     metsWrapper.setMainDiv(mainDiv);
     // metadata
-    DivType metadataDiv = createDivForStructMap(IPConstants.METADATA_WITH_FIRST_LETTER_CAPITAL);
-    metsWrapper.setMetadataDiv(metadataDiv);
-    mainDiv.getDiv().add(metadataDiv);
+    if(isMetadata) {
+      DivType metadataDiv = createDivForStructMap(IPConstants.METADATA_WITH_FIRST_LETTER_CAPITAL);
+      metsWrapper.setMetadataDiv(metadataDiv);
+      mainDiv.getDiv().add(metadataDiv);
+    }
     // INFO metadata/descriptive & metadata/preservation will be added to
     // metadata div appropriate attributes
 
     // metadata/other
-    DivType otherMetadataDiv = createDivForStructMap(IPConstants.METADATA_WITH_FIRST_LETTER_CAPITAL
-      + IPConstants.ZIP_PATH_SEPARATOR + IPConstants.OTHER_WITH_FIRST_LETTER_CAPITAL);
-    metsWrapper.setOtherMetadataDiv(otherMetadataDiv);
-    mainDiv.getDiv().add(otherMetadataDiv);
-
-    // data
-    DivType dataDiv = createDivForStructMap(IPConstants.DATA_WITH_FIRST_LETTER_CAPITAL);
-    metsWrapper.setDataDiv(dataDiv);
-    mainDiv.getDiv().add(dataDiv);
-    // schemas
-    DivType schemasDiv = createDivForStructMap(IPConstants.SCHEMAS_WITH_FIRST_LETTER_CAPITAL);
-    metsWrapper.setSchemasDiv(schemasDiv);
-    mainDiv.getDiv().add(schemasDiv);
-    // documentation
-    DivType documentationDiv = createDivForStructMap(IPConstants.DOCUMENTATION_WITH_FIRST_LETTER_CAPITAL);
-    metsWrapper.setDocumentationDiv(documentationDiv);
-    mainDiv.getDiv().add(documentationDiv);
-    // submission
-    if (IPType.AIP.toString().equals(type)) {
-      DivType submissionDiv = createDivForStructMap(IPConstants.SUBMISSION);
-      metsWrapper.setSubmissionsDiv(submissionDiv);
-      mainDiv.getDiv().add(submissionDiv);
+    if(isMetadataOther) {
+      DivType otherMetadataDiv = createDivForStructMap(IPConstants.METADATA_WITH_FIRST_LETTER_CAPITAL
+              + IPConstants.ZIP_PATH_SEPARATOR + IPConstants.OTHER_WITH_FIRST_LETTER_CAPITAL);
+      metsWrapper.setOtherMetadataDiv(otherMetadataDiv);
+      mainDiv.getDiv().add(otherMetadataDiv);
     }
-
+    // data
+    if(!mainMets) {
+      DivType dataDiv = createDivForStructMap(IPConstants.DATA_WITH_FIRST_LETTER_CAPITAL);
+      metsWrapper.setDataDiv(dataDiv);
+      mainDiv.getDiv().add(dataDiv);
+    }
+    // schemas
+    if(isSchemas) {
+      DivType schemasDiv = createDivForStructMap(IPConstants.SCHEMAS_WITH_FIRST_LETTER_CAPITAL);
+      metsWrapper.setSchemasDiv(schemasDiv);
+      mainDiv.getDiv().add(schemasDiv);
+    }
+    // documentation
+    if(isDocumentation) {
+      DivType documentationDiv = createDivForStructMap(IPConstants.DOCUMENTATION_WITH_FIRST_LETTER_CAPITAL);
+      metsWrapper.setDocumentationDiv(documentationDiv);
+      mainDiv.getDiv().add(documentationDiv);
+      // submission
+      if (IPType.AIP.toString().equals(type)) {
+        DivType submissionDiv = createDivForStructMap(IPConstants.SUBMISSION);
+        metsWrapper.setSubmissionsDiv(submissionDiv);
+        mainDiv.getDiv().add(submissionDiv);
+      }
+    }
     structMap.setDiv(mainDiv);
     mets.getStructMap().add(structMap);
 

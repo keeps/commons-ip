@@ -126,10 +126,18 @@ public class EARKSIP extends SIP {
     Path zipPath = getZipPath(destinationDirectory, fileNameWithoutExtension);
     try {
       Map<String, ZipEntryInfo> zipEntries = getZipEntries();
-
+      boolean isMetadataOther = (this.getOtherMetadata() != null
+              && !this.getOtherMetadata().isEmpty());
+      boolean isMetadata = ((this.getDescriptiveMetadata() != null
+              && !this.getDescriptiveMetadata().isEmpty()) &&  (this.getPreservationMetadata() != null
+              && !this.getDescriptiveMetadata().isEmpty()));
+      boolean isDocumentation = (this.getDocumentation() != null
+              && !this.getDocumentation().isEmpty());
+      boolean isSchemas = (this.getSchemas() != null
+              && !this.getSchemas().isEmpty());
       MetsWrapper mainMETSWrapper = EARKMETSUtils.generateMETS(StringUtils.join(this.getIds(), " "),
         this.getDescription(), this.getProfile(), true, Optional.ofNullable(this.getAncestors()), null,
-        this.getHeader(), this.getType(), this.getContentType(), null);
+        this.getHeader(), this.getType(), this.getContentType(), null,isMetadata,isMetadataOther,isSchemas,isDocumentation);
 
       EARKUtils.addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
       EARKUtils.addPreservationMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getPreservationMetadata(), null);

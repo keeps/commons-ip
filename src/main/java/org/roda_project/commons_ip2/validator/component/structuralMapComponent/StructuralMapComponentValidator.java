@@ -408,10 +408,21 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
         Message.createErrorMessage("mets/structMap in %1$s can't be null", metsName, isRootMets()), false, false);
     } else {
-      if (structMap.size() != 1) {
+      int numberOfCSIPstructMaps = 0;
+      for (StructMapType struct : structMap) {
+        if (struct.getLABEL().equals("CSIP")) {
+          numberOfCSIPstructMaps++;
+        }
+      }
+      if (numberOfCSIPstructMaps != 1) {
+        String message = numberOfCSIPstructMaps == 0
+          ? "Must have one structMap with the mets/structMap[@LABEL='CSIP'] in %1$s doens't appear mets/structMap[@LABEL='CSIP']."
+          : "Only one structMap with the mets/structMap/@LABEL value CSIP is allowed. See %1$s";
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          Message.createErrorMessage("You have more than one mets/structMap in %1$s", metsName, isRootMets()), false,
-          false);
+          Message.createErrorMessage(
+            message, metsName,
+            isRootMets()),
+          false, false);
       }
     }
     return new ReporterDetails();
@@ -426,11 +437,12 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         String type = struct.getTYPE();
+        String label = struct.getLABEL();
         if (type == null) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
             "mets/structMap[@TYPE='PHYSICAL'] in %1$s can't be null", metsName, isRootMets()), false, false);
         } else {
-          if (!type.equals("PHYSICAL")) {
+          if (label.equals("CSIP") && !type.equals("PHYSICAL")) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
               "mets/structMap[@TYPE='PHYSICAL'] value in %1$s must be PHYSICAL", metsName, isRootMets()), false, false);
           }
