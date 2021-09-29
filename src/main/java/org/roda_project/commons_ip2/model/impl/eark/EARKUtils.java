@@ -153,7 +153,7 @@ public final class EARKUtils {
           && !representation.getOtherMetadata().isEmpty());
         boolean isRepresentationMetadata = ((representation.getDescriptiveMetadata() != null
           && !representation.getDescriptiveMetadata().isEmpty()) &&  (representation.getPreservationMetadata() != null
-                && !representation.getDescriptiveMetadata().isEmpty()));
+                && !representation.getPreservationMetadata().isEmpty()));
         boolean isRepresentationDocumentation = (representation.getDocumentation() != null
           && !representation.getDocumentation().isEmpty());
         boolean isRepresentationSchemas = (representation.getSchemas() != null

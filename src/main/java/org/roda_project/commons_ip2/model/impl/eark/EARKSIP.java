@@ -130,7 +130,7 @@ public class EARKSIP extends SIP {
               && !this.getOtherMetadata().isEmpty());
       boolean isMetadata = ((this.getDescriptiveMetadata() != null
               && !this.getDescriptiveMetadata().isEmpty()) &&  (this.getPreservationMetadata() != null
-              && !this.getDescriptiveMetadata().isEmpty()));
+              && !this.getPreservationMetadata().isEmpty()));
       boolean isDocumentation = (this.getDocumentation() != null
               && !this.getDocumentation().isEmpty());
       boolean isSchemas = (this.getSchemas() != null
