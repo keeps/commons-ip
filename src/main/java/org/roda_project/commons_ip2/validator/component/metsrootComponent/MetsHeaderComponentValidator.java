@@ -1358,12 +1358,12 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
       for (MetsType.MetsHdr.Agent agent : agents) {
         String role = agent.getROLE();
         if (role != null) {
-          if (role.equals("CREATOR")) {
+          if (role.equals("CREATOR") && (agent.getOTHERTYPE() != null && !agent.getOTHERTYPE().equals("SOFTWARE"))) {
             String type = agent.getTYPE();
             if (!type.equals("INDIVIDUAL")) {
               StringBuilder message = new StringBuilder();
               message.append("Value ").append(type).append(
-                " in %1$s for metsHdr/agent/@TYPE isn't valid, when the metsHdr/agent/@ROLE is CREATOR metsHdr/agent/@TYPE must be INDIVIDUAL");
+                " in %1$s for metsHdr/agent/@TYPE isn't valid, when the metsHdr/agent/@ROLE is CREATOR and  metsHdr/agent/@OTHERTYPE isn't SOFTWARE metsHdr/agent/@TYPE must be INDIVIDUAL");
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
                 Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
             }

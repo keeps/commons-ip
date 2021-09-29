@@ -19,9 +19,9 @@
 
 	<distributionManagement>
 		<repository>
-			<id>keeps_artifactory</id>
-			<name>KEEP SOLUTIONS artifactory</name>
-			<url>https://artifactory.keep.pt/artifactory/keep</url>
+			<id>github</id>
+			<name>GitHub Packages</name>
+			<url>https://maven.pkg.github.com/keeps/commons-ip</url>
 		</repository>
 	</distributionManagement>
 

@@ -152,8 +152,8 @@ public final class EARKUtils {
         boolean isRepresentationMetadataOther = (representation.getOtherMetadata() != null
           && !representation.getOtherMetadata().isEmpty());
         boolean isRepresentationMetadata = ((representation.getDescriptiveMetadata() != null
-          && !representation.getDescriptiveMetadata().isEmpty()) &&  (representation.getPreservationMetadata() != null
-                && !representation.getPreservationMetadata().isEmpty()));
+          && !representation.getDescriptiveMetadata().isEmpty())
+          || (representation.getPreservationMetadata() != null && !representation.getPreservationMetadata().isEmpty()));
         boolean isRepresentationDocumentation = (representation.getDocumentation() != null
           && !representation.getDocumentation().isEmpty());
         boolean isRepresentationSchemas = (representation.getSchemas() != null
@@ -162,7 +162,8 @@ public final class EARKUtils {
         MetsWrapper representationMETSWrapper = EARKMETSUtils.generateMETS(representationId,
           representation.getDescription(), ip.getProfile(), false, Optional.empty(), null, header,
           mainMETSWrapper.getMets().getMetsHdr().getOAISPACKAGETYPE(), representation.getContentType(),
-          representation.getContentInformationType(),isRepresentationMetadata,isRepresentationMetadataOther,isRepresentationSchemas,isRepresentationDocumentation);
+          representation.getContentInformationType(), isRepresentationMetadata, isRepresentationMetadataOther,
+          isRepresentationSchemas, isRepresentationDocumentation);
         representationMETSWrapper.getMainDiv().setTYPE(representation.getStatus().asString());
 
         // representation data

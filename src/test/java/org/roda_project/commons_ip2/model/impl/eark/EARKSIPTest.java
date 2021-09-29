@@ -39,6 +39,7 @@ import org.roda_project.commons_ip2.model.IPFileInterface;
 import org.roda_project.commons_ip2.model.IPFileShallow;
 import org.roda_project.commons_ip2.model.IPMetadata;
 import org.roda_project.commons_ip2.model.IPRepresentation;
+import org.roda_project.commons_ip2.model.MetadataStatus;
 import org.roda_project.commons_ip2.model.MetadataType;
 import org.roda_project.commons_ip2.model.MetadataType.MetadataTypeEnum;
 import org.roda_project.commons_ip2.model.RepresentationStatus;
@@ -71,7 +72,7 @@ public class EARKSIPTest {
   }
 
   @Test
-  public void buildAndParseEARKSIP_For_Test_Compliance()
+  public void buildParseAndValidateEARKSIP()
     throws IPException, ParseException, InterruptedException, IOException, ParserConfigurationException, SAXException {
     LOGGER.info("Creating full E-ARK SIP");
     Path zipSIP = createFullEARKSIP_For_Test_Compliance();
@@ -79,44 +80,37 @@ public class EARKSIPTest {
     LOGGER.info("Parsing (and validating) full E-ARK SIP");
     parseAndValidateFullEARKSIP(zipSIP);
 
-    int i = 1;
-    Path reportPath;
-    do {
-      reportPath = Paths.get("/home/jgomes/Desktop/Compliance").resolve("Full-EARK-SIP_" + i + ".json");
-      i++;
-    } while (Files.exists(reportPath));
-
-    // Path earkSIPath =
-    // Paths.get("/home/jgomes/Desktop/Demo/SIPS/Other").resolve("Full-EARK-SIP.zip");
+    Path reportPath = Files.createTempDirectory("reports").resolve("Full-EARK-SIP.json");
     EARKSIPValidator earksipValidator = new EARKSIPValidator(zipSIP, reportPath);
     boolean validate = earksipValidator.validate();
     LOGGER.info("Done parsing (and validating) full E-ARK SIP");
+    Assert.assertTrue(validate);
   }
 
-  // @Test
-  // public void buildAndParseEARKSIP() throws IPException, ParseException,
-  // InterruptedException {
-  // LOGGER.info("Creating full E-ARK SIP");
-  // Path zipSIP = createFullEARKSIP();
-  // LOGGER.info("Done creating full E-ARK SIP");
-  //
-  // LOGGER.info("Parsing (and validating) full E-ARK SIP");
-  // parseAndValidateFullEARKSIP(zipSIP);
-  // LOGGER.info("Done parsing (and validating) full E-ARK SIP");
-  //
-  // }
-  //
-  // @Test
-  // public void buildEARKSIPShallow() throws IPException, InterruptedException,
-  // DatatypeConfigurationException, ParseException, URISyntaxException {
-  // LOGGER.info("Creating full E-ARK SIP-S");
-  // Path zipSIPS = createFullEARKSIPS();
-  // LOGGER.info("Done creating full E-ARK SIP-S");
-  //
-  // LOGGER.info("Parsing (and validating) full E-ARK SIP");
-  // parseAndValidateFullEARKSIPS(zipSIPS);
-  // LOGGER.info("Done parsing (and validating) full E-ARK SIP");
-  // }
+   @Test
+   public void buildAndParseEARKSIP() throws IPException, ParseException,
+   InterruptedException {
+   LOGGER.info("Creating full E-ARK SIP");
+   Path zipSIP = createFullEARKSIP();
+   LOGGER.info("Done creating full E-ARK SIP");
+
+   LOGGER.info("Parsing (and validating) full E-ARK SIP");
+   parseAndValidateFullEARKSIP(zipSIP);
+   LOGGER.info("Done parsing (and validating) full E-ARK SIP");
+
+   }
+
+//   @Test
+//   public void buildEARKSIPShallow() throws IPException, InterruptedException,
+//   DatatypeConfigurationException, ParseException, URISyntaxException {
+//   LOGGER.info("Creating full E-ARK SIP-S");
+//   Path zipSIPS = createFullEARKSIPS();
+//   LOGGER.info("Done creating full E-ARK SIP-S");
+//
+//   LOGGER.info("Parsing (and validating) full E-ARK SIP");
+//   parseAndValidateFullEARKSIPS(zipSIPS);
+//   LOGGER.info("Done parsing (and validating) full E-ARK SIP");
+//   }
 
   private Path createFullEARKSIPS()
     throws IPException, InterruptedException, DatatypeConfigurationException, URISyntaxException {
@@ -437,6 +431,7 @@ public class EARKSIPTest {
 
     // 2) build SIP, providing an output directory
     Path zipSIP = sip.build(Paths.get("/home/jgomes/Desktop/Compliance/"));
+    //Path zipSIP = sip.build(tempFolder);
 
     return zipSIP;
   }
