@@ -430,8 +430,7 @@ public class EARKSIPTest {
     representation2.addFile(representationFile3);
 
     // 2) build SIP, providing an output directory
-    Path zipSIP = sip.build(Paths.get("/home/jgomes/Desktop/Compliance/"));
-    //Path zipSIP = sip.build(tempFolder);
+    Path zipSIP = sip.build(tempFolder);
 
     return zipSIP;
   }
