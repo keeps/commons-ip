@@ -34,6 +34,6 @@ jobs:
           name: Version ${{ steps.tag.outputs.VERSION }}
           tag_name: ${{ steps.tag.outputs.VERSION }}
           draft: true
-          files: target/commons-ip-2.0.0-beta1.jar
+          files: target/commons-ip-2.0.0-beta2.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
