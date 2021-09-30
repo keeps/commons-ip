@@ -25,6 +25,8 @@ jobs:
           restore-keys: ${{ runner.os }}-maven-
       - name: Build Jar and Deploy
         run: mvn --batch-mode clean package deploy -P cli
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Get release version
         id: tag
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\/}
