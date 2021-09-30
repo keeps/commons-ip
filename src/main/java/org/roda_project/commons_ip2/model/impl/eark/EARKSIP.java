@@ -177,7 +177,7 @@ public class EARKSIP extends SIP {
     throws IPException, InterruptedException {
     try {
       notifySipBuildPackagingStarted(zipEntries.size());
-      ZIPUtils.zip(zipEntries, Files.newOutputStream(zipPath), this, false, true);
+      ZIPUtils.zip(zipEntries, Files.newOutputStream(zipPath), this, true, true);
     } catch (ClosedByInterruptException e) {
       throw new InterruptedException();
     } catch (IOException e) {

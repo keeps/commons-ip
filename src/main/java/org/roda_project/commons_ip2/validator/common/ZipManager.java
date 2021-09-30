@@ -48,7 +48,7 @@ public class ZipManager {
     String entry = null;
     while (entries.hasMoreElements()) {
       ZipEntry entr = (ZipEntry) entries.nextElement();
-      if (entr.getName().endsWith("METS.xml")) {
+      if (entr.getName().endsWith("/METS.xml")) {
         if (entr.getName().split("/").length == 2) {
           entry = entr.getName();
         }
@@ -106,9 +106,10 @@ public class ZipManager {
     Enumeration entries = zipFile.entries();
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().endsWith("METS.xml")) {
+      if (entry.getName().endsWith("/METS.xml")) {
         if (entry.getName().split("/").length == 2) {
           found = true;
+          break;
         }
       }
     }
@@ -213,7 +214,7 @@ public class ZipManager {
 
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().endsWith("METS.xml")) {
+      if (entry.getName().endsWith("/METS.xml")) {
         if (entry.getName().split("/").length > 2) {
           InputStream stream = zipFile.getInputStream(entry);
           if (stream != null) {
@@ -317,7 +318,7 @@ public class ZipManager {
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
       if (!entry.getName().matches(".*/METS.xml")) {
-        if (!entry.getName().contains("metadata")) {
+        if (!entry.getName().contains("/metadata")) {
           if (!entry.isDirectory()) {
             metadataFiles.put(entry.getName(), false);
           }
@@ -424,7 +425,7 @@ public class ZipManager {
           countSubMets++;
         }
       } else {
-        if (entry.getName().contains("representations")
+        if (entry.getName().contains("/representations/")
           && (entry.getName().split("/").length > 3 && !entry.isDirectory())) {
           String[] representations = entry.getName().split("/");
           StringBuilder representationName = new StringBuilder();
@@ -447,7 +448,7 @@ public class ZipManager {
     Enumeration entries = zipFile.entries();
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().contains("representations")) {
+      if (entry.getName().contains("/representations/")) {
         if (entry.getName().split("/").length > 3) {
           String[] representations = entry.getName().split("/");
           StringBuilder representationName = new StringBuilder();
@@ -467,7 +468,7 @@ public class ZipManager {
     Enumeration entries = zipFile.entries();
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().contains("representations")) {
+      if (entry.getName().contains("/representations/")) {
         if (entry.getName().split("/").length > 3) {
           if (!entry.isDirectory()) {
             count++;

@@ -135,7 +135,7 @@ public final class ZIPUtils {
       if (createSipIdFolder) {
         entry = new ZipEntry(sip.getId() + "/" + file.getName());
       } else {
-        entry = new ZipEntry(sip.getId() + "/" + file.getName());
+        entry = new ZipEntry(file.getName());
       }
 
       zos.putNextEntry(entry);
