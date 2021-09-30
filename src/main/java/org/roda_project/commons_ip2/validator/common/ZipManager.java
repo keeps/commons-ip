@@ -426,13 +426,10 @@ public class ZipManager {
         }
       } else {
         if (entry.getName().contains("/representations/")
-          && (entry.getName().split("/").length > 3 && !entry.isDirectory())) {
-          String[] representations = entry.getName().split("/");
-          StringBuilder representationName = new StringBuilder();
-          representationName.append(representations[0]).append("/").append(representations[1]).append("/")
-            .append(representations[2]);
-          if (!representationsFoldersNames.contains(representationName.toString())) {
-            representationsFoldersNames.add(representationName.toString());
+          && (entry.getName().split("/").length > 3 && !entry.isDirectory())) {;
+          String representationName = getRepresentationName(entry.getName());
+          if (!representationsFoldersNames.contains(representationName)) {
+            representationsFoldersNames.add(representationName);
           }
         }
       }
@@ -450,11 +447,8 @@ public class ZipManager {
       ZipEntry entry = (ZipEntry) entries.nextElement();
       if (entry.getName().contains("/representations/")) {
         if (entry.getName().split("/").length > 3) {
-          String[] representations = entry.getName().split("/");
-          StringBuilder representationName = new StringBuilder();
-          representationName.append(representations[0]).append("/").append(representations[1]).append("/")
-            .append(representations[2]);
-          representationsFoldersNames.add(representationName.toString());
+          String representationName = getRepresentationName(entry.getName());
+          representationsFoldersNames.add(representationName);
         }
       }
     }
@@ -498,5 +492,13 @@ public class ZipManager {
       }
     }
     return additionalFolders;
+  }
+
+  private String getRepresentationName(String entry){
+    String[] representations = entry.split("/");
+    StringBuilder representationName = new StringBuilder();
+    representationName.append(representations[0]).append("/").append(representations[1]).append("/")
+            .append(representations[2]);
+    return representationName.toString();
   }
 }
