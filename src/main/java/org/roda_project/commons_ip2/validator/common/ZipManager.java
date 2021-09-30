@@ -48,7 +48,7 @@ public class ZipManager {
     String entry = null;
     while (entries.hasMoreElements()) {
       ZipEntry entr = (ZipEntry) entries.nextElement();
-      if (entr.getName().matches(".*/METS.xml")) {
+      if (entr.getName().endsWith("/METS.xml")) {
         if (entr.getName().split("/").length == 2) {
           entry = entr.getName();
         }
@@ -106,9 +106,10 @@ public class ZipManager {
     Enumeration entries = zipFile.entries();
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().matches(".*/METS.xml")) {
+      if (entry.getName().endsWith("/METS.xml")) {
         if (entry.getName().split("/").length == 2) {
           found = true;
+          break;
         }
       }
     }
@@ -213,7 +214,7 @@ public class ZipManager {
 
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().matches(".*/METS.xml")) {
+      if (entry.getName().endsWith("/METS.xml")) {
         if (entry.getName().split("/").length > 2) {
           InputStream stream = zipFile.getInputStream(entry);
           if (stream != null) {
@@ -241,10 +242,19 @@ public class ZipManager {
   public boolean checkDirectory(Path path, String directoryPath) throws IOException {
     ZipFile zipFile = new ZipFile(path.toFile());
     ZipEntry e = zipFile.getEntry(directoryPath);
+    Enumeration entries = zipFile.entries();
+    boolean found = false;
     if (e == null) {
-      return false;
+      while (entries.hasMoreElements()) {
+        ZipEntry entry = (ZipEntry) entries.nextElement();
+        if (entry.getName().startsWith(directoryPath) && !entry.isDirectory()) {
+          found = true;
+        }
+      }
+    } else {
+      found = true;
     }
-    return true;
+    return found;
   }
 
   public boolean checkSubMetsFolder(Path path, String objectID) throws IOException {
@@ -308,7 +318,7 @@ public class ZipManager {
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
       if (!entry.getName().matches(".*/METS.xml")) {
-        if (!entry.getName().contains("metadata")) {
+        if (!entry.getName().contains("/metadata")) {
           if (!entry.isDirectory()) {
             metadataFiles.put(entry.getName(), false);
           }
@@ -344,12 +354,10 @@ public class ZipManager {
     Enumeration entries = zipFile.entries();
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().matches(".*/" + folder + "/")) {
-        if (entry.isDirectory()) {
-          if (entry.getName().split("/").length == 2) {
-            found = true;
-            break;
-          }
+      if (entry.getName().matches(".*/" + folder + "/.*")) {
+        if (entry.getName().split("/")[1].equals(folder)) {
+          found = true;
+          break;
         }
       }
     }
@@ -408,7 +416,8 @@ public class ZipManager {
     ZipFile zipFile = new ZipFile(path.toFile());
     Enumeration entries = zipFile.entries();
     int countSubMets = 0;
-    int countRepresentations = 0;
+    int countRepresentations;
+    List<String> representationsFoldersNames = new ArrayList<>();
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
       if (entry.getName().matches(".*/METS.xml")) {
@@ -416,13 +425,17 @@ public class ZipManager {
           countSubMets++;
         }
       } else {
-        if (entry.getName().matches(".*/representations/.*/")) {
-          if (entry.getName().split("/").length == 3 && entry.isDirectory()) {
-            countRepresentations++;
+        if (entry.getName().contains("/representations/")
+          && (entry.getName().split("/").length > 3 && !entry.isDirectory())) {;
+          String representationName = getRepresentationName(entry.getName());
+          if (!representationsFoldersNames.contains(representationName)) {
+            representationsFoldersNames.add(representationName);
           }
         }
       }
     }
+    zipFile.close();
+    countRepresentations = representationsFoldersNames.size();
     return countSubMets == countRepresentations;
   }
 
@@ -432,14 +445,14 @@ public class ZipManager {
     Enumeration entries = zipFile.entries();
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().matches(".*/representations/.*/")) {
-        if (entry.getName().split("/").length == 3) {
-          if (entry.isDirectory()) {
-            representationsFoldersNames.add(entry.getName());
-          }
+      if (entry.getName().contains("/representations/")) {
+        if (entry.getName().split("/").length > 3) {
+          String representationName = getRepresentationName(entry.getName());
+          representationsFoldersNames.add(representationName);
         }
       }
     }
+    zipFile.close();
     return representationsFoldersNames;
   }
 
@@ -449,8 +462,8 @@ public class ZipManager {
     Enumeration entries = zipFile.entries();
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().matches(".*/representations/.*/")) {
-        if (entry.getName().split("/").length == 3) {
+      if (entry.getName().contains("/representations/")) {
+        if (entry.getName().split("/").length > 3) {
           if (!entry.isDirectory()) {
             count++;
           }
@@ -472,12 +485,20 @@ public class ZipManager {
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
       String[] folder = entry.getName().split("/");
-      if(folder.length == 2 && entry.isDirectory()){
-        if(!commonFolders.contains(folder[1])){
+      if (folder.length == 2 && entry.isDirectory()) {
+        if (!commonFolders.contains(folder[1])) {
           additionalFolders.add(folder[1]);
         }
       }
     }
     return additionalFolders;
+  }
+
+  private String getRepresentationName(String entry){
+    String[] representations = entry.split("/");
+    StringBuilder representationName = new StringBuilder();
+    representationName.append(representations[0]).append("/").append(representations[1]).append("/")
+            .append(representations[2]);
+    return representationName.toString();
   }
 }

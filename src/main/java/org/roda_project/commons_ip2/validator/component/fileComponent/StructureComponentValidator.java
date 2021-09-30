@@ -348,19 +348,13 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
    */
   private ReporterDetails validateCSIPSTR10() throws IOException {
     List<String> representationsFoldersNames;
-    List<String> tmp;
+    List<String> distintFoldersNames;
     if (isZipFileFlag()) {
       representationsFoldersNames = zipManager.getRepresentationsFoldersNames(getEARKSIPpath());
       if (!representationsFoldersNames.isEmpty()) {
-        if (zipManager.countFilesInsideRepresentations(getEARKSIPpath()) != 0) {
+        if (zipManager.countFilesInsideRepresentations(getEARKSIPpath()) == 0) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
             "The representations folder SHOULD include a sub-folder for each individual representation.", false, false);
-        } else {
-          tmp = representationsFoldersNames.stream().distinct().collect(Collectors.toList());
-          if (representationsFoldersNames.size() != tmp.size()) {
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "Names of representatios folders must be unique", false, false);
-          }
         }
       } else {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
@@ -369,15 +363,9 @@ public class StructureComponentValidator extends ValidatorComponentImpl {
     } else {
       representationsFoldersNames = folderManager.getRepresentationsFoldersNames(getEARKSIPpath());
       if (!representationsFoldersNames.isEmpty()) {
-        if (folderManager.countFilesInsideRepresentations(getEARKSIPpath()) != 0) {
+        if (folderManager.countFilesInsideRepresentations(getEARKSIPpath()) == 0) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
             "The representations folder SHOULD include a sub-folder for each individual representation.", false, false);
-        } else {
-          tmp = representationsFoldersNames.stream().distinct().collect(Collectors.toList());
-          if (representationsFoldersNames.size() != tmp.size()) {
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "Names of representatios folders must be unique", false, false);
-          }
         }
       } else {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,

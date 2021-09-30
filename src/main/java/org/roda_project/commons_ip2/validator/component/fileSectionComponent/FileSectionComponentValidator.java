@@ -325,11 +325,9 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    */
   private ReporterDetails validateCSIP60() throws IOException {
     List<MetsType.FileSec.FileGrp> fileGrps = mets.getFileSec().getFileGrp();
-    boolean found = false;
     StringBuilder message = new StringBuilder();
     for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
       if (fileGrp.getUSE().equals("Documentation")) {
-        found = true;
         List<FileType> files = fileGrp.getFile();
         if (files != null && !files.isEmpty()) {
           for (FileType file : files) {
@@ -365,10 +363,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
         }
       }
     }
-    if (!found) {
-      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-        "must have one mets/fileSec/fileGrp[@USE=’Documentation’] in %1$s", metsName, isRootMets()), false, false);
-    }
+
     return new ReporterDetails();
   }
 
@@ -396,7 +391,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
                 filePath.append(metsPath).append(href);
               }
               if (!zipManager.checkPathExists(getEARKSIPpath(), filePath.toString())) {
-                message.append("mets/fileSec/fileGrp[@USE=’Documentation’] ").append(filePath)
+                message.append("mets/fileSec/fileGrp[@USE=’Schemas’] ").append(filePath)
                   .append(" doesn't exists (%1$s)");
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                   Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
@@ -406,8 +401,8 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
             for (FileType.FLocat flocat : fLocats) {
               String filePath = URLDecoder.decode(flocat.getHref(), UTF_8);
               if (!folderManager.checkPathExists(Paths.get(metsPath).resolve(filePath))) {
-                message.append("mets/fileSec/fileGrp[@USE=’Documentation’] ")
-                  .append(Paths.get(metsPath).resolve(filePath)).append(" doesn't exists (%1$s)");
+                message.append("mets/fileSec/fileGrp[@USE=’Schemas’] ").append(Paths.get(metsPath).resolve(filePath))
+                  .append(" doesn't exists (%1$s)");
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                   Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
               }
@@ -443,7 +438,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
                 filePath.append(metsPath).append(href);
               }
               if (!zipManager.checkPathExists(getEARKSIPpath(), filePath.toString())) {
-                message.append("mets/fileSec/fileGrp[@USE=’Documentation’] ").append(filePath)
+                message.append("mets/fileSec/fileGrp[@USE=’Representations’] ").append(filePath)
                   .append(" doesn't exists (%1$s)");
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                   Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
@@ -453,7 +448,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
             for (FileType.FLocat flocat : fLocats) {
               String filePath = URLDecoder.decode(flocat.getHref(), UTF_8);
               if (!folderManager.checkPathExists(Paths.get(metsPath).resolve(filePath))) {
-                message.append("mets/fileSec/fileGrp[@USE=’Documentation’] ")
+                message.append("mets/fileSec/fileGrp[@USE=’Representations’] ")
                   .append(Paths.get(metsPath).resolve(filePath)).append(" doesn't exists (%1$s)");
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                   Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);

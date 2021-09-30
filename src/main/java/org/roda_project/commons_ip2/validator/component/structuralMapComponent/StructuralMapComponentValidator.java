@@ -95,7 +95,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
             /* CSIP90 */
             notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP90_ID);
             ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP90_ID,
-              validateCSIP90().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+             new ReporterDetails().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
             /* CSIP91 */
             notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP91_ID);
@@ -134,7 +134,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
             /* CSIP95 */
             notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP95_ID);
             ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP95_ID,
-              validateCSIP95().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+              new ReporterDetails().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
             /* CSIP96 */
             notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP96_ID);
@@ -173,7 +173,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
             /* CSIP99 */
             notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP99_ID);
             ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP99_ID,
-              validateCSIP99().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+              new ReporterDetails().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
             /* CSIP100 */
             notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP100_ID);
@@ -408,10 +408,18 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
         Message.createErrorMessage("mets/structMap in %1$s can't be null", metsName, isRootMets()), false, false);
     } else {
-      if (structMap.size() != 1) {
+      int numberOfCSIPstructMaps = 0;
+      for (StructMapType struct : structMap) {
+        if (struct.getLABEL().equals("CSIP")) {
+          numberOfCSIPstructMaps++;
+        }
+      }
+      if (numberOfCSIPstructMaps != 1) {
+        String message = numberOfCSIPstructMaps == 0
+          ? "Must have one structMap with the mets/structMap[@LABEL='CSIP'] in %1$s doens't appear mets/structMap[@LABEL='CSIP']."
+          : "Only one structMap with the mets/structMap/@LABEL value CSIP is allowed. See %1$s";
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          Message.createErrorMessage("You have more than one mets/structMap in %1$s", metsName, isRootMets()), false,
-          false);
+          Message.createErrorMessage(message, metsName, isRootMets()), false, false);
       }
     }
     return new ReporterDetails();
@@ -426,13 +434,18 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         String type = struct.getTYPE();
-        if (type == null) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-            "mets/structMap[@TYPE='PHYSICAL'] in %1$s can't be null", metsName, isRootMets()), false, false);
-        } else {
-          if (!type.equals("PHYSICAL")) {
+        String label = struct.getLABEL();
+        if (label.equals("CSIP")) {
+          if (type == null) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-              "mets/structMap[@TYPE='PHYSICAL'] value in %1$s must be PHYSICAL", metsName, isRootMets()), false, false);
+              "mets/structMap[@TYPE='PHYSICAL'] in %1$s can't be null", metsName, isRootMets()), false, false);
+          } else {
+            if (!type.equals("PHYSICAL")) {
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                Message.createErrorMessage("mets/structMap[@TYPE='PHYSICAL'] value in %1$s must be PHYSICAL", metsName,
+                  isRootMets()),
+                false, false);
+            }
           }
         }
       }
@@ -447,6 +460,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
   private ReporterDetails validateCSIP82() {
     List<StructMapType> structMap = mets.getStructMap();
     if (structMap != null) {
+      int numberOfCsipLabels = 0;
       for (StructMapType struct : structMap) {
         String label = struct.getLABEL();
         if (label == null) {
@@ -454,11 +468,14 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
             Message.createErrorMessage("mets/structMap[@LABEL='CSIP'] in %1$s can't be null", metsName, isRootMets()),
             false, false);
         } else {
-          if (!label.equals("CSIP")) {
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-              "mets/structMap[@LABEL='CSIP'] value in %1$s must be CSIP", metsName, isRootMets()), false, false);
+          if (label.equals("CSIP")) {
+            numberOfCsipLabels++;
           }
         }
+      }
+      if (numberOfCsipLabels != 1) {
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+          "mets/structMap[@LABEL='CSIP'] value in %1$s must be CSIP", metsName, isRootMets()), false, false);
       }
     }
     return new ReporterDetails();
@@ -501,12 +518,14 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     List<StructMapType> structMap = mets.getStructMap();
     if (structMap != null) {
       for (StructMapType struct : structMap) {
-        DivType div = struct.getDiv();
-        if (div == null) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            Message.createErrorMessage("Must have a single division mets/structMap[@LABEL='CSIP']/div in %1$s",
-              metsName, isRootMets()),
-            false, false);
+        if (struct.getLABEL().equals("CSIP")) {
+          DivType div = struct.getDiv();
+          if (div == null) {
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+              Message.createErrorMessage("Must have a single division mets/structMap[@LABEL='CSIP']/div in %1$s",
+                metsName, isRootMets()),
+              false, false);
+          }
         }
       }
     }
@@ -555,7 +574,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         DivType div = struct.getDiv();
-        if (div != null) {
+        if (div != null && div.getLABEL().equals("CSIP")) {
           String label = div.getLABEL();
           if (label == null) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
@@ -586,42 +605,44 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     List<StructMapType> structMap = mets.getStructMap();
     List<MdSecType> dmdSec = mets.getDmdSec();
     List<AmdSecType> amdSec = mets.getAmdSec();
-
-    if (dmdSec == null && amdSec == null) {
+    boolean isMetadata = false;
+    if ((dmdSec != null && !dmdSec.isEmpty())) {
+      for (MdSecType mdSecType : dmdSec) {
+        if (mdSecType.getMdRef() != null) {
+          isMetadata = true;
+        }
+      }
+      if (!isMetadata && (amdSec != null && !amdSec.isEmpty())) {
+        for (AmdSecType amdSecType : amdSec) {
+          if (amdSecType.getDigiprovMD() != null && !amdSecType.getDigiprovMD().isEmpty()) {
+            isMetadata = true;
+          }
+        }
+      }
+    } else {
+      if (amdSec != null && !amdSec.isEmpty()) {
+        for (AmdSecType amdSecType : amdSec) {
+          if (amdSecType.getDigiprovMD() != null && !amdSecType.getDigiprovMD().isEmpty()) {
+            isMetadata = true;
+          }
+        }
+      }
+    }
+    if (isMetadata) {
       for (StructMapType struct : structMap) {
         DivType div = struct.getDiv();
-        if (div != null) {
+        if (div != null && div.getLABEL().equals("CSIP")) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
             if (d.getLABEL().equals("Metadata")) {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                 Message.createErrorMessage(
-                  "The section of administrative or descriptive metadata remains to be added in %1$s", metsName,
+                  "You have metadata files, must add mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata'] in %1$s", metsName,
                   isRootMets()),
                 false, false);
             }
           }
         }
-      }
-    } else {
-      boolean found = false;
-      for (StructMapType struct : structMap) {
-        DivType div = struct.getDiv();
-        if (div != null) {
-          List<DivType> divs = div.getDiv();
-          for (DivType d : divs) {
-            if (d.getLABEL().equals("Metadata")) {
-              found = true;
-              break;
-            }
-          }
-        }
-      }
-      if (!found) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          Message.createErrorMessage("mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata'] in %1$s not found",
-            metsName, isRootMets()),
-          false, false);
       }
     }
     return new ReporterDetails();
@@ -709,7 +730,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     List<AmdSecType> amdSec = mets.getAmdSec();
     boolean found = false;
     List<String> amdSecIDs = new ArrayList<>();
-    if (amdSec.size() != 0) {
+    if (amdSec != null && !amdSec.isEmpty()) {
       for (AmdSecType amdSecType : amdSec) {
         List<MdSecType> digiProv = amdSecType.getDigiprovMD();
         for (MdSecType mdSecType : digiProv) {
@@ -725,7 +746,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
           for (DivType d : divs) {
             if (d.getLABEL().matches("Metadata.*?")) {
               List<Object> admids = d.getADMID();
-              if (admids != null && admids.size() != 0) {
+              if (admids != null && !admids.isEmpty()) {
                 for (Object o : admids) {
                   String admid = ((MdSecType) o).getID();
                   if (!amdSecIDs.contains(admid)) {
@@ -1449,7 +1470,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
       if (isRootMets()) {
         for (StructMapType struct : structMap) {
           DivType firstDiv = struct.getDiv();
-          if (firstDiv != null) {
+          if (firstDiv != null && firstDiv.getLABEL().equals("CSIP")) {
             List<DivType> divs = firstDiv.getDiv();
             for (DivType div : divs) {
               if (div.getLABEL().matches("Representations/.*/") && div.getMptr().isEmpty()) {
@@ -1474,7 +1495,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         DivType firstDiv = struct.getDiv();
-        if (firstDiv != null) {
+        if (firstDiv != null && firstDiv.getLABEL().equals("CSIP")) {
           List<DivType> divs = firstDiv.getDiv();
           for (DivType div : divs) {
             String id = div.getID();
@@ -1515,7 +1536,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         DivType div = struct.getDiv();
-        if (div != null) {
+        if (div != null && div.getLABEL().equals("CSIP")) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
             String label = d.getLABEL();
@@ -1567,7 +1588,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         DivType div = struct.getDiv();
-        if (div != null) {
+        if (div != null && div.getLABEL().equals("CSIP")) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
             if (d.getLABEL().matches("Representations/.*")) {
@@ -1617,7 +1638,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         DivType div = struct.getDiv();
-        if (div != null) {
+        if (div != null && div.getLABEL().equals("CSIP")) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
             if (d.getLABEL().matches("Representations/.*")) {
@@ -1649,7 +1670,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         DivType div = struct.getDiv();
-        if (div != null) {
+        if (div != null && div.getLABEL().equals("CSIP")) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
             if (d.getLABEL().matches("Representations/.*")) {
@@ -1725,7 +1746,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     if (!structMap.isEmpty()) {
       for (StructMapType struct : structMap) {
         DivType div = struct.getDiv();
-        if (div != null) {
+        if (div != null && div.getLABEL().equals("CSIP")) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
             if (d.getLABEL().matches("Representations/")) {
@@ -1766,7 +1787,7 @@ public class StructuralMapComponentValidator extends ValidatorComponentImpl {
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         DivType div = struct.getDiv();
-        if (div != null) {
+        if (div != null && div.getLABEL().equals("CSIP")) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
             if (d.getLABEL().matches("Representations/")) {
