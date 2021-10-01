@@ -234,10 +234,10 @@ mptr and area elements for mapping MPEG21 DII Identifier values
 	 9. Added mets/fileSec/fileGrp/file/@sip:FORMATREGISTRY
 	10. Added mets/fileSec/fileGrp/file/@sip:FORMATREGISTRYKEY
  -->
-<xsd:schema targetNamespace="http://www.loc.gov/METS/" xmlns="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:csip="https://dilcis.eu/XML/METS/CSIPExtensionMETS" xmlns:sip="https://dilcis.eu/XML/METS/SIPExtensionMETS" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xsd:schema targetNamespace="http://www.loc.gov/METS/" xmlns="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:csip="https://DILCIS.eu/XML/METS/CSIPExtensionMETS" xmlns:sip="https://DILCIS.eu/XML/METS/SIPExtensionMETS" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xsd:import namespace="http://www.w3.org/1999/xlink" schemaLocation="xlink.xsd"/>
-	<xsd:import namespace="https://dilcis.eu/XML/METS/CSIPExtensionMETS" schemaLocation="DILCISExtensionMETS.xsd" />
-	<xsd:import namespace="https://dilcis.eu/XML/METS/SIPExtensionMETS" schemaLocation="DILCISExtensionSIPMETS.xsd" />
+	<xsd:import namespace="https://DILCIS.eu/XML/METS/CSIPExtensionMETS" schemaLocation="DILCISExtensionMETS.xsd" />
+	<xsd:import namespace="https://DILCIS.eu/XML/METS/SIPExtensionMETS" schemaLocation="DILCISExtensionSIPMETS.xsd" />
 	
 	<xsd:element name="mets">
 		<xsd:annotation>
