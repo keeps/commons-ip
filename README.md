@@ -302,6 +302,21 @@ and the after
 xjc -d src/main/java/ -p "org.roda_project.commons_ip2.mets_v1_12.beans" src/main/resources/schemas2/mets1_12.xsd -b src/main/resources/schemas2/mets1_12.xjb
 ```
 
+### IANA Media Types
+
+The IANA Media Types list is required to perform SIP Validation. The list is located in the folder and named as follows:
+
+```/src/main/resources/controlledVocabularies/IANA_MEDIA_TYPES.txt```
+
+#### How to generate/update 
+
+To update IANA media types list, in commons-ip root directory run the following command:
+
+```./scripts/ianaMediaTypes_parser.sh```
+
+The command executes a script that downloads all IANA Media Types (Application, Audio, Font, Image, Message, Model, Multipart, Text, Video) from https://www.iana.org/assignments/media-types/${iana_file}.csv . 
+Note that this downloads different **.csv** files then creates a **.txt** file with all IANA media types appended to the new file.
+
 ## Commercial support
 
 For more information or commercial support, contact [KEEP SOLUTIONS](http://www.keep.pt).
