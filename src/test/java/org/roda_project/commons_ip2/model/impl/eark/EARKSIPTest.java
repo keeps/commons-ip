@@ -63,12 +63,12 @@ public class EARKSIPTest {
 
   @BeforeClass
   public static void setup() throws IOException {
-    tempFolder = Files.createTempDirectory("temp");
+   tempFolder = Files.createTempDirectory("temp");
   }
 
   @AfterClass
   public static void cleanup() throws Exception {
-    Utils.deletePath(tempFolder);
+   Utils.deletePath(tempFolder);
   }
 
   @Test
@@ -374,8 +374,8 @@ public class EARKSIPTest {
     sip.setAncestors(Arrays.asList("b6f24059-8973-4582-932d-eb0b2cb48f28"));
 
     // 1.8) add an agent (SIP level)
-    IPAgent agent = new IPAgent("Agent Name", "OTHER", "OTHER ROLE", CreatorType.INDIVIDUAL, "OTHER TYPE", "",
-      IPAgentNoteTypeEnum.SOFTWARE_VERSION);
+    IPAgent agent = new IPAgent("Agent Name", "OTHER", "SUBMITTER", CreatorType.INDIVIDUAL, "OTHER TYPE", "",
+      IPAgentNoteTypeEnum.IDENTIFICATIONCODE);
     sip.addAgent(agent);
 
     // 1.9) add a representation (status will be set to the default value, i.e.,

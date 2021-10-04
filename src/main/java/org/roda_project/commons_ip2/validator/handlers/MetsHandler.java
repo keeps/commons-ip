@@ -36,15 +36,18 @@ public class MetsHandler extends DefaultHandler {
       String type = null;
       String href = null;
       for (int i = 0; i < attributes.getLength(); i++) {
-        String name = attributes.getQName(i);
+        String attrUri = attributes.getURI(i);
+        String attName = attributes.getLocalName(i);
+        String attQName = attributes.getQName(i);
+
         String value = attributes.getValue(i);
-        if (name.equals("ID")) {
+        if (attName.equals("ID")) {
           id = value;
         }
-        if (name.equals("xlink:href")) {
+        if (attrUri.equals("http://www.w3.org/1999/xlink") && attName.equals("href")) {
           href = value;
         }
-        if (name.equals("xlink:type")) {
+        if (attrUri.equals("http://www.w3.org/1999/xlink") && attName.equals("type")) {
           type = value;
         }
       }

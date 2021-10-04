@@ -24,6 +24,7 @@ public class MetsParser {
   public void parse(DefaultHandler handler, InputStream stream) {
     SAXParserFactory factory = SAXParserFactory.newInstance();
     try {
+      factory.setNamespaceAware(true);
       SAXParser saxParser = factory.newSAXParser();
       saxParser.parse(stream, handler);
     } catch (ParserConfigurationException | SAXException | IOException e) {
