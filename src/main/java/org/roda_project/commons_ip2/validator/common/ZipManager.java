@@ -215,7 +215,7 @@ public class ZipManager {
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
       if (entry.getName().endsWith("/METS.xml")) {
-        if (entry.getName().split("/").length > 2) {
+        if (entry.getName().split("/").length > 2 && entry.getName().split("/").length <= 4) {
           InputStream stream = zipFile.getInputStream(entry);
           if (stream != null) {
             subMets.put(entry.getName(), stream);
