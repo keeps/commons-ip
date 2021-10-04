@@ -1084,7 +1084,7 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
       for (MetsType.MetsHdr.Agent agent : agents) {
         String role = agent.getROLE();
         if (role != null) {
-          if (role.equals("OTHER")) {
+          if (role.equals("OTHER") && agent.getOTHERROLE().equals("SUBMITTER")) {
             found = true;
             count++;
           }
@@ -1124,7 +1124,7 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
       for (MetsType.MetsHdr.Agent agent : agents) {
         String role = agent.getROLE();
         if (role != null) {
-          if (role.equals("OTHER")) {
+          if (role.equals("OTHER") && agent.getOTHERROLE().equals("SUBMITTER")) {
             found = true;
             count++;
           }
@@ -1163,7 +1163,7 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
       for (MetsType.MetsHdr.Agent agent : agents) {
         String role = agent.getROLE();
         if (role != null) {
-          if (role.equals("OTHER")) {
+          if (role.equals("OTHER") && agent.getOTHERROLE().equals("SUBMITTER")) {
             String type = agent.getTYPE();
             if (!type.equals("ORGANIZATION") && !type.equals("INDIVIDUAL")) {
               StringBuilder message = new StringBuilder();
@@ -1195,7 +1195,7 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
       for (MetsType.MetsHdr.Agent agent : agents) {
         String role = agent.getROLE();
         if (role != null) {
-          if (role.equals("OTHER")) {
+          if (role.equals("OTHER") && agent.getOTHERROLE().equals("SUBMITTER")) {
             String name = agent.getName();
             if (name == null) {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
@@ -1226,7 +1226,7 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
       for (MetsType.MetsHdr.Agent agent : agents) {
         String role = agent.getROLE();
         if (role != null) {
-          if (role.equals("OTHER")) {
+          if (role.equals("OTHER") && agent.getOTHERROLE().equals("SUBMITTER")) {
             List<MetsType.MetsHdr.Agent.Note> notes = agent.getNote();
             if (notes != null && !notes.isEmpty()) {
               if (notes.size() != 1) {
@@ -1262,7 +1262,7 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
       for (MetsType.MetsHdr.Agent agent : agents) {
         String role = agent.getROLE();
         if (role != null) {
-          if (role.equals("OTHER")) {
+          if (role.equals("OTHER") && agent.getOTHERROLE().equals("SUBMITTER")) {
             List<MetsType.MetsHdr.Agent.Note> notes = agent.getNote();
             if (notes != null && !notes.isEmpty()) {
               for (MetsType.MetsHdr.Agent.Note note : notes) {
@@ -1272,6 +1272,13 @@ public class MetsHeaderComponentValidator extends ValidatorComponentImpl {
                     Message.createErrorMessage("metsHdr/agent/@csip:NOTETYPE in %1$s can't be null or empty", metsName,
                       isRootMets()),
                     false, false);
+                } else {
+                  if (!noteType.equals("IDENTIFICATIONCODE")) {
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
+                      Message.createErrorMessage("metsHdr/agent/@csip:NOTETYPE in %1$s has to be IDENTIFICATIONCODE",
+                        metsName, isRootMets()),
+                      false, false);
+                  }
                 }
               }
             }

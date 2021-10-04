@@ -5,5 +5,10 @@
 // Generated on: 2021.10.01 at 04:31:38 PM WEST 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.loc.gov/METS/", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.loc.gov/METS/", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED, xmlns={
+@javax.xml.bind.annotation.XmlNs(prefix = "", namespaceURI = "http://www.loc.gov/METS/"),
+@javax.xml.bind.annotation.XmlNs(prefix = "xsi", namespaceURI = "http://www.w3.org/2001/XMLSchema-instance"),
+@javax.xml.bind.annotation.XmlNs(prefix = "csip", namespaceURI = "https://DILCIS.eu/XML/METS/CSIPExtensionMETS"),
+@javax.xml.bind.annotation.XmlNs(prefix = "sip", namespaceURI = "https://DILCIS.eu/XML/METS/SIPExtensionMETS"),
+@javax.xml.bind.annotation.XmlNs(prefix = "xlink", namespaceURI = "http://www.w3.org/1999/xlink")})
 package org.roda_project.commons_ip2.mets_v1_12.beans;
