@@ -291,15 +291,15 @@ and the after
 @javax.xml.bind.annotation.XmlSchema(namespace = "http://www.loc.gov/METS/", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED, xmlns = {
   @javax.xml.bind.annotation.XmlNs(prefix = "", namespaceURI = "http://www.loc.gov/METS/"),
   @javax.xml.bind.annotation.XmlNs(prefix = "xsi", namespaceURI = "http://www.w3.org/2001/XMLSchema-instance"),
-  @javax.xml.bind.annotation.XmlNs(prefix = "csip", namespaceURI = "https://dilcis.eu/XML/METS/CSIPExtensionMETS"),
-  @javax.xml.bind.annotation.XmlNs(prefix = "sip", namespaceURI = "https://dilcis.eu/XML/METS/SIPExtensionMETS"),
+  @javax.xml.bind.annotation.XmlNs(prefix = "csip", namespaceURI = "https://DILCIS.eu/XML/METS/CSIPExtensionMETS"),
+  @javax.xml.bind.annotation.XmlNs(prefix = "sip", namespaceURI = "https://DILCIS.eu/XML/METS/SIPExtensionMETS"),
   @javax.xml.bind.annotation.XmlNs(prefix = "xlink", namespaceURI = "http://www.w3.org/1999/xlink")})
 ```
 
 #### How to generate/update XML Beans
 
 ```
-xjc [-npa] -d src/main/java/ -p "org.roda_project.commons_ip2.mets_v1_12.beans" src/main/resources/schemas2/mets1_12.xsd -b src/main/resources/schemas2/mets1_12.xjb
+xjc -d src/main/java/ -p "org.roda_project.commons_ip2.mets_v1_12.beans" src/main/resources/schemas2/mets1_12.xsd -b src/main/resources/schemas2/mets1_12.xjb
 ```
 
 ## Commercial support
