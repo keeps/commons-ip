@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -58,7 +59,7 @@ public class EARKSIPValidator {
   private ValidatorComponent structureComponent;
   private List<ValidatorComponent> metsComponents = new ArrayList<>();
   private HashMap<String, Boolean> files;
-  private List<String> ianaMediaTypes;
+  private Set<String> ianaMediaTypes;
 
   public EARKSIPValidator(Path earksipPath, Path reportPath)
     throws IOException, ParserConfigurationException, SAXException {
@@ -74,7 +75,7 @@ public class EARKSIPValidator {
     this.metsInternalIds = new ArrayList<>();
     this.ianaMediaTypes = new BufferedReader(new InputStreamReader(
       getClass().getClassLoader().getResourceAsStream(Constants.PATH_RESOURCES_CSIP_VOCABULARY_IANA_MEDIA_TYPES),
-      StandardCharsets.UTF_8)).lines().collect(Collectors.toList());
+      StandardCharsets.UTF_8)).lines().collect(Collectors.toSet());
     this.results = new TreeMap<>(new RequirementsComparator());
     setupStructureComponent();
     setupComponents();
@@ -116,9 +117,6 @@ public class EARKSIPValidator {
       results.putAll(structureValidationResults);
 
       if (validFileComponent()) {
-        if (!ianaMediaTypes.contains("text/plain")) {
-          ianaMediaTypes.add("text/plain");
-        }
         Map<String, InputStream> subMets;
         if (structureComponent.isZipFileFlag()) {
           files = zipManager.getFiles(earksipPath);

@@ -16,6 +16,7 @@ import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -140,10 +141,11 @@ public final class METSUtils {
     return fileLocation;
   }
 
-  public static MdRef setFileBasicInformation(Path file, MdRef mdRef) throws IPException, InterruptedException {
+  public static MdRef setFileBasicInformation(Path file, MdRef mdRef, Set<String> ianaMediaTypes)
+    throws IPException, InterruptedException {
     // mimetype info.
     try {
-      mdRef.setMIMETYPE(getFileMimetype(file));
+      mdRef.setMIMETYPE(getFileMimetype(file, ianaMediaTypes));
     } catch (IOException e) {
       throw new IPException("Error probing file content (" + file + ")", e);
     }
@@ -165,12 +167,12 @@ public final class METSUtils {
     return mdRef;
   }
 
-  public static void setFileBasicInformation(Logger logger, Path file, FileType fileType)
+  public static void setFileBasicInformation(Logger logger, Path file, FileType fileType, Set<String> ianaMediaTypes)
     throws IPException, InterruptedException {
     // mimetype info.
     try {
       logger.debug("Setting mimetype {}", file);
-      fileType.setMIMETYPE(getFileMimetype(file));
+      fileType.setMIMETYPE(getFileMimetype(file, ianaMediaTypes));
       logger.debug("Done setting mimetype");
     } catch (IOException e) {
       throw new IPException("Error probing content-type (" + file.toString() + ")", e);
@@ -193,10 +195,14 @@ public final class METSUtils {
     }
   }
 
-  private static String getFileMimetype(Path file) throws IOException {
+  private static String getFileMimetype(Path file, Set<String> ianaMediaTypes) throws IOException {
     String probedContentType = Files.probeContentType(file);
     if (probedContentType == null) {
       probedContentType = "application/octet-stream";
+    } else {
+      if (!ianaMediaTypes.contains(probedContentType)) {
+        probedContentType = "application/octet-stream";
+      }
     }
     return probedContentType;
   }
@@ -206,9 +212,9 @@ public final class METSUtils {
    * 
    * <p>
    * 20170511 hsilva: a global variable called
-   * {@link IPConstants.METS_ENCODE_AND_DECODE_HREF} is used to enable/disable
-   * the effective decode (done this way to avoid lots of changes in the methods
-   * that use this method)
+   * {@link IPConstants.METS_ENCODE_AND_DECODE_HREF} is used to enable/disable the
+   * effective decode (done this way to avoid lots of changes in the methods that
+   * use this method)
    * </p>
    */
   public static String decodeHref(String value) {
@@ -227,10 +233,10 @@ public final class METSUtils {
    *
    * <p>
    * 20170511 hsilva: a global variable called
-   * {@link IPConstants.METS_ENCODE_AND_DECODE_HREF} is used to enable/disable
-   * the effective encode (done this way to avoid lots of changes in the methods
-   * that use this method). This method is not multi-thread safe when using
-   * different SIP formats.
+   * {@link IPConstants.METS_ENCODE_AND_DECODE_HREF} is used to enable/disable the
+   * effective encode (done this way to avoid lots of changes in the methods that
+   * use this method). This method is not multi-thread safe when using different
+   * SIP formats.
    * </p>
    */
   public static String encodeHref(String value) {
@@ -254,7 +260,7 @@ public final class METSUtils {
 
   private static boolean isSafeChar(char ch) {
     return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')
-        || ":/$-_.!*'(),".indexOf(ch) >= 0;
+      || ":/$-_.!*'(),".indexOf(ch) >= 0;
   }
 
   private static String encodeUnsafeChar(char ch) {

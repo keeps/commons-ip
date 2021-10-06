@@ -4,6 +4,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
 import org.roda_project.commons_ip2.validator.common.FolderManager;
@@ -32,7 +33,7 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
   private boolean isRootMets = false;
 
   protected HashMap<String, Boolean> files = null;
-  protected List<String> ianaMediaTypes = null;
+  protected Set<String> ianaMediaTypes = null;
   private List<ValidationObserver> observers = new ArrayList<>();
 
   protected Path getEARKSIPpath() {
@@ -150,7 +151,7 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
   }
 
   @Override
-  public void setIANAMediaTypes(List<String> ianaMediaTypes) {
+  public void setIANAMediaTypes(Set<String> ianaMediaTypes) {
     this.ianaMediaTypes = ianaMediaTypes;
   }
 }

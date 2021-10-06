@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
 import org.roda_project.commons_ip2.validator.common.FolderManager;
@@ -51,7 +52,7 @@ public interface ValidatorComponent {
 
   void setFiles(HashMap<String, Boolean> files);
 
-  void setIANAMediaTypes(List<String> ianaMediaTypes);
+  void setIANAMediaTypes(Set<String> ianaMediaTypes);
 
   void clean();
 }

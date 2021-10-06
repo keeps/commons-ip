@@ -7,8 +7,11 @@
  */
 package org.roda_project.commons_ip2.utils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
@@ -17,6 +20,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBException;
 
@@ -25,6 +29,7 @@ import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
 import org.roda_project.commons_ip2.model.IPConstants;
+import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,7 +72,10 @@ public class METSZipEntryInfo extends FileZipEntryInfo {
     try {
       METSUtils.marshallMETS(mets, getFilePath(), rootMETS);
       if (!rootMETS && fileType != null) {
-        METSUtils.setFileBasicInformation(LOGGER, getFilePath(), fileType);
+        Set<String> ianaMediaTypes = new BufferedReader(new InputStreamReader(
+                getClass().getClassLoader().getResourceAsStream(Constants.PATH_RESOURCES_CSIP_VOCABULARY_IANA_MEDIA_TYPES),
+                StandardCharsets.UTF_8)).lines().collect(Collectors.toSet());
+        METSUtils.setFileBasicInformation(LOGGER, getFilePath(), fileType,ianaMediaTypes);
 
         String checksumType = IPConstants.CHECKSUM_ALGORITHM;
         Set<String> checksumAlgorithms = new HashSet<>();

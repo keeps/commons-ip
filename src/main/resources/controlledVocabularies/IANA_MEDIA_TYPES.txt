@@ -498,6 +498,7 @@ application/vnd.afpc.modca-mediummap
 application/vnd.afpc.modca-objectcontainer
 application/vnd.afpc.modca-overlay
 application/vnd.afpc.modca-pagesegment
+application/vnd.age
 application/vnd.ah-barcode
 application/vnd.ahead.space
 application/vnd.airzip.filesecure.azf
@@ -978,6 +979,7 @@ application/vnd.musician
 application/vnd.music-niff
 application/vnd.muvee.style
 application/vnd.mynfc
+application/vnd.nacamar.ybrid+json
 application/vnd.ncd.control
 application/vnd.ncd.reference
 application/vnd.nearst.inv+json
@@ -1926,3 +1928,18 @@ video/vnd.youtube.yt
 video/vnd.vivo
 video/VP8
 video/VP9
+image/ief
+image/jpeg
+image/gif
+message/external-body
+message/partial
+message/rfc822
+model/mesh
+model/vrml
+multipart/alternative
+multipart/digest
+multipart/mixed
+multipart/parallel
+text/enriched
+text/plain
+text/richtext

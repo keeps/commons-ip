@@ -7,14 +7,18 @@
  */
 package org.roda_project.commons_ip2.model.impl.eark;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.channels.ClosedByInterruptException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip.model.ParseException;
@@ -29,6 +33,7 @@ import org.roda_project.commons_ip2.model.SIP;
 import org.roda_project.commons_ip2.model.impl.ModelUtils;
 import org.roda_project.commons_ip2.utils.METSUtils;
 import org.roda_project.commons_ip2.utils.ZIPUtils;
+import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,133 +67,7 @@ public class EARKSIP extends SIP {
   }
 
   /**
-   * 
-   * build and all build related methods
-   * _________________________________________________________________________
-   */
-  @Override
-  public Path build(Path destinationDirectory) throws IPException, InterruptedException {
-    return build(destinationDirectory, null);
-  }
-
-  /**
-   * Builds a SIP.
    *
-   * @param destinationDirectory
-   *          the {@link Path} where the SIP should be build.
-   * @param onlyManifest
-   *          build only the manifest file? (<strong>this parameter is
-   *          ignored</strong>).
-   * @return the {@link Path}.
-   * @throws IPException
-   *           if some error occurs.
-   * @throws InterruptedException
-   *           if some error occurs.
-   */
-  @Override
-  public Path build(final Path destinationDirectory, final boolean onlyManifest)
-    throws IPException, InterruptedException {
-    return build(destinationDirectory, null);
-  }
-
-  @Override
-  public Path build(Path destinationDirectory, String fileNameWithoutExtension)
-    throws IPException, InterruptedException {
-    return build(destinationDirectory, fileNameWithoutExtension, false);
-  }
-
-  /**
-   *
-   * build and all build related methods
-   * _________________________________________________________________________
-   */
-  /**
-   * Builds a SIP.
-   *
-   * @param destinationDirectory
-   *          the {@link Path} where the SIP should be build.
-   * @param fileNameWithoutExtension
-   *          the name of the output file without extension.
-   * @param onlyManifest
-   *          build only the manifest file? (<strong>this parameter is
-   *          ignored</strong>).
-   * @return the {@link Path}.
-   * @throws IPException
-   *           if some error occurs.
-   * @throws InterruptedException
-   *           if some error occurs.
-   */
-  @Override
-  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
-    throws IPException, InterruptedException {
-    IPConstants.METS_ENCODE_AND_DECODE_HREF = true;
-    Path buildDir = ModelUtils.createBuildDir(SIP_TEMP_DIR);
-    Path zipPath = getZipPath(destinationDirectory, fileNameWithoutExtension);
-    try {
-      Map<String, ZipEntryInfo> zipEntries = getZipEntries();
-      boolean isMetadataOther = (this.getOtherMetadata() != null && !this.getOtherMetadata().isEmpty());
-      boolean isMetadata = ((this.getDescriptiveMetadata() != null && !this.getDescriptiveMetadata().isEmpty())
-        || (this.getPreservationMetadata() != null && !this.getPreservationMetadata().isEmpty()));
-      boolean isDocumentation = (this.getDocumentation() != null && !this.getDocumentation().isEmpty());
-      boolean isSchemas = (this.getSchemas() != null && !this.getSchemas().isEmpty());
-      MetsWrapper mainMETSWrapper = EARKMETSUtils.generateMETS(StringUtils.join(this.getIds(), " "),
-        this.getDescription(), this.getProfile(), true, Optional.ofNullable(this.getAncestors()), null,
-        this.getHeader(), this.getType(), this.getContentType(), this.getContentInformationType(), isMetadata,
-        isMetadataOther, isSchemas, isDocumentation);
-
-      EARKUtils.addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
-      EARKUtils.addPreservationMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getPreservationMetadata(), null);
-      EARKUtils.addOtherMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getOtherMetadata(), null);
-      EARKUtils.addRepresentationsToZipAndMETS(this, getRepresentations(), zipEntries, mainMETSWrapper, buildDir);
-      EARKUtils.addDefaultSchemas(LOGGER, getSchemas(), buildDir);
-      EARKUtils.addSchemasToZipAndMETS(zipEntries, mainMETSWrapper, getSchemas(), null);
-      EARKUtils.addDocumentationToZipAndMETS(zipEntries, mainMETSWrapper, getDocumentation(), null);
-      METSUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, buildDir);
-
-      createZipFile(zipEntries, zipPath);
-      return zipPath;
-    } catch (InterruptedException e) {
-      ModelUtils.cleanUpUponInterrupt(LOGGER, zipPath);
-      throw e;
-    } finally {
-      ModelUtils.deleteBuildDir(buildDir);
-    }
-  }
-
-  private Path getZipPath(Path destinationDirectory, String fileNameWithoutExtension) throws IPException {
-    Path zipPath;
-    if (fileNameWithoutExtension != null) {
-      zipPath = destinationDirectory.resolve(fileNameWithoutExtension + SIP_FILE_EXTENSION);
-    } else {
-      zipPath = destinationDirectory.resolve(getId() + SIP_FILE_EXTENSION);
-    }
-
-    try {
-      if (Files.exists(zipPath)) {
-        Files.delete(zipPath);
-      }
-    } catch (IOException e) {
-      throw new IPException("Error deleting already existing zip", e);
-    }
-    return zipPath;
-  }
-
-  private void createZipFile(Map<String, ZipEntryInfo> zipEntries, Path zipPath)
-    throws IPException, InterruptedException {
-    try {
-      notifySipBuildPackagingStarted(zipEntries.size());
-      ZIPUtils.zip(zipEntries, Files.newOutputStream(zipPath), this, true, true);
-    } catch (ClosedByInterruptException e) {
-      throw new InterruptedException();
-    } catch (IOException e) {
-      throw new IPException("Error generating E-ARK SIP ZIP file. Reason: " + e.getMessage(), e);
-    } finally {
-      notifySipBuildPackagingEnded();
-    }
-  }
-
-  /**
-   * 
    * parse and all parse related methods; during parse, validation is also
    * conducted and stored inside the SIP
    * _________________________________________________________________________
@@ -235,6 +114,136 @@ public class EARKSIP extends SIP {
       return sip;
     } catch (final IPException e) {
       throw new ParseException("Error parsing E-ARK SIP", e);
+    }
+  }
+
+  /**
+   *
+   * build and all build related methods
+   * _________________________________________________________________________
+   */
+
+  /**
+   *
+   * build and all build related methods
+   * _________________________________________________________________________
+   */
+  @Override
+  public Path build(Path destinationDirectory) throws IPException, InterruptedException {
+    return build(destinationDirectory, null);
+  }
+
+  /**
+   * Builds a SIP.
+   *
+   * @param destinationDirectory
+   *          the {@link Path} where the SIP should be build.
+   * @param onlyManifest
+   *          build only the manifest file? (<strong>this parameter is
+   *          ignored</strong>).
+   * @return the {@link Path}.
+   * @throws IPException
+   *           if some error occurs.
+   * @throws InterruptedException
+   *           if some error occurs.
+   */
+  @Override
+  public Path build(final Path destinationDirectory, final boolean onlyManifest)
+    throws IPException, InterruptedException {
+    return build(destinationDirectory, null);
+  }
+
+  @Override
+  public Path build(Path destinationDirectory, String fileNameWithoutExtension)
+    throws IPException, InterruptedException {
+    return build(destinationDirectory, fileNameWithoutExtension, false);
+  }
+
+  /**
+   * Builds a SIP.
+   *
+   * @param destinationDirectory
+   *          the {@link Path} where the SIP should be build.
+   * @param fileNameWithoutExtension
+   *          the name of the output file without extension.
+   * @param onlyManifest
+   *          build only the manifest file? (<strong>this parameter is
+   *          ignored</strong>).
+   * @return the {@link Path}.
+   * @throws IPException
+   *           if some error occurs.
+   * @throws InterruptedException
+   *           if some error occurs.
+   */
+  @Override
+  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
+    throws IPException, InterruptedException {
+    IPConstants.METS_ENCODE_AND_DECODE_HREF = true;
+    Path buildDir = ModelUtils.createBuildDir(SIP_TEMP_DIR);
+    Path zipPath = getZipPath(destinationDirectory, fileNameWithoutExtension);
+    try {
+      Set<String> ianaMediaTypes = new BufferedReader(new InputStreamReader(
+        getClass().getClassLoader().getResourceAsStream(Constants.PATH_RESOURCES_CSIP_VOCABULARY_IANA_MEDIA_TYPES),
+        StandardCharsets.UTF_8)).lines().collect(Collectors.toSet());
+      Map<String, ZipEntryInfo> zipEntries = getZipEntries();
+      boolean isMetadataOther = (this.getOtherMetadata() != null && !this.getOtherMetadata().isEmpty());
+      boolean isMetadata = ((this.getDescriptiveMetadata() != null && !this.getDescriptiveMetadata().isEmpty())
+        || (this.getPreservationMetadata() != null && !this.getPreservationMetadata().isEmpty()));
+      boolean isDocumentation = (this.getDocumentation() != null && !this.getDocumentation().isEmpty());
+      boolean isSchemas = (this.getSchemas() != null && !this.getSchemas().isEmpty());
+      MetsWrapper mainMETSWrapper = EARKMETSUtils.generateMETS(StringUtils.join(this.getIds(), " "),
+        this.getDescription(), this.getProfile(), true, Optional.ofNullable(this.getAncestors()), null,
+        this.getHeader(), this.getType(), this.getContentType(), this.getContentInformationType(), isMetadata,
+        isMetadataOther, isSchemas, isDocumentation);
+
+      EARKUtils.addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null,ianaMediaTypes);
+      EARKUtils.addPreservationMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getPreservationMetadata(), null,ianaMediaTypes);
+      EARKUtils.addOtherMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getOtherMetadata(), null,ianaMediaTypes);
+      EARKUtils.addRepresentationsToZipAndMETS(this, getRepresentations(), zipEntries, mainMETSWrapper, buildDir,ianaMediaTypes);
+      EARKUtils.addDefaultSchemas(LOGGER, getSchemas(), buildDir);
+      EARKUtils.addSchemasToZipAndMETS(zipEntries, mainMETSWrapper, getSchemas(), null,ianaMediaTypes);
+      EARKUtils.addDocumentationToZipAndMETS(zipEntries, mainMETSWrapper, getDocumentation(), null,ianaMediaTypes);
+      METSUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, buildDir);
+
+      createZipFile(zipEntries, zipPath);
+      return zipPath;
+    } catch (InterruptedException e) {
+      ModelUtils.cleanUpUponInterrupt(LOGGER, zipPath);
+      throw e;
+    } finally {
+      ModelUtils.deleteBuildDir(buildDir);
+    }
+  }
+
+  private Path getZipPath(Path destinationDirectory, String fileNameWithoutExtension) throws IPException {
+    Path zipPath;
+    if (fileNameWithoutExtension != null) {
+      zipPath = destinationDirectory.resolve(fileNameWithoutExtension + SIP_FILE_EXTENSION);
+    } else {
+      zipPath = destinationDirectory.resolve(getId() + SIP_FILE_EXTENSION);
+    }
+
+    try {
+      if (Files.exists(zipPath)) {
+        Files.delete(zipPath);
+      }
+    } catch (IOException e) {
+      throw new IPException("Error deleting already existing zip", e);
+    }
+    return zipPath;
+  }
+
+  private void createZipFile(Map<String, ZipEntryInfo> zipEntries, Path zipPath)
+    throws IPException, InterruptedException {
+    try {
+      notifySipBuildPackagingStarted(zipEntries.size());
+      ZIPUtils.zip(zipEntries, Files.newOutputStream(zipPath), this, true, true);
+    } catch (ClosedByInterruptException e) {
+      throw new InterruptedException();
+    } catch (IOException e) {
+      throw new IPException("Error generating E-ARK SIP ZIP file. Reason: " + e.getMessage(), e);
+    } finally {
+      notifySipBuildPackagingEnded();
     }
   }
 
