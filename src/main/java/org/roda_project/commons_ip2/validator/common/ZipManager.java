@@ -420,8 +420,8 @@ public class ZipManager {
     List<String> representationsFoldersNames = new ArrayList<>();
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().matches(".*/METS.xml")) {
-        if (entry.getName().split("/").length > 2) {
+      if (entry.getName().endsWith("/METS.xml")) {
+        if (entry.getName().split("/").length > 2 && entry.getName().split("/").length <= 4) {
           countSubMets++;
         }
       } else {
