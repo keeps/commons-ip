@@ -33,7 +33,6 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
   private boolean isRootMets = false;
 
   protected HashMap<String, Boolean> files = null;
-  protected Set<String> ianaMediaTypes = null;
   private List<ValidationObserver> observers = new ArrayList<>();
 
   protected Path getEARKSIPpath() {
@@ -148,10 +147,5 @@ public abstract class ValidatorComponentImpl implements ValidatorComponent {
   @Override
   public void setMetsPath(String metsPath) {
     this.metsPath = metsPath;
-  }
-
-  @Override
-  public void setIANAMediaTypes(Set<String> ianaMediaTypes) {
-    this.ianaMediaTypes = ianaMediaTypes;
   }
 }

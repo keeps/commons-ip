@@ -59,7 +59,6 @@ public class EARKSIPValidator {
   private ValidatorComponent structureComponent;
   private List<ValidatorComponent> metsComponents = new ArrayList<>();
   private HashMap<String, Boolean> files;
-  private Set<String> ianaMediaTypes;
 
   public EARKSIPValidator(Path earksipPath, Path reportPath)
     throws IOException, ParserConfigurationException, SAXException {
@@ -73,9 +72,6 @@ public class EARKSIPValidator {
 
     this.folderManager = new FolderManager();
     this.metsInternalIds = new ArrayList<>();
-    this.ianaMediaTypes = new BufferedReader(new InputStreamReader(
-      getClass().getClassLoader().getResourceAsStream(Constants.PATH_RESOURCES_CSIP_VOCABULARY_IANA_MEDIA_TYPES),
-      StandardCharsets.UTF_8)).lines().collect(Collectors.toSet());
     this.results = new TreeMap<>(new RequirementsComparator());
     setupStructureComponent();
     setupComponents();
@@ -214,7 +210,6 @@ public class EARKSIPValidator {
       component.setZipFileFlag(isZip);
       component.setMetsName(key);
       component.setIsRootMets(isRootMets);
-      component.setIANAMediaTypes(ianaMediaTypes);
       if (isZip) {
         StringBuilder metsPath = new StringBuilder();
         for (String path : key.split("/")) {

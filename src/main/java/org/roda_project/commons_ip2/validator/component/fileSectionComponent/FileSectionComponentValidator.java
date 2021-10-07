@@ -17,6 +17,7 @@ import org.roda_project.commons_ip2.mets_v1_12.beans.AmdSecType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MetsType;
+import org.roda_project.commons_ip2.utils.IANAMediaTypes;
 import org.roda_project.commons_ip2.validator.common.ControlledVocabularyParser;
 import org.roda_project.commons_ip2.validator.common.MetsParser;
 import org.roda_project.commons_ip2.validator.component.ValidatorComponentImpl;
@@ -728,7 +729,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
       for (FileType file : files) {
         String mimeType = file.getMIMETYPE();
         if (mimeType != null) {
-          if (!ianaMediaTypes.contains(mimeType)) {
+          if (!IANAMediaTypes.getIANAMediaTypes().contains(mimeType)) {
             StringBuilder message = new StringBuilder();
             message.append("Value ").append(mimeType)
               .append(" in %1$s for mets/fileSec/fileGrp/file/@MIMETYPE value isn't valid");

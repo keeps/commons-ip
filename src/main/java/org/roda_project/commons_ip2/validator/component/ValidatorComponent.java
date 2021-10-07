@@ -52,7 +52,5 @@ public interface ValidatorComponent {
 
   void setFiles(HashMap<String, Boolean> files);
 
-  void setIANAMediaTypes(Set<String> ianaMediaTypes);
-
   void clean();
 }
