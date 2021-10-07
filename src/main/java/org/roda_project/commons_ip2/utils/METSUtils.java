@@ -16,7 +16,6 @@ import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
-import java.util.Set;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -141,11 +140,10 @@ public final class METSUtils {
     return fileLocation;
   }
 
-  public static MdRef setFileBasicInformation(Path file, MdRef mdRef, Set<String> ianaMediaTypes)
-    throws IPException, InterruptedException {
+  public static MdRef setFileBasicInformation(Path file, MdRef mdRef) throws IPException, InterruptedException {
     // mimetype info.
     try {
-      mdRef.setMIMETYPE(getFileMimetype(file, ianaMediaTypes));
+      mdRef.setMIMETYPE(getFileMimetype(file));
     } catch (IOException e) {
       throw new IPException("Error probing file content (" + file + ")", e);
     }
@@ -167,12 +165,12 @@ public final class METSUtils {
     return mdRef;
   }
 
-  public static void setFileBasicInformation(Logger logger, Path file, FileType fileType, Set<String> ianaMediaTypes)
+  public static void setFileBasicInformation(Logger logger, Path file, FileType fileType)
     throws IPException, InterruptedException {
     // mimetype info.
     try {
       logger.debug("Setting mimetype {}", file);
-      fileType.setMIMETYPE(getFileMimetype(file, ianaMediaTypes));
+      fileType.setMIMETYPE(getFileMimetype(file));
       logger.debug("Done setting mimetype");
     } catch (IOException e) {
       throw new IPException("Error probing content-type (" + file.toString() + ")", e);
@@ -195,12 +193,12 @@ public final class METSUtils {
     }
   }
 
-  private static String getFileMimetype(Path file, Set<String> ianaMediaTypes) throws IOException {
+  private static String getFileMimetype(Path file) throws IOException {
     String probedContentType = Files.probeContentType(file);
     if (probedContentType == null) {
       probedContentType = "application/octet-stream";
     } else {
-      if (!ianaMediaTypes.contains(probedContentType)) {
+      if (!IANAMediaTypes.getIANAMediaTypes().contains(probedContentType)) {
         probedContentType = "application/octet-stream";
       }
     }

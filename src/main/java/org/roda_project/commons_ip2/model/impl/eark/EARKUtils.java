@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 
@@ -69,8 +68,8 @@ public final class EARKUtils {
   }
 
   protected static void addDescriptiveMetadataToZipAndMETS(Map<String, ZipEntryInfo> zipEntries,
-    MetsWrapper metsWrapper, List<IPDescriptiveMetadata> descriptiveMetadata, String representationId,
-    Set<String> ianaMediaTypes) throws IPException, InterruptedException {
+    MetsWrapper metsWrapper, List<IPDescriptiveMetadata> descriptiveMetadata, String representationId)
+    throws IPException, InterruptedException {
     if (descriptiveMetadata != null && !descriptiveMetadata.isEmpty()) {
       for (IPDescriptiveMetadata dm : descriptiveMetadata) {
         if (Thread.interrupted()) {
@@ -80,7 +79,7 @@ public final class EARKUtils {
 
         String descriptiveFilePath = IPConstants.DESCRIPTIVE_FOLDER
           + ModelUtils.getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
-        MdRef mdRef = EARKMETSUtils.addDescriptiveMetadataToMETS(metsWrapper, dm, descriptiveFilePath,ianaMediaTypes);
+        MdRef mdRef = EARKMETSUtils.addDescriptiveMetadataToMETS(metsWrapper, dm, descriptiveFilePath);
 
         if (representationId != null) {
           descriptiveFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
@@ -92,7 +91,7 @@ public final class EARKUtils {
   }
 
   protected static void addPreservationMetadataToZipAndMETS(Map<String, ZipEntryInfo> zipEntries,
-    MetsWrapper metsWrapper, List<IPMetadata> preservationMetadata, String representationId,Set<String> ianaMediaTypes)
+    MetsWrapper metsWrapper, List<IPMetadata> preservationMetadata, String representationId)
     throws IPException, InterruptedException {
     if (preservationMetadata != null && !preservationMetadata.isEmpty()) {
       for (IPMetadata pm : preservationMetadata) {
@@ -103,7 +102,7 @@ public final class EARKUtils {
 
         String preservationMetadataPath = IPConstants.PRESERVATION_FOLDER
           + ModelUtils.getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
-        MdRef mdRef = EARKMETSUtils.addPreservationMetadataToMETS(metsWrapper, pm, preservationMetadataPath,ianaMediaTypes);
+        MdRef mdRef = EARKMETSUtils.addPreservationMetadataToMETS(metsWrapper, pm, preservationMetadataPath);
 
         if (representationId != null) {
           preservationMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId
@@ -115,7 +114,7 @@ public final class EARKUtils {
   }
 
   protected static void addOtherMetadataToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-    List<IPMetadata> otherMetadata, String representationId,Set<String> ianaMediaTypes) throws IPException, InterruptedException {
+    List<IPMetadata> otherMetadata, String representationId) throws IPException, InterruptedException {
     if (otherMetadata != null && !otherMetadata.isEmpty()) {
       for (IPMetadata om : otherMetadata) {
         if (Thread.interrupted()) {
@@ -125,7 +124,7 @@ public final class EARKUtils {
 
         String otherMetadataPath = IPConstants.OTHER_FOLDER + ModelUtils.getFoldersFromList(file.getRelativeFolders())
           + file.getFileName();
-        MdRef mdRef = EARKMETSUtils.addOtherMetadataToMETS(metsWrapper, om, otherMetadataPath,ianaMediaTypes);
+        MdRef mdRef = EARKMETSUtils.addOtherMetadataToMETS(metsWrapper, om, otherMetadataPath);
 
         if (representationId != null) {
           otherMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
@@ -137,7 +136,7 @@ public final class EARKUtils {
   }
 
   protected static void addRepresentationsToZipAndMETS(IPInterface ip, List<IPRepresentation> representations,
-    Map<String, ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper, Path buildDir,Set<String> ianaMediaTypes)
+    Map<String, ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper, Path buildDir)
     throws IPException, InterruptedException {
     // representations
     if (representations != null && !representations.isEmpty()) {
@@ -169,26 +168,26 @@ public final class EARKUtils {
 
         // representation data
         addRepresentationDataFilesToZipAndMETS(ip, zipEntries, representationMETSWrapper, representation,
-          representationId,ianaMediaTypes);
+          representationId);
 
         // representation descriptive metadata
         addDescriptiveMetadataToZipAndMETS(zipEntries, representationMETSWrapper,
-          representation.getDescriptiveMetadata(), representationId,ianaMediaTypes);
+          representation.getDescriptiveMetadata(), representationId);
 
         // representation preservation metadata
         addPreservationMetadataToZipAndMETS(zipEntries, representationMETSWrapper,
-          representation.getPreservationMetadata(), representationId,ianaMediaTypes);
+          representation.getPreservationMetadata(), representationId);
 
         // representation other metadata
         addOtherMetadataToZipAndMETS(zipEntries, representationMETSWrapper, representation.getOtherMetadata(),
-          representationId,ianaMediaTypes);
+          representationId);
 
         // representation schemas
-        addSchemasToZipAndMETS(zipEntries, representationMETSWrapper, representation.getSchemas(), representationId,ianaMediaTypes);
+        addSchemasToZipAndMETS(zipEntries, representationMETSWrapper, representation.getSchemas(), representationId);
 
         // representation documentation
         addDocumentationToZipAndMETS(zipEntries, representationMETSWrapper, representation.getDocumentation(),
-          representationId,ianaMediaTypes);
+          representationId);
 
         // add representation METS to Zip file and to main METS file
         EARKMETSUtils.addRepresentationMETSToZipAndToMainMETS(zipEntries, mainMETSWrapper, representationId,
@@ -203,7 +202,7 @@ public final class EARKUtils {
   }
 
   protected static void addRepresentationDataFilesToZipAndMETS(IPInterface ip, Map<String, ZipEntryInfo> zipEntries,
-    MetsWrapper representationMETSWrapper, IPRepresentation representation, String representationId,Set<String> ianaMediaTypes)
+    MetsWrapper representationMETSWrapper, IPRepresentation representation, String representationId)
     throws IPException, InterruptedException {
     if (representation.getData() != null && !representation.getData().isEmpty()) {
       if (ip instanceof SIP) {
@@ -218,7 +217,7 @@ public final class EARKUtils {
         if (file instanceof IPFile) {
           String dataFilePath = IPConstants.DATA_FOLDER + ModelUtils.getFoldersFromList(file.getRelativeFolders())
             + file.getFileName();
-          FileType fileType = EARKMETSUtils.addDataFileToMETS(representationMETSWrapper, dataFilePath, file.getPath(),ianaMediaTypes);
+          FileType fileType = EARKMETSUtils.addDataFileToMETS(representationMETSWrapper, dataFilePath, file.getPath());
 
           dataFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
             + dataFilePath;
@@ -240,7 +239,7 @@ public final class EARKUtils {
   }
 
   protected static void addSchemasToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-    List<IPFileInterface> schemas, String representationId,Set<String> ianaMediaTypes) throws IPException, InterruptedException {
+    List<IPFileInterface> schemas, String representationId) throws IPException, InterruptedException {
     if (schemas != null && !schemas.isEmpty()) {
       for (IPFileInterface schema : schemas) {
         if (Thread.interrupted()) {
@@ -249,7 +248,7 @@ public final class EARKUtils {
 
         String schemaFilePath = IPConstants.SCHEMAS_FOLDER + ModelUtils.getFoldersFromList(schema.getRelativeFolders())
           + schema.getFileName();
-        FileType fileType = EARKMETSUtils.addSchemaFileToMETS(metsWrapper, schemaFilePath, schema.getPath(),ianaMediaTypes);
+        FileType fileType = EARKMETSUtils.addSchemaFileToMETS(metsWrapper, schemaFilePath, schema.getPath());
 
         if (representationId != null) {
           schemaFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
@@ -261,7 +260,7 @@ public final class EARKUtils {
   }
 
   protected static void addDocumentationToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-    List<IPFileInterface> documentation, String representationId,Set<String> ianaMediaTypes) throws IPException, InterruptedException {
+    List<IPFileInterface> documentation, String representationId) throws IPException, InterruptedException {
     if (documentation != null && !documentation.isEmpty()) {
       for (IPFileInterface doc : documentation) {
         if (Thread.interrupted()) {
@@ -270,7 +269,7 @@ public final class EARKUtils {
 
         String documentationFilePath = IPConstants.DOCUMENTATION_FOLDER
           + ModelUtils.getFoldersFromList(doc.getRelativeFolders()) + doc.getFileName();
-        FileType fileType = EARKMETSUtils.addDocumentationFileToMETS(metsWrapper, documentationFilePath, doc.getPath(),ianaMediaTypes);
+        FileType fileType = EARKMETSUtils.addDocumentationFileToMETS(metsWrapper, documentationFilePath, doc.getPath());
 
         if (representationId != null) {
           documentationFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
@@ -305,7 +304,7 @@ public final class EARKUtils {
   }
 
   protected static void addSubmissionsToZipAndMETS(final Map<String, ZipEntryInfo> zipEntries,
-    final MetsWrapper metsWrapper, final List<IPFileInterface> submissions,Set<String> ianaMediaTypes) throws IPException, InterruptedException {
+    final MetsWrapper metsWrapper, final List<IPFileInterface> submissions) throws IPException, InterruptedException {
     if (submissions != null && !submissions.isEmpty()) {
       for (IPFileInterface submission : submissions) {
         if (Thread.interrupted()) {
@@ -314,7 +313,7 @@ public final class EARKUtils {
         final String submissionFilePath = IPConstants.SUBMISSION_FOLDER
           + ModelUtils.getFoldersFromList(submission.getRelativeFolders()) + submission.getFileName();
         final FileType fileType = EARKMETSUtils.addSubmissionFileToMETS(metsWrapper, submissionFilePath,
-          submission.getPath(),ianaMediaTypes);
+          submission.getPath());
         ZIPUtils.addFileTypeFileToZip(zipEntries, submission.getPath(), submissionFilePath, fileType);
       }
     }

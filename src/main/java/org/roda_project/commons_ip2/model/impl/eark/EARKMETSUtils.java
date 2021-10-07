@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -317,19 +316,19 @@ public final class EARKMETSUtils {
   }
 
   public static MdRef addDescriptiveMetadataToMETS(MetsWrapper metsWrapper, IPDescriptiveMetadata descriptiveMetadata,
-    String descriptiveMetadataPath, Set<String> ianaMediaTypes) throws IPException, InterruptedException {
+    String descriptiveMetadataPath) throws IPException, InterruptedException {
     return addMetadataToMETS(metsWrapper, descriptiveMetadata, descriptiveMetadataPath,
       descriptiveMetadata.getMetadataType().getType().getType(), descriptiveMetadata.getMetadataType().getOtherType(),
-      descriptiveMetadata.getMetadataVersion(), true, ianaMediaTypes);
+      descriptiveMetadata.getMetadataVersion(), true);
   }
 
   public static MdRef addOtherMetadataToMETS(MetsWrapper metsWrapper, IPMetadata otherMetadata,
-    String otherMetadataPath, Set<String> ianaMediaTypes) throws IPException, InterruptedException {
-    return addMetadataToMETS(metsWrapper, otherMetadata, otherMetadataPath, "OTHER", null, null, false, ianaMediaTypes);
+    String otherMetadataPath) throws IPException, InterruptedException {
+    return addMetadataToMETS(metsWrapper, otherMetadata, otherMetadataPath, "OTHER", null, null, false);
   }
 
   private static MdRef addMetadataToMETS(MetsWrapper metsWrapper, IPMetadata metadata, String metadataPath,
-    String mdType, String mdOtherType, String mdTypeVersion, boolean isDescriptive, Set<String> ianaMediaTypes)
+    String mdType, String mdOtherType, String mdTypeVersion, boolean isDescriptive)
     throws IPException, InterruptedException {
     MdSecType dmdSec = new MdSecType();
     dmdSec.setSTATUS(metadata.getMetadataStatus().toString());
@@ -343,7 +342,7 @@ public final class EARKMETSUtils {
     mdRef.setMDTYPEVERSION(mdTypeVersion);
 
     // set mimetype, date creation, etc.
-    METSUtils.setFileBasicInformation(metadata.getMetadata().getPath(), mdRef, ianaMediaTypes);
+    METSUtils.setFileBasicInformation(metadata.getMetadata().getPath(), mdRef);
     // also set date created in dmdSec elem
     dmdSec.setCREATED(mdRef.getCREATED());
 
@@ -360,7 +359,7 @@ public final class EARKMETSUtils {
   }
 
   public static MdRef addPreservationMetadataToMETS(MetsWrapper metsWrapper, IPMetadata preservationMetadata,
-    String preservationMetadataPath, Set<String> ianaMediaTypes) throws IPException, InterruptedException {
+    String preservationMetadataPath) throws IPException, InterruptedException {
     MdSecType digiprovMD = new MdSecType();
     digiprovMD.setSTATUS(preservationMetadata.getMetadataStatus().toString());
     digiprovMD.setID(Utils.generateRandomAndPrefixedUUID());
@@ -368,7 +367,7 @@ public final class EARKMETSUtils {
     mdRef.setMDTYPE(preservationMetadata.getMetadataType().asString());
 
     // set mimetype, date creation, etc.
-    METSUtils.setFileBasicInformation(preservationMetadata.getMetadata().getPath(), mdRef, ianaMediaTypes);
+    METSUtils.setFileBasicInformation(preservationMetadata.getMetadata().getPath(), mdRef);
 
     // structural map info.
     metsWrapper.getMetadataDiv().getADMID().add(digiprovMD);
@@ -404,13 +403,13 @@ public final class EARKMETSUtils {
     }
   }
 
-  public static FileType addDataFileToMETS(MetsWrapper representationMETS, String dataFilePath, Path dataFile,
-    Set<String> ianaMediaTypes) throws IPException, InterruptedException {
+  public static FileType addDataFileToMETS(MetsWrapper representationMETS, String dataFilePath, Path dataFile)
+    throws IPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedUUID());
 
     // set mimetype, date creation, etc.
-    METSUtils.setFileBasicInformation(LOGGER, dataFile, file, ianaMediaTypes);
+    METSUtils.setFileBasicInformation(LOGGER, dataFile, file);
 
     // add to file section
     FLocat fileLocation = METSUtils.createFileLocation(dataFilePath);
@@ -426,13 +425,13 @@ public final class EARKMETSUtils {
     return file;
   }
 
-  public static FileType addSchemaFileToMETS(MetsWrapper metsWrapper, String schemaFilePath, Path schemaFile,
-    Set<String> ianaMediaTypes) throws IPException, InterruptedException {
+  public static FileType addSchemaFileToMETS(MetsWrapper metsWrapper, String schemaFilePath, Path schemaFile)
+    throws IPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedUUID());
 
     // set mimetype, date creation, etc.
-    METSUtils.setFileBasicInformation(LOGGER, schemaFile, file, ianaMediaTypes);
+    METSUtils.setFileBasicInformation(LOGGER, schemaFile, file);
 
     // add to file section
     FLocat fileLocation = METSUtils.createFileLocation(schemaFilePath);
@@ -449,12 +448,12 @@ public final class EARKMETSUtils {
   }
 
   public static FileType addSubmissionFileToMETS(MetsWrapper metsWrapper, String submissionFilePath,
-    Path submissionFile,Set<String> ianaMediaTypes) throws IPException, InterruptedException {
+    Path submissionFile) throws IPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedUUID());
 
     // set mimetype, date creation, etc.
-    METSUtils.setFileBasicInformation(LOGGER, submissionFile, file,ianaMediaTypes);
+    METSUtils.setFileBasicInformation(LOGGER, submissionFile, file);
 
     // add to file section
     FLocat fileLocation = METSUtils.createFileLocation(submissionFilePath);
@@ -469,12 +468,12 @@ public final class EARKMETSUtils {
   }
 
   public static FileType addDocumentationFileToMETS(MetsWrapper metsWrapper, String documentationFilePath,
-    Path documentationFile, Set<String> ianaMediaTypes) throws IPException, InterruptedException {
+    Path documentationFile) throws IPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedUUID());
 
     // set mimetype, date creation, etc.
-    METSUtils.setFileBasicInformation(LOGGER, documentationFile, file, ianaMediaTypes);
+    METSUtils.setFileBasicInformation(LOGGER, documentationFile, file);
 
     // add to file section
     FLocat fileLocation = METSUtils.createFileLocation(documentationFilePath);

@@ -7,18 +7,14 @@
  */
 package org.roda_project.commons_ip2.model.impl.eark;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.channels.ClosedByInterruptException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip.model.ParseException;
@@ -33,7 +29,6 @@ import org.roda_project.commons_ip2.model.SIP;
 import org.roda_project.commons_ip2.model.impl.ModelUtils;
 import org.roda_project.commons_ip2.utils.METSUtils;
 import org.roda_project.commons_ip2.utils.ZIPUtils;
-import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -182,9 +177,6 @@ public class EARKSIP extends SIP {
     Path buildDir = ModelUtils.createBuildDir(SIP_TEMP_DIR);
     Path zipPath = getZipPath(destinationDirectory, fileNameWithoutExtension);
     try {
-      Set<String> ianaMediaTypes = new BufferedReader(new InputStreamReader(
-        getClass().getClassLoader().getResourceAsStream(Constants.PATH_RESOURCES_CSIP_VOCABULARY_IANA_MEDIA_TYPES),
-        StandardCharsets.UTF_8)).lines().collect(Collectors.toSet());
       Map<String, ZipEntryInfo> zipEntries = getZipEntries();
       boolean isMetadataOther = (this.getOtherMetadata() != null && !this.getOtherMetadata().isEmpty());
       boolean isMetadata = ((this.getDescriptiveMetadata() != null && !this.getDescriptiveMetadata().isEmpty())
@@ -196,13 +188,13 @@ public class EARKSIP extends SIP {
         this.getHeader(), this.getType(), this.getContentType(), this.getContentInformationType(), isMetadata,
         isMetadataOther, isSchemas, isDocumentation);
 
-      EARKUtils.addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null,ianaMediaTypes);
-      EARKUtils.addPreservationMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getPreservationMetadata(), null,ianaMediaTypes);
-      EARKUtils.addOtherMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getOtherMetadata(), null,ianaMediaTypes);
-      EARKUtils.addRepresentationsToZipAndMETS(this, getRepresentations(), zipEntries, mainMETSWrapper, buildDir,ianaMediaTypes);
+      EARKUtils.addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
+      EARKUtils.addPreservationMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getPreservationMetadata(), null);
+      EARKUtils.addOtherMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getOtherMetadata(), null);
+      EARKUtils.addRepresentationsToZipAndMETS(this, getRepresentations(), zipEntries, mainMETSWrapper, buildDir);
       EARKUtils.addDefaultSchemas(LOGGER, getSchemas(), buildDir);
-      EARKUtils.addSchemasToZipAndMETS(zipEntries, mainMETSWrapper, getSchemas(), null,ianaMediaTypes);
-      EARKUtils.addDocumentationToZipAndMETS(zipEntries, mainMETSWrapper, getDocumentation(), null,ianaMediaTypes);
+      EARKUtils.addSchemasToZipAndMETS(zipEntries, mainMETSWrapper, getSchemas(), null);
+      EARKUtils.addDocumentationToZipAndMETS(zipEntries, mainMETSWrapper, getDocumentation(), null);
       METSUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, buildDir);
 
       createZipFile(zipEntries, zipPath);

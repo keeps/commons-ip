@@ -5,7 +5,7 @@ RESOURCES_FOLDER="./src/main/resources/controlledVocabularies"
 rm -f "$RESOURCES_FOLDER/IANA_MEDIA_TYPES.txt" 2>&1
 
 declare -a ianaGroups=("application" "audio" "font" "image" "message" "model" "multipart" "text" "video" )
-declare -a missingMimeTypes=("image/ief" "image/jpeg" "image/gif" "message/external-body" "message/partial" "message/rfc822" "model/mesh" "model/vrml" "multipart/alternative" "multipart/digest" "multipart/mixed" "multipart/parallel" "text/enriched" "text/plain" "text/richtext" "video/mpeg")
+declare -a missingMimeTypes=("image/jpeg" "image/gif" "text/plain" "video/mpeg")
 
 for ianaGroup in ${ianaGroups[@]}; do
    echo $ianaGroup
