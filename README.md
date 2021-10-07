@@ -330,7 +330,11 @@ The IANA media types list from https://www.iana.org/assignments/media-types/${ia
 ###### Video
 * video/mpeg
 
+#### Update Extended list of IANA Media Types
 
+*To add/remove new values to the list add a new line with the IANA Media Type in **scripts/ExtendedIANAMediaTypes.txt**
+
+*Run the script again
 ## Commercial support
 
 For more information or commercial support, contact [KEEP SOLUTIONS](http://www.keep.pt).
