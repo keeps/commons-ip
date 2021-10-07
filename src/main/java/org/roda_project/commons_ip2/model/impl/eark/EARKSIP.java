@@ -62,7 +62,64 @@ public class EARKSIP extends SIP {
   }
 
   /**
-   * 
+   *
+   * parse and all parse related methods; during parse, validation is also
+   * conducted and stored inside the SIP
+   * _________________________________________________________________________
+   */
+
+  public static SIP parse(Path source, Path destinationDirectory) throws ParseException {
+    return parseEARKSIP(source, destinationDirectory);
+  }
+
+  public static SIP parse(Path source) throws ParseException {
+    try {
+      return parse(source, Files.createTempDirectory("unzipped"));
+    } catch (IOException e) {
+      throw new ParseException("Error creating temporary directory for E-ARK SIP parse", e);
+    }
+  }
+
+  private static SIP parseEARKSIP(final Path source, final Path destinationDirectory) throws ParseException {
+    try {
+      IPConstants.METS_ENCODE_AND_DECODE_HREF = true;
+      SIP sip = new EARKSIP();
+
+      Path sipPath = ZIPUtils.extractIPIfInZipFormat(source, destinationDirectory);
+      sip.setBasePath(sipPath);
+
+      MetsWrapper metsWrapper = EARKUtils.processMainMets(sip, sipPath);
+
+      if (sip.isValid()) {
+
+        StructMapType structMap = EARKUtils.getEARKStructMap(metsWrapper, sip, true);
+
+        if (structMap != null) {
+          EARKUtils.preProcessStructMap(metsWrapper, structMap);
+          EARKUtils.processDescriptiveMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
+          EARKUtils.processOtherMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
+          EARKUtils.processPreservationMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
+          EARKUtils.processRepresentations(metsWrapper, sip, LOGGER);
+          EARKUtils.processSchemasMetadata(metsWrapper, sip, sip.getBasePath());
+          EARKUtils.processDocumentationMetadata(metsWrapper, sip, sip.getBasePath());
+          EARKUtils.processAncestors(metsWrapper, sip);
+        }
+      }
+
+      return sip;
+    } catch (final IPException e) {
+      throw new ParseException("Error parsing E-ARK SIP", e);
+    }
+  }
+
+  /**
+   *
+   * build and all build related methods
+   * _________________________________________________________________________
+   */
+
+  /**
+   *
    * build and all build related methods
    * _________________________________________________________________________
    */
@@ -97,11 +154,6 @@ public class EARKSIP extends SIP {
     return build(destinationDirectory, fileNameWithoutExtension, false);
   }
 
-  /**
-   *
-   * build and all build related methods
-   * _________________________________________________________________________
-   */
   /**
    * Builds a SIP.
    *
@@ -184,57 +236,6 @@ public class EARKSIP extends SIP {
       throw new IPException("Error generating E-ARK SIP ZIP file. Reason: " + e.getMessage(), e);
     } finally {
       notifySipBuildPackagingEnded();
-    }
-  }
-
-  /**
-   * 
-   * parse and all parse related methods; during parse, validation is also
-   * conducted and stored inside the SIP
-   * _________________________________________________________________________
-   */
-
-  public static SIP parse(Path source, Path destinationDirectory) throws ParseException {
-    return parseEARKSIP(source, destinationDirectory);
-  }
-
-  public static SIP parse(Path source) throws ParseException {
-    try {
-      return parse(source, Files.createTempDirectory("unzipped"));
-    } catch (IOException e) {
-      throw new ParseException("Error creating temporary directory for E-ARK SIP parse", e);
-    }
-  }
-
-  private static SIP parseEARKSIP(final Path source, final Path destinationDirectory) throws ParseException {
-    try {
-      IPConstants.METS_ENCODE_AND_DECODE_HREF = true;
-      SIP sip = new EARKSIP();
-
-      Path sipPath = ZIPUtils.extractIPIfInZipFormat(source, destinationDirectory);
-      sip.setBasePath(sipPath);
-
-      MetsWrapper metsWrapper = EARKUtils.processMainMets(sip, sipPath);
-
-      if (sip.isValid()) {
-
-        StructMapType structMap = EARKUtils.getEARKStructMap(metsWrapper, sip, true);
-
-        if (structMap != null) {
-          EARKUtils.preProcessStructMap(metsWrapper, structMap);
-          EARKUtils.processDescriptiveMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
-          EARKUtils.processOtherMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
-          EARKUtils.processPreservationMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
-          EARKUtils.processRepresentations(metsWrapper, sip, LOGGER);
-          EARKUtils.processSchemasMetadata(metsWrapper, sip, sip.getBasePath());
-          EARKUtils.processDocumentationMetadata(metsWrapper, sip, sip.getBasePath());
-          EARKUtils.processAncestors(metsWrapper, sip);
-        }
-      }
-
-      return sip;
-    } catch (final IPException e) {
-      throw new ParseException("Error parsing E-ARK SIP", e);
     }
   }
 

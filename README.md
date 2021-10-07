@@ -317,6 +317,24 @@ To update IANA media types list, in commons-ip root directory run the following 
 The command executes a script that downloads all IANA Media Types (Application, Audio, Font, Image, Message, Model, Multipart, Text, Video) from https://www.iana.org/assignments/media-types/${iana_file}.csv . 
 Note that this downloads different **.csv** files then creates a **.txt** file with all IANA media types appended to the new file.
 
+#### Extend List of IANA Media Types
+The IANA media types list from https://www.iana.org/assignments/media-types/${iana_file}.csv was extended with the following **mimetypes:**
+
+###### Image
+* image/jpeg
+* image/gif
+
+###### Text
+* text/plain
+
+###### Video
+* video/mpeg
+
+#### Update Extended list of IANA Media Types
+
+*To add/remove new values to the list add a new line with the IANA Media Type in **scripts/ExtendedIANAMediaTypes.txt**
+
+*Run the script again
 ## Commercial support
 
 For more information or commercial support, contact [KEEP SOLUTIONS](http://www.keep.pt).

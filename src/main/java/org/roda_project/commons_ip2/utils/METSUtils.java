@@ -197,6 +197,10 @@ public final class METSUtils {
     String probedContentType = Files.probeContentType(file);
     if (probedContentType == null) {
       probedContentType = "application/octet-stream";
+    } else {
+      if (!IANAMediaTypes.getIANAMediaTypes().contains(probedContentType)) {
+        probedContentType = "application/octet-stream";
+      }
     }
     return probedContentType;
   }
@@ -206,9 +210,9 @@ public final class METSUtils {
    * 
    * <p>
    * 20170511 hsilva: a global variable called
-   * {@link IPConstants.METS_ENCODE_AND_DECODE_HREF} is used to enable/disable
-   * the effective decode (done this way to avoid lots of changes in the methods
-   * that use this method)
+   * {@link IPConstants.METS_ENCODE_AND_DECODE_HREF} is used to enable/disable the
+   * effective decode (done this way to avoid lots of changes in the methods that
+   * use this method)
    * </p>
    */
   public static String decodeHref(String value) {
@@ -227,10 +231,10 @@ public final class METSUtils {
    *
    * <p>
    * 20170511 hsilva: a global variable called
-   * {@link IPConstants.METS_ENCODE_AND_DECODE_HREF} is used to enable/disable
-   * the effective encode (done this way to avoid lots of changes in the methods
-   * that use this method). This method is not multi-thread safe when using
-   * different SIP formats.
+   * {@link IPConstants.METS_ENCODE_AND_DECODE_HREF} is used to enable/disable the
+   * effective encode (done this way to avoid lots of changes in the methods that
+   * use this method). This method is not multi-thread safe when using different
+   * SIP formats.
    * </p>
    */
   public static String encodeHref(String value) {
@@ -254,7 +258,7 @@ public final class METSUtils {
 
   private static boolean isSafeChar(char ch) {
     return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')
-        || ":/$-_.!*'(),".indexOf(ch) >= 0;
+      || ":/$-_.!*'(),".indexOf(ch) >= 0;
   }
 
   private static String encodeUnsafeChar(char ch) {

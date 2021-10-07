@@ -14,6 +14,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.roda_project.commons_ip2.mets_v1_12.beans.AmdSecType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType;
+import org.roda_project.commons_ip2.utils.IANAMediaTypes;
 import org.roda_project.commons_ip2.validator.common.ControlledVocabularyParser;
 import org.roda_project.commons_ip2.validator.common.MetsParser;
 import org.roda_project.commons_ip2.validator.component.ValidatorComponentImpl;
@@ -685,7 +686,7 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
         MdSecType.MdRef mdRef = digiprov.getMdRef();
         String mimeType = mdRef.getMIMETYPE();
         if (mimeType != null) {
-          if (!ianaMediaTypes.contains(mimeType)) {
+          if (!IANAMediaTypes.getIANAMediaTypes().contains(mimeType)) {
             StringBuilder message = new StringBuilder();
             message.append("Value ").append(mimeType)
               .append(" in %1$s for mets/amdSec/digiprovMD/mdRef/@MIMETYPE isn't valid");
@@ -1162,7 +1163,7 @@ public class AdministritiveMetadataComponentValidator extends ValidatorComponent
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
                 "mets/amdSec/rightsMD/mdRef/@MIMETYPE in %1$s can't be null", metsName, isRootMets()), false, false);
             } else {
-              if (!ianaMediaTypes.contains(mimeType)) {
+              if (!IANAMediaTypes.getIANAMediaTypes().contains(mimeType)) {
                 StringBuilder message = new StringBuilder();
                 message.append("Value ").append(mimeType)
                   .append(" in %1$s for mets/amdSec/rightsMD/mdRef/@MIMETYPE value isn't valid");

@@ -1,0 +1,4 @@
+image/jpeg
+image/gif
+text/plain
+video/mpeg
