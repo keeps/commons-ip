@@ -14,7 +14,7 @@ for ianaGroup in ${ianaGroups[@]}; do
 done
 
 for mimeType in ${missingMimeTypes[@]}; do
-  c=$(grep -c $mimeType "$RESOURCES_FOLDER/IANA_MEDIA_TYPES.txt")
+  c=$(grep -Pc "$mimeType$" "$RESOURCES_FOLDER/IANA_MEDIA_TYPES.txt")
   if [ "$c" -eq "0" ]; then
     echo $mimeType >> "$RESOURCES_FOLDER/IANA_MEDIA_TYPES.txt"
   fi
