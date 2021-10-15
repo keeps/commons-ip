@@ -61,6 +61,8 @@ public class ValidationReportOutputJson {
     return notes;
   }
 
+  public Path getSipPath(){ return sipPath;}
+
   private void init(Path path) {
     this.outputFile = path;
     this.success = 0;
