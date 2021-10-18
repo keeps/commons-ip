@@ -1,9 +1,9 @@
 package org.roda_project.commons_ip2.validator.component;
 
-import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
 
 /**
  * @author João Gomes <jgomes@keep.pt>
@@ -21,8 +21,18 @@ public abstract class StructureValidatorImpl implements StructureValidator {
     this.observers.remove(observer);
   }
 
-  public void notifyObserversIPValidationStarted(){
+  public void notifyObserversIPValidationStarted() {
     observers.forEach(ValidationObserver::notifyValidationStart);
+  }
+
+  public void notifyObserversIPValidationFinished() {
+    observers.forEach(ValidationObserver::notifyFinishValidation);
+  }
+
+  public void notifyIndicators(int errors, int success, int warnings, int notes, int skipped) {
+    for(ValidationObserver observer : observers){
+      observer.notifyIndicators(errors,success,warnings,notes,skipped);
+    }
   }
 
   protected void notifyObserversValidationStarted(String moduleName, String ID) {

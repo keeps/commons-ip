@@ -46,17 +46,10 @@ public class EARKSIPValidator {
   private final Path earksipPath;
 
   private final ValidationReportOutputJson validationReportOutputJson;
-  private final ZipManager zipManager;
-  private final List<ValidationObserver> observers;
-  private final FolderManager folderManager;
-  private final List<String> metsInternalIds;
-  private final TreeMap<String, ReporterDetails> results;
-  private StructureComponentValidator structureComponent;
-  private StructureValidatorState structureValidatorState;
-  private Mets mets;
-  private List<ValidatorComponent> metsComponents = new ArrayList<>();
-  private MetsValidatorState metsValidatorState;
-  private HashMap<String, Boolean> files;
+  private final StructureComponentValidator structureComponent;
+  private final StructureValidatorState structureValidatorState;
+  private final List<MetsValidator> metsComponents = new ArrayList<>();
+  private final MetsValidatorState metsValidatorState;
 
   public EARKSIPValidator(ValidationReportOutputJson reportOutputJson)
     throws IOException, ParserConfigurationException, SAXException {
@@ -64,59 +57,41 @@ public class EARKSIPValidator {
     this.earksipPath = reportOutputJson.getSipPath().toAbsolutePath().normalize();
 
     this.validationReportOutputJson = reportOutputJson;
-    this.zipManager = new ZipManager();
-    this.observers = new ArrayList<>();
 
-    this.folderManager = new FolderManager();
-    this.metsInternalIds = new ArrayList<>();
-    this.results = new TreeMap<>(new RequirementsComparator());
-
-    // setupStructureComponent();
     this.structureValidatorState = new StructureValidatorState(reportOutputJson.getSipPath().toAbsolutePath().normalize());
     this.structureComponent = new StructureComponentValidator();
     this.metsValidatorState = new MetsValidatorState();
     setupComponents();
   }
 
-  // private void setupStructureComponent() {
-  // this.structureComponent = new StructureComponentValidator(earksipPath);
-  // }
-
   private void setupComponents() throws IOException, ParserConfigurationException, SAXException {
-//      this.metsComponents.add(new MetsComponentValidator());
-//    this.metsComponents.add(new MetsHeaderComponentValidator());
-//    this.metsComponents.add(new DescriptiveMetadataComponentValidator());
-//    this.metsComponents.add(new AdministritiveMetadataComponentValidator());
-//    this.metsComponents.add(new FileSectionComponentValidator());
-//    this.metsComponents.add(new StructuralMapComponentValidator());
+    this.metsComponents.add(new MetsComponentValidator());
+    this.metsComponents.add(new MetsHeaderComponentValidator());
+    this.metsComponents.add(new DescriptiveMetadataComponentValidator());
+    this.metsComponents.add(new AdministritiveMetadataComponentValidator());
+    this.metsComponents.add(new FileSectionComponentValidator());
+    this.metsComponents.add(new StructuralMapComponentValidator());
   }
 
   public void addObserver(ValidationObserver observer) {
-    // Esta vai ser para cortar.
-    observers.add(observer);
     structureComponent.addObserver(observer);
     metsComponents.forEach(c -> c.addObserver(observer));
   }
 
   public void removeObserver(ValidationObserver observer) {
-    observers.remove(observer);
     structureComponent.removeObserver(observer);
     metsComponents.forEach(c -> c.removeObserver(observer));
   }
 
   public boolean validate() {
-    // Esta vai ser para cortar.
-    observers.forEach(ValidationObserver::notifyValidationStart);
     structureComponent.notifyObserversIPValidationStarted();
     try {
       Map<String, ReporterDetails> structureValidationResults = structureComponent.validate(structureValidatorState);
-      results.putAll(structureValidationResults);
+      validationReportOutputJson.getResults().putAll(structureValidationResults);
 
-      if (validFileComponent()) {
+      if (validationReportOutputJson.validFileComponent()) {
         Map<String, InputStream> subMets;
         if (structureValidatorState.isZipFileFlag()) {
-          files = structureValidatorState.getZipManager().getFiles(earksipPath);
-          // nova instrução
           metsValidatorState.setMetsFiles(structureValidatorState.getZipManager().getFiles(earksipPath));
           subMets = structureValidatorState.getZipManager().getSubMets(earksipPath);
         } else {
@@ -131,18 +106,14 @@ public class EARKSIPValidator {
         ReporterDetails csipStr0 = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", true,
           false);
         csipStr0.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-        results.put(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID, csipStr0);
+        validationReportOutputJson.getResults().put(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID, csipStr0);
       }
 
-      validationReportOutputJson.validationResults(results);
-      if (validationReportOutputJson.getErrors() > 0) {
-        validationReportOutputJson.componentValidationFinish(Constants.VALIDATION_REPORT_SPECIFICATION_RESULT_INVALID);
-      } else {
-        validationReportOutputJson.componentValidationFinish(Constants.VALIDATION_REPORT_SPECIFICATION_RESULT_VALID);
-      }
+      validationReportOutputJson.validationResults();
+      validationReportOutputJson.writeFinalResult();
       notifyIndicatorsObservers();
       validationReportOutputJson.close();
-      observers.forEach(ValidationObserver::notifyFinishValidation);
+      structureComponent.notifyObserversIPValidationFinished();
 
     } catch (IOException | JAXBException | SAXException e) {
       StringBuilder message = new StringBuilder();
@@ -169,44 +140,21 @@ public class EARKSIPValidator {
       ReporterDetails csipStr0 = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
         message.toString(), false, false);
       csipStr0.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-      results.put(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID, csipStr0);
+      validationReportOutputJson.getResults().put(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID, csipStr0);
 
-      validationReportOutputJson.validationResults(results);
-      validationReportOutputJson.componentValidationFinish(Constants.VALIDATION_REPORT_SPECIFICATION_RESULT_INVALID);
-      observers.forEach(ValidationObserver::notifyValidationStart);
+      validationReportOutputJson.validationResults();
+      validationReportOutputJson.writeFinalResult();
       notifyIndicatorsObservers();
       validationReportOutputJson.close();
-      observers.forEach(ValidationObserver::notifyFinishValidation);
+      structureComponent.notifyObserversIPValidationFinished();
     }
     return validationReportOutputJson.getErrors() == 0;
   }
 
-  private void validateComponents(boolean isZip, String key, boolean isRootMets) throws IOException {
-    for (ValidatorComponent component : metsComponents) {
-      component.setReporter(validationReportOutputJson);
-      component.setZipManager(zipManager);
-      component.setFolderManager(folderManager);
-      component.setEARKSIPpath(earksipPath);
-      component.setMets(mets);
-      component.setIds(metsInternalIds);
-      component.setFiles(files);
-      component.setZipFileFlag(isZip);
-      component.setMetsName(key);
-      component.setIsRootMets(isRootMets);
-      if (isZip) {
-        StringBuilder metsPath = new StringBuilder();
-        for (String path : key.split("/")) {
-          if (!path.equals("METS.xml")) {
-            metsPath.append(path).append("/");
-          }
-        }
-        component.setMetsPath(metsPath.toString());
-      } else {
-        component.setMetsPath(Paths.get(key).getParent().toString());
-      }
-      Map<String, ReporterDetails> componentResults = component.validate();
-      ResultsUtils.mergeResults(results, componentResults);
-      component.clean();
+  private void validateComponents() throws IOException {
+    for (MetsValidator component : metsComponents) {
+      Map<String, ReporterDetails> componentResults = component.validate(structureValidatorState, metsValidatorState);
+      ResultsUtils.mergeResults(validationReportOutputJson.getResults(),componentResults);
     }
   }
 
@@ -214,9 +162,9 @@ public class EARKSIPValidator {
     throws IOException, JAXBException, SAXException {
     for (Map.Entry<String, InputStream> entry : subMets.entrySet()) {
       InstatiateMets instatiateMets = new InstatiateMets(entry.getValue());
-      mets = instatiateMets.instatiateMetsFile();
+      metsValidatorState.setMets(instatiateMets.instatiateMetsFile());
       setupMetsValidatorState(entry.getKey(), isZip, false);
-      validateComponents(isZip, entry.getKey(), false);
+      validateComponents();
     }
   }
 
@@ -230,19 +178,13 @@ public class EARKSIPValidator {
       metsRootStream = structureValidatorState.getFolderManager().getMetsRootInputStream(earksipPath);
       ipPath = earksipPath.resolve("METS.xml").toString();
     }
-    InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
-    mets = metsRoot.instatiateMetsFile();
-    validateComponents(structureValidatorState.isZipFileFlag(), ipPath, true);
-  }
 
-  public boolean validFileComponent() {
-    for (Map.Entry<String, ReporterDetails> result : results.entrySet()) {
-      String strCsip = result.getKey();
-      if ((strCsip.equals("CSIPSTR1") || strCsip.equals("CSIPSTR4")) && !result.getValue().isValid()) {
-        return false;
-      }
-    }
-    return true;
+    InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
+    metsValidatorState.setMetsPath(ipPath);
+    metsValidatorState.setMetsName(ipPath);
+    metsValidatorState.setIsRootMets(true);
+    metsValidatorState.setMets(metsRoot.instatiateMetsFile());
+    validateComponents();
   }
 
   private void setupMetsValidatorState(String key, boolean isZip, boolean isRootMets) {
@@ -262,47 +204,8 @@ public class EARKSIPValidator {
   }
 
   public void notifyIndicatorsObservers() {
-    for (ValidationObserver observer : observers) {
-      observer.notifyIndicators(this.validationReportOutputJson.getErrors(),
+    structureComponent.notifyIndicators(this.validationReportOutputJson.getErrors(),
         this.validationReportOutputJson.getSuccess(), this.validationReportOutputJson.getWarnings(),
         this.validationReportOutputJson.getNotes(), this.validationReportOutputJson.getSkipped());
-    }
-  }
-
-  public int compareInt(int c1, int c2) {
-    if (c1 < c2) {
-      return -1;
-    } else {
-      if (c1 > c2) {
-        return 1;
-      }
-      return 0;
-    }
-  }
-
-  private class RequirementsComparator implements Comparator<String> {
-
-    private int calculateWeight(String o) {
-      int c;
-
-      if (o.startsWith("CSIPSTR")) {
-        c = 1000;
-        c += Integer.parseInt(o.substring("CSIPSTR".length()));
-      } else if (o.startsWith("CSIP")) {
-        c = 2000;
-        c += Integer.parseInt(o.substring("CSIP".length()));
-      } else if (o.startsWith("SIP")) {
-        c = 4000;
-        c += Integer.parseInt(o.substring("SIP".length()));
-      } else {
-        c = 9000;
-      }
-      return c;
-    }
-
-    @Override
-    public int compare(String o1, String o2) {
-      return compareInt(calculateWeight(o1), calculateWeight(o2));
-    }
   }
 }

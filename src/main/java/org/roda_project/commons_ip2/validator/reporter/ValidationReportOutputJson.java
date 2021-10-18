@@ -6,10 +6,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.roda_project.commons_ip2.validator.EARKSIPValidator;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.constants.ConstantsSIPspec;
@@ -35,6 +37,8 @@ public class ValidationReportOutputJson {
   private int warnings;
   private int skipped;
   private int notes;
+
+  private Map<String,ReporterDetails> results =  new TreeMap<>(new RequirementsComparator());
 
   public ValidationReportOutputJson(Path path, Path sipPath) {
     this.sipPath = sipPath;
@@ -62,6 +66,10 @@ public class ValidationReportOutputJson {
   }
 
   public Path getSipPath(){ return sipPath;}
+
+  public Map<String,ReporterDetails> getResults(){
+    return results;
+  }
 
   private void init(Path path) {
     this.outputFile = path;
@@ -213,7 +221,7 @@ public class ValidationReportOutputJson {
     }
   }
 
-  public void validationResults(TreeMap<String, ReporterDetails> results) {
+  public void validationResults() {
     for (Map.Entry<String, ReporterDetails> entry : results.entrySet()) {
       ReporterDetails details = entry.getValue();
       List<String> issues = details.getIssues();
@@ -351,6 +359,59 @@ public class ValidationReportOutputJson {
         }
         jsonGenerator.writeEndArray();
         break;
+    }
+  }
+
+  public void writeFinalResult(){
+    if (errors > 0) {
+      componentValidationFinish(Constants.VALIDATION_REPORT_SPECIFICATION_RESULT_INVALID);
+    } else {
+      componentValidationFinish(Constants.VALIDATION_REPORT_SPECIFICATION_RESULT_VALID);
+    }
+  }
+  public boolean validFileComponent() {
+    for (Map.Entry<String, ReporterDetails> result : results.entrySet()) {
+      String strCsip = result.getKey();
+      if ((strCsip.equals("CSIPSTR1") || strCsip.equals("CSIPSTR4")) && !result.getValue().isValid()) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private class RequirementsComparator implements Comparator<String> {
+    private int compareInt(int c1, int c2) {
+      if (c1 < c2) {
+        return -1;
+      } else {
+        if (c1 > c2) {
+          return 1;
+        }
+        return 0;
+      }
+    }
+
+    private int calculateWeight(String o) {
+      int c;
+
+      if (o.startsWith("CSIPSTR")) {
+        c = 1000;
+        c += Integer.parseInt(o.substring("CSIPSTR".length()));
+      } else if (o.startsWith("CSIP")) {
+        c = 2000;
+        c += Integer.parseInt(o.substring("CSIP".length()));
+      } else if (o.startsWith("SIP")) {
+        c = 4000;
+        c += Integer.parseInt(o.substring("SIP".length()));
+      } else {
+        c = 9000;
+      }
+      return c;
+    }
+
+    @Override
+    public int compare(String o1, String o2) {
+      return compareInt(calculateWeight(o1), calculateWeight(o2));
     }
   }
 }

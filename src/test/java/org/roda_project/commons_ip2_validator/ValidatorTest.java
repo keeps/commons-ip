@@ -13,6 +13,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.roda_project.commons_ip2.utils.Utils;
 import org.roda_project.commons_ip2.validator.EARKSIPValidator;
+import org.roda_project.commons_ip2.validator.observer.ProgressValidationLoggerObserver;
+import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReportOutputJson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,11 +63,13 @@ public class ValidatorTest {
     LOGGER.info("Validate - Full-EARK-SIP");
 
     //URI resource = getClass().getResource("/").toURI();
-    Path earkSIPath = Paths.get("/home/jgomes/Desktop/Compliance/").resolve("uuid-9f7b7fdc-d2b6-41f9-8ce0-9b023dc79193.zip");
-    Path reportPath = Paths.get("/home/jgomes/Desktop/Compliance/").resolve("uuid-9f7b7fdc-d2b6-41f9-8ce0-9b023dc79193.json");;
+    Path earkSIPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/Other").resolve("Simple-EARK-SIP.zip");
+    Path reportPath = Paths.get("/home/jgomes/Desktop/Demo/SIPS/Other").resolve("Simple-EARK-SIP.json");;
 
     ValidationReportOutputJson reportOutputJson = new ValidationReportOutputJson(reportPath,earkSIPath);
     EARKSIPValidator earksipValidator = new EARKSIPValidator(reportOutputJson);
+    ValidationObserver observer = new ProgressValidationLoggerObserver();
+    earksipValidator.addObserver(observer);
     boolean validate = earksipValidator.validate();
     LOGGER.info("Done validate - Full-EARK-SIP");
 

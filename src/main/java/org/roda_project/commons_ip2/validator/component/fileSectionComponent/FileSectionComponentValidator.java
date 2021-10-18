@@ -20,12 +20,14 @@ import org.roda_project.commons_ip2.mets_v1_12.beans.MetsType;
 import org.roda_project.commons_ip2.utils.IANAMediaTypes;
 import org.roda_project.commons_ip2.validator.common.ControlledVocabularyParser;
 import org.roda_project.commons_ip2.validator.common.MetsParser;
-import org.roda_project.commons_ip2.validator.component.ValidatorComponentImpl;
+import org.roda_project.commons_ip2.validator.component.MetsValidatorImpl;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.constants.ConstantsSIPspec;
 import org.roda_project.commons_ip2.validator.handlers.MetsHandler;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
+import org.roda_project.commons_ip2.validator.state.MetsValidatorState;
+import org.roda_project.commons_ip2.validator.state.StructureValidatorState;
 import org.roda_project.commons_ip2.validator.utils.CHECKSUMTYPE;
 import org.roda_project.commons_ip2.validator.utils.Message;
 import org.roda_project.commons_ip2.validator.utils.ResultsUtils;
@@ -34,7 +36,7 @@ import org.xml.sax.SAXException;
 /**
  * @author João Gomes <jgomes@keep.pt>
  */
-public class FileSectionComponentValidator extends ValidatorComponentImpl {
+public class FileSectionComponentValidator extends MetsValidatorImpl {
   public static final String UTF_8 = "UTF-8";
   public static final String HTTPS_DILCIS_EU_XML_METS_CSIPEXTENSION_METS = "https://dilcis.eu/XML/METS/CSIPExtensionMETS";
 
@@ -48,143 +50,162 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
   }
 
   @Override
-  public Map<String, ReporterDetails> validate() throws IOException {
+  public Map<String, ReporterDetails> validate(StructureValidatorState structureValidatorState,
+    MetsValidatorState metsValidatorState) throws IOException {
     ReporterDetails csip;
     Map<String, ReporterDetails> results = new HashMap<>();
     /* CSIP58 */
     notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID);
     ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID,
-      validateCSIP58().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+      validateCSIP58(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
     if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID)) {
 
       /* CSIP59 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP59_ID);
       ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP59_ID,
-        validateCSIP59().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+        validateCSIP59(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIP60 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP60_ID);
       ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP60_ID,
-        validateCSIP60().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+        validateCSIP60(structureValidatorState, metsValidatorState)
+          .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIP113 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP113_ID);
       ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP113_ID,
-        validateCSIP113().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+        validateCSIP113(structureValidatorState, metsValidatorState)
+          .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIP114 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP114_ID);
       ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP114_ID,
-        validateCSIP114().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+        validateCSIP114(structureValidatorState, metsValidatorState)
+          .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIP61 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP61_ID);
       ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP61_ID,
-        validateCSIP61().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+        validateCSIP61(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIP62 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP62_ID);
       ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP62_ID,
-        validateCSIP62().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+        validateCSIP62(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIP63 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP63_ID);
       ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP63_ID,
-        validateCSIP63().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+        validateCSIP63(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIP64 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP64_ID);
       ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP64_ID,
-        validateCSIP64().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+        validateCSIP64(structureValidatorState, metsValidatorState)
+          .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIP65 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP65_ID);
       ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP65_ID,
-        validateCSIP65().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+        validateCSIP65(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIP66 */
       notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP66_ID);
       ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP66_ID,
-        validateCSIP66().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+        validateCSIP66(structureValidatorState, metsValidatorState)
+          .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP66_ID)) {
 
         /* CSIP67 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP67_ID);
         ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP67_ID,
-          validateCSIP67().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+          validateCSIP67(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
         /* CSIP68 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP68_ID);
         ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP68_ID,
-          validateCSIP68().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+          validateCSIP68(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
         /* CSIP69 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP69_ID);
         ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP69_ID,
-          validateCSIP69().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+          validateCSIP69(structureValidatorState, metsValidatorState)
+            .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
         /* CSIP70 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP70_ID);
         ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP70_ID,
-          validateCSIP70().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+          validateCSIP70(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
         /* CSIP71 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP71_ID);
         try {
-          csip = validateCSIP71().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+          csip = validateCSIP71(structureValidatorState, metsValidatorState)
+            .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
         } catch (Exception e) {
           csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            Message.createErrorMessage("Can't calculate checksum of file %1$s", metsName, isRootMets()), false, false);
+            Message.createErrorMessage("Can't calculate checksum of file %1$s", metsValidatorState.getMetsName(),
+              metsValidatorState.isRootMets()),
+            false, false);
         }
         ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP71_ID, csip);
 
         /* CSIP72 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID);
         ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID,
-          validateCSIP72().setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
+          validateCSIP72(metsValidatorState)
+            .setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
 
         /* CSIP73 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP73_ID);
         ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP73_ID,
-          validateCSIP73().setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
+          validateCSIP73(metsValidatorState)
+            .setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
 
         /* CSIP74 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP74_ID);
         ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP74_ID,
-          validateCSIP74().setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
+          validateCSIP74(metsValidatorState)
+            .setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
 
         /* CSIP75 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP75_ID);
         ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP75_ID,
-          validateCSIP75().setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
+          validateCSIP75(metsValidatorState)
+            .setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
 
         /* CSIP76 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP76_ID);
         ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP76_ID,
-          validateCSIP76().setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
+          validateCSIP76(metsValidatorState)
+            .setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
 
         if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP76_ID)) {
 
           /* CSIP77 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP77_ID);
           ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP77_ID,
-            validateCSIP77().setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
+            validateCSIP77(metsValidatorState)
+              .setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
 
           /* CSIP78 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP78_ID);
           ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP78_ID,
-            validateCSIP78().setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
+            validateCSIP78(structureValidatorState, metsValidatorState)
+              .setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
 
           /* CSIP79 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP79_ID);
           ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP79_ID,
-            validateCSIP79().setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
+            validateCSIP79(structureValidatorState, metsValidatorState)
+              .setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
 
         } else {
           String message = Message.createErrorMessage(
-            "SKIPPED in %1$s because mets/fileSec/fileGrp/file/FLocat doesn't exist", metsName, isRootMets());
+            "SKIPPED in %1$s because mets/fileSec/fileGrp/file/FLocat doesn't exist", metsValidatorState.getMetsName(),
+            metsValidatorState.isRootMets());
 
           ResultsUtils.addResults(results,
             new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
@@ -196,26 +217,26 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
         /* SIP32 */
         notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP32_ID);
         ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP32_ID,
-          validateSIP32().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
+          validateSIP32(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
         /* SIP33 */
         notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP33_ID);
         ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP33_ID,
-          validateSIP33().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
+          validateSIP33(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
         /* SIP34 */
         notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP34_ID);
         ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP34_ID,
-          validateSIP34().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
+          validateSIP34(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
         /* SIP35 */
         notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP35_ID);
         ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP35_ID,
-          validateSIP35().setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
+          validateSIP35(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
 
       } else {
         String message = Message.createErrorMessage("SKIPPED in %1$s because mets/fileSec/fileGrp/file/ doesn't exist",
-          metsName, isRootMets());
+          metsValidatorState.getMetsName(), metsValidatorState.isRootMets());
 
         ResultsUtils.addResults(results,
           new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
@@ -238,8 +259,8 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
           ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP35_ID);
       }
     } else {
-      String message = Message.createErrorMessage("SKIPPED in %1$s because mets/fileSec doesn't exist", metsName,
-        isRootMets());
+      String message = Message.createErrorMessage("SKIPPED in %1$s because mets/fileSec doesn't exist",
+        metsValidatorState.getMetsName(), metsValidatorState.isRootMets());
 
       ResultsUtils.addResults(results,
         new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
@@ -282,12 +303,13 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * transfer just descriptive metadata and/or administrative metadata without
    * files placed in this section.
    */
-  private ReporterDetails validateCSIP58() {
+  private ReporterDetails validateCSIP58(MetsValidatorState metsValidatorState) {
     ReporterDetails details = new ReporterDetails();
-    MetsType.FileSec fileSec = mets.getFileSec();
+    MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
     if (fileSec == null) {
       details.setValid(false);
-      details.addIssue(Message.createErrorMessage("mets/fileSec in %1$s can't be null", metsName, isRootMets()));
+      details.addIssue(Message.createErrorMessage("mets/fileSec in %1$s can't be null",
+        metsValidatorState.getMetsName(), metsValidatorState.isRootMets()));
     }
     return details;
   }
@@ -296,22 +318,24 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * mets/fileSec/@ID An xml:id identifier for the file section used for internal
    * package references. It must be unique within the package.
    */
-  private ReporterDetails validateCSIP59() {
-    MetsType.FileSec fileSec = mets.getFileSec();
+  private ReporterDetails validateCSIP59(MetsValidatorState metsValidatorState) {
+    MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
     if (fileSec != null) {
       String id = fileSec.getID();
       if (id != null) {
-        if (!checkId(id)) {
-          addId(id);
+        if (!metsValidatorState.checkMetsInternalId(id)) {
+          metsValidatorState.addMetsInternalId(id);
         } else {
           StringBuilder message = new StringBuilder();
           message.append("Value ").append(id).append(" in %1$s for mets/fileSec/@ID isn't unique in the package");
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+            message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
         }
       } else {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          Message.createErrorMessage("mets/fileSec/@ID in %1$s can't be null", metsName, isRootMets()), false, false);
+          Message.createErrorMessage("mets/fileSec/@ID in %1$s can't be null", metsValidatorState.getMetsName(),
+            metsValidatorState.isRootMets()),
+          false, false);
       }
     }
     return new ReporterDetails();
@@ -324,8 +348,9 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * mets/fileSec/fileGrp/@USE attribute value “Documentation”.See also: File
    * group names
    */
-  private ReporterDetails validateCSIP60() throws IOException {
-    List<MetsType.FileSec.FileGrp> fileGrps = mets.getFileSec().getFileGrp();
+  private ReporterDetails validateCSIP60(StructureValidatorState structureValidatorState,
+    MetsValidatorState metsValidatorState) throws IOException {
+    List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
     StringBuilder message = new StringBuilder();
     for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
       if (fileGrp.getUSE().equals("Documentation")) {
@@ -333,30 +358,37 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
         if (files != null && !files.isEmpty()) {
           for (FileType file : files) {
             List<FileType.FLocat> fLocats = file.getFLocat();
-            if (isZipFileFlag()) {
+            if (structureValidatorState.isZipFileFlag()) {
               for (FileType.FLocat flocat : fLocats) {
                 String href = URLDecoder.decode(flocat.getHref(), UTF_8);
                 StringBuilder filePath = new StringBuilder();
-                if (isRootMets()) {
-                  filePath.append(mets.getOBJID()).append("/").append(href);
+                if (metsValidatorState.isRootMets()) {
+                  filePath.append(metsValidatorState.getMets().getOBJID()).append("/").append(href);
                 } else {
-                  filePath.append(metsPath).append(href);
+                  filePath.append(metsValidatorState.getMetsPath()).append(href);
                 }
-                if (!zipManager.checkPathExists(getEARKSIPpath(), filePath.toString())) {
+                if (!structureValidatorState.getZipManager().checkPathExists(structureValidatorState.getIpPath(),
+                  filePath.toString())) {
                   message.append("mets/fileSec/fileGrp[@USE=’Documentation’] ").append(filePath)
                     .append(" doesn't exists (%1$s)");
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+                    Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                      metsValidatorState.isRootMets()),
+                    false, false);
                 }
               }
             } else {
               for (FileType.FLocat flocat : fLocats) {
                 String filePath = URLDecoder.decode(flocat.getHref(), UTF_8);
-                if (!folderManager.checkPathExists(Paths.get(metsPath).resolve(filePath))) {
+                if (!structureValidatorState.getFolderManager()
+                  .checkPathExists(Paths.get(metsValidatorState.getMetsPath()).resolve(filePath))) {
                   message.append("mets/fileSec/fileGrp[@USE=’Documentation’] ")
-                    .append(Paths.get(metsPath).resolve(filePath)).append(" doesn't exists (in %1$s)");
+                    .append(Paths.get(metsValidatorState.getMetsPath()).resolve(filePath))
+                    .append(" doesn't exists (in %1$s)");
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+                    Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                      metsValidatorState.isRootMets()),
+                    false, false);
                 }
               }
             }
@@ -374,38 +406,42 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * mets/fileSec/fileGrp/@USE attribute value “Schemas”.See also: File group
    * names
    */
-  private ReporterDetails validateCSIP113() throws IOException {
-    List<MetsType.FileSec.FileGrp> fileGrps = mets.getFileSec().getFileGrp();
+  private ReporterDetails validateCSIP113(StructureValidatorState structureValidatorState,
+    MetsValidatorState metsValidatorState) throws IOException {
+    List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
     StringBuilder message = new StringBuilder();
     for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
       if (fileGrp.getUSE().equals("Schemas")) {
         List<FileType> files = fileGrp.getFile();
         for (FileType file : files) {
           List<FileType.FLocat> fLocats = file.getFLocat();
-          if (isZipFileFlag()) {
+          if (structureValidatorState.isZipFileFlag()) {
             for (FileType.FLocat flocat : fLocats) {
               String href = URLDecoder.decode(flocat.getHref(), UTF_8);
               StringBuilder filePath = new StringBuilder();
-              if (isRootMets()) {
-                filePath.append(mets.getOBJID()).append("/").append(href);
+              if (metsValidatorState.isRootMets()) {
+                filePath.append(metsValidatorState.getMets().getOBJID()).append("/").append(href);
               } else {
-                filePath.append(metsPath).append(href);
+                filePath.append(metsValidatorState.getMetsPath()).append(href);
               }
-              if (!zipManager.checkPathExists(getEARKSIPpath(), filePath.toString())) {
+              if (!structureValidatorState.getZipManager().checkPathExists(structureValidatorState.getIpPath(),
+                filePath.toString())) {
                 message.append("mets/fileSec/fileGrp[@USE=’Schemas’] ").append(filePath)
                   .append(" doesn't exists (%1$s)");
-                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+                  message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
               }
             }
           } else {
             for (FileType.FLocat flocat : fLocats) {
               String filePath = URLDecoder.decode(flocat.getHref(), UTF_8);
-              if (!folderManager.checkPathExists(Paths.get(metsPath).resolve(filePath))) {
-                message.append("mets/fileSec/fileGrp[@USE=’Schemas’] ").append(Paths.get(metsPath).resolve(filePath))
+              if (!structureValidatorState.getFolderManager()
+                .checkPathExists(Paths.get(metsValidatorState.getMetsPath()).resolve(filePath))) {
+                message.append("mets/fileSec/fileGrp[@USE=’Schemas’] ")
+                  .append(Paths.get(metsValidatorState.getMetsPath()).resolve(filePath))
                   .append(" doesn't exists (%1$s)");
-                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+                  message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
               }
             }
           }
@@ -421,38 +457,42 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * must be present in one or more file groups with mets/fileSec/fileGrp/@USE
    * attribute value “Representations”.See also: File group names
    */
-  private ReporterDetails validateCSIP114() throws IOException {
-    List<MetsType.FileSec.FileGrp> fileGrps = mets.getFileSec().getFileGrp();
+  private ReporterDetails validateCSIP114(StructureValidatorState structureValidatorState,
+    MetsValidatorState metsValidatorState) throws IOException {
+    List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
     StringBuilder message = new StringBuilder();
     for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
       if (fileGrp.getUSE().matches("Representations/")) {
         List<FileType> files = fileGrp.getFile();
         for (FileType file : files) {
           List<FileType.FLocat> fLocats = file.getFLocat();
-          if (isZipFileFlag()) {
+          if (structureValidatorState.isZipFileFlag()) {
             for (FileType.FLocat flocat : fLocats) {
               String href = URLDecoder.decode(flocat.getHref(), UTF_8);
               StringBuilder filePath = new StringBuilder();
-              if (isRootMets()) {
-                filePath.append(mets.getOBJID()).append("/").append(href);
+              if (metsValidatorState.isRootMets()) {
+                filePath.append(metsValidatorState.getMets().getOBJID()).append("/").append(href);
               } else {
-                filePath.append(metsPath).append(href);
+                filePath.append(metsValidatorState.getMetsPath()).append(href);
               }
-              if (!zipManager.checkPathExists(getEARKSIPpath(), filePath.toString())) {
+              if (!structureValidatorState.getZipManager().checkPathExists(structureValidatorState.getIpPath(),
+                filePath.toString())) {
                 message.append("mets/fileSec/fileGrp[@USE=’Representations’] ").append(filePath)
                   .append(" doesn't exists (%1$s)");
-                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+                  message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
               }
             }
           } else {
             for (FileType.FLocat flocat : fLocats) {
               String filePath = URLDecoder.decode(flocat.getHref(), UTF_8);
-              if (!folderManager.checkPathExists(Paths.get(metsPath).resolve(filePath))) {
+              if (!structureValidatorState.getFolderManager()
+                .checkPathExists(Paths.get(metsValidatorState.getMetsPath()).resolve(filePath))) {
                 message.append("mets/fileSec/fileGrp[@USE=’Representations’] ")
-                  .append(Paths.get(metsPath).resolve(filePath)).append(" doesn't exists (%1$s)");
-                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+                  .append(Paths.get(metsValidatorState.getMetsPath()).resolve(filePath))
+                  .append(" doesn't exists (%1$s)");
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+                  message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
               }
             }
           }
@@ -469,9 +509,9 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    *
    * Nota: verificar se é id do digiprovMD ou amdSec
    */
-  private ReporterDetails validateCSIP61() {
-    List<MetsType.FileSec.FileGrp> fileGrps = mets.getFileSec().getFileGrp();
-    List<AmdSecType> amdSec = mets.getAmdSec();
+  private ReporterDetails validateCSIP61(MetsValidatorState metsValidatorState) {
+    List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
+    List<AmdSecType> amdSec = metsValidatorState.getMets().getAmdSec();
     for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
       QName keyAdmid = new QName(HTTPS_DILCIS_EU_XML_METS_CSIPEXTENSION_METS, "ADMID", "csip");
       String admid = fileGrp.getOtherAttributes().get(keyAdmid);
@@ -493,8 +533,8 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
           StringBuilder message = new StringBuilder();
           message.append("Value ").append(admid)
             .append(" in %1$s for mets/fileSec/fileGrp/file/@ADMID doesn't match with any mets/amdSec/digiprovMD/@ID");
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+            message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
         }
       }
     }
@@ -513,8 +553,8 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * specification used for the file group.See also: Content information type
    * specification
    */
-  private ReporterDetails validateCSIP62() {
-    List<MetsType.FileSec.FileGrp> fileGrps = mets.getFileSec().getFileGrp();
+  private ReporterDetails validateCSIP62(MetsValidatorState metsValidatorState) {
+    List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
     for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
       if (fileGrp.getUSE().matches("Representations/")) {
         QName keyContentInformationType = new QName(HTTPS_DILCIS_EU_XML_METS_CSIPEXTENSION_METS,
@@ -525,14 +565,14 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
             StringBuilder message = new StringBuilder();
             message.append("Value ").append(cType).append(
               " in %1$s for mets/fileSec/fileGrp[@USE=’Representations’]/@csip:CONTENTINFORMATIONTYPE value isn't valid");
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+              message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
           }
         } else {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
             Message.createErrorMessage(
               "mets/fileSec/fileGrp[@USE=’Representations’]/@csip:CONTENTINFORMATIONTYPE in %1$s can't be null",
-              metsName, isRootMets()),
+              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
             false, false);
         }
       }
@@ -547,8 +587,8 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * “OTHER” the mets/fileSec/fileGrp/@csip:OTHERCONTENTINFORMATIONTYPE must state
    * a value for the Content Information Type Specification used.
    */
-  private ReporterDetails validateCSIP63() {
-    List<MetsType.FileSec.FileGrp> fileGrps = mets.getFileSec().getFileGrp();
+  private ReporterDetails validateCSIP63(MetsValidatorState metsValidatorState) {
+    List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
     for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
       QName keyContentInformationType = new QName(HTTPS_DILCIS_EU_XML_METS_CSIPEXTENSION_METS, "CONTENTINFORMATIONTYPE",
         "csip");
@@ -560,7 +600,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
         if (otherContentInformationType == null) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
             "In %1$s mets/fileSec/fileGrp/@csip:CONTENTINFORMATIONTYPE have the value OTHER mets/fileSec/fileGrp[@csip:CONTENTINFORMATIONTYPE='OTHER']/@csip:OTHERCONTENTINFORMATIONTYPE can't be null",
-            metsName, isRootMets()), false, false);
+            metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
         }
       }
     }
@@ -573,8 +613,9 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * “Schemas”, “Representations/preingest” or “Representations/submission/data”.
    * Falta perguntar o use: Data
    */
-  private ReporterDetails validateCSIP64() throws IOException {
-    List<MetsType.FileSec.FileGrp> fileGrps = mets.getFileSec().getFileGrp();
+  private ReporterDetails validateCSIP64(StructureValidatorState structureValidatorState,
+    MetsValidatorState metsValidatorState) throws IOException {
+    List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
     List<String> tmp = new ArrayList<>();
     tmp.add("Schemas");
     tmp.add("Documentation");
@@ -585,35 +626,38 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
       if (use != null) {
         if (!tmp.contains(use)) {
           if (fileGrp.getFile().isEmpty()) {
-            if (isZipFileFlag()) {
+            if (structureValidatorState.isZipFileFlag()) {
               String expr;
-              if (isRootMets()) {
-                expr = mets.getOBJID() + "/" + use.toLowerCase();
+              if (metsValidatorState.isRootMets()) {
+                expr = metsValidatorState.getMets().getOBJID() + "/" + use.toLowerCase();
               } else {
-                expr = metsPath + use.toLowerCase();
+                expr = metsValidatorState.getMetsPath() + use.toLowerCase();
               }
-              if (!zipManager.checkPathIsDirectory(getEARKSIPpath(), expr)) {
+              if (!structureValidatorState.getZipManager().checkPathIsDirectory(structureValidatorState.getIpPath(),
+                expr)) {
                 message.append("Value ").append(use)
                   .append(" in %1$s for mets/fileSec/fileGrp/@USE doesn't match with any directory in sip(")
                   .append(expr).append(")");
-                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+                  message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
               }
             } else {
-              if (!folderManager.checkDirectory(Paths.get(metsPath).resolve(use.toLowerCase()))) {
+              if (!structureValidatorState.getFolderManager()
+                .checkDirectory(Paths.get(metsValidatorState.getMetsPath()).resolve(use.toLowerCase()))) {
                 message.append("Value ").append(use)
                   .append(" in %1$s for mets/fileSec/fileGrp/@USE doesn't match with any directory in sip(")
-                  .append(Paths.get(metsPath).resolve(use.toLowerCase())).append(")");
-                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+                  .append(Paths.get(metsValidatorState.getMetsPath()).resolve(use.toLowerCase())).append(")");
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+                  message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
               }
             }
           }
         }
       } else {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          Message.createErrorMessage("mets/fileSec/fileGrp/@USE in %1$s can't be null", metsName, isRootMets()), false,
-          false);
+          Message.createErrorMessage("mets/fileSec/fileGrp/@USE in %1$s can't be null",
+            metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+          false, false);
       }
     }
     return new ReporterDetails();
@@ -623,25 +667,26 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * mets/fileSec/fileGrp/@ID An xml:id identifier for the file group used for
    * internal package references. It must be unique within the package.
    */
-  private ReporterDetails validateCSIP65() {
-    MetsType.FileSec fileSec = mets.getFileSec();
+  private ReporterDetails validateCSIP65(MetsValidatorState metsValidatorState) {
+    MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
     List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
     for (MetsType.FileSec.FileGrp grp : fileGrp) {
       String id = grp.getID();
       if (id != null) {
-        if (!checkId(id)) {
-          addId(id);
+        if (!metsValidatorState.checkMetsInternalId(id)) {
+          metsValidatorState.addMetsInternalId(id);
         } else {
           StringBuilder message = new StringBuilder();
           message.append("Value ").append(id)
             .append(" in %1$s for mets/fileSec/fileGrp/@ID isn't unique in the package");
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+            message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
         }
       } else {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          Message.createErrorMessage("mets/fileSec/fileGrp/@ID in %1$s can't be null", metsName, isRootMets()), false,
-          false);
+          Message.createErrorMessage("mets/fileSec/fileGrp/@ID in %1$s can't be null", metsValidatorState.getMetsName(),
+            metsValidatorState.isRootMets()),
+          false, false);
       }
     }
     return new ReporterDetails();
@@ -651,9 +696,10 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * mets/fileSec/fileGrp/file The file group ( <fileGrp> ) contains the file
    * elements which describe the file objects.
    */
-  private ReporterDetails validateCSIP66() throws IOException {
-    if (isZipFileFlag()) {
-      MetsType.FileSec fileSec = mets.getFileSec();
+  private ReporterDetails validateCSIP66(StructureValidatorState structureValidatorState,
+    MetsValidatorState metsValidatorState) throws IOException {
+    if (structureValidatorState.isZipFileFlag()) {
+      MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
       List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
       for (MetsType.FileSec.FileGrp grp : fileGrp) {
         List<FileType> fileTypes = grp.getFile();
@@ -664,22 +710,23 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
               for (FileType.FLocat fLocat : fLocats) {
                 String hrefDecoded = URLDecoder.decode(fLocat.getHref(), UTF_8);
                 StringBuilder filePath = new StringBuilder();
-                if (isRootMets()) {
-                  filePath.append(mets.getOBJID()).append("/").append(hrefDecoded);
+                if (metsValidatorState.isRootMets()) {
+                  filePath.append(metsValidatorState.getMets().getOBJID()).append("/").append(hrefDecoded);
                 } else {
-                  filePath.append(metsPath).append(hrefDecoded);
+                  filePath.append(metsValidatorState.getMetsPath()).append(hrefDecoded);
                 }
-                if (files.containsKey(filePath.toString())) {
-                  files.replace(filePath.toString(), true);
+                if (metsValidatorState.getMetsFiles().containsKey(filePath.toString())) {
+                  metsValidatorState.getMetsFiles().replace(filePath.toString(), true);
                 }
               }
             }
           }
         }
       }
-      if (files.containsValue(false) && isRootMets()) {
+      if (metsValidatorState.getMetsFiles().containsValue(false) && metsValidatorState.isRootMets()) {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          Message.createErrorMessage("You have files in SIP does not referenced in %1$s", metsName, isRootMets()),
+          Message.createErrorMessage("You have files in SIP does not referenced in %1$s",
+            metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
           false, false);
       }
     }
@@ -690,26 +737,27 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * mets/fileSec/fileGrp/file/@ID A unique xml:id identifier for this file across
    * the package.
    */
-  private ReporterDetails validateCSIP67() {
-    MetsType.FileSec fileSec = mets.getFileSec();
+  private ReporterDetails validateCSIP67(MetsValidatorState metsValidatorState) {
+    MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
     List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
     for (MetsType.FileSec.FileGrp grp : fileGrp) {
       List<FileType> files = grp.getFile();
       for (FileType file : files) {
         String id = file.getID();
         if (id != null) {
-          if (!checkId(id)) {
-            addId(id);
+          if (!metsValidatorState.checkMetsInternalId(id)) {
+            metsValidatorState.addMetsInternalId(id);
           } else {
             StringBuilder message = new StringBuilder();
             message.append("Value ").append(id)
               .append(" in %1$s for mets/fileSec/fileGrp/@ID isn't unique in the package");
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+              message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
           }
         } else {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            Message.createErrorMessage("mets/fileSec/fileGrp/file/@ID in %1$s can't be null", metsName, isRootMets()),
+            Message.createErrorMessage("mets/fileSec/fileGrp/file/@ID in %1$s can't be null",
+              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
             false, false);
         }
       }
@@ -721,8 +769,8 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * mets/fileSec/fileGrp/file/@MIMETYPE The IANA mime type for the referenced
    * file.See also: IANA media types
    */
-  private ReporterDetails validateCSIP68() {
-    MetsType.FileSec fileSec = mets.getFileSec();
+  private ReporterDetails validateCSIP68(MetsValidatorState metsValidatorState) {
+    MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
     List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
     for (MetsType.FileSec.FileGrp grp : fileGrp) {
       List<FileType> files = grp.getFile();
@@ -733,12 +781,14 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
             StringBuilder message = new StringBuilder();
             message.append("Value ").append(mimeType)
               .append(" in %1$s for mets/fileSec/fileGrp/file/@MIMETYPE value isn't valid");
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+              message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
           }
         } else {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-            "mets/fileSec/fileGrp/file/@MIMETYPE of file in %1$s can't be null", metsName, isRootMets()), false, false);
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            Message.createErrorMessage("mets/fileSec/fileGrp/file/@MIMETYPE of file in %1$s can't be null",
+              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+            false, false);
         }
       }
     }
@@ -748,8 +798,9 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
   /*
    * mets/fileSec/fileGrp/file/@SIZE Size of the referenced file in bytes.
    */
-  private ReporterDetails validateCSIP69() throws IOException {
-    MetsType.FileSec fileSec = mets.getFileSec();
+  private ReporterDetails validateCSIP69(StructureValidatorState structureValidatorState,
+    MetsValidatorState metsValidatorState) throws IOException {
+    MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
     StringBuilder message = new StringBuilder();
     List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
     for (MetsType.FileSec.FileGrp grp : fileGrp) {
@@ -762,53 +813,72 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
             if (href != null) {
               Long size = file.getSIZE();
               if (size != null) {
-                if (isZipFileFlag()) {
+                if (structureValidatorState.isZipFileFlag()) {
                   StringBuilder filePath = new StringBuilder();
-                  if (isRootMets()) {
-                    filePath.append(mets.getOBJID()).append("/").append(href);
+                  if (metsValidatorState.isRootMets()) {
+                    filePath.append(metsValidatorState.getMets().getOBJID()).append("/").append(href);
                   } else {
-                    filePath.append(metsPath).append(href);
+                    filePath.append(metsValidatorState.getMetsPath()).append(href);
                   }
-                  if (!zipManager.verifySize(getEARKSIPpath(), filePath.toString(), size)) {
+                  if (!structureValidatorState.getZipManager().verifySize(structureValidatorState.getIpPath(),
+                    filePath.toString(), size)) {
                     message.append("mets/dmdSec/mdRef/@SIZE ").append(size).append(" in %1$s and size of file (")
                       .append(filePath).append(") isn't equal");
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+                      Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                        metsValidatorState.isRootMets()),
+                      false, false);
                   }
                 } else {
-                  if (isRootMets()) {
-                    if (!folderManager.verifySize(getEARKSIPpath().resolve(href), size)) {
+                  if (metsValidatorState.isRootMets()) {
+                    if (!structureValidatorState.getFolderManager()
+                      .verifySize(structureValidatorState.getIpPath().resolve(href), size)) {
                       message.append("mets/dmdSec/mdRef/@SIZE ").append(size).append(" in %1$s and size of file (")
-                        .append(getEARKSIPpath().resolve(getEARKSIPpath().resolve(href))).append(") isn't equal");
+                        .append(structureValidatorState.getIpPath()
+                          .resolve(structureValidatorState.getIpPath().resolve(href)))
+                        .append(") isn't equal");
                       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                        Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+                        Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                          metsValidatorState.isRootMets()),
+                        false, false);
                     }
                   } else {
-                    if (!folderManager.verifySize(Paths.get(metsPath).resolve(href), size)) {
+                    if (!structureValidatorState.getFolderManager()
+                      .verifySize(Paths.get(metsValidatorState.getMetsPath()).resolve(href), size)) {
                       message.append("mets/dmdSec/mdRef/@SIZE ").append(size).append(" in %1$s and size of file (")
-                        .append(getEARKSIPpath().resolve(Paths.get(metsPath).resolve(href))).append(") isn't equal");
+                        .append(structureValidatorState.getIpPath()
+                          .resolve(Paths.get(metsValidatorState.getMetsPath()).resolve(href)))
+                        .append(") isn't equal");
                       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                        Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+                        Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                          metsValidatorState.isRootMets()),
+                        false, false);
                     }
                   }
                 }
               } else {
-                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-                  "mets/fileSec/fileGrp/file/@SIZE in %1$s can't be null", metsName, isRootMets()), false, false);
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                  Message.createErrorMessage("mets/fileSec/fileGrp/file/@SIZE in %1$s can't be null",
+                    metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                  false, false);
               }
             } else {
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-                "mets/fileSec/fileGrp/file/flocat/@href in %1$s can't be null", metsName, isRootMets()), false, false);
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                Message.createErrorMessage("mets/fileSec/fileGrp/file/flocat/@href in %1$s can't be null",
+                  metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                false, false);
             }
           } else {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              Message.createErrorMessage("cannot have more than one mets/fileSec/fileGrp/file/flocat in %1$s", metsName,
-                isRootMets()),
+              Message.createErrorMessage("cannot have more than one mets/fileSec/fileGrp/file/flocat in %1$s",
+                metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
               false, false);
           }
         } else {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-            "mets/fileSec/fileGrp/file/flocat in %1$s can't be null", metsName, isRootMets()), false, false);
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            Message.createErrorMessage("mets/fileSec/fileGrp/file/flocat in %1$s can't be null",
+              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+            false, false);
         }
       }
     }
@@ -818,15 +888,17 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
   /*
    * mets/fileSec/fileGrp/file/@CREATED Creation date of the referenced file.
    */
-  private ReporterDetails validateCSIP70() {
-    MetsType.FileSec fileSec = mets.getFileSec();
+  private ReporterDetails validateCSIP70(MetsValidatorState metsValidatorState) {
+    MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
     List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
     for (MetsType.FileSec.FileGrp grp : fileGrp) {
       List<FileType> files = grp.getFile();
       for (FileType file : files) {
         if (file.getCREATED() == null) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-            "mets/fileSec/fileGrp/file/@CREATED in %1$s can't be null", metsName, isRootMets()), false, false);
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            Message.createErrorMessage("mets/fileSec/fileGrp/file/@CREATED in %1$s can't be null",
+              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+            false, false);
         }
       }
     }
@@ -836,59 +908,72 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
   /*
    * mets/fileSec/fileGrp/file/@CHECKSUM The checksum of the referenced file.
    */
-  private ReporterDetails validateCSIP71() throws IOException, NoSuchAlgorithmException {
+  private ReporterDetails validateCSIP71(StructureValidatorState structureValidatorState,
+    MetsValidatorState metsValidatorState) throws IOException, NoSuchAlgorithmException {
     List<String> tmp = new ArrayList<>();
     for (CHECKSUMTYPE check : CHECKSUMTYPE.values()) {
       tmp.add(check.toString());
     }
     StringBuilder message = new StringBuilder();
-    MetsType.FileSec fileSec = mets.getFileSec();
+    MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
     List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
     for (MetsType.FileSec.FileGrp grp : fileGrp) {
       List<FileType> files = grp.getFile();
       for (FileType file : files) {
         String checksumType = file.getCHECKSUMTYPE();
         if (checksumType == null) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-            "mets/fileSec/fileGrp/file/@CHECKSUMTYPE in %1$s can't be null", metsName, isRootMets()), false, false);
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            Message.createErrorMessage("mets/fileSec/fileGrp/file/@CHECKSUMTYPE in %1$s can't be null",
+              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+            false, false);
         } else {
           if (!tmp.contains(checksumType)) {
             message.append("Value ").append(checksumType)
               .append(" in %1$s for mets/fileSec/fileGrp/file/@CHECKSUMTYPE isn't valid");
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+              message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
           } else {
             String checksum = file.getCHECKSUM();
             if (checksum == null) {
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-                "mets/fileSec/fileGrp/file/@CHECKSUM in %1$s can't be null", metsName, isRootMets()), false, false);
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                Message.createErrorMessage("mets/fileSec/fileGrp/file/@CHECKSUM in %1$s can't be null",
+                  metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                false, false);
             } else {
               String href = file.getFLocat().get(0).getHref();
               if (href == null) {
-                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-                  "mets/fileSec/fileGrp/file/flocat/href in %1$s can't be null", metsName, isRootMets()), false, false);
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                  Message.createErrorMessage("mets/fileSec/fileGrp/file/flocat/href in %1$s can't be null",
+                    metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                  false, false);
               } else {
                 String filePath = URLDecoder.decode(href, UTF_8);
-                if (isZipFileFlag()) {
+                if (structureValidatorState.isZipFileFlag()) {
                   StringBuilder finalPath = new StringBuilder();
-                  if (!isRootMets()) {
-                    finalPath.append(metsPath).append(filePath);
+                  if (!metsValidatorState.isRootMets()) {
+                    finalPath.append(metsValidatorState.getMetsPath()).append(filePath);
                   } else {
-                    finalPath.append(mets.getOBJID()).append("/").append(filePath);
+                    finalPath.append(metsValidatorState.getMets().getOBJID()).append("/").append(filePath);
                   }
-                  if (!zipManager.verifyChecksum(getEARKSIPpath(), finalPath.toString(), checksumType, checksum)) {
+                  if (!structureValidatorState.getZipManager().verifyChecksum(structureValidatorState.getIpPath(),
+                    finalPath.toString(), checksumType, checksum)) {
                     message.append("mets/dmdSec/mdRef/@CHECKSUM ").append(checksum)
                       .append(" in %1$s and checksum of file (").append(finalPath).append(") isn't equal");
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+                      Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                        metsValidatorState.isRootMets()),
+                      false, false);
                   }
                 } else {
-                  if (!folderManager.verifyChecksum(Paths.get(metsPath).resolve(filePath), checksumType, checksum)) {
+                  if (!structureValidatorState.getFolderManager().verifyChecksum(
+                    Paths.get(metsValidatorState.getMetsPath()).resolve(filePath), checksumType, checksum)) {
                     message.append("mets/dmdSec/mdRef/@CHECKSUM ").append(checksum)
-                      .append(" in %1$s and checksum of file (").append(Paths.get(metsPath).resolve(filePath))
-                      .append(") isn't equal");
+                      .append(" in %1$s and checksum of file (")
+                      .append(Paths.get(metsValidatorState.getMetsPath()).resolve(filePath)).append(") isn't equal");
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+                      Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                        metsValidatorState.isRootMets()),
+                      false, false);
                   }
                 }
 
@@ -906,27 +991,29 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * value list present in the METS-standard which has been used for calculating
    * the checksum for the referenced file.
    */
-  private ReporterDetails validateCSIP72() {
+  private ReporterDetails validateCSIP72(MetsValidatorState metsValidatorState) {
     List<String> tmp = new ArrayList<>();
     for (CHECKSUMTYPE check : CHECKSUMTYPE.values()) {
       tmp.add(check.toString());
     }
-    MetsType.FileSec fileSec = mets.getFileSec();
+    MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
     List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
     for (MetsType.FileSec.FileGrp grp : fileGrp) {
       List<FileType> files = grp.getFile();
       for (FileType file : files) {
         String checksumType = file.getCHECKSUMTYPE();
         if (checksumType == null) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-            "mets/fileSec/fileGrp/file/@CHECKSUMTYPE in %1$s can't be null", metsName, isRootMets()), false, false);
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            Message.createErrorMessage("mets/fileSec/fileGrp/file/@CHECKSUMTYPE in %1$s can't be null",
+              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+            false, false);
         } else {
           if (!tmp.contains(checksumType)) {
             StringBuilder message = new StringBuilder();
             message.append("Value ").append(checksumType)
               .append(" in %1$s for mets/fileSec/fileGrp/file/@CHECKSUMTYPE isn't valid");
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+              message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
           }
         }
       }
@@ -938,8 +1025,8 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * mets/fileSec/fileGrp/file/@OWNERID If an identifier for the file was supplied
    * by the owner it can be recorded in this attribute.
    */
-  private ReporterDetails validateCSIP73() {
-    MetsType.FileSec fileSec = mets.getFileSec();
+  private ReporterDetails validateCSIP73(MetsValidatorState metsValidatorState) {
+    MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
     List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
     for (MetsType.FileSec.FileGrp grp : fileGrp) {
       List<FileType> files = grp.getFile();
@@ -947,7 +1034,9 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
         String ownerID = file.getOWNERID();
         if (ownerID != null) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            Message.createErrorMessage("A owner identifier was defined in %1$s", metsName, isRootMets()), false, false);
+            Message.createErrorMessage("A owner identifier was defined in %1$s", metsValidatorState.getMetsName(),
+              metsValidatorState.isRootMets()),
+            false, false);
         }
       }
     }
@@ -959,9 +1048,9 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * for the file this attribute refers to the file’s administrative metadata by
    * ID.
    */
-  private ReporterDetails validateCSIP74() {
-    List<MetsType.FileSec.FileGrp> fileGrps = mets.getFileSec().getFileGrp();
-    List<AmdSecType> amdSec = mets.getAmdSec();
+  private ReporterDetails validateCSIP74(MetsValidatorState metsValidatorState) {
+    List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
+    List<AmdSecType> amdSec = metsValidatorState.getMets().getAmdSec();
     for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
       List<FileType> files = fileGrp.getFile();
       for (FileType file : files) {
@@ -985,8 +1074,8 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
               StringBuilder message = new StringBuilder();
               message.append("Value ").append(admid).append(
                 " in %1$s for mets/fileSec/fileGrp/file/@ADMID does not match with any mets/amdSec/digiprovMd/@ID");
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+                message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
             }
           }
         }
@@ -999,9 +1088,9 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * mets/fileSec/fileGrp/file/@DMDID If descriptive metadata has been provided
    * per file this attribute refers to the file’s descriptive metadata by ID.
    */
-  private ReporterDetails validateCSIP75() {
-    List<MetsType.FileSec.FileGrp> fileGrps = mets.getFileSec().getFileGrp();
-    List<MdSecType> dmdSec = mets.getDmdSec();
+  private ReporterDetails validateCSIP75(MetsValidatorState metsValidatorState) {
+    List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
+    List<MdSecType> dmdSec = metsValidatorState.getMets().getDmdSec();
     for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
       List<FileType> files = fileGrp.getFile();
       for (FileType file : files) {
@@ -1022,8 +1111,8 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
               StringBuilder message = new StringBuilder();
               message.append("Value ").append(dmdid)
                 .append(" in %1$s for mets/fileSec/fileGrp/file/@DMDID does not match with any mets/dmdSec/mdRef/@ID");
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+                message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
             }
           }
 
@@ -1040,21 +1129,23 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * XLink href attribute and the file protocol using the relative location of the
    * file.
    */
-  private ReporterDetails validateCSIP76() {
-    MetsType.FileSec fileSec = mets.getFileSec();
+  private ReporterDetails validateCSIP76(MetsValidatorState metsValidatorState) {
+    MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
     List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
     for (MetsType.FileSec.FileGrp grp : fileGrp) {
       List<FileType> files = grp.getFile();
       for (FileType file : files) {
         List<FileType.FLocat> flocat = file.getFLocat();
         if (flocat == null) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-            "mets/fileSec/fileGrp/file/FLocat in %1$s can't be null", metsName, isRootMets()), false, false);
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            Message.createErrorMessage("mets/fileSec/fileGrp/file/FLocat in %1$s can't be null",
+              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+            false, false);
         } else {
           if (flocat.size() != 1) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              Message.createErrorMessage("Can't have more than one mets/fileSec/fileGrp/file/FLocat in %1$s", metsName,
-                isRootMets()),
+              Message.createErrorMessage("Can't have more than one mets/fileSec/fileGrp/file/FLocat in %1$s",
+                metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
               false, false);
           }
         }
@@ -1067,30 +1158,32 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * mets/fileSec/fileGrp/file/FLocat[@LOCTYPE=’URL’] The locator type is always
    * used with the value “URL” from the vocabulary in the attribute.
    */
-  private ReporterDetails validateCSIP77() {
-    MetsType.FileSec fileSec = mets.getFileSec();
+  private ReporterDetails validateCSIP77(MetsValidatorState metsValidatorState) {
+    MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
     List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
     for (MetsType.FileSec.FileGrp grp : fileGrp) {
       List<FileType> files = grp.getFile();
       for (FileType file : files) {
         List<FileType.FLocat> flocat = file.getFLocat();
         if (flocat == null) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-            "mets/fileSec/fileGrp/file/FLocat in %1$s can't be null", metsName, isRootMets()), false, false);
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            Message.createErrorMessage("mets/fileSec/fileGrp/file/FLocat in %1$s can't be null",
+              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+            false, false);
         } else {
           for (FileType.FLocat floc : flocat) {
             String loctype = floc.getLOCTYPE();
             if (loctype == null) {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                 Message.createErrorMessage("mets/fileSec/fileGrp/file/FLocat[@LOCTYPE=’URL’] in %1$s can't be null",
-                  metsName, isRootMets()),
+                  metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
                 false, false);
             } else {
               if (!loctype.equals("URL")) {
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                   Message.createErrorMessage(
-                    "mets/fileSec/fileGrp/file/FLocat[@LOCTYPE=’URL’] value in %1$s has to be URL ", metsName,
-                    isRootMets()),
+                    "mets/fileSec/fileGrp/file/FLocat[@LOCTYPE=’URL’] value in %1$s has to be URL ",
+                    metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
                   false, false);
               }
             }
@@ -1105,25 +1198,30 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * mets/fileSec/fileGrp/file/FLocat[@xlink:type=’simple’] Attribute used with
    * the value “simple”. Value list is maintained by the xlink standard.
    */
-  private ReporterDetails validateCSIP78() throws IOException {
-    MetsType.FileSec fileSec = mets.getFileSec();
+  private ReporterDetails validateCSIP78(StructureValidatorState structureValidatorState,
+    MetsValidatorState metsValidatorState) throws IOException {
+    MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
     List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
     HashMap<String, String> fileSecTypes = new HashMap<>();
     MetsHandler fileSecHandler = new MetsHandler("file", "FLocat", fileSecTypes);
     MetsParser metsParser = new MetsParser();
     InputStream metsStream = null;
     if (!fileGrp.isEmpty()) {
-      if (isZipFileFlag()) {
-        if (isRootMets()) {
-          metsStream = zipManager.getMetsRootInputStream(getEARKSIPpath());
+      if (structureValidatorState.isZipFileFlag()) {
+        if (metsValidatorState.isRootMets()) {
+          metsStream = structureValidatorState.getZipManager()
+            .getMetsRootInputStream(structureValidatorState.getIpPath());
         } else {
-          metsStream = zipManager.getZipInputStream(getEARKSIPpath(), metsPath + "METS.xml");
+          metsStream = structureValidatorState.getZipManager().getZipInputStream(structureValidatorState.getIpPath(),
+            metsValidatorState.getMetsPath() + "METS.xml");
         }
       } else {
-        if (isRootMets()) {
-          metsStream = folderManager.getMetsRootInputStream(getEARKSIPpath());
+        if (metsValidatorState.isRootMets()) {
+          metsStream = structureValidatorState.getFolderManager()
+            .getMetsRootInputStream(structureValidatorState.getIpPath());
         } else {
-          metsStream = folderManager.getInputStream(Paths.get(metsPath).resolve("METS.xml"));
+          metsStream = structureValidatorState.getFolderManager()
+            .getInputStream(Paths.get(metsValidatorState.getMetsPath()).resolve("METS.xml"));
         }
       }
     }
@@ -1136,22 +1234,24 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
       for (FileType file : files) {
         List<FileType.FLocat> flocat = file.getFLocat();
         if (flocat.isEmpty()) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-            "mets/fileSec/fileGrp/file/FLocat in %1$s can't be null", metsName, isRootMets()), false, false);
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            Message.createErrorMessage("mets/fileSec/fileGrp/file/FLocat in %1$s can't be null",
+              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+            false, false);
         } else {
           for (FileType.FLocat floc : flocat) {
             if (fileSecTypes.get(floc.getHref()) == null) {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                 Message.createErrorMessage(
-                  "mets/fileSec/fileGrp/file/FLocat[@xlink:type=’simple’] in %1$s can't be null", metsName,
-                  isRootMets()),
+                  "mets/fileSec/fileGrp/file/FLocat[@xlink:type=’simple’] in %1$s can't be null",
+                  metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
                 false, false);
             } else {
               if (!fileSecTypes.get(floc.getHref()).equals("simple")) {
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                   Message.createErrorMessage(
-                    "mets/fileSec/fileGrp/file/FLocat[@xlink:type=’simple’] value in %1$s has to be simple", metsName,
-                    isRootMets()),
+                    "mets/fileSec/fileGrp/file/FLocat[@xlink:type=’simple’] value in %1$s has to be simple",
+                    metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
                   false, false);
               }
             }
@@ -1166,8 +1266,9 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * mets/fileSec/fileGrp/file/FLocat/@xlink:href The actual location of the
    * resource. We recommend recording a URL type filepath within this attribute.
    */
-  private ReporterDetails validateCSIP79() throws IOException {
-    MetsType.FileSec fileSec = mets.getFileSec();
+  private ReporterDetails validateCSIP79(StructureValidatorState structureValidatorState,
+    MetsValidatorState metsValidatorState) throws IOException {
+    MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
     List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
     StringBuilder message = new StringBuilder();
     for (MetsType.FileSec.FileGrp grp : fileGrp) {
@@ -1175,38 +1276,47 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
       for (FileType file : files) {
         List<FileType.FLocat> flocat = file.getFLocat();
         if (flocat == null) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-            "mets/fileSec/fileGrp/file/FLocat in %1$s can't be null", metsName, isRootMets()), false, false);
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            Message.createErrorMessage("mets/fileSec/fileGrp/file/FLocat in %1$s can't be null",
+              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+            false, false);
         } else {
           for (FileType.FLocat floc : flocat) {
             String href = floc.getHref();
             if (href != null) {
               String hrefDecoded = URLDecoder.decode(href, UTF_8);
-              if (isZipFileFlag()) {
+              if (structureValidatorState.isZipFileFlag()) {
                 StringBuilder finalPath = new StringBuilder();
-                if (!isRootMets()) {
-                  finalPath.append(metsPath).append(hrefDecoded);
+                if (!metsValidatorState.isRootMets()) {
+                  finalPath.append(metsValidatorState.getMetsPath()).append(hrefDecoded);
                 } else {
-                  finalPath.append(mets.getOBJID()).append("/").append(hrefDecoded);
+                  finalPath.append(metsValidatorState.getMets().getOBJID()).append("/").append(hrefDecoded);
                 }
-                if (!zipManager.checkPathExists(getEARKSIPpath(), finalPath.toString())) {
+                if (!structureValidatorState.getZipManager().checkPathExists(structureValidatorState.getIpPath(),
+                  finalPath.toString())) {
                   message.append("mets/fileSec/fileGrp/file/@xlink:href ").append(finalPath)
                     .append(" does not exist (%1$s)");
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+                    Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                      metsValidatorState.isRootMets()),
+                    false, false);
                 }
               } else {
-                if (!folderManager.checkPathExists(Paths.get(metsPath).resolve(hrefDecoded))) {
+                if (!structureValidatorState.getFolderManager()
+                  .checkPathExists(Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded))) {
                   message.append("mets/fileSec/fileGrp/file/@xlink:href ")
-                    .append(Paths.get(metsPath).resolve(hrefDecoded)).append(" does not exist (%1$s)");
+                    .append(Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded))
+                    .append(" does not exist (%1$s)");
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    Message.createErrorMessage(message.toString(), metsName, isRootMets()), false, false);
+                    Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                      metsValidatorState.isRootMets()),
+                    false, false);
                 }
               }
             } else {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                 Message.createErrorMessage("mets/fileSec/fileGrp/file/FLocat/@xlink:href in %1$s can't be null",
-                  metsName, isRootMets()),
+                  metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
                 false, false);
             }
           }
@@ -1225,8 +1335,8 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * “ISO/IEC 26300:2006”
    */
 
-  private ReporterDetails validateSIP32() {
-    List<MetsType.FileSec.FileGrp> fileGrps = mets.getFileSec().getFileGrp();
+  private ReporterDetails validateSIP32(MetsValidatorState metsValidatorState) {
+    List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
     for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
       int count = 0;
       List<FileType> files = fileGrp.getFile();
@@ -1239,7 +1349,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
       if (count != files.size()) {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION, Message.createErrorMessage(
           "can add fileSec/fileGrp/file/@sip:FILEFORMATNAME in %1$s  if the MIMETYPE is not sufficient for the purposes of processing the information package.",
-          metsName, isRootMets()), false, false);
+          metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
       }
     }
     return new ReporterDetails();
@@ -1250,8 +1360,8 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * when the use of PREMIS has not been agreed upon in the submission agreement.
    * Example: “1.0”
    */
-  private ReporterDetails validateSIP33() {
-    List<MetsType.FileSec.FileGrp> fileGrps = mets.getFileSec().getFileGrp();
+  private ReporterDetails validateSIP33(MetsValidatorState metsValidatorState) {
+    List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
     for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
       int count = 0;
       List<FileType> files = fileGrp.getFile();
@@ -1264,7 +1374,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
       if (count != files.size()) {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION, Message.createErrorMessage(
           "can add fileSec/fileGrp/file/@sip:FILEFORMATVERSION in %1$s. The version of the file format when the use of PREMIS has not been agreed upon in the submission agreement.",
-          metsName, isRootMets()), false, false);
+          metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
       }
     }
     return new ReporterDetails();
@@ -1275,8 +1385,8 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * used to identify the file format when the use of PREMIS has not been agreed
    * upon in the submission agreement. Example: “PRONOM”
    */
-  private ReporterDetails validateSIP34() {
-    List<MetsType.FileSec.FileGrp> fileGrps = mets.getFileSec().getFileGrp();
+  private ReporterDetails validateSIP34(MetsValidatorState metsValidatorState) {
+    List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
     for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
       int count = 0;
       List<FileType> files = fileGrp.getFile();
@@ -1289,7 +1399,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
       if (count != files.size()) {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION, Message.createErrorMessage(
           "can add fileSec/fileGrp/file/@sip:FILEFORMATREGISTRY in %1$s. The name of the format registry used to identify the file format when the use of PREMIS has not been agreed upon in the submission agreement.",
-          metsName, isRootMets()), false, false);
+          metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
       }
     }
     return new ReporterDetails();
@@ -1300,8 +1410,8 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
    * registry when use of PREMIS has not been agreed upon in the submission
    * agreement. Example: “fmt/101”
    */
-  private ReporterDetails validateSIP35() {
-    List<MetsType.FileSec.FileGrp> fileGrps = mets.getFileSec().getFileGrp();
+  private ReporterDetails validateSIP35(MetsValidatorState metsValidatorState) {
+    List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
     for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
       int count = 0;
       List<FileType> files = fileGrp.getFile();
@@ -1314,7 +1424,7 @@ public class FileSectionComponentValidator extends ValidatorComponentImpl {
       if (count != files.size()) {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION, Message.createErrorMessage(
           "can add fileSec/fileGrp/file/@sip:FILEFORMATKEY in %1$s. Key of the file format in the registry when use of PREMIS has not been agreed upon in the submission agreement.",
-          metsName, isRootMets()), false, false);
+          metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
       }
     }
     return new ReporterDetails();
