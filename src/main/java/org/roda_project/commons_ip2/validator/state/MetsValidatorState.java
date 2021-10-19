@@ -15,6 +15,7 @@ public class MetsValidatorState {
   private String metsPath = null;
   private boolean isRootMets = false;
   private Map<String, Boolean> metsFiles = null;
+  private String ipType = null;
 
   public Mets getMets() {
     return mets;
@@ -62,5 +63,13 @@ public class MetsValidatorState {
 
   public void setMetsFiles(Map<String,Boolean> metsFiles){
     this.metsFiles = metsFiles;
+  }
+
+  public String getIpType(){
+    return ipType;
+  }
+
+  public void setIpType(String ipType){
+    this.ipType = ipType;
   }
 }

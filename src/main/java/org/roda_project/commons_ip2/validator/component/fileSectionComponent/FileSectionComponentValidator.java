@@ -214,26 +214,6 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
             ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP79_ID);
         }
 
-        /* SIP32 */
-        notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP32_ID);
-        ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP32_ID,
-          validateSIP32(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
-
-        /* SIP33 */
-        notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP33_ID);
-        ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP33_ID,
-          validateSIP33(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
-
-        /* SIP34 */
-        notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP34_ID);
-        ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP34_ID,
-          validateSIP34(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
-
-        /* SIP35 */
-        notifyObserversValidationStarted(moduleName, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP35_ID);
-        ResultsUtils.addResult(results, ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP35_ID,
-          validateSIP35(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION));
-
       } else {
         String message = Message.createErrorMessage("SKIPPED in %1$s because mets/fileSec/fileGrp/file/ doesn't exist",
           metsValidatorState.getMetsName(), metsValidatorState.isRootMets());
@@ -286,11 +266,7 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
         ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP76_ID,
         ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP77_ID,
         ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP78_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP79_ID,
-        ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP32_ID,
-        ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP33_ID,
-        ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP34_ID,
-        ConstantsSIPspec.VALIDATION_REPORT_SPECIFICATION_SIP35_ID);
+        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP79_ID);
     }
     notifyObserversFinishModule(moduleName);
     return results;
@@ -1325,109 +1301,4 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
     }
     return new ReporterDetails();
   }
-
-  /* SIP Specification Validations */
-
-  /*
-   * fileSec/fileGrp/file/@sip:FILEFORMATNAME An optional attribute may be used if
-   * the MIMETYPE is not suicient for the purposes of processing the information
-   * package. Example: “Extensible Markup Language” Example: “PDF/A” Example:
-   * “ISO/IEC 26300:2006”
-   */
-
-  private ReporterDetails validateSIP32(MetsValidatorState metsValidatorState) {
-    List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
-    for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
-      int count = 0;
-      List<FileType> files = fileGrp.getFile();
-      for (FileType file : files) {
-        String fileFormatName = file.getFILEFORMATNAME();
-        if (fileFormatName != null && !fileFormatName.equals("")) {
-          count++;
-        }
-      }
-      if (count != files.size()) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION, Message.createErrorMessage(
-          "can add fileSec/fileGrp/file/@sip:FILEFORMATNAME in %1$s  if the MIMETYPE is not sufficient for the purposes of processing the information package.",
-          metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
-      }
-    }
-    return new ReporterDetails();
-  }
-
-  /*
-   * fileSec/fileGrp/file/@sip:FILEFORMATVERSION The version of the file format
-   * when the use of PREMIS has not been agreed upon in the submission agreement.
-   * Example: “1.0”
-   */
-  private ReporterDetails validateSIP33(MetsValidatorState metsValidatorState) {
-    List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
-    for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
-      int count = 0;
-      List<FileType> files = fileGrp.getFile();
-      for (FileType file : files) {
-        String fileFormatVersion = file.getFILEFORMATVERSION();
-        if (fileFormatVersion != null && !fileFormatVersion.equals("")) {
-          count++;
-        }
-      }
-      if (count != files.size()) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION, Message.createErrorMessage(
-          "can add fileSec/fileGrp/file/@sip:FILEFORMATVERSION in %1$s. The version of the file format when the use of PREMIS has not been agreed upon in the submission agreement.",
-          metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
-      }
-    }
-    return new ReporterDetails();
-  }
-
-  /*
-   * fileSec/fileGrp/file/@sip:FILEFORMATREGISTRY The name of the format registry
-   * used to identify the file format when the use of PREMIS has not been agreed
-   * upon in the submission agreement. Example: “PRONOM”
-   */
-  private ReporterDetails validateSIP34(MetsValidatorState metsValidatorState) {
-    List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
-    for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
-      int count = 0;
-      List<FileType> files = fileGrp.getFile();
-      for (FileType file : files) {
-        String fileFormatRegistry = file.getFORMATREGISTRY();
-        if (fileFormatRegistry != null && !fileFormatRegistry.equals("")) {
-          count++;
-        }
-      }
-      if (count != files.size()) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION, Message.createErrorMessage(
-          "can add fileSec/fileGrp/file/@sip:FILEFORMATREGISTRY in %1$s. The name of the format registry used to identify the file format when the use of PREMIS has not been agreed upon in the submission agreement.",
-          metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
-      }
-    }
-    return new ReporterDetails();
-  }
-
-  /*
-   * fileSec/fileGrp/file/@sip:FILEFORMATKEY Key of the file format in the
-   * registry when use of PREMIS has not been agreed upon in the submission
-   * agreement. Example: “fmt/101”
-   */
-  private ReporterDetails validateSIP35(MetsValidatorState metsValidatorState) {
-    List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
-    for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
-      int count = 0;
-      List<FileType> files = fileGrp.getFile();
-      for (FileType file : files) {
-        String fileFormatKey = file.getFORMATREGISTRYKEY();
-        if (fileFormatKey != null && !fileFormatKey.equals("")) {
-          count++;
-        }
-      }
-      if (count != files.size()) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION, Message.createErrorMessage(
-          "can add fileSec/fileGrp/file/@sip:FILEFORMATKEY in %1$s. Key of the file format in the registry when use of PREMIS has not been agreed upon in the submission agreement.",
-          metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
-      }
-    }
-    return new ReporterDetails();
-  }
-
 }

@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.roda_project.commons_ip2.validator.EARKSIPValidator;
 import org.roda_project.commons_ip2.validator.constants.Constants;
+import org.roda_project.commons_ip2.validator.constants.ConstantsAIPspec;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.constants.ConstantsSIPspec;
 import org.slf4j.Logger;
@@ -28,8 +28,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 
 public class ValidationReportOutputJson {
   private static final Logger LOGGER = LoggerFactory.getLogger(ValidationReportOutputJson.class);
-  private Path outputFile;
   private final Path sipPath;
+  private Path outputFile;
   private OutputStream outputStream;
   private JsonGenerator jsonGenerator;
   private int success;
@@ -38,7 +38,7 @@ public class ValidationReportOutputJson {
   private int skipped;
   private int notes;
 
-  private Map<String,ReporterDetails> results =  new TreeMap<>(new RequirementsComparator());
+  private Map<String, ReporterDetails> results = new TreeMap<>(new RequirementsComparator());
 
   public ValidationReportOutputJson(Path path, Path sipPath) {
     this.sipPath = sipPath;
@@ -65,9 +65,11 @@ public class ValidationReportOutputJson {
     return notes;
   }
 
-  public Path getSipPath(){ return sipPath;}
+  public Path getSipPath() {
+    return sipPath;
+  }
 
-  public Map<String,ReporterDetails> getResults(){
+  public Map<String, ReporterDetails> getResults() {
     return results;
   }
 
@@ -159,11 +161,17 @@ public class ValidationReportOutputJson {
   public void componentValidationResult(String specification, String id, String status, List<String> issues,
     String detail) {
     try {
-      String level;
+      String level = null;
       if (id.startsWith("CSIP")) {
         level = ConstantsCSIPspec.getSpecificationLevel(id);
       } else {
-        level = ConstantsSIPspec.getSpecificationLevel(id);
+        if (id.startsWith("SIP")) {
+          level = ConstantsSIPspec.getSpecificationLevel(id);
+        } else {
+          if (id.startsWith("AIP")) {
+            level = ConstantsAIPspec.getSpecificationLevel(id);
+          }
+        }
       }
       jsonGenerator.writeStartObject();
       jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_SPECIFICATION, specification);
@@ -226,11 +234,17 @@ public class ValidationReportOutputJson {
       ReporterDetails details = entry.getValue();
       List<String> issues = details.getIssues();
       String detail = details.getDetail();
-      String level;
+      String level = null;
       if (details.getSpecification().startsWith("CSIP")) {
         level = ConstantsCSIPspec.getSpecificationLevel(entry.getKey());
       } else {
-        level = ConstantsSIPspec.getSpecificationLevel(entry.getKey());
+        if (details.getSpecification().startsWith("SIP")) {
+          level = ConstantsSIPspec.getSpecificationLevel(entry.getKey());
+        } else {
+          if (details.getSpecification().startsWith("AIP")) {
+            level = ConstantsAIPspec.getSpecificationLevel(entry.getKey());
+          }
+        }
       }
 
       if (details.isSkipped()) {
@@ -287,11 +301,11 @@ public class ValidationReportOutputJson {
   }
 
   private void writeSpecificationDetails(String id) throws IOException {
-    String name;
-    String location;
-    String description;
-    String cardinality;
-    String level;
+    String name = null;
+    String location = null;
+    String description = null;
+    String cardinality = null;
+    String level = null;
     if (id.startsWith("CSIP")) {
       name = ConstantsCSIPspec.getSpecificationName(id);
       location = ConstantsCSIPspec.getSpecificationLocation(id);
@@ -299,11 +313,21 @@ public class ValidationReportOutputJson {
       cardinality = ConstantsCSIPspec.getSpecificationCardinality(id);
       level = ConstantsCSIPspec.getSpecificationLevel(id);
     } else {
-      name = ConstantsSIPspec.getSpecificationName(id);
-      location = ConstantsSIPspec.getSpecificationLocation(id);
-      description = ConstantsSIPspec.getSpecificationDescription(id);
-      cardinality = ConstantsSIPspec.getSpecificationCardinality(id);
-      level = ConstantsSIPspec.getSpecificationLevel(id);
+      if (id.startsWith("SIP")) {
+        name = ConstantsSIPspec.getSpecificationName(id);
+        location = ConstantsSIPspec.getSpecificationLocation(id);
+        description = ConstantsSIPspec.getSpecificationDescription(id);
+        cardinality = ConstantsSIPspec.getSpecificationCardinality(id);
+        level = ConstantsSIPspec.getSpecificationLevel(id);
+      } else {
+        if (id.startsWith("AIP")) {
+          name = ConstantsAIPspec.getSpecificationName(id);
+          location = ConstantsAIPspec.getSpecificationLocation(id);
+          description = ConstantsAIPspec.getSpecificationDescription(id);
+          cardinality = ConstantsAIPspec.getSpecificationCardinality(id);
+          level = ConstantsAIPspec.getSpecificationLevel(id);
+        }
+      }
     }
 
     jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_NAME, name);
@@ -362,13 +386,14 @@ public class ValidationReportOutputJson {
     }
   }
 
-  public void writeFinalResult(){
+  public void writeFinalResult() {
     if (errors > 0) {
       componentValidationFinish(Constants.VALIDATION_REPORT_SPECIFICATION_RESULT_INVALID);
     } else {
       componentValidationFinish(Constants.VALIDATION_REPORT_SPECIFICATION_RESULT_VALID);
     }
   }
+
   public boolean validFileComponent() {
     for (Map.Entry<String, ReporterDetails> result : results.entrySet()) {
       String strCsip = result.getKey();
@@ -403,6 +428,9 @@ public class ValidationReportOutputJson {
       } else if (o.startsWith("SIP")) {
         c = 4000;
         c += Integer.parseInt(o.substring("SIP".length()));
+      } else if (o.startsWith("AIP")) {
+        c = 4000;
+        c += Integer.parseInt(o.substring("AIP".length()));
       } else {
         c = 9000;
       }

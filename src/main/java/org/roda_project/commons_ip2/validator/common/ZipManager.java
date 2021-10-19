@@ -214,8 +214,15 @@ public class ZipManager {
 
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().endsWith("/METS.xml")) {
-        if (entry.getName().split("/").length > 2 && entry.getName().split("/").length <= 4) {
+      if (entry.getName().matches(".+/submission/.+") && entry.getName().endsWith("/METS.xml")
+        && entry.getName().split("/").length > 2 && entry.getName().split("/").length <= 5) {
+        InputStream stream = zipFile.getInputStream(entry);
+        if (stream != null) {
+          subMets.put(entry.getName(), stream);
+        }
+      } else {
+        if (entry.getName().endsWith("/METS.xml") && entry.getName().split("/").length > 2
+          && entry.getName().split("/").length <= 4) {
           InputStream stream = zipFile.getInputStream(entry);
           if (stream != null) {
             subMets.put(entry.getName(), stream);
@@ -426,7 +433,8 @@ public class ZipManager {
         }
       } else {
         if (entry.getName().contains("/representations/")
-          && (entry.getName().split("/").length > 3 && !entry.isDirectory())) {;
+          && (entry.getName().split("/").length > 3 && !entry.isDirectory())) {
+          ;
           String representationName = getRepresentationName(entry.getName());
           if (!representationsFoldersNames.contains(representationName)) {
             representationsFoldersNames.add(representationName);
@@ -494,11 +502,11 @@ public class ZipManager {
     return additionalFolders;
   }
 
-  private String getRepresentationName(String entry){
+  private String getRepresentationName(String entry) {
     String[] representations = entry.split("/");
     StringBuilder representationName = new StringBuilder();
     representationName.append(representations[0]).append("/").append(representations[1]).append("/")
-            .append(representations[2]);
+      .append(representations[2]);
     return representationName.toString();
   }
 }
