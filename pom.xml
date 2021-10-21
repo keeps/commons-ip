@@ -42,6 +42,14 @@
 			<organizationUrl>http://www.keep.pt</organizationUrl>
 			<timezone>0</timezone>
 		</developer>
+		<developer>
+			<id>jgomes</id>
+			<name>João Gomes</name>
+			<email>jgomes@keep.pt</email>
+			<organization>KEEP SOLUTIONS</organization>
+			<organizationUrl>http://www.keep.pt</organizationUrl>
+			<timezone>0</timezone>
+		</developer>
 	</developers>
 
 	<prerequisites>
@@ -203,7 +211,7 @@
 									<goal>single</goal>
 								</goals>
 								<configuration>
-									<finalName>commons-ip-${version}</finalName>
+									<finalName>commons-ip2-cli-${version}</finalName>
 									<attach>true</attach>
 									<archive>
 										<manifest>

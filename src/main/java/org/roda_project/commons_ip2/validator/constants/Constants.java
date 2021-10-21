@@ -24,11 +24,12 @@ public class Constants {
   public static final String VALIDATION_REPORT_KEY_ID = "id";
   public static final String VALIDATION_REPORT_HEADER_CSIP_VERSION = "CSIP-2.0.4";
   public static final String VALIDATION_REPORT_HEADER_SIP_VERSION = "SIP-2.0.4";
+  public static final String VALIDATION_REPORT_HEADER_AIP_VERSION = "AIP-2.0.4";
   public static final String VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL = "url";
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_PATH = "path";
   public static final String VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_CSIP = "https://github.com/DILCISBoard/E-ARK-CSIP/releases/tag/v2.0.4";
   public static final String VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_SIP = "https://github.com/DILCISBoard/E-ARK-SIP/releases/tag/v2.0.4";
-
+  public static final String VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_AIP = "https://github.com/DILCISBoard/E-ARK-AIP/releases/tag/v2.0.4";
   /* Depois vai ser removida */
   public static final String VALIDATION_REPORT_SPECIFICATION_COMMONS_IP_VERSION = "2.0.0-alpha3-SNAPSHOT";
 
@@ -74,4 +75,9 @@ public class Constants {
   public static final String CSIP_MODULE_NAME_5 = "Use of the METS file section (element fileSec)";
   public static final String CSIP_MODULE_NAME_6 = "Use of the METS structural map (<structMap>)";
 
+  public static final String SIP_MODULE_NAME_1 = "Extended use of the METS root element (element mets)";
+  public static final String SIP_MODULE_NAME_2 = "Extended use of the METS header (element metsHdr)";
+  public static final String SIP_MODULE_NAME_3 = "Extended use of the METS file section (element fileSec)";
+
+  public static final String AIP_MODULE_NAME_2 = " Structural metadata - Digital objects";
 }

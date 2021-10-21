@@ -436,10 +436,12 @@ public final class EARKMETSUtils {
     // add to file section
     FLocat fileLocation = METSUtils.createFileLocation(schemaFilePath);
     file.getFLocat().add(fileLocation);
-    metsWrapper.getSchemasFileGroup().getFile().add(file);
+    if(metsWrapper.getSchemasFileGroup() != null) {
+      metsWrapper.getSchemasFileGroup().getFile().add(file);
+    }
 
     // add to struct map
-    if (metsWrapper.getSchemasDiv().getFptr().isEmpty()) {
+    if (metsWrapper.getSchemasDiv()!= null && metsWrapper.getSchemasDiv().getFptr().isEmpty()) {
       Fptr fptr = new Fptr();
       fptr.setFILEID(metsWrapper.getSchemasFileGroup());
       metsWrapper.getSchemasDiv().getFptr().add(fptr);

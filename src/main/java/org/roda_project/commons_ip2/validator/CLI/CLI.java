@@ -17,8 +17,10 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.roda_project.commons_ip2.model.ValidationReport;
 import org.roda_project.commons_ip2.validator.EARKSIPValidator;
 import org.roda_project.commons_ip2.validator.observer.ProgressValidationLoggerObserver;
+import org.roda_project.commons_ip2.validator.reporter.ValidationReportOutputJson;
 import org.roda_project.commons_ip2.validator.utils.ExitCodes;
 import org.xml.sax.SAXException;
 
@@ -76,8 +78,8 @@ public class CLI {
           }
 
         } while (Files.exists(reportPath));
-
-        EARKSIPValidator earksipValidator = new EARKSIPValidator(sipPath, reportPath);
+        ValidationReportOutputJson jsonReporter = new ValidationReportOutputJson(reportPath,sipPath);
+        EARKSIPValidator earksipValidator = new EARKSIPValidator(jsonReporter);
         earksipValidator.addObserver(new ProgressValidationLoggerObserver());
         earksipValidator.validate();
       }

@@ -47,6 +47,7 @@ import org.roda_project.commons_ip2.model.SIP;
 import org.roda_project.commons_ip2.model.ValidationEntry.LEVEL;
 import org.roda_project.commons_ip2.utils.Utils;
 import org.roda_project.commons_ip2.validator.EARKSIPValidator;
+import org.roda_project.commons_ip2.validator.reporter.ValidationReportOutputJson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -81,7 +82,8 @@ public class EARKSIPTest {
     parseAndValidateFullEARKSIP(zipSIP);
 
     Path reportPath = Files.createTempDirectory("reports").resolve("Full-EARK-SIP.json");
-    EARKSIPValidator earksipValidator = new EARKSIPValidator(zipSIP, reportPath);
+    ValidationReportOutputJson reportOutputJson = new ValidationReportOutputJson(reportPath,zipSIP);
+    EARKSIPValidator earksipValidator = new EARKSIPValidator(reportOutputJson);
     boolean validate = earksipValidator.validate();
     LOGGER.info("Done parsing (and validating) full E-ARK SIP");
     Assert.assertTrue(validate);
