@@ -117,13 +117,6 @@ public class EARKSIPValidator {
         validationReportOutputJson.getResults().put(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID,
           csipStr0);
       }
-
-      validationReportOutputJson.validationResults();
-      validationReportOutputJson.writeFinalResult();
-      notifyIndicatorsObservers();
-      validationReportOutputJson.close();
-      structureComponent.notifyObserversIPValidationFinished();
-
     } catch (IOException | JAXBException | SAXException e) {
       StringBuilder message = new StringBuilder();
 
@@ -150,13 +143,8 @@ public class EARKSIPValidator {
         message.toString(), false, false);
       csipStr0.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
       validationReportOutputJson.getResults().put(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID, csipStr0);
-
-      validationReportOutputJson.validationResults();
-      validationReportOutputJson.writeFinalResult();
-      notifyIndicatorsObservers();
-      validationReportOutputJson.close();
-      structureComponent.notifyObserversIPValidationFinished();
     }
+    writeReport();
     return validationReportOutputJson.getErrors() == 0;
   }
 
@@ -250,10 +238,23 @@ public class EARKSIPValidator {
               validationReportOutputJson.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID));
           }
           Map<String, ReporterDetails> aipComponentResults = component.validate(structureValidatorState,
-                  metsValidatorState);
+            metsValidatorState);
           ResultsUtils.mergeResults(validationReportOutputJson.getResults(), aipComponentResults);
         }
       }
     }
+  }
+
+  private void writeReport() {
+    if (metsValidatorState.getMets() != null) {
+      validationReportOutputJson.setIpType(metsValidatorState.getIpType());
+    }
+
+    validationReportOutputJson.init();
+    validationReportOutputJson.validationResults();
+    validationReportOutputJson.writeFinalResult();
+    notifyIndicatorsObservers();
+    validationReportOutputJson.close();
+    structureComponent.notifyObserversIPValidationFinished();
   }
 }

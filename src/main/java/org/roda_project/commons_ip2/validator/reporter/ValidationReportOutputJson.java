@@ -29,6 +29,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 public class ValidationReportOutputJson {
   private static final Logger LOGGER = LoggerFactory.getLogger(ValidationReportOutputJson.class);
   private final Path sipPath;
+  private final Path reportPath;
   private Path outputFile;
   private OutputStream outputStream;
   private JsonGenerator jsonGenerator;
@@ -39,10 +40,11 @@ public class ValidationReportOutputJson {
   private int notes;
 
   private Map<String, ReporterDetails> results = new TreeMap<>(new RequirementsComparator());
+  private String ipType = "";
 
   public ValidationReportOutputJson(Path path, Path sipPath) {
     this.sipPath = sipPath;
-    init(path);
+    this.reportPath = path;
   }
 
   public int getSuccess() {
@@ -73,8 +75,12 @@ public class ValidationReportOutputJson {
     return results;
   }
 
-  private void init(Path path) {
-    this.outputFile = path;
+  public void setIpType(String ipType) {
+    this.ipType = ipType;
+  }
+
+  public void init() {
+    this.outputFile = reportPath;
     this.success = 0;
     this.errors = 0;
     this.warnings = 0;
@@ -132,13 +138,23 @@ public class ValidationReportOutputJson {
         jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
           Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_CSIP);
         jsonGenerator.writeEndObject();
-        // header -> specifications -> SIP
-        jsonGenerator.writeStartObject();
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
-          Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
-          Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_SIP);
-        jsonGenerator.writeEndObject();
+        if (ipType.equals("SIP")) {
+          // header -> specifications -> SIP
+          jsonGenerator.writeStartObject();
+          jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
+            Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+          jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
+            Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_SIP);
+          jsonGenerator.writeEndObject();
+        } else if (ipType.equals("AIP")) {
+          // header -> specifications -> AIP
+          jsonGenerator.writeStartObject();
+          jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
+            Constants.VALIDATION_REPORT_HEADER_AIP_VERSION);
+          jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
+            Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_AIP);
+          jsonGenerator.writeEndObject();
+        }
         jsonGenerator.writeEndArray();
         // header -> version_commons_ip
         jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_VERSION_COMMONS_IP,

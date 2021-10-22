@@ -67,9 +67,9 @@ public class ValidatorTest {
 
     // URI resource = getClass().getResource("/").toURI();
     Path earkSIPath = Paths.get("/home/jgomes/Desktop/Compliance")
-      .resolve("uuid-9f7b7fdc-d2b6-41f9-8ce0-9b023dc79193.zip");
+      .resolve("uuid-5b7be427-9889-4f25-b36f-0b36f63db67f.zip");
     Path reportPath = Paths.get("/home/jgomes/Desktop/Compliance")
-      .resolve("uuid-9f7b7fdc-d2b6-41f9-8ce0-9b023dc79193.json");
+      .resolve("uuid-5b7be427-9889-4f25-b36f-0b36f63db67f.json");
     ;
 
     ValidationReportOutputJson reportOutputJson = new ValidationReportOutputJson(reportPath, earkSIPath);

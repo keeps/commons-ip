@@ -31,8 +31,7 @@ public class Constants {
   public static final String VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_SIP = "https://github.com/DILCISBoard/E-ARK-SIP/releases/tag/v2.0.4";
   public static final String VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_AIP = "https://github.com/DILCISBoard/E-ARK-AIP/releases/tag/v2.0.4";
   /* Depois vai ser removida */
-  public static final String VALIDATION_REPORT_SPECIFICATION_COMMONS_IP_VERSION = "2.0.0-alpha3-SNAPSHOT";
-
+  public static final String VALIDATION_REPORT_SPECIFICATION_COMMONS_IP_VERSION = "2.0.0";
   /* Report Validation */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_SPECIFICATION = "specification";
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_VERSION_COMMONS_IP = "version_commons_ip";
