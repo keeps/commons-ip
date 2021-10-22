@@ -117,8 +117,6 @@ public class EARKSIPValidator {
         validationReportOutputJson.getResults().put(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID,
           csipStr0);
       }
-      writeReport(true);
-
     } catch (IOException | JAXBException | SAXException e) {
       StringBuilder message = new StringBuilder();
 
@@ -145,9 +143,8 @@ public class EARKSIPValidator {
         message.toString(), false, false);
       csipStr0.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
       validationReportOutputJson.getResults().put(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID, csipStr0);
-
-      writeReport(false);
     }
+    writeReport();
     return validationReportOutputJson.getErrors() == 0;
   }
 
@@ -248,8 +245,8 @@ public class EARKSIPValidator {
     }
   }
 
-  private void writeReport(boolean isSchemaValid) {
-    if (isSchemaValid) {
+  private void writeReport() {
+    if (metsValidatorState.getMets() != null) {
       validationReportOutputJson.setIpType(metsValidatorState.getIpType());
     }
 
