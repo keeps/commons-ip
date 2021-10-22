@@ -241,20 +241,18 @@ public class EARKSIPValidator {
               validationReportOutputJson.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID));
           }
           Map<String, ReporterDetails> aipComponentResults = component.validate(structureValidatorState,
-                  metsValidatorState);
+            metsValidatorState);
           ResultsUtils.mergeResults(validationReportOutputJson.getResults(), aipComponentResults);
         }
       }
     }
   }
 
-  private void writeReport(boolean isSchemaValid){
-      if(isSchemaValid){
-        validationReportOutputJson.setIpType(metsValidatorState.getIpType());
-      }
-      else{
-        validationReportOutputJson.setIpType("");
-      }
+  private void writeReport(boolean isSchemaValid) {
+    if (isSchemaValid) {
+      validationReportOutputJson.setIpType(metsValidatorState.getIpType());
+    }
+
     validationReportOutputJson.init();
     validationReportOutputJson.validationResults();
     validationReportOutputJson.writeFinalResult();

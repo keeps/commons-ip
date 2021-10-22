@@ -40,7 +40,7 @@ public class ValidationReportOutputJson {
   private int notes;
 
   private Map<String, ReporterDetails> results = new TreeMap<>(new RequirementsComparator());
-  private String ipType;
+  private String ipType = "";
 
   public ValidationReportOutputJson(Path path, Path sipPath) {
     this.sipPath = sipPath;
@@ -75,7 +75,7 @@ public class ValidationReportOutputJson {
     return results;
   }
 
-  public void setIpType(String ipType){
+  public void setIpType(String ipType) {
     this.ipType = ipType;
   }
 
@@ -138,23 +138,22 @@ public class ValidationReportOutputJson {
         jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
           Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_CSIP);
         jsonGenerator.writeEndObject();
-        if(ipType.equals("SIP")) {
+        if (ipType.equals("SIP")) {
           // header -> specifications -> SIP
           jsonGenerator.writeStartObject();
           jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
-                  Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+            Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
           jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
-                  Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_SIP);
+            Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_SIP);
           jsonGenerator.writeEndObject();
-        }
-        else{
-          if(ipType.equals("AIP")){
+        } else {
+          if (ipType.equals("AIP")) {
             // header -> specifications -> AIP
             jsonGenerator.writeStartObject();
             jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
-                    Constants.VALIDATION_REPORT_HEADER_AIP_VERSION);
+              Constants.VALIDATION_REPORT_HEADER_AIP_VERSION);
             jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
-                    Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_AIP);
+              Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_AIP);
             jsonGenerator.writeEndObject();
           }
         }
