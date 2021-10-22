@@ -117,12 +117,7 @@ public class EARKSIPValidator {
         validationReportOutputJson.getResults().put(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID,
           csipStr0);
       }
-
-      validationReportOutputJson.validationResults();
-      validationReportOutputJson.writeFinalResult();
-      notifyIndicatorsObservers();
-      validationReportOutputJson.close();
-      structureComponent.notifyObserversIPValidationFinished();
+      writeReport(true);
 
     } catch (IOException | JAXBException | SAXException e) {
       StringBuilder message = new StringBuilder();
@@ -151,11 +146,7 @@ public class EARKSIPValidator {
       csipStr0.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
       validationReportOutputJson.getResults().put(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID, csipStr0);
 
-      validationReportOutputJson.validationResults();
-      validationReportOutputJson.writeFinalResult();
-      notifyIndicatorsObservers();
-      validationReportOutputJson.close();
-      structureComponent.notifyObserversIPValidationFinished();
+      writeReport(false);
     }
     return validationReportOutputJson.getErrors() == 0;
   }
@@ -255,5 +246,20 @@ public class EARKSIPValidator {
         }
       }
     }
+  }
+
+  private void writeReport(boolean isSchemaValid){
+      if(isSchemaValid){
+        validationReportOutputJson.setIpType(metsValidatorState.getIpType());
+      }
+      else{
+        validationReportOutputJson.setIpType("");
+      }
+    validationReportOutputJson.init();
+    validationReportOutputJson.validationResults();
+    validationReportOutputJson.writeFinalResult();
+    notifyIndicatorsObservers();
+    validationReportOutputJson.close();
+    structureComponent.notifyObserversIPValidationFinished();
   }
 }
