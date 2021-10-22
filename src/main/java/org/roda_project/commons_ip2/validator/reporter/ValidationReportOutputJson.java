@@ -146,16 +146,14 @@ public class ValidationReportOutputJson {
           jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
             Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_SIP);
           jsonGenerator.writeEndObject();
-        } else {
-          if (ipType.equals("AIP")) {
-            // header -> specifications -> AIP
-            jsonGenerator.writeStartObject();
-            jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
-              Constants.VALIDATION_REPORT_HEADER_AIP_VERSION);
-            jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
-              Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_AIP);
-            jsonGenerator.writeEndObject();
-          }
+        } else if (ipType.equals("AIP")) {
+          // header -> specifications -> AIP
+          jsonGenerator.writeStartObject();
+          jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
+            Constants.VALIDATION_REPORT_HEADER_AIP_VERSION);
+          jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
+            Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_AIP);
+          jsonGenerator.writeEndObject();
         }
         jsonGenerator.writeEndArray();
         // header -> version_commons_ip
