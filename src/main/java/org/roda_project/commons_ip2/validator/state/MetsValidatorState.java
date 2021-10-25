@@ -29,7 +29,7 @@ public class MetsValidatorState {
     return this.metsName;
   }
 
-  public void setMetsName(String metsName){
+  public void setMetsName(String metsName) {
     this.metsName = metsName;
   }
 
@@ -61,15 +61,15 @@ public class MetsValidatorState {
     return this.metsFiles;
   }
 
-  public void setMetsFiles(Map<String,Boolean> metsFiles){
+  public void setMetsFiles(Map<String, Boolean> metsFiles) {
     this.metsFiles = metsFiles;
   }
 
-  public String getIpType(){
+  public String getIpType() {
     return ipType;
   }
 
-  public void setIpType(String ipType){
+  public void setIpType(String ipType) {
     this.ipType = ipType;
   }
 }
