@@ -13,23 +13,19 @@ public class Main {
     if (args.length == 0) {
       CLI.printUsage(System.out);
     } else {
-      if(args[0].equals(CLIConstants.CLI_OPTION_VALIDATE)){
-        if(args.length == 1){
+      if (args[0].equals(CLIConstants.CLI_OPTION_VALIDATE)) {
+        if (args.length == 1) {
           CLI.printUsageValidator(System.out);
-        }
-        else{
-          if(!args[1].equals(CLIConstants.CLI_OPTION_SIP_PATHS)){
+        } else {
+          if (!args[1].equals(CLIConstants.CLI_OPTION_SIP_PATHS)) {
             CLI.printUsageValidator(System.out);
-          }
-          else{
+          } else {
             if (args.length < 3) {
               CLI.printUsageValidator(System.out);
-            }
-            else {
-              if(args[2].equals(CLIConstants.CLI_OPTION_REPORT_DIRECTORY)){
+            } else {
+              if (args[2].equals(CLIConstants.CLI_OPTION_REPORT_DIRECTORY)) {
                 CLI.printUsageValidator(System.out);
-              }
-              else{
+              } else {
                 List<String> filteredArgs = new ArrayList<>(Arrays.asList(args));
                 filteredArgs.remove(0);
                 CLI cli = new CLI();
@@ -38,8 +34,7 @@ public class Main {
             }
           }
         }
-      }
-      else{
+      } else {
         CLI.printUsage(System.out);
       }
     }

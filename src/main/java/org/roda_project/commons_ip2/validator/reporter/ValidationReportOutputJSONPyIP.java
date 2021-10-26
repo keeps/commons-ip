@@ -72,6 +72,7 @@ public class ValidationReportOutputJSONPyIP {
     StructStatus structureStatus = validationReport.getStructure().getStatus();
     MetadataStatus schemaStatus = validationReport.getMetadata().getSchemaResults().getStatus();
     MetadataStatus schematronStatus = validationReport.getMetadata().getSchematronResults().getStatus();
-    return !structureStatus.equals(StructStatus.NOTWELLFORMED) && !schemaStatus.equals(MetadataStatus.NOTVALID) && !schematronStatus.equals(MetadataStatus.NOTVALID);
+    return !structureStatus.equals(StructStatus.NOTWELLFORMED) && !schemaStatus.equals(MetadataStatus.NOTVALID)
+      && !schematronStatus.equals(MetadataStatus.NOTVALID);
   }
 }
