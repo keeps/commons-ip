@@ -91,58 +91,33 @@ public class EARKSIPValidator {
     sipComponents.forEach(c -> c.removeObserver(observer));
   }
 
-  public boolean validate() {
+  public boolean validate() throws IOException {
     structureComponent.notifyObserversIPValidationStarted();
-    try {
-      Map<String, ReporterDetails> structureValidationResults = structureComponent.validate(structureValidatorState);
-      validationReportOutputJson.getResults().putAll(structureValidationResults);
+    Map<String, ReporterDetails> structureValidationResults = structureComponent.validate(structureValidatorState);
+    validationReportOutputJson.getResults().putAll(structureValidationResults);
 
-      if (validationReportOutputJson.validFileComponent()) {
-        Map<String, InputStream> subMets;
-        if (structureValidatorState.isZipFileFlag()) {
-          metsValidatorState.setMetsFiles(structureValidatorState.getZipManager().getFiles(earksipPath));
-          subMets = structureValidatorState.getZipManager().getSubMets(earksipPath);
-        } else {
-          subMets = structureValidatorState.getFolderManager().getSubMets(earksipPath);
-        }
+    if (validationReportOutputJson.validFileComponent()) {
+      Map<String, InputStream> subMets;
+      if (structureValidatorState.isZipFileFlag()) {
+        metsValidatorState.setMetsFiles(structureValidatorState.getZipManager().getFiles(earksipPath));
+        subMets = structureValidatorState.getZipManager().getSubMets(earksipPath);
+      } else {
+        subMets = structureValidatorState.getFolderManager().getSubMets(earksipPath);
+      }
 
-        if (subMets.size() > 0) {
-          validateSubMets(subMets, structureValidatorState.isZipFileFlag());
-        }
-        validateRootMets();
+      if (subMets.size() > 0) {
+        validateSubMets(subMets, structureValidatorState.isZipFileFlag());
+      }
+      validateRootMets();
 
+      if (!validationReportOutputJson.getResults()
+        .containsKey(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID)) {
         ReporterDetails csipStr0 = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", true,
           false);
         csipStr0.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
         validationReportOutputJson.getResults().put(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID,
           csipStr0);
       }
-    } catch (IOException | JAXBException | SAXException e) {
-      StringBuilder message = new StringBuilder();
-
-      Throwable cause = e;
-      if (e.getMessage() != null) {
-        message.append("[").append(e.getClass().getSimpleName()).append("] ").append(e.getMessage());
-      }
-      while (cause.getCause() != null) {
-        cause = cause.getCause();
-        if (message.length() > 0) {
-          message.append(" caused by ");
-        }
-
-        message.append("[").append(cause.getClass().getSimpleName()).append("] ").append(cause.getMessage());
-
-        if (cause instanceof SAXParseException) {
-          SAXParseException e1 = (SAXParseException) cause;
-          message.append(" (line: ").append(e1.getLineNumber()).append(", column: ").append(e1.getColumnNumber())
-            .append(") - ");
-        }
-      }
-
-      ReporterDetails csipStr0 = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-        message.toString(), false, false);
-      csipStr0.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-      validationReportOutputJson.getResults().put(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID, csipStr0);
     }
     writeReport();
     return validationReportOutputJson.getErrors() == 0;
@@ -156,34 +131,80 @@ public class EARKSIPValidator {
     validateIpTypeExtendedComponents();
   }
 
-  private void validateSubMets(Map<String, InputStream> subMets, boolean isZip)
-    throws IOException, JAXBException, SAXException {
+  private void validateSubMets(Map<String, InputStream> subMets, boolean isZip) {
     for (Map.Entry<String, InputStream> entry : subMets.entrySet()) {
+
       InstatiateMets instatiateMets = new InstatiateMets(entry.getValue());
-      metsValidatorState.setMets(instatiateMets.instatiateMetsFile());
-      metsValidatorState.setIpType(metsValidatorState.getMets().getMetsHdr().getOAISPACKAGETYPE());
-      setupMetsValidatorState(entry.getKey(), isZip, false);
-      validateComponents();
+      try {
+        metsValidatorState.setMets(instatiateMets.instatiateMetsFile());
+        metsValidatorState.setIpType(metsValidatorState.getMets().getMetsHdr().getOAISPACKAGETYPE());
+        setupMetsValidatorState(entry.getKey(), isZip, false);
+        validateComponents();
+      } catch (IOException | JAXBException | SAXException e) {
+        String message = createExceptionMessage(e, entry.getKey());
+        ReporterDetails csipStr0 = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, false,
+          false);
+        csipStr0.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+        ResultsUtils.addResult(validationReportOutputJson.getResults(),
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID, csipStr0);
+      }
     }
   }
 
-  private void validateRootMets() throws IOException, JAXBException, SAXException {
-    InputStream metsRootStream;
-    String ipPath;
-    if (structureValidatorState.isZipFileFlag()) {
-      metsRootStream = structureValidatorState.getZipManager().getMetsRootInputStream(earksipPath);
-      ipPath = earksipPath.toString();
-    } else {
-      metsRootStream = structureValidatorState.getFolderManager().getMetsRootInputStream(earksipPath);
-      ipPath = earksipPath.resolve("METS.xml").toString();
+  private String createExceptionMessage(Exception e, String mets) {
+    StringBuilder message = new StringBuilder();
+
+    Throwable cause = e;
+    if (e.getMessage() != null) {
+      message.append("[").append(e.getClass().getSimpleName()).append("] ").append(e.getMessage());
+    }
+    while (cause.getCause() != null) {
+      cause = cause.getCause();
+      if (message.length() > 0) {
+        message.append(" caused by ");
+      }
+
+      message.append("[").append(cause.getClass().getSimpleName()).append("] ").append(cause.getMessage());
+
+      if (cause instanceof SAXParseException) {
+        SAXParseException e1 = (SAXParseException) cause;
+        message.append(" (file: ").append(mets).append(", line: ").append(e1.getLineNumber()).append(", column: ")
+          .append(e1.getColumnNumber()).append(")");
+      }
     }
 
-    InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
-    metsValidatorState.setMetsPath(ipPath);
-    metsValidatorState.setMetsName(ipPath);
-    metsValidatorState.setIsRootMets(true);
-    metsValidatorState.setMets(metsRoot.instatiateMetsFile());
-    validateComponents();
+    return message.toString();
+  }
+
+  private void validateRootMets() {
+    InputStream metsRootStream;
+    String ipPath;
+    try {
+
+      if (structureValidatorState.isZipFileFlag()) {
+        metsRootStream = structureValidatorState.getZipManager().getMetsRootInputStream(earksipPath);
+        ipPath = earksipPath.toString();
+      } else {
+        metsRootStream = structureValidatorState.getFolderManager().getMetsRootInputStream(earksipPath);
+        ipPath = earksipPath.resolve("METS.xml").toString();
+      }
+
+      InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
+      metsValidatorState.setMetsPath(ipPath);
+      metsValidatorState.setMetsName(ipPath);
+      metsValidatorState.setIsRootMets(true);
+
+      metsValidatorState.setMets(metsRoot.instatiateMetsFile());
+      validateComponents();
+    } catch (IOException | JAXBException | SAXException e) {
+      String message = createExceptionMessage(e, earksipPath.toString() + "/METS.xml");
+      ReporterDetails csipStr0 = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, false,
+        false);
+      csipStr0.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+      ResultsUtils.addResult(validationReportOutputJson.getResults(),
+        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID, csipStr0);
+    }
+
   }
 
   private void setupMetsValidatorState(String key, boolean isZip, boolean isRootMets) {
@@ -209,39 +230,45 @@ public class EARKSIPValidator {
   }
 
   private void validateIpTypeExtendedComponents() throws IOException {
-    if (metsValidatorState.getIpType().equals("SIP")) {
-      aipComponents.clear();
-      for (MetsValidator component : sipComponents) {
-        if (component instanceof SipFileSectionComponent) {
-          ((SipFileSectionComponent) component).setIsToValidate(ResultsUtils.isResultValid(
-            validationReportOutputJson.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID));
-        }
-        if (component instanceof SipMetsHdrComponent) {
-          ((SipMetsHdrComponent) component).setIsToValidateMetsHdr(ResultsUtils.isResultValid(
-            validationReportOutputJson.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID));
-          if (validationReportOutputJson.getResults()
-            .get(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID) != null) {
-            ((SipMetsHdrComponent) component).setIsToValidateAgents(ResultsUtils.isResultValid(
-              validationReportOutputJson.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID));
-          }
-        }
-        Map<String, ReporterDetails> sipComponentResults = component.validate(structureValidatorState,
-          metsValidatorState);
-        ResultsUtils.mergeResults(validationReportOutputJson.getResults(), sipComponentResults);
+    if (metsValidatorState.getIpType() != null && metsValidatorState.getIpType().equals("SIP")) {
+      validateSIPComponents();
+    } else if (metsValidatorState.getIpType() != null && metsValidatorState.getIpType().equals("AIP")) {
+      validateAIPComponets();
+    }
+  }
+
+  private void validateSIPComponents() throws IOException {
+    aipComponents.clear();
+    for (MetsValidator component : sipComponents) {
+      if (component instanceof SipFileSectionComponent) {
+        ((SipFileSectionComponent) component).setIsToValidate(ResultsUtils.isResultValid(
+          validationReportOutputJson.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID));
       }
-    } else {
-      if (metsValidatorState.getIpType().equals("AIP")) {
-        sipComponents.clear();
-        for (MetsValidator component : aipComponents) {
-          if (component instanceof AipFileSectionComponent) {
-            ((AipFileSectionComponent) component).setIsToValidate(ResultsUtils.isResultValid(
-              validationReportOutputJson.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID));
-          }
-          Map<String, ReporterDetails> aipComponentResults = component.validate(structureValidatorState,
-            metsValidatorState);
-          ResultsUtils.mergeResults(validationReportOutputJson.getResults(), aipComponentResults);
+      if (component instanceof SipMetsHdrComponent) {
+        ((SipMetsHdrComponent) component).setIsToValidateMetsHdr(ResultsUtils.isResultValid(
+          validationReportOutputJson.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID));
+        if (validationReportOutputJson.getResults()
+          .get(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID) != null) {
+          ((SipMetsHdrComponent) component).setIsToValidateAgents(ResultsUtils.isResultValid(
+            validationReportOutputJson.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID));
         }
       }
+      Map<String, ReporterDetails> sipComponentResults = component.validate(structureValidatorState,
+        metsValidatorState);
+      ResultsUtils.mergeResults(validationReportOutputJson.getResults(), sipComponentResults);
+    }
+  }
+
+  private void validateAIPComponets() throws IOException {
+    sipComponents.clear();
+    for (MetsValidator component : aipComponents) {
+      if (component instanceof AipFileSectionComponent) {
+        ((AipFileSectionComponent) component).setIsToValidate(ResultsUtils.isResultValid(
+          validationReportOutputJson.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID));
+      }
+      Map<String, ReporterDetails> aipComponentResults = component.validate(structureValidatorState,
+        metsValidatorState);
+      ResultsUtils.mergeResults(validationReportOutputJson.getResults(), aipComponentResults);
     }
   }
 

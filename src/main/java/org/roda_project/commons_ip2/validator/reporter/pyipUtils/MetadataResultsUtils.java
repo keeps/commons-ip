@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.roda_project.commons_ip2.validator.constants.ConstantsAIPspec;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.constants.ConstantsSIPspec;
 import org.roda_project.commons_ip2.validator.pyipModel.MetadataChecks;
@@ -52,7 +53,13 @@ public class MetadataResultsUtils {
   private static TestResult createTestResult(String id, ReporterDetails reporterDetails) {
     TestResult testResult = new TestResult();
     testResult.setRuleId(id);
-    testResult.setLocation(ConstantsCSIPspec.getSpecificationLocation(id));
+    if (id.startsWith("CSIP")) {
+      testResult.setLocation(ConstantsCSIPspec.getSpecificationLocation(id));
+    } else if (id.startsWith("SIP")) {
+      testResult.setLocation(ConstantsSIPspec.getSpecificationLocation(id));
+    } else if (id.startsWith("AIP")) {
+      testResult.setLocation(ConstantsAIPspec.getSpecificationLocation(id));
+    }
     StringBuilder message = new StringBuilder();
     for (String issue : reporterDetails.getIssues()) {
       message.append(issue);

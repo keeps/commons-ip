@@ -207,41 +207,45 @@ public class EARKPyIPValidator {
   }
 
   private void validateIpTypeExtendedComponents() throws IOException {
-    if (metsValidatorState.getIpType().equals("SIP")) {
-      aipComponents.clear();
-      for (MetsValidator component : sipComponents) {
-        if (component instanceof SipFileSectionComponent) {
-          ((SipFileSectionComponent) component).setIsToValidate(ResultsUtils.isResultValid(
-            validationReportOutputJSONPyIP.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID));
-        }
-        if (component instanceof SipMetsHdrComponent) {
-          ((SipMetsHdrComponent) component).setIsToValidateMetsHdr(ResultsUtils.isResultValid(
-            validationReportOutputJSONPyIP.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID));
-          if (validationReportOutputJSONPyIP.getResults()
-            .get(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID) != null) {
-            ((SipMetsHdrComponent) component)
-              .setIsToValidateAgents(ResultsUtils.isResultValid(validationReportOutputJSONPyIP.getResults(),
-                ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID));
-          }
-        }
-        Map<String, ReporterDetails> sipComponentResults = component.validate(structureValidatorState,
-          metsValidatorState);
-        ResultsUtils.mergeResults(validationReportOutputJSONPyIP.getResults(), sipComponentResults);
+    if(metsValidatorState.getIpType() != null && metsValidatorState.getIpType().equals("SIP")){
+      validateSIPComponents();
+    }else if(metsValidatorState.getIpType() != null && metsValidatorState.getIpType().equals("AIP")){
+      validateAIPComponets();
+    }
+  }
+
+  private void validateSIPComponents() throws IOException {
+    aipComponents.clear();
+    for (MetsValidator component : sipComponents) {
+      if (component instanceof SipFileSectionComponent) {
+        ((SipFileSectionComponent) component).setIsToValidate(ResultsUtils.isResultValid(
+                validationReportOutputJSONPyIP.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID));
       }
-    } else {
-      if (metsValidatorState.getIpType().equals("AIP")) {
-        sipComponents.clear();
-        for (MetsValidator component : aipComponents) {
-          if (component instanceof AipFileSectionComponent) {
-            ((AipFileSectionComponent) component)
-              .setIsToValidate(ResultsUtils.isResultValid(validationReportOutputJSONPyIP.getResults(),
-                ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID));
-          }
-          Map<String, ReporterDetails> aipComponentResults = component.validate(structureValidatorState,
-            metsValidatorState);
-          ResultsUtils.mergeResults(validationReportOutputJSONPyIP.getResults(), aipComponentResults);
+      if (component instanceof SipMetsHdrComponent) {
+        ((SipMetsHdrComponent) component).setIsToValidateMetsHdr(ResultsUtils.isResultValid(
+                validationReportOutputJSONPyIP.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID));
+        if (validationReportOutputJSONPyIP.getResults()
+                .get(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID) != null) {
+          ((SipMetsHdrComponent) component).setIsToValidateAgents(ResultsUtils.isResultValid(
+                  validationReportOutputJSONPyIP.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID));
         }
       }
+      Map<String, ReporterDetails> sipComponentResults = component.validate(structureValidatorState,
+              metsValidatorState);
+      ResultsUtils.mergeResults(validationReportOutputJSONPyIP.getResults(), sipComponentResults);
+    }
+  }
+
+  private void validateAIPComponets() throws IOException {
+    sipComponents.clear();
+    for (MetsValidator component : aipComponents) {
+      if (component instanceof AipFileSectionComponent) {
+        ((AipFileSectionComponent) component).setIsToValidate(ResultsUtils.isResultValid(
+                validationReportOutputJSONPyIP.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID));
+      }
+      Map<String, ReporterDetails> aipComponentResults = component.validate(structureValidatorState,
+              metsValidatorState);
+      ResultsUtils.mergeResults(validationReportOutputJSONPyIP.getResults(), aipComponentResults);
     }
   }
 }
