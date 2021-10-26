@@ -44,10 +44,11 @@ public class CLI {
     Option reportOption = new Option("o", true, "Output to file");
     reportOption.setRequired(false);
     reportOption.setOptionalArg(true);
+    parameters.addOption(reportOption);
     Option typeValidatorReportOption = new Option("r","Type of Validation Report");
     typeValidatorReportOption.setRequired(false);
-    reportOption.setOptionalArg(true);
-    parameters.addOption(reportOption);
+    typeValidatorReportOption.setOptionalArg(true);
+    typeValidatorReportOption.setArgs(1);
     parameters.addOption(typeValidatorReportOption);
   }
 
@@ -88,12 +89,11 @@ public class CLI {
   public int start(String[] args) {
     try {
       CommandLine commandLine = parser.parse(parameters, args);
+
+      String[] sipPaths = commandLine.getOptionValues("i");
       String reportDirectoryPath = commandLine.getOptionValue("o");
       String typeReportOption = commandLine.getOptionValue("r");
-      String[] sipPaths = commandLine.getOptionValues("i");
 
-      System.out.println(reportDirectoryPath);
-      System.out.println(typeReportOption);
       if (sipPaths == null || sipPaths.length == 0) {
         printMissingSipPath(System.out);
       }
