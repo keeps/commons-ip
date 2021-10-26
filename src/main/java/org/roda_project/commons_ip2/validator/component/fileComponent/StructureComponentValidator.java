@@ -371,7 +371,7 @@ public class StructureComponentValidator extends StructureValidatorImpl {
         .getRepresentationsFoldersNames(structureValidatorState.getIpPath());
       if (!representationsFoldersNames.isEmpty()) {
         if (structureValidatorState.getZipManager()
-          .countFilesInsideRepresentations(structureValidatorState.getIpPath()) == 0) {
+          .countFilesInsideRepresentations(structureValidatorState.getIpPath()) != 0) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
             "The representations folder SHOULD include a sub-folder for each individual representation.", false, false);
         }
@@ -384,7 +384,7 @@ public class StructureComponentValidator extends StructureValidatorImpl {
         .getRepresentationsFoldersNames(structureValidatorState.getIpPath());
       if (!representationsFoldersNames.isEmpty()) {
         if (structureValidatorState.getFolderManager()
-          .countFilesInsideRepresentations(structureValidatorState.getIpPath()) == 0) {
+          .countFilesInsideRepresentations(structureValidatorState.getIpPath()) != 0) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
             "The representations folder SHOULD include a sub-folder for each individual representation.", false, false);
         }
@@ -503,12 +503,9 @@ public class StructureComponentValidator extends StructureValidatorImpl {
         "schemas")) {
         if (!structureValidatorState.getZipManager()
           .checkIfExistsFolderInsideRepresentation(structureValidatorState.getIpPath(), "schemas")) {
-          if (structureValidatorState.getZipManager()
-            .checkIfExistsFilesInsideRepresentationFolder(structureValidatorState.getIpPath())) {
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "We recommend including all XML schema documents for any structured metadata within package. These schema documents SHOULD be placed in a sub-folder called schemas within the Information Package root folder and/or the representation folder.",
-              false, false);
-          }
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "We recommend including all XML schema documents for any structured metadata within package. These schema documents SHOULD be placed in a sub-folder called schemas within the Information Package root folder and/or the representation folder.",
+            false, false);
         }
       }
     } else {
@@ -516,12 +513,9 @@ public class StructureComponentValidator extends StructureValidatorImpl {
         "schemas")) {
         if (!structureValidatorState.getFolderManager()
           .checkIfExistsFolderInsideRepresentation(structureValidatorState.getIpPath(), "schemas")) {
-          if (structureValidatorState.getFolderManager()
-            .checkIfExistsFilesInsideRepresentationFolder(structureValidatorState.getIpPath())) {
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "We recommend including all XML schema documents for any structured metadata within package. These schema documents SHOULD be placed in a sub-folder called schemas within the Information Package root folder and/or the representation folder.",
-              false, false);
-          }
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "We recommend including all XML schema documents for any structured metadata within package. These schema documents SHOULD be placed in a sub-folder called schemas within the Information Package root folder and/or the representation folder.",
+            false, false);
         }
       }
     }
@@ -538,27 +532,18 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     if (structureValidatorState.isZipFileFlag()) {
       if (!structureValidatorState.getZipManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
         "documentation")) {
-        if (!structureValidatorState.getZipManager()
-          .checkIfExistsFolderInsideRepresentation(structureValidatorState.getIpPath(), "documentation")) {
-          if (structureValidatorState.getZipManager()
-            .checkIfExistsFilesInsideRepresentationFolder(structureValidatorState.getIpPath())) {
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "We recommend including any supplementary documentation for the package or a specific representation within the package. Supplementary documentation SHOULD be placed in a sub-folder called documentation within the Information Package root folder and/or the representation folder.",
-              false, false);
-          }
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "We recommend including any supplementary documentation for the package or a specific representation within the package. Supplementary documentation SHOULD be placed in a sub-folder called documentation within the Information Package root folder and/or the representation folder.",
+            false, false);
         }
-      }
     } else {
       if (!structureValidatorState.getFolderManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
         "documentation")) {
         if (!structureValidatorState.getFolderManager()
           .checkIfExistsFolderInsideRepresentation(structureValidatorState.getIpPath(), "documentation")) {
-          if (structureValidatorState.getFolderManager()
-            .checkIfExistsFilesInsideRepresentationFolder(structureValidatorState.getIpPath())) {
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              "We recommend including any supplementary documentation for the package or a specific representation within the package. Supplementary documentation SHOULD be placed in a sub-folder called documentation within the Information Package root folder and/or the representation folder.",
-              false, false);
-          }
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "We recommend including any supplementary documentation for the package or a specific representation within the package. Supplementary documentation SHOULD be placed in a sub-folder called documentation within the Information Package root folder and/or the representation folder.",
+            false, false);
         }
       }
     }

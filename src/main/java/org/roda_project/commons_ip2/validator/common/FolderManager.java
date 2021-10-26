@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -268,25 +269,18 @@ public class FolderManager {
   }
 
   public boolean checkIfExistsFolderInsideRepresentation(Path path, String folder) {
-    File[] root = path.toFile().listFiles();
-    for (File file : root) {
-      if (file.getName().equals("representations")) {
-        if (file.isDirectory()) {
-          File[] insideFiles = file.listFiles();
-          for (File f : insideFiles) {
-            if (f.isDirectory()) {
-              File[] representationFiles = file.listFiles();
-              for (File representationFile : representationFiles) {
-                if (representationFile.getName().equals(folder)) {
-                  if (representationFile.isDirectory()) {
-                    return true;
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+    File[] representationFiles = path.resolve("representations").toFile().listFiles();
+    if(representationFiles != null && representationFiles.length != 0){
+     for(File representation : representationFiles){
+       if(representation.isDirectory()){
+         File[] filesInsideRepresentation = representation.listFiles();
+         for(File fileInside: filesInsideRepresentation){
+           if(fileInside.getName().equals(folder) && fileInside.isDirectory()){
+             return true;
+           }
+         }
+       }
+     }
     }
     return false;
   }

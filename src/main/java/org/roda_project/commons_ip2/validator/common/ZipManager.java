@@ -471,10 +471,8 @@ public class ZipManager {
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
       if (entry.getName().contains("/representations/")) {
-        if (entry.getName().split("/").length > 3) {
-          if (!entry.isDirectory()) {
+        if (entry.getName().split("/").length == 3 && !entry.getName().endsWith("/")) {
             count++;
-          }
         }
       }
     }
