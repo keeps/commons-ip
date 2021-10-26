@@ -137,7 +137,7 @@ public class CLI {
       printErrors(System.out, "Error on object initialize");
       return ExitCodes.EXIT_CANNOT_CREATE_EARKVALIDATOR_OBJECT;
     } catch (NoSuchAlgorithmException e) {
-      printErrors(System.out, "Error on object initialize");
+      printErrors(System.out, "Error on object initialize EARKPYIP");
       return ExitCodes.EXIT_CANNOT_CREATE_EARKVALIDATOR_OBJECT;
     }
     return ExitCodes.EXIT_CODE_OK;

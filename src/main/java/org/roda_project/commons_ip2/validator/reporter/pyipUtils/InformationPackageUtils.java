@@ -1,5 +1,6 @@
 package org.roda_project.commons_ip2.validator.reporter.pyipUtils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,11 +26,14 @@ public class InformationPackageUtils {
     throws IOException, NoSuchAlgorithmException {
     PackageDetails packageDetails = new PackageDetails();
     packageDetails.setName(name);
-    ChecksumAlg algorithim = ChecksumAlg.fromValue(checksumAlg);
-    Checksum checksum = new Checksum();
-    checksum.setAlgorithm(algorithim);
-    checksum.setValue(calculateChecksumPackage(ipPath, algorithim.toString()));
-    packageDetails.addChecksumsItem(checksum);
+    File file = Paths.get(ipPath).toFile();
+    if(!file.isDirectory()) {
+      ChecksumAlg algorithim = ChecksumAlg.fromValue(checksumAlg);
+      Checksum checksum = new Checksum();
+      checksum.setAlgorithm(algorithim);
+      checksum.setValue(calculateChecksumPackage(ipPath, algorithim.toString()));
+      packageDetails.addChecksumsItem(checksum);
+    }
     return packageDetails;
   }
 
