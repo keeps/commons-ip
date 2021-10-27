@@ -583,7 +583,9 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     for (String representation : representationFoldersNames) {
       if (!structureValidatorState.getFolderManager()
         .checkIfExistsFolderRepresentation(structureValidatorState.getIpPath(), "schemas", representation)) {
-        message.append("Not exists ").append(folder).append(" folder in ").append(representation);
+        message.append("Not exists ").append(folder).append(" folder in ")
+          .append(structureValidatorState.getIpPath().resolve("representations").resolve(representation).toString()
+            .substring(structureValidatorState.getIpPath().getParent().toString().length()));
         if (i != representationFoldersNames.size() - 1) {
           message.append(", ");
         } else {
