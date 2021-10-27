@@ -27,12 +27,20 @@ public class InformationPackageUtils {
     PackageDetails packageDetails = new PackageDetails();
     packageDetails.setName(name);
     File file = Paths.get(ipPath).toFile();
-    if(!file.isDirectory()) {
+    if(file.exists() && !file.isDirectory()) {
       ChecksumAlg algorithim = ChecksumAlg.fromValue(checksumAlg);
       Checksum checksum = new Checksum();
       checksum.setAlgorithm(algorithim);
       checksum.setValue(calculateChecksumPackage(ipPath, algorithim.toString()));
       packageDetails.addChecksumsItem(checksum);
+    }
+    else{
+      ChecksumAlg algorithim = ChecksumAlg.fromValue(checksumAlg);
+      Checksum checksum = new Checksum();
+      checksum.setAlgorithm(algorithim);
+      checksum.setValue("");
+      packageDetails.addChecksumsItem(checksum);
+
     }
     return packageDetails;
   }
