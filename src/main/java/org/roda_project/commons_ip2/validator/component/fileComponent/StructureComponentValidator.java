@@ -257,21 +257,15 @@ public class StructureComponentValidator extends StructureValidatorImpl {
   private ReporterDetails validateCSIPSTR6(StructureValidatorState structureValidatorState) throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
       if (!structureValidatorState.getZipManager().checkIfExistsFolderInside(structureValidatorState.getIpPath(),
-        "metadata/preservation")) {
-        if (structureValidatorState.getZipManager().verifyIfExistsFilesInFolder(structureValidatorState.getIpPath(),
-          ".*/metadata/")) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "If preservation metadata are available should include inside metadata/preservation", false, false);
-        }
+        "metadata/preservation/")) {
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+          "If preservation metadata are available should include inside metadata/preservation", false, false);
       }
     } else {
       if (!structureValidatorState.getFolderManager().checkIfExistsFolderInside(structureValidatorState.getIpPath(),
         "metadata", "preservation")) {
-        if (structureValidatorState.getFolderManager().verifyIfExistsFilesInFolder(structureValidatorState.getIpPath(),
-          "metadata")) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "If preservation metadata are available should include inside metadata/preservation", false, false);
-        }
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+          "If preservation metadata are available should include inside metadata/preservation", false, false);
       }
     }
     return new ReporterDetails();
@@ -285,20 +279,15 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     if (structureValidatorState.isZipFileFlag()) {
       if (!structureValidatorState.getZipManager().checkIfExistsFolderInside(structureValidatorState.getIpPath(),
         "metadata/descriptive")) {
-        if (structureValidatorState.getZipManager().verifyIfExistsFilesInFolder(structureValidatorState.getIpPath(),
-          ".*/metadata/")) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "If descriptive metadata are available should include inside metadata/descriptive", false, false);
-        }
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+          "If descriptive metadata are available should include inside metadata/descriptive", false, false);
+
       }
     } else {
       if (!structureValidatorState.getFolderManager().checkIfExistsFolderInside(structureValidatorState.getIpPath(),
         "metadata", "descriptive")) {
-        if (structureValidatorState.getFolderManager().verifyIfExistsFilesInFolder(structureValidatorState.getIpPath(),
-          "metadata")) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "If descriptive metadata are available should include inside metadata/descriptive", false, false);
-        }
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+          "If descriptive metadata are available should include inside metadata/descriptive", false, false);
       }
     }
     return new ReporterDetails();
@@ -310,28 +299,19 @@ public class StructureComponentValidator extends StructureValidatorImpl {
    */
   private ReporterDetails validateCSIPSTR8(StructureValidatorState structureValidatorState) throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
-      if (structureValidatorState.getZipManager().verifyIfExistsFilesInFolder(structureValidatorState.getIpPath(),
-        "metadata/descriptive")
-        || structureValidatorState.getZipManager().verifyIfExistsFilesInFolder(structureValidatorState.getIpPath(),
-          "metadata/preservation")) {
-        if (structureValidatorState.getZipManager().verifyIfExistsFilesInFolder(structureValidatorState.getIpPath(),
-          ".*/metadata/")) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "If any other metadata are available, they MAY be included in separate sub-folders, for example an additional folder named other.",
-            false, false);
-        }
+      if (!structureValidatorState.getZipManager().checkIfExistsFolderInside(structureValidatorState.getIpPath(),
+        "metadata/other")) {
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+          "If any other metadata are available, they MAY be included in separate sub-folders, for example an additional folder named other.",
+          false, false);
+
       }
     } else {
-      if (structureValidatorState.getFolderManager().checkIfExistsFolderInside(structureValidatorState.getIpPath(),
-        "metadata", "descriptive")
-        || structureValidatorState.getFolderManager().checkIfExistsFolderInside(structureValidatorState.getIpPath(),
-          "metadata", "preservation")) {
-        if (structureValidatorState.getFolderManager().verifyIfExistsFilesInFolder(structureValidatorState.getIpPath(),
-          "metadata")) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "If any other metadata are available, they MAY be included in separate sub-folders, for example an additional folder named other.",
-            false, false);
-        }
+      if (!structureValidatorState.getFolderManager().checkIfExistsFolderInside(structureValidatorState.getIpPath(),
+        "metadata", "other")) {
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+          "If any other metadata are available, they MAY be included in separate sub-folders, for example an additional folder named other.",
+          false, false);
       }
     }
     return new ReporterDetails();
@@ -531,7 +511,7 @@ public class StructureComponentValidator extends StructureValidatorImpl {
   private ReporterDetails validateCSIPSTR16(StructureValidatorState structureValidatorState) throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
       if (!structureValidatorState.getZipManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
-              "documentation")) {
+        "documentation")) {
         String message = checkIfExistsZipFolderInRepresentations(structureValidatorState, "documentation");
         if (message.length() > 0) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, false, false);
@@ -541,7 +521,7 @@ public class StructureComponentValidator extends StructureValidatorImpl {
       }
     } else {
       if (!structureValidatorState.getFolderManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
-              "documentation")) {
+        "documentation")) {
         String message = checkIfExistsFolderInRepresentations(structureValidatorState, "documentation");
         if (message.length() > 0) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, false, false);
