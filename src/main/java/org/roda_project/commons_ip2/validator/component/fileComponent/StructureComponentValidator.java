@@ -531,20 +531,23 @@ public class StructureComponentValidator extends StructureValidatorImpl {
   private ReporterDetails validateCSIPSTR16(StructureValidatorState structureValidatorState) throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
       if (!structureValidatorState.getZipManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
-        "documentation")) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "We recommend including any supplementary documentation for the package or a specific representation within the package. Supplementary documentation SHOULD be placed in a sub-folder called documentation within the Information Package root folder and/or the representation folder.",
-            false, false);
+              "documentation")) {
+        String message = checkIfExistsZipFolderInRepresentations(structureValidatorState, "documentation");
+        if (message.length() > 0) {
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, false, false);
         }
+      } else {
+        return new ReporterDetails();
+      }
     } else {
       if (!structureValidatorState.getFolderManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
-        "documentation")) {
-        if (!structureValidatorState.getFolderManager()
-          .checkIfExistsFolderInsideRepresentation(structureValidatorState.getIpPath(), "documentation")) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "We recommend including any supplementary documentation for the package or a specific representation within the package. Supplementary documentation SHOULD be placed in a sub-folder called documentation within the Information Package root folder and/or the representation folder.",
-            false, false);
+              "documentation")) {
+        String message = checkIfExistsFolderInRepresentations(structureValidatorState, "documentation");
+        if (message.length() > 0) {
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, false, false);
         }
+      } else {
+        return new ReporterDetails();
       }
     }
     return new ReporterDetails();
