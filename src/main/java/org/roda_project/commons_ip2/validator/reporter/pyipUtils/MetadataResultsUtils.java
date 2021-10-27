@@ -23,7 +23,8 @@ public class MetadataResultsUtils {
     MetadataChecks metadataChecks = new MetadataChecks();
     ReporterDetails schemaResult = results.get("CSIP0");
     List<TestResult> testResults = new ArrayList<>();
-    if (schemaResult.isValid()) {
+
+    if (schemaResult != null && schemaResult.isValid()) {
       metadataChecks.setStatus(MetadataStatus.VALID);
     } else {
       metadataChecks.setStatus(MetadataStatus.NOTVALID);
@@ -61,9 +62,11 @@ public class MetadataResultsUtils {
       testResult.setLocation(ConstantsAIPspec.getSpecificationLocation(id));
     }
     StringBuilder message = new StringBuilder();
-    for (String issue : reporterDetails.getIssues()) {
-      message.append(issue);
-      message.append(" ");
+    if (reporterDetails != null && !reporterDetails.getIssues().isEmpty()) {
+      for (String issue : reporterDetails.getIssues()) {
+        message.append(issue);
+        message.append(" ");
+      }
     }
     testResult.message(message.toString());
     testResult.setSeverity(calculateSeverity(ConstantsCSIPspec.getSpecificationLevel(id), reporterDetails.isValid()));

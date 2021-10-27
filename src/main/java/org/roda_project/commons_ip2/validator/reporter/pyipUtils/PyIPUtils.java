@@ -13,6 +13,7 @@ import org.roda_project.commons_ip2.validator.pyipModel.MetadataChecks;
 import org.roda_project.commons_ip2.validator.pyipModel.MetadataResults;
 import org.roda_project.commons_ip2.validator.pyipModel.MetadataStatus;
 import org.roda_project.commons_ip2.validator.pyipModel.StructResults;
+import org.roda_project.commons_ip2.validator.pyipModel.StructStatus;
 import org.roda_project.commons_ip2.validator.pyipModel.TestResult;
 import org.roda_project.commons_ip2.validator.pyipModel.ValidationReport;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
@@ -28,7 +29,11 @@ public class PyIPUtils {
     validationReport.setPackage(createInformationPackage(name, checkumAlg, ipPath, ipType));
     validationReport.setUid(UUID.randomUUID());
     validationReport.setStructure(createStructureResults(results));
-    validationReport.setMetadata(createMetadataResults(results));
+    if (!validationReport.getStructure().getStatus().equals(StructStatus.NOTWELLFORMED)) {
+      validationReport.setMetadata(createMetadataResults(results));
+    } else {
+      validationReport.setMetadata(createInvalidMetadataResults());
+    }
     return validationReport;
   }
 
@@ -61,6 +66,16 @@ public class PyIPUtils {
     } else {
       metadataResults.setSchematronResults(MetadataResultsUtils.createSchematronResult(results));
     }
+    return metadataResults;
+  }
+
+  public static MetadataResults createInvalidMetadataResults() {
+    MetadataResults metadataResults = new MetadataResults();
+    MetadataChecks metadataChecks = new MetadataChecks();
+    metadataChecks.setStatus(MetadataStatus.NOTVALID);
+    metadataChecks.setMessages(new ArrayList<>());
+    metadataResults.schemaResults(metadataChecks);
+    metadataResults.schematronResults(metadataChecks);
     return metadataResults;
   }
 }
