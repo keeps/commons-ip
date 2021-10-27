@@ -45,11 +45,16 @@ public class CLI {
     reportOption.setRequired(false);
     reportOption.setOptionalArg(true);
     parameters.addOption(reportOption);
-    Option typeValidatorReportOption = new Option("r","Type of Validation Report");
+    Option typeValidatorReportOption = new Option("r", "Type of Validation Report");
     typeValidatorReportOption.setRequired(false);
     typeValidatorReportOption.setOptionalArg(true);
     typeValidatorReportOption.setArgs(1);
     parameters.addOption(typeValidatorReportOption);
+    Option verbose = new Option("v", "Verbose Option");
+    verbose.setRequired(false);
+    verbose.setOptionalArg(false);
+    verbose.setArgs(0);
+    parameters.addOption(verbose);
   }
 
   public static void printUsageValidator(PrintStream printStream) {
@@ -67,7 +72,9 @@ public class CLI {
         "(optional) Path to save the validation report. If not set a report will be " + "generated in the sip folder.")
       .append("\n\n");
     out.append("\t").append(CLIConstants.CLI_OPTION_REPORT_TYPE).append("\t\t")
-      .append("(optional) By default generate json report, with option eark generate E-ARK JSON").append("/n");
+      .append("(optional) By default generate json report, with option eark generate E-ARK JSON").append("\n\n");
+    out.append("\t").append(CLIConstants.CLI_OPTION_VERBOSE).append("\t\t")
+            .append("(optional) Verbose command line output with all validation steps").append("/n");
     out.append("\n");
     printStream.append(out).flush();
   }
@@ -93,6 +100,11 @@ public class CLI {
       String[] sipPaths = commandLine.getOptionValues("i");
       String reportDirectoryPath = commandLine.getOptionValue("o");
       String typeReportOption = commandLine.getOptionValue("r");
+
+      if (commandLine.hasOption("o") && reportDirectoryPath == null) {
+        printUsageValidator(System.out);
+        return ExitCodes.EXIT_PARSE_ARG;
+      }
 
       if (sipPaths == null || sipPaths.length == 0) {
         printMissingSipPath(System.out);
@@ -123,12 +135,12 @@ public class CLI {
 
         } while (Files.exists(reportPath));
 
-        validate(typeReportOption, reportPath, sipPath);
+        validate(typeReportOption, reportPath, sipPath, commandLine.hasOption("v"));
 
       }
 
     } catch (ParseException e) {
-      printErrors(System.out, "Can't parse resource files for validation");
+      printUsageValidator(System.out);
       return ExitCodes.EXIT_PARSE_ARG;
     } catch (DateTimeException d) {
       printErrors(System.out, "Invalid date format error");
@@ -176,16 +188,21 @@ public class CLI {
     return ExitCodes.EXIT_CODE_OK;
   }
 
-  private int validate(String typeReportOption, Path reportPath, Path sipPath)
+  private int validate(String typeReportOption, Path reportPath, Path sipPath, boolean verbose)
     throws IOException, ParserConfigurationException, SAXException, NoSuchAlgorithmException {
     if (typeReportOption == null || typeReportOption.equals("default")) {
       ValidationReportOutputJson jsonReporter = new ValidationReportOutputJson(reportPath, sipPath);
       EARKSIPValidator earksipValidator = new EARKSIPValidator(jsonReporter);
-      earksipValidator.addObserver(new ProgressValidationLoggerObserver());
+      if (verbose) {
+        earksipValidator.addObserver(new ProgressValidationLoggerObserver());
+      }
       earksipValidator.validate();
     } else if (typeReportOption.equals("eark")) {
       ValidationReportOutputJSONPyIP jsonReporter = new ValidationReportOutputJSONPyIP(reportPath, sipPath);
       EARKPyIPValidator earkPyIPValidator = new EARKPyIPValidator(jsonReporter);
+      if (verbose) {
+        earkPyIPValidator.addObserver(new ProgressValidationLoggerObserver());
+      }
       earkPyIPValidator.validate();
     } else {
       printErrors(System.out, "Invalid Option of ReportType");

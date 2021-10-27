@@ -137,22 +137,22 @@ public class ValidationReportOutputJson {
         jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
           Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_CSIP);
         jsonGenerator.writeEndObject();
-        if(ipType != null) {
+        if (ipType != null) {
           if (ipType.equals("SIP")) {
             // header -> specifications -> SIP
             jsonGenerator.writeStartObject();
             jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
-                    Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+              Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
             jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
-                    Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_SIP);
+              Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_SIP);
             jsonGenerator.writeEndObject();
           } else if (ipType.equals("AIP")) {
             // header -> specifications -> AIP
             jsonGenerator.writeStartObject();
             jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
-                    Constants.VALIDATION_REPORT_HEADER_AIP_VERSION);
+              Constants.VALIDATION_REPORT_HEADER_AIP_VERSION);
             jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
-                    Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_AIP);
+              Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_AIP);
             jsonGenerator.writeEndObject();
           }
         }
@@ -308,8 +308,7 @@ public class ValidationReportOutputJson {
       LOGGER.debug("Unable to close validation reporter file", e);
     } finally {
       if (outputStream != null) {
-        LOGGER.info("A report was generated with a listing of information about the individual validations.");
-        LOGGER.info("The report file is located at {}", outputFile.normalize().toAbsolutePath());
+        System.out.println(outputFile.normalize().toAbsolutePath());
       } else {
         LOGGER.info(
           "A report with a listing of information  about the individual validations could not be generated, please submit a bug report to help us fix this.");

@@ -56,6 +56,7 @@ public class ValidationReportOutputJSONPyIP {
 
     ObjectWriter objectWriter = objectMapper.writer(new DefaultPrettyPrinter());
     objectWriter.writeValue(reportPath.toFile(), validationReport);
+    System.out.println(reportPath.normalize().toAbsolutePath());
   }
 
   public boolean validFileComponent() {
