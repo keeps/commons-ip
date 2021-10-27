@@ -434,7 +434,6 @@ public class ZipManager {
       } else {
         if (entry.getName().contains("/representations/")
           && (entry.getName().split("/").length > 3 && !entry.isDirectory())) {
-          ;
           String representationName = getRepresentationName(entry.getName());
           if (!representationsFoldersNames.contains(representationName)) {
             representationsFoldersNames.add(representationName);
