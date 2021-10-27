@@ -501,22 +501,22 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     if (structureValidatorState.isZipFileFlag()) {
       if (!structureValidatorState.getZipManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
         "schemas")) {
-        if (!structureValidatorState.getZipManager()
-          .checkIfExistsFolderInsideRepresentation(structureValidatorState.getIpPath(), "schemas")) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "We recommend including all XML schema documents for any structured metadata within package. These schema documents SHOULD be placed in a sub-folder called schemas within the Information Package root folder and/or the representation folder.",
-            false, false);
+        String message = checkIfExistsZipFolderInRepresentations(structureValidatorState, "schemas");
+        if (message.length() > 0) {
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, false, false);
         }
+      } else {
+        return new ReporterDetails();
       }
     } else {
       if (!structureValidatorState.getFolderManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
         "schemas")) {
-        if (!structureValidatorState.getFolderManager()
-          .checkIfExistsFolderInsideRepresentation(structureValidatorState.getIpPath(), "schemas")) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "We recommend including all XML schema documents for any structured metadata within package. These schema documents SHOULD be placed in a sub-folder called schemas within the Information Package root folder and/or the representation folder.",
-            false, false);
+        String message = checkIfExistsFolderInRepresentations(structureValidatorState, "schemas");
+        if (message.length() > 0) {
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, false, false);
         }
+      } else {
+        return new ReporterDetails();
       }
     }
     return new ReporterDetails();
@@ -569,5 +569,46 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     }
 
     return isZip;
+  }
+
+  private String checkIfExistsZipFolderInRepresentations(StructureValidatorState structureValidatorState, String folder)
+    throws IOException {
+    List<String> representationFoldersNames = structureValidatorState.getZipManager()
+      .getRepresentationsFoldersNames(structureValidatorState.getIpPath());
+    StringBuilder message = new StringBuilder();
+    int i = 0;
+    for (String representation : representationFoldersNames) {
+      if (!structureValidatorState.getZipManager()
+        .checkIfExistsFolderRepresentation(structureValidatorState.getIpPath(), folder, representation)) {
+        message.append("Not exists ").append(folder).append(" folder in ").append(representation);
+        if (i != representationFoldersNames.size() - 1) {
+          message.append(", ");
+        } else {
+          message.append(".");
+        }
+        i++;
+      }
+    }
+    return message.toString();
+  }
+
+  private String checkIfExistsFolderInRepresentations(StructureValidatorState structureValidatorState, String folder) {
+    List<String> representationFoldersNames = structureValidatorState.getFolderManager()
+      .getRepresentationsFoldersNames(structureValidatorState.getIpPath());
+    StringBuilder message = new StringBuilder();
+    int i = 0;
+    for (String representation : representationFoldersNames) {
+      if (!structureValidatorState.getFolderManager()
+        .checkIfExistsFolderRepresentation(structureValidatorState.getIpPath(), "schemas", representation)) {
+        message.append("Not exists ").append(folder).append(" folder in ").append(representation);
+        if (i != representationFoldersNames.size() - 1) {
+          message.append(", ");
+        } else {
+          message.append(".");
+        }
+        i++;
+      }
+    }
+    return message.toString();
   }
 }

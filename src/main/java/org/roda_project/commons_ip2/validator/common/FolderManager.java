@@ -426,4 +426,16 @@ public class FolderManager {
     }
     return additionalFolders;
   }
+
+  public boolean checkIfExistsFolderRepresentation(Path ipPath,String folder, String representation){
+    File[] representationFiles = ipPath.resolve("representations").resolve(representation).toFile().listFiles();
+    if(representationFiles != null){
+      for(File representationFile: representationFiles){
+        if(representationFile.isDirectory() && representationFile.getName().equals(folder)){
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 }
