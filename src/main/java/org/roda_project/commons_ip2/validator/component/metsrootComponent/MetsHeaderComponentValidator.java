@@ -237,7 +237,7 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
         String role = a.getROLE();
         String type = a.getTYPE();
         String otherType = a.getOTHERTYPE();
-        if (role.equals("CREATOR") && type.equals("OTHER") && otherType.equals("SOFTWARE")) {
+        if ((role != null && role.equals("CREATOR")) && (type != null && type.equals("OTHER")) && (otherType != null && otherType.equals("SOFTWARE"))) {
           found = true;
           break;
         }
@@ -266,7 +266,7 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
         String role = a.getROLE();
         String type = a.getTYPE();
         String otherType = a.getOTHERTYPE();
-        if (role.equals("CREATOR") && type.equals("OTHER") && otherType.equals("SOFTWARE")) {
+        if ((role != null && role.equals("CREATOR")) && (type != null && type.equals("OTHER")) && (otherType != null && otherType.equals("SOFTWARE"))) {
           return new ReporterDetails();
         }
       }
@@ -292,7 +292,7 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
         String role = a.getROLE();
         String type = a.getTYPE();
         String otherType = a.getOTHERTYPE();
-        if (role.equals("CREATOR") && type.equals("OTHER") && otherType.equals("SOFTWARE")) {
+        if ((role != null && role.equals("CREATOR")) && (type != null && type.equals("OTHER")) && (otherType != null && otherType.equals("SOFTWARE"))) {
           return new ReporterDetails();
         }
       }
@@ -317,7 +317,7 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
         String role = a.getROLE();
         String type = a.getTYPE();
         String otherType = a.getOTHERTYPE();
-        if (role.equals("CREATOR") && type.equals("OTHER") && otherType.equals("SOFTWARE")) {
+        if ((role != null && role.equals("CREATOR")) && (type != null && type.equals("OTHER")) && (otherType != null && otherType.equals("SOFTWARE"))) {
           if (a.getName() == null) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
               Message.createErrorMessage("mets/metsHdr/agent/name can't be null, in %1$s the value is null",
@@ -350,7 +350,7 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
         String role = a.getROLE();
         String type = a.getTYPE();
         String otherType = a.getOTHERTYPE();
-        if (role.equals("CREATOR") && type.equals("OTHER") && otherType.equals("SOFTWARE")) {
+        if ((role != null && role.equals("CREATOR")) && (type != null && type.equals("OTHER")) && (otherType != null && otherType.equals("SOFTWARE"))) {
           List<MetsType.MetsHdr.Agent.Note> notes = a.getNote();
           if (notes == null || notes.isEmpty()) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
@@ -398,7 +398,7 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
       String role = a.getROLE();
       String type = a.getTYPE();
       String otherType = a.getOTHERTYPE();
-      if (role.equals("CREATOR") && type.equals("OTHER") && otherType.equals("SOFTWARE")) {
+      if ((role != null && role.equals("CREATOR")) && (type != null && type.equals("OTHER")) && (otherType != null && otherType.equals("SOFTWARE"))) {
         List<MetsType.MetsHdr.Agent.Note> notes = a.getNote();
         if (notes == null || notes.isEmpty()) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,

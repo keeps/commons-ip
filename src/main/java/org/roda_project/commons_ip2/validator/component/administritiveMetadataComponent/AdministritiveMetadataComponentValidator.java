@@ -347,7 +347,7 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
           for (AmdSecType amd : metsValidatorState.getMets().getAmdSec()) {
             for (MdSecType md : amd.getDigiprovMD()) {
               MdSecType.MdRef mdRef = md.getMdRef();
-              if (mdRef != null) {
+              if (mdRef != null && mdRef.getHref() != null) {
                 String hrefDecoded = URLDecoder.decode(mdRef.getHref(), UTF_8);
                 if (metsValidatorState.isRootMets()) {
                   if (metadataFiles.containsKey(metsValidatorState.getMets().getOBJID() + "/" + hrefDecoded)) {
@@ -364,7 +364,7 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
           if (metadataFiles.containsValue(false)) {
             for (MdSecType md : metsValidatorState.getMets().getDmdSec()) {
               MdSecType.MdRef mdRef = md.getMdRef();
-              if (mdRef != null) {
+              if (mdRef != null && mdRef.getHref() != null) {
                 String hrefDecoded = URLDecoder.decode(mdRef.getHref(), UTF_8);
                 if (metsValidatorState.isRootMets()) {
                   if (metadataFiles.containsKey(metsValidatorState.getMets().getOBJID() + "/" + hrefDecoded)) {
@@ -656,7 +656,7 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
       for (MdSecType md : digiprov) {
         MdSecType.MdRef mdRef = md.getMdRef();
         StringBuilder message = new StringBuilder();
-        if (mdRef != null) {
+        if (mdRef != null && mdRef.getHref() != null) {
           String href = URLDecoder.decode(mdRef.getHref(), UTF_8);
           if (structureValidatorState.isZipFileFlag()) {
             StringBuilder path = new StringBuilder();
@@ -767,7 +767,7 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
       List<MdSecType> digiprov = amdSecType.getDigiprovMD();
       for (MdSecType md : digiprov) {
         MdSecType.MdRef mdRef = md.getMdRef();
-        if (mdRef != null) {
+        if (mdRef != null && mdRef.getHref() != null) {
           String href = URLDecoder.decode(mdRef.getHref(), UTF_8);
           Long size = mdRef.getSIZE();
           if (size == null) {
@@ -1187,7 +1187,7 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
       if (rigthsMD != null && !rigthsMD.isEmpty()) {
         for (MdSecType rmd : rigthsMD) {
           MdSecType.MdRef mdRef = rmd.getMdRef();
-          if (mdRef != null) {
+          if (mdRef != null && mdRef.getHref() != null) {
             String href = URLDecoder.decode(mdRef.getHref(), UTF_8);
             StringBuilder message = new StringBuilder();
             if (structureValidatorState.isZipFileFlag()) {
@@ -1301,7 +1301,7 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
       if (rigthsMD != null && !rigthsMD.isEmpty()) {
         for (MdSecType rmd : rigthsMD) {
           MdSecType.MdRef mdRef = rmd.getMdRef();
-          if (mdRef != null) {
+          if (mdRef != null && mdRef.getHref() != null) {
             String href = URLDecoder.decode(mdRef.getHref(), UTF_8);
             Long size = mdRef.getSIZE();
             if (size == null) {

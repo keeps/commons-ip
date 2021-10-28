@@ -210,7 +210,7 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
             regex);
           for (MdSecType md : dmdSec) {
             MdSecType.MdRef mdRef = md.getMdRef();
-            if (mdRef != null) {
+            if (mdRef != null && mdRef.getHref() != null) {
               String hrefDecoded = URLDecoder.decode(mdRef.getHref(), "UTF-8");
               if (metsValidatorState.isRootMets()) {
                 if (metadataFiles.containsKey(mets.getOBJID() + "/" + hrefDecoded)) {
@@ -229,7 +229,7 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
             for (AmdSecType amd : mets.getAmdSec()) {
               for (MdSecType md : amd.getDigiprovMD()) {
                 MdSecType.MdRef mdRef = md.getMdRef();
-                if (mdRef != null) {
+                if (mdRef != null && mdRef.getHref() != null) {
                   String hrefDecoded = URLDecoder.decode(mdRef.getHref(), "UTF-8");
                   if (metsValidatorState.isRootMets()) {
                     if (metadataFiles.containsKey(mets.getOBJID() + "/" + hrefDecoded)) {
