@@ -156,7 +156,7 @@ public class ZipManager {
       }
       byte[] hash = messageDigest.digest();
       String fileChecksum = DatatypeConverter.printHexBinary(hash);
-      if (!checksum.equals(fileChecksum)) {
+      if (!checksum.equalsIgnoreCase(fileChecksum)) {
         valid = false;
       }
     }

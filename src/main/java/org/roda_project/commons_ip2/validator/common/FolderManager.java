@@ -81,7 +81,7 @@ public class FolderManager {
         }
         byte[] hash = messageDigest.digest();
         String fileChecksum = DatatypeConverter.printHexBinary(hash);
-        if (!checksum.equals(fileChecksum)) {
+        if (!checksum.equalsIgnoreCase(fileChecksum)) {
           valid = false;
         }
         stream.close();
@@ -217,7 +217,7 @@ public class FolderManager {
   }
 
   public Boolean checkRootFolderName(Path path, String OBJECTID) {
-    return path.endsWith(OBJECTID);
+    return path.getParent().endsWith(OBJECTID);
   }
 
   public boolean checkIfExistsFolderInRoot(Path path, String folder) {
