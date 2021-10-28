@@ -183,7 +183,7 @@ public class EARKPyIPValidator {
     }
 
     InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
-    metsValidatorState.setMetsPath(ipPath);
+    metsValidatorState.setMetsPath(earksipPath.toString());
     metsValidatorState.setMetsName(ipPath);
     metsValidatorState.setIsRootMets(true);
     metsValidatorState.setMets(metsRoot.instatiateMetsFile());

@@ -11,7 +11,6 @@ import java.util.List;
  * @author João Gomes <jgomes@keep.pt>
  */
 public class ReporterDetails {
-  private static final Logger LOGGER = LoggerFactory.getLogger(ReporterDetails.class);
   private String detail;
   private boolean valid;
   private final List<String> issues;
