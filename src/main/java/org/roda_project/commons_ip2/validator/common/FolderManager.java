@@ -58,7 +58,7 @@ public class FolderManager {
     return tmp[tmp.length - 1];
   }
 
-  public boolean checkPathExists(Path path) throws IOException {
+  public boolean checkPathExists(Path path) {
     return Files.exists(path);
   }
 
