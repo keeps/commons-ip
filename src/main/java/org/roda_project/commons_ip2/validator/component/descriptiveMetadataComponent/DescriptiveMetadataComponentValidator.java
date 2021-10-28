@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -467,26 +468,40 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
     if (metsStream != null) {
       metsParser.parse(dmdSecHandler, metsStream);
     }
-    ReporterDetails details = new ReporterDetails();
-
+    int numberOfMdRefs = 0;
     for (MdSecType mdSec : dmdSec) {
-      MdSecType.MdRef mdRef = mdSec.getMdRef();
-      if (dmdSecType.get(mdRef.getID()) == null) {
-        details.setValid(false);
-        details.addIssue(Message.createErrorMessage("mets/dmdSec/mdRef[@xlink:type=’simple’] in %1$s can't be null",
-          metsValidatorState.getMetsName(), metsValidatorState.isRootMets()));
-      } else {
-        if (!dmdSecType.get(mdRef.getID()).equals("simple")) {
-          StringBuilder message = new StringBuilder();
-          message.append("Value ").append(dmdSecType.get(mdRef.getID()).equals("simple"))
-            .append(" in %1$s for mets/dmdSec/mdRef[@xlink:type=’simple’] isn't valid, must be 'simple'");
-          details.setValid(false);
-          details.addIssue(Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
-            metsValidatorState.isRootMets()));
-        }
+      if (mdSec.getMdRef() != null) {
+        numberOfMdRefs++;
       }
     }
-    return details;
+    if (dmdSecType.size() < numberOfMdRefs) {
+      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+        Message.createErrorMessage("mets/dmdSec/mdRef[@xlink:type=’simple’] in %1$s can't be null",
+          metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+        false, false);
+    } else {
+      for (Map.Entry<String, String> entry : dmdSecType.entrySet()) {
+        if (entry.getValue() == null) {
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            Message.createErrorMessage("mets/dmdSec/mdRef[@xlink:type=’simple’] in %1$s can't be null",
+              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+            false, false);
+        }
+      }
+      Map<String, String> typesInvalid = dmdSecType.entrySet().stream()
+        .filter(type -> !type.getValue().equals("simple"))
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+      if (!typesInvalid.isEmpty()) {
+        StringBuilder message = new StringBuilder();
+        message.append("Values ");
+        typesInvalid.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList())
+          .forEach(type -> message.append(type).append(","));
+        message.append(" in %1$s for mets/dmdSec/mdRef[@xlink:type=’simple’] isn't valid, must be 'simple'");
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+          message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+      }
+    }
+    return new ReporterDetails();
   }
 
   /*
