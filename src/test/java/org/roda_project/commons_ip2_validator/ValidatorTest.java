@@ -62,7 +62,7 @@ public class ValidatorTest {
   // }
 
   /* Full SIP */
-  @Test
+  //@Test
   public void validateFullSipZIP()
     throws IOException, URISyntaxException, ParserConfigurationException, SAXException, NoSuchAlgorithmException {
     LOGGER.info("Validate - Full-EARK-SIP");
