@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -138,22 +137,24 @@ public class ValidationReportOutputJson {
         jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
           Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_CSIP);
         jsonGenerator.writeEndObject();
-        if (ipType.equals("SIP")) {
-          // header -> specifications -> SIP
-          jsonGenerator.writeStartObject();
-          jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
-            Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-          jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
-            Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_SIP);
-          jsonGenerator.writeEndObject();
-        } else if (ipType.equals("AIP")) {
-          // header -> specifications -> AIP
-          jsonGenerator.writeStartObject();
-          jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
-            Constants.VALIDATION_REPORT_HEADER_AIP_VERSION);
-          jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
-            Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_AIP);
-          jsonGenerator.writeEndObject();
+        if (ipType != null) {
+          if (ipType.equals("SIP")) {
+            // header -> specifications -> SIP
+            jsonGenerator.writeStartObject();
+            jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
+              Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+            jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
+              Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_SIP);
+            jsonGenerator.writeEndObject();
+          } else if (ipType.equals("AIP")) {
+            // header -> specifications -> AIP
+            jsonGenerator.writeStartObject();
+            jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
+              Constants.VALIDATION_REPORT_HEADER_AIP_VERSION);
+            jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
+              Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_AIP);
+            jsonGenerator.writeEndObject();
+          }
         }
         jsonGenerator.writeEndArray();
         // header -> version_commons_ip
@@ -307,8 +308,7 @@ public class ValidationReportOutputJson {
       LOGGER.debug("Unable to close validation reporter file", e);
     } finally {
       if (outputStream != null) {
-        LOGGER.info("A report was generated with a listing of information about the individual validations.");
-        LOGGER.info("The report file is located at {}", outputFile.normalize().toAbsolutePath());
+        System.out.println(outputFile.normalize().toAbsolutePath());
       } else {
         LOGGER.info(
           "A report with a listing of information  about the individual validations could not be generated, please submit a bug report to help us fix this.");
@@ -418,44 +418,5 @@ public class ValidationReportOutputJson {
       }
     }
     return true;
-  }
-
-  private class RequirementsComparator implements Comparator<String> {
-    private int compareInt(int c1, int c2) {
-      if (c1 < c2) {
-        return -1;
-      } else {
-        if (c1 > c2) {
-          return 1;
-        }
-        return 0;
-      }
-    }
-
-    private int calculateWeight(String o) {
-      int c;
-
-      if (o.startsWith("CSIPSTR")) {
-        c = 1000;
-        c += Integer.parseInt(o.substring("CSIPSTR".length()));
-      } else if (o.startsWith("CSIP")) {
-        c = 2000;
-        c += Integer.parseInt(o.substring("CSIP".length()));
-      } else if (o.startsWith("SIP")) {
-        c = 4000;
-        c += Integer.parseInt(o.substring("SIP".length()));
-      } else if (o.startsWith("AIP")) {
-        c = 4000;
-        c += Integer.parseInt(o.substring("AIP".length()));
-      } else {
-        c = 9000;
-      }
-      return c;
-    }
-
-    @Override
-    public int compare(String o1, String o2) {
-      return compareInt(calculateWeight(o1), calculateWeight(o2));
-    }
   }
 }

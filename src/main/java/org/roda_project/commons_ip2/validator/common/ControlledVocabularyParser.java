@@ -23,10 +23,10 @@ public class ControlledVocabularyParser {
   public static List<String> parse(String resourcePath) throws IOException, SAXException, ParserConfigurationException {
     SAXParserFactory factory = SAXParserFactory.newInstance();
     List<String> data = new ArrayList<>();
-      SAXParser saxParser = factory.newSAXParser();
-      ControlledVocabularyHandler controlledVocabularyHandler = new ControlledVocabularyHandler("Term", data);
-      InputStream stream = ClassLoader.getSystemResourceAsStream(resourcePath);
-      saxParser.parse(stream, controlledVocabularyHandler);
-      return data;
+    SAXParser saxParser = factory.newSAXParser();
+    ControlledVocabularyHandler controlledVocabularyHandler = new ControlledVocabularyHandler("Term", data);
+    InputStream stream = ClassLoader.getSystemResourceAsStream(resourcePath);
+    saxParser.parse(stream, controlledVocabularyHandler);
+    return data;
   }
 }

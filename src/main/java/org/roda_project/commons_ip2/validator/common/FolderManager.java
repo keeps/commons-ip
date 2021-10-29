@@ -58,7 +58,7 @@ public class FolderManager {
     return tmp[tmp.length - 1];
   }
 
-  public boolean checkPathExists(Path path) throws IOException {
+  public boolean checkPathExists(Path path) {
     return Files.exists(path);
   }
 
@@ -68,23 +68,19 @@ public class FolderManager {
     if (!Files.exists(path)) {
       valid = false;
     } else {
-      if (Files.size(path) == 0) {
-        valid = false;
-      } else {
-        InputStream stream = new FileInputStream(path.toFile());
-        MessageDigest messageDigest = MessageDigest.getInstance(alg);
-        byte[] buffer = new byte[8192];
-        int numOfBytesRead;
-        while ((numOfBytesRead = stream.read(buffer)) > 0) {
-          messageDigest.update(buffer, 0, numOfBytesRead);
-        }
-        byte[] hash = messageDigest.digest();
-        String fileChecksum = DatatypeConverter.printHexBinary(hash);
-        if (!checksum.equals(fileChecksum)) {
-          valid = false;
-        }
-        stream.close();
+      InputStream stream = new FileInputStream(path.toFile());
+      MessageDigest messageDigest = MessageDigest.getInstance(alg);
+      byte[] buffer = new byte[8192];
+      int numOfBytesRead;
+      while ((numOfBytesRead = stream.read(buffer)) > 0) {
+        messageDigest.update(buffer, 0, numOfBytesRead);
       }
+      byte[] hash = messageDigest.digest();
+      String fileChecksum = DatatypeConverter.printHexBinary(hash);
+      if (!checksum.equalsIgnoreCase(fileChecksum)) {
+        valid = false;
+      }
+      stream.close();
     }
     return valid;
   }
@@ -216,7 +212,7 @@ public class FolderManager {
   }
 
   public Boolean checkRootFolderName(Path path, String OBJECTID) {
-    return path.endsWith(OBJECTID);
+    return path.getParent().endsWith(OBJECTID);
   }
 
   public boolean checkIfExistsFolderInRoot(Path path, String folder) {
@@ -268,21 +264,14 @@ public class FolderManager {
   }
 
   public boolean checkIfExistsFolderInsideRepresentation(Path path, String folder) {
-    File[] root = path.toFile().listFiles();
-    for (File file : root) {
-      if (file.getName().equals("representations")) {
-        if (file.isDirectory()) {
-          File[] insideFiles = file.listFiles();
-          for (File f : insideFiles) {
-            if (f.isDirectory()) {
-              File[] representationFiles = file.listFiles();
-              for (File representationFile : representationFiles) {
-                if (representationFile.getName().equals(folder)) {
-                  if (representationFile.isDirectory()) {
-                    return true;
-                  }
-                }
-              }
+    File[] representationFiles = path.resolve("representations").toFile().listFiles();
+    if (representationFiles != null && representationFiles.length != 0) {
+      for (File representation : representationFiles) {
+        if (representation.isDirectory()) {
+          File[] filesInsideRepresentation = representation.listFiles();
+          for (File fileInside : filesInsideRepresentation) {
+            if (fileInside.getName().equals(folder) && fileInside.isDirectory()) {
+              return true;
             }
           }
         }
@@ -431,5 +420,17 @@ public class FolderManager {
       }
     }
     return additionalFolders;
+  }
+
+  public boolean checkIfExistsFolderRepresentation(Path ipPath, String folder, String representation) {
+    File[] representationFiles = ipPath.resolve("representations").resolve(representation).toFile().listFiles();
+    if (representationFiles != null) {
+      for (File representationFile : representationFiles) {
+        if (representationFile.isDirectory() && representationFile.getName().equals(folder)) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 }

@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -62,7 +63,8 @@ public class ValidatorTest {
 
   /* Full SIP */
   @Test
-  public void validateFullSipZIP() throws IOException, URISyntaxException, ParserConfigurationException, SAXException {
+  public void validateFullSipZIP()
+    throws IOException, URISyntaxException, ParserConfigurationException, SAXException, NoSuchAlgorithmException {
     LOGGER.info("Validate - Full-EARK-SIP");
 
     // URI resource = getClass().getResource("/").toURI();
@@ -71,7 +73,8 @@ public class ValidatorTest {
     Path reportPath = Paths.get("/home/jgomes/Desktop/Compliance")
       .resolve("uuid-5b7be427-9889-4f25-b36f-0b36f63db67f.json");
     ;
-
+    Path reportPathPyIp = Paths.get("/home/jgomes/Desktop/Compliance")
+      .resolve("uuid-5b7be427-9889-4f25-b36f-0b36f63db67f-PYIP.json");
     ValidationReportOutputJson reportOutputJson = new ValidationReportOutputJson(reportPath, earkSIPath);
     EARKSIPValidator earksipValidator = new EARKSIPValidator(reportOutputJson);
     ValidationObserver observer = new ProgressValidationLoggerObserver();
@@ -79,7 +82,7 @@ public class ValidatorTest {
     boolean validate = earksipValidator.validate();
     LOGGER.info("Done validate - Full-EARK-SIP");
 
-    Assert.assertFalse(validate);
+    Assert.assertTrue(validate);
   }
   //
   // /* Simple SIP */

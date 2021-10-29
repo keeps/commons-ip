@@ -60,6 +60,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java_version>1.8</java_version>
 		<plug.version.assembly>3.0.0</plug.version.assembly>
+		<springfox-version>3.0.0</springfox-version>
 	</properties>
 
 	<profiles>
@@ -396,6 +397,18 @@
 			<groupId>org.glassfish.jaxb</groupId>
 			<artifactId>jaxb-runtime</artifactId>
 			<version>2.3.5</version>
+		</dependency>
+
+		<!-- PyIP dependencies -->
+		<dependency>
+			<groupId>com.github.joschi.jackson</groupId>
+			<artifactId>jackson-datatype-threetenbp</artifactId>
+			<version>2.6.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>5.3.10</version>
 		</dependency>
 	</dependencies>
 </project>

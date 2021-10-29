@@ -156,7 +156,7 @@ public class ZipManager {
       }
       byte[] hash = messageDigest.digest();
       String fileChecksum = DatatypeConverter.printHexBinary(hash);
-      if (!checksum.equals(fileChecksum)) {
+      if (!checksum.equalsIgnoreCase(fileChecksum)) {
         valid = false;
       }
     }
@@ -434,7 +434,6 @@ public class ZipManager {
       } else {
         if (entry.getName().contains("/representations/")
           && (entry.getName().split("/").length > 3 && !entry.isDirectory())) {
-          ;
           String representationName = getRepresentationName(entry.getName());
           if (!representationsFoldersNames.contains(representationName)) {
             representationsFoldersNames.add(representationName);
@@ -456,7 +455,9 @@ public class ZipManager {
       if (entry.getName().contains("/representations/")) {
         if (entry.getName().split("/").length > 3) {
           String representationName = getRepresentationName(entry.getName());
-          representationsFoldersNames.add(representationName);
+          if (!representationsFoldersNames.contains(representationName)) {
+            representationsFoldersNames.add(representationName);
+          }
         }
       }
     }
@@ -471,10 +472,8 @@ public class ZipManager {
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
       if (entry.getName().contains("/representations/")) {
-        if (entry.getName().split("/").length > 3) {
-          if (!entry.isDirectory()) {
-            count++;
-          }
+        if (entry.getName().split("/").length == 3 && !entry.getName().endsWith("/")) {
+          count++;
         }
       }
     }
@@ -508,5 +507,20 @@ public class ZipManager {
     representationName.append(representations[0]).append("/").append(representations[1]).append("/")
       .append(representations[2]);
     return representationName.toString();
+  }
+
+  public boolean checkIfExistsFolderRepresentation(Path ipPath, String folder, String representation)
+    throws IOException {
+    ZipFile zipFile = new ZipFile(ipPath.toFile());
+    Enumeration entries = zipFile.entries();
+    StringBuilder regex = new StringBuilder();
+    regex.append(".+/").append(representation).append("/").append(folder);
+    while (entries.hasMoreElements()) {
+      ZipEntry entry = (ZipEntry) entries.nextElement();
+      if (entry.getName().matches(regex.toString())) {
+        return true;
+      }
+    }
+    return false;
   }
 }

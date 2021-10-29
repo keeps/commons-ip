@@ -13,6 +13,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class EARKSIPTest {
 
   @Test
   public void buildParseAndValidateEARKSIP()
-    throws IPException, ParseException, InterruptedException, IOException, ParserConfigurationException, SAXException {
+          throws IPException, ParseException, InterruptedException, IOException, ParserConfigurationException, SAXException, NoSuchAlgorithmException {
     LOGGER.info("Creating full E-ARK SIP");
     Path zipSIP = createFullEARKSIP_For_Test_Compliance();
     LOGGER.info("Done creating full E-ARK SIP");

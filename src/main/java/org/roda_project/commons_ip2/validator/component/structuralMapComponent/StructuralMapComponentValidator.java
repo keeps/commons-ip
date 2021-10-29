@@ -223,7 +223,8 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
             /* CSIP103 */
             notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP103_ID);
             ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP103_ID,
-              validateCSIP103(structureValidatorState,metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+              validateCSIP103(structureValidatorState, metsValidatorState)
+                .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
             /* CSIP104 */
             notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP104_ID);
@@ -261,7 +262,8 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
           /* CSIP107 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP107_ID);
           ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP107_ID,
-            validateCSIP107(structureValidatorState,metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+            validateCSIP107(structureValidatorState, metsValidatorState)
+              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP108 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP108_ID);
@@ -276,12 +278,14 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
           /* CSIP110 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP110_ID);
           ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP110_ID,
-            validateCSIP110(structureValidatorState,metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+            validateCSIP110(structureValidatorState, metsValidatorState)
+              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP111 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP111_ID);
           ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP111_ID,
-            validateCSIP111(structureValidatorState,metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+            validateCSIP111(structureValidatorState, metsValidatorState)
+              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP112 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP112_ID);
@@ -687,7 +691,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         if (div != null) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().equals("Metadata")) {
+            if (d.getLABEL() != null && d.getLABEL().equals("Metadata")) {
               String id = d.getID();
               if (id == null) {
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
@@ -730,7 +734,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         if (div != null) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().equals("Metadata")) {
+            if (d.getLABEL() != null && d.getLABEL().equals("Metadata")) {
               found = true;
             }
           }
@@ -772,7 +776,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         if (div != null) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().matches("Metadata.*?")) {
+            if (d.getLABEL() != null && d.getLABEL().matches("Metadata.*?")) {
               List<Object> admids = d.getADMID();
               if (admids != null && !admids.isEmpty()) {
                 for (Object o : admids) {
@@ -820,7 +824,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         if (div != null) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().matches("Metadata.*?")) {
+            if (d.getLABEL() != null && d.getLABEL().matches("Metadata.*?")) {
               List<Object> dmdids = d.getDMDID();
               if (!dmdids.isEmpty()) {
                 for (Object o : dmdids) {
@@ -857,7 +861,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
       List<MetsType.FileSec.FileGrp> fileGrps = fileSec.getFileGrp();
       boolean existDocumentation = false;
       for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
-        if (fileGrp.getUSE().equals("Documentation")) {
+        if (fileGrp.getUSE() != null && fileGrp.getUSE().equals("Documentation")) {
           existDocumentation = true;
           break;
         }
@@ -867,7 +871,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         if (div != null) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().equals("Documentation")) {
+            if (d.getLABEL() != null && d.getLABEL().equals("Documentation")) {
               found = true;
               break;
             }
@@ -906,7 +910,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         if (div != null) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().equals("Documentation")) {
+            if (d.getLABEL() != null && d.getLABEL().equals("Documentation")) {
               String id = d.getID();
               if (id == null) {
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
@@ -950,7 +954,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         if (div != null) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().equals("Documentation")) {
+            if (d.getLABEL() != null && d.getLABEL().equals("Documentation")) {
               found = true;
               break;
             }
@@ -984,7 +988,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
     if (structMap != null) {
       if (fileGrps != null && !fileGrps.isEmpty()) {
         for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
-          if (fileGrp.getUSE().equals("Documentation")) {
+          if (fileGrp.getUSE() != null && fileGrp.getUSE().equals("Documentation")) {
             if (!fileGrp.getFile().isEmpty()) {
               fileGrpDocumentation++;
             }
@@ -996,7 +1000,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         if (div != null) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().equals("Documentation")) {
+            if (d.getLABEL() != null && d.getLABEL().equals("Documentation")) {
               List<DivType.Fptr> ftprs = d.getFptr();
               structDocumentation = ftprs.size();
             }
@@ -1029,13 +1033,13 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         if (div != null) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().equals("Documentation")) {
+            if (d.getLABEL() != null && d.getLABEL().equals("Documentation")) {
               List<DivType.Fptr> ftprs = d.getFptr();
               if (ftprs != null && !ftprs.isEmpty()) {
                 for (DivType.Fptr fptr : ftprs) {
                   String fileid = ((MetsType.FileSec.FileGrp) fptr.getFILEID()).getID();
                   for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
-                    if (fileGrp.getUSE().equals("Documentation")) {
+                    if (fileGrp.getUSE() != null && fileGrp.getUSE().equals("Documentation")) {
                       String id = fileGrp.getID();
                       if (id.equals(fileid)) {
                         found = true;
@@ -1074,7 +1078,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
       List<MetsType.FileSec.FileGrp> fileGrps = fileSec.getFileGrp();
       boolean existSchemas = false;
       for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
-        if (fileGrp.getUSE().equals("Schemas")) {
+        if (fileGrp.getUSE() != null && fileGrp.getUSE().equals("Schemas")) {
           existSchemas = true;
           break;
         }
@@ -1084,7 +1088,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         if (div != null) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().equals("Schemas")) {
+            if (d.getLABEL() != null && d.getLABEL().equals("Schemas")) {
               found = true;
               break;
             }
@@ -1122,7 +1126,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         if (div != null) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().equals("Schemas")) {
+            if (d.getLABEL() != null && d.getLABEL().equals("Schemas")) {
               String id = d.getID();
               if (id == null) {
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
@@ -1165,7 +1169,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         if (div != null) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().equals("Schemas")) {
+            if (d.getLABEL() != null && d.getLABEL().equals("Schemas")) {
               found = true;
               break;
             }
@@ -1198,7 +1202,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
     if (structMap != null) {
       if (fileGrps != null && !fileGrps.isEmpty()) {
         for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
-          if (fileGrp.getUSE().equals("Schemas")) {
+          if (fileGrp.getUSE() != null && fileGrp.getUSE().equals("Schemas")) {
             if (!fileGrp.getFile().isEmpty()) {
               fileGrpSchemas++;
             }
@@ -1210,7 +1214,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         if (div != null) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().equals("Schemas")) {
+            if (d.getLABEL() != null && d.getLABEL().equals("Schemas")) {
               List<DivType.Fptr> ftprs = d.getFptr();
               structSchemas = ftprs.size();
             }
@@ -1243,13 +1247,13 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         if (div != null) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().equals("Schemas")) {
+            if (d.getLABEL() != null && d.getLABEL().equals("Schemas")) {
               List<DivType.Fptr> ftprs = d.getFptr();
               if (ftprs != null && !ftprs.isEmpty()) {
                 for (DivType.Fptr fptr : ftprs) {
                   String fileid = ((MetsType.FileSec.FileGrp) fptr.getFILEID()).getID();
                   for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
-                    if (fileGrp.getUSE().equals("Schemas")) {
+                    if (fileGrp.getUSE() != null && fileGrp.getUSE().equals("Schemas")) {
                       String id = fileGrp.getID();
                       if (id.equals(fileid)) {
                         found = true;
@@ -1289,7 +1293,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
       List<MetsType.FileSec.FileGrp> fileGrps = fileSec.getFileGrp();
       boolean existRepresentations = false;
       for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
-        if (fileGrp.getUSE().equals("Representations")) {
+        if (fileGrp.getUSE() != null && fileGrp.getUSE().equals("Representations")) {
           existRepresentations = true;
           break;
         }
@@ -1299,7 +1303,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         if (div != null) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().equals("Representations")) {
+            if (d.getLABEL() != null && d.getLABEL().equals("Representations")) {
               found = true;
               break;
             }
@@ -1336,7 +1340,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         if (div != null) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().equals("Representations")) {
+            if (d.getLABEL() != null && d.getLABEL().equals("Representations")) {
               String id = d.getID();
               if (id == null) {
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
@@ -1391,7 +1395,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
           if (div != null) {
             List<DivType> divs = div.getDiv();
             for (DivType d : divs) {
-              if (d.getLABEL().equals("Representations")) {
+              if (d.getLABEL() != null && d.getLABEL().equals("Representations")) {
                 found = true;
                 break;
               }
@@ -1434,7 +1438,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         if (div != null) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().equals("Representations")) {
+            if (d.getLABEL() != null && d.getLABEL().equals("Representations")) {
               List<DivType.Fptr> ftprs = d.getFptr();
               if (!ftprs.isEmpty()) {
                 structRepresentations = ftprs.size();
@@ -1474,7 +1478,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         if (div != null) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().equals("Representations")) {
+            if (d.getLABEL() != null && d.getLABEL().equals("Representations")) {
               List<DivType.Fptr> ftprs = d.getFptr();
               if (ftprs != null && ftprs.size() > 0) {
                 for (DivType.Fptr fptr : ftprs) {
@@ -1590,35 +1594,41 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
             String label = d.getLABEL();
-            if (structureValidatorState.isZipFileFlag()) {
-              StringBuilder path = new StringBuilder();
-              if (metsValidatorState.isRootMets()) {
-                if (metsValidatorState.getMets().getOBJID() != null) {
-                  path.append(metsValidatorState.getMets().getOBJID()).append("/").append(label.toLowerCase());
+            if (d.getLABEL() != null) {
+              if (structureValidatorState.isZipFileFlag()) {
+                StringBuilder path = new StringBuilder();
+                if (metsValidatorState.isRootMets()) {
+                  if (metsValidatorState.getMets().getOBJID() != null) {
+                    path.append(metsValidatorState.getMets().getOBJID()).append("/").append(label.toLowerCase());
+                  } else {
+                    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                      Message.createErrorMessage("mets/OBJECTID in %1$s can't be null",
+                        metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                      false, false);
+                  }
                 } else {
+                  path.append(metsValidatorState.getMetsPath()).append(label.toLowerCase());
+                }
+                if (!structureValidatorState.getZipManager().checkDirectory(structureValidatorState.getIpPath(),
+                  path.toString())) {
+                  message.append("mets/structMap[@LABEL='CSIP']/div/div/@LABEL in %1$s ( ").append(label).append(" )")
+                    .append("does not lead to a directory ( ").append(path).append(" )");
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    Message.createErrorMessage("mets/OBJECTID in %1$s can't be null", metsValidatorState.getMetsName(),
+                    Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
                       metsValidatorState.isRootMets()),
                     false, false);
                 }
               } else {
-                path.append(metsValidatorState.getMetsPath()).append(label.toLowerCase());
-              }
-              if (!structureValidatorState.getZipManager().checkDirectory(structureValidatorState.getIpPath(),
-                path.toString())) {
-                message.append("mets/structMap[@LABEL='CSIP']/div/div/@LABEL in %1$s ( ").append(label).append(" )")
-                  .append("does not lead to a directory ( ").append(path).append(" )");
-                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-                  message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
-              }
-            } else {
-              if (!structureValidatorState.getFolderManager()
-                .checkDirectory(Paths.get(metsValidatorState.getMetsPath()).resolve(label.toLowerCase()))) {
-                message.append("mets/structMap[@LABEL='CSIP']/div/div/@LABEL in %1$s ( ").append(label).append(" )")
-                  .append("does not lead to a directory ( ")
-                  .append(Paths.get(metsValidatorState.getMetsPath()).resolve(label.toLowerCase())).append(" )");
-                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-                  message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                if (!structureValidatorState.getFolderManager()
+                  .checkDirectory(Paths.get(metsValidatorState.getMetsPath()).resolve(label.toLowerCase()))) {
+                  message.append("mets/structMap[@LABEL='CSIP']/div/div/@LABEL in %1$s ( ").append(label).append(" )")
+                    .append("does not lead to a directory ( ")
+                    .append(Paths.get(metsValidatorState.getMetsPath()).resolve(label.toLowerCase())).append(" )");
+                  return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                    Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                      metsValidatorState.isRootMets()),
+                    false, false);
+                }
               }
             }
           }
@@ -1644,7 +1654,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         if (div != null && div.getLABEL().equals("CSIP")) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().matches("Representations/.*")) {
+            if (d.getLABEL() != null && d.getLABEL().matches("Representations/.*")) {
               List<DivType.Mptr> mptrs = d.getMptr();
               if (mptrs != null && !mptrs.isEmpty()) {
                 for (DivType.Mptr mptr : mptrs) {
@@ -1696,7 +1706,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         if (div != null && div.getLABEL().equals("CSIP")) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().matches("Representations/.*")) {
+            if (d.getLABEL() != null && d.getLABEL().matches("Representations/.*")) {
               List<DivType.Mptr> mptrs = d.getMptr();
               if (d.getFptr().isEmpty()) {
                 if (mptrs == null || mptrs.size() != 1) {
@@ -1818,7 +1828,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         if (div != null && div.getLABEL().equals("CSIP")) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().matches("Representations/")) {
+            if (d.getLABEL() != null && d.getLABEL().matches("Representations/")) {
               List<DivType.Mptr> mptrs = d.getMptr();
               if (!mptrs.isEmpty()) {
                 for (DivType.Mptr mptr : mptrs) {
@@ -1859,7 +1869,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         if (div != null && div.getLABEL().equals("CSIP")) {
           List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().matches("Representations/")) {
+            if (d.getLABEL() != null && d.getLABEL().matches("Representations/")) {
               List<DivType.Mptr> mptrs = d.getMptr();
               for (DivType.Mptr mptr : mptrs) {
                 String locType = mptr.getLOCTYPE();

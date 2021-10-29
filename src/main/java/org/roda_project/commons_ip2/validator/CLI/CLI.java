@@ -5,6 +5,7 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,9 +18,10 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.roda_project.commons_ip2.model.ValidationReport;
+import org.roda_project.commons_ip2.validator.EARKPyIPValidator;
 import org.roda_project.commons_ip2.validator.EARKSIPValidator;
 import org.roda_project.commons_ip2.validator.observer.ProgressValidationLoggerObserver;
+import org.roda_project.commons_ip2.validator.reporter.ValidationReportOutputJSONPyIP;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReportOutputJson;
 import org.roda_project.commons_ip2.validator.utils.ExitCodes;
 import org.xml.sax.SAXException;
@@ -43,13 +45,67 @@ public class CLI {
     reportOption.setRequired(false);
     reportOption.setOptionalArg(true);
     parameters.addOption(reportOption);
+    Option typeValidatorReportOption = new Option("r", "Type of Validation Report");
+    typeValidatorReportOption.setRequired(false);
+    typeValidatorReportOption.setOptionalArg(true);
+    typeValidatorReportOption.setArgs(1);
+    parameters.addOption(typeValidatorReportOption);
+    Option verbose = new Option("v", "Verbose Option");
+    verbose.setRequired(false);
+    verbose.setOptionalArg(false);
+    verbose.setArgs(0);
+    parameters.addOption(verbose);
+  }
+
+  public static void printUsageValidator(PrintStream printStream) {
+    StringBuilder out = new StringBuilder();
+
+    out.append("Usage: Commons-ip validator COMMAND [OPTIONS]\n");
+
+    out.append("\n");
+    out.append("Commands:");
+    out.append("\n\n");
+    out.append("\t").append(CLIConstants.CLI_OPTION_SIP_PATHS).append("\t\t")
+      .append("(required) Paths to the SIPs archive file or files").append("\n");
+    out.append("\t").append(CLIConstants.CLI_OPTION_REPORT_DIRECTORY).append("\t\t")
+      .append(
+        "(optional) Path to save the validation report. If not set a report will be " + "generated in the sip folder.")
+      .append("\n\n");
+    out.append("\t").append(CLIConstants.CLI_OPTION_REPORT_TYPE).append("\t\t")
+      .append("(optional) By default generate json report, with option eark generate E-ARK JSON").append("\n\n");
+    out.append("\t").append(CLIConstants.CLI_OPTION_VERBOSE).append("\t\t")
+            .append("(optional) Verbose command line output with all validation steps").append("/n");
+    out.append("\n");
+    printStream.append(out).flush();
+  }
+
+  public static void printUsage(PrintStream printStream) {
+    StringBuilder out = new StringBuilder();
+
+    out.append("Usage: Commons-ip validator COMMAND [OPTIONS]\n");
+
+    out.append("\n");
+    out.append("Commands:");
+    out.append("\n\n");
+    out.append("\t").append(CLIConstants.CLI_OPTION_VALIDATE).append("\t\t").append("Validate a SIP file").append("\n");
+
+    out.append("\n");
+    printStream.append(out).flush();
   }
 
   public int start(String[] args) {
     try {
       CommandLine commandLine = parser.parse(parameters, args);
+
       String[] sipPaths = commandLine.getOptionValues("i");
       String reportDirectoryPath = commandLine.getOptionValue("o");
+      String typeReportOption = commandLine.getOptionValue("r");
+
+      if (commandLine.hasOption("o") && reportDirectoryPath == null) {
+        printUsageValidator(System.out);
+        return ExitCodes.EXIT_PARSE_ARG;
+      }
+
       if (sipPaths == null || sipPaths.length == 0) {
         printMissingSipPath(System.out);
       }
@@ -57,7 +113,7 @@ public class CLI {
       if (reportDirectoryPath != null && !Files.isDirectory(Paths.get(reportDirectoryPath))) {
         int code = createDirectory(reportDirectoryPath);
         if (code == ExitCodes.EXIT_CODE_CREATE_DIRECTORY_FAILS) {
-          printErrors(System.out,"Cannot create the directory for the report.");
+          printErrors(System.out, "Cannot create the directory for the report.");
           return code;
         }
       }
@@ -78,56 +134,25 @@ public class CLI {
           }
 
         } while (Files.exists(reportPath));
-        ValidationReportOutputJson jsonReporter = new ValidationReportOutputJson(reportPath,sipPath);
-        EARKSIPValidator earksipValidator = new EARKSIPValidator(jsonReporter);
-        earksipValidator.addObserver(new ProgressValidationLoggerObserver());
-        earksipValidator.validate();
+
+        validate(typeReportOption, reportPath, sipPath, commandLine.hasOption("v"));
+
       }
 
     } catch (ParseException e) {
-      printErrors(System.out,"Can't parse resource files for validation");
+      printUsageValidator(System.out);
       return ExitCodes.EXIT_PARSE_ARG;
     } catch (DateTimeException d) {
-      printErrors(System.out,"Invalid date format error");
+      printErrors(System.out, "Invalid date format error");
       return ExitCodes.EXIT_CODE_INVALID_DATE_FORMAT;
     } catch (IOException | ParserConfigurationException | SAXException e) {
-      printErrors(System.out,"Error on object initialize");
+      printErrors(System.out, "Error on object initialize");
+      return ExitCodes.EXIT_CANNOT_CREATE_EARKVALIDATOR_OBJECT;
+    } catch (NoSuchAlgorithmException e) {
+      printErrors(System.out, "Error on object initialize EARKPYIP");
       return ExitCodes.EXIT_CANNOT_CREATE_EARKVALIDATOR_OBJECT;
     }
     return ExitCodes.EXIT_CODE_OK;
-  }
-
-  public static void printUsageValidator(PrintStream printStream) {
-    StringBuilder out = new StringBuilder();
-
-    out.append("Usage: Commons-ip validator COMMAND [OPTIONS]\n");
-
-    out.append("\n");
-    out.append("Commands:");
-    out.append("\n\n");
-    out.append("\t").append(CLIConstants.CLI_OPTION_SIP_PATHS).append("\t\t")
-      .append("(required) Paths to the SIPs archive file or files").append("\n");
-    out.append("\t").append(CLIConstants.CLI_OPTION_REPORT_DIRECTORY).append("\t\t")
-      .append(
-        "(optional) Path to save the validation report. If not set a report will be " + "generated in the sip folder.")
-      .append("\n");
-
-    out.append("\n");
-    printStream.append(out).flush();
-  }
-
-  public static void printUsage(PrintStream printStream) {
-    StringBuilder out = new StringBuilder();
-
-    out.append("Usage: Commons-ip validator COMMAND [OPTIONS]\n");
-
-    out.append("\n");
-    out.append("Commands:");
-    out.append("\n\n");
-    out.append("\t").append(CLIConstants.CLI_OPTION_VALIDATE).append("\t\t").append("Validate a SIP file").append("\n");
-
-    out.append("\n");
-    printStream.append(out).flush();
   }
 
   private void printMissingSipPath(PrintStream printStream) {
@@ -142,7 +167,7 @@ public class CLI {
     printStream.append(out).flush();
   }
 
-  private void printErrors(PrintStream printStream,String message) {
+  private void printErrors(PrintStream printStream, String message) {
     StringBuilder out = new StringBuilder();
 
     out.append("ERROR\n");
@@ -159,6 +184,29 @@ public class CLI {
       Files.createDirectories(Paths.get(path));
     } catch (IOException e) {
       return ExitCodes.EXIT_CODE_CREATE_DIRECTORY_FAILS;
+    }
+    return ExitCodes.EXIT_CODE_OK;
+  }
+
+  private int validate(String typeReportOption, Path reportPath, Path sipPath, boolean verbose)
+    throws IOException, ParserConfigurationException, SAXException, NoSuchAlgorithmException {
+    if (typeReportOption == null || typeReportOption.equals("default")) {
+      ValidationReportOutputJson jsonReporter = new ValidationReportOutputJson(reportPath, sipPath);
+      EARKSIPValidator earksipValidator = new EARKSIPValidator(jsonReporter);
+      if (verbose) {
+        earksipValidator.addObserver(new ProgressValidationLoggerObserver());
+      }
+      earksipValidator.validate();
+    } else if (typeReportOption.equals("eark")) {
+      ValidationReportOutputJSONPyIP jsonReporter = new ValidationReportOutputJSONPyIP(reportPath, sipPath);
+      EARKPyIPValidator earkPyIPValidator = new EARKPyIPValidator(jsonReporter);
+      if (verbose) {
+        earkPyIPValidator.addObserver(new ProgressValidationLoggerObserver());
+      }
+      earkPyIPValidator.validate();
+    } else {
+      printErrors(System.out, "Invalid Option of ReportType");
+      return ExitCodes.EXIT_REPORT_TYPE_INVALID;
     }
     return ExitCodes.EXIT_CODE_OK;
   }

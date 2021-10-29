@@ -329,7 +329,7 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
     List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
     StringBuilder message = new StringBuilder();
     for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
-      if (fileGrp.getUSE().equals("Documentation")) {
+      if (fileGrp.getUSE() != null && fileGrp.getUSE().equals("Documentation")) {
         List<FileType> files = fileGrp.getFile();
         if (files != null && !files.isEmpty()) {
           for (FileType file : files) {
@@ -387,7 +387,7 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
     List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
     StringBuilder message = new StringBuilder();
     for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
-      if (fileGrp.getUSE().equals("Schemas")) {
+      if (fileGrp.getUSE() != null && fileGrp.getUSE().equals("Schemas")) {
         List<FileType> files = fileGrp.getFile();
         for (FileType file : files) {
           List<FileType.FLocat> fLocats = file.getFLocat();
@@ -438,7 +438,7 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
     List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
     StringBuilder message = new StringBuilder();
     for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
-      if (fileGrp.getUSE().matches("Representations/")) {
+      if (fileGrp.getUSE() != null && fileGrp.getUSE().matches("Representations/")) {
         List<FileType> files = fileGrp.getFile();
         for (FileType file : files) {
           List<FileType.FLocat> fLocats = file.getFLocat();
@@ -532,7 +532,7 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
   private ReporterDetails validateCSIP62(MetsValidatorState metsValidatorState) {
     List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
     for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
-      if (fileGrp.getUSE().matches("Representations/")) {
+      if (fileGrp.getUSE() != null && fileGrp.getUSE().matches("Representations/")) {
         QName keyContentInformationType = new QName(HTTPS_DILCIS_EU_XML_METS_CSIPEXTENSION_METS,
           "CONTENTINFORMATIONTYPE", "csip");
         String cType = fileGrp.getOtherAttributes().get(keyContentInformationType);
@@ -1034,15 +1034,17 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
         if (admids != null && !admids.isEmpty()) {
           boolean found = false;
           for (Object o : admids) {
-            MdSecType.MdRef mdRef = (MdSecType.MdRef) o;
-            String admid = mdRef.getID();
+            MdSecType mdSecType = (MdSecType) o;
+            String admid = mdSecType.getMdRef().getID();
             for (AmdSecType amdSecType : amdSec) {
               List<MdSecType> digiProv = amdSecType.getDigiprovMD();
-              for (MdSecType mdSecType : digiProv) {
-                String id = mdSecType.getMdRef().getID();
-                if (admid.equals(id)) {
-                  found = true;
-                  break;
+              for (MdSecType mdSecT : digiProv) {
+                if (mdSecT.getMdRef() != null) {
+                  String id = mdSecT.getMdRef().getID();
+                  if (id != null && admid.equals(id)) {
+                    found = true;
+                    break;
+                  }
                 }
               }
             }
@@ -1074,11 +1076,11 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
         if (dmdids != null && !dmdids.isEmpty()) {
           boolean found = false;
           for (Object o : dmdids) {
-            MdSecType.MdRef mdRef = (MdSecType.MdRef) o;
-            String dmdid = mdRef.getID();
+            MdSecType mdSecType = (MdSecType) o;
+            String dmdid = mdSecType.getMdRef().getID();
             for (MdSecType md : dmdSec) {
               String id = md.getMdRef().getID();
-              if (dmdid.equals(id)) {
+              if (id != null && dmdid.equals(id)) {
                 found = true;
                 break;
               }

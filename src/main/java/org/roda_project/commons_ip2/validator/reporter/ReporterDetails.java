@@ -1,9 +1,5 @@
 package org.roda_project.commons_ip2.validator.reporter;
 
-import org.roda_project.commons_ip2.validator.component.fileComponent.StructureComponentValidator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +7,6 @@ import java.util.List;
  * @author João Gomes <jgomes@keep.pt>
  */
 public class ReporterDetails {
-  private static final Logger LOGGER = LoggerFactory.getLogger(ReporterDetails.class);
   private String detail;
   private boolean valid;
   private final List<String> issues;

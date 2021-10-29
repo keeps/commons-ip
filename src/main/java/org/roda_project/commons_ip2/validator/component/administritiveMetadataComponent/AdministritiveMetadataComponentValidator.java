@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -346,7 +347,7 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
           for (AmdSecType amd : metsValidatorState.getMets().getAmdSec()) {
             for (MdSecType md : amd.getDigiprovMD()) {
               MdSecType.MdRef mdRef = md.getMdRef();
-              if (mdRef != null) {
+              if (mdRef != null && mdRef.getHref() != null) {
                 String hrefDecoded = URLDecoder.decode(mdRef.getHref(), UTF_8);
                 if (metsValidatorState.isRootMets()) {
                   if (metadataFiles.containsKey(metsValidatorState.getMets().getOBJID() + "/" + hrefDecoded)) {
@@ -363,7 +364,7 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
           if (metadataFiles.containsValue(false)) {
             for (MdSecType md : metsValidatorState.getMets().getDmdSec()) {
               MdSecType.MdRef mdRef = md.getMdRef();
-              if (mdRef != null) {
+              if (mdRef != null && mdRef.getHref() != null) {
                 String hrefDecoded = URLDecoder.decode(mdRef.getHref(), UTF_8);
                 if (metsValidatorState.isRootMets()) {
                   if (metadataFiles.containsKey(metsValidatorState.getMets().getOBJID() + "/" + hrefDecoded)) {
@@ -604,28 +605,43 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
     if (metsStream != null) {
       metsParser.parse(amdSecHandler, metsStream);
     }
-    ReporterDetails details = new ReporterDetails();
+    int numberOfMdRef = 0;
     for (AmdSecType a : amdSec) {
-      List<MdSecType> digiprov = a.getDigiprovMD();
-      for (MdSecType md : digiprov) {
-        MdSecType.MdRef mdRef = md.getMdRef();
-
-        if (amdSecTypes.get(mdRef.getID()) == null) {
-          details.setValid(false);
-          details.addIssue(
-            Message.createErrorMessage("mets/amdSec/digiprovMD/mdRef[@xlink:type=’simple’] in %1$s can't be null",
-              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()));
-        } else {
-          if (!amdSecTypes.get(mdRef.getID()).equals("simple")) {
-            details.setValid(false);
-            details.addIssue(Message.createErrorMessage(
-              "mets/amdSec/digiprovMD/mdRef[@xlink:type=’simple’] value in %1$s must be 'simple'",
-              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()));
-          }
+      List<MdSecType> digiprovMds = a.getDigiprovMD();
+      for (MdSecType mdSecType : digiprovMds) {
+        if (mdSecType.getMdRef() != null) {
+          numberOfMdRef++;
         }
       }
     }
-    return details;
+    if (amdSecTypes.size() < numberOfMdRef) {
+      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+        Message.createErrorMessage("mets/amdSec/mdRef[@xlink:type=’simple’] in %1$s can't be null",
+          metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+        false, false);
+    } else {
+      for (Map.Entry<String, String> entry : amdSecTypes.entrySet()) {
+        if (entry.getValue() == null) {
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            Message.createErrorMessage("mets/amdSec/mdRef[@xlink:type=’simple’] in %1$s can't be null",
+              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+            false, false);
+        }
+      }
+      Map<String, String> typesInvalid = amdSecTypes.entrySet().stream()
+        .filter(type -> !type.getValue().equals("simple"))
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+      if (!typesInvalid.isEmpty()) {
+        StringBuilder message = new StringBuilder();
+        message.append("Values ");
+        typesInvalid.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList())
+          .forEach(type -> message.append(type).append(","));
+        message.append(" in %1$s for mets/amdSec/mdRef[@xlink:type=’simple’] isn't valid, must be 'simple'");
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+          message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+      }
+    }
+    return new ReporterDetails();
   }
 
   /*
@@ -640,7 +656,7 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
       for (MdSecType md : digiprov) {
         MdSecType.MdRef mdRef = md.getMdRef();
         StringBuilder message = new StringBuilder();
-        if (mdRef != null) {
+        if (mdRef != null && mdRef.getHref() != null) {
           String href = URLDecoder.decode(mdRef.getHref(), UTF_8);
           if (structureValidatorState.isZipFileFlag()) {
             StringBuilder path = new StringBuilder();
@@ -751,7 +767,7 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
       List<MdSecType> digiprov = amdSecType.getDigiprovMD();
       for (MdSecType md : digiprov) {
         MdSecType.MdRef mdRef = md.getMdRef();
-        if (mdRef != null) {
+        if (mdRef != null && mdRef.getHref() != null) {
           String href = URLDecoder.decode(mdRef.getHref(), UTF_8);
           Long size = mdRef.getSIZE();
           if (size == null) {
@@ -1118,28 +1134,43 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
     if (metsStream != null) {
       metsParser.parse(amdSecHandler, metsStream);
     }
+    int numberOfMdRef = 0;
     for (AmdSecType a : amdSec) {
       List<MdSecType> rigthsMD = a.getRightsMD();
       if (rigthsMD != null && !rigthsMD.isEmpty()) {
         for (MdSecType rmd : rigthsMD) {
           MdSecType.MdRef mdRef = rmd.getMdRef();
           if (mdRef != null) {
-            if (amdSecTypes.get(mdRef.getID()) == null) {
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                Message.createErrorMessage("mets/amdSec/rightsMD/mdRef[@xlink:type=’simple’] in %1$s can't be null ",
-                  metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-                false, false);
-            } else {
-              if (!amdSecTypes.get(mdRef.getID()).equals("simple")) {
-                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                  Message.createErrorMessage(
-                    "mets/amdSec/rightsMD/mdRef[@xlink:type=’simple’] value in %1$s isn't 'simple'",
-                    metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-                  false, false);
-              }
-            }
+            numberOfMdRef++;
           }
         }
+      }
+    }
+    if (amdSecTypes.size() < numberOfMdRef) {
+      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+        Message.createErrorMessage("mets/amdSec/rightsMD/mdRef[@xlink:type='simple'] in %1$s can't be null",
+          metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+        false, false);
+    } else {
+      for (Map.Entry<String, String> entry : amdSecTypes.entrySet()) {
+        if (entry.getValue() == null) {
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            Message.createErrorMessage("mets/amdSec/rightsMD/mdRef[@xlink:type='simple'] in %1$s can't be null",
+              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+            false, false);
+        }
+      }
+      Map<String, String> typesInvalid = amdSecTypes.entrySet().stream()
+        .filter(type -> !type.getValue().equals("simple"))
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+      if (!typesInvalid.isEmpty()) {
+        StringBuilder message = new StringBuilder();
+        message.append("Values ");
+        typesInvalid.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList())
+          .forEach(type -> message.append(type).append(","));
+        message.append(" in %1$s for mets/amdSec/rightsMD/mdRef[@xlink:type='simple'] isn't valid, must be 'simple'");
+        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+          message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
       }
     }
     return new ReporterDetails();
@@ -1156,7 +1187,7 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
       if (rigthsMD != null && !rigthsMD.isEmpty()) {
         for (MdSecType rmd : rigthsMD) {
           MdSecType.MdRef mdRef = rmd.getMdRef();
-          if (mdRef != null) {
+          if (mdRef != null && mdRef.getHref() != null) {
             String href = URLDecoder.decode(mdRef.getHref(), UTF_8);
             StringBuilder message = new StringBuilder();
             if (structureValidatorState.isZipFileFlag()) {
@@ -1270,7 +1301,7 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
       if (rigthsMD != null && !rigthsMD.isEmpty()) {
         for (MdSecType rmd : rigthsMD) {
           MdSecType.MdRef mdRef = rmd.getMdRef();
-          if (mdRef != null) {
+          if (mdRef != null && mdRef.getHref() != null) {
             String href = URLDecoder.decode(mdRef.getHref(), UTF_8);
             Long size = mdRef.getSIZE();
             if (size == null) {
