@@ -487,6 +487,7 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
    * administrative metadata section by ID.
    *
    * Nota: verificar se é id do digiprovMD ou amdSec
+   * 
    * @return reporter detail results
    */
   private ReporterDetails validateCSIP61(MetsValidatorState metsValidatorState) {
@@ -1023,34 +1024,38 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
     return new ReporterDetails();
   }
 
-  /*
+  /**
    * mets/fileSec/fileGrp/file/@ADMID If administrative metadata has been
    * provided for the file this attribute refers to the file’s administrative
    * metadata by ID.
+   * 
+   * @param metsValidatorState
+   *          the contextual METS validator state
+   * @return the result of the validation
    */
-  private ReporterDetails validateCSIP74(MetsValidatorState metsValidatorState) {
-    List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
-    List<AmdSecType> amdSec = metsValidatorState.getMets().getAmdSec();
+  private ReporterDetails validateCSIP74(final MetsValidatorState metsValidatorState) {
+    final List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
+    final List<AmdSecType> amdSec = metsValidatorState.getMets().getAmdSec();
 
     // Get all identifiers for DigiprovMD
-    List<String> amdIds = amdSec.stream().map(AmdSecType::getDigiprovMD).flatMap(List::stream)
+    final List<String> amdIds = amdSec.stream().map(AmdSecType::getDigiprovMD).flatMap(List::stream)
       .filter(dp -> dp.getMdRef() != null).map(dp -> dp.getMdRef().getID()).collect(Collectors.toList());
 
     // Get all file ADMIDs that are NOT in the list of DigiprovMD identifiers
-    List<String> admidsNotInAmd = fileGrps.stream().map(FileGrpType::getFile).flatMap(List::stream)
+    final List<String> admidsNotInAmd = fileGrps.stream().map(FileGrpType::getFile).flatMap(List::stream)
       .map(FileType::getADMID).flatMap(List::stream).filter(MdSecType.class::isInstance).map(MdSecType.class::cast)
       .filter(md -> md.getMdRef() != null).map(md -> md.getMdRef().getID()).distinct()
       .filter(admid -> !amdIds.contains(admid)).collect(Collectors.toList());
 
     // Report only valid if all ADMIDs are in DigiprovMD identifiers
-    ReporterDetails r = new ReporterDetails();
+    final ReporterDetails r = new ReporterDetails();
     r.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
     r.setSkipped(false);
     r.setValid(admidsNotInAmd.isEmpty());
 
     // for each ADMID not in the DigiprovMD create an issue
     for (String admid : admidsNotInAmd) {
-      StringBuilder message = new StringBuilder();
+      final StringBuilder message = new StringBuilder();
       message.append("Value ").append(admid)
         .append(" in %1$s for mets/fileSec/fileGrp/file/@ADMID does not match with any mets/amdSec/digiprovMd/@ID");
       r.addIssue(Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
