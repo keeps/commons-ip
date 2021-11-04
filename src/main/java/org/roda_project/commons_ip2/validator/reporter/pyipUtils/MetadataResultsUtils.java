@@ -69,7 +69,17 @@ public class MetadataResultsUtils {
       }
     }
     testResult.message(message.toString());
-    testResult.setSeverity(calculateSeverity(ConstantsCSIPspec.getSpecificationLevel(id), reporterDetails.isValid()));
+    Severity severity = null;
+    if (reporterDetails != null) {
+      if (id.startsWith("CSIP")) {
+        severity = calculateSeverity(ConstantsCSIPspec.getSpecificationLevel(id), reporterDetails.isValid());
+      } else if (id.startsWith("SIP")) {
+        severity = calculateSeverity(ConstantsSIPspec.getSpecificationLevel(id), reporterDetails.isValid());
+      } else if (id.startsWith("AIP")) {
+        severity = calculateSeverity(ConstantsAIPspec.getSpecificationLevel(id), reporterDetails.isValid());
+      }
+    }
+    testResult.setSeverity(severity);
     return testResult;
   }
 
@@ -89,11 +99,15 @@ public class MetadataResultsUtils {
     Map<String, ReporterDetails> failedResults = results.entrySet().stream()
       .filter(result -> !result.getValue().isValid()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     for (Map.Entry<String, ReporterDetails> result : failedResults.entrySet()) {
-      if (result.getKey().startsWith("CSIP")
-        && ConstantsCSIPspec.getSpecificationLevel(result.getKey()).equals("MUST")) {
-        return MetadataStatus.NOTVALID;
-      } else if (result.getKey().startsWith("SIP")
-        && ConstantsSIPspec.getSpecificationLevel(result.getKey()).equals("MUST")) {
+      String level = null;
+      if (result.getKey().startsWith("CSIP")) {
+        level = ConstantsCSIPspec.getSpecificationLevel(result.getKey());
+      } else if (result.getKey().startsWith("SIP")) {
+        level = ConstantsSIPspec.getSpecificationLevel(result.getKey());
+      } else if (result.getKey().startsWith("AIP")) {
+        level = ConstantsAIPspec.getSpecificationLevel(result.getKey());
+      }
+      if (level != null && level.equals("MUST")) {
         return MetadataStatus.NOTVALID;
       }
     }

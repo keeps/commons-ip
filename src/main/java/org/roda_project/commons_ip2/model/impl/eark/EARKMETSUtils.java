@@ -72,7 +72,7 @@ public final class EARKMETSUtils {
   public static MetsWrapper generateMETS(String id, String label, String profile, boolean mainMets,
     Optional<List<String>> ancestors, Path metsPath, IPHeader ipHeader, String type, IPContentType contentType,
     IPContentInformationType contentInformationType, boolean isMetadata, boolean isMetadataOther, boolean isSchemas,
-    boolean isDocumentation) throws IPException {
+    boolean isDocumentation,boolean isSubmission) throws IPException {
     Mets mets = new Mets();
     MetsWrapper metsWrapper = new MetsWrapper(mets, metsPath);
 
@@ -136,7 +136,7 @@ public final class EARKMETSUtils {
       FileGrp schemasFileGroup = createFileGroup(IPConstants.SCHEMAS_WITH_FIRST_LETTER_CAPITAL);
       fileSec.getFileGrp().add(schemasFileGroup);
       metsWrapper.setSchemasFileGroup(schemasFileGroup);
-      if (IPType.AIP.toString().equals(type)) {
+      if (IPType.AIP.toString().equals(type) && isSubmission) {
         FileGrp submissionFileGroup = createFileGroup(IPConstants.SUBMISSION);
         fileSec.getFileGrp().add(submissionFileGroup);
         metsWrapper.setSubmissionFileGroup(submissionFileGroup);
@@ -191,7 +191,7 @@ public final class EARKMETSUtils {
       metsWrapper.setDocumentationDiv(documentationDiv);
       mainDiv.getDiv().add(documentationDiv);
       // submission
-      if (IPType.AIP.toString().equals(type)) {
+      if (IPType.AIP.toString().equals(type) && isSubmission) {
         DivType submissionDiv = createDivForStructMap(IPConstants.SUBMISSION);
         metsWrapper.setSubmissionsDiv(submissionDiv);
         mainDiv.getDiv().add(submissionDiv);
@@ -377,9 +377,13 @@ public final class EARKMETSUtils {
     return mdRef;
   }
 
+  private static String escapeNCName(String id) {
+    return id.replaceAll("[:@$%&/+,;\\s]", "_");
+  }
+
   private static MdRef createMdRef(String id, String metadataPath) {
     MdRef mdRef = new MdRef();
-    mdRef.setID(id);
+    mdRef.setID(escapeNCName(id));
     mdRef.setType(IPConstants.METS_TYPE_SIMPLE);
     mdRef.setLOCTYPE(LocType.URL.toString());
     mdRef.setHref(METSUtils.encodeHref(metadataPath));
