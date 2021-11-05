@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -432,5 +433,26 @@ public class FolderManager {
       }
     }
     return false;
+  }
+
+  public HashMap<String,Boolean> getFiles(Path path){
+    HashMap<String,Boolean> files = new HashMap<>();
+    files.putAll(getFilesDirectory(path));
+    return files;
+  }
+
+  public HashMap<String, Boolean> getFilesDirectory(Path path) {
+    HashMap<String, Boolean> files = new HashMap<>();
+    File folder = path.toFile();
+    for (final File fileEntry : folder.listFiles()) {
+      if (fileEntry.isDirectory() && !fileEntry.getName().equals("metadata")) {
+        files.putAll(getFilesDirectory(Paths.get(fileEntry.getPath())));
+      } else {
+        if (!fileEntry.isDirectory() && !fileEntry.getName().equals("METS.xml") && !fileEntry.getName().equals("aip.json")) {
+          files.put(Paths.get(fileEntry.getPath()).toString(), false);
+        }
+      }
+    }
+    return files;
   }
 }

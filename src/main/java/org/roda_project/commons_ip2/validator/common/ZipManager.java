@@ -324,16 +324,9 @@ public class ZipManager {
     Enumeration entries = zipFile.entries();
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (!entry.getName().matches(".*/METS.xml")) {
-        if (!entry.getName().contains("/metadata")) {
-          if (!entry.isDirectory()) {
-            metadataFiles.put(entry.getName(), false);
-          }
-        }
-      } else {
-        if (entry.getName().split("/").length != 2) {
-          metadataFiles.put(entry.getName(), false);
-        }
+      if (!entry.getName().matches(".*/METS.xml") && !entry.getName().contains("/metadata") && !entry.isDirectory()
+        && !entry.getName().contains("/aip.json")) {
+        metadataFiles.put(entry.getName(), false);
       }
     }
     return metadataFiles;

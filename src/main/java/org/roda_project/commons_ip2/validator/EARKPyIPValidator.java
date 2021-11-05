@@ -104,6 +104,7 @@ public class EARKPyIPValidator {
           metsValidatorState.setMetsFiles(structureValidatorState.getZipManager().getFiles(earksipPath));
           subMets = structureValidatorState.getZipManager().getSubMets(earksipPath);
         } else {
+          metsValidatorState.setMetsFiles(structureValidatorState.getFolderManager().getFiles(earksipPath));
           subMets = structureValidatorState.getFolderManager().getSubMets(earksipPath);
         }
 

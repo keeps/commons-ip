@@ -155,8 +155,6 @@ public class EARKAIP extends AIPWrap {
 
       EARKUtils.addRepresentationsToZipAndMETS(this, getRepresentations(), zipEntries, mainMETSWrapper, buildDir);
 
-      EARKUtils.addDefaultSchemas(LOGGER, getSchemas(), buildDir);
-
       EARKUtils.addSchemasToZipAndMETS(zipEntries, mainMETSWrapper, getSchemas(), null);
 
       EARKUtils.addDocumentationToZipAndMETS(zipEntries, mainMETSWrapper, getDocumentation(), null);

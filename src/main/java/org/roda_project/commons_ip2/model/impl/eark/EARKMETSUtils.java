@@ -247,7 +247,7 @@ public final class EARKMETSUtils {
 
       // create file
       FileType fileType = new FileType();
-      fileType.setID(Utils.generateRandomAndPrefixedUUID());
+      fileType.setID(Utils.generateRandomAndPrefixedFileID());
 
       addMETSToZip(zipEntries, representationMETSWrapper, representationMetsPath, buildDir, false, fileType);
 
@@ -392,7 +392,7 @@ public final class EARKMETSUtils {
 
   public static void addDataFileToMETS(MetsWrapper representationMETS, IPFileShallow shallow) {
     FileType file = shallow.getFileType();
-    file.setID(Utils.generateRandomAndPrefixedUUID());
+    file.setID(Utils.generateRandomAndPrefixedFileID());
 
     // add to file section
     FLocat fileLocation = METSUtils.createShallowFileLocation(shallow.getFileLocation().toString());
@@ -410,7 +410,7 @@ public final class EARKMETSUtils {
   public static FileType addDataFileToMETS(MetsWrapper representationMETS, String dataFilePath, Path dataFile)
     throws IPException, InterruptedException {
     FileType file = new FileType();
-    file.setID(Utils.generateRandomAndPrefixedUUID());
+    file.setID(Utils.generateRandomAndPrefixedFileID());
 
     // set mimetype, date creation, etc.
     METSUtils.setFileBasicInformation(LOGGER, dataFile, file);
@@ -432,7 +432,7 @@ public final class EARKMETSUtils {
   public static FileType addSchemaFileToMETS(MetsWrapper metsWrapper, String schemaFilePath, Path schemaFile)
     throws IPException, InterruptedException {
     FileType file = new FileType();
-    file.setID(Utils.generateRandomAndPrefixedUUID());
+    file.setID(Utils.generateRandomAndPrefixedFileID());
 
     // set mimetype, date creation, etc.
     METSUtils.setFileBasicInformation(LOGGER, schemaFile, file);
@@ -456,7 +456,7 @@ public final class EARKMETSUtils {
   public static FileType addSubmissionFileToMETS(MetsWrapper metsWrapper, String submissionFilePath,
     Path submissionFile) throws IPException, InterruptedException {
     FileType file = new FileType();
-    file.setID(Utils.generateRandomAndPrefixedUUID());
+    file.setID(Utils.generateRandomAndPrefixedFileID());
 
     // set mimetype, date creation, etc.
     METSUtils.setFileBasicInformation(LOGGER, submissionFile, file);
@@ -476,7 +476,7 @@ public final class EARKMETSUtils {
   public static FileType addDocumentationFileToMETS(MetsWrapper metsWrapper, String documentationFilePath,
     Path documentationFile) throws IPException, InterruptedException {
     FileType file = new FileType();
-    file.setID(Utils.generateRandomAndPrefixedUUID());
+    file.setID(Utils.generateRandomAndPrefixedFileID());
 
     // set mimetype, date creation, etc.
     METSUtils.setFileBasicInformation(LOGGER, documentationFile, file);

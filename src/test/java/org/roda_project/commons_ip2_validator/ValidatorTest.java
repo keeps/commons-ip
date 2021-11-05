@@ -68,17 +68,17 @@ public class ValidatorTest {
     LOGGER.info("Validate - Full-EARK-SIP");
 
     // URI resource = getClass().getResource("/").toURI();
-    Path earkSIPath = Paths.get("/home/jgomes/Desktop/Compliance")
-      .resolve("uuid-5b7be427-9889-4f25-b36f-0b36f63db67f.zip");
+    Path earkSIPath = Paths.get("/home/jgomes/.roda/data/storage/aip")
+      .resolve("7dd09f80-f341-4a27-86be-08d93e2adabb.zip");
     Path reportPath = Paths.get("/home/jgomes/Desktop/Compliance")
-      .resolve("uuid-5b7be427-9889-4f25-b36f-0b36f63db67f.json");
+      .resolve("7dd09f80-f341-4a27-86be-08d93e2adabb-zip.json");
     ;
     Path reportPathPyIp = Paths.get("/home/jgomes/Desktop/Compliance")
       .resolve("uuid-5b7be427-9889-4f25-b36f-0b36f63db67f-PYIP.json");
     ValidationReportOutputJson reportOutputJson = new ValidationReportOutputJson(reportPath, earkSIPath);
     EARKSIPValidator earksipValidator = new EARKSIPValidator(reportOutputJson);
-    ValidationObserver observer = new ProgressValidationLoggerObserver();
-    earksipValidator.addObserver(observer);
+    //ValidationObserver observer = new ProgressValidationLoggerObserver();
+    //earksipValidator.addObserver(observer);
     boolean validate = earksipValidator.validate();
     LOGGER.info("Done validate - Full-EARK-SIP");
 

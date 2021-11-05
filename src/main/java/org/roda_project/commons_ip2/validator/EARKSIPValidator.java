@@ -102,6 +102,7 @@ public class EARKSIPValidator {
         metsValidatorState.setMetsFiles(structureValidatorState.getZipManager().getFiles(earksipPath));
         subMets = structureValidatorState.getZipManager().getSubMets(earksipPath);
       } else {
+        metsValidatorState.setMetsFiles(structureValidatorState.getFolderManager().getFiles(earksipPath));
         subMets = structureValidatorState.getFolderManager().getSubMets(earksipPath);
       }
 
@@ -190,7 +191,7 @@ public class EARKSIPValidator {
       }
 
       InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
-      metsValidatorState.setMetsPath(ipPath);
+      metsValidatorState.setMetsPath(earksipPath.toString());
       metsValidatorState.setMetsName(ipPath);
       metsValidatorState.setIsRootMets(true);
 
