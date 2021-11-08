@@ -1,10 +1,7 @@
 package org.roda_project.commons_ip2.validator.reporter;
 
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -28,8 +25,6 @@ import com.fasterxml.jackson.core.JsonGenerator;
 public class ValidationReportOutputJson {
   private static final Logger LOGGER = LoggerFactory.getLogger(ValidationReportOutputJson.class);
   private final Path sipPath;
-  private final Path reportPath;
-  private Path outputFile;
   private OutputStream outputStream;
   private JsonGenerator jsonGenerator;
   private int success;
@@ -41,9 +36,9 @@ public class ValidationReportOutputJson {
   private Map<String, ReporterDetails> results = new TreeMap<>(new RequirementsComparator());
   private String ipType = "";
 
-  public ValidationReportOutputJson(Path path, Path sipPath) {
+  public ValidationReportOutputJson(Path sipPath, OutputStream outputStream) {
     this.sipPath = sipPath;
-    this.reportPath = path;
+    this.outputStream = outputStream;
   }
 
   public int getSuccess() {
@@ -78,101 +73,62 @@ public class ValidationReportOutputJson {
     this.ipType = ipType;
   }
 
-  public void init() {
-    this.outputFile = reportPath;
+  public void init() throws IOException {
     this.success = 0;
     this.errors = 0;
     this.warnings = 0;
-    if (!outputFile.toFile().exists()) {
-      try {
-        Files.createFile(outputFile);
-      } catch (IOException e) {
-        LOGGER.warn("Could not create report file in current working directory. Attempting to use a temporary file", e);
-        try {
-          outputFile = Files.createTempFile(Constants.VALIDATION_REPORT_PREFIX, ".json");
-        } catch (IOException e1) {
-          LOGGER.error("Could not create report temporary file. Reporting will not function.", e1);
+      // Depois receber parametro new BufferedOutputStream(System.out)
+      JsonFactory jsonFactory = new JsonFactory();
+      jsonGenerator = jsonFactory.createGenerator(this.outputStream, JsonEncoding.UTF8).useDefaultPrettyPrinter();
+      jsonGenerator.writeStartObject();
+      // header object
+      jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_HEADER_KEY_HEADER);
+      jsonGenerator.writeStartObject();
+      // header -> title
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_KEY_TITLE,
+        Constants.VALIDATION_REPORT_HEADER_TITLE);
+      // header -> specifications
+      jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_HEADER_KEY_SPECIFICATIONS);
+      jsonGenerator.writeStartArray();
+      // header -> specifications -> CSIP
+      jsonGenerator.writeStartObject();
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
+        Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
+        Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_CSIP);
+      jsonGenerator.writeEndObject();
+      if (ipType != null) {
+        if (ipType.equals("SIP")) {
+          // header -> specifications -> SIP
+          jsonGenerator.writeStartObject();
+          jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
+            Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
+          jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
+            Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_SIP);
+          jsonGenerator.writeEndObject();
+        } else if (ipType.equals("AIP")) {
+          // header -> specifications -> AIP
+          jsonGenerator.writeStartObject();
+          jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
+            Constants.VALIDATION_REPORT_HEADER_AIP_VERSION);
+          jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
+            Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_AIP);
+          jsonGenerator.writeEndObject();
         }
       }
-    } else {
-      try {
-        Files.deleteIfExists(outputFile);
-        try {
-          Files.createFile(outputFile);
-        } catch (IOException e) {
-          LOGGER.warn("Could not create report file in current working directory. Attempting to use a temporary file",
-            e);
-          try {
-            outputFile = Files.createTempFile(Constants.VALIDATION_REPORT_PREFIX, ".json");
-          } catch (IOException e1) {
-            LOGGER.error("Could not create report temporary file. Reporting will not function.", e1);
-          }
-        }
-      } catch (IOException e) {
-        LOGGER.warn("Could not eliminate old report file in current working directory.", e);
-      }
-    }
-
-    if (outputFile != null) {
-      try {
-        // Depois receber parametro new BufferedOutputStream(System.out)
-
-        outputStream = new BufferedOutputStream(new FileOutputStream(outputFile.toFile()));
-        JsonFactory jsonFactory = new JsonFactory();
-        jsonGenerator = jsonFactory.createGenerator(outputStream, JsonEncoding.UTF8).useDefaultPrettyPrinter();
-        jsonGenerator.writeStartObject();
-        // header object
-        jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_HEADER_KEY_HEADER);
-        jsonGenerator.writeStartObject();
-        // header -> title
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_KEY_TITLE,
-          Constants.VALIDATION_REPORT_HEADER_TITLE);
-        // header -> specifications
-        jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_HEADER_KEY_SPECIFICATIONS);
-        jsonGenerator.writeStartArray();
-        // header -> specifications -> CSIP
-        jsonGenerator.writeStartObject();
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
-          Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
-          Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_CSIP);
-        jsonGenerator.writeEndObject();
-        if (ipType != null) {
-          if (ipType.equals("SIP")) {
-            // header -> specifications -> SIP
-            jsonGenerator.writeStartObject();
-            jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
-              Constants.VALIDATION_REPORT_HEADER_SIP_VERSION);
-            jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
-              Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_SIP);
-            jsonGenerator.writeEndObject();
-          } else if (ipType.equals("AIP")) {
-            // header -> specifications -> AIP
-            jsonGenerator.writeStartObject();
-            jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
-              Constants.VALIDATION_REPORT_HEADER_AIP_VERSION);
-            jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
-              Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_AIP);
-            jsonGenerator.writeEndObject();
-          }
-        }
-        jsonGenerator.writeEndArray();
-        // header -> version_commons_ip
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_VERSION_COMMONS_IP,
-          Constants.VALIDATION_REPORT_SPECIFICATION_COMMONS_IP_VERSION);
-        // header -> date (date of sip validation)
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_DATE,
-          new org.joda.time.DateTime().toString());
-        // header -> path of sip
-        jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_PATH, sipPath.toString());
-        jsonGenerator.writeEndObject();
-        // initialize validation array
-        jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_VALIDATION);
-        jsonGenerator.writeStartArray();
-      } catch (IOException e) {
-        LOGGER.error("Could not create an output stream for file '" + outputFile.normalize().toAbsolutePath() + "'", e);
-      }
-    }
+      jsonGenerator.writeEndArray();
+      // header -> version_commons_ip
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_VERSION_COMMONS_IP,
+        Constants.VALIDATION_REPORT_SPECIFICATION_COMMONS_IP_VERSION);
+      // header -> date (date of sip validation)
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_DATE,
+        new org.joda.time.DateTime().toString());
+      // header -> path of sip
+      jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_PATH, sipPath.toString());
+      jsonGenerator.writeEndObject();
+      // initialize validation array
+      jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_VALIDATION);
+      jsonGenerator.writeStartArray();
   }
 
   public void componentValidationResult(String specification, String id, String status, List<String> issues,
@@ -300,19 +256,12 @@ public class ValidationReportOutputJson {
 
   public void close() {
     try {
-      if (outputStream != null) {
+      if (this.outputStream != null) {
         jsonGenerator.close();
-        outputStream.close();
+        this.outputStream.close();
       }
     } catch (IOException e) {
       LOGGER.debug("Unable to close validation reporter file", e);
-    } finally {
-      if (outputStream != null) {
-        System.out.println(outputFile.normalize().toAbsolutePath());
-      } else {
-        LOGGER.info(
-          "A report with a listing of information  about the individual validations could not be generated, please submit a bug report to help us fix this.");
-      }
     }
   }
 

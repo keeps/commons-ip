@@ -273,7 +273,7 @@ public class EARKSIPValidator {
     }
   }
 
-  private void writeReport() {
+  private void writeReport() throws IOException {
     if (metsValidatorState.getMets() != null) {
       validationReportOutputJson.setIpType(metsValidatorState.getIpType());
     }

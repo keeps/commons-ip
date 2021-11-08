@@ -1,6 +1,9 @@
 package org.roda_project.commons_ip2_validator;
 
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,6 +18,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.roda_project.commons_ip2.utils.Utils;
 import org.roda_project.commons_ip2.validator.EARKSIPValidator;
+import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.observer.ProgressValidationLoggerObserver;
 import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReportOutputJson;
@@ -75,7 +79,22 @@ public class ValidatorTest {
     ;
     Path reportPathPyIp = Paths.get("/home/jgomes/Desktop/Compliance")
       .resolve("uuid-5b7be427-9889-4f25-b36f-0b36f63db67f-PYIP.json");
-    ValidationReportOutputJson reportOutputJson = new ValidationReportOutputJson(reportPath, earkSIPath);
+    if (!reportPath.toFile().exists()) {
+      try {
+        Files.createFile(reportPath);
+      } catch (IOException e) {
+        reportPath = Files.createTempFile(Constants.VALIDATION_REPORT_PREFIX, ".json");
+      }
+    } else {
+      Files.deleteIfExists(reportPath);
+      try {
+        Files.createFile(reportPath);
+      } catch (IOException e) {
+        reportPath = Files.createTempFile(Constants.VALIDATION_REPORT_PREFIX, ".json");
+      }
+    }
+    OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(reportPath.toFile()));
+    ValidationReportOutputJson reportOutputJson = new ValidationReportOutputJson(earkSIPath,outputStream);
     EARKSIPValidator earksipValidator = new EARKSIPValidator(reportOutputJson);
     //ValidationObserver observer = new ProgressValidationLoggerObserver();
     //earksipValidator.addObserver(observer);

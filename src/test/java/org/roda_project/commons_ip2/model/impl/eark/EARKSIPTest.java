@@ -7,7 +7,10 @@
  */
 package org.roda_project.commons_ip2.model.impl.eark;
 
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -48,6 +51,7 @@ import org.roda_project.commons_ip2.model.SIP;
 import org.roda_project.commons_ip2.model.ValidationEntry.LEVEL;
 import org.roda_project.commons_ip2.utils.Utils;
 import org.roda_project.commons_ip2.validator.EARKSIPValidator;
+import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReportOutputJson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,7 +87,22 @@ public class EARKSIPTest {
     parseAndValidateFullEARKSIP(zipSIP);
 
     Path reportPath = Files.createTempDirectory("reports").resolve("Full-EARK-SIP.json");
-    ValidationReportOutputJson reportOutputJson = new ValidationReportOutputJson(reportPath,zipSIP);
+    if (!reportPath.toFile().exists()) {
+      try {
+        Files.createFile(reportPath);
+      } catch (IOException e) {
+        reportPath = Files.createTempFile(Constants.VALIDATION_REPORT_PREFIX, ".json");
+      }
+    } else {
+      Files.deleteIfExists(reportPath);
+      try {
+        Files.createFile(reportPath);
+      } catch (IOException e) {
+        reportPath = Files.createTempFile(Constants.VALIDATION_REPORT_PREFIX, ".json");
+      }
+    }
+    OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(reportPath.toFile()));
+    ValidationReportOutputJson reportOutputJson = new ValidationReportOutputJson(zipSIP,outputStream);
     EARKSIPValidator earksipValidator = new EARKSIPValidator(reportOutputJson);
     boolean validate = earksipValidator.validate();
     LOGGER.info("Done parsing (and validating) full E-ARK SIP");

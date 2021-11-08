@@ -1,6 +1,9 @@
 package org.roda_project.commons_ip2.validator.CLI;
 
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,6 +23,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.roda_project.commons_ip2.validator.EARKPyIPValidator;
 import org.roda_project.commons_ip2.validator.EARKSIPValidator;
+import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.observer.ProgressValidationLoggerObserver;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReportOutputJSONPyIP;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReportOutputJson;
@@ -74,7 +78,7 @@ public class CLI {
     out.append("\t").append(CLIConstants.CLI_OPTION_REPORT_TYPE).append("\t\t")
       .append("(optional) By default generate json report, with option eark generate E-ARK JSON").append("\n\n");
     out.append("\t").append(CLIConstants.CLI_OPTION_VERBOSE).append("\t\t")
-            .append("(optional) Verbose command line output with all validation steps").append("/n");
+      .append("(optional) Verbose command line output with all validation steps").append("/n");
     out.append("\n");
     printStream.append(out).flush();
   }
@@ -136,7 +140,7 @@ public class CLI {
         } while (Files.exists(reportPath));
 
         validate(typeReportOption, reportPath, sipPath, commandLine.hasOption("v"));
-
+        System.out.println(reportPath.normalize().toAbsolutePath());
       }
 
     } catch (ParseException e) {
@@ -145,13 +149,17 @@ public class CLI {
     } catch (DateTimeException d) {
       printErrors(System.out, "Invalid date format error");
       return ExitCodes.EXIT_CODE_INVALID_DATE_FORMAT;
-    } catch (IOException | ParserConfigurationException | SAXException e) {
+    } catch (ParserConfigurationException | SAXException e) {
       printErrors(System.out, "Error on object initialize");
       return ExitCodes.EXIT_CANNOT_CREATE_EARKVALIDATOR_OBJECT;
     } catch (NoSuchAlgorithmException e) {
       printErrors(System.out, "Error on object initialize EARKPYIP");
       return ExitCodes.EXIT_CANNOT_CREATE_EARKVALIDATOR_OBJECT;
+    } catch (IOException e) {
+      printErrors(System.out, "Error on Report Initialize");
+      return ExitCodes.EXIT_CANNOT_CREATE_REPORT;
     }
+
     return ExitCodes.EXIT_CODE_OK;
   }
 
@@ -191,12 +199,18 @@ public class CLI {
   private int validate(String typeReportOption, Path reportPath, Path sipPath, boolean verbose)
     throws IOException, ParserConfigurationException, SAXException, NoSuchAlgorithmException {
     if (typeReportOption == null || typeReportOption.equals("default")) {
-      ValidationReportOutputJson jsonReporter = new ValidationReportOutputJson(reportPath, sipPath);
-      EARKSIPValidator earksipValidator = new EARKSIPValidator(jsonReporter);
-      if (verbose) {
-        earksipValidator.addObserver(new ProgressValidationLoggerObserver());
+      OutputStream outputStream = createReportOutputStream(reportPath);
+      if (outputStream != null) {
+        ValidationReportOutputJson jsonReporter = new ValidationReportOutputJson(sipPath, outputStream);
+        EARKSIPValidator earksipValidator = new EARKSIPValidator(jsonReporter);
+        if (verbose) {
+          earksipValidator.addObserver(new ProgressValidationLoggerObserver());
+        }
+        earksipValidator.validate();
+      } else {
+        printErrors(System.out, "Error on creation of reportPath");
+        return ExitCodes.EXIT_CANNOT_CREATE_REPORT;
       }
-      earksipValidator.validate();
     } else if (typeReportOption.equals("eark")) {
       ValidationReportOutputJSONPyIP jsonReporter = new ValidationReportOutputJSONPyIP(reportPath, sipPath);
       EARKPyIPValidator earkPyIPValidator = new EARKPyIPValidator(jsonReporter);
@@ -210,4 +224,33 @@ public class CLI {
     }
     return ExitCodes.EXIT_CODE_OK;
   }
+
+  private OutputStream createReportOutputStream(Path reportPath) throws IOException {
+    Path outputFile = createReportFile(reportPath);
+    OutputStream outputStream = null;
+    if (outputFile != null) {
+      outputStream = new BufferedOutputStream(new FileOutputStream(outputFile.toFile()));
+    }
+    return outputStream;
+  }
+
+  private Path createReportFile(Path reportPath) throws IOException {
+    Path outputFile = reportPath;
+    if (!outputFile.toFile().exists()) {
+      try {
+        Files.createFile(outputFile);
+      } catch (IOException e) {
+        outputFile = Files.createTempFile(Constants.VALIDATION_REPORT_PREFIX, ".json");
+      }
+    } else {
+      Files.deleteIfExists(outputFile);
+      try {
+        Files.createFile(outputFile);
+      } catch (IOException e) {
+        outputFile = Files.createTempFile(Constants.VALIDATION_REPORT_PREFIX, ".json");
+      }
+    }
+    return outputFile;
+  }
+
 }
