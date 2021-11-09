@@ -18,7 +18,7 @@ public class Constants {
 
   /* Report Header */
   public static final String VALIDATION_REPORT_HEADER_KEY_TITLE = "title";
-  public static final String VALIDATION_REPORT_HEADER_TITLE = "Validation Report CSIP";
+  public static final String VALIDATION_REPORT_HEADER_TITLE = "Validation Report";
   public static final String VALIDATION_REPORT_HEADER_KEY_HEADER = "header";
   public static final String VALIDATION_REPORT_HEADER_KEY_SPECIFICATIONS = "specifications";
   public static final String VALIDATION_REPORT_KEY_ID = "id";
