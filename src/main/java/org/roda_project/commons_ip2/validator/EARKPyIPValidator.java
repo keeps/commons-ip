@@ -51,6 +51,16 @@ public class EARKPyIPValidator {
   private final List<MetsValidator> aipComponents = new ArrayList<>();
   private final MetsValidatorState metsValidatorState;
 
+  /**
+   * @param validationReportOutputJSONPyIP
+   *          the {@link ValidationReportOutputJSONPyIP}
+   * @throws IOException
+   *           if some I/O error occurs
+   * @throws ParserConfigurationException
+   *           if some error occurs
+   * @throws SAXException
+   *           if some error occurs
+   */
   public EARKPyIPValidator(ValidationReportOutputJSONPyIP validationReportOutputJSONPyIP)
     throws IOException, ParserConfigurationException, SAXException {
 
@@ -65,6 +75,16 @@ public class EARKPyIPValidator {
     setupComponents();
   }
 
+  /**
+   * Setup Validation Components
+   *
+   * @throws IOException
+   *           if some I/O error occurs.
+   * @throws ParserConfigurationException
+   *           if some error occur.
+   * @throws SAXException
+   *           if some error occur.
+   */
   private void setupComponents() throws IOException, ParserConfigurationException, SAXException {
     this.csipComponents.add(new MetsComponentValidator());
     this.csipComponents.add(new MetsHeaderComponentValidator());
@@ -80,18 +100,39 @@ public class EARKPyIPValidator {
     this.aipComponents.add(new AipFileSectionComponent());
   }
 
+  /**
+   * Add {@link ValidationObserver} to the lists of observers
+   *
+   * @param observer
+   *          the {@link ValidationObserver}
+   */
   public void addObserver(ValidationObserver observer) {
     structureComponent.addObserver(observer);
     csipComponents.forEach(c -> c.addObserver(observer));
     sipComponents.forEach(c -> c.addObserver(observer));
   }
 
+  /**
+   * Remove {@link ValidationObserver} from the lists of observers
+   *
+   * @param observer
+   *          the {@link ValidationObserver}
+   */
   public void removeObserver(ValidationObserver observer) {
     structureComponent.removeObserver(observer);
     csipComponents.forEach(c -> c.removeObserver(observer));
     sipComponents.forEach(c -> c.removeObserver(observer));
   }
 
+  /**
+   * Validates the Information Package
+   * 
+   * @return if the Information package is valid or not
+   * @throws IOException
+   *           if some I/O error occurs.
+   * @throws NoSuchAlgorithmException
+   *           if some error occurs in Checksum Calculation.
+   */
   public boolean validate() throws IOException, NoSuchAlgorithmException {
     structureComponent.notifyObserversIPValidationStarted();
     try {
@@ -154,6 +195,12 @@ public class EARKPyIPValidator {
     return validationReportOutputJSONPyIP.isValid();
   }
 
+  /**
+   * Iterate over all Components and merge all results.
+   * 
+   * @throws IOException
+   *           if some I/O error occurs.
+   */
   private void validateComponents() throws IOException {
     for (MetsValidator component : csipComponents) {
       Map<String, ReporterDetails> componentResults = component.validate(structureValidatorState, metsValidatorState);
@@ -162,6 +209,21 @@ public class EARKPyIPValidator {
     validateIpTypeExtendedComponents();
   }
 
+  /**
+   * Validate METS files inside representations
+   * @param subMets
+   *         the {@link java.util.HashMap<String,InputStream>} with path to sub
+   *         METS and InputStream of file.
+   * @param isZip
+   *         flag if the Information Package is in compact format or if it is a
+   *         folder.
+   * @throws IOException
+   *         If some I/O error occurs
+   * @throws JAXBException
+   *         If some error occurs
+   * @throws SAXException
+   *         If some error occurs
+   */
   private void validateSubMets(Map<String, InputStream> subMets, boolean isZip)
     throws IOException, JAXBException, SAXException {
     for (Map.Entry<String, InputStream> entry : subMets.entrySet()) {
@@ -173,6 +235,15 @@ public class EARKPyIPValidator {
     }
   }
 
+  /**
+   * Validates the METS Root
+   * @throws IOException
+   *        If some I/O error occurs
+   * @throws JAXBException
+   *        If some error occurs
+   * @throws SAXException
+   *        If some error occurs
+   */
   private void validateRootMets() throws IOException, JAXBException, SAXException {
     InputStream metsRootStream;
     String ipPath;
@@ -192,6 +263,16 @@ public class EARKPyIPValidator {
     validateComponents();
   }
 
+  /**
+   * Setup State of METS
+   *
+   * @param key
+   *          the METS file path
+   * @param isZip
+   *          Flag if Information package is compacted or not
+   * @param isRootMets
+   *          Flag if METS file is root or representation METS
+   */
   private void setupMetsValidatorState(String key, boolean isZip, boolean isRootMets) {
     this.metsValidatorState.setMetsName(key);
     this.metsValidatorState.setIsRootMets(isRootMets);
@@ -208,6 +289,13 @@ public class EARKPyIPValidator {
     }
   }
 
+  /**
+   * Validate SIP specifications or AIP Specifications if the type is SIP or AIP.
+   *
+   * @throws IOException
+   *           if some I/O error occurs.
+   *
+   */
   private void validateIpTypeExtendedComponents() throws IOException {
     if (metsValidatorState.getIpType() != null && metsValidatorState.getIpType().equals("SIP")) {
       validateSIPComponents();
@@ -215,6 +303,13 @@ public class EARKPyIPValidator {
       validateAIPComponets();
     }
   }
+
+  /**
+   * Iterate over SIP components and merge the results with CSIP validations
+   *
+   * @throws IOException
+   *           if some I/O error occurs.
+   */
 
   private void validateSIPComponents() throws IOException {
     aipComponents.clear();
@@ -238,6 +333,13 @@ public class EARKPyIPValidator {
     }
   }
 
+  /**
+   * Iterate over AIP components and merges the results with CSIP validations
+   * results.
+   *
+   * @throws IOException
+   *           if some I/O error occurs.
+   */
   private void validateAIPComponets() throws IOException {
     sipComponents.clear();
     for (MetsValidator component : aipComponents) {
