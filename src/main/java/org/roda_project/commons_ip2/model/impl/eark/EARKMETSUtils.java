@@ -190,12 +190,13 @@ public final class EARKMETSUtils {
       DivType documentationDiv = createDivForStructMap(IPConstants.DOCUMENTATION_WITH_FIRST_LETTER_CAPITAL);
       metsWrapper.setDocumentationDiv(documentationDiv);
       mainDiv.getDiv().add(documentationDiv);
-      // submission
-      if (IPType.AIP.toString().equals(type) && isSubmission) {
-        DivType submissionDiv = createDivForStructMap(IPConstants.SUBMISSION);
-        metsWrapper.setSubmissionsDiv(submissionDiv);
-        mainDiv.getDiv().add(submissionDiv);
-      }
+
+    }
+    // submission
+    if (IPType.AIP.toString().equals(type) && isSubmission) {
+      DivType submissionDiv = createDivForStructMap(IPConstants.SUBMISSION);
+      metsWrapper.setSubmissionsDiv(submissionDiv);
+      mainDiv.getDiv().add(submissionDiv);
     }
     structMap.setDiv(mainDiv);
     mets.getStructMap().add(structMap);

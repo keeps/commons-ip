@@ -159,36 +159,6 @@ public class FolderManager {
 
   public Map<String, InputStream> getSubMets(Path path) throws FileNotFoundException {
     HashMap<String, InputStream> subMets = new HashMap<>();
-
-    File[] submissionFolder = path.resolve("submission").toFile().listFiles();
-
-    if (submissionFolder != null) {
-      for (File submissionFile : submissionFolder) {
-        if (submissionFile.getName().equals("METS.xml")) {
-          InputStream subStream = new FileInputStream(submissionFile.getPath());
-          subMets.put(submissionFile.getPath(), subStream);
-        } else {
-          if (submissionFile.getName().equals("representations") && submissionFile.isDirectory()) {
-            File[] submissionRepresentations = submissionFile.listFiles();
-            if (submissionRepresentations != null && submissionRepresentations.length != 0) {
-              for (File submissionRepresentation : submissionRepresentations) {
-                if (submissionRepresentation.isDirectory()) {
-                  File[] repFiles = submissionRepresentation.listFiles();
-                  if (repFiles != null && repFiles.length != 0) {
-                    for (File repFile : repFiles) {
-                      if (repFile.getName().equals("METS.xml")) {
-                        InputStream subStream = new FileInputStream(repFile.getPath());
-                        subMets.put(repFile.getPath(), subStream);
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
     File[] representationsFolder = path.resolve("representations").toFile().listFiles();
     if (representationsFolder != null && representationsFolder.length != 0) {
       for (File representation : representationsFolder) {
