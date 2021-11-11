@@ -342,8 +342,10 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
             }
           }
         } else {
-          HashMap<String, Boolean> metadataFiles = structureValidatorState.getZipManager()
+          Map<String, Boolean> metadataFiles = structureValidatorState.getZipManager()
             .getMetadataFiles(structureValidatorState.getIpPath(), regex);
+          metadataFiles = metadataFiles.entrySet().stream().filter(entry -> !entry.getKey().contains("/descriptive/"))
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
           for (AmdSecType amd : metsValidatorState.getMets().getAmdSec()) {
             for (MdSecType md : amd.getDigiprovMD()) {
               MdSecType.MdRef mdRef = md.getMdRef();
@@ -378,10 +380,16 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
               }
             }
             if (metadataFiles.containsValue(false)) {
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                Message.createErrorMessage("Have metadata files not referenced in %1$s",
-                  metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-                false, false);
+              StringBuilder message = new StringBuilder();
+              Map<String, Boolean> missedMetadataFiles = metadataFiles.entrySet().stream()
+                .filter(entry -> !entry.getValue()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+              message.append("There are administrative files not referenced:");
+              for (Map.Entry<String, Boolean> entry : missedMetadataFiles.entrySet()) {
+                message.append(entry.getKey()).append(", ");
+              }
+              message.append("in %1$s");
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+                message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
             }
           }
         }
@@ -410,8 +418,10 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
             }
           }
         } else {
-          HashMap<String, Boolean> metadataFiles = structureValidatorState.getFolderManager()
+          Map<String, Boolean> metadataFiles = structureValidatorState.getFolderManager()
             .getMetadataFiles(Paths.get(metsValidatorState.getMetsPath()));
+          metadataFiles = metadataFiles.entrySet().stream().filter(entry -> !entry.getKey().contains("/descriptive/"))
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
           for (AmdSecType amd : metsValidatorState.getMets().getAmdSec()) {
             for (MdSecType md : amd.getDigiprovMD()) {
               MdSecType.MdRef mdRef = md.getMdRef();
@@ -440,10 +450,16 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
               }
             }
             if (metadataFiles.containsValue(false)) {
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                Message.createErrorMessage("Have metadata files not referenced in %1$s",
-                  metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-                false, false);
+              StringBuilder message = new StringBuilder();
+              Map<String, Boolean> missedMetadataFiles = metadataFiles.entrySet().stream()
+                .filter(entry -> !entry.getValue()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+              message.append("There are administrative files not referenced:");
+              for (Map.Entry<String, Boolean> entry : missedMetadataFiles.entrySet()) {
+                message.append(entry.getKey()).append(", ");
+              }
+              message.append("in %1$s");
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+                message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
             }
           }
         }

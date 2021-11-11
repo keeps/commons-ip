@@ -1138,20 +1138,20 @@ public class SipMetsHdrComponent extends MetsValidatorImpl {
           }
         } else {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
-            Message.createErrorMessage("metsHdr/agent/@ROLE in %1$s can't be null ", metsValidatorState.getMetsName(),
+            Message.createErrorMessage("metsHdr/agent/@ROLE in %1$s can't be null", metsValidatorState.getMetsName(),
               metsValidatorState.isRootMets()),
             false, false);
         }
       }
       if (!found) {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
-          Message.createErrorMessage("Does not have metsHdr/agent with the ROLE PRESERVATION in %1$s ",
+          Message.createErrorMessage("You can add information about the organisation or person that preserves the package by adding a agent in the root METS header with @ROLE='PRESERVATION' in %1$s",
             metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
           false, false);
       } else {
         if (count != 1) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
-            Message.createErrorMessage("Can't have more than one metsHdr/agent with the ROLE PRESERVATION in %1$s",
+            Message.createErrorMessage("Can't have more than one metsHdr/agent with the ROLE='PRESERVATION' in %1$s",
               metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
             false, false);
         }
@@ -1188,7 +1188,7 @@ public class SipMetsHdrComponent extends MetsValidatorImpl {
       }
       if (!found) {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION,
-          Message.createErrorMessage("metsHdr/agent you can add agent with the ROLE PRESERVATION in %1$s ",
+          Message.createErrorMessage("You can add information about the organisation or person that preserves the package by adding a agent in the root METS header with @ROLE='PRESERVATION' in %1$s",
             metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
           false, false);
       } else {

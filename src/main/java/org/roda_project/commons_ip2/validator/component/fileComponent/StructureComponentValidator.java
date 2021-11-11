@@ -257,7 +257,7 @@ public class StructureComponentValidator extends StructureValidatorImpl {
   private ReporterDetails validateCSIPSTR6(StructureValidatorState structureValidatorState) throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
       if (!structureValidatorState.getZipManager().checkIfExistsFolderInside(structureValidatorState.getIpPath(),
-        "metadata/preservation/")) {
+        "metadata/preservation")) {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
           "If preservation metadata are available should include inside metadata/preservation", false, false);
       }
@@ -563,7 +563,8 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     for (String representation : representationFoldersNames) {
       if (!structureValidatorState.getZipManager()
         .checkIfExistsFolderRepresentation(structureValidatorState.getIpPath(), folder, representation)) {
-        message.append("Not exists ").append(folder).append(" folder in ").append(representation);
+        message.append("There is no ").append(folder).append(" folder in the representation folder ")
+          .append(representation);
         if (i != representationFoldersNames.size() - 1) {
           message.append(", ");
         } else {
@@ -583,7 +584,7 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     for (String representation : representationFoldersNames) {
       if (!structureValidatorState.getFolderManager()
         .checkIfExistsFolderRepresentation(structureValidatorState.getIpPath(), "schemas", representation)) {
-        message.append("Not exists ").append(folder).append(" folder in ")
+        message.append("There is no ").append(folder).append(" folder in the representation folder ")
           .append(structureValidatorState.getIpPath().resolve("representations").resolve(representation).toString()
             .substring(structureValidatorState.getIpPath().getParent().toString().length()));
         if (i != representationFoldersNames.size() - 1) {

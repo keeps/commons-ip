@@ -1,8 +1,10 @@
 package org.roda_project.commons_ip2.validator.reporter.pyipUtils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import org.roda_project.commons_ip2.validator.constants.ConstantsAIPspec;
@@ -13,6 +15,7 @@ import org.roda_project.commons_ip2.validator.pyipModel.MetadataStatus;
 import org.roda_project.commons_ip2.validator.pyipModel.Severity;
 import org.roda_project.commons_ip2.validator.pyipModel.TestResult;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
+import org.roda_project.commons_ip2.validator.reporter.RequirementsComparator;
 
 /**
  * @author João Gomes <jgomes@keep.pt>
@@ -40,9 +43,10 @@ public class MetadataResultsUtils {
       .filter(result -> !result.getKey().startsWith("CSIPSTR") && !result.getKey().equals("CSIP0")
         && !result.getValue().isValid())
       .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
+    TreeMap<String,ReporterDetails> sortedSpecificationResults = new TreeMap<>(new RequirementsComparator());
+    sortedSpecificationResults.putAll(specificationResults);
     List<TestResult> testResults = new ArrayList<>();
-    for (Map.Entry<String, ReporterDetails> result : specificationResults.entrySet()) {
+    for (Map.Entry<String, ReporterDetails> result : sortedSpecificationResults.entrySet()) {
       testResults.add(createTestResult(result.getKey(), result.getValue()));
     }
     MetadataChecks schematronResuts = new MetadataChecks();
