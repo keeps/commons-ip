@@ -3,10 +3,7 @@ package org.roda_project.commons_ip2.validator.constants;
 /**
  * @author João Gomes <jgomes@keep.pt>
  */
-public class Constants {
-  private Constants() {
-  }
-
+public final class Constants {
   /* File Paths */
   public static final String PATH_RESOURCES_CSIP_VOCABULARY_CONTENT_CATEGORY = "controlledVocabularies/CSIPVocabularyContentCategory.xml";
   public static final String PATH_RESOURCES_CSIP_VOCABULARY_CONTENT_INFORMATION_TYPE = "controlledVocabularies/CSIPVocabularyContentInformationType.xml";
@@ -15,7 +12,7 @@ public class Constants {
   public static final String PATH_RESOURCES_CSIP_VOCABULARY_RECORD_STATUS = "controlledVocabularies/SIPVocabularyRecordStatus.xml";
   public static final String PATH_RESOURCES_CSIP_VOCABULARY_IANA_MEDIA_TYPES = "controlledVocabularies/IANA_MEDIA_TYPES.txt";
   public static final String VALIDATION_REPORT_PREFIX = "commons-ip-validation-reporter";
-
+  public static final int LIMIT_MISSING_FILES = 3;
   /* Report Header */
   public static final String VALIDATION_REPORT_HEADER_KEY_TITLE = "title";
   public static final String VALIDATION_REPORT_HEADER_TITLE = "Validation Report";
@@ -59,12 +56,10 @@ public class Constants {
   public static final String VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_PASSED = "PASSED";
   public static final String VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_FAILED = "FAILED";
   public static final String VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_SKIPPED = "SKIPPED";
-
   public static final String VALIDATION_REPORT_SPECIFICATION_RESULT_VALID = "VALID";
   public static final String VALIDATION_REPORT_SPECIFICATION_RESULT_INVALID = "INVALID";
   public static final String VALIDATION_REPORT_SPECIFICATION_RESULT_ERROR = "ERROR";
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_ERROR = "fileErrors";
-
   /* Modules Names */
   public static final String CSIP_MODULE_NAME_0 = "Validation of the received sip";
   public static final String CSIP_MODULE_NAME_1 = "Use of the METS root element (element mets)";
@@ -73,10 +68,11 @@ public class Constants {
   public static final String CSIP_MODULE_NAME_4 = "Use of the METS administrative metadata section (element amdSec)";
   public static final String CSIP_MODULE_NAME_5 = "Use of the METS file section (element fileSec)";
   public static final String CSIP_MODULE_NAME_6 = "Use of the METS structural map (<structMap>)";
-
   public static final String SIP_MODULE_NAME_1 = "Extended use of the METS root element (element mets)";
   public static final String SIP_MODULE_NAME_2 = "Extended use of the METS header (element metsHdr)";
   public static final String SIP_MODULE_NAME_3 = "Extended use of the METS file section (element fileSec)";
-
   public static final String AIP_MODULE_NAME_2 = " Structural metadata - Digital objects";
+
+  private Constants() {
+  }
 }

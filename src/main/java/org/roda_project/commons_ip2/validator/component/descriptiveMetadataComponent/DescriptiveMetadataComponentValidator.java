@@ -247,16 +247,12 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
               }
             }
             if (metadataFiles.containsValue(false)) {
-              StringBuilder message = new StringBuilder();
-              Map<String, Boolean> missedMetadataFiles = metadataFiles.entrySet().stream()
+              final Map<String, Boolean> missedMetadataFiles = metadataFiles.entrySet().stream()
                 .filter(entry -> !entry.getValue()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-              message.append("There are descriptive files not referenced:");
-              for (Map.Entry<String, Boolean> entry : missedMetadataFiles.entrySet()) {
-                message.append(entry.getKey()).append(", ");
-              }
-              message.append("in %1$s");
+              final String initialMessage = "There are descriptive files not referenced: ";
+              final String message = Message.createMissingFilesMessage(missedMetadataFiles, initialMessage);
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-                message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
             }
           }
         }
@@ -314,16 +310,12 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
             }
           }
           if (metadataFiles.containsValue(false)) {
-            StringBuilder message = new StringBuilder();
             Map<String, Boolean> missedMetadataFiles = metadataFiles.entrySet().stream()
               .filter(entry -> !entry.getValue()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-            message.append("There are descriptive files not referenced:");
-            for (Map.Entry<String, Boolean> entry : missedMetadataFiles.entrySet()) {
-              message.append(entry.getKey()).append(", ");
-            }
-            message.append("in %1$s");
+            final String initialMessage = "There are descriptive files not referenced: ";
+            final String message = Message.createMissingFilesMessage(missedMetadataFiles, initialMessage);
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-              message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+              message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
           }
         }
       }

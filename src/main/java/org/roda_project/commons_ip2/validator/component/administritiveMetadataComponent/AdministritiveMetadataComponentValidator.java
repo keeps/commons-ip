@@ -380,16 +380,13 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
               }
             }
             if (metadataFiles.containsValue(false)) {
-              StringBuilder message = new StringBuilder();
               Map<String, Boolean> missedMetadataFiles = metadataFiles.entrySet().stream()
                 .filter(entry -> !entry.getValue()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-              message.append("There are administrative files not referenced:");
-              for (Map.Entry<String, Boolean> entry : missedMetadataFiles.entrySet()) {
-                message.append(entry.getKey()).append(", ");
-              }
-              message.append("in %1$s");
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-                message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+              final String initialMessage = "There are administrative files not referenced: ";
+              final String message = Message.createMissingFilesMessage(missedMetadataFiles, initialMessage);
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                Message.createErrorMessage(message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                false, false);
             }
           }
         }
@@ -450,16 +447,15 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
               }
             }
             if (metadataFiles.containsValue(false)) {
-              StringBuilder message = new StringBuilder();
+
               Map<String, Boolean> missedMetadataFiles = metadataFiles.entrySet().stream()
                 .filter(entry -> !entry.getValue()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-              message.append("There are administrative files not referenced:");
-              for (Map.Entry<String, Boolean> entry : missedMetadataFiles.entrySet()) {
-                message.append(entry.getKey()).append(", ");
-              }
-              message.append("in %1$s");
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-                message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+
+              final String initialMessage = "There are administrative files not referenced: ";
+              final String message = Message.createMissingFilesMessage(missedMetadataFiles, initialMessage);
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                Message.createErrorMessage(message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                false, false);
             }
           }
         }
