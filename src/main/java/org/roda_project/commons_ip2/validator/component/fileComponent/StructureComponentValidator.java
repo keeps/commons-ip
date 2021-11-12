@@ -30,8 +30,18 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     this.moduleName = Constants.CSIP_MODULE_NAME_0;
   }
 
+  /**
+   * Validates all Structural Checks CSIPSTR1 to CSIPSTR16
+   * 
+   * @param structureValidatorState
+   *          the contextual {@link StructureValidatorState}
+   * @return {@link Map<String,ReporterDetails>} with all results
+   * @throws IOException
+   *           if some I/O error occurs
+   */
   @Override
-  public Map<String, ReporterDetails> validate(StructureValidatorState structureValidatorState) throws IOException {
+  public Map<String, ReporterDetails> validate(final StructureValidatorState structureValidatorState)
+    throws IOException {
     Map<String, ReporterDetails> results = new HashMap<>();
 
     /* CSIPSTR1 */
@@ -146,13 +156,19 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     return results;
   }
 
-  /*
+  /**
    * Any Information Package MUST be included within a single physical root folder
    * (known as the “Information Package root folder”). For packages presented in
    * an archive format, see CSIPSTR3, the archive MUST unpack to a single root
    * folder.
+   * 
+   * @param structureValidatorState
+   *          the contextual {@link StructureValidatorState}
+   * @return {@link ReporterDetails}
+   * @throws IOException
+   *           if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR1(StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR1(final StructureValidatorState structureValidatorState) throws IOException {
     ReporterDetails details = new ReporterDetails();
     if (Files.exists(structureValidatorState.getIpPath())) {
       if (isZipFile(structureValidatorState.getIpPath())) {
@@ -178,21 +194,16 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     return details;
   }
 
-  /*
-   * The Information Package root folder SHOULD be named with the ID or name of
-   * the Information Package, that is the value of the package METS.xml’s root
-   * <mets> element’s @OBJID attribute.
-   */
-  private ReporterDetails validateCSIPSTR2() {
-    return new ReporterDetails();
-  }
-
-  /*
+  /**
    * The Information Package root folder MAY be compressed (for example by using
    * TAR or ZIP). Which specific compression format to use needs to be stated in
    * the Submission Agreement.
+   * 
+   * @param structureValidatorState
+   *          the contextual {@link StructureValidatorState}
+   * @return the {@link ReporterDetails}
    */
-  private ReporterDetails validateCSIPSTR3(StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR3(final StructureValidatorState structureValidatorState) {
     if (structureValidatorState.isZipFileFlag()) {
       if (structureValidatorState.getIpPath().toString().contains("zip")) {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
@@ -207,13 +218,19 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     }
   }
 
-  /*
+  /**
    * The Information Package root folder MUST include a file named METS.xml. This
    * file MUST contain metadata that identifies the package, provides a high-level
    * package description, and describes its structure, including pointers to
    * constituent representations.
+   * 
+   * @param structureValidatorState
+   *          the contextual {@link StructureValidatorState}
+   * @return {@link ReporterDetails}
+   * @throws IOException
+   *           if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR4(StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR4(final StructureValidatorState structureValidatorState) throws IOException {
     ReporterDetails details = new ReporterDetails();
     if (structureValidatorState.isZipFileFlag()) {
       if (!structureValidatorState.getZipManager().checkIfExistsRootMetsFile(structureValidatorState.getIpPath())) {
@@ -229,11 +246,17 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     return details;
   }
 
-  /*
+  /**
    * The Information Package root folder SHOULD include a folder named metadata,
    * which SHOULD include metadata relevant to the whole package.
+   * 
+   * @param structureValidatorState
+   *          the contextual {@link StructureValidatorState}
+   * @return {@link ReporterDetails}
+   * @throws IOException
+   *           if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR5(StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR5(final StructureValidatorState structureValidatorState) throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
       if (!structureValidatorState.getZipManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
         "metadata")) {
@@ -250,11 +273,17 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     return new ReporterDetails();
   }
 
-  /*
+  /**
    * If preservation metadata are available, they SHOULD be included in sub-folder
    * preservation.
+   * 
+   * @param structureValidatorState
+   *          the contextual {@link StructureValidatorState}
+   * @return {@link ReporterDetails}
+   * @throws IOException
+   *           if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR6(StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR6(final StructureValidatorState structureValidatorState) throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
       if (!structureValidatorState.getZipManager().checkIfExistsFolderInside(structureValidatorState.getIpPath(),
         "metadata/preservation")) {
@@ -271,11 +300,17 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     return new ReporterDetails();
   }
 
-  /*
+  /**
    * If descriptive metadata are available, they SHOULD be included in sub-folder
    * descriptive.
+   * 
+   * @param structureValidatorState
+   *          the contextual {@link StructureValidatorState}
+   * @return {@link ReporterDetails}
+   * @throws IOException
+   *           if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR7(StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR7(final StructureValidatorState structureValidatorState) throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
       if (!structureValidatorState.getZipManager().checkIfExistsFolderInside(structureValidatorState.getIpPath(),
         "metadata/descriptive")) {
@@ -293,11 +328,17 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     return new ReporterDetails();
   }
 
-  /*
+  /**
    * If any other metadata are available, they MAY be included in separate
    * sub-folders, for example an additional folder named other.
+   * 
+   * @param structureValidatorState
+   *          the contextual {@link StructureValidatorState}
+   * @return {@link ReporterDetails}
+   * @throws IOException
+   *           if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR8(StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR8(final StructureValidatorState structureValidatorState) throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
       if (!structureValidatorState.getZipManager().checkIfExistsFolderInside(structureValidatorState.getIpPath(),
         "metadata/other")) {
@@ -317,10 +358,16 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     return new ReporterDetails();
   }
 
-  /*
+  /**
    * The Information Package folder SHOULD include a folder named representations.
+   * 
+   * @param structureValidatorState
+   *          the contextual {@link StructureValidatorState}
+   * @return {@link ReporterDetails}
+   * @throws IOException
+   *           if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR9(StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR9(final StructureValidatorState structureValidatorState) throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
       if (!structureValidatorState.getZipManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
         "representations")) {
@@ -337,14 +384,20 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     return new ReporterDetails();
   }
 
-  /*
+  /**
    * The representations folder SHOULD include a sub-folder for each individual
    * representation (i.e. the “representation folder”). Each representation folder
    * should have a string name that is unique within the package scope. For
    * example the name of the representation and/or its creation date might be good
    * candidates as a representation sub-folder name.
+   * 
+   * @param structureValidatorState
+   *          the contextual {@link StructureValidatorState}
+   * @return {@link ReporterDetails}
+   * @throws IOException
+   *           if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR10(StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR10(final StructureValidatorState structureValidatorState) throws IOException {
     List<String> representationsFoldersNames;
     if (structureValidatorState.isZipFileFlag()) {
       representationsFoldersNames = structureValidatorState.getZipManager()
@@ -376,11 +429,17 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     return new ReporterDetails();
   }
 
-  /*
+  /**
    * The representation folder SHOULD include a sub-folder named data which MAY
    * include all data constituting the representation.
+   * 
+   * @param structureValidatorState
+   *          the contextual {@link StructureValidatorState}
+   * @return the {@link ReporterDetails}
+   * @throws IOException
+   *           if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR11(StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR11(final StructureValidatorState structureValidatorState) throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
       if (!structureValidatorState.getZipManager()
         .checkIfExistsFolderInsideRepresentation(structureValidatorState.getIpPath(), "data")) {
@@ -399,13 +458,19 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     return new ReporterDetails();
   }
 
-  /*
+  /**
    * The representation folder SHOULD include a metadata file named METS.xml which
    * includes information about the identity and structure of the representation
    * and its components. The recommended best practice is to always have a
    * METS.xml in the representation folder.
+   *
+   * @param structureValidatorState
+   *          the contextual {@link StructureValidatorState}
+   * @return {@link ReporterDetails}
+   * @throws IOException
+   *           if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR12(StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR12(final StructureValidatorState structureValidatorState) throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
       if (!structureValidatorState.getZipManager().checkIfExistsSubMets(structureValidatorState.getIpPath())) {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
@@ -420,11 +485,17 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     return new ReporterDetails();
   }
 
-  /*
+  /**
    * The representation folder SHOULD include a sub-folder named metadata which
    * MAY include all metadata about the specific representation.
+   * 
+   * @param structureValidatorState
+   *          the contextual {@link StructureValidatorState}
+   * @return the {@link ReporterDetails}
+   * @throws IOException
+   *           if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR13(StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR13(final StructureValidatorState structureValidatorState) throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
       if (!structureValidatorState.getZipManager()
         .checkIfExistsFolderInsideRepresentation(structureValidatorState.getIpPath(), "metadata")) {
@@ -443,10 +514,16 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     return new ReporterDetails();
   }
 
-  /*
+  /**
    * The Information Package MAY be extended with additional sub-folders.
+   *
+   * @param structureValidatorState
+   *          the contextual {@link StructureValidatorState}
+   * @return the {@link ReporterDetails}
+   * @throws IOException
+   *           if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR14(StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR14(final StructureValidatorState structureValidatorState) throws IOException {
     List<String> additionalFolders;
     if (structureValidatorState.isZipFileFlag()) {
       additionalFolders = structureValidatorState.getZipManager()
@@ -471,13 +548,19 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     return new ReporterDetails();
   }
 
-  /*
+  /**
    * We recommend including all XML schema documents for any structured metadata
    * within package. These schema documents SHOULD be placed in a sub-folder
    * called schemas within the Information Package root folder and/or the
    * representation folder.
+   * 
+   * @param structureValidatorState
+   *          the contextual {@link StructureValidatorState}
+   * @return the {@link ReporterDetails}
+   * @throws IOException
+   *           if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR15(StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR15(final StructureValidatorState structureValidatorState) throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
       if (!structureValidatorState.getZipManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
         "schemas")) {
@@ -502,13 +585,19 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     return new ReporterDetails();
   }
 
-  /*
+  /**
    * We recommend including any supplementary documentation for the package or a
    * specific representation within the package. Supplementary documentation
    * SHOULD be placed in a sub-folder called documentation within the Information
    * Package root folder and/or the representation folder.
+   * 
+   * @param structureValidatorState
+   *          the contextual {@link StructureValidatorState}
+   * @return the {@link ReporterDetails}
+   * @throws IOException
+   *           if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR16(StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR16(final StructureValidatorState structureValidatorState) throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
       if (!structureValidatorState.getZipManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
         "documentation")) {
@@ -533,6 +622,13 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     return new ReporterDetails();
   }
 
+  /**
+   * Check if the IP is a ZIP file or not
+   * 
+   * @param ipPath
+   *          the {@link Path} to the IP
+   * @return if the IP is a ZIP file
+   */
   private boolean isZipFile(Path ipPath) {
     boolean isZip = true;
 
@@ -554,8 +650,19 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     return isZip;
   }
 
-  private String checkIfExistsZipFolderInRepresentations(StructureValidatorState structureValidatorState, String folder)
-    throws IOException {
+  /**
+   * Check if exists some folder inside Representations in ZIP file Packages
+   * 
+   * @param structureValidatorState
+   *          the contextual {@link StructureValidatorState}
+   * @param folder
+   *          the folder to find
+   * @return a message
+   * @throws IOException
+   *           if some I/O error occurs
+   */
+  private String checkIfExistsZipFolderInRepresentations(final StructureValidatorState structureValidatorState,
+    String folder) throws IOException {
     List<String> representationFoldersNames = structureValidatorState.getZipManager()
       .getRepresentationsFoldersNames(structureValidatorState.getIpPath());
     StringBuilder message = new StringBuilder();
@@ -576,7 +683,17 @@ public class StructureComponentValidator extends StructureValidatorImpl {
     return message.toString();
   }
 
-  private String checkIfExistsFolderInRepresentations(StructureValidatorState structureValidatorState, String folder) {
+  /**
+   * Check if exists some folder inside Representations in folders
+   * 
+   * @param structureValidatorState
+   *          the contextual {@link StructureValidatorState}
+   * @param folder
+   *          the folder to find
+   * @return a message
+   */
+  private String checkIfExistsFolderInRepresentations(final StructureValidatorState structureValidatorState,
+    String folder) {
     List<String> representationFoldersNames = structureValidatorState.getFolderManager()
       .getRepresentationsFoldersNames(structureValidatorState.getIpPath());
     StringBuilder message = new StringBuilder();

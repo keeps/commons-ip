@@ -19,8 +19,8 @@ import org.roda_project.commons_ip2.validator.component.administritiveMetadataCo
 import org.roda_project.commons_ip2.validator.component.descriptiveMetadataComponent.DescriptiveMetadataComponentValidator;
 import org.roda_project.commons_ip2.validator.component.fileComponent.StructureComponentValidator;
 import org.roda_project.commons_ip2.validator.component.fileSectionComponent.FileSectionComponentValidator;
-import org.roda_project.commons_ip2.validator.component.metsrootComponent.MetsComponentValidator;
-import org.roda_project.commons_ip2.validator.component.metsrootComponent.MetsHeaderComponentValidator;
+import org.roda_project.commons_ip2.validator.component.metsRootComponent.MetsComponentValidator;
+import org.roda_project.commons_ip2.validator.component.metsRootComponent.MetsHeaderComponentValidator;
 import org.roda_project.commons_ip2.validator.component.structuralMapComponent.StructuralMapComponentValidator;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
@@ -41,14 +41,39 @@ import org.xml.sax.SAXParseException;
  * @author João Gomes <jgomes@keep.pt>
  */
 public class EARKPyIPValidator {
+
+  /**
+   * IP path.
+   */
   private final Path earksipPath;
 
+  /**
+   * {@link ValidationReportOutputJSONPyIP}.
+   */
   private final ValidationReportOutputJSONPyIP validationReportOutputJSONPyIP;
+  /**
+   * {@link StructureComponentValidator}.
+   */
   private final StructureComponentValidator structureComponent;
+  /**
+   * the contextual structural state {@link StructureValidatorState}.
+   */
   private final StructureValidatorState structureValidatorState;
+  /**
+   * List of CSIP components to validate.
+   */
   private final List<MetsValidator> csipComponents = new ArrayList<>();
+  /**
+   * List of SIP components to validate.
+   */
   private final List<MetsValidator> sipComponents = new ArrayList<>();
+  /**
+   * List of AIP components to validate.
+   */
   private final List<MetsValidator> aipComponents = new ArrayList<>();
+  /**
+   * The contextual mets state {@link MetsValidatorState}.
+   */
   private final MetsValidatorState metsValidatorState;
 
   /**
@@ -61,7 +86,7 @@ public class EARKPyIPValidator {
    * @throws SAXException
    *           if some error occurs
    */
-  public EARKPyIPValidator(ValidationReportOutputJSONPyIP validationReportOutputJSONPyIP)
+  public EARKPyIPValidator(final ValidationReportOutputJSONPyIP validationReportOutputJSONPyIP)
     throws IOException, ParserConfigurationException, SAXException {
 
     this.earksipPath = validationReportOutputJSONPyIP.getSipPath().toAbsolutePath().normalize();
@@ -76,7 +101,7 @@ public class EARKPyIPValidator {
   }
 
   /**
-   * Setup Validation Components
+   * Setup Validation Components.
    *
    * @throws IOException
    *           if some I/O error occurs.
@@ -101,31 +126,31 @@ public class EARKPyIPValidator {
   }
 
   /**
-   * Add {@link ValidationObserver} to the lists of observers
+   * Add {@link ValidationObserver} to the lists of observers.
    *
    * @param observer
    *          the {@link ValidationObserver}
    */
-  public void addObserver(ValidationObserver observer) {
+  public void addObserver(final ValidationObserver observer) {
     structureComponent.addObserver(observer);
     csipComponents.forEach(c -> c.addObserver(observer));
     sipComponents.forEach(c -> c.addObserver(observer));
   }
 
   /**
-   * Remove {@link ValidationObserver} from the lists of observers
+   * Remove {@link ValidationObserver} from the lists of observers.
    *
    * @param observer
    *          the {@link ValidationObserver}
    */
-  public void removeObserver(ValidationObserver observer) {
+  public void removeObserver(final ValidationObserver observer) {
     structureComponent.removeObserver(observer);
     csipComponents.forEach(c -> c.removeObserver(observer));
     sipComponents.forEach(c -> c.removeObserver(observer));
   }
 
   /**
-   * Validates the Information Package
+   * Validates the Information Package.
    * 
    * @return if the Information package is valid or not
    * @throws IOException
@@ -136,11 +161,12 @@ public class EARKPyIPValidator {
   public boolean validate() throws IOException, NoSuchAlgorithmException {
     structureComponent.notifyObserversIPValidationStarted();
     try {
-      Map<String, ReporterDetails> structureValidationResults = structureComponent.validate(structureValidatorState);
+      final Map<String, ReporterDetails> structureValidationResults = structureComponent
+        .validate(structureValidatorState);
       validationReportOutputJSONPyIP.getResults().putAll(structureValidationResults);
 
       if (validationReportOutputJSONPyIP.validFileComponent()) {
-        Map<String, InputStream> subMets;
+        final Map<String, InputStream> subMets;
         if (structureValidatorState.isZipFileFlag()) {
           metsValidatorState.setMetsFiles(structureValidatorState.getZipManager().getFiles(earksipPath));
           subMets = structureValidatorState.getZipManager().getSubMets(earksipPath);
@@ -154,14 +180,14 @@ public class EARKPyIPValidator {
         }
         validateRootMets();
 
-        ReporterDetails csipStr0 = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", true,
+        final ReporterDetails csipStr0 = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", true,
           false);
         csipStr0.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
         validationReportOutputJSONPyIP.getResults().put(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID,
           csipStr0);
       }
     } catch (IOException | JAXBException | SAXException e) {
-      StringBuilder message = new StringBuilder();
+      final StringBuilder message = new StringBuilder();
 
       Throwable cause = e;
       if (e.getMessage() != null) {
@@ -176,13 +202,13 @@ public class EARKPyIPValidator {
         message.append("[").append(cause.getClass().getSimpleName()).append("] ").append(cause.getMessage());
 
         if (cause instanceof SAXParseException) {
-          SAXParseException e1 = (SAXParseException) cause;
+          final SAXParseException e1 = (SAXParseException) cause;
           message.append(" (line: ").append(e1.getLineNumber()).append(", column: ").append(e1.getColumnNumber())
             .append(") - ");
         }
       }
 
-      ReporterDetails csipStr0 = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+      final ReporterDetails csipStr0 = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
         message.toString(), false, false);
       csipStr0.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
       validationReportOutputJSONPyIP.getResults().put(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID,
@@ -203,31 +229,33 @@ public class EARKPyIPValidator {
    */
   private void validateComponents() throws IOException {
     for (MetsValidator component : csipComponents) {
-      Map<String, ReporterDetails> componentResults = component.validate(structureValidatorState, metsValidatorState);
+      final Map<String, ReporterDetails> componentResults = component.validate(structureValidatorState,
+        metsValidatorState);
       ResultsUtils.mergeResults(validationReportOutputJSONPyIP.getResults(), componentResults);
     }
     validateIpTypeExtendedComponents();
   }
 
   /**
-   * Validate METS files inside representations
+   * Validate METS files inside representations.
+   * 
    * @param subMets
-   *         the {@link java.util.HashMap<String,InputStream>} with path to sub
-   *         METS and InputStream of file.
+   *          the {@link java.util.HashMap<String,InputStream>} with path to sub
+   *          METS and InputStream of file.
    * @param isZip
-   *         flag if the Information Package is in compact format or if it is a
-   *         folder.
+   *          flag if the Information Package is in compact format or if it is a
+   *          folder.
    * @throws IOException
-   *         If some I/O error occurs
+   *           If some I/O error occurs
    * @throws JAXBException
-   *         If some error occurs
+   *           If some error occurs
    * @throws SAXException
-   *         If some error occurs
+   *           If some error occurs
    */
-  private void validateSubMets(Map<String, InputStream> subMets, boolean isZip)
+  private void validateSubMets(final Map<String, InputStream> subMets, final boolean isZip)
     throws IOException, JAXBException, SAXException {
     for (Map.Entry<String, InputStream> entry : subMets.entrySet()) {
-      InstatiateMets instatiateMets = new InstatiateMets(entry.getValue());
+      final InstatiateMets instatiateMets = new InstatiateMets(entry.getValue());
       metsValidatorState.setMets(instatiateMets.instatiateMetsFile());
       metsValidatorState.setIpType(metsValidatorState.getMets().getMetsHdr().getOAISPACKAGETYPE());
       setupMetsValidatorState(entry.getKey(), isZip, false);
@@ -236,17 +264,18 @@ public class EARKPyIPValidator {
   }
 
   /**
-   * Validates the METS Root
+   * Validates the METS Root.
+   * 
    * @throws IOException
-   *        If some I/O error occurs
+   *           If some I/O error occurs
    * @throws JAXBException
-   *        If some error occurs
+   *           If some error occurs
    * @throws SAXException
-   *        If some error occurs
+   *           If some error occurs
    */
   private void validateRootMets() throws IOException, JAXBException, SAXException {
-    InputStream metsRootStream;
-    String ipPath;
+    final InputStream metsRootStream;
+    final String ipPath;
     if (structureValidatorState.isZipFileFlag()) {
       metsRootStream = structureValidatorState.getZipManager().getMetsRootInputStream(earksipPath);
       ipPath = earksipPath.toString();
@@ -255,7 +284,7 @@ public class EARKPyIPValidator {
       ipPath = earksipPath.resolve("METS.xml").toString();
     }
 
-    InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
+    final InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
     metsValidatorState.setMetsPath(earksipPath.toString());
     metsValidatorState.setMetsName(ipPath);
     metsValidatorState.setIsRootMets(true);
@@ -264,7 +293,7 @@ public class EARKPyIPValidator {
   }
 
   /**
-   * Setup State of METS
+   * Setup State of METS.
    *
    * @param key
    *          the METS file path
@@ -273,11 +302,11 @@ public class EARKPyIPValidator {
    * @param isRootMets
    *          Flag if METS file is root or representation METS
    */
-  private void setupMetsValidatorState(String key, boolean isZip, boolean isRootMets) {
+  private void setupMetsValidatorState(final String key, final boolean isZip, final boolean isRootMets) {
     this.metsValidatorState.setMetsName(key);
     this.metsValidatorState.setIsRootMets(isRootMets);
     if (isZip) {
-      StringBuilder metsPath = new StringBuilder();
+      final StringBuilder metsPath = new StringBuilder();
       for (String path : key.split("/")) {
         if (!path.equals("METS.xml")) {
           metsPath.append(path).append("/");
@@ -305,7 +334,7 @@ public class EARKPyIPValidator {
   }
 
   /**
-   * Iterate over SIP components and merge the results with CSIP validations
+   * Iterate over SIP components and merge the results with CSIP validations.
    *
    * @throws IOException
    *           if some I/O error occurs.
@@ -327,7 +356,7 @@ public class EARKPyIPValidator {
             validationReportOutputJSONPyIP.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID));
         }
       }
-      Map<String, ReporterDetails> sipComponentResults = component.validate(structureValidatorState,
+      final Map<String, ReporterDetails> sipComponentResults = component.validate(structureValidatorState,
         metsValidatorState);
       ResultsUtils.mergeResults(validationReportOutputJSONPyIP.getResults(), sipComponentResults);
     }
@@ -347,7 +376,7 @@ public class EARKPyIPValidator {
         ((AipFileSectionComponent) component).setIsToValidate(ResultsUtils.isResultValid(
           validationReportOutputJSONPyIP.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID));
       }
-      Map<String, ReporterDetails> aipComponentResults = component.validate(structureValidatorState,
+      final Map<String, ReporterDetails> aipComponentResults = component.validate(structureValidatorState,
         metsValidatorState);
       ResultsUtils.mergeResults(validationReportOutputJSONPyIP.getResults(), aipComponentResults);
     }
