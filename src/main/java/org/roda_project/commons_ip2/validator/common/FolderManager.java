@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -344,33 +345,18 @@ public class FolderManager {
     return new FileInputStream(path.toFile());
   }
 
-  public HashMap<String, Boolean> getMetadataFiles(Path path) throws FileNotFoundException {
+  public HashMap<String, Boolean> getMetadataFiles(Path path) throws IOException {
     if (path == null) {
       LOGGER.debug("File not Found");
       throw new FileNotFoundException("File not Found");
     }
-    HashMap<String, Boolean> data = new HashMap<>();
-    File[] rootFiles = path.toFile().listFiles();
-    for (File root : rootFiles) {
-      if (root.getName().equals("metadata")) {
-        if (root.isDirectory()) {
-          File[] metadataFiles = root.listFiles();
-          if (metadataFiles != null && metadataFiles.length != 0) {
-            for (File metadata : metadataFiles) {
-              if (!metadata.isDirectory()) {
-                data.put(metadata.getPath(), false);
-              } else {
-                File[] subMetadataFiles = metadata.listFiles();
-                if (subMetadataFiles != null && subMetadataFiles.length != 0) {
-                  for (File subMetadata : subMetadataFiles) {
-                    data.put(subMetadata.getPath(), false);
-                  }
-                }
-              }
-            }
-          }
+    final HashMap<String, Boolean> data = new HashMap<>();
+    try (Stream<Path> paths = Files.walk(path.resolve("metadata"))) {
+      paths.forEach(filePath -> {
+        if (!Files.isDirectory(filePath)) {
+          data.put(filePath.toString(), false);
         }
-      }
+      });
     }
     return data;
   }
@@ -405,8 +391,8 @@ public class FolderManager {
     return false;
   }
 
-  public HashMap<String,Boolean> getFiles(Path path){
-    HashMap<String,Boolean> files = new HashMap<>();
+  public HashMap<String, Boolean> getFiles(Path path) {
+    HashMap<String, Boolean> files = new HashMap<>();
     files.putAll(getFilesDirectory(path));
     return files;
   }
@@ -418,7 +404,8 @@ public class FolderManager {
       if (fileEntry.isDirectory() && !fileEntry.getName().equals("metadata")) {
         files.putAll(getFilesDirectory(Paths.get(fileEntry.getPath())));
       } else {
-        if (!fileEntry.isDirectory() && !fileEntry.getName().equals("METS.xml") && !fileEntry.getName().equals("aip.json")) {
+        if (!fileEntry.isDirectory() && !fileEntry.getName().equals("METS.xml")
+          && !fileEntry.getName().equals("aip.json")) {
           files.put(Paths.get(fileEntry.getPath()).toString(), false);
         }
       }

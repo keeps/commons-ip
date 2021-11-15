@@ -383,8 +383,15 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
               Map<String, Boolean> missedMetadataFiles = metadataFiles.entrySet().stream()
                 .filter(entry -> !entry.getValue()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
               final String initialMessage = "There are administrative files not referenced: ";
-              final String message = Message.createMissingFilesMessage(missedMetadataFiles, initialMessage);
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+              final String message;
+              if (metsValidatorState.isRootMets()) {
+                message = Message.createMissingFilesMessage(missedMetadataFiles, initialMessage,
+                  structureValidatorState.isZipFileFlag(), metsValidatorState.getMets().getOBJID());
+              } else {
+                message = Message.createMissingFilesMessage(missedMetadataFiles, initialMessage,
+                  structureValidatorState.isZipFileFlag(), metsValidatorState.getMetsPath());
+              }
+               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                 Message.createErrorMessage(message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
                 false, false);
             }
@@ -452,7 +459,7 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
                 .filter(entry -> !entry.getValue()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
               final String initialMessage = "There are administrative files not referenced: ";
-              final String message = Message.createMissingFilesMessage(missedMetadataFiles, initialMessage);
+              final String message = Message.createMissingFilesMessage(missedMetadataFiles, initialMessage,structureValidatorState.isZipFileFlag(),metsValidatorState.getMetsPath());
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                 Message.createErrorMessage(message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
                 false, false);
