@@ -7,21 +7,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.stream.Stream;
 import javax.xml.bind.DatatypeConverter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @author João Gomes <jgomes@keep.pt>
- */
+/** {@author João Gomes <jgomes@keep.pt>}. */
 public class FolderManager {
   private static final Logger LOGGER = LoggerFactory.getLogger(FolderManager.class);
 
@@ -62,7 +60,8 @@ public class FolderManager {
     return Files.exists(path);
   }
 
-  public boolean verifyChecksum(Path path, String alg, String checksum) throws IOException, NoSuchAlgorithmException {
+  public boolean verifyChecksum(Path path, String alg, String checksum)
+      throws IOException, NoSuchAlgorithmException {
     boolean valid = true;
 
     if (!Files.exists(path)) {
@@ -158,36 +157,6 @@ public class FolderManager {
 
   public Map<String, InputStream> getSubMets(Path path) throws FileNotFoundException {
     HashMap<String, InputStream> subMets = new HashMap<>();
-
-    File[] submissionFolder = path.resolve("submission").toFile().listFiles();
-
-    if (submissionFolder != null) {
-      for (File submissionFile : submissionFolder) {
-        if (submissionFile.getName().equals("METS.xml")) {
-          InputStream subStream = new FileInputStream(submissionFile.getPath());
-          subMets.put(submissionFile.getPath(), subStream);
-        } else {
-          if (submissionFile.getName().equals("representations") && submissionFile.isDirectory()) {
-            File[] submissionRepresentations = submissionFile.listFiles();
-            if (submissionRepresentations != null && submissionRepresentations.length != 0) {
-              for (File submissionRepresentation : submissionRepresentations) {
-                if (submissionRepresentation.isDirectory()) {
-                  File[] repFiles = submissionRepresentation.listFiles();
-                  if (repFiles != null && repFiles.length != 0) {
-                    for (File repFile : repFiles) {
-                      if (repFile.getName().equals("METS.xml")) {
-                        InputStream subStream = new FileInputStream(repFile.getPath());
-                        subMets.put(repFile.getPath(), subStream);
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
     File[] representationsFolder = path.resolve("representations").toFile().listFiles();
     if (representationsFolder != null && representationsFolder.length != 0) {
       for (File representation : representationsFolder) {
@@ -211,8 +180,8 @@ public class FolderManager {
     return Files.exists(path);
   }
 
-  public Boolean checkRootFolderName(Path path, String OBJECTID) {
-    return path.getParent().endsWith(OBJECTID);
+  public Boolean checkRootFolderName(Path path, String objectId) {
+    return path.getParent().endsWith(objectId);
   }
 
   public boolean checkIfExistsFolderInRoot(Path path, String folder) {
@@ -373,33 +342,19 @@ public class FolderManager {
     return new FileInputStream(path.toFile());
   }
 
-  public HashMap<String, Boolean> getMetadataFiles(Path path) throws FileNotFoundException {
+  public HashMap<String, Boolean> getMetadataFiles(Path path) throws IOException {
     if (path == null) {
       LOGGER.debug("File not Found");
       throw new FileNotFoundException("File not Found");
     }
-    HashMap<String, Boolean> data = new HashMap<>();
-    File[] rootFiles = path.toFile().listFiles();
-    for (File root : rootFiles) {
-      if (root.getName().equals("metadata")) {
-        if (root.isDirectory()) {
-          File[] metadataFiles = root.listFiles();
-          if (metadataFiles != null && metadataFiles.length != 0) {
-            for (File metadata : metadataFiles) {
-              if (!metadata.isDirectory()) {
-                data.put(metadata.getPath(), false);
-              } else {
-                File[] subMetadataFiles = metadata.listFiles();
-                if (subMetadataFiles != null && subMetadataFiles.length != 0) {
-                  for (File subMetadata : subMetadataFiles) {
-                    data.put(subMetadata.getPath(), false);
-                  }
-                }
-              }
+    final HashMap<String, Boolean> data = new HashMap<>();
+    try (Stream<Path> paths = Files.walk(path.resolve("metadata"))) {
+      paths.forEach(
+          filePath -> {
+            if (!Files.isDirectory(filePath)) {
+              data.put(filePath.toString(), false);
             }
-          }
-        }
-      }
+          });
     }
     return data;
   }
@@ -422,8 +377,10 @@ public class FolderManager {
     return additionalFolders;
   }
 
-  public boolean checkIfExistsFolderRepresentation(Path ipPath, String folder, String representation) {
-    File[] representationFiles = ipPath.resolve("representations").resolve(representation).toFile().listFiles();
+  public boolean checkIfExistsFolderRepresentation(
+      Path ipPath, String folder, String representation) {
+    File[] representationFiles =
+        ipPath.resolve("representations").resolve(representation).toFile().listFiles();
     if (representationFiles != null) {
       for (File representationFile : representationFiles) {
         if (representationFile.isDirectory() && representationFile.getName().equals(folder)) {
@@ -432,5 +389,28 @@ public class FolderManager {
       }
     }
     return false;
+  }
+
+  public HashMap<String, Boolean> getFiles(Path path) {
+    HashMap<String, Boolean> files = new HashMap<>();
+    files.putAll(getFilesDirectory(path));
+    return files;
+  }
+
+  public HashMap<String, Boolean> getFilesDirectory(Path path) {
+    HashMap<String, Boolean> files = new HashMap<>();
+    File folder = path.toFile();
+    for (final File fileEntry : folder.listFiles()) {
+      if (fileEntry.isDirectory() && !fileEntry.getName().equals("metadata")) {
+        files.putAll(getFilesDirectory(Paths.get(fileEntry.getPath())));
+      } else {
+        if (!fileEntry.isDirectory()
+            && !fileEntry.getName().equals("METS.xml")
+            && !fileEntry.getName().equals("aip.json")) {
+          files.put(Paths.get(fileEntry.getPath()).toString(), false);
+        }
+      }
+    }
+    return files;
   }
 }

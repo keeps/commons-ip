@@ -186,7 +186,7 @@ public class EARKSIP extends SIP {
       MetsWrapper mainMETSWrapper = EARKMETSUtils.generateMETS(StringUtils.join(this.getIds(), " "),
         this.getDescription(), this.getProfile(), true, Optional.ofNullable(this.getAncestors()), null,
         this.getHeader(), this.getType(), this.getContentType(), this.getContentInformationType(), isMetadata,
-        isMetadataOther, isSchemas, isDocumentation);
+        isMetadataOther, isSchemas, isDocumentation,false);
 
       EARKUtils.addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
       EARKUtils.addPreservationMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getPreservationMetadata(), null);

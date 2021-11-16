@@ -163,7 +163,7 @@ public final class EARKUtils {
           representation.getDescription(), ip.getProfile(), false, Optional.empty(), null, header,
           mainMETSWrapper.getMets().getMetsHdr().getOAISPACKAGETYPE(), representation.getContentType(),
           representation.getContentInformationType(), isRepresentationMetadata, isRepresentationMetadataOther,
-          isRepresentationSchemas, isRepresentationDocumentation);
+          isRepresentationSchemas, isRepresentationDocumentation,false);
         representationMETSWrapper.getMainDiv().setTYPE(representation.getStatus().asString());
 
         // representation data

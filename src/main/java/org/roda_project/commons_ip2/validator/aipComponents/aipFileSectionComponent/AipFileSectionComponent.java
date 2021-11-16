@@ -105,7 +105,7 @@ public class AipFileSectionComponent extends MetsValidatorImpl {
           String id = file.getID();
           if (!id.startsWith("ID")) {
             StringBuilder message = new StringBuilder();
-            message.append("The mets/fileSec/fileGrp/file/@ID must start with ID in").append(id)
+            message.append("The mets/fileSec/fileGrp/file/@ID must start with ID in ").append(id)
               .append("does not start with ID");
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_AIP_VERSION, Message.createErrorMessage(
               message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);

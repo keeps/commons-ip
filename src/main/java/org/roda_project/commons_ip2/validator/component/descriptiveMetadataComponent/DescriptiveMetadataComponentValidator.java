@@ -206,8 +206,9 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
               metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
             false, false);
         } else {
-          HashMap<String, Boolean> metadataFiles = zipManager.getMetadataFiles(structureValidatorState.getIpPath(),
-            regex);
+          Map<String, Boolean> metadataFiles = zipManager.getMetadataFiles(structureValidatorState.getIpPath(), regex);
+          metadataFiles = metadataFiles.entrySet().stream().filter(entry -> !entry.getKey().contains("/preservation/"))
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
           for (MdSecType md : dmdSec) {
             MdSecType.MdRef mdRef = md.getMdRef();
             if (mdRef != null && mdRef.getHref() != null) {
@@ -246,9 +247,19 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
               }
             }
             if (metadataFiles.containsValue(false)) {
+              final Map<String, Boolean> missedMetadataFiles = metadataFiles.entrySet().stream()
+                .filter(entry -> !entry.getValue()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+              final String initialMessage = "There are descriptive files not referenced: ";
+              final String message;
+              if (metsValidatorState.isRootMets()) {
+                message = Message.createMissingFilesMessage(missedMetadataFiles, initialMessage,
+                  structureValidatorState.isZipFileFlag(), metsValidatorState.getMets().getOBJID());
+              } else {
+                message = Message.createMissingFilesMessage(missedMetadataFiles, initialMessage,
+                  structureValidatorState.isZipFileFlag(), metsValidatorState.getMetsPath());
+              }
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                Message.createErrorMessage("Have metadata files not referenced in %1$s",
-                  metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                Message.createErrorMessage(message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
                 false, false);
             }
           }
@@ -274,8 +285,10 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
               metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
             false, false);
         } else {
-          HashMap<String, Boolean> metadataFiles = folderManager
+          Map<String, Boolean> metadataFiles = folderManager
             .getMetadataFiles(Paths.get(metsValidatorState.getMetsPath()));
+          metadataFiles = metadataFiles.entrySet().stream().filter(entry -> !entry.getKey().contains("/preservation/"))
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
           for (MdSecType md : dmdSec) {
             MdSecType.MdRef mdRef = md.getMdRef();
             if (mdRef != null) {
@@ -305,9 +318,13 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
             }
           }
           if (metadataFiles.containsValue(false)) {
+            Map<String, Boolean> missedMetadataFiles = metadataFiles.entrySet().stream()
+              .filter(entry -> !entry.getValue()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            final String initialMessage = "There are descriptive files not referenced: ";
+            final String message = Message.createMissingFilesMessage(missedMetadataFiles, initialMessage,
+              structureValidatorState.isZipFileFlag(), metsValidatorState.getMetsPath());
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              Message.createErrorMessage("Have metadata files not referenced in mets file in %1$s",
-                metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+              Message.createErrorMessage(message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
               false, false);
           }
         }

@@ -90,7 +90,7 @@ public class SipFileSectionComponent extends MetsValidatorImpl {
       }
       if (count != files.size()) {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION, Message.createErrorMessage(
-          "can add fileSec/fileGrp/file/@sip:FILEFORMATNAME in %1$s  if the MIMETYPE is not sufficient for the purposes of processing the information package.",
+          "If the MIMETYPE is not sufficient for the purposes of processing the information package, you can add @sip:FILEFORMATNAME attribute in the file element for the %1$s.",
           metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
       }
     }
@@ -115,7 +115,7 @@ public class SipFileSectionComponent extends MetsValidatorImpl {
       }
       if (count != files.size()) {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION, Message.createErrorMessage(
-          "can add fileSec/fileGrp/file/@sip:FILEFORMATVERSION in %1$s. The version of the file format when the use of PREMIS has not been agreed upon in the submission agreement.",
+          "You can add @sip:FILEFORMATVERSION attribute in the file element for the %1$s",
           metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
       }
     }
@@ -140,7 +140,7 @@ public class SipFileSectionComponent extends MetsValidatorImpl {
       }
       if (count != files.size()) {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION, Message.createErrorMessage(
-          "can add fileSec/fileGrp/file/@sip:FILEFORMATREGISTRY in %1$s. The name of the format registry used to identify the file format when the use of PREMIS has not been agreed upon in the submission agreement.",
+          "You can add @sip:FILEFORMATREGISTRY attribute in the file element for the %1$s",
           metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
       }
     }
@@ -165,7 +165,7 @@ public class SipFileSectionComponent extends MetsValidatorImpl {
       }
       if (count != files.size()) {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION, Message.createErrorMessage(
-          "can add fileSec/fileGrp/file/@sip:FILEFORMATKEY in %1$s. Key of the file format in the registry when use of PREMIS has not been agreed upon in the submission agreement.",
+          "You can add @sip:FILEFORMATKEY attribute in the file element for the %1$s",
           metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
       }
     }

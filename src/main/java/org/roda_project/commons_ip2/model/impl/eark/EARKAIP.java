@@ -140,11 +140,12 @@ public class EARKAIP extends AIPWrap {
         || (this.getPreservationMetadata() != null && !this.getPreservationMetadata().isEmpty()));
       boolean isDocumentation = (this.getDocumentation() != null && !this.getDocumentation().isEmpty());
       boolean isSchemas = (this.getSchemas() != null && !this.getSchemas().isEmpty());
+      boolean isSubmission = (this.getSubmissions() != null && !this.getSubmissions().isEmpty());
 
       final MetsWrapper mainMETSWrapper = EARKMETSUtils.generateMETS(StringUtils.join(this.getIds(), " "),
         this.getDescription(), this.getProfile(), true, Optional.ofNullable(this.getAncestors()), null,
         this.getHeader(), this.getType(), this.getContentType(), this.getContentInformationType(), isMetadata,
-        isMetadataOther, isSchemas, isDocumentation);
+        isMetadataOther, isSchemas, isDocumentation,isSubmission);
 
       EARKUtils.addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
 
@@ -153,8 +154,6 @@ public class EARKAIP extends AIPWrap {
       EARKUtils.addOtherMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getOtherMetadata(), null);
 
       EARKUtils.addRepresentationsToZipAndMETS(this, getRepresentations(), zipEntries, mainMETSWrapper, buildDir);
-
-      EARKUtils.addDefaultSchemas(LOGGER, getSchemas(), buildDir);
 
       EARKUtils.addSchemasToZipAndMETS(zipEntries, mainMETSWrapper, getSchemas(), null);
 

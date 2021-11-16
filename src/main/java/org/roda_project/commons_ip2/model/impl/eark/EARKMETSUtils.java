@@ -72,7 +72,7 @@ public final class EARKMETSUtils {
   public static MetsWrapper generateMETS(String id, String label, String profile, boolean mainMets,
     Optional<List<String>> ancestors, Path metsPath, IPHeader ipHeader, String type, IPContentType contentType,
     IPContentInformationType contentInformationType, boolean isMetadata, boolean isMetadataOther, boolean isSchemas,
-    boolean isDocumentation) throws IPException {
+    boolean isDocumentation,boolean isSubmission) throws IPException {
     Mets mets = new Mets();
     MetsWrapper metsWrapper = new MetsWrapper(mets, metsPath);
 
@@ -136,7 +136,7 @@ public final class EARKMETSUtils {
       FileGrp schemasFileGroup = createFileGroup(IPConstants.SCHEMAS_WITH_FIRST_LETTER_CAPITAL);
       fileSec.getFileGrp().add(schemasFileGroup);
       metsWrapper.setSchemasFileGroup(schemasFileGroup);
-      if (IPType.AIP.toString().equals(type)) {
+      if (IPType.AIP.toString().equals(type) && isSubmission) {
         FileGrp submissionFileGroup = createFileGroup(IPConstants.SUBMISSION);
         fileSec.getFileGrp().add(submissionFileGroup);
         metsWrapper.setSubmissionFileGroup(submissionFileGroup);
@@ -190,12 +190,13 @@ public final class EARKMETSUtils {
       DivType documentationDiv = createDivForStructMap(IPConstants.DOCUMENTATION_WITH_FIRST_LETTER_CAPITAL);
       metsWrapper.setDocumentationDiv(documentationDiv);
       mainDiv.getDiv().add(documentationDiv);
-      // submission
-      if (IPType.AIP.toString().equals(type)) {
-        DivType submissionDiv = createDivForStructMap(IPConstants.SUBMISSION);
-        metsWrapper.setSubmissionsDiv(submissionDiv);
-        mainDiv.getDiv().add(submissionDiv);
-      }
+
+    }
+    // submission
+    if (IPType.AIP.toString().equals(type) && isSubmission) {
+      DivType submissionDiv = createDivForStructMap(IPConstants.SUBMISSION);
+      metsWrapper.setSubmissionsDiv(submissionDiv);
+      mainDiv.getDiv().add(submissionDiv);
     }
     structMap.setDiv(mainDiv);
     mets.getStructMap().add(structMap);
@@ -247,7 +248,7 @@ public final class EARKMETSUtils {
 
       // create file
       FileType fileType = new FileType();
-      fileType.setID(Utils.generateRandomAndPrefixedUUID());
+      fileType.setID(Utils.generateRandomAndPrefixedFileID());
 
       addMETSToZip(zipEntries, representationMETSWrapper, representationMetsPath, buildDir, false, fileType);
 
@@ -377,9 +378,13 @@ public final class EARKMETSUtils {
     return mdRef;
   }
 
+  private static String escapeNCName(String id) {
+    return id.replaceAll("[:@$%&/+,;\\s]", "_");
+  }
+
   private static MdRef createMdRef(String id, String metadataPath) {
     MdRef mdRef = new MdRef();
-    mdRef.setID(id);
+    mdRef.setID(escapeNCName(id));
     mdRef.setType(IPConstants.METS_TYPE_SIMPLE);
     mdRef.setLOCTYPE(LocType.URL.toString());
     mdRef.setHref(METSUtils.encodeHref(metadataPath));
@@ -388,7 +393,7 @@ public final class EARKMETSUtils {
 
   public static void addDataFileToMETS(MetsWrapper representationMETS, IPFileShallow shallow) {
     FileType file = shallow.getFileType();
-    file.setID(Utils.generateRandomAndPrefixedUUID());
+    file.setID(Utils.generateRandomAndPrefixedFileID());
 
     // add to file section
     FLocat fileLocation = METSUtils.createShallowFileLocation(shallow.getFileLocation().toString());
@@ -406,7 +411,7 @@ public final class EARKMETSUtils {
   public static FileType addDataFileToMETS(MetsWrapper representationMETS, String dataFilePath, Path dataFile)
     throws IPException, InterruptedException {
     FileType file = new FileType();
-    file.setID(Utils.generateRandomAndPrefixedUUID());
+    file.setID(Utils.generateRandomAndPrefixedFileID());
 
     // set mimetype, date creation, etc.
     METSUtils.setFileBasicInformation(LOGGER, dataFile, file);
@@ -428,7 +433,7 @@ public final class EARKMETSUtils {
   public static FileType addSchemaFileToMETS(MetsWrapper metsWrapper, String schemaFilePath, Path schemaFile)
     throws IPException, InterruptedException {
     FileType file = new FileType();
-    file.setID(Utils.generateRandomAndPrefixedUUID());
+    file.setID(Utils.generateRandomAndPrefixedFileID());
 
     // set mimetype, date creation, etc.
     METSUtils.setFileBasicInformation(LOGGER, schemaFile, file);
@@ -452,7 +457,7 @@ public final class EARKMETSUtils {
   public static FileType addSubmissionFileToMETS(MetsWrapper metsWrapper, String submissionFilePath,
     Path submissionFile) throws IPException, InterruptedException {
     FileType file = new FileType();
-    file.setID(Utils.generateRandomAndPrefixedUUID());
+    file.setID(Utils.generateRandomAndPrefixedFileID());
 
     // set mimetype, date creation, etc.
     METSUtils.setFileBasicInformation(LOGGER, submissionFile, file);
@@ -472,7 +477,7 @@ public final class EARKMETSUtils {
   public static FileType addDocumentationFileToMETS(MetsWrapper metsWrapper, String documentationFilePath,
     Path documentationFile) throws IPException, InterruptedException {
     FileType file = new FileType();
-    file.setID(Utils.generateRandomAndPrefixedUUID());
+    file.setID(Utils.generateRandomAndPrefixedFileID());
 
     // set mimetype, date creation, etc.
     METSUtils.setFileBasicInformation(LOGGER, documentationFile, file);

@@ -6,7 +6,6 @@ import java.net.URLDecoder;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -277,10 +276,10 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
 
   /*
    * mets/fileSec The transferred content is placed in the file section in
-   * different file group elements, described in other requirements. Only a
-   * single file section ( <fileSec> ) element should be present. It is possible
-   * to transfer just descriptive metadata and/or administrative metadata
-   * without files placed in this section.
+   * different file group elements, described in other requirements. Only a single
+   * file section ( <fileSec> ) element should be present. It is possible to
+   * transfer just descriptive metadata and/or administrative metadata without
+   * files placed in this section.
    */
   private ReporterDetails validateCSIP58(MetsValidatorState metsValidatorState) {
     ReporterDetails details = new ReporterDetails();
@@ -294,8 +293,8 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
   }
 
   /*
-   * mets/fileSec/@ID An xml:id identifier for the file section used for
-   * internal package references. It must be unique within the package.
+   * mets/fileSec/@ID An xml:id identifier for the file section used for internal
+   * package references. It must be unique within the package.
    */
   private ReporterDetails validateCSIP59(MetsValidatorState metsValidatorState) {
     MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
@@ -380,8 +379,8 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
   }
 
   /*
-   * mets/fileSec/fileGrp[@USE=’Schemas’] All XML schemas used in the
-   * information package should be referenced from one or more file groups with
+   * mets/fileSec/fileGrp[@USE=’Schemas’] All XML schemas used in the information
+   * package should be referenced from one or more file groups with
    * mets/fileSec/fileGrp/@USE attribute value “Schemas”.See also: File group
    * names
    */
@@ -523,8 +522,8 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
   }
 
   /*
-   * mets/fileSec/fileGrp[@USE=’Representations’]/@csip:CONTENTINFORMATIONTYPE
-   * An added attribute which states the name of the content information type
+   * mets/fileSec/fileGrp[@USE=’Representations’]/@csip:CONTENTINFORMATIONTYPE An
+   * added attribute which states the name of the content information type
    * specification used to create the package. The vocabulary will evolve under
    * the curation of the DILCIS Board as additional content information type
    * specifications are developed. This attribute is mandatory when the
@@ -565,8 +564,8 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
    * mets/fileSec/fileGrp[@csip:CONTENTINFORMATIONTYPE=’OTHER’]/@csip:
    * OTHERCONTENTINFORMATIONTYPE When the
    * mets/fileSec/fileGrp/@csip:CONTENTINFORMATIONTYPE attribute has the value
-   * “OTHER” the mets/fileSec/fileGrp/@csip:OTHERCONTENTINFORMATIONTYPE must
-   * state a value for the Content Information Type Specification used.
+   * “OTHER” the mets/fileSec/fileGrp/@csip:OTHERCONTENTINFORMATIONTYPE must state
+   * a value for the Content Information Type Specification used.
    */
   private ReporterDetails validateCSIP63(MetsValidatorState metsValidatorState) {
     List<MetsType.FileSec.FileGrp> fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
@@ -591,8 +590,8 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
   /*
    * mets/fileSec/fileGrp/@USE The value in the mets/fileSec/fileGrp/@USE is the
    * name of the whole folder structure to the data, e.g “Documentation”,
-   * “Schemas”, “Representations/preingest” or
-   * “Representations/submission/data”. Falta perguntar o use: Data
+   * “Schemas”, “Representations/preingest” or “Representations/submission/data”.
+   * Falta perguntar o use: Data
    */
   private ReporterDetails validateCSIP64(StructureValidatorState structureValidatorState,
     MetsValidatorState metsValidatorState) throws IOException {
@@ -679,44 +678,47 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
    */
   private ReporterDetails validateCSIP66(StructureValidatorState structureValidatorState,
     MetsValidatorState metsValidatorState) throws IOException {
-    if (structureValidatorState.isZipFileFlag()) {
-      MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
-      List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
-      for (MetsType.FileSec.FileGrp grp : fileGrp) {
-        List<FileType> fileTypes = grp.getFile();
-        if (!fileTypes.isEmpty()) {
-          for (FileType file : fileTypes) {
-            List<FileType.FLocat> fLocats = file.getFLocat();
-            if (!fLocats.isEmpty()) {
-              for (FileType.FLocat fLocat : fLocats) {
-                String hrefDecoded = URLDecoder.decode(fLocat.getHref(), UTF_8);
-                StringBuilder filePath = new StringBuilder();
+
+    MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
+    List<MetsType.FileSec.FileGrp> fileGrp = fileSec.getFileGrp();
+    for (MetsType.FileSec.FileGrp grp : fileGrp) {
+      List<FileType> fileTypes = grp.getFile();
+      if (!fileTypes.isEmpty()) {
+        for (FileType file : fileTypes) {
+          List<FileType.FLocat> fLocats = file.getFLocat();
+          if (!fLocats.isEmpty()) {
+            for (FileType.FLocat fLocat : fLocats) {
+              String hrefDecoded = URLDecoder.decode(fLocat.getHref(), UTF_8);
+              StringBuilder filePath = new StringBuilder();
+              if (structureValidatorState.isZipFileFlag()) {
                 if (metsValidatorState.isRootMets()) {
                   filePath.append(metsValidatorState.getMets().getOBJID()).append("/").append(hrefDecoded);
                 } else {
                   filePath.append(metsValidatorState.getMetsPath()).append(hrefDecoded);
                 }
-                if (metsValidatorState.getMetsFiles().containsKey(filePath.toString())) {
-                  metsValidatorState.getMetsFiles().replace(filePath.toString(), true);
-                }
+              } else {
+                filePath.append(Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded));
+              }
+              if (metsValidatorState.getMetsFiles().containsKey(filePath.toString())) {
+                metsValidatorState.getMetsFiles().replace(filePath.toString(), true);
               }
             }
           }
         }
       }
-      if (metsValidatorState.getMetsFiles().containsValue(false) && metsValidatorState.isRootMets()) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          Message.createErrorMessage("You have files in SIP does not referenced in %1$s",
-            metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-          false, false);
-      }
+    }
+    if (metsValidatorState.getMetsFiles().containsValue(false) && metsValidatorState.isRootMets()) {
+      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+        Message.createErrorMessage("You have files in SIP does not referenced in %1$s",
+          metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+        false, false);
     }
     return new ReporterDetails();
   }
 
   /*
-   * mets/fileSec/fileGrp/file/@ID A unique xml:id identifier for this file
-   * across the package.
+   * mets/fileSec/fileGrp/file/@ID A unique xml:id identifier for this file across
+   * the package.
    */
   private ReporterDetails validateCSIP67(MetsValidatorState metsValidatorState) {
     MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
@@ -1003,8 +1005,8 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
   }
 
   /*
-   * mets/fileSec/fileGrp/file/@OWNERID If an identifier for the file was
-   * supplied by the owner it can be recorded in this attribute.
+   * mets/fileSec/fileGrp/file/@OWNERID If an identifier for the file was supplied
+   * by the owner it can be recorded in this attribute.
    */
   private ReporterDetails validateCSIP73(MetsValidatorState metsValidatorState) {
     MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
@@ -1025,9 +1027,9 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
   }
 
   /**
-   * mets/fileSec/fileGrp/file/@ADMID If administrative metadata has been
-   * provided for the file this attribute refers to the file’s administrative
-   * metadata by ID.
+   * mets/fileSec/fileGrp/file/@ADMID If administrative metadata has been provided
+   * for the file this attribute refers to the file’s administrative metadata by
+   * ID.
    * 
    * @param metsValidatorState
    *          the contextual METS validator state
@@ -1107,9 +1109,9 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
   /*
    * mets/fileSec/fileGrp/file/FLocat The location of each external file must be
    * defined by the file location <FLocat> element using the same rules as for
-   * referencing metadata files. All references to files should be made using
-   * the XLink href attribute and the file protocol using the relative location
-   * of the file.
+   * referencing metadata files. All references to files should be made using the
+   * XLink href attribute and the file protocol using the relative location of the
+   * file.
    */
   private ReporterDetails validateCSIP76(MetsValidatorState metsValidatorState) {
     MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();

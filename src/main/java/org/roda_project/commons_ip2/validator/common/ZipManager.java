@@ -214,19 +214,11 @@ public class ZipManager {
 
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().matches(".+/submission/.+") && entry.getName().endsWith("/METS.xml")
-        && entry.getName().split("/").length > 2 && entry.getName().split("/").length <= 5) {
+      if (entry.getName().endsWith("/METS.xml") && entry.getName().split("/").length > 2
+        && entry.getName().split("/").length <= 4 && !entry.getName().matches(".+/submission/.+")) {
         InputStream stream = zipFile.getInputStream(entry);
         if (stream != null) {
           subMets.put(entry.getName(), stream);
-        }
-      } else {
-        if (entry.getName().endsWith("/METS.xml") && entry.getName().split("/").length > 2
-          && entry.getName().split("/").length <= 4) {
-          InputStream stream = zipFile.getInputStream(entry);
-          if (stream != null) {
-            subMets.put(entry.getName(), stream);
-          }
         }
       }
     }
@@ -324,16 +316,9 @@ public class ZipManager {
     Enumeration entries = zipFile.entries();
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (!entry.getName().matches(".*/METS.xml")) {
-        if (!entry.getName().contains("/metadata")) {
-          if (!entry.isDirectory()) {
-            metadataFiles.put(entry.getName(), false);
-          }
-        }
-      } else {
-        if (entry.getName().split("/").length != 2) {
-          metadataFiles.put(entry.getName(), false);
-        }
+      if (!entry.getName().matches(".*/METS.xml") && !entry.getName().contains("/metadata") && !entry.isDirectory()
+        && !entry.getName().contains("/aip.json")) {
+        metadataFiles.put(entry.getName(), false);
       }
     }
     return metadataFiles;
@@ -377,13 +362,9 @@ public class ZipManager {
     Enumeration entries = zipFile.entries();
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().matches(".*/" + folder + "/")) {
-        if (entry.isDirectory()) {
-          if (entry.getName().split("/").length == 3) {
-            found = true;
-            break;
-          }
-        }
+      if (entry.getName().matches(".*/" + folder + "/.*") && entry.getName().split("/").length >= 3) {
+        found = true;
+        break;
       }
     }
     return found;
@@ -394,26 +375,9 @@ public class ZipManager {
     Enumeration entries = zipFile.entries();
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().matches(".*/representations/.*/" + folder + "/")) {
-        if (entry.isDirectory()) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  public boolean checkIfExistsFilesInsideRepresentationFolder(Path path) throws IOException {
-    ZipFile zipFile = new ZipFile(path.toFile());
-    Enumeration entries = zipFile.entries();
-    while (entries.hasMoreElements()) {
-      ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().matches(".*/representations/.*/")) {
-        if (!entry.getName().matches(".*/METS.xml")) {
-          if (!entry.isDirectory()) {
-            return true;
-          }
-        }
+      if (entry.getName().matches(".*/representations/.*/" + folder + "/.*")
+        && entry.getName().split("/").length >= 4) {
+        return true;
       }
     }
     return false;
@@ -428,12 +392,13 @@ public class ZipManager {
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
       if (entry.getName().endsWith("/METS.xml")) {
-        if (entry.getName().split("/").length > 2 && entry.getName().split("/").length <= 4) {
+        if (entry.getName().split("/").length > 2 && entry.getName().split("/").length <= 4
+          && !entry.getName().matches(".+/submission/.+")) {
           countSubMets++;
         }
       } else {
-        if (entry.getName().contains("/representations/")
-          && (entry.getName().split("/").length > 3 && !entry.isDirectory())) {
+        if (entry.getName().contains("/representations/") && (entry.getName().split("/").length > 3
+          && !entry.isDirectory() && !entry.getName().matches(".+/submission/.+"))) {
           String representationName = getRepresentationName(entry.getName());
           if (!representationsFoldersNames.contains(representationName)) {
             representationsFoldersNames.add(representationName);
@@ -452,12 +417,11 @@ public class ZipManager {
     Enumeration entries = zipFile.entries();
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().contains("/representations/")) {
-        if (entry.getName().split("/").length > 3) {
-          String representationName = getRepresentationName(entry.getName());
-          if (!representationsFoldersNames.contains(representationName)) {
-            representationsFoldersNames.add(representationName);
-          }
+      if (entry.getName().contains("/representations/") && entry.getName().split("/").length > 3
+        && !entry.getName().matches(".+/submission/.+")) {
+        String representationName = getRepresentationName(entry.getName());
+        if (!representationsFoldersNames.contains(representationName)) {
+          representationsFoldersNames.add(representationName);
         }
       }
     }
@@ -471,10 +435,9 @@ public class ZipManager {
     Enumeration entries = zipFile.entries();
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().contains("/representations/")) {
-        if (entry.getName().split("/").length == 3 && !entry.getName().endsWith("/")) {
-          count++;
-        }
+      if (entry.getName().contains("/representations/") && !entry.getName().matches(".+/submission/.+")
+        && entry.getName().split("/").length == 3 && !entry.getName().endsWith("/")) {
+        count++;
       }
     }
     return count;
