@@ -15,15 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-
 import javax.xml.bind.DatatypeConverter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @author João Gomes <jgomes@keep.pt>
- */
+/** {@author João Gomes <jgomes@keep.pt>}. */
 public class FolderManager {
   private static final Logger LOGGER = LoggerFactory.getLogger(FolderManager.class);
 
@@ -64,7 +60,8 @@ public class FolderManager {
     return Files.exists(path);
   }
 
-  public boolean verifyChecksum(Path path, String alg, String checksum) throws IOException, NoSuchAlgorithmException {
+  public boolean verifyChecksum(Path path, String alg, String checksum)
+      throws IOException, NoSuchAlgorithmException {
     boolean valid = true;
 
     if (!Files.exists(path)) {
@@ -183,8 +180,8 @@ public class FolderManager {
     return Files.exists(path);
   }
 
-  public Boolean checkRootFolderName(Path path, String OBJECTID) {
-    return path.getParent().endsWith(OBJECTID);
+  public Boolean checkRootFolderName(Path path, String objectId) {
+    return path.getParent().endsWith(objectId);
   }
 
   public boolean checkIfExistsFolderInRoot(Path path, String folder) {
@@ -352,11 +349,12 @@ public class FolderManager {
     }
     final HashMap<String, Boolean> data = new HashMap<>();
     try (Stream<Path> paths = Files.walk(path.resolve("metadata"))) {
-      paths.forEach(filePath -> {
-        if (!Files.isDirectory(filePath)) {
-          data.put(filePath.toString(), false);
-        }
-      });
+      paths.forEach(
+          filePath -> {
+            if (!Files.isDirectory(filePath)) {
+              data.put(filePath.toString(), false);
+            }
+          });
     }
     return data;
   }
@@ -379,8 +377,10 @@ public class FolderManager {
     return additionalFolders;
   }
 
-  public boolean checkIfExistsFolderRepresentation(Path ipPath, String folder, String representation) {
-    File[] representationFiles = ipPath.resolve("representations").resolve(representation).toFile().listFiles();
+  public boolean checkIfExistsFolderRepresentation(
+      Path ipPath, String folder, String representation) {
+    File[] representationFiles =
+        ipPath.resolve("representations").resolve(representation).toFile().listFiles();
     if (representationFiles != null) {
       for (File representationFile : representationFiles) {
         if (representationFile.isDirectory() && representationFile.getName().equals(folder)) {
@@ -404,8 +404,9 @@ public class FolderManager {
       if (fileEntry.isDirectory() && !fileEntry.getName().equals("metadata")) {
         files.putAll(getFilesDirectory(Paths.get(fileEntry.getPath())));
       } else {
-        if (!fileEntry.isDirectory() && !fileEntry.getName().equals("METS.xml")
-          && !fileEntry.getName().equals("aip.json")) {
+        if (!fileEntry.isDirectory()
+            && !fileEntry.getName().equals("METS.xml")
+            && !fileEntry.getName().equals("aip.json")) {
           files.put(Paths.get(fileEntry.getPath()).toString(), false);
         }
       }
