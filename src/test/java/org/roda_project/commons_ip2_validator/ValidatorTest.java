@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -66,19 +67,14 @@ public class ValidatorTest {
   // }
 
   /* Full SIP */
-  //@Test
+  @Test
   public void validateFullSipZIP()
     throws IOException, URISyntaxException, ParserConfigurationException, SAXException, NoSuchAlgorithmException {
     LOGGER.info("Validate - Full-EARK-SIP");
 
-    // URI resource = getClass().getResource("/").toURI();
-    Path earkSIPath = Paths.get("/home/jgomes/.roda/data/storage/aip")
-      .resolve("7dd09f80-f341-4a27-86be-08d93e2adabb.zip");
-    Path reportPath = Paths.get("/home/jgomes/Desktop/Compliance")
-      .resolve("7dd09f80-f341-4a27-86be-08d93e2adabb-zip.json");
-    ;
-    Path reportPathPyIp = Paths.get("/home/jgomes/Desktop/Compliance")
-      .resolve("uuid-5b7be427-9889-4f25-b36f-0b36f63db67f-PYIP.json");
+    URI resource = getClass().getResource("/").toURI();
+    Path earkSIPath =  Paths.get(resource).resolve("validation").resolve("Full-EARK-SIP.zip");
+    Path reportPath = Files.createTempDirectory("reports").resolve("Full-EARK-SIP.json");
     if (!reportPath.toFile().exists()) {
       try {
         Files.createFile(reportPath);
@@ -96,12 +92,11 @@ public class ValidatorTest {
     OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(reportPath.toFile()));
     ValidationReportOutputJson reportOutputJson = new ValidationReportOutputJson(earkSIPath,outputStream);
     EARKSIPValidator earksipValidator = new EARKSIPValidator(reportOutputJson);
-    //ValidationObserver observer = new ProgressValidationLoggerObserver();
-    //earksipValidator.addObserver(observer);
+
     boolean validate = earksipValidator.validate();
     LOGGER.info("Done validate - Full-EARK-SIP");
 
-    Assert.assertTrue(validate);
+    Assert.assertFalse(validate);
   }
   //
   // /* Simple SIP */
