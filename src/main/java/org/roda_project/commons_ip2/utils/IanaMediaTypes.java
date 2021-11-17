@@ -8,22 +8,31 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 
-/** @author João Gomes <jgomes@keep.pt> */
-public class IANAMediaTypes {
-  private static Set<String> ianaMediaTypes = null;
+/** {@author João Gomes <jgomes@keep.pt>}. */
+public class IanaMediaTypes {
+  private static Set<String> ianaMediaTypesList = null;
 
-  public static Set<String> getIANAMediaTypes() {
-    if (ianaMediaTypes == null) {
-      ianaMediaTypes =
+  private IanaMediaTypes() {
+    //do nothing
+  }
+
+  /**
+   * If {@link Set} with the IANA Media types is null, loads from resource.
+   *
+   * @return {@link Set}.
+   */
+  public static Set<String> getIanaMediaTypesList() {
+    if (ianaMediaTypesList == null) {
+      ianaMediaTypesList =
           new BufferedReader(
                   new InputStreamReader(
                       Objects.requireNonNull(
-                          IANAMediaTypes.class.getResourceAsStream(
+                          IanaMediaTypes.class.getResourceAsStream(
                               Constants.PATH_RESOURCES_CSIP_VOCABULARY_IANA_MEDIA_TYPES)),
                       StandardCharsets.UTF_8))
               .lines()
               .collect(Collectors.toSet());
     }
-    return ianaMediaTypes;
+    return ianaMediaTypesList;
   }
 }

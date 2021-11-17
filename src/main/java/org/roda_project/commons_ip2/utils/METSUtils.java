@@ -198,7 +198,7 @@ public final class METSUtils {
     if (probedContentType == null) {
       probedContentType = "application/octet-stream";
     } else {
-      if (!IANAMediaTypes.getIANAMediaTypes().contains(probedContentType)) {
+      if (!IanaMediaTypes.getIanaMediaTypesList().contains(probedContentType)) {
         probedContentType = "application/octet-stream";
       }
     }

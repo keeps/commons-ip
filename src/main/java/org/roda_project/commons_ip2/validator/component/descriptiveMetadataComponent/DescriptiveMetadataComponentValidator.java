@@ -16,7 +16,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.roda_project.commons_ip2.mets_v1_12.beans.AmdSecType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
-import org.roda_project.commons_ip2.utils.IANAMediaTypes;
+import org.roda_project.commons_ip2.utils.IanaMediaTypes;
 import org.roda_project.commons_ip2.validator.common.ControlledVocabularyParser;
 import org.roda_project.commons_ip2.validator.common.FolderManager;
 import org.roda_project.commons_ip2.validator.common.MetsParser;
@@ -610,7 +610,7 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
       MdSecType.MdRef mdRef = mdSecType.getMdRef();
       String mimetype = mdRef.getMIMETYPE();
       if (mimetype != null) {
-        if (!IANAMediaTypes.getIANAMediaTypes().contains(mimetype)) {
+        if (!IanaMediaTypes.getIanaMediaTypesList().contains(mimetype)) {
           StringBuilder message = new StringBuilder();
           message.append("Value ").append(mimetype)
             .append(" in %1$s for mets/dmdSec/mdRef/@MIMETYPE value isn't valid");

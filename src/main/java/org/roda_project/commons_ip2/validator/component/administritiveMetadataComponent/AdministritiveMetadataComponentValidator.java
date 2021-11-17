@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import javax.xml.parsers.ParserConfigurationException;
 import org.roda_project.commons_ip2.mets_v1_12.beans.AmdSecType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType;
-import org.roda_project.commons_ip2.utils.IANAMediaTypes;
+import org.roda_project.commons_ip2.utils.IanaMediaTypes;
 import org.roda_project.commons_ip2.validator.common.ControlledVocabularyParser;
 import org.roda_project.commons_ip2.validator.common.MetsParser;
 import org.roda_project.commons_ip2.validator.component.MetsValidatorImpl;
@@ -1028,7 +1028,7 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
         MdSecType.MdRef mdRef = digiprov.getMdRef();
         String mimeType = mdRef.getMIMETYPE();
         if (mimeType != null) {
-          if (!IANAMediaTypes.getIANAMediaTypes().contains(mimeType)) {
+          if (!IanaMediaTypes.getIanaMediaTypesList().contains(mimeType)) {
             StringBuilder message = new StringBuilder();
             message
                 .append("Value ")
@@ -1758,7 +1758,7 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
                   false,
                   false);
             } else {
-              if (!IANAMediaTypes.getIANAMediaTypes().contains(mimeType)) {
+              if (!IanaMediaTypes.getIanaMediaTypesList().contains(mimeType)) {
                 StringBuilder message = new StringBuilder();
                 message
                     .append("Value ")
