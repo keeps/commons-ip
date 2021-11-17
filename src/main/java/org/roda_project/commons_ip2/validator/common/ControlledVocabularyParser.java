@@ -25,7 +25,7 @@ public class ControlledVocabularyParser {
     List<String> data = new ArrayList<>();
     SAXParser saxParser = factory.newSAXParser();
     ControlledVocabularyHandler controlledVocabularyHandler = new ControlledVocabularyHandler("Term", data);
-    InputStream stream = ClassLoader.getSystemResourceAsStream(resourcePath);
+    InputStream stream = ControlledVocabularyParser.class.getResourceAsStream(resourcePath);
     saxParser.parse(stream, controlledVocabularyHandler);
     return data;
   }
