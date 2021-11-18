@@ -1,24 +1,34 @@
 package org.roda_project.commons_ip2.validator.utils;
 
-import java.nio.file.Paths;
 import java.util.Map;
-
 import org.roda_project.commons_ip2.validator.constants.Constants;
 
-/**
- * @author João Gomes <jgomes@keep.pt>
- */
+/** {@author João Gomes <jgomes@keep.pt>}. */
 public final class Message {
 
   private Message() {
-    /* do nothing */ }
+    // do nothing
+  }
 
-  public static String createErrorMessage(final String message, final String path, final boolean isRootMets) {
+  public static String createErrorMessage(
+      final String message, final String path, final boolean isRootMets) {
     return String.format(message, isRootMets ? "Root METS.xml" : path);
   }
 
-  public static String createMissingFilesMessage(final Map<String, Boolean> missedMetadataFiles,
-    final String initialMessage, final boolean isZip, final String split) {
+  /**
+   * Creates message with number of files missing in some validation methods.
+   *
+   * @param missedMetadataFiles the {@link Map} with the missing files.
+   * @param initialMessage the {@link String} with the initial message
+   * @param isZip flag if IP is in zip format or is a folder.
+   * @param split the {@link String} with the path we don't want in the message.
+   * @return a message {@link String}.
+   */
+  public static String createMissingFilesMessage(
+      final Map<String, Boolean> missedMetadataFiles,
+      final String initialMessage,
+      final boolean isZip,
+      final String split) {
     final StringBuilder message = new StringBuilder();
     message.append(initialMessage);
     final int size = missedMetadataFiles.size();
@@ -42,11 +52,14 @@ public final class Message {
     return message.toString();
   }
 
-  private static String calculateInnerMessage(final boolean isZip, final String key, final String split) {
+  private static String calculateInnerMessage(
+      final boolean isZip, final String key, final String split) {
     final StringBuilder message = new StringBuilder();
     if (isZip) {
-      message.append(key.split(split)[1].startsWith("/") ? key.split(split)[1] : "/" + key.split(split)[1])
-        .append(", ");
+      message
+          .append(
+              key.split(split)[1].startsWith("/") ? key.split(split)[1] : "/" + key.split(split)[1])
+          .append(", ");
     } else {
       message.append(key.split(split)[1]);
     }

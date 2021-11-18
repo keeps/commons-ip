@@ -1,24 +1,26 @@
 package org.roda_project.commons_ip2.validator.handlers;
 
-import java.util.HashMap;
 import java.util.Map;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-/**
- * @author João Gomes <jgomes@keep.pt>
- */
-
+/** {@author João Gomes <jgomes@keep.pt>}. */
 public class MetsHandler extends DefaultHandler {
   private final String section;
   private final String element;
   private final Map<String, String> data;
-  private boolean indexFound;
   private boolean sectionFound;
+  private boolean indexFound;
   private final StringBuilder tmp = new StringBuilder();
 
+  /**
+   * Constructor of Handler to parse METS files.
+   *
+   * @param section the {@link String} to section to parse
+   * @param element the {@link String} the element we want to get the value of
+   * @param data the {@link Map} where the values are stored
+   */
   public MetsHandler(String section, String element, Map<String, String> data) {
     this.section = section;
     this.element = element;
@@ -72,5 +74,4 @@ public class MetsHandler extends DefaultHandler {
       tmp.append(ch, start, length);
     }
   }
-
 }

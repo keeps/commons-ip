@@ -3,11 +3,10 @@ package org.roda_project.commons_ip2.validator.observer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @author João Gomes <jgomes@keep.pt>
- */
+/** {@author João Gomes <jgomes@keep.pt>}. */
 public class ProgressValidationLoggerObserver implements ValidationObserver {
-  private static final Logger LOGGER = LoggerFactory.getLogger(ProgressValidationLoggerObserver.class);
+  private static final Logger LOGGER =
+      LoggerFactory.getLogger(ProgressValidationLoggerObserver.class);
 
   @Override
   public void notifyValidationStart() {
@@ -40,7 +39,7 @@ public class ProgressValidationLoggerObserver implements ValidationObserver {
   }
 
   @Override
-  public void notifyIndicators(int errors, int success, int warnings,int notes, int skipped) {
+  public void notifyIndicators(int errors, int success, int warnings, int notes, int skipped) {
     LOGGER.info("Number of requirements success [{}]", success);
     LOGGER.info("Number of requirements failed [{}]", errors);
     LOGGER.info("Number of warnings [{}]", warnings);

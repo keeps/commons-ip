@@ -1,8 +1,6 @@
 package org.roda_project.commons_ip2.validator.utils;
 
-/**
- * @author João Gomes <jgomes@keep.pt>
- */
+/** {@author João Gomes <jgomes@keep.pt>}. */
 public enum CHECKSUMTYPE {
   HAVAL {
     public String toString() {

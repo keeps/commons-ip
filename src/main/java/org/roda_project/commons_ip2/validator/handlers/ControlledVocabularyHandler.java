@@ -1,15 +1,11 @@
 package org.roda_project.commons_ip2.validator.handlers;
 
 import java.util.List;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-/**
- * @author João Gomes <jgomes@keep.pt>
- */
-
+/** {@author João Gomes <jgomes@keep.pt>}. */
 public class ControlledVocabularyHandler extends DefaultHandler {
   private final String tag;
   private final List<String> data;
@@ -43,5 +39,4 @@ public class ControlledVocabularyHandler extends DefaultHandler {
       tmp.append(ch, start, length);
     }
   }
-
 }

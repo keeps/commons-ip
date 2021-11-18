@@ -1,8 +1,6 @@
 package org.roda_project.commons_ip2.validator.utils;
 
-/**
- * @author João Gomes <jgomes@keep.pt>
- */
+/** {@author João Gomes <jgomes@keep.pt>}. */
 public class ExitCodes {
   public static final int EXIT_CODE_OK = 0;
   public static final int EXIT_PARSE_ARG = 1;
@@ -12,5 +10,7 @@ public class ExitCodes {
   public static final int EXIT_CODE_INVALID_DATE_FORMAT = 5;
   public static final int EXIT_CANNOT_CREATE_EARKVALIDATOR_OBJECT = 7;
 
-
+  private ExitCodes() {
+    // do nothing.
+  }
 }
