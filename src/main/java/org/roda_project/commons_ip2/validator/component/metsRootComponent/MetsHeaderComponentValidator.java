@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.parsers.ParserConfigurationException;
-
 import org.roda_project.commons_ip2.mets_v1_12.beans.MetsType;
 import org.roda_project.commons_ip2.validator.common.ControlledVocabularyParser;
 import org.roda_project.commons_ip2.validator.component.MetsValidatorImpl;
@@ -20,9 +18,7 @@ import org.roda_project.commons_ip2.validator.utils.Message;
 import org.roda_project.commons_ip2.validator.utils.ResultsUtils;
 import org.xml.sax.SAXException;
 
-/**
- * @author João Gomes <jgomes@keep.pt>
- */
+/** {@author João Gomes <jgomes@keep.pt>}. */
 public class MetsHeaderComponentValidator extends MetsValidatorImpl {
 
   private final String moduleName;
@@ -30,110 +26,174 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
   private MetsType.MetsHdr metsHdr;
   private List<MetsType.MetsHdr.Agent> agents;
 
-  public MetsHeaderComponentValidator() throws IOException, ParserConfigurationException, SAXException {
+  /**
+   * Initialize all objects needed to validation of this component.
+   *
+   * @throws IOException if some I/O error occurs
+   * @throws ParserConfigurationException if some error occurs
+   * @throws SAXException if some error occurs
+   */
+  public MetsHeaderComponentValidator()
+      throws IOException, ParserConfigurationException, SAXException {
     this.moduleName = Constants.CSIP_MODULE_NAME_2;
-    this.oaisPackageTypes = ControlledVocabularyParser
-      .parse(Constants.PATH_RESOURCES_CSIP_VOCABULARY_OAIS_PACKAGE_TYPE);
+    this.oaisPackageTypes =
+        ControlledVocabularyParser.parse(
+            Constants.PATH_RESOURCES_CSIP_VOCABULARY_OAIS_PACKAGE_TYPE);
   }
 
   @Override
-  public Map<String, ReporterDetails> validate(StructureValidatorState structureValidatorState,
-    MetsValidatorState metsValidatorState) throws IOException {
+  public Map<String, ReporterDetails> validate(
+      StructureValidatorState structureValidatorState, MetsValidatorState metsValidatorState)
+      throws IOException {
     metsHdr = metsValidatorState.getMets().getMetsHdr();
     agents = metsHdr.getAgent();
     Map<String, ReporterDetails> results = new HashMap<>();
 
     ReporterDetails skippedCSIP;
     /* CSIP117 */
-    notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID);
-    ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID,
-      validateCSIP117(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+    notifyObserversValidationStarted(
+        moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID);
+    ResultsUtils.addResult(
+        results,
+        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID,
+        validateCSIP117(metsValidatorState)
+            .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
-    if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID)) {
+    if (ResultsUtils.isResultValid(
+        results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID)) {
       /* CSIP7 */
-      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP7_ID);
-      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP7_ID,
-        validateCSIP7(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+      notifyObserversValidationStarted(
+          moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP7_ID);
+      ResultsUtils.addResult(
+          results,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP7_ID,
+          validateCSIP7(metsValidatorState)
+              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIP8 */
-      skippedCSIP = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-        Message.createErrorMessage("SKIPPED in  %1$s  can't validate", metsValidatorState.getMetsName(),
-          metsValidatorState.isRootMets()),
-        true, true);
-      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP8_ID, skippedCSIP);
+      skippedCSIP =
+          new ReporterDetails(
+              Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+              Message.createErrorMessage(
+                  "SKIPPED in  %1$s  can't validate",
+                  metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+              true,
+              true);
+      ResultsUtils.addResult(
+          results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP8_ID, skippedCSIP);
 
       /* CSIP9 */
-      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP9_ID);
-      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP9_ID,
-        validateCSIP9(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+      notifyObserversValidationStarted(
+          moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP9_ID);
+      ResultsUtils.addResult(
+          results,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP9_ID,
+          validateCSIP9(metsValidatorState)
+              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       if (metsValidatorState.isRootMets()) {
         /* CSIP10 */
-        notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID);
-        ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID,
-          validateCSIP10(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+        notifyObserversValidationStarted(
+            moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID);
+        ResultsUtils.addResult(
+            results,
+            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID,
+            validateCSIP10(metsValidatorState)
+                .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
-        if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID)) {
+        if (ResultsUtils.isResultValid(
+            results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID)) {
           /* CSIP11 */
-          notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID);
-          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID,
-            validateCSIP11(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+          notifyObserversValidationStarted(
+              moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID);
+          ResultsUtils.addResult(
+              results,
+              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID,
+              validateCSIP11(metsValidatorState)
+                  .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP12 */
-          notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID);
-          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID,
-            validateCSIP12(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+          notifyObserversValidationStarted(
+              moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID);
+          ResultsUtils.addResult(
+              results,
+              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID,
+              validateCSIP12(metsValidatorState)
+                  .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP13 */
-          notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID);
-          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID,
-            validateCSIP13(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+          notifyObserversValidationStarted(
+              moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID);
+          ResultsUtils.addResult(
+              results,
+              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID,
+              validateCSIP13(metsValidatorState)
+                  .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP14 */
-          notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID);
-          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID,
-            validateCSIP14(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+          notifyObserversValidationStarted(
+              moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID);
+          ResultsUtils.addResult(
+              results,
+              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID,
+              validateCSIP14(metsValidatorState)
+                  .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP15 */
-          notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID);
-          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID,
-            validateCSIP15(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+          notifyObserversValidationStarted(
+              moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID);
+          ResultsUtils.addResult(
+              results,
+              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID,
+              validateCSIP15(metsValidatorState)
+                  .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP16 */
-          notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID);
-          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID,
-            validateCSIP16(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+          notifyObserversValidationStarted(
+              moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID);
+          ResultsUtils.addResult(
+              results,
+              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID,
+              validateCSIP16(metsValidatorState)
+                  .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
         } else {
-          String message = Message.createErrorMessage(
-            "SKIPPED in %1$s because it does not contain a mets/metsHdr/agent element",
-            metsValidatorState.getMetsName(), metsValidatorState.isRootMets());
+          String message =
+              Message.createErrorMessage(
+                  "SKIPPED in %1$s because it does not contain a mets/metsHdr/agent element",
+                  metsValidatorState.getMetsName(), metsValidatorState.isRootMets());
 
-          ResultsUtils.addResults(results,
-            new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID);
+          ResultsUtils.addResults(
+              results,
+              new ReporterDetails(
+                  Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
+              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID,
+              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID,
+              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID,
+              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID,
+              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID,
+              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID);
         }
       }
     } else {
-      String message = Message.createErrorMessage("SKIPPED because mets/metsHdr doesn't exist ",
-        metsValidatorState.getMetsName(), metsValidatorState.isRootMets());
+      String message =
+          Message.createErrorMessage(
+              "SKIPPED because mets/metsHdr doesn't exist ",
+              metsValidatorState.getMetsName(),
+              metsValidatorState.isRootMets());
 
-      ResultsUtils.addResults(results,
-        new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP7_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP8_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP9_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID);
+      ResultsUtils.addResults(
+          results,
+          new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP7_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP8_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP9_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP11_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP12_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP13_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP14_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP15_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP16_ID);
     }
     notifyObserversFinishModule(moduleName);
     return results;
@@ -146,8 +206,10 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
     ReporterDetails details = new ReporterDetails();
     if (metsHdr == null) {
       details.setValid(false);
-      details.addIssue(Message.createErrorMessage("mets/metsHdr can't be null, in %1$s the mets/metsHdr does not exist",
-        metsValidatorState.getMetsName(), metsValidatorState.isRootMets()));
+      details.addIssue(
+          Message.createErrorMessage(
+              "mets/metsHdr can't be null, in %1$s the mets/metsHdr does not exist",
+              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()));
     }
     return details;
   }
@@ -161,8 +223,10 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
     XMLGregorianCalendar createDate = metsHdr.getCREATEDATE();
     if (createDate == null) {
       details.setValid(false);
-      details.addIssue(Message.createErrorMessage("mets/metsHdr/@CREATEDATE can't be null, in %1$s the value is null",
-        metsValidatorState.getMetsName(), metsValidatorState.isRootMets()));
+      details.addIssue(
+          Message.createErrorMessage(
+              "mets/metsHdr/@CREATEDATE can't be null, in %1$s the value is null",
+              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()));
     }
     return details;
   }
@@ -177,17 +241,24 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
     String oaisPackageType = metsHdr.getOAISPACKAGETYPE();
     if (oaisPackageType == null || oaisPackageType.equals("")) {
       details.setValid(false);
-      details.addIssue(Message.createErrorMessage(
-        "mets/metsHdr/@csip:OAISPACKAGETYPE can't be null or empty, in %1$s the value is null or empty",
-        metsValidatorState.getMetsName(), metsValidatorState.isRootMets()));
+      details.addIssue(
+          Message.createErrorMessage(
+              "mets/metsHdr/@csip:OAISPACKAGETYPE can't be null or empty, "
+                  + "in %1$s the value is null or empty",
+              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()));
     } else {
       if (!oaisPackageTypes.contains(oaisPackageType)) {
         StringBuilder message = new StringBuilder();
-        message.append("Value ").append(oaisPackageType)
-          .append("in %1$s for mets/metsHdr/@csip:OAISPACKAGETYPE isn't valid");
+        message
+            .append("Value ")
+            .append(oaisPackageType)
+            .append("in %1$s for mets/metsHdr/@csip:OAISPACKAGETYPE isn't valid");
         details.setValid(false);
-        details.addIssue(Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
-          metsValidatorState.isRootMets()));
+        details.addIssue(
+            Message.createErrorMessage(
+                message.toString(),
+                metsValidatorState.getMetsName(),
+                metsValidatorState.isRootMets()));
       }
     }
     return details;
@@ -202,19 +273,24 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
     ReporterDetails details = new ReporterDetails();
     if (agents == null && metsValidatorState.isRootMets()) {
       details.setValid(false);
-      details.addIssue(Message.createErrorMessage("Must have at least one mets/metsHdr/agent (%1$s)",
-        metsValidatorState.getMetsName(), metsValidatorState.isRootMets()));
+      details.addIssue(
+          Message.createErrorMessage(
+              "Must have at least one mets/metsHdr/agent (%1$s)",
+              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()));
     } else {
       if (agents == null && !metsValidatorState.isRootMets()) {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", true, true);
       } else {
         if (agents.isEmpty() && metsValidatorState.isRootMets()) {
           details.setValid(false);
-          details.addIssue(Message.createErrorMessage("Must have at least one mets/metsHdr/agent (%1$s)",
-            metsValidatorState.getMetsName(), metsValidatorState.isRootMets()));
+          details.addIssue(
+              Message.createErrorMessage(
+                  "Must have at least one mets/metsHdr/agent (%1$s)",
+                  metsValidatorState.getMetsName(), metsValidatorState.isRootMets()));
         } else {
           if (agents.isEmpty() && !metsValidatorState.isRootMets()) {
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", true, true);
+            return new ReporterDetails(
+                Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", true, true);
           }
         }
       }
@@ -234,18 +310,22 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
         String role = a.getROLE();
         String type = a.getTYPE();
         String otherType = a.getOTHERTYPE();
-        if ((role != null && role.equals("CREATOR")) && (type != null && type.equals("OTHER"))
-          && (otherType != null && otherType.equals("SOFTWARE"))) {
+        if ((role != null && role.equals("CREATOR"))
+            && (type != null && type.equals("OTHER"))
+            && (otherType != null && otherType.equals("SOFTWARE"))) {
           found = true;
           break;
         }
       }
       if (!found) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          Message.createErrorMessage(
-            "Must have a mets/metsHdr/agent[@ROLE='CREATOR'] with the value CREATOR, in %1$s does not exists",
-            metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-          false, false);
+        return new ReporterDetails(
+            Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            Message.createErrorMessage(
+                "Must have a mets/metsHdr/agent[@ROLE='CREATOR'] "
+                    + "with the value CREATOR, in %1$s does not exists",
+                metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+            false,
+            false);
       }
     } else {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", true, true);
@@ -264,19 +344,23 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
         String role = a.getROLE();
         String type = a.getTYPE();
         String otherType = a.getOTHERTYPE();
-        if ((role != null && role.equals("CREATOR")) && (type != null && type.equals("OTHER"))
-          && (otherType != null && otherType.equals("SOFTWARE"))) {
+        if ((role != null && role.equals("CREATOR"))
+            && (type != null && type.equals("OTHER"))
+            && (otherType != null && otherType.equals("SOFTWARE"))) {
           return new ReporterDetails();
         }
       }
     } else {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", true, true);
     }
-    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-      Message.createErrorMessage(
-        "Must have a mets/metsHdr/agent[@TYPE='OTHER'] with the value OTHER, in %1$s does not exist",
-        metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-      false, false);
+    return new ReporterDetails(
+        Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+        Message.createErrorMessage(
+            "Must have a mets/metsHdr/agent[@TYPE='OTHER'] "
+                + "with the value OTHER, in %1$s does not exist",
+            metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+        false,
+        false);
   }
 
   /*
@@ -291,19 +375,28 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
         String role = a.getROLE();
         String type = a.getTYPE();
         String otherType = a.getOTHERTYPE();
-        if ((role != null && role.equals("CREATOR")) && (type != null && type.equals("OTHER"))
-          && (otherType != null && otherType.equals("SOFTWARE"))) {
+        if ((role != null && role.equals("CREATOR"))
+            && (type != null && type.equals("OTHER"))
+            && (otherType != null && otherType.equals("SOFTWARE"))) {
           return new ReporterDetails();
         }
       }
     } else {
-      new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-        Message.createErrorMessage("", metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), true, true);
+      new ReporterDetails(
+          Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+          Message.createErrorMessage(
+              "", metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+          true,
+          true);
     }
-    return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-      "Must have a mets/metsHdr/agent[@OTHERTYPE=’SOFTWARE’] with the value SOFTWARE, in the %1$s the value isn't SOFTWARE",
-      metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
-
+    return new ReporterDetails(
+        Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+        Message.createErrorMessage(
+            "Must have a mets/metsHdr/agent[@OTHERTYPE=’SOFTWARE’] "
+                + "with the value SOFTWARE, in the %1$s the value isn't SOFTWARE",
+            metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+        false,
+        false);
   }
 
   /*
@@ -317,19 +410,26 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
         String role = a.getROLE();
         String type = a.getTYPE();
         String otherType = a.getOTHERTYPE();
-        if ((role != null && role.equals("CREATOR")) && (type != null && type.equals("OTHER"))
-          && (otherType != null && otherType.equals("SOFTWARE"))) {
+        if ((role != null && role.equals("CREATOR"))
+            && (type != null && type.equals("OTHER"))
+            && (otherType != null && otherType.equals("SOFTWARE"))) {
           if (a.getName() == null) {
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              Message.createErrorMessage("mets/metsHdr/agent/name can't be null, in %1$s the value is null",
-                metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-              false, false);
+            return new ReporterDetails(
+                Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                Message.createErrorMessage(
+                    "mets/metsHdr/agent/name can't be null, in %1$s the value is null",
+                    metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                false,
+                false);
           } else {
             if (a.getName().equals("")) {
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                Message.createErrorMessage("mets/metsHdr/agent/name can't be empty, in %1$s the value is empty",
-                  metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-                false, false);
+              return new ReporterDetails(
+                  Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                  Message.createErrorMessage(
+                      "mets/metsHdr/agent/name can't be empty, in %1$s the value is empty",
+                      metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                  false,
+                  false);
             }
           }
         }
@@ -351,28 +451,38 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
         String role = a.getROLE();
         String type = a.getTYPE();
         String otherType = a.getOTHERTYPE();
-        if ((role != null && role.equals("CREATOR")) && (type != null && type.equals("OTHER"))
-          && (otherType != null && otherType.equals("SOFTWARE"))) {
+        if ((role != null && role.equals("CREATOR"))
+            && (type != null && type.equals("OTHER"))
+            && (otherType != null && otherType.equals("SOFTWARE"))) {
           List<MetsType.MetsHdr.Agent.Note> notes = a.getNote();
           if (notes == null || notes.isEmpty()) {
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              Message.createErrorMessage("mets/metsHdr/agent/note can't be null, in %1$s the value is null",
-                metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-              false, false);
+            return new ReporterDetails(
+                Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                Message.createErrorMessage(
+                    "mets/metsHdr/agent/note can't be null, in %1$s the value is null",
+                    metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                false,
+                false);
           } else {
             if (notes.size() > 1) {
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                Message.createErrorMessage(
-                  "mets/metsHdr/agent/note exists more than once, in %1$s exists more than once note",
-                  metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-                false, false);
+              return new ReporterDetails(
+                  Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                  Message.createErrorMessage(
+                      "mets/metsHdr/agent/note exists more than once, "
+                          + "in %1$s exists more than once note",
+                      metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                  false,
+                  false);
             } else {
               for (MetsType.MetsHdr.Agent.Note note : notes) {
                 if (note.getValue().isEmpty()) {
-                  return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    Message.createErrorMessage("mets/metsHdr/agent/note can't be empty, in %1$s the note is empty",
-                      metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-                    false, false);
+                  return new ReporterDetails(
+                      Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                      Message.createErrorMessage(
+                          "mets/metsHdr/agent/note can't be empty, in %1$s the note is empty",
+                          metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                      false,
+                      false);
                 }
               }
             }
@@ -383,7 +493,6 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", true, true);
     }
     return new ReporterDetails();
-
   }
 
   /*
@@ -400,29 +509,46 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
       String role = a.getROLE();
       String type = a.getTYPE();
       String otherType = a.getOTHERTYPE();
-      if ((role != null && role.equals("CREATOR")) && (type != null && type.equals("OTHER"))
-        && (otherType != null && otherType.equals("SOFTWARE"))) {
+      if ((role != null && role.equals("CREATOR"))
+          && (type != null && type.equals("OTHER"))
+          && (otherType != null && otherType.equals("SOFTWARE"))) {
         List<MetsType.MetsHdr.Agent.Note> notes = a.getNote();
         if (notes == null || notes.isEmpty()) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            Message.createErrorMessage("mets/metsHdr/agent/note can't be null, in the %1$s the value is null",
-              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-            false, false);
+          return new ReporterDetails(
+              Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+              Message.createErrorMessage(
+                  "mets/metsHdr/agent/note can't be null, in the %1$s the value is null",
+                  metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+              false,
+              false);
         } else {
           for (MetsType.MetsHdr.Agent.Note note : notes) {
             if (note.getNOTETYPE() == null) {
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                Message.createErrorMessage(
-                  "mets/metsHdr/agent/note[@csip:NOTETYPE=’SOFTWARE VERSION’] can't be null, in %1$s the value is null",
-                  metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-                false, false);
+              return new ReporterDetails(
+                  Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                  Message.createErrorMessage(
+                      "mets/metsHdr/agent/note[@csip:NOTETYPE=’SOFTWARE VERSION’] "
+                          + "can't be null, in %1$s the value is null",
+                      metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                  false,
+                  false);
             } else {
               if (!note.getNOTETYPE().equals("SOFTWARE VERSION")) {
                 StringBuilder message = new StringBuilder();
-                message.append("Value ").append(note.getNOTETYPE()).append(
-                  " in %1$s for mets/metsHdr/agent/note[@csip:NOTETYPE=’SOFTWARE VERSION’] isn't valid, the value must be SOFTWARE VERSION");
-                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-                  message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                message
+                    .append("Value ")
+                    .append(note.getNOTETYPE())
+                    .append(
+                        " in %1$s for mets/metsHdr/agent/note[@csip:NOTETYPE=’SOFTWARE VERSION’] "
+                            + "isn't valid, the value must be SOFTWARE VERSION");
+                return new ReporterDetails(
+                    Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                    Message.createErrorMessage(
+                        message.toString(),
+                        metsValidatorState.getMetsName(),
+                        metsValidatorState.isRootMets()),
+                    false,
+                    false);
               }
             }
           }

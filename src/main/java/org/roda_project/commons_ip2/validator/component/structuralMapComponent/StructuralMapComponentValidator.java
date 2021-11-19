@@ -1257,8 +1257,13 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    */
   private ReporterDetails validateCSIP96(MetsValidatorState metsValidatorState) {
     List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
-    List<MetsType.FileSec.FileGrp> fileGrps =
-        metsValidatorState.getMets().getFileSec().getFileGrp();
+    MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
+    List<MetsType.FileSec.FileGrp> fileGrps;
+    if (fileSec != null) {
+      fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
+    } else {
+      fileGrps = new ArrayList<>();
+    }
     int fileGrpDocumentation = 0;
     int structDocumentation = 0;
     if (structMap != null) {
@@ -1306,8 +1311,13 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    */
   private ReporterDetails validateCSIP116(MetsValidatorState metsValidatorState) {
     List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
-    List<MetsType.FileSec.FileGrp> fileGrps =
-        metsValidatorState.getMets().getFileSec().getFileGrp();
+    MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
+    List<MetsType.FileSec.FileGrp> fileGrps;
+    if (fileSec != null) {
+      fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
+    } else {
+      fileGrps = new ArrayList<>();
+    }
     boolean found = false;
     if (structMap != null) {
       for (StructMapType struct : structMap) {
@@ -1506,8 +1516,13 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    */
   private ReporterDetails validateCSIP100(MetsValidatorState metsValidatorState) {
     List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
-    List<MetsType.FileSec.FileGrp> fileGrps =
-        metsValidatorState.getMets().getFileSec().getFileGrp();
+    MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
+    List<MetsType.FileSec.FileGrp> fileGrps;
+    if (fileSec != null) {
+      fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
+    } else {
+      fileGrps = new ArrayList<>();
+    }
     int fileGrpSchemas = 0;
     int structSchemas = 0;
     if (structMap != null) {
@@ -1555,8 +1570,13 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    */
   private ReporterDetails validateCSIP118(MetsValidatorState metsValidatorState) {
     List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
-    List<MetsType.FileSec.FileGrp> fileGrps =
-        metsValidatorState.getMets().getFileSec().getFileGrp();
+    MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
+    List<MetsType.FileSec.FileGrp> fileGrps;
+    if (fileSec != null) {
+      fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
+    } else {
+      fileGrps = new ArrayList<>();
+    }
     boolean found = false;
     if (structMap != null) {
       for (StructMapType struct : structMap) {
@@ -1771,8 +1791,13 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    */
   private ReporterDetails validateCSIP104(MetsValidatorState metsValidatorState) {
     List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
-    List<MetsType.FileSec.FileGrp> fileGrps =
-        metsValidatorState.getMets().getFileSec().getFileGrp();
+    MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
+    List<MetsType.FileSec.FileGrp> fileGrps;
+    if (fileSec != null) {
+      fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
+    } else {
+      fileGrps = new ArrayList<>();
+    }
     boolean isMptr = false;
     int fileGrpRepresentations = 0;
     int structRepresentations = 0;
@@ -1825,8 +1850,13 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    */
   private ReporterDetails validateCSIP119(MetsValidatorState metsValidatorState) {
     List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
-    List<MetsType.FileSec.FileGrp> fileGrps =
-        metsValidatorState.getMets().getFileSec().getFileGrp();
+    MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
+    List<MetsType.FileSec.FileGrp> fileGrps;
+    if (fileSec != null) {
+      fileGrps = metsValidatorState.getMets().getFileSec().getFileGrp();
+    } else {
+      fileGrps = new ArrayList<>();
+    }
     boolean found = false;
     if (structMap != null) {
       for (StructMapType struct : structMap) {
