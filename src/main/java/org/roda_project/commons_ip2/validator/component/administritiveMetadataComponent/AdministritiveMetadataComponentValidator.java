@@ -27,20 +27,24 @@ import org.roda_project.commons_ip2.validator.utils.CHECKSUMTYPE;
 import org.roda_project.commons_ip2.validator.utils.Message;
 import org.roda_project.commons_ip2.validator.utils.MetadataType;
 import org.roda_project.commons_ip2.validator.utils.ResultsUtils;
-import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 /** {@author João Gomes <jgomes@keep.pt>}. */
 public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl {
   public static final String METS_OBJECTID_CAN_T_BE_NULL = "mets/@OBJECTID can't be null";
   public static final String UTF_8 = "UTF-8";
-  private static final org.slf4j.Logger LOGGER =
-      LoggerFactory.getLogger(AdministritiveMetadataComponentValidator.class);
 
   private final String moduleName;
   private List<AmdSecType> amdSec;
   private List<String> dmdSecStatus;
 
+  /**
+   * Initialize all objects needed to validation of this component.
+   *
+   * @throws IOException if some I/O error occurs.
+   * @throws ParserConfigurationException if some error occurs.
+   * @throws SAXException if some error occurs.
+   */
   public AdministritiveMetadataComponentValidator()
       throws IOException, ParserConfigurationException, SAXException {
     this.moduleName = Constants.CSIP_MODULE_NAME_4;
@@ -460,7 +464,8 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
           return new ReporterDetails(
               Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
               Message.createErrorMessage(
-                  "You have files in the metadata/folder, you must have mets/dmdSec or mets/amdSec in %1$s",
+                  "You have files in the metadata/folder, "
+                      + "you must have mets/dmdSec or mets/amdSec in %1$s",
                   metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
               false,
               false);
@@ -475,7 +480,8 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
               return new ReporterDetails(
                   Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                   Message.createErrorMessage(
-                      "Doesn't have files in metadata folder but have amdSec in %1$s. Put the files under metadata folder",
+                      "Doesn't have files in metadata folder "
+                          + "but have amdSec in %1$s. Put the files under metadata folder",
                       metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
                   false,
                   false);
@@ -570,7 +576,8 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
           return new ReporterDetails(
               Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
               Message.createErrorMessage(
-                  "You have files in the metadata/folder, you must have mets/dmdSec or mets/amdSec in %1$s",
+                  "You have files in the metadata/folder, "
+                      + "you must have mets/dmdSec or mets/amdSec in %1$s",
                   metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
               false,
               false);
@@ -585,7 +592,8 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
               return new ReporterDetails(
                   Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                   Message.createErrorMessage(
-                      "Doesn't have files in metadata folder but have amdSec in %1$s. Put the files under metadata folder",
+                      "Doesn't have files in metadata folder "
+                          + "but have amdSec in %1$s. Put the files under metadata folder",
                       metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
                   false,
                   false);
@@ -673,7 +681,8 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
               return new ReporterDetails(
                   Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                   Message.createErrorMessage(
-                      "It is mandatory to include one <digiprovMD> element in %1$s for each piece of PREMIS metadata",
+                      "It is mandatory to include one <digiprovMD> "
+                          + "element in %1$s for each piece of PREMIS metadata",
                       metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
                   false,
                   false);
@@ -758,7 +767,8 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
           return new ReporterDetails(
               Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
               Message.createErrorMessage(
-                  "mets/amdSec/digiprovMD/mdRef in %1$s is the reference to the digital provenance metadata file",
+                  "mets/amdSec/digiprovMD/mdRef in %1$s "
+                      + "is the reference to the digital provenance metadata file",
                   metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
               false,
               false);
@@ -1378,7 +1388,8 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
     return new ReporterDetails(
         Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
         Message.createErrorMessage(
-            "Individual representations should state their specific rights in their representation METS file (%1$s)",
+            "Individual representations should state their "
+                + "specific rights in their representation METS file (%1$s)",
             metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
         false,
         false);
@@ -1612,7 +1623,8 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
             .collect(Collectors.toList())
             .forEach(type -> message.append(type).append(","));
         message.append(
-            " in %1$s for mets/amdSec/rightsMD/mdRef[@xlink:type='simple'] isn't valid, must be 'simple'");
+            " in %1$s for mets/amdSec/rightsMD/mdRef[@xlink:type='simple'] "
+                + "isn't valid, must be 'simple'");
         return new ReporterDetails(
             Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
             Message.createErrorMessage(

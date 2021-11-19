@@ -1,14 +1,11 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-/**
- * ManifestEntry
- */
+/** ManifestEntry. */
 public class ManifestEntry {
   @JsonProperty("path")
   private String path = null;
@@ -25,11 +22,10 @@ public class ManifestEntry {
   }
 
   /**
-   * Get path
-   * 
+   * Get path.
+   *
    * @return path
-   **/
-
+   */
   public String getPath() {
     return path;
   }
@@ -44,11 +40,10 @@ public class ManifestEntry {
   }
 
   /**
-   * Get size
-   * 
+   * Get size.
+   *
    * @return size
-   **/
-
+   */
   public Integer getSize() {
     return size;
   }
@@ -71,10 +66,10 @@ public class ManifestEntry {
   }
 
   /**
-   * Get checksums
-   * 
+   * Get checksums.
+   *
    * @return checksums
-   **/
+   */
   public List<Checksum> getChecksums() {
     return checksums;
   }
@@ -92,8 +87,9 @@ public class ManifestEntry {
       return false;
     }
     ManifestEntry manifestEntry = (ManifestEntry) o;
-    return Objects.equals(this.path, manifestEntry.path) && Objects.equals(this.size, manifestEntry.size)
-      && Objects.equals(this.checksums, manifestEntry.checksums);
+    return Objects.equals(this.path, manifestEntry.path)
+        && Objects.equals(this.size, manifestEntry.size)
+        && Objects.equals(this.checksums, manifestEntry.checksums);
   }
 
   @Override
@@ -114,8 +110,7 @@ public class ManifestEntry {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {

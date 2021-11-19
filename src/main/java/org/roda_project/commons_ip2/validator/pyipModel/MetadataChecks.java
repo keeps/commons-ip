@@ -1,14 +1,11 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-/**
- * MetadataChecks
- */
+/** MetadataChecks. */
 public class MetadataChecks {
   @JsonProperty("status")
   private MetadataStatus status = null;
@@ -22,10 +19,10 @@ public class MetadataChecks {
   }
 
   /**
-   * Get status
-   * 
+   * Get status.
+   *
    * @return status
-   **/
+   */
   public MetadataStatus getStatus() {
     return status;
   }
@@ -48,10 +45,10 @@ public class MetadataChecks {
   }
 
   /**
-   * Get messages
-   * 
+   * Get messages.
+   *
    * @return messages
-   **/
+   */
   public List<TestResult> getMessages() {
     return messages;
   }
@@ -69,7 +66,8 @@ public class MetadataChecks {
       return false;
     }
     MetadataChecks metadataChecks = (MetadataChecks) o;
-    return Objects.equals(this.status, metadataChecks.status) && Objects.equals(this.messages, metadataChecks.messages);
+    return Objects.equals(this.status, metadataChecks.status)
+        && Objects.equals(this.messages, metadataChecks.messages);
   }
 
   @Override
@@ -89,8 +87,7 @@ public class MetadataChecks {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {

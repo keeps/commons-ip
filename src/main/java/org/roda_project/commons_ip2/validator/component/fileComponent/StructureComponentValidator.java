@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.roda_project.commons_ip2.validator.component.StructureValidatorImpl;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
@@ -18,9 +17,7 @@ import org.roda_project.commons_ip2.validator.utils.ResultsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @author João Gomes <jgomes@keep.pt>
- */
+/** {@author João Gomes <jgomes@keep.pt>}. */
 public class StructureComponentValidator extends StructureValidatorImpl {
   private static final Logger LOGGER = LoggerFactory.getLogger(StructureComponentValidator.class);
   private static final byte[] ZIP_MAGIC_NUMBER = {'P', 'K', 0x3, 0x4};
@@ -31,99 +28,163 @@ public class StructureComponentValidator extends StructureValidatorImpl {
   }
 
   /**
-   * Validates all Structural Checks CSIPSTR1 to CSIPSTR16
-   * 
-   * @param structureValidatorState
-   *          the contextual {@link StructureValidatorState}
-   * @return {@link Map<String,ReporterDetails>} with all results
-   * @throws IOException
-   *           if some I/O error occurs
+   * Validates all Structural Checks CSIPSTR1 to CSIPSTR16.
+   *
+   * @param structureValidatorState the contextual {@link StructureValidatorState}
+   * @return {@link Map} with all results
+   * @throws IOException if some I/O error occurs
    */
   @Override
-  public Map<String, ReporterDetails> validate(final StructureValidatorState structureValidatorState)
-    throws IOException {
+  public Map<String, ReporterDetails> validate(
+      final StructureValidatorState structureValidatorState) throws IOException {
     Map<String, ReporterDetails> results = new HashMap<>();
 
     /* CSIPSTR1 */
-    notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_ID);
-    ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_ID,
-      validateCSIPSTR1(structureValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-    if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_ID)) {
+    notifyObserversValidationStarted(
+        moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_ID);
+    ResultsUtils.addResult(
+        results,
+        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_ID,
+        validateCSIPSTR1(structureValidatorState)
+            .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+    if (ResultsUtils.isResultValid(
+        results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR1_ID)) {
 
       /* CSIPSTR2 */
-      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_ID,
-        new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "Requirement check was skipped as it will be checked under CSIP1", true, true));
+      ResultsUtils.addResult(
+          results,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_ID,
+          new ReporterDetails(
+              Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+              "Requirement check was skipped as it will be checked under CSIP1",
+              true,
+              true));
 
       /* CSIPSTR3 */
-      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_ID);
-      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_ID,
-        validateCSIPSTR3(structureValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+      notifyObserversValidationStarted(
+          moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_ID);
+      ResultsUtils.addResult(
+          results,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_ID,
+          validateCSIPSTR3(structureValidatorState)
+              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR4 */
-      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_ID);
-      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_ID,
-        validateCSIPSTR4(structureValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+      notifyObserversValidationStarted(
+          moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_ID);
+      ResultsUtils.addResult(
+          results,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_ID,
+          validateCSIPSTR4(structureValidatorState)
+              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR5 */
-      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_ID);
-      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_ID,
-        validateCSIPSTR5(structureValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+      notifyObserversValidationStarted(
+          moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_ID);
+      ResultsUtils.addResult(
+          results,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_ID,
+          validateCSIPSTR5(structureValidatorState)
+              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR6 */
-      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_ID);
-      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_ID,
-        validateCSIPSTR6(structureValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+      notifyObserversValidationStarted(
+          moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_ID);
+      ResultsUtils.addResult(
+          results,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_ID,
+          validateCSIPSTR6(structureValidatorState)
+              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR7 */
-      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_ID);
-      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_ID,
-        validateCSIPSTR7(structureValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+      notifyObserversValidationStarted(
+          moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_ID);
+      ResultsUtils.addResult(
+          results,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_ID,
+          validateCSIPSTR7(structureValidatorState)
+              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR8 */
-      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_ID);
-      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_ID,
-        validateCSIPSTR8(structureValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+      notifyObserversValidationStarted(
+          moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_ID);
+      ResultsUtils.addResult(
+          results,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_ID,
+          validateCSIPSTR8(structureValidatorState)
+              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR9 */
-      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_ID);
-      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_ID,
-        validateCSIPSTR9(structureValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+      notifyObserversValidationStarted(
+          moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_ID);
+      ResultsUtils.addResult(
+          results,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_ID,
+          validateCSIPSTR9(structureValidatorState)
+              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR10 */
-      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_ID);
-      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_ID,
-        validateCSIPSTR10(structureValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+      notifyObserversValidationStarted(
+          moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_ID);
+      ResultsUtils.addResult(
+          results,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_ID,
+          validateCSIPSTR10(structureValidatorState)
+              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR11 */
-      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_ID);
-      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_ID,
-        validateCSIPSTR11(structureValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+      notifyObserversValidationStarted(
+          moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_ID);
+      ResultsUtils.addResult(
+          results,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_ID,
+          validateCSIPSTR11(structureValidatorState)
+              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR12 */
-      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_ID);
-      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_ID,
-        validateCSIPSTR12(structureValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+      notifyObserversValidationStarted(
+          moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_ID);
+      ResultsUtils.addResult(
+          results,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_ID,
+          validateCSIPSTR12(structureValidatorState)
+              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR13 */
-      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_ID);
-      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_ID,
-        validateCSIPSTR13(structureValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+      notifyObserversValidationStarted(
+          moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_ID);
+      ResultsUtils.addResult(
+          results,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_ID,
+          validateCSIPSTR13(structureValidatorState)
+              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR14 */
-      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_ID);
-      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_ID,
-        validateCSIPSTR14(structureValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+      notifyObserversValidationStarted(
+          moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_ID);
+      ResultsUtils.addResult(
+          results,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_ID,
+          validateCSIPSTR14(structureValidatorState)
+              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR15 */
-      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_ID);
-      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_ID,
-        validateCSIPSTR15(structureValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+      notifyObserversValidationStarted(
+          moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_ID);
+      ResultsUtils.addResult(
+          results,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_ID,
+          validateCSIPSTR15(structureValidatorState)
+              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
       /* CSIPSTR16 */
-      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_ID);
-      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_ID,
-        validateCSIPSTR16(structureValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
+      notifyObserversValidationStarted(
+          moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_ID);
+      ResultsUtils.addResult(
+          results,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_ID,
+          validateCSIPSTR16(structureValidatorState)
+              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
     } else {
       String message;
@@ -133,23 +194,24 @@ public class StructureComponentValidator extends StructureValidatorImpl {
         message = "Root must be a single directory";
       }
 
-      ResultsUtils.addResults(results,
-        new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_ID);
+      ResultsUtils.addResults(
+          results,
+          new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR2_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR3_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR4_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR5_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR6_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR7_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR8_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR9_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR10_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR11_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR12_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR13_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR14_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR15_ID,
+          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIPSTR16_ID);
     }
     notifyObserversFinishModule(moduleName);
 
@@ -157,202 +219,244 @@ public class StructureComponentValidator extends StructureValidatorImpl {
   }
 
   /**
-   * Any Information Package MUST be included within a single physical root folder
-   * (known as the “Information Package root folder”). For packages presented in
-   * an archive format, see CSIPSTR3, the archive MUST unpack to a single root
-   * folder.
-   * 
-   * @param structureValidatorState
-   *          the contextual {@link StructureValidatorState}
+   * Any Information Package MUST be included within a single physical root folder (known as the
+   * “Information Package root folder”). For packages presented in an archive format, see CSIPSTR3,
+   * the archive MUST unpack to a single root folder.
+   *
+   * @param structureValidatorState the contextual {@link StructureValidatorState}
    * @return {@link ReporterDetails}
-   * @throws IOException
-   *           if some I/O error occurs
+   * @throws IOException if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR1(final StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR1(final StructureValidatorState structureValidatorState)
+      throws IOException {
     ReporterDetails details = new ReporterDetails();
     if (Files.exists(structureValidatorState.getIpPath())) {
       if (isZipFile(structureValidatorState.getIpPath())) {
         structureValidatorState.setZipFileFlag(true);
-        if (!structureValidatorState.getZipManager().checkSingleRootFolder(structureValidatorState.getIpPath())) {
+        if (!structureValidatorState
+            .getZipManager()
+            .checkSingleRootFolder(structureValidatorState.getIpPath())) {
           details.setValid(false);
           details.addIssue("MUST unpack to a single folder");
         }
       } else {
         if (!Files.isDirectory(structureValidatorState.getIpPath())) {
           details.setValid(false);
-          details.addIssue(Message.createErrorMessage(
-            "The SIP path (%1$s) does not exist or is not a directory or is not an archived file format",
-            structureValidatorState.getIpPath().toString(), false));
+          details.addIssue(
+              Message.createErrorMessage(
+                  "The SIP path (%1$s) does not exist or "
+                      + "is not a directory or is not an archived file format",
+                  structureValidatorState.getIpPath().toString(), false));
         }
       }
     } else {
       details.setValid(false);
-      details.addIssue(Message.createErrorMessage(
-        "The SIP path (%1$s) does not exist or is not a directory or is not an archived file format",
-        structureValidatorState.getIpPath().toString(), false));
+      details.addIssue(
+          Message.createErrorMessage(
+              "The SIP path (%1$s) does not exist or is "
+                  + "not a directory or is not an archived file format",
+              structureValidatorState.getIpPath().toString(), false));
     }
     return details;
   }
 
   /**
-   * The Information Package root folder MAY be compressed (for example by using
-   * TAR or ZIP). Which specific compression format to use needs to be stated in
-   * the Submission Agreement.
-   * 
-   * @param structureValidatorState
-   *          the contextual {@link StructureValidatorState}
+   * The Information Package root folder MAY be compressed (for example by using TAR or ZIP). Which
+   * specific compression format to use needs to be stated in the Submission Agreement.
+   *
+   * @param structureValidatorState the contextual {@link StructureValidatorState}
    * @return the {@link ReporterDetails}
    */
   private ReporterDetails validateCSIPSTR3(final StructureValidatorState structureValidatorState) {
     if (structureValidatorState.isZipFileFlag()) {
       if (structureValidatorState.getIpPath().toString().contains("zip")) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "Information package is compressed in ZIP format", true, false);
+        return new ReporterDetails(
+            Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "Information package is compressed in ZIP format",
+            true,
+            false);
       } else {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "Information package is compressed in TAR format", true, false);
+        return new ReporterDetails(
+            Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "Information package is compressed in TAR format",
+            true,
+            false);
       }
     } else {
-      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-        "The Information Package root folder MAY be compressed.", false, false);
+      return new ReporterDetails(
+          Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+          "The Information Package root folder MAY be compressed.",
+          false,
+          false);
     }
   }
 
   /**
-   * The Information Package root folder MUST include a file named METS.xml. This
-   * file MUST contain metadata that identifies the package, provides a high-level
-   * package description, and describes its structure, including pointers to
-   * constituent representations.
-   * 
-   * @param structureValidatorState
-   *          the contextual {@link StructureValidatorState}
+   * The Information Package root folder MUST include a file named METS.xml. This file MUST contain
+   * metadata that identifies the package, provides a high-level package description, and describes
+   * its structure, including pointers to constituent representations.
+   *
+   * @param structureValidatorState the contextual {@link StructureValidatorState}
    * @return {@link ReporterDetails}
-   * @throws IOException
-   *           if some I/O error occurs
+   * @throws IOException if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR4(final StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR4(final StructureValidatorState structureValidatorState)
+      throws IOException {
     ReporterDetails details = new ReporterDetails();
     if (structureValidatorState.isZipFileFlag()) {
-      if (!structureValidatorState.getZipManager().checkIfExistsRootMetsFile(structureValidatorState.getIpPath())) {
+      if (!structureValidatorState
+          .getZipManager()
+          .checkIfExistsRootMetsFile(structureValidatorState.getIpPath())) {
         details.setValid(false);
-        details.addIssue("METS.xml in root folder not found; Please verify name of File or is existence.");
+        details.addIssue(
+            "METS.xml in root folder not found; Please verify name of File or is existence.");
       }
     } else {
-      if (!structureValidatorState.getFolderManager().checkIfExistsRootMetsFile(structureValidatorState.getIpPath())) {
+      if (!structureValidatorState
+          .getFolderManager()
+          .checkIfExistsRootMetsFile(structureValidatorState.getIpPath())) {
         details.setValid(false);
-        details.addIssue("METS.xml in root folder not found; Please verify name of File or is existence.");
+        details.addIssue(
+            "METS.xml in root folder not found; Please verify name of File or is existence.");
       }
     }
     return details;
   }
 
   /**
-   * The Information Package root folder SHOULD include a folder named metadata,
-   * which SHOULD include metadata relevant to the whole package.
-   * 
-   * @param structureValidatorState
-   *          the contextual {@link StructureValidatorState}
+   * The Information Package root folder SHOULD include a folder named metadata, which SHOULD
+   * include metadata relevant to the whole package.
+   *
+   * @param structureValidatorState the contextual {@link StructureValidatorState}
    * @return {@link ReporterDetails}
-   * @throws IOException
-   *           if some I/O error occurs
+   * @throws IOException if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR5(final StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR5(final StructureValidatorState structureValidatorState)
+      throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
-      if (!structureValidatorState.getZipManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
-        "metadata")) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "Include Metadata relevant to the whole package in folder metadata", false, false);
+      if (!structureValidatorState
+          .getZipManager()
+          .checkIfExistsFolderInRoot(structureValidatorState.getIpPath(), "metadata")) {
+        return new ReporterDetails(
+            Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "Include Metadata relevant to the whole package in folder metadata",
+            false,
+            false);
       }
     } else {
-      if (!structureValidatorState.getFolderManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
-        "metadata")) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "Include Metadata relevant to the whole package in folder metadata", false, false);
+      if (!structureValidatorState
+          .getFolderManager()
+          .checkIfExistsFolderInRoot(structureValidatorState.getIpPath(), "metadata")) {
+        return new ReporterDetails(
+            Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "Include Metadata relevant to the whole package in folder metadata",
+            false,
+            false);
       }
     }
     return new ReporterDetails();
   }
 
   /**
-   * If preservation metadata are available, they SHOULD be included in sub-folder
-   * preservation.
-   * 
-   * @param structureValidatorState
-   *          the contextual {@link StructureValidatorState}
+   * If preservation metadata are available, they SHOULD be included in sub-folder preservation.
+   *
+   * @param structureValidatorState the contextual {@link StructureValidatorState}
    * @return {@link ReporterDetails}
-   * @throws IOException
-   *           if some I/O error occurs
+   * @throws IOException if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR6(final StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR6(final StructureValidatorState structureValidatorState)
+      throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
-      if (!structureValidatorState.getZipManager().checkIfExistsFolderInside(structureValidatorState.getIpPath(),
-        "metadata/preservation")) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "If preservation metadata are available should include inside metadata/preservation", false, false);
+      if (!structureValidatorState
+          .getZipManager()
+          .checkIfExistsFolderInside(
+              structureValidatorState.getIpPath(), "metadata/preservation")) {
+        return new ReporterDetails(
+            Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "If preservation metadata are available should include inside metadata/preservation",
+            false,
+            false);
       }
     } else {
-      if (!structureValidatorState.getFolderManager().checkIfExistsFolderInside(structureValidatorState.getIpPath(),
-        "metadata", "preservation")) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "If preservation metadata are available should include inside metadata/preservation", false, false);
+      if (!structureValidatorState
+          .getFolderManager()
+          .checkIfExistsFolderInside(
+              structureValidatorState.getIpPath(), "metadata", "preservation")) {
+        return new ReporterDetails(
+            Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "If preservation metadata are available should include inside metadata/preservation",
+            false,
+            false);
       }
     }
     return new ReporterDetails();
   }
 
   /**
-   * If descriptive metadata are available, they SHOULD be included in sub-folder
-   * descriptive.
-   * 
-   * @param structureValidatorState
-   *          the contextual {@link StructureValidatorState}
+   * If descriptive metadata are available, they SHOULD be included in sub-folder descriptive.
+   *
+   * @param structureValidatorState the contextual {@link StructureValidatorState}
    * @return {@link ReporterDetails}
-   * @throws IOException
-   *           if some I/O error occurs
+   * @throws IOException if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR7(final StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR7(final StructureValidatorState structureValidatorState)
+      throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
-      if (!structureValidatorState.getZipManager().checkIfExistsFolderInside(structureValidatorState.getIpPath(),
-        "metadata/descriptive")) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "If descriptive metadata are available should include inside metadata/descriptive", false, false);
-
+      if (!structureValidatorState
+          .getZipManager()
+          .checkIfExistsFolderInside(structureValidatorState.getIpPath(), "metadata/descriptive")) {
+        return new ReporterDetails(
+            Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "If descriptive metadata are available should include inside metadata/descriptive",
+            false,
+            false);
       }
     } else {
-      if (!structureValidatorState.getFolderManager().checkIfExistsFolderInside(structureValidatorState.getIpPath(),
-        "metadata", "descriptive")) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "If descriptive metadata are available should include inside metadata/descriptive", false, false);
+      if (!structureValidatorState
+          .getFolderManager()
+          .checkIfExistsFolderInside(
+              structureValidatorState.getIpPath(), "metadata", "descriptive")) {
+        return new ReporterDetails(
+            Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "If descriptive metadata are available should include inside metadata/descriptive",
+            false,
+            false);
       }
     }
     return new ReporterDetails();
   }
 
   /**
-   * If any other metadata are available, they MAY be included in separate
-   * sub-folders, for example an additional folder named other.
-   * 
-   * @param structureValidatorState
-   *          the contextual {@link StructureValidatorState}
+   * If any other metadata are available, they MAY be included in separate sub-folders, for example
+   * an additional folder named other.
+   *
+   * @param structureValidatorState the contextual {@link StructureValidatorState}
    * @return {@link ReporterDetails}
-   * @throws IOException
-   *           if some I/O error occurs
+   * @throws IOException if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR8(final StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR8(final StructureValidatorState structureValidatorState)
+      throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
-      if (!structureValidatorState.getZipManager().checkIfExistsFolderInside(structureValidatorState.getIpPath(),
-        "metadata/other")) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "If any other metadata are available, they MAY be included in separate sub-folders, for example an additional folder named other.",
-          false, false);
-
+      if (!structureValidatorState
+          .getZipManager()
+          .checkIfExistsFolderInside(structureValidatorState.getIpPath(), "metadata/other")) {
+        return new ReporterDetails(
+            Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "If any other metadata are available, they MAY be included in "
+                + "separate sub-folders, for example an additional folder named other.",
+            false,
+            false);
       }
     } else {
-      if (!structureValidatorState.getFolderManager().checkIfExistsFolderInside(structureValidatorState.getIpPath(),
-        "metadata", "other")) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "If any other metadata are available, they MAY be included in separate sub-folders, for example an additional folder named other.",
-          false, false);
+      if (!structureValidatorState
+          .getFolderManager()
+          .checkIfExistsFolderInside(structureValidatorState.getIpPath(), "metadata", "other")) {
+        return new ReporterDetails(
+            Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "If any other metadata are available, they MAY be included in separate sub-folders, "
+                + "for example an additional folder named other.",
+            false,
+            false);
       }
     }
     return new ReporterDetails();
@@ -360,155 +464,210 @@ public class StructureComponentValidator extends StructureValidatorImpl {
 
   /**
    * The Information Package folder SHOULD include a folder named representations.
-   * 
-   * @param structureValidatorState
-   *          the contextual {@link StructureValidatorState}
+   *
+   * @param structureValidatorState the contextual {@link StructureValidatorState}
    * @return {@link ReporterDetails}
-   * @throws IOException
-   *           if some I/O error occurs
+   * @throws IOException if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR9(final StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR9(final StructureValidatorState structureValidatorState)
+      throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
-      if (!structureValidatorState.getZipManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
-        "representations")) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "The Information Package folder SHOULD include a folder named representations.", false, false);
+      if (!structureValidatorState
+          .getZipManager()
+          .checkIfExistsFolderInRoot(structureValidatorState.getIpPath(), "representations")) {
+        return new ReporterDetails(
+            Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "The Information Package folder SHOULD include a folder named representations.",
+            false,
+            false);
       }
     } else {
-      if (!structureValidatorState.getFolderManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
-        "representations")) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "The Information Package folder SHOULD include a folder named representations.", false, false);
+      if (!structureValidatorState
+          .getFolderManager()
+          .checkIfExistsFolderInRoot(structureValidatorState.getIpPath(), "representations")) {
+        return new ReporterDetails(
+            Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "The Information Package folder SHOULD include a folder named representations.",
+            false,
+            false);
       }
     }
     return new ReporterDetails();
   }
 
   /**
-   * The representations folder SHOULD include a sub-folder for each individual
-   * representation (i.e. the “representation folder”). Each representation folder
-   * should have a string name that is unique within the package scope. For
-   * example the name of the representation and/or its creation date might be good
-   * candidates as a representation sub-folder name.
-   * 
-   * @param structureValidatorState
-   *          the contextual {@link StructureValidatorState}
+   * The representations folder SHOULD include a sub-folder for each individual representation (i.e.
+   * the “representation folder”). Each representation folder should have a string name that is
+   * unique within the package scope. For example the name of the representation and/or its creation
+   * date might be good candidates as a representation sub-folder name.
+   *
+   * @param structureValidatorState the contextual {@link StructureValidatorState}
    * @return {@link ReporterDetails}
-   * @throws IOException
-   *           if some I/O error occurs
+   * @throws IOException if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR10(final StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR10(final StructureValidatorState structureValidatorState)
+      throws IOException {
     List<String> representationsFoldersNames;
     if (structureValidatorState.isZipFileFlag()) {
-      representationsFoldersNames = structureValidatorState.getZipManager()
-        .getRepresentationsFoldersNames(structureValidatorState.getIpPath());
+      representationsFoldersNames =
+          structureValidatorState
+              .getZipManager()
+              .getRepresentationsFoldersNames(structureValidatorState.getIpPath());
       if (!representationsFoldersNames.isEmpty()) {
-        if (structureValidatorState.getZipManager()
-          .countFilesInsideRepresentations(structureValidatorState.getIpPath()) != 0) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "The representations folder SHOULD include a sub-folder for each individual representation.", false, false);
+        if (structureValidatorState
+                .getZipManager()
+                .countFilesInsideRepresentations(structureValidatorState.getIpPath())
+            != 0) {
+          return new ReporterDetails(
+              Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+              "The representations folder SHOULD include a "
+                  + "sub-folder for each individual representation.",
+              false,
+              false);
         }
       } else {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "The representations folder SHOULD include a sub-folder for each individual representation.", false, false);
+        return new ReporterDetails(
+            Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "The representations folder SHOULD include a "
+                + "sub-folder for each individual representation.",
+            false,
+            false);
       }
     } else {
-      representationsFoldersNames = structureValidatorState.getFolderManager()
-        .getRepresentationsFoldersNames(structureValidatorState.getIpPath());
+      representationsFoldersNames =
+          structureValidatorState
+              .getFolderManager()
+              .getRepresentationsFoldersNames(structureValidatorState.getIpPath());
       if (!representationsFoldersNames.isEmpty()) {
-        if (structureValidatorState.getFolderManager()
-          .countFilesInsideRepresentations(structureValidatorState.getIpPath()) != 0) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            "The representations folder SHOULD include a sub-folder for each individual representation.", false, false);
+        if (structureValidatorState
+                .getFolderManager()
+                .countFilesInsideRepresentations(structureValidatorState.getIpPath())
+            != 0) {
+          return new ReporterDetails(
+              Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+              "The representations folder SHOULD "
+                  + "include a sub-folder for each individual representation.",
+              false,
+              false);
         }
       } else {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "The representations folder SHOULD include a sub-folder for each individual representation.", false, false);
+        return new ReporterDetails(
+            Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "The representations folder SHOULD include a "
+                + "sub-folder for each individual representation.",
+            false,
+            false);
       }
     }
     return new ReporterDetails();
   }
 
   /**
-   * The representation folder SHOULD include a sub-folder named data which MAY
-   * include all data constituting the representation.
-   * 
-   * @param structureValidatorState
-   *          the contextual {@link StructureValidatorState}
-   * @return the {@link ReporterDetails}
-   * @throws IOException
-   *           if some I/O error occurs
-   */
-  private ReporterDetails validateCSIPSTR11(final StructureValidatorState structureValidatorState) throws IOException {
-    if (structureValidatorState.isZipFileFlag()) {
-      if (!structureValidatorState.getZipManager()
-        .checkIfExistsFolderInsideRepresentation(structureValidatorState.getIpPath(), "data")) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "The representation folder SHOULD include a sub-folder named data which MAY include all data constituting the representation",
-          false, false);
-      }
-    } else {
-      if (!structureValidatorState.getFolderManager()
-        .checkIfExistsFolderInsideRepresentation(structureValidatorState.getIpPath(), "data")) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "The representation folder SHOULD include a sub-folder named data which MAY include all data constituting the representation",
-          false, false);
-      }
-    }
-    return new ReporterDetails();
-  }
-
-  /**
-   * The representation folder SHOULD include a metadata file named METS.xml which
-   * includes information about the identity and structure of the representation
-   * and its components. The recommended best practice is to always have a
-   * METS.xml in the representation folder.
+   * The representation folder SHOULD include a sub-folder named data which MAY include all data
+   * constituting the representation.
    *
-   * @param structureValidatorState
-   *          the contextual {@link StructureValidatorState}
-   * @return {@link ReporterDetails}
-   * @throws IOException
-   *           if some I/O error occurs
+   * @param structureValidatorState the contextual {@link StructureValidatorState}
+   * @return the {@link ReporterDetails}
+   * @throws IOException if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR12(final StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR11(final StructureValidatorState structureValidatorState)
+      throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
-      if (!structureValidatorState.getZipManager().checkIfExistsSubMets(structureValidatorState.getIpPath())) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "The recommended best practice is to always have a METS.xml in the representation folder.", false, false);
+      if (!structureValidatorState
+          .getZipManager()
+          .checkIfExistsFolderInsideRepresentation(structureValidatorState.getIpPath(), "data")) {
+        return new ReporterDetails(
+            Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "The representation folder SHOULD include a sub-folder named "
+                + "data which MAY include all data constituting the representation",
+            false,
+            false);
       }
     } else {
-      if (!structureValidatorState.getFolderManager().checkIfExistsSubMets(structureValidatorState.getIpPath())) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "The recommended best practice is to always have a METS.xml in the representation folder.", false, false);
+      if (!structureValidatorState
+          .getFolderManager()
+          .checkIfExistsFolderInsideRepresentation(structureValidatorState.getIpPath(), "data")) {
+        return new ReporterDetails(
+            Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "The representation folder SHOULD include a sub-folder named data "
+                + "which MAY include all data constituting the representation",
+            false,
+            false);
       }
     }
     return new ReporterDetails();
   }
 
   /**
-   * The representation folder SHOULD include a sub-folder named metadata which
-   * MAY include all metadata about the specific representation.
-   * 
-   * @param structureValidatorState
-   *          the contextual {@link StructureValidatorState}
-   * @return the {@link ReporterDetails}
-   * @throws IOException
-   *           if some I/O error occurs
+   * The representation folder SHOULD include a metadata file named METS.xml which includes
+   * information about the identity and structure of the representation and its components. The
+   * recommended best practice is to always have a METS.xml in the representation folder.
+   *
+   * @param structureValidatorState the contextual {@link StructureValidatorState}
+   * @return {@link ReporterDetails}
+   * @throws IOException if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR13(final StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR12(final StructureValidatorState structureValidatorState)
+      throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
-      if (!structureValidatorState.getZipManager()
-        .checkIfExistsFolderInsideRepresentation(structureValidatorState.getIpPath(), "metadata")) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "The representation folder SHOULD include a sub-folder named metadata which MAY include all metadata about the specific representation.",
-          false, false);
+      if (!structureValidatorState
+          .getZipManager()
+          .checkIfExistsSubMets(structureValidatorState.getIpPath())) {
+        return new ReporterDetails(
+            Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "The recommended best practice is to always "
+                + "have a METS.xml in the representation folder.",
+            false,
+            false);
       }
     } else {
-      if (!structureValidatorState.getFolderManager()
-        .checkIfExistsFolderInsideRepresentation(structureValidatorState.getIpPath(), "metadata")) {
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          "The representation folder SHOULD include a sub-folder named metadata which MAY include all metadata about the specific representation.",
-          false, false);
+      if (!structureValidatorState
+          .getFolderManager()
+          .checkIfExistsSubMets(structureValidatorState.getIpPath())) {
+        return new ReporterDetails(
+            Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "The recommended best practice is to always "
+                + "have a METS.xml in the representation folder.",
+            false,
+            false);
+      }
+    }
+    return new ReporterDetails();
+  }
+
+  /**
+   * The representation folder SHOULD include a sub-folder named metadata which MAY include all
+   * metadata about the specific representation.
+   *
+   * @param structureValidatorState the contextual {@link StructureValidatorState}
+   * @return the {@link ReporterDetails}
+   * @throws IOException if some I/O error occurs
+   */
+  private ReporterDetails validateCSIPSTR13(final StructureValidatorState structureValidatorState)
+      throws IOException {
+    if (structureValidatorState.isZipFileFlag()) {
+      if (!structureValidatorState
+          .getZipManager()
+          .checkIfExistsFolderInsideRepresentation(
+              structureValidatorState.getIpPath(), "metadata")) {
+        return new ReporterDetails(
+            Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "The representation folder SHOULD include a sub-folder named "
+                + "metadata which MAY include all metadata about the specific representation.",
+            false,
+            false);
+      }
+    } else {
+      if (!structureValidatorState
+          .getFolderManager()
+          .checkIfExistsFolderInsideRepresentation(
+              structureValidatorState.getIpPath(), "metadata")) {
+        return new ReporterDetails(
+            Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            "The representation folder SHOULD include a sub-folder named "
+                + "metadata which MAY include all metadata about the specific representation.",
+            false,
+            false);
       }
     }
     return new ReporterDetails();
@@ -517,20 +676,23 @@ public class StructureComponentValidator extends StructureValidatorImpl {
   /**
    * The Information Package MAY be extended with additional sub-folders.
    *
-   * @param structureValidatorState
-   *          the contextual {@link StructureValidatorState}
+   * @param structureValidatorState the contextual {@link StructureValidatorState}
    * @return the {@link ReporterDetails}
-   * @throws IOException
-   *           if some I/O error occurs
+   * @throws IOException if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR14(final StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR14(final StructureValidatorState structureValidatorState)
+      throws IOException {
     List<String> additionalFolders;
     if (structureValidatorState.isZipFileFlag()) {
-      additionalFolders = structureValidatorState.getZipManager()
-        .verifyAdditionalFoldersInRoot(structureValidatorState.getIpPath());
+      additionalFolders =
+          structureValidatorState
+              .getZipManager()
+              .verifyAdditionalFoldersInRoot(structureValidatorState.getIpPath());
     } else {
-      additionalFolders = structureValidatorState.getFolderManager()
-        .verifyAdditionalFoldersInRoot(structureValidatorState.getIpPath());
+      additionalFolders =
+          structureValidatorState
+              .getFolderManager()
+              .verifyAdditionalFoldersInRoot(structureValidatorState.getIpPath());
     }
     if (!additionalFolders.isEmpty()) {
       StringBuilder folders = new StringBuilder();
@@ -543,40 +705,44 @@ public class StructureComponentValidator extends StructureValidatorImpl {
           folders.append(" ").append(folder).append(" ");
         }
       }
-      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, folders.toString(), false, false);
+      return new ReporterDetails(
+          Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, folders.toString(), false, false);
     }
     return new ReporterDetails();
   }
 
   /**
-   * We recommend including all XML schema documents for any structured metadata
-   * within package. These schema documents SHOULD be placed in a sub-folder
-   * called schemas within the Information Package root folder and/or the
-   * representation folder.
-   * 
-   * @param structureValidatorState
-   *          the contextual {@link StructureValidatorState}
+   * We recommend including all XML schema documents for any structured metadata within package.
+   * These schema documents SHOULD be placed in a sub-folder called schemas within the Information
+   * Package root folder and/or the representation folder.
+   *
+   * @param structureValidatorState the contextual {@link StructureValidatorState}
    * @return the {@link ReporterDetails}
-   * @throws IOException
-   *           if some I/O error occurs
+   * @throws IOException if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR15(final StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR15(final StructureValidatorState structureValidatorState)
+      throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
-      if (!structureValidatorState.getZipManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
-        "schemas")) {
-        String message = checkIfExistsZipFolderInRepresentations(structureValidatorState, "schemas");
+      if (!structureValidatorState
+          .getZipManager()
+          .checkIfExistsFolderInRoot(structureValidatorState.getIpPath(), "schemas")) {
+        String message =
+            checkIfExistsZipFolderInRepresentations(structureValidatorState, "schemas");
         if (message.length() > 0) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, false, false);
+          return new ReporterDetails(
+              Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, false, false);
         }
       } else {
         return new ReporterDetails();
       }
     } else {
-      if (!structureValidatorState.getFolderManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
-        "schemas")) {
+      if (!structureValidatorState
+          .getFolderManager()
+          .checkIfExistsFolderInRoot(structureValidatorState.getIpPath(), "schemas")) {
         String message = checkIfExistsFolderInRepresentations(structureValidatorState, "schemas");
         if (message.length() > 0) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, false, false);
+          return new ReporterDetails(
+              Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, false, false);
         }
       } else {
         return new ReporterDetails();
@@ -586,34 +752,39 @@ public class StructureComponentValidator extends StructureValidatorImpl {
   }
 
   /**
-   * We recommend including any supplementary documentation for the package or a
-   * specific representation within the package. Supplementary documentation
-   * SHOULD be placed in a sub-folder called documentation within the Information
-   * Package root folder and/or the representation folder.
-   * 
-   * @param structureValidatorState
-   *          the contextual {@link StructureValidatorState}
+   * We recommend including any supplementary documentation for the package or a specific
+   * representation within the package. Supplementary documentation SHOULD be placed in a sub-folder
+   * called documentation within the Information Package root folder and/or the representation
+   * folder.
+   *
+   * @param structureValidatorState the contextual {@link StructureValidatorState}
    * @return the {@link ReporterDetails}
-   * @throws IOException
-   *           if some I/O error occurs
+   * @throws IOException if some I/O error occurs
    */
-  private ReporterDetails validateCSIPSTR16(final StructureValidatorState structureValidatorState) throws IOException {
+  private ReporterDetails validateCSIPSTR16(final StructureValidatorState structureValidatorState)
+      throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
-      if (!structureValidatorState.getZipManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
-        "documentation")) {
-        String message = checkIfExistsZipFolderInRepresentations(structureValidatorState, "documentation");
+      if (!structureValidatorState
+          .getZipManager()
+          .checkIfExistsFolderInRoot(structureValidatorState.getIpPath(), "documentation")) {
+        String message =
+            checkIfExistsZipFolderInRepresentations(structureValidatorState, "documentation");
         if (message.length() > 0) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, false, false);
+          return new ReporterDetails(
+              Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, false, false);
         }
       } else {
         return new ReporterDetails();
       }
     } else {
-      if (!structureValidatorState.getFolderManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
-        "documentation")) {
-        String message = checkIfExistsFolderInRepresentations(structureValidatorState, "documentation");
+      if (!structureValidatorState
+          .getFolderManager()
+          .checkIfExistsFolderInRoot(structureValidatorState.getIpPath(), "documentation")) {
+        String message =
+            checkIfExistsFolderInRepresentations(structureValidatorState, "documentation");
         if (message.length() > 0) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, false, false);
+          return new ReporterDetails(
+              Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, false, false);
         }
       } else {
         return new ReporterDetails();
@@ -623,10 +794,9 @@ public class StructureComponentValidator extends StructureValidatorImpl {
   }
 
   /**
-   * Check if the IP is a ZIP file or not
-   * 
-   * @param ipPath
-   *          the {@link Path} to the IP
+   * Check if the IP is a ZIP file or not.
+   *
+   * @param ipPath the {@link Path} to the IP
    * @return if the IP is a ZIP file
    */
   private boolean isZipFile(Path ipPath) {
@@ -642,8 +812,10 @@ public class StructureComponentValidator extends StructureValidatorImpl {
         }
       }
     } catch (IOException e) {
-      LOGGER.debug("Failed to validate {} Failed to validate due to an exception on CSIP1 " + moduleName,
-        "Please check the file submitted", e);
+      LOGGER.debug(
+          "Failed to validate {} Failed to validate due to an exception on CSIP1 " + moduleName,
+          "Please check the file submitted",
+          e);
       isZip = false;
     }
 
@@ -651,27 +823,31 @@ public class StructureComponentValidator extends StructureValidatorImpl {
   }
 
   /**
-   * Check if exists some folder inside Representations in ZIP file Packages
-   * 
-   * @param structureValidatorState
-   *          the contextual {@link StructureValidatorState}
-   * @param folder
-   *          the folder to find
+   * Check if exists some folder inside Representations in ZIP file Packages.
+   *
+   * @param structureValidatorState the contextual {@link StructureValidatorState}
+   * @param folder the folder to find
    * @return a message
-   * @throws IOException
-   *           if some I/O error occurs
+   * @throws IOException if some I/O error occurs
    */
-  private String checkIfExistsZipFolderInRepresentations(final StructureValidatorState structureValidatorState,
-    String folder) throws IOException {
-    List<String> representationFoldersNames = structureValidatorState.getZipManager()
-      .getRepresentationsFoldersNames(structureValidatorState.getIpPath());
+  private String checkIfExistsZipFolderInRepresentations(
+      final StructureValidatorState structureValidatorState, String folder) throws IOException {
+    List<String> representationFoldersNames =
+        structureValidatorState
+            .getZipManager()
+            .getRepresentationsFoldersNames(structureValidatorState.getIpPath());
     StringBuilder message = new StringBuilder();
     int i = 0;
     for (String representation : representationFoldersNames) {
-      if (!structureValidatorState.getZipManager()
-        .checkIfExistsFolderRepresentation(structureValidatorState.getIpPath(), folder, representation)) {
-        message.append("There is no ").append(folder).append(" folder in the representation folder ")
-          .append(representation);
+      if (!structureValidatorState
+          .getZipManager()
+          .checkIfExistsFolderRepresentation(
+              structureValidatorState.getIpPath(), folder, representation)) {
+        message
+            .append("There is no ")
+            .append(folder)
+            .append(" folder in the representation folder ")
+            .append(representation);
         if (i != representationFoldersNames.size() - 1) {
           message.append(", ");
         } else {
@@ -684,26 +860,37 @@ public class StructureComponentValidator extends StructureValidatorImpl {
   }
 
   /**
-   * Check if exists some folder inside Representations in folders
-   * 
-   * @param structureValidatorState
-   *          the contextual {@link StructureValidatorState}
-   * @param folder
-   *          the folder to find
+   * Check if exists some folder inside Representations in folders.
+   *
+   * @param structureValidatorState the contextual {@link StructureValidatorState}
+   * @param folder the folder to find
    * @return a message
    */
-  private String checkIfExistsFolderInRepresentations(final StructureValidatorState structureValidatorState,
-    String folder) {
-    List<String> representationFoldersNames = structureValidatorState.getFolderManager()
-      .getRepresentationsFoldersNames(structureValidatorState.getIpPath());
+  private String checkIfExistsFolderInRepresentations(
+      final StructureValidatorState structureValidatorState, String folder) {
+    List<String> representationFoldersNames =
+        structureValidatorState
+            .getFolderManager()
+            .getRepresentationsFoldersNames(structureValidatorState.getIpPath());
     StringBuilder message = new StringBuilder();
     int i = 0;
     for (String representation : representationFoldersNames) {
-      if (!structureValidatorState.getFolderManager()
-        .checkIfExistsFolderRepresentation(structureValidatorState.getIpPath(), "schemas", representation)) {
-        message.append("There is no ").append(folder).append(" folder in the representation folder ")
-          .append(structureValidatorState.getIpPath().resolve("representations").resolve(representation).toString()
-            .substring(structureValidatorState.getIpPath().getParent().toString().length()));
+      if (!structureValidatorState
+          .getFolderManager()
+          .checkIfExistsFolderRepresentation(
+              structureValidatorState.getIpPath(), "schemas", representation)) {
+        message
+            .append("There is no ")
+            .append(folder)
+            .append(" folder in the representation folder ")
+            .append(
+                structureValidatorState
+                    .getIpPath()
+                    .resolve("representations")
+                    .resolve(representation)
+                    .toString()
+                    .substring(
+                        structureValidatorState.getIpPath().getParent().toString().length()));
         if (i != representationFoldersNames.size() - 1) {
           message.append(", ");
         } else {

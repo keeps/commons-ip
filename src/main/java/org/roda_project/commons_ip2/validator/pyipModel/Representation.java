@@ -1,12 +1,9 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-/**
- * Representation
- */
+/** Representation. */
 public class Representation {
   @JsonProperty("name")
   private String name = null;
@@ -17,11 +14,10 @@ public class Representation {
   }
 
   /**
-   * Get name
-   * 
+   * Get name.
+   *
    * @return name
-   **/
-
+   */
   public String getName() {
     return name;
   }
@@ -58,8 +54,7 @@ public class Representation {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {

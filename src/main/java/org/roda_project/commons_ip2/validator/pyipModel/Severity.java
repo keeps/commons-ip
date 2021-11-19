@@ -3,11 +3,11 @@ package org.roda_project.commons_ip2.validator.pyipModel;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/**
- * Gets or Sets severity
- */
+/** Gets or Sets severity. */
 public enum Severity {
-  INFO("Info"), WARN("Warn"), ERROR("Error");
+  INFO("Info"),
+  WARN("Warn"),
+  ERROR("Error");
 
   private String value;
 

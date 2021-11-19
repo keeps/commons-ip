@@ -1,12 +1,9 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-/**
- * ProfileDetails
- */
+/** ProfileDetails. */
 public class ProfileDetails {
   @JsonProperty("type")
   private IpType type = null;
@@ -23,10 +20,10 @@ public class ProfileDetails {
   }
 
   /**
-   * Get type
-   * 
+   * Get type.
+   *
    * @return type
-   **/
+   */
   public IpType getType() {
     return type;
   }
@@ -41,10 +38,10 @@ public class ProfileDetails {
   }
 
   /**
-   * Get name
-   * 
+   * Get name.
+   *
    * @return name
-   **/
+   */
   public String getName() {
     return name;
   }
@@ -59,10 +56,10 @@ public class ProfileDetails {
   }
 
   /**
-   * Get version
-   * 
+   * Get version.
+   *
    * @return version
-   **/
+   */
   public String getVersion() {
     return version;
   }
@@ -80,8 +77,9 @@ public class ProfileDetails {
       return false;
     }
     ProfileDetails profileDetails = (ProfileDetails) o;
-    return Objects.equals(this.type, profileDetails.type) && Objects.equals(this.name, profileDetails.name)
-      && Objects.equals(this.version, profileDetails.version);
+    return Objects.equals(this.type, profileDetails.type)
+        && Objects.equals(this.name, profileDetails.name)
+        && Objects.equals(this.version, profileDetails.version);
   }
 
   @Override
@@ -102,8 +100,7 @@ public class ProfileDetails {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {

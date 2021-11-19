@@ -3,11 +3,11 @@ package org.roda_project.commons_ip2.validator.pyipModel;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/**
- * Gets or Sets packageState
- */
+/** Gets or Sets packageState. */
 public enum PackageState {
-  UPLOADED("UPLOADED"), CHECKSUMMED("CHECKSUMMED"), VALIDATED("VALIDATED");
+  UPLOADED("UPLOADED"),
+  CHECKSUMMED("CHECKSUMMED"),
+  VALIDATED("VALIDATED");
 
   private String value;
 

@@ -1,12 +1,9 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-/**
- * TestResult
- */
+/** TestResult. */
 public class TestResult {
   @JsonProperty("ruleId")
   private String ruleId = null;
@@ -26,10 +23,10 @@ public class TestResult {
   }
 
   /**
-   * Get ruleId
-   * 
+   * Get ruleId.
+   *
    * @return ruleId
-   **/
+   */
   public String getRuleId() {
     return ruleId;
   }
@@ -44,10 +41,10 @@ public class TestResult {
   }
 
   /**
-   * Get location
-   * 
+   * Get location.
+   *
    * @return location
-   **/
+   */
   public String getLocation() {
     return location;
   }
@@ -62,10 +59,10 @@ public class TestResult {
   }
 
   /**
-   * Get message
-   * 
+   * Get message.
+   *
    * @return message
-   **/
+   */
   public String getMessage() {
     return message;
   }
@@ -80,11 +77,10 @@ public class TestResult {
   }
 
   /**
-   * Get severity
-   * 
+   * Get severity.
+   *
    * @return severity
-   **/
-
+   */
   public Severity getSeverity() {
     return severity;
   }
@@ -102,8 +98,10 @@ public class TestResult {
       return false;
     }
     TestResult testResult = (TestResult) o;
-    return Objects.equals(this.ruleId, testResult.ruleId) && Objects.equals(this.location, testResult.location)
-      && Objects.equals(this.message, testResult.message) && Objects.equals(this.severity, testResult.severity);
+    return Objects.equals(this.ruleId, testResult.ruleId)
+        && Objects.equals(this.location, testResult.location)
+        && Objects.equals(this.message, testResult.message)
+        && Objects.equals(this.severity, testResult.severity);
   }
 
   @Override
@@ -125,8 +123,7 @@ public class TestResult {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {
