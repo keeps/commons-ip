@@ -12,9 +12,7 @@ import java.security.NoSuchAlgorithmException;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
 import javax.xml.parsers.ParserConfigurationException;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -30,13 +28,12 @@ import org.roda_project.commons_ip2.validator.reporter.ValidationReportOutputJso
 import org.roda_project.commons_ip2.validator.utils.ExitCodes;
 import org.xml.sax.SAXException;
 
-/**
- * @author João Gomes <jgomes@keep.pt>
- */
+/** {@author João Gomes <jgomes@keep.pt>}. */
 public class CLI {
   private final Options parameters;
   private final CommandLineParser parser;
 
+  /** Initialize available CLI options. */
   public CLI() {
     this.parameters = new Options();
     this.parser = new DefaultParser();
@@ -61,6 +58,11 @@ public class CLI {
     parameters.addOption(verbose);
   }
 
+  /**
+   * Print All available options if some required option is missing.
+   *
+   * @param printStream {@link PrintStream}
+   */
   public static void printUsageValidator(PrintStream printStream) {
     StringBuilder out = new StringBuilder();
 
@@ -69,20 +71,37 @@ public class CLI {
     out.append("\n");
     out.append("Commands:");
     out.append("\n\n");
-    out.append("\t").append(CLIConstants.CLI_OPTION_SIP_PATHS).append("\t\t")
-      .append("(required) Paths to the SIPs archive file or files").append("\n");
-    out.append("\t").append(CLIConstants.CLI_OPTION_REPORT_DIRECTORY).append("\t\t")
-      .append(
-        "(optional) Path to save the validation report. If not set a report will be " + "generated in the sip folder.")
-      .append("\n\n");
-    out.append("\t").append(CLIConstants.CLI_OPTION_REPORT_TYPE).append("\t\t")
-      .append("(optional) By default generate json report, with option eark generate E-ARK JSON").append("\n\n");
-    out.append("\t").append(CLIConstants.CLI_OPTION_VERBOSE).append("\t\t")
-      .append("(optional) Verbose command line output with all validation steps").append("/n");
+    out.append("\t")
+        .append(CLIConstants.CLI_OPTION_SIP_PATHS)
+        .append("\t\t")
+        .append("(required) Paths to the SIPs archive file or files")
+        .append("\n");
+    out.append("\t")
+        .append(CLIConstants.CLI_OPTION_REPORT_DIRECTORY)
+        .append("\t\t")
+        .append(
+            "(optional) Path to save the validation report. If not set a report will be "
+                + "generated in the sip folder.")
+        .append("\n\n");
+    out.append("\t")
+        .append(CLIConstants.CLI_OPTION_REPORT_TYPE)
+        .append("\t\t")
+        .append("(optional) By default generate json report, with option eark generate E-ARK JSON")
+        .append("\n\n");
+    out.append("\t")
+        .append(CLIConstants.CLI_OPTION_VERBOSE)
+        .append("\t\t")
+        .append("(optional) Verbose command line output with all validation steps")
+        .append("/n");
     out.append("\n");
     printStream.append(out).flush();
   }
 
+  /**
+   * If first option validate is missing, print the first option to the user know.
+   *
+   * @param printStream {@link PrintStream}
+   */
   public static void printUsage(PrintStream printStream) {
     StringBuilder out = new StringBuilder();
 
@@ -91,12 +110,22 @@ public class CLI {
     out.append("\n");
     out.append("Commands:");
     out.append("\n\n");
-    out.append("\t").append(CLIConstants.CLI_OPTION_VALIDATE).append("\t\t").append("Validate a SIP file").append("\n");
+    out.append("\t")
+        .append(CLIConstants.CLI_OPTION_VALIDATE)
+        .append("\t\t")
+        .append("Validate a SIP file")
+        .append("\n");
 
     out.append("\n");
     printStream.append(out).flush();
   }
 
+  /**
+   * Start the CLI.
+   *
+   * @param args {@link String} array with arguments of command.
+   * @return one {@link ExitCodes}
+   */
   public int start(String[] args) {
     try {
       CommandLine commandLine = parser.parse(parameters, args);
@@ -130,7 +159,8 @@ public class CLI {
         Path reportPath;
         int count = 1;
         do {
-          String reportName = sipPath.getFileName() + "_validation-report_" + date + "_" + count++ + ".json";
+          String reportName =
+              sipPath.getFileName() + "_validation-report_" + date + "_" + count++ + ".json";
           if (reportDirectoryPath != null) {
             reportPath = Paths.get(reportDirectoryPath).resolve(reportName);
           } else {
@@ -197,11 +227,12 @@ public class CLI {
   }
 
   private int validate(String typeReportOption, Path reportPath, Path sipPath, boolean verbose)
-    throws IOException, ParserConfigurationException, SAXException, NoSuchAlgorithmException {
+      throws IOException, ParserConfigurationException, SAXException, NoSuchAlgorithmException {
     if (typeReportOption == null || typeReportOption.equals("default")) {
       OutputStream outputStream = createReportOutputStream(reportPath);
       if (outputStream != null) {
-        ValidationReportOutputJson jsonReporter = new ValidationReportOutputJson(sipPath, outputStream);
+        ValidationReportOutputJson jsonReporter =
+            new ValidationReportOutputJson(sipPath, outputStream);
         EARKSIPValidator earksipValidator = new EARKSIPValidator(jsonReporter);
         if (verbose) {
           earksipValidator.addObserver(new ProgressValidationLoggerObserver());
@@ -212,7 +243,8 @@ public class CLI {
         return ExitCodes.EXIT_CANNOT_CREATE_REPORT;
       }
     } else if (typeReportOption.equals("eark")) {
-      ValidationReportOutputJSONPyIP jsonReporter = new ValidationReportOutputJSONPyIP(reportPath, sipPath);
+      ValidationReportOutputJSONPyIP jsonReporter =
+          new ValidationReportOutputJSONPyIP(reportPath, sipPath);
       EARKPyIPValidator earkPyIPValidator = new EARKPyIPValidator(jsonReporter);
       if (verbose) {
         earkPyIPValidator.addObserver(new ProgressValidationLoggerObserver());
@@ -252,5 +284,4 @@ public class CLI {
     }
     return outputFile;
   }
-
 }

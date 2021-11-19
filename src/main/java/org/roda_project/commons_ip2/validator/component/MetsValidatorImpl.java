@@ -1,14 +1,10 @@
 package org.roda_project.commons_ip2.validator.component;
 
-import org.roda_project.commons_ip2.validator.component.MetsValidator;
-import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
 
-/**
- * @author João Gomes <jgomes@keep.pt>
- */
+/** {@author João Gomes <jgomes@keep.pt>}. */
 public abstract class MetsValidatorImpl implements MetsValidator {
 
   private List<ValidationObserver> observers = new ArrayList<>();
@@ -35,5 +31,4 @@ public abstract class MetsValidatorImpl implements MetsValidator {
       observer.notifyFinishModule(moduleName);
     }
   }
-
 }

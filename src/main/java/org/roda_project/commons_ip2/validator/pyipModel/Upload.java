@@ -1,13 +1,10 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-/**
- * Upload
- */
+/** Upload. */
 public class Upload {
   @JsonProperty("uid")
   private UUID uid = null;
@@ -24,10 +21,10 @@ public class Upload {
   }
 
   /**
-   * Get uid
-   * 
+   * Get uid.
+   *
    * @return uid
-   **/
+   */
   public UUID getUid() {
     return uid;
   }
@@ -42,10 +39,10 @@ public class Upload {
   }
 
   /**
-   * Get state
-   * 
+   * Get state.
+   *
    * @return state
-   **/
+   */
   public PackageState getState() {
     return state;
   }
@@ -60,10 +57,10 @@ public class Upload {
   }
 
   /**
-   * Get details
-   * 
+   * Get details.
+   *
    * @return details
-   **/
+   */
   public PackageDetails getDetails() {
     return details;
   }
@@ -81,8 +78,9 @@ public class Upload {
       return false;
     }
     Upload upload = (Upload) o;
-    return Objects.equals(this.uid, upload.uid) && Objects.equals(this.state, upload.state)
-      && Objects.equals(this.details, upload.details);
+    return Objects.equals(this.uid, upload.uid)
+        && Objects.equals(this.state, upload.state)
+        && Objects.equals(this.details, upload.details);
   }
 
   @Override
@@ -103,8 +101,7 @@ public class Upload {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {

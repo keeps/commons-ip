@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * @author João Gomes <jgomes@keep.pt>
- */
+/** {@author João Gomes <jgomes@keep.pt>}. */
 public class Main {
 
+  /**
+   * Main of the CLI.
+   *
+   * @param args {@link String} array with the args of the command.
+   */
   public static void main(String[] args) {
     if (args.length == 0) {
       CLI.printUsage(System.out);
@@ -22,6 +25,5 @@ public class Main {
         CLI.printUsage(System.out);
       }
     }
-
   }
 }

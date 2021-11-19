@@ -1,14 +1,11 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-/**
- * StructResults
- */
+/** StructResults. */
 public class StructResults {
   @JsonProperty("status")
   private StructStatus status = null;
@@ -22,10 +19,10 @@ public class StructResults {
   }
 
   /**
-   * Get status
-   * 
+   * Get status.
+   *
    * @return status
-   **/
+   */
   public StructStatus getStatus() {
     return status;
   }
@@ -48,10 +45,10 @@ public class StructResults {
   }
 
   /**
-   * Get messages
-   * 
+   * Get messages.
+   *
    * @return messages
-   **/
+   */
   public List<TestResult> getMessages() {
     return messages;
   }
@@ -69,7 +66,8 @@ public class StructResults {
       return false;
     }
     StructResults structResults = (StructResults) o;
-    return Objects.equals(this.status, structResults.status) && Objects.equals(this.messages, structResults.messages);
+    return Objects.equals(this.status, structResults.status)
+        && Objects.equals(this.messages, structResults.messages);
   }
 
   @Override
@@ -89,8 +87,7 @@ public class StructResults {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {

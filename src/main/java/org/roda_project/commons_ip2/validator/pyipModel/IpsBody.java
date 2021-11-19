@@ -1,14 +1,10 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
-
 import org.springframework.core.io.Resource;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-/**
- * IpsBody
- */
+/** IpsBody. */
 public class IpsBody {
   @JsonProperty("sha1")
   private String sha1 = null;
@@ -22,11 +18,10 @@ public class IpsBody {
   }
 
   /**
-   * Get sha1
-   * 
+   * Get sha1.
+   *
    * @return sha1
-   **/
-
+   */
   public String getSha1() {
     return sha1;
   }
@@ -41,10 +36,10 @@ public class IpsBody {
   }
 
   /**
-   * Get fileName
-   * 
+   * Get fileName.
+   *
    * @return fileName
-   **/
+   */
   public Resource getFileName() {
     return fileName;
   }
@@ -62,7 +57,8 @@ public class IpsBody {
       return false;
     }
     IpsBody ipsBody = (IpsBody) o;
-    return Objects.equals(this.sha1, ipsBody.sha1) && Objects.equals(this.fileName, ipsBody.fileName);
+    return Objects.equals(this.sha1, ipsBody.sha1)
+        && Objects.equals(this.fileName, ipsBody.fileName);
   }
 
   @Override
@@ -82,8 +78,7 @@ public class IpsBody {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {

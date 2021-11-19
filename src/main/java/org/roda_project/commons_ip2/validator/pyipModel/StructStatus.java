@@ -3,11 +3,11 @@ package org.roda_project.commons_ip2.validator.pyipModel;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/**
- * Gets or Sets structStatus
- */
+/** Gets or Sets structStatus. */
 public enum StructStatus {
-  UNKNOWN("Unknown"), NOTWELLFORMED("NotWellFormed"), WELLFORMED("WellFormed");
+  UNKNOWN("Unknown"),
+  NOTWELLFORMED("NotWellFormed"),
+  WELLFORMED("WellFormed");
 
   private String value;
 

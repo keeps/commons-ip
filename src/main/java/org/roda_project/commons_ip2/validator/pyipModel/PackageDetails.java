@@ -1,14 +1,11 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-/**
- * PackageDetails
- */
+/** PackageDetails. */
 public class PackageDetails {
   @JsonProperty("name")
   private String name = null;
@@ -22,10 +19,10 @@ public class PackageDetails {
   }
 
   /**
-   * Get name
-   * 
+   * Get name.
+   *
    * @return name
-   **/
+   */
   public String getName() {
     return name;
   }
@@ -48,10 +45,10 @@ public class PackageDetails {
   }
 
   /**
-   * Get checksums
-   * 
+   * Get checksums.
+   *
    * @return checksums
-   **/
+   */
   public List<Checksum> getChecksums() {
     return checksums;
   }
@@ -69,7 +66,8 @@ public class PackageDetails {
       return false;
     }
     PackageDetails packageDetails = (PackageDetails) o;
-    return Objects.equals(this.name, packageDetails.name) && Objects.equals(this.checksums, packageDetails.checksums);
+    return Objects.equals(this.name, packageDetails.name)
+        && Objects.equals(this.checksums, packageDetails.checksums);
   }
 
   @Override
@@ -89,8 +87,7 @@ public class PackageDetails {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {

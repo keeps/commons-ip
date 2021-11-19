@@ -1,12 +1,9 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-/**
- * MetadataResults
- */
+/** MetadataResults. */
 public class MetadataResults {
   @JsonProperty("schemaResults")
   private MetadataChecks schemaResults = null;
@@ -20,10 +17,10 @@ public class MetadataResults {
   }
 
   /**
-   * Get schemaResults
-   * 
+   * Get schemaResults.
+   *
    * @return schemaResults
-   **/
+   */
   public MetadataChecks getSchemaResults() {
     return schemaResults;
   }
@@ -38,10 +35,10 @@ public class MetadataResults {
   }
 
   /**
-   * Get schematronResults
-   * 
+   * Get schematronResults.
+   *
    * @return schematronResults
-   **/
+   */
   public MetadataChecks getSchematronResults() {
     return schematronResults;
   }
@@ -60,7 +57,7 @@ public class MetadataResults {
     }
     MetadataResults metadataResults = (MetadataResults) o;
     return Objects.equals(this.schemaResults, metadataResults.schemaResults)
-      && Objects.equals(this.schematronResults, metadataResults.schematronResults);
+        && Objects.equals(this.schematronResults, metadataResults.schematronResults);
   }
 
   @Override
@@ -80,8 +77,7 @@ public class MetadataResults {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {

@@ -3,11 +3,11 @@ package org.roda_project.commons_ip2.validator.pyipModel;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/**
- * Gets or Sets ipType
- */
+/** Gets or Sets ipType. */
 public enum IpType {
-  CSIP("CSIP"), SIP("SIP"), DIP("DIP");
+  CSIP("CSIP"),
+  SIP("SIP"),
+  DIP("DIP");
 
   private String value;
 

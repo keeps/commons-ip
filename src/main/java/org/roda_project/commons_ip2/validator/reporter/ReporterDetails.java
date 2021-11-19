@@ -3,9 +3,7 @@ package org.roda_project.commons_ip2.validator.reporter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author João Gomes <jgomes@keep.pt>
- */
+/** {@author João Gomes <jgomes@keep.pt>}. */
 public class ReporterDetails {
   private String detail;
   private boolean valid;
@@ -14,6 +12,7 @@ public class ReporterDetails {
   private boolean skipped;
   private int errors;
 
+  /** Empty Constructor of {@link ReporterDetails}. */
   public ReporterDetails() {
     this.detail = "";
     this.valid = true;
@@ -21,6 +20,14 @@ public class ReporterDetails {
     this.errors = 0;
   }
 
+  /**
+   * Constructor {@link ReporterDetails}.
+   *
+   * @param specification the requirement specification {@link String}.
+   * @param issue the issue of the requirement {@link String}
+   * @param valid flag if the requirement is valid or not
+   * @param skipped flag if the requirement is skipped or not
+   */
   public ReporterDetails(String specification, String issue, boolean valid, boolean skipped) {
     this.detail = "";
     this.valid = valid;
@@ -31,7 +38,16 @@ public class ReporterDetails {
     this.skipped = skipped;
   }
 
-  public ReporterDetails(String specification,List<String> issues, boolean valid,boolean skipped){
+  /**
+   * Constructor of {@link ReporterDetails}.
+   *
+   * @param specification the requirement specification {@link String}
+   * @param issues {@link List} of all issues of the result
+   * @param valid flag if the requirement is valid or not
+   * @param skipped flag if the requirement is skipped or not
+   */
+  public ReporterDetails(
+      String specification, List<String> issues, boolean valid, boolean skipped) {
     this.detail = "";
     this.specification = specification;
     this.issues = new ArrayList<>(issues);
@@ -40,8 +56,13 @@ public class ReporterDetails {
     this.skipped = skipped;
   }
 
+  /**
+   * Copy Constructor {@link ReporterDetails}.
+   *
+   * @param clone {@link ReporterDetails}
+   */
   public ReporterDetails(ReporterDetails clone) {
-    this(clone.getSpecification(),clone.getIssues(), clone.isValid(), clone.isSkipped());
+    this(clone.getSpecification(), clone.getIssues(), clone.isValid(), clone.isSkipped());
   }
 
   public ReporterDetails clone() {
@@ -92,5 +113,4 @@ public class ReporterDetails {
   public void addIssues(List<String> issues) {
     this.issues.addAll(issues);
   }
-
 }

@@ -1,14 +1,11 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-/**
- * Manifest
- */
+/** Manifest. */
 public class Manifest {
   @JsonProperty("source")
   private String source = null;
@@ -17,7 +14,6 @@ public class Manifest {
   private ManifestSummary summary = null;
 
   @JsonProperty("entries")
-
   private List<ManifestEntry> entries = null;
 
   public Manifest source(String source) {
@@ -26,12 +22,10 @@ public class Manifest {
   }
 
   /**
-   * Some class to cover different types of manifest source (archive, filesystem,
-   * METS)
-   * 
+   * Some class to cover different types of manifest source (archive, filesystem, METS).
+   *
    * @return source
-   **/
-
+   */
   public String getSource() {
     return source;
   }
@@ -46,11 +40,10 @@ public class Manifest {
   }
 
   /**
-   * Get summary
-   * 
+   * Get summary.
+   *
    * @return summary
-   **/
-
+   */
   public ManifestSummary getSummary() {
     return summary;
   }
@@ -73,11 +66,10 @@ public class Manifest {
   }
 
   /**
-   * Get entries
-   * 
+   * Get entries.
+   *
    * @return entries
-   **/
-
+   */
   public List<ManifestEntry> getEntries() {
     return entries;
   }
@@ -95,8 +87,9 @@ public class Manifest {
       return false;
     }
     Manifest manifest = (Manifest) o;
-    return Objects.equals(this.source, manifest.source) && Objects.equals(this.summary, manifest.summary)
-      && Objects.equals(this.entries, manifest.entries);
+    return Objects.equals(this.source, manifest.source)
+        && Objects.equals(this.summary, manifest.summary)
+        && Objects.equals(this.entries, manifest.entries);
   }
 
   @Override
@@ -117,8 +110,7 @@ public class Manifest {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {

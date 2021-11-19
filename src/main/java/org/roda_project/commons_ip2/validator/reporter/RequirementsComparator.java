@@ -2,9 +2,7 @@ package org.roda_project.commons_ip2.validator.reporter;
 
 import java.util.Comparator;
 
-/**
- * @author João Gomes <jgomes@keep.pt>
- */
+/** {@author João Gomes <jgomes@keep.pt>}. */
 public class RequirementsComparator implements Comparator<String> {
   private int compareInt(int c1, int c2) {
     if (c1 < c2) {

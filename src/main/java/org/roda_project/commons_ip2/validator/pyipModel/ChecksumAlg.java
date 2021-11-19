@@ -3,11 +3,12 @@ package org.roda_project.commons_ip2.validator.pyipModel;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/**
- * Gets or Sets checksumAlg
- */
+/** Gets or Sets checksumAlg. */
 public enum ChecksumAlg {
-  MD5("MD5"), SHA1("SHA1"), SHA256("SHA256"), SHA512("SHA512");
+  MD5("MD5"),
+  SHA1("SHA1"),
+  SHA256("SHA256"),
+  SHA512("SHA512");
 
   private String value;
 

@@ -1,14 +1,10 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-/**
- * IpManifest
- */
-
+/** IpManifest. */
 public class IpManifest {
   @JsonProperty("uid")
   private UUID uid = null;
@@ -22,11 +18,10 @@ public class IpManifest {
   }
 
   /**
-   * Get uid
-   * 
+   * Get uid.
+   *
    * @return uid
-   **/
-
+   */
   public UUID getUid() {
     return uid;
   }
@@ -41,11 +36,10 @@ public class IpManifest {
   }
 
   /**
-   * Get manifest
-   * 
+   * Get manifest.
+   *
    * @return manifest
-   **/
-
+   */
   public Manifest getManifest() {
     return manifest;
   }
@@ -63,7 +57,8 @@ public class IpManifest {
       return false;
     }
     IpManifest ipManifest = (IpManifest) o;
-    return Objects.equals(this.uid, ipManifest.uid) && Objects.equals(this.manifest, ipManifest.manifest);
+    return Objects.equals(this.uid, ipManifest.uid)
+        && Objects.equals(this.manifest, ipManifest.manifest);
   }
 
   @Override
@@ -83,8 +78,7 @@ public class IpManifest {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {

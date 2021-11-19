@@ -1,12 +1,9 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-/**
- * Checksum
- */
+/** Checksum. */
 public class Checksum {
   @JsonProperty("algorithm")
   private ChecksumAlg algorithm = null;
@@ -20,11 +17,10 @@ public class Checksum {
   }
 
   /**
-   * Get algorithm
-   * 
-   * @return algorithm
-   **/
-
+   * Get algorithm.
+   *
+   * @return algorithm.
+   */
   public ChecksumAlg getAlgorithm() {
     return algorithm;
   }
@@ -39,11 +35,10 @@ public class Checksum {
   }
 
   /**
-   * Get value
-   * 
+   * Get value.
+   *
    * @return value
-   **/
-
+   */
   public String getValue() {
     return value;
   }
@@ -61,7 +56,8 @@ public class Checksum {
       return false;
     }
     Checksum checksum = (Checksum) o;
-    return Objects.equals(this.algorithm, checksum.algorithm) && Objects.equals(this.value, checksum.value);
+    return Objects.equals(this.algorithm, checksum.algorithm)
+        && Objects.equals(this.value, checksum.value);
   }
 
   @Override
@@ -81,8 +77,7 @@ public class Checksum {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {

@@ -1,13 +1,10 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-/**
- * ValidationReport
- */
+/** ValidationReport. */
 public class ValidationReport {
   @JsonProperty("uid")
   private UUID uid = null;
@@ -27,10 +24,10 @@ public class ValidationReport {
   }
 
   /**
-   * Get uid
-   * 
+   * Get uid.
+   *
    * @return uid
-   **/
+   */
   public UUID getUid() {
     return uid;
   }
@@ -45,10 +42,10 @@ public class ValidationReport {
   }
 
   /**
-   * Get _package
-   * 
+   * Get _package.
+   *
    * @return _package
-   **/
+   */
   public InformationPackage getPackage() {
     return _package;
   }
@@ -63,10 +60,10 @@ public class ValidationReport {
   }
 
   /**
-   * Get structure
-   * 
+   * Get structure.
+   *
    * @return structure
-   **/
+   */
   public StructResults getStructure() {
     return structure;
   }
@@ -81,10 +78,10 @@ public class ValidationReport {
   }
 
   /**
-   * Get metadata
-   * 
+   * Get metadata.
+   *
    * @return metadata
-   **/
+   */
   public MetadataResults getMetadata() {
     return metadata;
   }
@@ -102,9 +99,10 @@ public class ValidationReport {
       return false;
     }
     ValidationReport validationReport = (ValidationReport) o;
-    return Objects.equals(this.uid, validationReport.uid) && Objects.equals(this._package, validationReport._package)
-      && Objects.equals(this.structure, validationReport.structure)
-      && Objects.equals(this.metadata, validationReport.metadata);
+    return Objects.equals(this.uid, validationReport.uid)
+        && Objects.equals(this._package, validationReport._package)
+        && Objects.equals(this.structure, validationReport.structure)
+        && Objects.equals(this.metadata, validationReport.metadata);
   }
 
   @Override
@@ -126,8 +124,7 @@ public class ValidationReport {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {

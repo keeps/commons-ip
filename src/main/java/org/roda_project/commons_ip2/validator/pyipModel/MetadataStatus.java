@@ -3,7 +3,7 @@ package org.roda_project.commons_ip2.validator.pyipModel;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 /**
- * Gets or Sets metadataStatus
+ * Gets or Sets metadataStatus.
  */
 public enum MetadataStatus {
   UNKNOWN("Unknown"), NOTVALID("NotValid"), VALID("Valid");

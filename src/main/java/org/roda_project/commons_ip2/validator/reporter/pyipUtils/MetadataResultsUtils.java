@@ -1,12 +1,10 @@
 package org.roda_project.commons_ip2.validator.reporter.pyipUtils;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
-
 import org.roda_project.commons_ip2.validator.constants.ConstantsAIPspec;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.constants.ConstantsSIPspec;
@@ -17,11 +15,19 @@ import org.roda_project.commons_ip2.validator.pyipModel.TestResult;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.reporter.RequirementsComparator;
 
-/**
- * @author João Gomes <jgomes@keep.pt>
- */
+/** {@author João Gomes <jgomes@keep.pt>}. */
 public class MetadataResultsUtils {
 
+  private MetadataResultsUtils() {
+    // do nothing
+  }
+
+  /**
+   * Creates the Schema result to the report.
+   *
+   * @param results {@link Map} with the results.
+   * @return {@link MetadataChecks}
+   */
   public static MetadataChecks createSchemaResult(Map<String, ReporterDetails> results) {
     MetadataChecks metadataChecks = new MetadataChecks();
     ReporterDetails schemaResult = results.get("CSIP0");
@@ -38,12 +44,23 @@ public class MetadataResultsUtils {
     return metadataChecks;
   }
 
+  /**
+   * Creates the other results in the report.
+   *
+   * @param results {@link Map} with the results.
+   * @return {@link MetadataChecks}
+   */
   public static MetadataChecks createSchematronResult(Map<String, ReporterDetails> results) {
-    Map<String, ReporterDetails> specificationResults = results.entrySet().stream()
-      .filter(result -> !result.getKey().startsWith("CSIPSTR") && !result.getKey().equals("CSIP0")
-        && !result.getValue().isValid())
-      .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    TreeMap<String,ReporterDetails> sortedSpecificationResults = new TreeMap<>(new RequirementsComparator());
+    Map<String, ReporterDetails> specificationResults =
+        results.entrySet().stream()
+            .filter(
+                result ->
+                    !result.getKey().startsWith("CSIPSTR")
+                        && !result.getKey().equals("CSIP0")
+                        && !result.getValue().isValid())
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    TreeMap<String, ReporterDetails> sortedSpecificationResults =
+        new TreeMap<>(new RequirementsComparator());
     sortedSpecificationResults.putAll(specificationResults);
     List<TestResult> testResults = new ArrayList<>();
     for (Map.Entry<String, ReporterDetails> result : sortedSpecificationResults.entrySet()) {
@@ -76,11 +93,17 @@ public class MetadataResultsUtils {
     Severity severity = null;
     if (reporterDetails != null) {
       if (id.startsWith("CSIP")) {
-        severity = calculateSeverity(ConstantsCSIPspec.getSpecificationLevel(id), reporterDetails.isValid());
+        severity =
+            calculateSeverity(
+                ConstantsCSIPspec.getSpecificationLevel(id), reporterDetails.isValid());
       } else if (id.startsWith("SIP")) {
-        severity = calculateSeverity(ConstantsSIPspec.getSpecificationLevel(id), reporterDetails.isValid());
+        severity =
+            calculateSeverity(
+                ConstantsSIPspec.getSpecificationLevel(id), reporterDetails.isValid());
       } else if (id.startsWith("AIP")) {
-        severity = calculateSeverity(ConstantsAIPspec.getSpecificationLevel(id), reporterDetails.isValid());
+        severity =
+            calculateSeverity(
+                ConstantsAIPspec.getSpecificationLevel(id), reporterDetails.isValid());
       }
     }
     testResult.setSeverity(severity);
@@ -100,8 +123,10 @@ public class MetadataResultsUtils {
   }
 
   private static MetadataStatus calculateStatus(Map<String, ReporterDetails> results) {
-    Map<String, ReporterDetails> failedResults = results.entrySet().stream()
-      .filter(result -> !result.getValue().isValid()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    Map<String, ReporterDetails> failedResults =
+        results.entrySet().stream()
+            .filter(result -> !result.getValue().isValid())
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     for (Map.Entry<String, ReporterDetails> result : failedResults.entrySet()) {
       String level = null;
       if (result.getKey().startsWith("CSIP")) {
