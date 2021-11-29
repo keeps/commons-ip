@@ -456,36 +456,4 @@ public class EARKSIPTest {
 
     return zipSIP;
   }
-
-  private Path createSIPonlyWithRepresentation() throws IPException, InterruptedException {
-    // 1) instantiate E-ARK SIP object
-    SIP sip = new EARKSIP("SIP_1", IPContentType.getMIXED(), IPContentInformationType.getMIXED());
-    sip.addCreatorSoftwareAgent("RODA Commons IP", "2.0.0");
-
-    // 1.1) set optional human-readable description
-    sip.setDescription("A full E-ARK SIP");
-
-    // 1.2) add descriptive metadata (SIP level)
-    IPDescriptiveMetadata metadataDescriptiveDC = new IPDescriptiveMetadata(
-        new IPFile(Paths.get("src/test/resources/eark/metadata_descriptive_dc.xml")),
-        new MetadataType(MetadataTypeEnum.DC), null);
-    sip.addDescriptiveMetadata(metadataDescriptiveDC);
-
-
-    // 1.8) add an agent (SIP level)
-    IPAgent agent = new IPAgent("Agent Name", "OTHER", "OTHER ROLE", CreatorType.INDIVIDUAL, "OTHER TYPE", "",
-        IPAgentNoteTypeEnum.SOFTWARE_VERSION);
-    sip.addAgent(agent);
-
-    // 1.9) add a representation (status will be set to the default value, i.e.,
-    // ORIGINAL)
-    IPRepresentation representation1 = new IPRepresentation("representation 1");
-    sip.addRepresentation(representation1);
-
-    // 2) build SIP, providing an output directory
-    Path zipSIP = sip.build(Paths.get("/home/jgomes/Desktop/TEST NULL POINTER"));
-
-    return zipSIP;
-  }
-
 }
