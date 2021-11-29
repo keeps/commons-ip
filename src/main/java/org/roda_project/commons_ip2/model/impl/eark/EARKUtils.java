@@ -158,12 +158,13 @@ public final class EARKUtils {
           && !representation.getDocumentation().isEmpty());
         boolean isRepresentationSchemas = (representation.getSchemas() != null
           && !representation.getSchemas().isEmpty());
+        boolean isRepresentationsData = (representation.getData() != null && !representation.getData().isEmpty());
         IPHeader header = new IPHeader(IPEnums.IPStatus.NEW).setAgents(representation.getAgents());
         MetsWrapper representationMETSWrapper = EARKMETSUtils.generateMETS(representationId,
           representation.getDescription(), ip.getProfile(), false, Optional.empty(), null, header,
           mainMETSWrapper.getMets().getMetsHdr().getOAISPACKAGETYPE(), representation.getContentType(),
           representation.getContentInformationType(), isRepresentationMetadata, isRepresentationMetadataOther,
-          isRepresentationSchemas, isRepresentationDocumentation,false);
+          isRepresentationSchemas, isRepresentationDocumentation,false,false,isRepresentationsData);
         representationMETSWrapper.getMainDiv().setTYPE(representation.getStatus().asString());
 
         // representation data
