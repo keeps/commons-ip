@@ -456,5 +456,4 @@ public class EARKSIPTest {
 
     return zipSIP;
   }
-
 }

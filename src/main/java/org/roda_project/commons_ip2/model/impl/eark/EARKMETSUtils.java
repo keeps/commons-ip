@@ -13,9 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
+
 import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip.utils.IPEnums.IPType;
 import org.roda_project.commons_ip.utils.IPException;
@@ -66,23 +68,10 @@ public final class EARKMETSUtils {
     // do nothing
   }
 
-  public static MetsWrapper generateMETS(
-      String id,
-      String label,
-      String profile,
-      boolean mainMets,
-      Optional<List<String>> ancestors,
-      Path metsPath,
-      IPHeader ipHeader,
-      String type,
-      IPContentType contentType,
-      IPContentInformationType contentInformationType,
-      boolean isMetadata,
-      boolean isMetadataOther,
-      boolean isSchemas,
-      boolean isDocumentation,
-      boolean isSubmission)
-      throws IPException {
+  public static MetsWrapper generateMETS(String id, String label, String profile, boolean mainMets,
+    Optional<List<String>> ancestors, Path metsPath, IPHeader ipHeader, String type, IPContentType contentType,
+    IPContentInformationType contentInformationType, boolean isMetadata, boolean isMetadataOther, boolean isSchemas,
+    boolean isDocumentation, boolean isSubmission, boolean isRepresentations, boolean isRepresentationsData) throws IPException {
     Mets mets = new Mets();
     MetsWrapper metsWrapper = new MetsWrapper(mets, metsPath);
 
@@ -138,7 +127,7 @@ public final class EARKMETSUtils {
 
     FileSec fileSec = new FileSec();
     fileSec.setID(Utils.generateRandomAndPrefixedUUID());
-    if (!mainMets) {
+    if (!mainMets && isRepresentationsData) {
       FileGrp dataFileGroup = createFileGroup(IPConstants.DATA_WITH_FIRST_LETTER_CAPITAL);
       fileSec.getFileGrp().add(dataFileGroup);
       metsWrapper.setDataFileGroup(dataFileGroup);
@@ -154,12 +143,11 @@ public final class EARKMETSUtils {
       }
     }
     if (isDocumentation) {
-      FileGrp documentationFileGroup =
-          createFileGroup(IPConstants.DOCUMENTATION_WITH_FIRST_LETTER_CAPITAL);
+      FileGrp documentationFileGroup = createFileGroup(IPConstants.DOCUMENTATION_WITH_FIRST_LETTER_CAPITAL);
       fileSec.getFileGrp().add(documentationFileGroup);
       metsWrapper.setDocumentationFileGroup(documentationFileGroup);
     }
-    if (!fileSec.getFileGrp().isEmpty()) {
+    if ((mainMets && isRepresentations) || !fileSec.getFileGrp().isEmpty()) {
       mets.setFileSec(fileSec);
     }
 
@@ -182,16 +170,13 @@ public final class EARKMETSUtils {
 
     // metadata/other
     if (isMetadataOther) {
-      DivType otherMetadataDiv =
-          createDivForStructMap(
-              IPConstants.METADATA_WITH_FIRST_LETTER_CAPITAL
-                  + IPConstants.ZIP_PATH_SEPARATOR
-                  + IPConstants.OTHER_WITH_FIRST_LETTER_CAPITAL);
+      DivType otherMetadataDiv = createDivForStructMap(IPConstants.METADATA_WITH_FIRST_LETTER_CAPITAL
+        + IPConstants.ZIP_PATH_SEPARATOR + IPConstants.OTHER_WITH_FIRST_LETTER_CAPITAL);
       metsWrapper.setOtherMetadataDiv(otherMetadataDiv);
       mainDiv.getDiv().add(otherMetadataDiv);
     }
     // data
-    if (!mainMets) {
+    if (!mainMets && isRepresentationsData) {
       DivType dataDiv = createDivForStructMap(IPConstants.DATA_WITH_FIRST_LETTER_CAPITAL);
       metsWrapper.setDataDiv(dataDiv);
       mainDiv.getDiv().add(dataDiv);
@@ -204,8 +189,7 @@ public final class EARKMETSUtils {
     }
     // documentation
     if (isDocumentation) {
-      DivType documentationDiv =
-          createDivForStructMap(IPConstants.DOCUMENTATION_WITH_FIRST_LETTER_CAPITAL);
+      DivType documentationDiv = createDivForStructMap(IPConstants.DOCUMENTATION_WITH_FIRST_LETTER_CAPITAL);
       metsWrapper.setDocumentationDiv(documentationDiv);
       mainDiv.getDiv().add(documentationDiv);
     }
@@ -249,14 +233,9 @@ public final class EARKMETSUtils {
     return div;
   }
 
-  public static void addRepresentationMETSToZipAndToMainMETS(
-      Map<String, ZipEntryInfo> zipEntries,
-      MetsWrapper mainMETSWrapper,
-      String representationId,
-      MetsWrapper representationMETSWrapper,
-      String representationMetsPath,
-      Path buildDir)
-      throws IPException, InterruptedException {
+  public static void addRepresentationMETSToZipAndToMainMETS(Map<String, ZipEntryInfo> zipEntries,
+    MetsWrapper mainMETSWrapper, String representationId, MetsWrapper representationMETSWrapper,
+    String representationMetsPath, Path buildDir) throws IPException, InterruptedException {
     try {
       if (Thread.interrupted()) {
         throw new InterruptedException();
@@ -272,13 +251,10 @@ public final class EARKMETSUtils {
       FileType fileType = new FileType();
       fileType.setID(Utils.generateRandomAndPrefixedFileID());
 
-      addMETSToZip(
-          zipEntries, representationMETSWrapper, representationMetsPath, buildDir, false, fileType);
+      addMETSToZip(zipEntries, representationMETSWrapper, representationMetsPath, buildDir, false, fileType);
 
       // add to file group and then to file section
-      FileGrp fileGrp =
-          createFileGroup(
-              IPConstants.REPRESENTATIONS_WITH_FIRST_LETTER_CAPITAL + "/" + representationId);
+      FileGrp fileGrp = createFileGroup(IPConstants.REPRESENTATIONS_WITH_FIRST_LETTER_CAPITAL + "/" + representationId);
       FLocat fileLocation = METSUtils.createFileLocation(representationMetsPath);
       fileType.getFLocat().add(fileLocation);
       fileGrp.getFile().add(fileType);
@@ -293,18 +269,10 @@ public final class EARKMETSUtils {
     }
   }
 
-  private static void addMETSToZip(
-      Map<String, ZipEntryInfo> zipEntries,
-      MetsWrapper metsWrapper,
-      String metsPath,
-      Path buildDir,
-      boolean mainMets,
-      FileType fileType)
-      throws JAXBException, IOException, IPException {
-    Path temp =
-        Files.createTempFile(buildDir, IPConstants.METS_FILE_NAME, IPConstants.METS_FILE_EXTENSION);
-    ZIPUtils.addMETSFileToZip(
-        zipEntries, temp, metsPath, metsWrapper.getMets(), mainMets, fileType);
+  private static void addMETSToZip(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper, String metsPath,
+    Path buildDir, boolean mainMets, FileType fileType) throws JAXBException, IOException, IPException {
+    Path temp = Files.createTempFile(buildDir, IPConstants.METS_FILE_NAME, IPConstants.METS_FILE_EXTENSION);
+    ZIPUtils.addMETSFileToZip(zipEntries, temp, metsPath, metsWrapper.getMets(), mainMets, fileType);
   }
 
   private static Agent createMETSAgent(IPAgent ipAgent) {
@@ -338,54 +306,31 @@ public final class EARKMETSUtils {
       ipAgent.setNoteType(IPAgentNoteTypeEnum.parse(note.getNOTETYPE()));
     }
     if (notes > 1) {
-      ValidationUtils.addIssue(
-          ip.getValidationReport(),
-          ValidationConstants.METS_AGENT_HAS_SEVERAL_NOTE_ENTRIES,
-          LEVEL.WARN,
-          agent.getID());
+      ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.METS_AGENT_HAS_SEVERAL_NOTE_ENTRIES,
+        LEVEL.WARN, agent.getID());
     }
 
-    ipAgent
-        .setName(agent.getName())
-        .setRole(agent.getROLE())
-        .setOtherRole(agent.getOTHERROLE())
-        .setType(agentType)
-        .setOtherType(agent.getOTHERTYPE());
+    ipAgent.setName(agent.getName()).setRole(agent.getROLE()).setOtherRole(agent.getOTHERROLE()).setType(agentType)
+      .setOtherType(agent.getOTHERTYPE());
 
     return ipAgent;
   }
 
-  public static MdRef addDescriptiveMetadataToMETS(
-      MetsWrapper metsWrapper,
-      IPDescriptiveMetadata descriptiveMetadata,
-      String descriptiveMetadataPath)
-      throws IPException, InterruptedException {
-    return addMetadataToMETS(
-        metsWrapper,
-        descriptiveMetadata,
-        descriptiveMetadataPath,
-        descriptiveMetadata.getMetadataType().getType().getType(),
-        descriptiveMetadata.getMetadataType().getOtherType(),
-        descriptiveMetadata.getMetadataVersion(),
-        true);
+  public static MdRef addDescriptiveMetadataToMETS(MetsWrapper metsWrapper, IPDescriptiveMetadata descriptiveMetadata,
+    String descriptiveMetadataPath) throws IPException, InterruptedException {
+    return addMetadataToMETS(metsWrapper, descriptiveMetadata, descriptiveMetadataPath,
+      descriptiveMetadata.getMetadataType().getType().getType(), descriptiveMetadata.getMetadataType().getOtherType(),
+      descriptiveMetadata.getMetadataVersion(), true);
   }
 
-  public static MdRef addOtherMetadataToMETS(
-      MetsWrapper metsWrapper, IPMetadata otherMetadata, String otherMetadataPath)
-      throws IPException, InterruptedException {
-    return addMetadataToMETS(
-        metsWrapper, otherMetadata, otherMetadataPath, "OTHER", null, null, false);
+  public static MdRef addOtherMetadataToMETS(MetsWrapper metsWrapper, IPMetadata otherMetadata,
+    String otherMetadataPath) throws IPException, InterruptedException {
+    return addMetadataToMETS(metsWrapper, otherMetadata, otherMetadataPath, "OTHER", null, null, false);
   }
 
-  private static MdRef addMetadataToMETS(
-      MetsWrapper metsWrapper,
-      IPMetadata metadata,
-      String metadataPath,
-      String mdType,
-      String mdOtherType,
-      String mdTypeVersion,
-      boolean isDescriptive)
-      throws IPException, InterruptedException {
+  private static MdRef addMetadataToMETS(MetsWrapper metsWrapper, IPMetadata metadata, String metadataPath,
+    String mdType, String mdOtherType, String mdTypeVersion, boolean isDescriptive)
+    throws IPException, InterruptedException {
     MdSecType dmdSec = new MdSecType();
     dmdSec.setSTATUS(metadata.getMetadataStatus().toString());
     dmdSec.setID(Utils.generateRandomAndPrefixedUUID());
@@ -414,9 +359,8 @@ public final class EARKMETSUtils {
     return mdRef;
   }
 
-  public static MdRef addPreservationMetadataToMETS(
-      MetsWrapper metsWrapper, IPMetadata preservationMetadata, String preservationMetadataPath)
-      throws IPException, InterruptedException {
+  public static MdRef addPreservationMetadataToMETS(MetsWrapper metsWrapper, IPMetadata preservationMetadata,
+    String preservationMetadataPath) throws IPException, InterruptedException {
     MdSecType digiprovMD = new MdSecType();
     digiprovMD.setSTATUS(preservationMetadata.getMetadataStatus().toString());
     digiprovMD.setID(Utils.generateRandomAndPrefixedUUID());
@@ -464,9 +408,8 @@ public final class EARKMETSUtils {
     }
   }
 
-  public static FileType addDataFileToMETS(
-      MetsWrapper representationMETS, String dataFilePath, Path dataFile)
-      throws IPException, InterruptedException {
+  public static FileType addDataFileToMETS(MetsWrapper representationMETS, String dataFilePath, Path dataFile)
+    throws IPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedFileID());
 
@@ -487,9 +430,8 @@ public final class EARKMETSUtils {
     return file;
   }
 
-  public static FileType addSchemaFileToMETS(
-      MetsWrapper metsWrapper, String schemaFilePath, Path schemaFile)
-      throws IPException, InterruptedException {
+  public static FileType addSchemaFileToMETS(MetsWrapper metsWrapper, String schemaFilePath, Path schemaFile)
+    throws IPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedFileID());
 
@@ -512,9 +454,8 @@ public final class EARKMETSUtils {
     return file;
   }
 
-  public static FileType addSubmissionFileToMETS(
-      MetsWrapper metsWrapper, String submissionFilePath, Path submissionFile)
-      throws IPException, InterruptedException {
+  public static FileType addSubmissionFileToMETS(MetsWrapper metsWrapper, String submissionFilePath,
+    Path submissionFile) throws IPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedFileID());
 
@@ -533,9 +474,8 @@ public final class EARKMETSUtils {
     return file;
   }
 
-  public static FileType addDocumentationFileToMETS(
-      MetsWrapper metsWrapper, String documentationFilePath, Path documentationFile)
-      throws IPException, InterruptedException {
+  public static FileType addDocumentationFileToMETS(MetsWrapper metsWrapper, String documentationFilePath,
+    Path documentationFile) throws IPException, InterruptedException {
     FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedFileID());
 
@@ -581,16 +521,13 @@ public final class EARKMETSUtils {
     List<String> ancestors = new ArrayList<>();
 
     for (StructMapType structMap : mets.getStructMap()) {
-      if (structMap.getLABEL() != null
-          && IPConstants.RODA_STRUCTURAL_MAP.equalsIgnoreCase(structMap.getLABEL())
-          && structMap.getDiv() != null) {
+      if (structMap.getLABEL() != null && IPConstants.RODA_STRUCTURAL_MAP.equalsIgnoreCase(structMap.getLABEL())
+        && structMap.getDiv() != null) {
         DivType mainDiv = structMap.getDiv();
 
-        if (IPConstants.RODA_DIV_LABEL.equalsIgnoreCase(mainDiv.getLABEL())
-            && mainDiv.getDiv() != null) {
+        if (IPConstants.RODA_DIV_LABEL.equalsIgnoreCase(mainDiv.getLABEL()) && mainDiv.getDiv() != null) {
           for (DivType div : mainDiv.getDiv()) {
-            if (IPConstants.RODA_ANCESTORS_DIV_LABEL.equalsIgnoreCase(div.getLABEL())
-                && div.getMptr() != null) {
+            if (IPConstants.RODA_ANCESTORS_DIV_LABEL.equalsIgnoreCase(div.getLABEL()) && div.getMptr() != null) {
               for (Mptr m : div.getMptr()) {
                 String href = METSUtils.decodeHref(m.getHref());
                 if (StringUtils.isNotBlank(href)) {
