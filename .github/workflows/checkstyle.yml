@@ -1,3 +1,4 @@
+name: Checkstyle
 on: pull_request
 
 jobs:
@@ -13,3 +14,4 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         reporter: 'github-pr-review'
         tool_name: 'checkstyle'
+        checkstyle_config: '../../code-style/checkstyle.xml'
