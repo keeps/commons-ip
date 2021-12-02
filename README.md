@@ -1,5 +1,5 @@
 # E-ARK IP validation and manipulation tool and library
-
+.
 This project provides a command-line interface and Java library to validate and manipulate OAIS Information Packages of different formats: E-ARK (version 1 & 2 in alpha stage), BagIt, Hungarian type 4 SIP.
 
 The E-ARK Information Packages are maintained by the Digital Information LifeCycle Interoperability Standards Board (DILCIS Board).  DILCIS Board is an international group of experts committed to maintain and sustain maintain a set of interoperability specifications which allow for the transfer, long-term preservation, and reuse of digital information regardless of the origin or type of the information.
