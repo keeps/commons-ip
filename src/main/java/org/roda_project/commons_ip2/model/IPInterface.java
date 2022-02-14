@@ -15,6 +15,7 @@ import java.util.Optional;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.roda_project.commons_ip.model.ParseException;
+import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.IPEnums.IPStatus;
 import org.roda_project.commons_ip.utils.IPEnums.IPType;
 import org.roda_project.commons_ip.utils.IPException;
@@ -41,7 +42,7 @@ public interface IPInterface {
   IP setContentType(IPContentType contentType);
 
   IPContentType getContentType();
-  
+
   IP setContentInformationType(IPContentInformationType contentInformationType);
 
   IPContentInformationType getContentInformationType();
@@ -133,7 +134,13 @@ public interface IPInterface {
 
   Path build(Path destinationDirectory, String fileNameWithoutExtension) throws IPException, InterruptedException;
 
+  Path build(Path destinationDirectory, String fileNameWithoutExtension, IPEnums.SipType sipType)
+    throws IPException, InterruptedException;
+
   Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest)
+    throws IPException, InterruptedException;
+
+  Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest, IPEnums.SipType sipType)
     throws IPException, InterruptedException;
 
   static IPInterface parse(Path source) throws ParseException {

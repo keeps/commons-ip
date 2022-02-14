@@ -136,7 +136,7 @@ public final class EARKUtils {
   }
 
   protected static void addRepresentationsToZipAndMETS(IPInterface ip, List<IPRepresentation> representations,
-    Map<String, ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper, Path buildDir)
+    Map<String, ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper, Path buildDir, IPEnums.SipType sipType)
     throws IPException, InterruptedException {
     // representations
     if (representations != null && !representations.isEmpty()) {
@@ -149,22 +149,32 @@ public final class EARKUtils {
         }
         String representationId = representation.getObjectID();
         // 20160407 hsilva: not being used by Common Specification v0.13
-        boolean isRepresentationMetadataOther = (representation.getOtherMetadata() != null
+        final boolean isRepresentationMetadataOther = (representation.getOtherMetadata() != null
           && !representation.getOtherMetadata().isEmpty());
-        boolean isRepresentationMetadata = ((representation.getDescriptiveMetadata() != null
+        final boolean isRepresentationMetadata = ((representation.getDescriptiveMetadata() != null
           && !representation.getDescriptiveMetadata().isEmpty())
           || (representation.getPreservationMetadata() != null && !representation.getPreservationMetadata().isEmpty()));
-        boolean isRepresentationDocumentation = (representation.getDocumentation() != null
+        final boolean isRepresentationDocumentation = (representation.getDocumentation() != null
           && !representation.getDocumentation().isEmpty());
-        boolean isRepresentationSchemas = (representation.getSchemas() != null
+        final boolean isRepresentationSchemas = (representation.getSchemas() != null
           && !representation.getSchemas().isEmpty());
-        boolean isRepresentationsData = (representation.getData() != null && !representation.getData().isEmpty());
-        IPHeader header = new IPHeader(IPEnums.IPStatus.NEW).setAgents(representation.getAgents());
-        MetsWrapper representationMETSWrapper = EARKMETSUtils.generateMETS(representationId,
-          representation.getDescription(), ip.getProfile(), false, Optional.empty(), null, header,
-          mainMETSWrapper.getMets().getMetsHdr().getOAISPACKAGETYPE(), representation.getContentType(),
-          representation.getContentInformationType(), isRepresentationMetadata, isRepresentationMetadataOther,
-          isRepresentationSchemas, isRepresentationDocumentation,false,false,isRepresentationsData);
+        final boolean isRepresentationsData = (representation.getData() != null && !representation.getData().isEmpty());
+        final IPHeader header = new IPHeader(IPEnums.IPStatus.NEW).setAgents(representation.getAgents());
+
+        final MetsWrapper representationMETSWrapper;
+        if (!IPEnums.SipType.SIPS.equals(sipType)) {
+          representationMETSWrapper = EARKMETSUtils.generateMETS(representationId, representation.getDescription(),
+            ip.getProfile(), false, Optional.empty(), null, header,
+            mainMETSWrapper.getMets().getMetsHdr().getOAISPACKAGETYPE(), representation.getContentType(),
+            representation.getContentInformationType(), isRepresentationMetadata, isRepresentationMetadataOther,
+            isRepresentationSchemas, isRepresentationDocumentation, false, false, isRepresentationsData);
+        } else {
+          representationMETSWrapper = EARKMETSUtils.generateMetsShallow(representation, ip.getProfile(), false,
+            Optional.empty(), null, header, mainMETSWrapper.getMets().getMetsHdr().getOAISPACKAGETYPE(),
+            isRepresentationMetadata, isRepresentationMetadataOther, isRepresentationSchemas,
+            isRepresentationDocumentation, false, false, isRepresentationsData);
+        }
+
         representationMETSWrapper.getMainDiv().setTYPE(representation.getStatus().asString());
 
         // representation data

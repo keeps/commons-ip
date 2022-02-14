@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,6 +30,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.roda_project.commons_ip.model.ParseException;
+import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
@@ -43,7 +45,6 @@ import org.roda_project.commons_ip2.model.IPFileInterface;
 import org.roda_project.commons_ip2.model.IPFileShallow;
 import org.roda_project.commons_ip2.model.IPMetadata;
 import org.roda_project.commons_ip2.model.IPRepresentation;
-import org.roda_project.commons_ip2.model.MetadataStatus;
 import org.roda_project.commons_ip2.model.MetadataType;
 import org.roda_project.commons_ip2.model.MetadataType.MetadataTypeEnum;
 import org.roda_project.commons_ip2.model.RepresentationStatus;
@@ -69,17 +70,17 @@ public class EARKSIPTest {
 
   @BeforeClass
   public static void setup() throws IOException {
-   tempFolder = Files.createTempDirectory("temp");
+    tempFolder = Files.createTempDirectory("temp");
   }
 
   @AfterClass
   public static void cleanup() throws Exception {
-   Utils.deletePath(tempFolder);
+    Utils.deletePath(tempFolder);
   }
 
   @Test
-  public void buildParseAndValidateEARKSIP()
-          throws IPException, ParseException, InterruptedException, IOException, ParserConfigurationException, SAXException, NoSuchAlgorithmException {
+  public void buildParseAndValidateEARKSIP() throws IPException, ParseException, InterruptedException, IOException,
+    ParserConfigurationException, SAXException, NoSuchAlgorithmException {
     LOGGER.info("Creating full E-ARK SIP");
     Path zipSIP = createFullEARKSIP_For_Test_Compliance();
     LOGGER.info("Done creating full E-ARK SIP");
@@ -102,37 +103,36 @@ public class EARKSIPTest {
       }
     }
     OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(reportPath.toFile()));
-    ValidationReportOutputJson reportOutputJson = new ValidationReportOutputJson(zipSIP,outputStream);
+    ValidationReportOutputJson reportOutputJson = new ValidationReportOutputJson(zipSIP, outputStream);
     EARKSIPValidator earksipValidator = new EARKSIPValidator(reportOutputJson);
     boolean validate = earksipValidator.validate();
     LOGGER.info("Done parsing (and validating) full E-ARK SIP");
     Assert.assertTrue(validate);
   }
 
-   @Test
-   public void buildAndParseEARKSIP() throws IPException, ParseException,
-   InterruptedException {
-   LOGGER.info("Creating full E-ARK SIP");
-   Path zipSIP = createFullEARKSIP();
-   LOGGER.info("Done creating full E-ARK SIP");
+  @Test
+  public void buildAndParseEARKSIP() throws IPException, ParseException, InterruptedException {
+    LOGGER.info("Creating full E-ARK SIP");
+    Path zipSIP = createFullEARKSIP();
+    LOGGER.info("Done creating full E-ARK SIP");
 
-   LOGGER.info("Parsing (and validating) full E-ARK SIP");
-   parseAndValidateFullEARKSIP(zipSIP);
-   LOGGER.info("Done parsing (and validating) full E-ARK SIP");
+    LOGGER.info("Parsing (and validating) full E-ARK SIP");
+    parseAndValidateFullEARKSIP(zipSIP);
+    LOGGER.info("Done parsing (and validating) full E-ARK SIP");
 
-   }
+  }
 
-//   @Test
-//   public void buildEARKSIPShallow() throws IPException, InterruptedException,
-//   DatatypeConfigurationException, ParseException, URISyntaxException {
-//   LOGGER.info("Creating full E-ARK SIP-S");
-//   Path zipSIPS = createFullEARKSIPS();
-//   LOGGER.info("Done creating full E-ARK SIP-S");
-//
-//   LOGGER.info("Parsing (and validating) full E-ARK SIP");
-//   parseAndValidateFullEARKSIPS(zipSIPS);
-//   LOGGER.info("Done parsing (and validating) full E-ARK SIP");
-//   }
+  @Test
+  public void buildEARKSIPShallow()
+    throws IPException, InterruptedException, DatatypeConfigurationException, ParseException, URISyntaxException {
+    LOGGER.info("Creating full E-ARK SIP-S");
+    Path zipSIPS = createFullEARKSIPS();
+    LOGGER.info("Done creating full E-ARK SIP-S");
+
+    LOGGER.info("Parsing (and validating) full E-ARK SIP");
+    // parseAndValidateFullEARKSIPS(zipSIPS);
+    LOGGER.info("Done parsing (and validating) full E-ARK SIP");
+  }
 
   private Path createFullEARKSIPS()
     throws IPException, InterruptedException, DatatypeConfigurationException, URISyntaxException {
@@ -188,6 +188,8 @@ public class EARKSIPTest {
 
     // 1.9.1) add a file to the representation
     URI url = new URI("file:///home/mguimaraes/Downloads/Search+results.csv");
+    URI url2 = new URI("file:///home/mguimaraes/Downloads/Search+resuts.csv");
+    URI url3 = new URI("file:///home/mguimaraes/Downloads/Search+result.csv");
     // setting basic information about the remote file
     FileType filetype = new FileType();
     filetype.setMIMETYPE("application/pdf");
@@ -196,11 +198,43 @@ public class EARKSIPTest {
     filetype.setCHECKSUM("3df79d34abbca99308e79cb94461c1893582604d68329a41fd4bec1885e6adb4");
     filetype.setCHECKSUMTYPE(IPConstants.CHECKSUM_ALGORITHM);
 
+    FileType filetype2 = new FileType();
+    filetype.setMIMETYPE("application/pdf");
+    filetype.setSIZE(784099L);
+    filetype.setCREATED(Utils.getCurrentCalendar());
+    filetype.setCHECKSUM("3df79d34abbca99308e79cb54461c1893582604d68329a41fd4bec1885e6adb4");
+    filetype.setCHECKSUMTYPE(IPConstants.CHECKSUM_ALGORITHM);
+
+    FileType filetype3 = new FileType();
+    filetype.setMIMETYPE("application/pdf");
+    filetype.setSIZE(784099L);
+    filetype.setCREATED(Utils.getCurrentCalendar());
+    filetype.setCHECKSUM("3df79d34abbca99308e78cb94461c1893582604d68329a41fd4bec1885e6adb4");
+    filetype.setCHECKSUMTYPE(IPConstants.CHECKSUM_ALGORITHM);
     IPFileInterface representationFile = new IPFileShallow(url, filetype);
+    List<String> relativeFolders = new ArrayList<>();
+    relativeFolders.add("abc");
+    relativeFolders.add("def");
+    ((IPFileShallow) representationFile).setRelativeFolders(relativeFolders);
+
+    // New fil
+
+    IPFileInterface representationFile2 = new IPFileShallow(url2, filetype2);
+    List<String> relativeFolders2 = new ArrayList<>();
+    relativeFolders2.add("abc");
+    relativeFolders2.add("fgh");
+    ((IPFileShallow) representationFile2).setRelativeFolders(relativeFolders2);
+
+    IPFileInterface representationFile3 = new IPFileShallow(url3, filetype3);
+    List<String> relativeFolders3 = new ArrayList<>();
+    ((IPFileShallow) representationFile3).setRelativeFolders(relativeFolders3);
+
     representation1.addFile(representationFile);
+    representation1.addFile(representationFile2);
+    representation1.addFile(representationFile3);
 
     // 2) build SIP, providing an output directory
-    Path zipSIP = sip.build(tempFolder);
+    Path zipSIP = sip.build(Paths.get("/home/jgomes/Desktop/TEST_SIPS"), "okok", IPEnums.SipType.SIPS);
 
     return zipSIP;
   }

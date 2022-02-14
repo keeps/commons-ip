@@ -1,7 +1,6 @@
 package org.roda_project.commons_ip2.model;
 
 import java.net.URI;
-import java.net.URL;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -14,11 +13,19 @@ public class IPFileShallow implements IPFileInterface {
 
   private URI fileLocation;
   private FileType fileType;
+  private List<String> relativeFolders;
 
   public IPFileShallow(URI fileLocation, FileType fileType) {
     super();
     this.fileLocation = fileLocation;
     this.fileType = fileType;
+  }
+
+  public IPFileShallow(final URI fileLocation, final FileType fileType, final List<String> relativeFolders) {
+    super();
+    this.fileLocation = fileLocation;
+    this.fileType = fileType;
+    this.relativeFolders = relativeFolders;
   }
 
   public URI getFileLocation() {
@@ -39,12 +46,17 @@ public class IPFileShallow implements IPFileInterface {
 
   @Override
   public List<String> getRelativeFolders() {
-    throw new UnsupportedOperationException("IPFileShallow does not support this method");
+    return relativeFolders;
+  }
+
+  public IPFileInterface setRelativeFolders(List<String> relativeFolders) {
+    this.relativeFolders = relativeFolders;
+    return this;
   }
 
   @Override
   public String getFileName() {
-      return null;
+    return null;
   }
 
   @Override
