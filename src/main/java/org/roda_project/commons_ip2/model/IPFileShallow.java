@@ -15,6 +15,10 @@ public class IPFileShallow implements IPFileInterface {
   private FileType fileType;
   private List<String> relativeFolders;
 
+  public IPFileShallow(final List<String> relativeFolders) {
+    this.relativeFolders = relativeFolders;
+  }
+
   public IPFileShallow(URI fileLocation, FileType fileType) {
     super();
     this.fileLocation = fileLocation;
