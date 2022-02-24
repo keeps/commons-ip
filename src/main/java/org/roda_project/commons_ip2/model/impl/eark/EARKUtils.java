@@ -162,7 +162,7 @@ public final class EARKUtils {
         final IPHeader header = new IPHeader(IPEnums.IPStatus.NEW).setAgents(representation.getAgents());
 
         final MetsWrapper representationMETSWrapper;
-        if (!IPEnums.SipType.SIPS.equals(sipType)) {
+        if (!IPEnums.SipType.EARK2S.equals(sipType)) {
           representationMETSWrapper = EARKMETSUtils.generateMETS(representationId, representation.getDescription(),
             ip.getProfile(), false, Optional.empty(), null, header,
             mainMETSWrapper.getMets().getMetsHdr().getOAISPACKAGETYPE(), representation.getContentType(),

@@ -1,5 +1,11 @@
 package org.roda_project.commons_ip2.model.impl.eark;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -14,18 +20,11 @@ import org.roda_project.commons_ip2.model.IPFile;
 import org.roda_project.commons_ip2.model.IPMetadata;
 import org.roda_project.commons_ip2.model.IPRepresentation;
 import org.roda_project.commons_ip2.model.MetadataType;
-import org.roda_project.commons_ip2.model.RepresentationStatus;
 import org.roda_project.commons_ip2.model.SIP;
 import org.roda_project.commons_ip2.utils.RepresentationUtils;
 import org.roda_project.commons_ip2.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
 
 /**
  * {@author João Gomes <jgomes@keep.pt>}.
@@ -63,14 +62,14 @@ public class SIPRepresentativityTest {
 
     // 1.2) add descriptive metadata (SIP level)
     IPDescriptiveMetadata metadataDescriptiveDC = new IPDescriptiveMetadata(
-            new IPFile(Paths.get("src/test/resources/eark/metadata_descriptive_dc.xml")),
-            new MetadataType(MetadataType.MetadataTypeEnum.DC), null);
+      new IPFile(Paths.get("src/test/resources/eark/metadata_descriptive_dc.xml")),
+      new MetadataType(MetadataType.MetadataTypeEnum.DC), null);
     sip.addDescriptiveMetadata(metadataDescriptiveDC);
 
     // 1.3) add preservation metadata (SIP level)
     IPMetadata metadataPreservation = new IPMetadata(
-            new IPFile(Paths.get("src/test/resources/eark/metadata_preservation_premis.xml")))
-            .setMetadataType(MetadataType.MetadataTypeEnum.PREMIS);
+      new IPFile(Paths.get("src/test/resources/eark/metadata_preservation_premis.xml")))
+        .setMetadataType(MetadataType.MetadataTypeEnum.PREMIS);
     sip.addPreservationMetadata(metadataPreservation);
 
     // 1.4) add other metadata (SIP level)
@@ -96,7 +95,7 @@ public class SIPRepresentativityTest {
 
     // 1.8) add an agent (SIP level)
     IPAgent agent = new IPAgent("Agent Name", "OTHER", "OTHER ROLE", METSEnums.CreatorType.INDIVIDUAL, "OTHER TYPE", "",
-            IPAgentNoteTypeEnum.SOFTWARE_VERSION);
+      IPAgentNoteTypeEnum.SOFTWARE_VERSION);
     sip.addAgent(agent);
 
     // 1.9) add a representation (status will be set to the default value, i.e.,
@@ -104,35 +103,13 @@ public class SIPRepresentativityTest {
     IPRepresentation representation1 = new IPRepresentation("representation 1");
     sip.addRepresentation(representation1);
     try {
-      RepresentationUtils.includeInRepresentation(Paths.get("/home/jgomes/Desktop/Representative"),representation1);
+      RepresentationUtils.includeInRepresentation(Paths.get("src/test/resources/Representative"), representation1);
     } catch (IOException e) {
       // do nothing
     }
 
-//    // 1.9.1) add a file to the representation
-//    IPFile representationFile = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
-//    representationFile.setRenameTo("data_.pdf");
-//    representation1.addFile(representationFile);
-//
-//
-//    // 1.9.2) add a file to the representation and put it inside a folder
-//    // called 'abc' which has a folder inside called 'def'
-//    IPFile representationFile2 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
-//    representationFile2.setRelativeFolders(Arrays.asList("abc", "def"));
-//    representation1.addFile(representationFile2);
-//
-//    // 1.10) add a representation & define its status
-//    IPRepresentation representation2 = new IPRepresentation("representation 2");
-//    representation2.setStatus(new RepresentationStatus(REPRESENTATION_STATUS_NORMALIZED));
-//    sip.addRepresentation(representation2);
-//
-//    // 1.10.1) add a file to the representation
-//    IPFile representationFile3 = new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
-//    representationFile3.setRenameTo("data3.pdf");
-//    representation2.addFile(representationFile3);
-
     // 2) build SIP, providing an output directory
-    final Path zipSIP = sip.build(Paths.get("/home/jgomes/Desktop/TEST_SIPS"));
+    final Path zipSIP = sip.build(tempFolder);
 
     return zipSIP;
   }

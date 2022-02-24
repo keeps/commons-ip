@@ -187,9 +187,9 @@ public class EARKSIPTest {
     sip.addRepresentation(representation1);
 
     // 1.9.1) add a file to the representation
-    URI url = new URI("file:///home/mguimaraes/Downloads/Search+results.csv");
-    URI url2 = new URI("file:///home/mguimaraes/Downloads/Search+resuts.csv");
-    URI url3 = new URI("file:///home/mguimaraes/Downloads/Search+result.csv");
+    URI url = Paths.get("src/test/resources/data/data.txt").toUri();
+    URI url2 =Paths.get("src/test/resources/data/descriptive.txt").toUri();
+    URI url3 = Paths.get("src/test/resources/data/eark.pdf").toUri();
     // setting basic information about the remote file
     FileType filetype = new FileType();
     filetype.setMIMETYPE("application/pdf");
@@ -234,7 +234,7 @@ public class EARKSIPTest {
     representation1.addFile(representationFile3);
 
     // 2) build SIP, providing an output directory
-    Path zipSIP = sip.build(Paths.get("/home/jgomes/Desktop/TEST_SIPS"), "okok", IPEnums.SipType.SIPS);
+    Path zipSIP = sip.build(tempFolder, "okok", IPEnums.SipType.EARK2S);
 
     return zipSIP;
   }

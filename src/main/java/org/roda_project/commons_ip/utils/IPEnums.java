@@ -33,7 +33,7 @@ public class IPEnums {
   }
 
   public enum SipType {
-    SIPS, EARK2
+    EARK2S, EARK2
   }
 
 }
