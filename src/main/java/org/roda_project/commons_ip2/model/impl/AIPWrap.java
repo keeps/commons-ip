@@ -23,7 +23,6 @@ import org.roda_project.commons_ip2.model.IPAgent;
 import org.roda_project.commons_ip2.model.IPContentInformationType;
 import org.roda_project.commons_ip2.model.IPContentType;
 import org.roda_project.commons_ip2.model.IPDescriptiveMetadata;
-import org.roda_project.commons_ip2.model.IPFile;
 import org.roda_project.commons_ip2.model.IPFileInterface;
 import org.roda_project.commons_ip2.model.IPHeader;
 import org.roda_project.commons_ip2.model.IPMetadata;
@@ -344,8 +343,20 @@ public class AIPWrap implements AIP {
   }
 
   @Override
+  public Path build(Path destinationDirectory, String fileNameWithoutExtension, IPEnums.SipType sipType)
+    throws IPException, InterruptedException {
+    return aip.build(destinationDirectory, fileNameWithoutExtension);
+  }
+
+  @Override
   public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
     throws IPException, InterruptedException {
+    return aip.build(destinationDirectory, fileNameWithoutExtension, onlyManifest);
+  }
+
+  @Override
+  public Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest,
+    IPEnums.SipType sipType) throws IPException, InterruptedException {
     return aip.build(destinationDirectory, fileNameWithoutExtension, onlyManifest);
   }
 

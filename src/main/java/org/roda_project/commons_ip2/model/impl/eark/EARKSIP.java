@@ -18,6 +18,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip.model.ParseException;
+import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
 import org.roda_project.commons_ip2.mets_v1_12.beans.StructMapType;
@@ -151,7 +152,19 @@ public class EARKSIP extends SIP {
   @Override
   public Path build(Path destinationDirectory, String fileNameWithoutExtension)
     throws IPException, InterruptedException {
-    return build(destinationDirectory, fileNameWithoutExtension, false);
+    return build(destinationDirectory, fileNameWithoutExtension, false, IPEnums.SipType.EARK2);
+  }
+
+  @Override
+  public Path build(Path destinationDirectory, String fileNameWithoutExtension, IPEnums.SipType sipType)
+    throws IPException, InterruptedException {
+    return build(destinationDirectory, fileNameWithoutExtension, false, sipType);
+  }
+
+  @Override
+  public Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest)
+    throws IPException, InterruptedException {
+    return build(destinationDirectory, fileNameWithoutExtension, false, IPEnums.SipType.EARK2);
   }
 
   /**
@@ -171,8 +184,8 @@ public class EARKSIP extends SIP {
    *           if some error occurs.
    */
   @Override
-  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
-    throws IPException, InterruptedException {
+  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest,
+    IPEnums.SipType sipType) throws IPException, InterruptedException {
     IPConstants.METS_ENCODE_AND_DECODE_HREF = true;
     Path buildDir = ModelUtils.createBuildDir(SIP_TEMP_DIR);
     Path zipPath = getZipPath(destinationDirectory, fileNameWithoutExtension);
@@ -187,12 +200,13 @@ public class EARKSIP extends SIP {
       MetsWrapper mainMETSWrapper = EARKMETSUtils.generateMETS(StringUtils.join(this.getIds(), " "),
         this.getDescription(), this.getProfile(), true, Optional.ofNullable(this.getAncestors()), null,
         this.getHeader(), this.getType(), this.getContentType(), this.getContentInformationType(), isMetadata,
-        isMetadataOther, isSchemas, isDocumentation, false, isRepresentations,false);
+        isMetadataOther, isSchemas, isDocumentation, false, isRepresentations, false);
 
       EARKUtils.addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
       EARKUtils.addPreservationMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getPreservationMetadata(), null);
       EARKUtils.addOtherMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getOtherMetadata(), null);
-      EARKUtils.addRepresentationsToZipAndMETS(this, getRepresentations(), zipEntries, mainMETSWrapper, buildDir);
+      EARKUtils.addRepresentationsToZipAndMETS(this, getRepresentations(), zipEntries, mainMETSWrapper, buildDir,
+        sipType);
       EARKUtils.addDefaultSchemas(LOGGER, getSchemas(), buildDir);
       EARKUtils.addSchemasToZipAndMETS(zipEntries, mainMETSWrapper, getSchemas(), null);
       EARKUtils.addDocumentationToZipAndMETS(zipEntries, mainMETSWrapper, getDocumentation(), null);

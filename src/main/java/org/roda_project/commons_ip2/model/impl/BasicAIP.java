@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.IPEnums.IPType;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip2.model.AIP;
@@ -29,7 +30,7 @@ import org.roda_project.commons_ip2.model.IPFileInterface;
  * a {@link IPException}.
  *
  * Parse methods: {@link #parse(Path)}, {@link #parse(Path, Path)} throw a
- * {@link org.roda_project.commons_ip2.model.ParseException}.
+ * {@link org.roda_project.commons_ip.model.ParseException}.
  *
  * @author Rui Castro (rui.castro@gmail.com)
  */
@@ -123,6 +124,18 @@ public class BasicAIP extends IP implements AIP {
 
   @Override
   public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
+    throws IPException, InterruptedException {
+    throw new IPException("Not implemented");
+  }
+
+  @Override
+  public Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest,
+    IPEnums.SipType sipType) throws IPException, InterruptedException {
+    throw new IPException("Not implemented");
+  }
+
+  @Override
+  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, IPEnums.SipType sipType)
     throws IPException, InterruptedException {
     throw new IPException("Not implemented");
   }

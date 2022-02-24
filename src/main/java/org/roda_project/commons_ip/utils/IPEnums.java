@@ -32,4 +32,8 @@ public class IPEnums {
     }
   }
 
+  public enum SipType {
+    EARK2S, EARK2
+  }
+
 }
