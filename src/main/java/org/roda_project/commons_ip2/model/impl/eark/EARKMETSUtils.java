@@ -727,7 +727,7 @@ public final class EARKMETSUtils {
         dataFilePath = IPConstants.DATA_FOLDER + ModelUtils.getFoldersFromList(file.getRelativeFolders());
       }
 
-      if (!dataFileGrp.containsKey(dataFilePath)) {
+      if (!dataFileGrp.containsKey(dataFilePath) && ((IPFileShallow) file).getFileLocation() != null) {
         final FileGrp dataFileGroup = createFileGroup(dataFilePath);
         dataFileGrp.put(dataFilePath, dataFileGroup);
       }
@@ -827,8 +827,10 @@ public final class EARKMETSUtils {
    */
   private static void addNodes(final Tree<StructMapDiv> divTree, final String fileLocation,
     List<String> fileRelativeFolders) {
-    if (fileRelativeFolders.isEmpty()) {
-      divTree.getRoot().setFileLocation(fileLocation);
+    if (fileRelativeFolders == null || fileRelativeFolders.isEmpty()) {
+      if (fileLocation != null) {
+        divTree.getRoot().setFileLocation(fileLocation);
+      }
     } else {
       if (fileRelativeFolders.get(0) != null) {
         Tree<StructMapDiv> childNode = divTree.addChild(new StructMapDiv(fileRelativeFolders.get(0)),

@@ -229,9 +229,16 @@ public class EARKSIPTest {
     List<String> relativeFolders3 = new ArrayList<>();
     ((IPFileShallow) representationFile3).setRelativeFolders(relativeFolders3);
 
+
+    List<String> relativeFolders4 = new ArrayList<>();
+    relativeFolders4.add("uuu");
+    relativeFolders4.add("fff");
+    IPFileInterface representationFile4 = new IPFileShallow(relativeFolders4);
+
     representation1.addFile(representationFile);
     representation1.addFile(representationFile2);
     representation1.addFile(representationFile3);
+    representation1.addFile(representationFile4);
 
     // 2) build SIP, providing an output directory
     Path zipSIP = sip.build(tempFolder, "okok", IPEnums.SipType.EARK2S);

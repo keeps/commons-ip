@@ -235,7 +235,9 @@ public final class EARKUtils {
           ZIPUtils.addFileTypeFileToZip(zipEntries, file.getPath(), dataFilePath, fileType);
         } else if (file instanceof IPFileShallow) {
           IPFileShallow shallow = (IPFileShallow) file;
-          EARKMETSUtils.addDataFileToMETS(representationMETSWrapper, shallow);
+          if(shallow.getFileLocation() != null) {
+            EARKMETSUtils.addDataFileToMETS(representationMETSWrapper, shallow);
+          }
         }
 
         i++;
