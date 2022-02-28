@@ -15,16 +15,40 @@ public class IPFileShallow implements IPFileInterface {
   private FileType fileType;
   private List<String> relativeFolders;
 
+  /**
+   * Constructor only with relative folders.
+   * 
+   * @param relativeFolders
+   *          {@link List}
+   */
   public IPFileShallow(final List<String> relativeFolders) {
     this.relativeFolders = relativeFolders;
   }
 
+  /**
+   * Constructor with {@link URI} and {@link FileType}.
+   * 
+   * @param fileLocation
+   *          {@link URI}
+   * @param fileType
+   *          {@link FileType}
+   */
   public IPFileShallow(URI fileLocation, FileType fileType) {
     super();
     this.fileLocation = fileLocation;
     this.fileType = fileType;
   }
 
+  /**
+   * Constructor with {@link URI}, {@link FileType} and {@link List}.
+   * 
+   * @param fileLocation
+   *          {@link URI}
+   * @param fileType
+   *          {@link FileType}
+   * @param relativeFolders
+   *          {@link List}
+   */
   public IPFileShallow(final URI fileLocation, final FileType fileType, final List<String> relativeFolders) {
     super();
     this.fileLocation = fileLocation;
@@ -53,6 +77,13 @@ public class IPFileShallow implements IPFileInterface {
     return relativeFolders;
   }
 
+  /**
+   * Set of relative folders.
+   * 
+   * @param relativeFolders
+   *          {@link List}
+   * @return {@link IPFileInterface}
+   */
   public IPFileInterface setRelativeFolders(List<String> relativeFolders) {
     this.relativeFolders = relativeFolders;
     return this;
