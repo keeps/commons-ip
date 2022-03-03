@@ -719,6 +719,7 @@ public final class EARKMETSUtils {
    *          {@link IPRepresentation}
    */
   private static void addFileGrps(final IPRepresentation representation) {
+
     for (IPFileInterface file : representation.getData()) {
       final String dataFilePath;
       if (file.getRelativeFolders() == null || file.getRelativeFolders().isEmpty()) {
@@ -888,6 +889,13 @@ public final class EARKMETSUtils {
         fileGrpType.getFile().add(file);
       }
     }
+  }
+
+  /**
+   * Clean the {@link HashMap} data.
+   */
+  public static void cleanFileGrpStructure() {
+    dataFileGrp.clear();
   }
 
 }

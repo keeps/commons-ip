@@ -205,6 +205,8 @@ public final class EARKUtils {
           representationMETSWrapper, IPConstants.REPRESENTATIONS_FOLDER + representationId
             + IPConstants.ZIP_PATH_SEPARATOR + IPConstants.METS_FILE,
           buildDir);
+
+        EARKMETSUtils.cleanFileGrpStructure();
       }
       if (ip instanceof SIP) {
         ((SIP) ip).notifySipBuildRepresentationsProcessingEnded();
@@ -235,7 +237,7 @@ public final class EARKUtils {
           ZIPUtils.addFileTypeFileToZip(zipEntries, file.getPath(), dataFilePath, fileType);
         } else if (file instanceof IPFileShallow) {
           IPFileShallow shallow = (IPFileShallow) file;
-          if(shallow.getFileLocation() != null) {
+          if (shallow.getFileLocation() != null) {
             EARKMETSUtils.addDataFileToMETS(representationMETSWrapper, shallow);
           }
         }
