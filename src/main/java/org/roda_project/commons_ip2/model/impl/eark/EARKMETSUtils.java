@@ -891,6 +891,9 @@ public final class EARKMETSUtils {
     }
   }
 
+  /**
+   * Clean the {@link HashMap} data.
+   */
   public static void cleanFileGrpStructure() {
     dataFileGrp.clear();
   }
