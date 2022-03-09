@@ -11,6 +11,11 @@ import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
  */
 public class IPFileShallow implements IPFileInterface {
 
+
+  public static IPFileShallow createEmptyFolder(final List<String> emptyFolderPath) {
+    return new IPFileShallow(emptyFolderPath);
+  }
+
   private URI fileLocation;
   private FileType fileType;
   private List<String> relativeFolders;

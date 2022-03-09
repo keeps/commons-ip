@@ -11,7 +11,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -758,12 +760,14 @@ public final class EARKUtils {
                   }
                 } else {
                   // treat as a SIP shallow
-                  Optional<IPFileInterface> ipFileInterface = validateFileShallow(ip, fLocat, filePath, fileType);
+                  Optional<IPFileInterface> ipFileInterface = validateFileShallow(ip, fLocat, filePath, fileType,
+                    Collections.emptyList());
                   ipFileInterface.ifPresent(representation::addFile);
                 }
               } else {
                 // treat as a SIP shallow
-                Optional<IPFileInterface> ipFileInterface = validateFileShallow(ip, fLocat, filePath, fileType);
+                Optional<IPFileInterface> ipFileInterface = validateFileShallow(ip, fLocat, filePath, fileType,
+                  Collections.emptyList());
                 ipFileInterface.ifPresent(representation::addFile);
               }
             } else {
@@ -772,6 +776,13 @@ public final class EARKUtils {
             }
           }
         }
+      }
+
+      for (DivType subDiv : representationMetsWrapper.getDataDiv().getDiv()) {
+        final List<String> subDivRelativePath = new ArrayList<>();
+        subDivRelativePath.add(subDiv.getLABEL());
+        processRepresentationFilesSubDivs(ip, representationMetsWrapper, representation, representationBasePath, subDiv,
+                subDivRelativePath);
       }
 
       // post-process validations
@@ -783,12 +794,76 @@ public final class EARKUtils {
     }
   }
 
+  protected static void processRepresentationFilesSubDivs(IPInterface ip, MetsWrapper representationMetsWrapper,
+    IPRepresentation representation, Path representationBasePath, DivType div, List<String> relativePath)
+    throws IPException {
+
+    final List<Fptr> fptrs = div.getFptr();
+    if (fptrs != null && !fptrs.isEmpty()) {
+      for (Fptr fptr : fptrs) {
+        final Object object = fptr.getFILEID();
+        if (object instanceof FileGrpType) {
+          final FileGrpType fileGrp = (FileGrpType) object;
+          for (FileType fileType : fileGrp.getFile()) {
+            if (fileType != null && fileType.getFLocat() != null) {
+              final FLocat fLocat = fileType.getFLocat().get(0);
+              final String href = Utils.extractedRelativePathFromHref(fLocat.getHref());
+              final Path filePath = representationBasePath.resolve(href);
+
+              // Verify that when protocol is file:/// the file is inside the SIP or not
+              if (filePath.startsWith(representationBasePath)) {
+                // treat as a SIP (generic behaviour)
+                if (Files.exists(filePath)) {
+                  final List<String> fileRelativeFolders = Utils
+                    .getFileRelativeFolders(representationBasePath.resolve(IPConstants.DATA), filePath);
+                  final Optional<IPFileInterface> file = validateFile(ip, filePath, fileType, fileRelativeFolders);
+
+                  if (file.isPresent()) {
+                    representation.addFile(file.get());
+                    ValidationUtils.addInfo(ip.getValidationReport(),
+                      ValidationConstants.REPRESENTATION_FILE_FOUND_WITH_MATCHING_CHECKSUMS, ip.getBasePath(),
+                      filePath);
+                  }
+                } else {
+                  // treat as a SIP shallow
+                  final Optional<IPFileInterface> ipFileInterface = validateFileShallow(ip, fLocat, filePath, fileType,
+                    relativePath);
+                  ipFileInterface.ifPresent(representation::addFile);
+                }
+              } else {
+                // treat as a SIP shallow
+                final Optional<IPFileInterface> ipFileInterface = validateFileShallow(ip, fLocat, filePath, fileType,
+                  relativePath);
+                ipFileInterface.ifPresent(representation::addFile);
+              }
+            } else {
+              ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.REPRESENTATION_FILE_HAS_NO_FLOCAT,
+                ValidationEntry.LEVEL.ERROR, fileType, ip.getBasePath(), representationMetsWrapper.getMetsPath());
+            }
+          }
+        }
+      }
+    } else if (div.getDiv().isEmpty()) {
+      // This is a empty folder, add an empty folder representation in form of a
+      // IPFileShallow
+      representation.addFile(IPFileShallow.createEmptyFolder(relativePath));
+    }
+
+    for (DivType subDiv : div.getDiv()) {
+      final List<String> subDivRelativePath = new ArrayList<>(relativePath);
+      subDivRelativePath.add(subDiv.getLABEL());
+      processRepresentationFilesSubDivs(ip, representationMetsWrapper, representation, representationBasePath, subDiv,
+        subDivRelativePath);
+    }
+
+  }
+
   private static Optional<IPFileInterface> validateFileShallow(IPInterface ip, FLocat fLocat, Path filePath,
-    FileType fileType) {
+    FileType fileType, List<String> relativeFolders) {
     Optional<IPFileInterface> file = Optional.empty();
 
     if (URI.create(fLocat.getHref()).getScheme() != null) {
-      file = Optional.of(new IPFileShallow(URI.create(fLocat.getHref()), fileType));
+      file = Optional.of(new IPFileShallow(URI.create(fLocat.getHref()), fileType, relativeFolders));
     } else {
       ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.REPRESENTATION_SCHEME_NOT_FOUND,
         ValidationEntry.LEVEL.ERROR, ip.getBasePath(), filePath);
