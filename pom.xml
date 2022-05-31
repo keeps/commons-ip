@@ -189,7 +189,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>cli</id>
+			<id>validateCli</id>
 			<build>
 				<plugins>
 					<plugin>
@@ -212,7 +212,7 @@
 									<goal>single</goal>
 								</goals>
 								<configuration>
-									<finalName>commons-ip2-cli-${version}</finalName>
+									<finalName>commons-ip2-validateCli-${version}</finalName>
 									<attach>true</attach>
 									<archive>
 										<manifest>
@@ -377,8 +377,8 @@
 
 		<!-- CLI dependecies -->
 		<dependency>
-			<groupId>commons-cli</groupId>
-			<artifactId>commons-cli</artifactId>
+			<groupId>commons-validateCli</groupId>
+			<artifactId>commons-validateCli</artifactId>
 			<version>1.4</version>
 		</dependency>
 
@@ -405,10 +405,10 @@
 			<artifactId>jackson-datatype-threetenbp</artifactId>
 			<version>2.6.4</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>5.3.10</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework</groupId>-->
+<!--			<artifactId>spring-core</artifactId>-->
+<!--			<version>5.3.10</version>-->
+<!--		</dependency>-->
 	</dependencies>
 </project>
