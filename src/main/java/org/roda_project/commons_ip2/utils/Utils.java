@@ -78,7 +78,7 @@ public final class Utils {
     return METSEnums.ID_PREFIX + UUID.randomUUID().toString().toUpperCase();
   }
 
-  public static String generateRandomAndPrefixedFileID(){
+  public static String generateRandomAndPrefixedFileID() {
     return METSEnums.FILE_ID_PREFIX + UUID.randomUUID().toString().toUpperCase();
   }
 

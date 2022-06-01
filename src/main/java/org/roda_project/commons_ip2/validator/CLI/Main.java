@@ -1,5 +1,7 @@
 package org.roda_project.commons_ip2.validator.CLI;
 
+import org.roda_project.commons_ip2.validator.utils.CLIUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,14 +22,14 @@ public class Main {
       if (args[0].equals(CLIConstants.CLI_OPTION_VALIDATE)) {
         List<String> filteredArgs = new ArrayList<>(Arrays.asList(args));
         filteredArgs.remove(0);
-        ValidateCLI validateCli = new ValidateCLI();
-        validateCli.start(filteredArgs.toArray(new String[] {}));
+        CLIValidator cliValidator = new CLIValidator();
+        cliValidator.start(filteredArgs.toArray(new String[] {}));
       }
       if (args[0].equals(CLIConstants.CLI_OPTION_CREATE)) {
         List<String> filteredArgs = new ArrayList<>(Arrays.asList(args));
         filteredArgs.remove(0);
-        CreateCLI createCLI = new CreateCLI();
-        createCLI.start(filteredArgs.toArray(new String[] {}));
+        CLICreator cliCreator = new CLICreator();
+        cliCreator.start(filteredArgs.toArray(new String[] {}));
       } else {
         CLIUtils.printUsage(System.out);
       }

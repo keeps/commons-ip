@@ -10,6 +10,12 @@ public class ExitCodes {
   public static final int EXIT_CODE_INVALID_DATE_FORMAT = 5;
   public static final int EXIT_CANNOT_CREATE_EARKVALIDATOR_OBJECT = 7;
 
+  public static final int EXIT_CODE_CREATE_MISSING_ARGS = 2;
+
+  public static final int EXIT_CODE_CREATE_CANNOT_SIP = 3;
+
+  public static final int EXIT_CODE_CREATE_INVALID_PATHS = 4;
+
   private ExitCodes() {
     // do nothing.
   }

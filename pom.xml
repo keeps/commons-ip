@@ -189,7 +189,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>validateCli</id>
+			<id>cli</id>
 			<build>
 				<plugins>
 					<plugin>
@@ -212,12 +212,13 @@
 									<goal>single</goal>
 								</goals>
 								<configuration>
-									<finalName>commons-ip2-validateCli-${version}</finalName>
+									<finalName>commons-ip2-cli-${version}</finalName>
 									<attach>true</attach>
 									<archive>
 										<manifest>
 											<addClasspath>true</addClasspath>
 											<classpathPrefix>lib/</classpathPrefix>
+											<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 											<mainClass>org.roda_project.commons_ip2.validator.CLI.Main</mainClass>
 										</manifest>
 									</archive>
@@ -377,8 +378,8 @@
 
 		<!-- CLI dependecies -->
 		<dependency>
-			<groupId>commons-validateCli</groupId>
-			<artifactId>commons-validateCli</artifactId>
+			<groupId>commons-cli</groupId>
+			<artifactId>commons-cli</artifactId>
 			<version>1.4</version>
 		</dependency>
 

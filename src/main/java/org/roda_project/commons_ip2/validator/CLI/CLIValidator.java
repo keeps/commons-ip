@@ -27,16 +27,17 @@ import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.observer.ProgressValidationLoggerObserver;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReportOutputJSONPyIP;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReportOutputJson;
+import org.roda_project.commons_ip2.validator.utils.CLIUtils;
 import org.roda_project.commons_ip2.validator.utils.ExitCodes;
 import org.xml.sax.SAXException;
 
 /** {@author João Gomes <jgomes@keep.pt>}. */
-public class ValidateCLI {
+public class CLIValidator {
   private final Options parameters;
   private final CommandLineParser parser;
 
   /** Initialize available CLI options. */
-  public ValidateCLI() {
+  public CLIValidator() {
     this.parameters = new Options();
     this.parser = new DefaultParser();
 

@@ -328,7 +328,8 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP addDocumentationToRepresentation(String representationID, IPFileInterface documentation) throws IPException {
+  public IP addDocumentationToRepresentation(String representationID, IPFileInterface documentation)
+    throws IPException {
     checkIfRepresentationExists(representationID);
     IPRepresentation rep = representations.get(representationID);
     rep.addDocumentation(documentation);
@@ -404,6 +405,32 @@ public abstract class IP implements IPInterface {
       IPAgentNoteTypeEnum.SOFTWARE_VERSION);
     header.addAgent(creatorAgent);
     return creatorAgent;
+  }
+
+  private IPAgent addSubmitterDefaultAgent() {
+    IPAgent submitterAgent = new IPAgent("Default submitter agent", "CREATOR", null, CreatorType.INDIVIDUAL, null, "1",
+      IPAgentNoteTypeEnum.IDENTIFICATIONCODE);
+    header.addAgent(submitterAgent);
+    return submitterAgent;
+  }
+
+  public IPAgent addSubmitterAgent(String submitterAgentName, String submitterAgentID) {
+    IPAgent submitterAgent;
+    if (submitterAgentName == null && submitterAgentID != null) {
+      submitterAgent = new IPAgent("Default submitter agent", "CREATOR", null, CreatorType.INDIVIDUAL, null,
+        submitterAgentID, IPAgentNoteTypeEnum.IDENTIFICATIONCODE);
+    } else if (submitterAgentName != null && submitterAgentID == null) {
+      submitterAgent = new IPAgent(submitterAgentName, "CREATOR", null, CreatorType.INDIVIDUAL, null, "1",
+        IPAgentNoteTypeEnum.IDENTIFICATIONCODE);
+    } else if (submitterAgentName != null && submitterAgentID != null) {
+      submitterAgent = new IPAgent(submitterAgentName, "CREATOR", null, CreatorType.INDIVIDUAL, null, submitterAgentID,
+        IPAgentNoteTypeEnum.IDENTIFICATIONCODE);
+    } else {
+      submitterAgent = addSubmitterDefaultAgent();
+    }
+
+    header.addAgent(submitterAgent);
+    return submitterAgent;
   }
 
   @Override

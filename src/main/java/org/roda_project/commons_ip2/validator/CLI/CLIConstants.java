@@ -27,6 +27,13 @@ public class CLIConstants {
   public static final String CLI_CREATE_OPTION_SIP_ID = "-sid";
 
   public static final String CLI_CREATE_OPTION_DOCUMENTATION = "-doc";
+
+  public static final String CLI_CREATE_OPTION_PATH = "-p";
+
+  public static final String CLI_CREATE_OPTION_SUBMITTER_AGENT_NAME = "sn";
+
+  public static final String CLI_CREATE_OPTION_SUBMITTER_AGENT_ID = "aid";
+
   private CLIConstants() {
     // do nothing
   }

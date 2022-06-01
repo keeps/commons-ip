@@ -1,4 +1,6 @@
-package org.roda_project.commons_ip2.validator.CLI;
+package org.roda_project.commons_ip2.validator.utils;
+
+import org.roda_project.commons_ip2.validator.CLI.CLIConstants;
 
 import java.io.PrintStream;
 
@@ -7,7 +9,7 @@ import java.io.PrintStream;
  */
 public class CLIUtils {
 
-  public CLIUtils() {
+  private CLIUtils() {
     // do nothing
   }
 
