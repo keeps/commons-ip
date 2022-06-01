@@ -70,6 +70,7 @@ metadata type: **EAD**, metadata version: **2002**)
 Examples:
 
 ###Full create SIP command with long options:
+
 ```
 java -jar commons-ip-cli-2.X.Y.jar create --metadata-file metadata.xml --metadata-type ead --metadata-version 2002 \
 --representation-data dataFile1.pdf dataFolder1 dataFile2.png --representation-type Mixed --representation-id representation1 \
@@ -77,6 +78,7 @@ java -jar commons-ip-cli-2.X.Y.jar create --metadata-file metadata.xml --metadat
 ```
 
 ###Full create SIP command with short options:
+
 ```
 java -jar commons-ip-cli-2.X.Y.jar create -mf metadata.xml -mt ead -mv 2002 \
 -rd dataFile1.pdf dataFolder1 dataFile2.png -rt Mixed -rid representation1 \
