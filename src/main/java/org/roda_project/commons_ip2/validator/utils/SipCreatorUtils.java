@@ -34,7 +34,8 @@ public class SipCreatorUtils {
   public static boolean validateMetadataOptions(String metadataFile, String metadataType, String metadataVersion) {
     if (metadataFile == null && metadataType == null && metadataVersion == null) {
       return true;
-    } else return metadataFile != null && metadataType != null;
+    } else
+      return metadataFile != null && metadataType != null;
   }
 
   public static boolean validateRepresentationOptions(String[] representationData, String representationType,
@@ -131,9 +132,10 @@ public class SipCreatorUtils {
     } else if (metadataVersion != null && metadataType == null) {
       metadataTypeValue = getMetadataTypeFromMetadataFile(metadataFile);
     } else if (metadataVersion == null) {
+      metadataTypeValue = getType(metadataType);
       metadataVersion = getMetadataVersionFromMetadataFile(metadataFile);
     } else {
-      metadataTypeValue = getTypeFromFileName(metadataType);
+      metadataTypeValue = getType(metadataType);
     }
 
     IPDescriptiveMetadata descriptiveMetadata = new IPDescriptiveMetadata(new IPFile(Paths.get(metadataFile)),
@@ -146,18 +148,18 @@ public class SipCreatorUtils {
     String filename = metadataPath.getFileName().toString();
     filename = filename.split("\\.")[0];
 
-    MetadataType.MetadataTypeEnum metadataType = getTypeFromFileName(filename);
+    MetadataType.MetadataTypeEnum metadataType = getType(filename);
 
     if (metadataType == null) {
       String[] splitedFileName = filename.split("_");
       if (splitedFileName.length == 2) {
-        metadataType = getTypeFromFileName(splitedFileName[0]);
+        metadataType = getType(splitedFileName[0]);
       }
     }
     return metadataType;
   }
 
-  private static MetadataType.MetadataTypeEnum getTypeFromFileName(String type) {
+  private static MetadataType.MetadataTypeEnum getType(String type) {
     List<MetadataType.MetadataTypeEnum> metadataEnumList = Arrays.asList(MetadataType.MetadataTypeEnum.values());
     for (MetadataType.MetadataTypeEnum metadataTypeEnum : metadataEnumList) {
       if (type.equalsIgnoreCase(metadataTypeEnum.getType())) {
