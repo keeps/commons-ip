@@ -25,32 +25,79 @@ import org.roda_project.commons_ip2.utils.Utils;
 /**
  * {@author João Gomes <jgomes@keep.pt>}.
  */
-public class SipCreatorUtils {
+public final class SipCreatorUtils {
+
+  /**
+   * Constant with "_" char.
+   */
+  private static final String UNDERSCORE = "_";
+  /**
+   * Constant with regex "." char.
+   */
+  private static final String DOT_REGEX = "\\.";
 
   private SipCreatorUtils() {
     // do nothing
   }
 
-  public static boolean validateMetadataOptions(String metadataFile, String metadataType, String metadataVersion) {
+  /**
+   * Validates the metadata options.
+   * 
+   * @param metadataFile
+   *          the metadata file arg.
+   * @param metadataType
+   *          the metadata type arg.
+   * @param metadataVersion
+   *          the metadata version arg.
+   * @return a flag if is valid or not.
+   */
+  public static boolean validateMetadataOptions(final String metadataFile, final String metadataType,
+    final String metadataVersion) {
     if (metadataFile == null && metadataType == null && metadataVersion == null) {
       return true;
-    } else
+    } else {
       return metadataFile != null && metadataType != null;
+    }
   }
 
-  public static boolean validateRepresentationOptions(String[] representationData, String representationType,
-    String representationID) {
+  /**
+   * Validate representation options.
+   * 
+   * @param representationData
+   *          the paths to the representation data.
+   * @param representationType
+   *          the representation type.
+   * @param representationID
+   *          the representation id.
+   * @return flag if is valid or not.
+   */
+  public static boolean validateRepresentationOptions(final String[] representationData,
+    final String representationType, final String representationID) {
     return representationData != null || (representationType == null && representationID == null);
   }
 
-  public static boolean validateMetadataPath(String metadataFile) {
+  /**
+   * Check if the path to the metadata file exists.
+   * 
+   * @param metadataFile
+   *          the path to the metadata file.
+   * @return if exists or not.
+   */
+  public static boolean validateMetadataPath(final String metadataFile) {
     if (metadataFile != null) {
       return Files.exists(Paths.get(metadataFile));
     }
     return false;
   }
 
-  public static boolean validateRepresentationPaths(String[] representationData) {
+  /**
+   * Check if the paths representation data exists.
+   *
+   * @param representationData
+   *          the paths to the representation data files or folders.
+   * @return if exists all the paths or not.
+   */
+  public static boolean validateRepresentationPaths(final String[] representationData) {
     for (String data : representationData) {
       if (!Files.exists(Paths.get(data))) {
         return false;
@@ -59,7 +106,14 @@ public class SipCreatorUtils {
     return true;
   }
 
-  public static boolean validateDocumentationPaths(String[] documentationPaths) {
+  /**
+   * Check if the paths to documentation exists.
+   *
+   * @param documentationPaths
+   *          the paths to the documentation files or folders.
+   * @return if exists all the paths or not.
+   */
+  public static boolean validateDocumentationPaths(final String[] documentationPaths) {
     if (documentationPaths != null) {
       for (String doc : documentationPaths) {
         if (!Files.exists(Paths.get(doc))) {
@@ -70,16 +124,52 @@ public class SipCreatorUtils {
     return true;
   }
 
-  public static Path createEARK2SIP(String metadataFile, String metadataType, String metadataVersion,
-    String[] representationData, String representationType, String representationID, String sipID, String[] ancestors,
-    String[] documentation, String softwareVersion, String path, String submitterAgentName, String submitterAgentID)
+  /**
+   * Create the EARK2 SIP with the args passed to the CLI.
+   * 
+   * @param metadataFile
+   *          the path to the metadata file.
+   * @param metadataType
+   *          the type of the metadata.
+   * @param metadataVersion
+   *          the version of the metadata.
+   * @param representationData
+   *          the paths to the representation data files or folders.
+   * @param representationType
+   *          the type of content in representation.
+   * @param representationID
+   *          the representation id.
+   * @param sipID
+   *          the SIP id.
+   * @param ancestors
+   *          the ancestors of the SIP.
+   * @param documentation
+   *          the paths to the documentation files or folders.
+   * @param softwareVersion
+   *          the software version.
+   * @param path
+   *          the path to save the SIP.
+   * @param submitterAgentName
+   *          the name of the submitter agent.
+   * @param submitterAgentID
+   *          the id of the submitter agent
+   * @return {@link SIP}.
+   * @throws IPException
+   *           if some error occur.
+   * @throws InterruptedException
+   *           if some error occur.
+   */
+  public static Path createEARK2SIP(final String metadataFile, final String metadataType, final String metadataVersion,
+    final String[] representationData, final String representationType, final String representationID,
+    final String sipID, final String[] ancestors, final String[] documentation, final String softwareVersion,
+    final String path, final String submitterAgentName, final String submitterAgentID)
     throws IPException, InterruptedException {
-
-    if (sipID == null) {
-      sipID = Utils.generateRandomAndPrefixedUUID();
+    String id = sipID;
+    if (id == null) {
+      id = Utils.generateRandomAndPrefixedUUID();
     }
 
-    final SIP sip = new EARKSIP(sipID, IPContentType.getMIXED(), IPContentInformationType.getMIXED());
+    final SIP sip = new EARKSIP(id, IPContentType.getMIXED(), IPContentInformationType.getMIXED());
     sip.addCreatorSoftwareAgent("RODA Commons IP", softwareVersion);
     sip.addSubmitterAgent(submitterAgentName, submitterAgentID);
 
@@ -88,7 +178,7 @@ public class SipCreatorUtils {
     if (metadataFile != null) {
       try {
         addMetadataToSIP(sip, metadataFile, metadataType, metadataVersion);
-      } catch (IPException e) {
+      } catch (final IPException e) {
         CLIUtils.printErrors(System.out, "Cannot add metadata to the SIP.");
       }
     }
@@ -96,7 +186,7 @@ public class SipCreatorUtils {
     if (representationData != null) {
       try {
         addRepresentationDataToSIP(sip, representationData, representationType, representationID);
-      } catch (IPException e) {
+      } catch (final IPException e) {
         CLIUtils.printErrors(System.out, "Cannot add representation to the SIP.");
       }
     }
@@ -104,8 +194,8 @@ public class SipCreatorUtils {
     if (documentation != null) {
       try {
         addDocumentationToSIP(sip, documentation);
-      } catch (IOException e) {
-        CLIUtils.printErrors(System.out, "Cannot add metadata to the SIP.");
+      } catch (final IOException e) {
+        CLIUtils.printErrors(System.out, "Cannot add documentation to the SIP.");
       }
     }
 
@@ -113,7 +203,7 @@ public class SipCreatorUtils {
       sip.setAncestors(Arrays.asList(ancestors));
     }
 
-    Path buildPath;
+    final Path buildPath;
     if (path != null && Files.exists(Paths.get(path))) {
       buildPath = Paths.get(path);
     } else {
@@ -123,35 +213,36 @@ public class SipCreatorUtils {
     return sip.build(buildPath);
   }
 
-  private static void addMetadataToSIP(SIP sip, String metadataFile, String metadataType, String metadataVersion)
-    throws IPException {
+  private static void addMetadataToSIP(final SIP sip, final String metadataFile, final String metadataType,
+    final String metadataVersion) throws IPException {
     MetadataType.MetadataTypeEnum metadataTypeValue = null;
+    String version = metadataVersion;
     if (metadataType == null && metadataVersion == null) {
       metadataTypeValue = getMetadataTypeFromMetadataFile(metadataFile);
-      metadataVersion = getMetadataVersionFromMetadataFile(metadataFile);
+      version = getMetadataVersionFromMetadataFile(metadataFile);
     } else if (metadataVersion != null && metadataType == null) {
       metadataTypeValue = getMetadataTypeFromMetadataFile(metadataFile);
     } else if (metadataVersion == null) {
       metadataTypeValue = getType(metadataType);
-      metadataVersion = getMetadataVersionFromMetadataFile(metadataFile);
+      version = getMetadataVersionFromMetadataFile(metadataFile);
     } else {
       metadataTypeValue = getType(metadataType);
     }
 
-    IPDescriptiveMetadata descriptiveMetadata = new IPDescriptiveMetadata(new IPFile(Paths.get(metadataFile)),
-      new MetadataType(metadataTypeValue), metadataVersion);
+    final IPDescriptiveMetadata descriptiveMetadata = new IPDescriptiveMetadata(new IPFile(Paths.get(metadataFile)),
+      new MetadataType(metadataTypeValue), version);
     sip.addDescriptiveMetadata(descriptiveMetadata);
   }
 
-  private static MetadataType.MetadataTypeEnum getMetadataTypeFromMetadataFile(String metadataFile) {
-    Path metadataPath = Paths.get(metadataFile);
+  private static MetadataType.MetadataTypeEnum getMetadataTypeFromMetadataFile(final String metadataFile) {
+    final Path metadataPath = Paths.get(metadataFile);
     String filename = metadataPath.getFileName().toString();
-    filename = filename.split("\\.")[0];
+    filename = filename.split(DOT_REGEX)[0];
 
     MetadataType.MetadataTypeEnum metadataType = getType(filename);
 
     if (metadataType == null) {
-      String[] splitedFileName = filename.split("_");
+      final String[] splitedFileName = filename.split(UNDERSCORE);
       if (splitedFileName.length == 2) {
         metadataType = getType(splitedFileName[0]);
       }
@@ -159,8 +250,8 @@ public class SipCreatorUtils {
     return metadataType;
   }
 
-  private static MetadataType.MetadataTypeEnum getType(String type) {
-    List<MetadataType.MetadataTypeEnum> metadataEnumList = Arrays.asList(MetadataType.MetadataTypeEnum.values());
+  private static MetadataType.MetadataTypeEnum getType(final String type) {
+    final List<MetadataType.MetadataTypeEnum> metadataEnumList = Arrays.asList(MetadataType.MetadataTypeEnum.values());
     for (MetadataType.MetadataTypeEnum metadataTypeEnum : metadataEnumList) {
       if (type.equalsIgnoreCase(metadataTypeEnum.getType())) {
         return metadataTypeEnum;
@@ -170,48 +261,47 @@ public class SipCreatorUtils {
     return null;
   }
 
-  private static String getMetadataVersionFromMetadataFile(String metadataFile) {
-    Path metadataPath = Paths.get(metadataFile);
+  private static String getMetadataVersionFromMetadataFile(final String metadataFile) {
+    final Path metadataPath = Paths.get(metadataFile);
     String filename = metadataPath.getFileName().toString();
-    filename = filename.split("\\.")[0];
-    String[] filenameSplitedWithoutUnderscore = filename.split("_");
+    filename = filename.split(DOT_REGEX)[0];
+    final String[] filenameSplitedWithoutUnderscore = filename.split(UNDERSCORE);
     String metadataVersion = null;
     if (filenameSplitedWithoutUnderscore.length == 2) {
       metadataVersion = filenameSplitedWithoutUnderscore[1];
-    } else {
-      metadataVersion = filenameSplitedWithoutUnderscore[0].replaceAll("[A-Z-a-z]", "");
     }
 
     return metadataVersion;
   }
 
-  private static void addRepresentationDataToSIP(SIP sip, String[] representationData, String representationType,
-    String representationID) throws IPException {
-    if (representationID == null) {
-      representationID = "rep1";
+  private static void addRepresentationDataToSIP(final SIP sip, final String[] representationData,
+    final String representationType, final String representationID) throws IPException {
+    String id = representationID;
+    if (id == null) {
+      id = "rep1";
     }
 
-    IPRepresentation representation = new IPRepresentation(representationID);
+    final IPRepresentation representation = new IPRepresentation(id);
     sip.addRepresentation(representation);
     if (representationType != null) {
-      IPContentType ipContentType = getIPContentType(representationType);
+      final IPContentType ipContentType = getIPContentType(representationType);
       representation.setContentType(ipContentType);
     }
 
     for (String data : representationData) {
-      Path dataPath = Paths.get(data);
+      final Path dataPath = Paths.get(data);
       addFileToRepresentation(representation, dataPath, new ArrayList<>());
     }
 
   }
 
-  private static void addFileToRepresentation(IPRepresentation representation, Path dataPath,
-    List<String> relativePath) {
+  private static void addFileToRepresentation(final IPRepresentation representation, final Path dataPath,
+    final List<String> relativePath) {
     if (Files.isDirectory(dataPath)) {
       final List<String> newRelativePath = new ArrayList<>(relativePath);
       newRelativePath.add(dataPath.getFileName().toString());
       // recursive call to all the node's children
-      File[] files = dataPath.toFile().listFiles();
+      final File[] files = dataPath.toFile().listFiles();
       if (files != null) {
         for (File file : files) {
           addFileToRepresentation(representation, file.toPath(), newRelativePath);
@@ -226,8 +316,9 @@ public class SipCreatorUtils {
     }
   }
 
-  private static IPContentType getIPContentType(String representationType) {
-    List<IPContentType.IPContentTypeEnum> ipContentTypeEnums = Arrays.asList(IPContentType.IPContentTypeEnum.values());
+  private static IPContentType getIPContentType(final String representationType) {
+    final List<IPContentType.IPContentTypeEnum> ipContentTypeEnums = Arrays
+      .asList(IPContentType.IPContentTypeEnum.values());
     for (IPContentType.IPContentTypeEnum ipContentTypeEnum : ipContentTypeEnums) {
       if (representationType.equalsIgnoreCase(ipContentTypeEnum.getType())) {
         return new IPContentType(ipContentTypeEnum);
@@ -236,11 +327,11 @@ public class SipCreatorUtils {
     return new IPContentType(IPContentType.IPContentTypeEnum.MIXED);
   }
 
-  private static void addDocumentationToSIP(SIP sip, String[] documentation) throws IOException {
+  private static void addDocumentationToSIP(final SIP sip, final String[] documentation) throws IOException {
     for (String doc : documentation) {
-      Path docPath = Paths.get(doc);
+      final Path docPath = Paths.get(doc);
       if (Files.isDirectory(docPath)) {
-        List<Path> filesInDirectory = getFilesInDirectory(docPath);
+        final List<Path> filesInDirectory = getFilesInDirectory(docPath);
         for (Path docFile : filesInDirectory) {
           sip.addDocumentation(new IPFile(docFile));
         }
@@ -250,8 +341,8 @@ public class SipCreatorUtils {
     }
   }
 
-  private static List<Path> getFilesInDirectory(Path docPath) throws IOException {
-    List<Path> filesInDirectory;
+  private static List<Path> getFilesInDirectory(final Path docPath) throws IOException {
+    final List<Path> filesInDirectory;
     try (Stream<Path> walk = Files.walk(docPath)) {
       filesInDirectory = walk.filter(Files::isRegularFile).collect(Collectors.toList());
     }

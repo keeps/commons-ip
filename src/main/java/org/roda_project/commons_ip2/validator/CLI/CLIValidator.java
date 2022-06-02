@@ -33,7 +33,13 @@ import org.xml.sax.SAXException;
 
 /** {@author João Gomes <jgomes@keep.pt>}. */
 public class CLIValidator {
+  /**
+   * {@link Options}.
+   */
   private final Options parameters;
+  /**
+   * {@link CommandLineParser}.
+   */
   private final CommandLineParser parser;
 
   /** Initialize available CLI options. */
@@ -41,20 +47,23 @@ public class CLIValidator {
     this.parameters = new Options();
     this.parser = new DefaultParser();
 
-    Option op = new Option("i", "input", true, "List of files to be used as inputs");
+    final Option op = new Option(CLIConstants.CLI_CREATE_SHORT_OPTION_INPUT_WITHOUT_IDENT, "input", true,
+      "List of files to be used as inputs");
     op.setArgs(Option.UNLIMITED_VALUES);
     op.setRequired(true);
     parameters.addOption(op);
-    Option reportOption = new Option("o", true, "Output to file");
+    final Option reportOption = new Option(CLIConstants.CLI_CREATE_SHORT_OPTION_OUTPUT_FILE_WITHOUT_IDENT, true,
+      "Output to file");
     reportOption.setRequired(false);
     reportOption.setOptionalArg(true);
     parameters.addOption(reportOption);
-    Option typeValidatorReportOption = new Option("r", "Type of Validation Report");
+    final Option typeValidatorReportOption = new Option(CLIConstants.CLI_OPTION_REPORT_TYPE,
+      "Type of Validation Report");
     typeValidatorReportOption.setRequired(false);
     typeValidatorReportOption.setOptionalArg(true);
     typeValidatorReportOption.setArgs(1);
     parameters.addOption(typeValidatorReportOption);
-    Option verbose = new Option("v", "Verbose Option");
+    final Option verbose = new Option(CLIConstants.CLI_CREATE_SHORT_OPTION_VERBOSE_WITHOUT_IDENT, "Verbose Option");
     verbose.setRequired(false);
     verbose.setOptionalArg(false);
     verbose.setArgs(0);
@@ -67,25 +76,26 @@ public class CLIValidator {
    * @param printStream
    *          {@link PrintStream}
    */
-  public static void printUsageValidator(PrintStream printStream) {
-    StringBuilder out = new StringBuilder();
+  public static void printUsageValidator(final PrintStream printStream) {
+    final StringBuilder out = new StringBuilder();
 
     out.append("Usage: Commons-ip validator COMMAND [OPTIONS]\n");
 
-    out.append("\n");
+    out.append(CLIConstants.END_OF_LINE);
     out.append("Commands:");
-    out.append("\n\n");
-    out.append("\t").append(CLIConstants.CLI_OPTION_SIP_PATHS).append("\t\t")
-      .append("(required) Paths to the SIPs archive file or files").append("\n");
-    out.append("\t").append(CLIConstants.CLI_OPTION_REPORT_DIRECTORY).append("\t\t")
+    out.append(CLIConstants.DOUBLE_END_OF_LINE);
+    out.append(CLIConstants.TAB).append(CLIConstants.CLI_OPTION_SIP_PATHS).append(CLIConstants.DOUBLE_TAB)
+      .append("(required) Paths to the SIPs archive file or files").append(CLIConstants.END_OF_LINE);
+    out.append(CLIConstants.TAB).append(CLIConstants.CLI_OPTION_REPORT_DIRECTORY).append(CLIConstants.DOUBLE_TAB)
       .append(
         "(optional) Path to save the validation report. If not set a report will be " + "generated in the sip folder.")
-      .append("\n\n");
-    out.append("\t").append(CLIConstants.CLI_OPTION_REPORT_TYPE).append("\t\t")
-      .append("(optional) By default generate json report, with option eark generate E-ARK JSON").append("\n\n");
-    out.append("\t").append(CLIConstants.CLI_OPTION_VERBOSE).append("\t\t")
+      .append(CLIConstants.DOUBLE_END_OF_LINE);
+    out.append(CLIConstants.TAB).append(CLIConstants.CLI_OPTION_REPORT_TYPE).append(CLIConstants.DOUBLE_TAB)
+      .append("(optional) By default generate json report, with option eark generate E-ARK JSON")
+      .append(CLIConstants.DOUBLE_END_OF_LINE);
+    out.append(CLIConstants.TAB).append(CLIConstants.CLI_OPTION_VERBOSE).append(CLIConstants.DOUBLE_TAB)
       .append("(optional) Verbose command line output with all validation steps").append("/n");
-    out.append("\n");
+    out.append(CLIConstants.END_OF_LINE);
     printStream.append(out).flush();
   }
 
@@ -96,40 +106,44 @@ public class CLIValidator {
    *          {@link String} array with arguments of command.
    * @return one {@link ExitCodes}
    */
-  public int start(String[] args) {
+  public int start(final String[] args) {
     try {
-      CommandLine commandLine = parser.parse(parameters, args);
+      final CommandLine commandLine = parser.parse(parameters, args);
 
-      String[] sipPaths = commandLine.getOptionValues("i");
-      String reportDirectoryPath = commandLine.getOptionValue("o");
-      String typeReportOption = commandLine.getOptionValue("r");
+      final String[] sipPaths = commandLine.getOptionValues(CLIConstants.CLI_CREATE_SHORT_OPTION_INPUT_WITHOUT_IDENT);
+      final String reportDirectoryPath = commandLine
+        .getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_OUTPUT_FILE_WITHOUT_IDENT);
+      final String typeReportOption = commandLine.getOptionValue(CLIConstants.CLI_OPTION_REPORT_TYPE);
 
-      if (commandLine.hasOption("o") && reportDirectoryPath == null) {
+      if (commandLine.hasOption(CLIConstants.CLI_CREATE_SHORT_OPTION_OUTPUT_FILE_WITHOUT_IDENT)
+        && reportDirectoryPath == null) {
         printUsageValidator(System.out);
         return ExitCodes.EXIT_PARSE_ARG;
       }
 
       if (sipPaths == null || sipPaths.length == 0) {
         printMissingSipPath(System.out);
+        return ExitCodes.EXIT_CODE_CREATE_MISSING_ARGS;
       }
 
       if (reportDirectoryPath != null && !Files.isDirectory(Paths.get(reportDirectoryPath))) {
-        int code = createDirectory(reportDirectoryPath);
+        final int code = createDirectory(reportDirectoryPath);
         if (code == ExitCodes.EXIT_CODE_CREATE_DIRECTORY_FAILS) {
           CLIUtils.printErrors(System.out, "Cannot create the directory for the report.");
           return code;
         }
       }
 
-      LocalDateTime localDateTime = LocalDateTime.now();
+      final LocalDateTime localDateTime = LocalDateTime.now();
 
-      String date = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+      final String date = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
       for (String sip : sipPaths) {
-        Path sipPath = Paths.get(sip);
+        final Path sipPath = Paths.get(sip);
         Path reportPath;
         int count = 1;
         do {
-          String reportName = sipPath.getFileName() + "_validation-report_" + date + "_" + count++ + ".json";
+          final String reportName = sipPath.getFileName() + "_validation-report_" + date + "_" + count++
+            + CLIConstants.JSON_FILE_EXTENSION;
           if (reportDirectoryPath != null) {
             reportPath = Paths.get(reportDirectoryPath).resolve(reportName);
           } else {
@@ -138,23 +152,24 @@ public class CLIValidator {
 
         } while (Files.exists(reportPath));
 
-        validate(typeReportOption, reportPath, sipPath, commandLine.hasOption("v"));
+        validate(typeReportOption, reportPath, sipPath,
+          commandLine.hasOption(CLIConstants.CLI_CREATE_SHORT_OPTION_VERBOSE_WITHOUT_IDENT));
         System.out.println(reportPath.normalize().toAbsolutePath());
       }
 
-    } catch (ParseException e) {
+    } catch (final ParseException e) {
       printUsageValidator(System.out);
       return ExitCodes.EXIT_PARSE_ARG;
-    } catch (DateTimeException d) {
+    } catch (final DateTimeException d) {
       CLIUtils.printErrors(System.out, "Invalid date format error");
       return ExitCodes.EXIT_CODE_INVALID_DATE_FORMAT;
-    } catch (ParserConfigurationException | SAXException e) {
+    } catch (final ParserConfigurationException | SAXException e) {
       CLIUtils.printErrors(System.out, "Error on object initialize");
       return ExitCodes.EXIT_CANNOT_CREATE_EARKVALIDATOR_OBJECT;
-    } catch (NoSuchAlgorithmException e) {
+    } catch (final NoSuchAlgorithmException e) {
       CLIUtils.printErrors(System.out, "Error on object initialize EARKPYIP");
       return ExitCodes.EXIT_CANNOT_CREATE_EARKVALIDATOR_OBJECT;
-    } catch (IOException e) {
+    } catch (final IOException e) {
       CLIUtils.printErrors(System.out, "Error on Report Initialize");
       return ExitCodes.EXIT_CANNOT_CREATE_REPORT;
     }
@@ -162,34 +177,34 @@ public class CLIValidator {
     return ExitCodes.EXIT_CODE_OK;
   }
 
-  private void printMissingSipPath(PrintStream printStream) {
-    StringBuilder out = new StringBuilder();
+  private void printMissingSipPath(final PrintStream printStream) {
+    final StringBuilder out = new StringBuilder();
 
     out.append("ERROR\n");
 
-    out.append("\n");
+    out.append(CLIConstants.END_OF_LINE);
     out.append("Missing SIP Path");
-    out.append("\n\n");
-    out.append("\n");
+    out.append(CLIConstants.DOUBLE_END_OF_LINE);
+    out.append(CLIConstants.END_OF_LINE);
     printStream.append(out).flush();
   }
 
-  private int createDirectory(String path) {
+  private int createDirectory(final String path) {
     try {
       Files.createDirectories(Paths.get(path));
-    } catch (IOException e) {
+    } catch (final IOException e) {
       return ExitCodes.EXIT_CODE_CREATE_DIRECTORY_FAILS;
     }
     return ExitCodes.EXIT_CODE_OK;
   }
 
-  private int validate(String typeReportOption, Path reportPath, Path sipPath, boolean verbose)
+  private int validate(final String typeReportOption, final Path reportPath, final Path sipPath, final boolean verbose)
     throws IOException, ParserConfigurationException, SAXException, NoSuchAlgorithmException {
     if (typeReportOption == null || typeReportOption.equals("default")) {
-      OutputStream outputStream = createReportOutputStream(reportPath);
+      final OutputStream outputStream = createReportOutputStream(reportPath);
       if (outputStream != null) {
-        ValidationReportOutputJson jsonReporter = new ValidationReportOutputJson(sipPath, outputStream);
-        EARKSIPValidator earksipValidator = new EARKSIPValidator(jsonReporter);
+        final ValidationReportOutputJson jsonReporter = new ValidationReportOutputJson(sipPath, outputStream);
+        final EARKSIPValidator earksipValidator = new EARKSIPValidator(jsonReporter);
         if (verbose) {
           earksipValidator.addObserver(new ProgressValidationLoggerObserver());
         }
@@ -199,8 +214,8 @@ public class CLIValidator {
         return ExitCodes.EXIT_CANNOT_CREATE_REPORT;
       }
     } else if (typeReportOption.equals("eark")) {
-      ValidationReportOutputJSONPyIP jsonReporter = new ValidationReportOutputJSONPyIP(reportPath, sipPath);
-      EARKPyIPValidator earkPyIPValidator = new EARKPyIPValidator(jsonReporter);
+      final ValidationReportOutputJSONPyIP jsonReporter = new ValidationReportOutputJSONPyIP(reportPath, sipPath);
+      final EARKPyIPValidator earkPyIPValidator = new EARKPyIPValidator(jsonReporter);
       if (verbose) {
         earkPyIPValidator.addObserver(new ProgressValidationLoggerObserver());
       }
@@ -212,8 +227,8 @@ public class CLIValidator {
     return ExitCodes.EXIT_CODE_OK;
   }
 
-  private OutputStream createReportOutputStream(Path reportPath) throws IOException {
-    Path outputFile = createReportFile(reportPath);
+  private OutputStream createReportOutputStream(final Path reportPath) throws IOException {
+    final Path outputFile = createReportFile(reportPath);
     OutputStream outputStream = null;
     if (outputFile != null) {
       outputStream = new BufferedOutputStream(new FileOutputStream(outputFile.toFile()));
@@ -221,20 +236,20 @@ public class CLIValidator {
     return outputStream;
   }
 
-  private Path createReportFile(Path reportPath) throws IOException {
+  private Path createReportFile(final Path reportPath) throws IOException {
     Path outputFile = reportPath;
     if (!outputFile.toFile().exists()) {
       try {
         Files.createFile(outputFile);
-      } catch (IOException e) {
-        outputFile = Files.createTempFile(Constants.VALIDATION_REPORT_PREFIX, ".json");
+      } catch (final IOException e) {
+        outputFile = Files.createTempFile(Constants.VALIDATION_REPORT_PREFIX, CLIConstants.JSON_FILE_EXTENSION);
       }
     } else {
       Files.deleteIfExists(outputFile);
       try {
         Files.createFile(outputFile);
-      } catch (IOException e) {
-        outputFile = Files.createTempFile(Constants.VALIDATION_REPORT_PREFIX, ".json");
+      } catch (final IOException e) {
+        outputFile = Files.createTempFile(Constants.VALIDATION_REPORT_PREFIX, CLIConstants.JSON_FILE_EXTENSION);
       }
     }
     return outputFile;

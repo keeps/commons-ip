@@ -179,7 +179,8 @@
                             <generateGitPropertiesFile>true</generateGitPropertiesFile>
 
                             <!-- The path for the properties file to be generated. See Super Pom
-                                for default variable reference https://maven.apache.org/guides/introduction/introduction-to-the-pom.html -->
+                                for default variable reference
+                                https://maven.apache.org/guides/introduction/introduction-to-the-pom.html -->
                             <generateGitPropertiesFilename>
                                 ${project.build.directory}/classes/version.json
                             </generateGitPropertiesFilename>
@@ -228,7 +229,8 @@
                                         <descriptorRef>jar-with-dependencies</descriptorRef>
                                     </descriptorRefs>
                                     <descriptors>
-                                        <!--<descriptor>src/main/assembly/assembly-exclude-descriptor.xml</descriptor> -->
+                                        <!--<descriptor>src/main/assembly
+                                        /assembly-exclude-descriptor.xml</descriptor> -->
                                     </descriptors>
                                     <appendAssemblyId>false</appendAssemblyId>
                                 </configuration>
@@ -359,11 +361,6 @@
             <groupId>org.jdom</groupId>
             <artifactId>jdom2</artifactId>
             <version>2.0.6</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>26.0-jre</version>
         </dependency>
 
         <!-- Jackson.core dependency for Validation Reporter and joda-time -->

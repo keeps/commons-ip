@@ -21,6 +21,7 @@ import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.text.StringEscapeUtils;
 import org.jdom2.Element;
 import org.jdom2.IllegalDataException;
 import org.jdom2.output.Format;
@@ -31,8 +32,6 @@ import org.roda_project.commons_ip.model.IPFile;
 import org.roda_project.commons_ip.model.MetadataType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.xml.XmlEscapers;
 
 public final class BagitUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(BagitUtils.class);
@@ -96,7 +95,7 @@ public final class BagitUtils {
     for (Map.Entry<String, String> entry : bagInfo.entrySet()) {
       if (!IPConstants.BAGIT_PARENT.equalsIgnoreCase(entry.getKey())) {
         Element child = new Element(IPConstants.BAGIT_FIELD);
-        child.setAttribute(IPConstants.BAGIT_NAME, XmlEscapers.xmlAttributeEscaper().escape(entry.getKey()));
+        child.setAttribute(IPConstants.BAGIT_NAME, StringEscapeUtils.escapeXml11(entry.getKey()));
         child.addContent(entry.getValue());
         root.addContent(child);
       }
