@@ -32,7 +32,9 @@ public class SipCreatorUtils {
   }
 
   public static boolean validateMetadataOptions(String metadataFile, String metadataType, String metadataVersion) {
-    return metadataFile != null || (metadataType == null && metadataVersion == null);
+    if (metadataFile == null && metadataType == null && metadataVersion == null) {
+      return true;
+    } else return metadataFile != null && metadataType != null;
   }
 
   public static boolean validateRepresentationOptions(String[] representationData, String representationType,

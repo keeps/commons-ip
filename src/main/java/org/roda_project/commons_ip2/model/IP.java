@@ -407,10 +407,9 @@ public abstract class IP implements IPInterface {
     return creatorAgent;
   }
 
-  private IPAgent addSubmitterDefaultAgent() {
+  private IPAgent getSubmitterDefaultAgent() {
     IPAgent submitterAgent = new IPAgent("Default submitter agent", "CREATOR", null, CreatorType.INDIVIDUAL, null, "1",
       IPAgentNoteTypeEnum.IDENTIFICATIONCODE);
-    header.addAgent(submitterAgent);
     return submitterAgent;
   }
 
@@ -426,7 +425,7 @@ public abstract class IP implements IPInterface {
       submitterAgent = new IPAgent(submitterAgentName, "CREATOR", null, CreatorType.INDIVIDUAL, null, submitterAgentID,
         IPAgentNoteTypeEnum.IDENTIFICATIONCODE);
     } else {
-      submitterAgent = addSubmitterDefaultAgent();
+      submitterAgent = getSubmitterDefaultAgent();
     }
 
     header.addAgent(submitterAgent);

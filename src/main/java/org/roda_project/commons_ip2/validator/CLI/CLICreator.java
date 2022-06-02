@@ -146,7 +146,7 @@ public class CLICreator {
         }
 
       } else {
-        CLIUtils.printErrors(System.out, "Missing metadata file or representation data.");
+        CLIUtils.printErrors(System.out, "Missing metadata file and metadata type or representation data.");
         return ExitCodes.EXIT_CODE_CREATE_MISSING_ARGS;
       }
     } catch (ParseException e) {
