@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 /** {@author João Gomes <jgomes@keep.pt>}. */
 public class RequirementsComparator implements Comparator<String> {
-  private int compareInt(int c1, int c2) {
+  private int compareInt(final int c1, final int c2) {
     if (c1 < c2) {
       return -1;
     } else {
@@ -15,7 +15,7 @@ public class RequirementsComparator implements Comparator<String> {
     }
   }
 
-  private int calculateWeight(String o) {
+  private int calculateWeight(final String o) {
     int c;
 
     if (o.startsWith("CSIPSTR")) {
@@ -37,7 +37,7 @@ public class RequirementsComparator implements Comparator<String> {
   }
 
   @Override
-  public int compare(String o1, String o2) {
+  public int compare(final String o1, final String o2) {
     return compareInt(calculateWeight(o1), calculateWeight(o2));
   }
 }

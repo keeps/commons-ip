@@ -46,11 +46,13 @@ public class StructMapDiv {
    *          {@link Object}
    * @return if is equals or not.
    */
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
-    if ((obj == null) || (obj.getClass() != this.getClass()))
+    }
+    if (obj == null || obj.getClass() != this.getClass()) {
       return false;
+    }
     // object must be Test at this point
     final StructMapDiv structMapDiv = (StructMapDiv) obj;
     return label.equals(structMapDiv.label);

@@ -1,6 +1,7 @@
 package org.roda_project.commons_ip2.validator.utils;
 
 import java.util.Map;
+
 import org.roda_project.commons_ip2.validator.constants.Constants;
 
 /** {@author João Gomes <jgomes@keep.pt>}. */
@@ -10,25 +11,36 @@ public final class Message {
     // do nothing
   }
 
-  public static String createErrorMessage(
-      final String message, final String path, final boolean isRootMets) {
+  /**
+   * Generates an error message.
+   * 
+   * @param message
+   *          The message.
+   * @param path
+   *          The path to add to the message
+   * @param isRootMets
+   *          Flag if is root mets or not.
+   * @return {@link String}.
+   */
+  public static String createErrorMessage(final String message, final String path, final boolean isRootMets) {
     return String.format(message, isRootMets ? "Root METS.xml" : path);
   }
 
   /**
    * Creates message with number of files missing in some validation methods.
    *
-   * @param missedMetadataFiles the {@link Map} with the missing files.
-   * @param initialMessage the {@link String} with the initial message
-   * @param isZip flag if IP is in zip format or is a folder.
-   * @param split the {@link String} with the path we don't want in the message.
+   * @param missedMetadataFiles
+   *          the {@link Map} with the missing files.
+   * @param initialMessage
+   *          the {@link String} with the initial message
+   * @param isZip
+   *          flag if IP is in zip format or is a folder.
+   * @param split
+   *          the {@link String} with the path we don't want in the message.
    * @return a message {@link String}.
    */
-  public static String createMissingFilesMessage(
-      final Map<String, Boolean> missedMetadataFiles,
-      final String initialMessage,
-      final boolean isZip,
-      final String split) {
+  public static String createMissingFilesMessage(final Map<String, Boolean> missedMetadataFiles,
+    final String initialMessage, final boolean isZip, final String split) {
     final StringBuilder message = new StringBuilder();
     message.append(initialMessage);
     final int size = missedMetadataFiles.size();
@@ -52,14 +64,11 @@ public final class Message {
     return message.toString();
   }
 
-  private static String calculateInnerMessage(
-      final boolean isZip, final String key, final String split) {
+  private static String calculateInnerMessage(final boolean isZip, final String key, final String split) {
     final StringBuilder message = new StringBuilder();
     if (isZip) {
-      message
-          .append(
-              key.split(split)[1].startsWith("/") ? key.split(split)[1] : "/" + key.split(split)[1])
-          .append(", ");
+      message.append(key.split(split)[1].startsWith(Constants.SEPARATOR) ? key.split(split)[1]
+        : Constants.SEPARATOR + key.split(split)[1]).append(", ");
     } else {
       message.append(key.split(split)[1]);
     }

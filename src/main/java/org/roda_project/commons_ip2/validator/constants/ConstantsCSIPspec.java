@@ -1,7 +1,7 @@
 package org.roda_project.commons_ip2.validator.constants;
 
 /** {@author João Gomes <jgomes@keep.pt>}. */
-public class ConstantsCSIPspec {
+public final class ConstantsCSIPspec {
   private ConstantsCSIPspec() {}
 
   /* Errors and ID's for constants in validation of sip path */

@@ -1,17 +1,35 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import org.roda_project.commons_ip2.validator.constants.Constants;
+
+
 
 /** Checksum. */
 public class Checksum {
+  /**
+   * {@link ChecksumAlg}.
+   */
   @JsonProperty("algorithm")
   private ChecksumAlg algorithm = null;
 
+  /**
+   * the checksum value.
+   */
   @JsonProperty("value")
   private String value = null;
 
-  public Checksum algorithm(ChecksumAlg algorithm) {
+  /**
+   * Set the checksum algorithm.
+   * 
+   * @param algorithm
+   *          {@link ChecksumAlg}.
+   * @return {@link Checksum}
+   */
+  public Checksum algorithm(final ChecksumAlg algorithm) {
     this.algorithm = algorithm;
     return this;
   }
@@ -25,11 +43,18 @@ public class Checksum {
     return algorithm;
   }
 
-  public void setAlgorithm(ChecksumAlg algorithm) {
+  public void setAlgorithm(final ChecksumAlg algorithm) {
     this.algorithm = algorithm;
   }
 
-  public Checksum value(String value) {
+  /**
+   * Set the value of the checksum.
+   * 
+   * @param value
+   *          the value of the checksum.
+   * @return {@link Checksum}.
+   */
+  public Checksum value(final String value) {
     this.value = value;
     return this;
   }
@@ -43,21 +68,20 @@ public class Checksum {
     return value;
   }
 
-  public void setValue(String value) {
+  public void setValue(final String value) {
     this.value = value;
   }
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Checksum checksum = (Checksum) o;
-    return Objects.equals(this.algorithm, checksum.algorithm)
-        && Objects.equals(this.value, checksum.value);
+    final Checksum checksum = (Checksum) o;
+    return Objects.equals(this.algorithm, checksum.algorithm) && Objects.equals(this.value, checksum.value);
   }
 
   @Override
@@ -67,19 +91,20 @@ public class Checksum {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
     sb.append("class Checksum {\n");
 
-    sb.append("    algorithm: ").append(toIndentedString(algorithm)).append("\n");
-    sb.append("    value: ").append(toIndentedString(value)).append("\n");
+    sb.append("    algorithm: ").append(toIndentedString(algorithm)).append(Constants.END_OF_LINE);
+    sb.append("    value: ").append(toIndentedString(value)).append(Constants.END_OF_LINE);
     sb.append("}");
     return sb.toString();
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(final Object o) {
     if (o == null) {
       return "null";
     }

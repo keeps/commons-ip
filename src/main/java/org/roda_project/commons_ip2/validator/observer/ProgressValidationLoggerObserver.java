@@ -5,8 +5,10 @@ import org.slf4j.LoggerFactory;
 
 /** {@author João Gomes <jgomes@keep.pt>}. */
 public class ProgressValidationLoggerObserver implements ValidationObserver {
-  private static final Logger LOGGER =
-      LoggerFactory.getLogger(ProgressValidationLoggerObserver.class);
+  /**
+   * The {@link Logger}.
+   */
+  private static final Logger LOGGER = LoggerFactory.getLogger(ProgressValidationLoggerObserver.class);
 
   @Override
   public void notifyValidationStart() {
@@ -14,22 +16,22 @@ public class ProgressValidationLoggerObserver implements ValidationObserver {
   }
 
   @Override
-  public void notifyStartValidationModule(String moduleName, String ID) {
-    LOGGER.info("Start validation of: {} - {}", ID, moduleName);
+  public void notifyStartValidationModule(final String moduleName, final String id) {
+    LOGGER.info("Start validation of: {} - {}", id, moduleName);
   }
 
   @Override
-  public void notifyStartStep(String ID) {
-    LOGGER.info("Start validation of: {}", ID);
+  public void notifyStartStep(final String id) {
+    LOGGER.info("Start validation of: {}", id);
   }
 
   @Override
-  public void notifyFinishStep(String ID) {
-    LOGGER.info("Finish validation of: {}", ID);
+  public void notifyFinishStep(final String id) {
+    LOGGER.info("Finish validation of: {}", id);
   }
 
   @Override
-  public void notifyFinishModule(String moduleName) {
+  public void notifyFinishModule(final String moduleName) {
     LOGGER.info("Finish validation of module: {}", moduleName);
   }
 
@@ -39,7 +41,8 @@ public class ProgressValidationLoggerObserver implements ValidationObserver {
   }
 
   @Override
-  public void notifyIndicators(int errors, int success, int warnings, int notes, int skipped) {
+  public void notifyIndicators(final int errors, final int success, final int warnings, final int notes,
+    final int skipped) {
     LOGGER.info("Number of requirements success [{}]", success);
     LOGGER.info("Number of requirements failed [{}]", errors);
     LOGGER.info("Number of warnings [{}]", warnings);

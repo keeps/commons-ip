@@ -1,7 +1,7 @@
 package org.roda_project.commons_ip2.validator.constants;
 
 /** {@author João Gomes <jgomes@keep.pt>}. */
-public class ConstantsAIPspec {
+public final class ConstantsAIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_AIP9_ID = "AIP9";
   public static final String VALIDATION_REPORT_SPECIFICATION_AIP9_NAME = "File ID";
   public static final String VALIDATION_REPORT_SPECIFICATION_AIP9_LOCATION = "file/@ID";

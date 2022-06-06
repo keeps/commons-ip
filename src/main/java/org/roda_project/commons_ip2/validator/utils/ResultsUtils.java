@@ -1,10 +1,11 @@
 package org.roda_project.commons_ip2.validator.utils;
 
 import java.util.Map;
+
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 
 /** {@author João Gomes <jgomes@keep.pt>}. */
-public class ResultsUtils {
+public final class ResultsUtils {
 
   private ResultsUtils() {
     // do nothing
@@ -13,14 +14,17 @@ public class ResultsUtils {
   /**
    * Add the {@link ReporterDetails} result to the {@link Map} results.
    *
-   * @param results the {@link Map} with all results
-   * @param specification the {@link String} with the specification of the result.
-   * @param details the {@link ReporterDetails}
+   * @param results
+   *          the {@link Map} with all results
+   * @param specification
+   *          the {@link String} with the specification of the result.
+   * @param details
+   *          the {@link ReporterDetails}
    */
-  public static void addResult(
-      Map<String, ReporterDetails> results, String specification, ReporterDetails details) {
+  public static void addResult(final Map<String, ReporterDetails> results, final String specification,
+    final ReporterDetails details) {
     if (results.containsKey(specification)) {
-      ReporterDetails currentResult = results.get(specification);
+      final ReporterDetails currentResult = results.get(specification);
       // Merge current result with new test case validation outcome
       if (!details.getIssues().isEmpty()) {
         currentResult.addIssues(details.getIssues());
@@ -32,24 +36,45 @@ public class ResultsUtils {
     }
   }
 
-  public static boolean isResultValid(Map<String, ReporterDetails> results, String specification) {
+  /**
+   * Check if the result is valid.
+   * 
+   * @param results
+   *          {@link Map} with all specification results.
+   * @param specification
+   *          the specification.
+   * @return if is valid or not.
+   */
+  public static boolean isResultValid(final Map<String, ReporterDetails> results, final String specification) {
     return results.get(specification).isValid() && !results.get(specification).isSkipped();
   }
 
-  public static void mergeResults(
-      Map<String, ReporterDetails> results, Map<String, ReporterDetails> componentResults) {
+  /**
+   * Merge the results for all component requirements.
+   * 
+   * @param results
+   *          {@link Map} global results.
+   * @param componentResults
+   *          {@link Map} component results.
+   */
+  public static void mergeResults(final Map<String, ReporterDetails> results,
+    final Map<String, ReporterDetails> componentResults) {
     componentResults.forEach((s, d) -> addResult(results, s, d));
   }
 
   /**
-   * Add the same {@link ReporterDetails} to different specifications in the results {@link Map}.
+   * Add the same {@link ReporterDetails} to different specifications in the
+   * results {@link Map}.
    *
-   * @param results the {@link Map} with all results
-   * @param details the {@link ReporterDetails}
-   * @param specifications 1 or more specifications {@link String}.
+   * @param results
+   *          the {@link Map} with all results
+   * @param details
+   *          the {@link ReporterDetails}
+   * @param specifications
+   *          1 or more specifications {@link String}.
    */
-  public static void addResults(
-      Map<String, ReporterDetails> results, ReporterDetails details, String... specifications) {
+  public static void addResults(final Map<String, ReporterDetails> results, final ReporterDetails details,
+    final String... specifications) {
     for (String specification : specifications) {
       addResult(results, specification, details);
     }
