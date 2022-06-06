@@ -64,7 +64,7 @@ metadata type: **EAD**, metadata version: **2002**)
 * **-doc** or **--documentation**, [OPTIONAL] Path(s) to folders or files to add in documentation of SIP.
 * **-p** or **--path**, [OPTIONAL] Path to save the SIP.
 * **-a** or **--ancestors**, [OPTIONAL] ID(s) of the ancestors of the SIP.
-* **-sn** or **--submitter-agent-name**, [OPTIONAL] The name of the submitter agent.
+* **-san** or **--submitter-agent-name**, [OPTIONAL] The name of the submitter agent.
 * **-aid** or **--submiter-agent-id**, [OPTIONAL] THE identification code (ID) of the submitter agent.
 
 Examples:

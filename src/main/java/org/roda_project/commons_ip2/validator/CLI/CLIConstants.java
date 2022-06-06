@@ -71,7 +71,7 @@ public final class CLIConstants {
   public static final String CLI_CREATE_OPTION_REPRESENTATION_TYPE = "-rt";
 
   /**
-   * CLI option to add ancestprs to the SIP.
+   * CLI option to add ancestors to the SIP.
    */
   public static final String CLI_CREATE_OPTION_ANCESTORS = "-a";
 
@@ -93,7 +93,7 @@ public final class CLIConstants {
   /**
    * CLI option to give the submitter agent name.
    */
-  public static final String CLI_CREATE_OPTION_SUBMITTER_AGENT_NAME = "-sn";
+  public static final String CLI_CREATE_OPTION_SUBMITTER_AGENT_NAME = "-san";
 
   /**
    * CLI option to give the submitter agent id.
@@ -231,7 +231,7 @@ public final class CLIConstants {
   /**
    * Short option Ancestors without ident.
    */
-  public static final String CLI_CREATE_SHORT_OPTION_SUBMITTER_AGENT_NAME_WITHOUT_IDENT = "sn";
+  public static final String CLI_CREATE_SHORT_OPTION_SUBMITTER_AGENT_NAME_WITHOUT_IDENT = "san";
 
   /**
    * Long option submitter agent id without ident.
