@@ -23,6 +23,11 @@ jobs:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven-
+      - name: Get release version
+        id: tag
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\/}
+      - name: Set POM Version
+        run: mvn versions:set versions:commit -DnewVersion=${{ steps.tag.outputs.VERSION }}
       - name: Build Jar
         run: mvn --batch-mode clean package -P cli
         env:
@@ -31,9 +36,6 @@ jobs:
         run:  mvn --batch-mode deploy -Djacoco.skip=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Get release version
-        id: tag
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\/}
       - name: Release to GitHub
         uses: softprops/action-gh-release@v1
         with:
