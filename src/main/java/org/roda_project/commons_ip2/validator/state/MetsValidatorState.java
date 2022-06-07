@@ -2,16 +2,38 @@ package org.roda_project.commons_ip2.validator.state;
 
 import java.util.ArrayList;
 import java.util.Map;
+
 import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
 
 /** {@author João Gomes <jgomes@keep.pt>}. */
 public class MetsValidatorState {
+  /**
+   * {@link Mets}.
+   */
   private Mets mets = null;
+  /**
+   * {@link ArrayList} with the internal ids.
+   */
   private ArrayList<String> metsInternalIds = new ArrayList<>();
+  /**
+   * Mets name.
+   */
   private String metsName = null;
+  /**
+   * Mets path.
+   */
   private String metsPath = null;
+  /**
+   * Flag if is root mets.
+   */
   private boolean isRootMets = false;
+  /**
+   * {@link Map} with the files of the mets.
+   */
   private Map<String, Boolean> metsFiles = null;
+  /**
+   * Type of the ip.
+   */
   private String ipType = null;
 
   /**
@@ -26,9 +48,10 @@ public class MetsValidatorState {
   /**
    * Set {@link Mets} object.
    *
-   * @param mets the {@link Mets}
+   * @param mets
+   *          the {@link Mets}
    */
-  public void setMets(Mets mets) {
+  public void setMets(final Mets mets) {
     this.mets = mets;
   }
 
@@ -44,9 +67,10 @@ public class MetsValidatorState {
   /**
    * Set METS file name.
    *
-   * @param metsName the {@link String }
+   * @param metsName
+   *          the {@link String }
    */
-  public void setMetsName(String metsName) {
+  public void setMetsName(final String metsName) {
     this.metsName = metsName;
   }
 
@@ -62,9 +86,10 @@ public class MetsValidatorState {
   /**
    * Set METS file path.
    *
-   * @param metsPath the {@link String }
+   * @param metsPath
+   *          the {@link String }
    */
-  public void setMetsPath(String metsPath) {
+  public void setMetsPath(final String metsPath) {
     this.metsPath = metsPath;
   }
 
@@ -80,28 +105,31 @@ public class MetsValidatorState {
   /**
    * Set if is METS root file or not.
    *
-   * @param isRootMets flag if is METS file on root or not
+   * @param isRootMets
+   *          flag if is METS file on root or not
    */
-  public void setIsRootMets(boolean isRootMets) {
+  public void setIsRootMets(final boolean isRootMets) {
     this.isRootMets = isRootMets;
   }
 
   /**
    * Add id to list of all METS files id's in the IP.
    *
-   * @param id the {@link String }
+   * @param id
+   *          the {@link String }
    */
-  public void addMetsInternalId(String id) {
+  public void addMetsInternalId(final String id) {
     metsInternalIds.add(id);
   }
 
   /**
    * Check if exists this {@link String} in the list of id's.
    *
-   * @param id the {@link String}
+   * @param id
+   *          the {@link String}
    * @return if already exists this {@link String}
    */
-  public boolean checkMetsInternalId(String id) {
+  public boolean checkMetsInternalId(final String id) {
     return metsInternalIds.contains(id);
   }
 
@@ -117,9 +145,10 @@ public class MetsValidatorState {
   /**
    * Set {@link Map} METS files.
    *
-   * @param metsFiles the {@link Map}
+   * @param metsFiles
+   *          the {@link Map}
    */
-  public void setMetsFiles(Map<String, Boolean> metsFiles) {
+  public void setMetsFiles(final Map<String, Boolean> metsFiles) {
     this.metsFiles = metsFiles;
   }
 
@@ -135,9 +164,10 @@ public class MetsValidatorState {
   /**
    * Set the type of IP (SIP, AIP,DIP).
    *
-   * @param ipType the {@link String}
+   * @param ipType
+   *          the {@link String}
    */
-  public void setIpType(String ipType) {
+  public void setIpType(final String ipType) {
     this.ipType = ipType;
   }
 }

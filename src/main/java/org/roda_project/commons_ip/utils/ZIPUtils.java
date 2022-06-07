@@ -222,7 +222,7 @@ public final class ZIPUtils {
         if (Utils.systemIsWindows()) {
           entryName = entryName.replaceAll("/", "\\\\");
         }
-        Path newFile = dest.resolve(entryName);
+        Path newFile = dest.resolve(entryName).normalize();
 
         if (zipEntry.isDirectory()) {
           Files.createDirectories(newFile);

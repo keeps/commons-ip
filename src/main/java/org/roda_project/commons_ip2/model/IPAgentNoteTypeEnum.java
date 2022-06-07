@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum IPAgentNoteTypeEnum {
-  SOFTWARE_VERSION("SOFTWARE VERSION"), IDENTIFICATIONCODE("IDENTIFICATIONCODE") ,NOT_SET("Not set");
+  SOFTWARE_VERSION("SOFTWARE VERSION"), IDENTIFICATIONCODE("IDENTIFICATIONCODE"), NOT_SET("Not set");
 
   public static final Map<String, IPAgentNoteTypeEnum> typeToEnum = new HashMap<>();
   static {

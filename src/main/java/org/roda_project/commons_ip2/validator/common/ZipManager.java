@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
 import javax.xml.bind.DatatypeConverter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,10 +27,13 @@ public class ZipManager {
   /**
    * Gets {@link InputStream} to the IP in zip format.
    *
-   * @param path {@link Path} to the IP
-   * @param entry {@link String} entry
+   * @param path
+   *          {@link Path} to the IP
+   * @param entry
+   *          {@link String} entry
    * @return {@link InputStream} to the zip file
-   * @throws IOException if some I/O error occurs
+   * @throws IOException
+   *           if some I/O error occurs
    */
   public InputStream getZipInputStream(Path path, String entry) throws IOException {
     if (zipFile == null) {
@@ -45,9 +50,11 @@ public class ZipManager {
   /**
    * Get METS file in Root of the IP {@link InputStream}.
    *
-   * @param path {@link Path} to the IP
+   * @param path
+   *          {@link Path} to the IP
    * @return {@link InputStream} to the file.
-   * @throws IOException if some I/O error occurs
+   * @throws IOException
+   *           if some I/O error occurs
    */
   public InputStream getMetsRootInputStream(Path path) throws IOException {
     if (zipFile == null) {
@@ -79,8 +86,10 @@ public class ZipManager {
   /**
    * Get specific entry of IP.
    *
-   * @param path {@link Path} to the IP
-   * @param entry {@link String} entry
+   * @param path
+   *          {@link Path} to the IP
+   * @param entry
+   *          {@link String} entry
    * @return {@link ZipEntry}
    */
   public ZipEntry getZipEntry(Path path, String entry) {
@@ -98,9 +107,11 @@ public class ZipManager {
   /**
    * Check if exists METS file in root of the IP.
    *
-   * @param path {@link Path} to the IP
+   * @param path
+   *          {@link Path} to the IP
    * @return if exists or not.
-   * @throws IOException if some I/O error occurs.
+   * @throws IOException
+   *           if some I/O error occurs.
    */
   public boolean checkIfExistsRootMetsFile(Path path) throws IOException {
     boolean found = false;
@@ -133,10 +144,13 @@ public class ZipManager {
   /**
    * Checks if specific path exists on the IP.
    *
-   * @param path {@link Path} to the IP.
-   * @param filePath {@link String} file path.
+   * @param path
+   *          {@link Path} to the IP.
+   * @param filePath
+   *          {@link String} file path.
    * @return if exists the path or not.
-   * @throws IOException if some I/O error occurs.
+   * @throws IOException
+   *           if some I/O error occurs.
    */
   public boolean checkPathExists(Path path, String filePath) throws IOException {
     boolean found = false;
@@ -154,21 +168,22 @@ public class ZipManager {
 
   /**
    * Verify if checksum given is equal against the calculation of file checksum.
+   * 
    * @param path
-   *      {@link Path} to the IP
+   *          {@link Path} to the IP
    * @param file
-   *      {@link String} to the file
+   *          {@link String} to the file
    * @param alg
-   *      {@link String} with the algorithm to checksum calculation
+   *          {@link String} with the algorithm to checksum calculation
    * @param checksum
-   *      {@link String} value of the given checksum.
+   *          {@link String} value of the given checksum.
    * @return if the calculation of checksum and the given checksum are equal.
    * @throws IOException
-   *         if some I/O error occurs.
+   *           if some I/O error occurs.
    * @throws NoSuchAlgorithmException
    */
   public boolean verifyChecksum(Path path, String file, String alg, String checksum)
-      throws IOException, NoSuchAlgorithmException {
+    throws IOException, NoSuchAlgorithmException {
     boolean valid = true;
     InputStream entry = getZipInputStream(path, file);
     if (entry == null) {
@@ -240,10 +255,8 @@ public class ZipManager {
 
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().endsWith("/METS.xml")
-          && entry.getName().split("/").length > 2
-          && entry.getName().split("/").length <= 4
-          && !entry.getName().matches(".+/submission/.+")) {
+      if (entry.getName().endsWith("/METS.xml") && entry.getName().split("/").length > 2
+        && entry.getName().split("/").length <= 4 && !entry.getName().matches(".+/submission/.+")) {
         InputStream stream = zipFile.getInputStream(entry);
         if (stream != null) {
           subMets.put(entry.getName(), stream);
@@ -344,10 +357,8 @@ public class ZipManager {
     Enumeration entries = zipFile.entries();
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (!entry.getName().matches(".*/METS.xml")
-          && !entry.getName().contains("/metadata")
-          && !entry.isDirectory()
-          && !entry.getName().contains("/aip.json")) {
+      if (!entry.getName().matches(".*/METS.xml") && !entry.getName().contains("/metadata") && !entry.isDirectory()
+        && !entry.getName().contains("/aip.json")) {
         metadataFiles.put(entry.getName(), false);
       }
     }
@@ -392,8 +403,7 @@ public class ZipManager {
     Enumeration entries = zipFile.entries();
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().matches(".*/" + folder + "/.*")
-          && entry.getName().split("/").length >= 3) {
+      if (entry.getName().matches(".*/" + folder + "/.*") && entry.getName().split("/").length >= 3) {
         found = true;
         break;
       }
@@ -401,14 +411,13 @@ public class ZipManager {
     return found;
   }
 
-  public boolean checkIfExistsFolderInsideRepresentation(Path path, String folder)
-      throws IOException {
+  public boolean checkIfExistsFolderInsideRepresentation(Path path, String folder) throws IOException {
     ZipFile zipFile = new ZipFile(path.toFile());
     Enumeration entries = zipFile.entries();
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
       if (entry.getName().matches(".*/representations/.*/" + folder + "/.*")
-          && entry.getName().split("/").length >= 4) {
+        && entry.getName().split("/").length >= 4) {
         return true;
       }
     }
@@ -424,16 +433,13 @@ public class ZipManager {
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
       if (entry.getName().endsWith("/METS.xml")) {
-        if (entry.getName().split("/").length > 2
-            && entry.getName().split("/").length <= 4
-            && !entry.getName().matches(".+/submission/.+")) {
+        if (entry.getName().split("/").length > 2 && entry.getName().split("/").length <= 4
+          && !entry.getName().matches(".+/submission/.+")) {
           countSubMets++;
         }
       } else {
-        if (entry.getName().contains("/representations/")
-            && (entry.getName().split("/").length > 3
-                && !entry.isDirectory()
-                && !entry.getName().matches(".+/submission/.+"))) {
+        if (entry.getName().contains("/representations/") && (entry.getName().split("/").length > 3
+          && !entry.isDirectory() && !entry.getName().matches(".+/submission/.+"))) {
           String representationName = getRepresentationName(entry.getName());
           if (!representationsFoldersNames.contains(representationName)) {
             representationsFoldersNames.add(representationName);
@@ -452,9 +458,8 @@ public class ZipManager {
     Enumeration entries = zipFile.entries();
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().contains("/representations/")
-          && entry.getName().split("/").length > 3
-          && !entry.getName().matches(".+/submission/.+")) {
+      if (entry.getName().contains("/representations/") && entry.getName().split("/").length > 3
+        && !entry.getName().matches(".+/submission/.+")) {
         String representationName = getRepresentationName(entry.getName());
         if (!representationsFoldersNames.contains(representationName)) {
           representationsFoldersNames.add(representationName);
@@ -471,10 +476,8 @@ public class ZipManager {
     Enumeration entries = zipFile.entries();
     while (entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().contains("/representations/")
-          && !entry.getName().matches(".+/submission/.+")
-          && entry.getName().split("/").length == 3
-          && !entry.getName().endsWith("/")) {
+      if (entry.getName().contains("/representations/") && !entry.getName().matches(".+/submission/.+")
+        && entry.getName().split("/").length == 3 && !entry.getName().endsWith("/")) {
         count++;
       }
     }
@@ -505,17 +508,13 @@ public class ZipManager {
   private String getRepresentationName(String entry) {
     String[] representations = entry.split("/");
     StringBuilder representationName = new StringBuilder();
-    representationName
-        .append(representations[0])
-        .append("/")
-        .append(representations[1])
-        .append("/")
-        .append(representations[2]);
+    representationName.append(representations[0]).append("/").append(representations[1]).append("/")
+      .append(representations[2]);
     return representationName.toString();
   }
 
-  public boolean checkIfExistsFolderRepresentation(
-      Path ipPath, String folder, String representation) throws IOException {
+  public boolean checkIfExistsFolderRepresentation(Path ipPath, String folder, String representation)
+    throws IOException {
     ZipFile zipFile = new ZipFile(ipPath.toFile());
     Enumeration entries = zipFile.entries();
     StringBuilder regex = new StringBuilder();

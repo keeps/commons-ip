@@ -5,6 +5,9 @@ import java.util.List;
 
 /**
  * {@author João Gomes <jgomes@keep.pt>}.
+ * 
+ * @param <T>
+ *          generic object.
  */
 public class Tree<T> {
   /**
@@ -42,15 +45,15 @@ public class Tree<T> {
    * @param child
    *          {@link T}
    */
-  public Tree<T> addChild(final T child, final T parent) {
+  public Tree<T> addChild(final T child, final T parentNode) {
     final Tree<T> childTree;
-    if (!checkIfExistChild(child, parent)) {
+    if (!checkIfExistChild(child, parentNode)) {
       childTree = new Tree<>(child);
       childTree.parent = this;
       this.childs.add(childTree);
 
     } else {
-      childTree = getChild(child, parent);
+      childTree = getChild(child, parentNode);
     }
     return childTree;
   }

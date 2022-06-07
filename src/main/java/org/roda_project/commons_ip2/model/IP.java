@@ -78,7 +78,7 @@ public abstract class IP implements IPInterface {
     this.zipEntries = new LinkedHashMap<>();
   }
 
-  public IP(List<String> ipIds, IPType ipType) {
+  public IP(final List<String> ipIds, final IPType ipType) {
     super();
     this.setIds(ipIds);
     this.type = ipType;
@@ -86,13 +86,13 @@ public abstract class IP implements IPInterface {
     this.header = new IPHeader();
   }
 
-  public IP(List<String> ipIds, IPType ipType, IPContentType contentType) {
+  public IP(final List<String> ipIds, final IPType ipType, final IPContentType contentType) {
     this(ipIds, ipType);
     this.contentType = contentType;
   }
 
   @Override
-  public IP setId(String id) {
+  public IP setId(final String id) {
     this.ids = Arrays.asList(id);
     return this;
   }
@@ -103,7 +103,7 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP setIds(List<String> ids) {
+  public IP setIds(final List<String> ids) {
     this.ids = ids;
     return this;
   }
@@ -114,7 +114,7 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP setProfile(String profile) {
+  public IP setProfile(final String profile) {
     this.profile = profile;
     return this;
   }
@@ -125,7 +125,7 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP setType(IPType type) {
+  public IP setType(final IPType type) {
     this.type = type;
     return this;
   }
@@ -141,7 +141,7 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP setCreateDate(XMLGregorianCalendar date) {
+  public IP setCreateDate(final XMLGregorianCalendar date) {
     header.setCreateDate(date);
     return this;
   }
@@ -152,13 +152,13 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP setModificationDate(XMLGregorianCalendar date) {
+  public IP setModificationDate(final XMLGregorianCalendar date) {
     header.setModificationDate(date);
     return this;
   }
 
   @Override
-  public IP setContentType(IPContentType contentType) {
+  public IP setContentType(final IPContentType contentType) {
     this.contentType = contentType;
     return this;
   }
@@ -169,7 +169,7 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP setContentInformationType(IPContentInformationType contentInformationType) {
+  public IP setContentInformationType(final IPContentInformationType contentInformationType) {
     this.contentInformationType = contentInformationType;
     return this;
   }
@@ -185,7 +185,7 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP setAncestors(List<String> ancestors) {
+  public IP setAncestors(final List<String> ancestors) {
     this.ancestors = ancestors;
     return this;
   }
@@ -196,13 +196,13 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP setStatus(IPStatus status) {
+  public IP setStatus(final IPStatus status) {
     this.header.setStatus(status);
     return this;
   }
 
   @Override
-  public IP setBasePath(Path basePath) {
+  public IP setBasePath(final Path basePath) {
     this.basePath = basePath;
     return this;
   }
@@ -213,7 +213,7 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP setDescription(String description) {
+  public IP setDescription(final String description) {
     this.description = description;
     return this;
   }
@@ -224,32 +224,32 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP addAgent(IPAgent sipAgent) {
+  public IP addAgent(final IPAgent sipAgent) {
     header.addAgent(sipAgent);
     return this;
   }
 
   @Override
-  public IP addPreservationMetadata(IPMetadata sipMetadata) throws IPException {
+  public IP addPreservationMetadata(final IPMetadata sipMetadata) throws IPException {
     preservationMetadata.add(sipMetadata);
     return this;
   }
 
   @Override
-  public IP addOtherMetadata(IPMetadata sipMetadata) throws IPException {
+  public IP addOtherMetadata(final IPMetadata sipMetadata) throws IPException {
     otherMetadata.add(sipMetadata);
     return this;
   }
 
   @Override
-  public IP addDescriptiveMetadata(IPDescriptiveMetadata metadata) throws IPException {
+  public IP addDescriptiveMetadata(final IPDescriptiveMetadata metadata) throws IPException {
     descriptiveMetadata.add(metadata);
     return this;
   }
 
   @Override
-  public IP addRepresentation(IPRepresentation sipRepresentation) throws IPException {
-    String representationId = sipRepresentation.getRepresentationID();
+  public IP addRepresentation(final IPRepresentation sipRepresentation) throws IPException {
+    final String representationId = sipRepresentation.getRepresentationID();
     if (representations.containsKey(representationId)) {
       throw new IPException("Representation already exists");
     } else {
@@ -260,77 +260,79 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
-  public IP addSchema(IPFileInterface schema) {
+  public IP addSchema(final IPFileInterface schema) {
     schemas.add(schema);
     return this;
   }
 
   @Override
-  public IP addDocumentation(IPFileInterface documentationPath) {
+  public IP addDocumentation(final IPFileInterface documentationPath) {
     documentation.add(documentationPath);
     return this;
   }
 
   @Override
-  public IP addAgentToRepresentation(String representationID, IPAgent agent) throws IPException {
+  public IP addAgentToRepresentation(final String representationID, final IPAgent agent) throws IPException {
     checkIfRepresentationExists(representationID);
-    IPRepresentation rep = representations.get(representationID);
+    final IPRepresentation rep = representations.get(representationID);
     rep.addAgent(agent);
     representations.put(representationID, rep);
     return this;
   }
 
   @Override
-  public IP addDescriptiveMetadataToRepresentation(String representationID, IPDescriptiveMetadata descriptiveMetadata)
-    throws IPException {
+  public IP addDescriptiveMetadataToRepresentation(final String representationID,
+    final IPDescriptiveMetadata descriptiveMetadata) throws IPException {
     checkIfRepresentationExists(representationID);
-    IPRepresentation rep = representations.get(representationID);
+    final IPRepresentation rep = representations.get(representationID);
     rep.addDescriptiveMetadata(descriptiveMetadata);
     representations.put(representationID, rep);
     return this;
   }
 
   @Override
-  public IP addPreservationMetadataToRepresentation(String representationID, IPMetadata preservationMetadata)
-    throws IPException {
+  public IP addPreservationMetadataToRepresentation(final String representationID,
+    final IPMetadata preservationMetadata) throws IPException {
     checkIfRepresentationExists(representationID);
-    IPRepresentation rep = representations.get(representationID);
+    final IPRepresentation rep = representations.get(representationID);
     rep.addPreservationMetadata(preservationMetadata);
     representations.put(representationID, rep);
     return this;
   }
 
   @Override
-  public IP addOtherMetadataToRepresentation(String representationID, IPMetadata otherMetadata) throws IPException {
+  public IP addOtherMetadataToRepresentation(final String representationID, final IPMetadata otherMetadata)
+    throws IPException {
     checkIfRepresentationExists(representationID);
-    IPRepresentation rep = representations.get(representationID);
+    final IPRepresentation rep = representations.get(representationID);
     rep.addOtherMetadata(otherMetadata);
     representations.put(representationID, rep);
     return this;
   }
 
   @Override
-  public IP addFileToRepresentation(String representationID, IPFileInterface file) throws IPException {
+  public IP addFileToRepresentation(final String representationID, final IPFileInterface file) throws IPException {
     checkIfRepresentationExists(representationID);
-    IPRepresentation rep = representations.get(representationID);
+    final IPRepresentation rep = representations.get(representationID);
     rep.addFile(file);
     representations.put(representationID, rep);
     return this;
   }
 
   @Override
-  public IP addSchemaToRepresentation(String representationID, IPFileInterface schema) throws IPException {
+  public IP addSchemaToRepresentation(final String representationID, final IPFileInterface schema) throws IPException {
     checkIfRepresentationExists(representationID);
-    IPRepresentation rep = representations.get(representationID);
+    final IPRepresentation rep = representations.get(representationID);
     rep.addSchema(schema);
     representations.put(representationID, rep);
     return this;
   }
 
   @Override
-  public IP addDocumentationToRepresentation(String representationID, IPFileInterface documentation) throws IPException {
+  public IP addDocumentationToRepresentation(final String representationID, final IPFileInterface documentation)
+    throws IPException {
     checkIfRepresentationExists(representationID);
-    IPRepresentation rep = representations.get(representationID);
+    final IPRepresentation rep = representations.get(representationID);
     rep.addDocumentation(documentation);
     representations.put(representationID, rep);
     return this;
@@ -358,7 +360,7 @@ public abstract class IP implements IPInterface {
 
   @Override
   public List<IPRepresentation> getRepresentations() {
-    List<IPRepresentation> representationsList = new ArrayList<>();
+    final List<IPRepresentation> representationsList = new ArrayList<>();
     for (String representationId : representationIds) {
       representationsList.add(representations.get(representationId));
     }
@@ -384,7 +386,7 @@ public abstract class IP implements IPInterface {
     return header;
   }
 
-  public void setHeader(IPHeader hdr) {
+  public void setHeader(final IPHeader hdr) {
     header = hdr;
   }
 
@@ -393,17 +395,50 @@ public abstract class IP implements IPInterface {
     return validationReport.isValid();
   }
 
-  private void checkIfRepresentationExists(String representationID) throws IPException {
+  private void checkIfRepresentationExists(final String representationID) throws IPException {
     if (!representations.containsKey(representationID)) {
       throw new IPException("Representation doesn't exist");
     }
   }
 
-  public IPAgent addCreatorSoftwareAgent(String softwareName, String softwareVersion) {
-    IPAgent creatorAgent = new IPAgent(softwareName, "CREATOR", null, CreatorType.OTHER, "SOFTWARE", softwareVersion,
-      IPAgentNoteTypeEnum.SOFTWARE_VERSION);
+  public IPAgent addCreatorSoftwareAgent(final String softwareName, final String softwareVersion) {
+    final IPAgent creatorAgent = new IPAgent(softwareName, "CREATOR", null, CreatorType.OTHER, "SOFTWARE",
+      softwareVersion, IPAgentNoteTypeEnum.SOFTWARE_VERSION);
     header.addAgent(creatorAgent);
     return creatorAgent;
+  }
+
+  private IPAgent getSubmitterDefaultAgent() {
+    return new IPAgent("Default submitter agent", "CREATOR", null, CreatorType.INDIVIDUAL, null, "1",
+      IPAgentNoteTypeEnum.IDENTIFICATIONCODE);
+  }
+
+  /**
+   * Adds a submitter agent to the SIP.
+   * 
+   * @param submitterAgentName
+   *          the name of the submitter agent.
+   * @param submitterAgentID
+   *          the id of the submitter agent.
+   * @return {@link IPAgent}
+   */
+  public IPAgent addSubmitterAgent(final String submitterAgentName, final String submitterAgentID) {
+    final IPAgent submitterAgent;
+    if (submitterAgentName == null && submitterAgentID != null) {
+      submitterAgent = new IPAgent("Default submitter agent", "CREATOR", null, CreatorType.INDIVIDUAL, null,
+        submitterAgentID, IPAgentNoteTypeEnum.IDENTIFICATIONCODE);
+    } else if (submitterAgentName != null && submitterAgentID == null) {
+      submitterAgent = new IPAgent(submitterAgentName, "CREATOR", null, CreatorType.INDIVIDUAL, null, "1",
+        IPAgentNoteTypeEnum.IDENTIFICATIONCODE);
+    } else if (submitterAgentName != null && submitterAgentID != null) {
+      submitterAgent = new IPAgent(submitterAgentName, "CREATOR", null, CreatorType.INDIVIDUAL, null, submitterAgentID,
+        IPAgentNoteTypeEnum.IDENTIFICATIONCODE);
+    } else {
+      submitterAgent = getSubmitterDefaultAgent();
+    }
+
+    header.addAgent(submitterAgent);
+    return submitterAgent;
   }
 
   @Override
@@ -416,11 +451,11 @@ public abstract class IP implements IPInterface {
       + validationReport + "]";
   }
 
-  public static IP parse(Path source) throws ParseException {
+  public static IP parse(final Path source) throws ParseException {
     throw new ParseException("One must implement static method parse in a concrete class");
   }
 
-  public static IP parse(Path source, Path destinationDirectory) throws ParseException {
+  public static IP parse(final Path source, final Path destinationDirectory) throws ParseException {
     throw new ParseException("One must implement static method parse in a concrete class");
   }
 

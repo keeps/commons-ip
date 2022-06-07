@@ -1,22 +1,36 @@
 package org.roda_project.commons_ip2.validator.state;
 
 import java.nio.file.Path;
+
 import org.roda_project.commons_ip2.validator.common.FolderManager;
 import org.roda_project.commons_ip2.validator.common.ZipManager;
 
 /** {@author João Gomes <jgomes@keep.pt>}. */
 public class StructureValidatorState {
+  /**
+   * {@link ZipManager}.
+   */
   private ZipManager zipManager;
+  /**
+   * {@link FolderManager}.
+   */
   private FolderManager folderManager;
+  /**
+   * Flag if is zip file or is a directory.
+   */
   private boolean isZipFileFlag;
+  /**
+   * The IP path.
+   */
   private Path ipPath;
 
   /**
    * Initialize all objects of structure Component.
    *
-   * @param ipPath {@link Path}
+   * @param ipPath
+   *          {@link Path}
    */
-  public StructureValidatorState(Path ipPath) {
+  public StructureValidatorState(final Path ipPath) {
     this.zipManager = new ZipManager();
     this.folderManager = new FolderManager();
     this.isZipFileFlag = false;
@@ -53,9 +67,10 @@ public class StructureValidatorState {
   /**
    * Set if the IP is in zip format or is a folder.
    *
-   * @param zipFileFlag flag if IP is in zip format or not.
+   * @param zipFileFlag
+   *          flag if IP is in zip format or not.
    */
-  public void setZipFileFlag(boolean zipFileFlag) {
+  public void setZipFileFlag(final boolean zipFileFlag) {
     isZipFileFlag = zipFileFlag;
   }
 
