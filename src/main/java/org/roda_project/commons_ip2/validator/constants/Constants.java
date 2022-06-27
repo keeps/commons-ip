@@ -157,49 +157,203 @@ public final class Constants {
    */
   public static final String VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_AIP = VALIDATION_REPORT_HEADER_URL_DILCIS
     + "E-ARK-AIP/releases/tag/v2.0.4";
-  public static final String VALIDATION_REPORT_SPECIFICATION_COMMONS_IP_VERSION = "2.0.0";
+
+
   /* Report Validation */
+  /**
+   * Constant validation report key "specification".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_SPECIFICATION = "specification";
+  /**
+   * Constant validation report key "version".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_VERSION_COMMONS_IP = "version_commons_ip";
+  /**
+   * Constant validation report key "date".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_DATE = "date";
+  /**
+   * Constant validation report key "validation".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_VALIDATION = "validation";
+  /**
+   * Constant validation report key "result".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_RESULT = "result";
+  /**
+   * Constant validation report key "summary".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_SUMMARY = "summary";
+  /**
+   * Constant validation report key "success".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_SUCCESS = "success";
+
+  /**
+   * Constant validation report key "warnings".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_WARNINGS = "warnings";
+  /**
+   * Constant validation report key "errors".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_ERRORS = "errors";
+
+  /**
+   * Constant validation report key "skipped".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_SKIPPED = "skipped";
+
+  /**
+   * Constant validation report key "notes".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_NOTES = "notes";
+
+  /**
+   * Constant validation report key "name".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_NAME = "name";
+
+  /**
+   * Constant validation report key "location".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_LOCATION = "location";
+
+  /**
+   * Constant validation report key "description".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_DESCRIPTION = "description";
+
+  /**
+   * Constant validation report key "cardinality".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_CARDINALITY = "cardinality";
+
+  /**
+   * Constant validation report key "level".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_LEVEL = "level";
+
+  /**
+   * Constant validation report key "testing".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_TESTING = "testing";
+
+  /**
+   * Constant validation report key "outcome".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_OUTCOME = "outcome";
+
+  /**
+   * Constant validation report key "detail".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_DETAIL = "detail";
+
+  /**
+   * Constant validation report key "issues".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_ISSUES = "issues";
+
+  /**
+   * Constant validation report key "warnings".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_WARNINGS = "warnings";
+
+  /**
+   * Constant validation report key "notes".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_NOTES = "notes";
+
+
   /* Report Status */
+  /**
+   * Constant validation report key "passed".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_PASSED = "PASSED";
+
+  /**
+   * Constant validation report key "failed".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_FAILED = "FAILED";
+
+  /**
+   * Constant validation report key "skipped".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_SKIPPED = "SKIPPED";
+
+  /**
+   * Constant validation report key "valid".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_RESULT_VALID = "VALID";
+
+  /**
+   * Constant validation report key "invalid".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_RESULT_INVALID = "INVALID";
+
+  /**
+   * Constant validation report key "error".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_RESULT_ERROR = "ERROR";
+
+  /**
+   * Constant validation report key "fileErrors".
+   */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_ERROR = "fileErrors";
   /* Modules Names */
+
+  /**
+   * Constant Module Name 0.
+   */
   public static final String CSIP_MODULE_NAME_0 = "Validation of the received sip";
+
+  /**
+   * Constant  Module Name "Use of the METS root element (element mets)".
+   */
   public static final String CSIP_MODULE_NAME_1 = "Use of the METS root element (element mets)";
+
+  /**
+   * Constant  Module Name "Use of the METS header (element metsHdr)".
+   */
   public static final String CSIP_MODULE_NAME_2 = "Use of the METS header (element metsHdr)";
+
+  /**
+   * Constant  Module Name "Use of the METS descriptive metadata section (element dmdSec)".
+   */
   public static final String CSIP_MODULE_NAME_3 = "Use of the METS descriptive metadata section (element dmdSec)";
+
+  /**
+   * Constant  Module Name "Use of the METS administrative metadata section (element amdSec)".
+   */
   public static final String CSIP_MODULE_NAME_4 = "Use of the METS administrative metadata section (element amdSec)";
+
+  /**
+   * Constant  Module Name "Use of the METS file section (element fileSec)".
+   */
   public static final String CSIP_MODULE_NAME_5 = "Use of the METS file section (element fileSec)";
+
+  /**
+   * Constant  Module Name "Use of the METS structural map (<structMap>)".
+   */
   public static final String CSIP_MODULE_NAME_6 = "Use of the METS structural map (<structMap>)";
+
+  /**
+   * Constant  Module Name "Extended use of the METS root element (element mets)".
+   */
   public static final String SIP_MODULE_NAME_1 = "Extended use of the METS root element (element mets)";
+
+  /**
+   * Constant  Module Name "Extended use of the METS header (element metsHdr)".
+   */
   public static final String SIP_MODULE_NAME_2 = "Extended use of the METS header (element metsHdr)";
+
+  /**
+   * Constant  Module Name "Extended use of the METS file section (element fileSec)".
+   */
   public static final String SIP_MODULE_NAME_3 = "Extended use of the METS file section (element fileSec)";
+
+  /**
+   * Constant  Module Name "Structural metadata - Digital objects".
+   */
   public static final String AIP_MODULE_NAME_2 = " Structural metadata - Digital objects";
 
   private Constants() {
