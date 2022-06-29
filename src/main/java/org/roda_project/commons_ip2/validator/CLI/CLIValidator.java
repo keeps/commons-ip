@@ -57,7 +57,7 @@ public class CLIValidator {
     reportOption.setRequired(false);
     reportOption.setOptionalArg(true);
     parameters.addOption(reportOption);
-    final Option typeValidatorReportOption = new Option(CLIConstants.CLI_OPTION_REPORT_TYPE,
+    final Option typeValidatorReportOption = new Option(CLIConstants.CLI_CREATE_SHORT_OPTION_TYPE_OF_REPORT_WITHOUT_IDENT,
       "Type of Validation Report");
     typeValidatorReportOption.setRequired(false);
     typeValidatorReportOption.setOptionalArg(true);
