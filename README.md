@@ -43,8 +43,10 @@ valid EARK2 SIP.
 To validate a SIP have to use the following options:
 
 * **validate**, [REQUIRED] this option is for the CLI to know that is to perform the validation of a SIP.
-* **-i**, [REQUIRED] Path(s) to the SIP(s) archive file or folder(s).
+* **-i**, [REQU,,,IRED] Path(s) to the SIP(s) archive file or folder(s).
 * **-o,** [OPTIONAL]  Path to the Directory where you want to save the validation report.
+* **-r,** [OPTIONAL] The type of report (Valid Option eark or default)
+* **-v,** [OPTIONAL] Verbose option (Will print all validation steps)
 
 To create a EARK-2 SIP have to use the following options:
 

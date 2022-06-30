@@ -349,4 +349,20 @@ public final class SipCreatorUtils {
     return filesInDirectory;
   }
 
+  /**
+   * Validates if at least something is given as parameter.
+   * 
+   * @param metadataFile
+   *          {@link String}
+   * @param documentation
+   *          {@link String[]}
+   * @param representationData
+   *          {@link String[]}
+   * @return true if at least one file has given as parameter.
+   */
+  public static boolean validateAllOptions(final String metadataFile, final String[] documentation,
+    final String[] representationData) {
+    return metadataFile != null || documentation != null || representationData != null;
+  }
+
 }

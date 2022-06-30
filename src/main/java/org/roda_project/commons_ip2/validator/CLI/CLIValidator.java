@@ -57,7 +57,8 @@ public class CLIValidator {
     reportOption.setRequired(false);
     reportOption.setOptionalArg(true);
     parameters.addOption(reportOption);
-    final Option typeValidatorReportOption = new Option(CLIConstants.CLI_VALIDATE_SHORT_OPTION_TYPE_OF_REPORT_WITHOUT_IDENT,
+    final Option typeValidatorReportOption = new Option(
+      CLIConstants.CLI_VALIDATE_SHORT_OPTION_TYPE_OF_REPORT_WITHOUT_IDENT,
       "Type of Validation Report");
     typeValidatorReportOption.setRequired(false);
     typeValidatorReportOption.setOptionalArg(true);
@@ -113,7 +114,8 @@ public class CLIValidator {
       final String[] sipPaths = commandLine.getOptionValues(CLIConstants.CLI_CREATE_SHORT_OPTION_INPUT_WITHOUT_IDENT);
       final String reportDirectoryPath = commandLine
         .getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_OUTPUT_FILE_WITHOUT_IDENT);
-      final String typeReportOption = commandLine.getOptionValue(CLIConstants.CLI_VALIDATE_SHORT_OPTION_TYPE_OF_REPORT_WITHOUT_IDENT);
+      final String typeReportOption = commandLine
+        .getOptionValue(CLIConstants.CLI_VALIDATE_SHORT_OPTION_TYPE_OF_REPORT_WITHOUT_IDENT);
 
       if (commandLine.hasOption(CLIConstants.CLI_CREATE_SHORT_OPTION_OUTPUT_FILE_WITHOUT_IDENT)
         && reportDirectoryPath == null) {
