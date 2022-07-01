@@ -29,6 +29,35 @@ public final class Constants {
   public static final String METS_FILE = "METS.xml";
 
   /**
+   * Constant ID type CSIP.
+   */
+  public static final String ID_TYPE_CSIP = "CSIP";
+
+  /**
+   * Constant ID type SIP.
+   */
+  public static final String ID_TYPE_SIP = "SIP";
+
+  /**
+   * Constant ID type AIP.
+   */
+  public static final String ID_TYPE_AIP = "AIP";
+
+  /**
+   * Constant requirement level "SHOULD".
+   */
+  public static final String REQUIREMENT_LEVEL_SHOULD = "SHOULD";
+
+  /**
+   * Constant requirement level "MUST".
+   */
+  public static final String REQUIREMENT_LEVEL_MUST = "MUST";
+
+  /**
+   * Constant requirement level "MAY".
+   */
+  public static final String REQUIREMENT_LEVEL_MAY = "MAY";
+  /**
    * Constant empty space.
    */
   public static final String EMPTY_SPACE = " ";
@@ -158,7 +187,6 @@ public final class Constants {
   public static final String VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_AIP = VALIDATION_REPORT_HEADER_URL_DILCIS
     + "E-ARK-AIP/releases/tag/v2.0.4";
 
-
   /* Report Validation */
   /**
    * Constant validation report key "specification".
@@ -263,7 +291,6 @@ public final class Constants {
    */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_NOTES = "notes";
 
-
   /* Report Status */
   /**
    * Constant validation report key "passed".
@@ -307,52 +334,55 @@ public final class Constants {
   public static final String CSIP_MODULE_NAME_0 = "Validation of the received sip";
 
   /**
-   * Constant  Module Name "Use of the METS root element (element mets)".
+   * Constant Module Name "Use of the METS root element (element mets)".
    */
   public static final String CSIP_MODULE_NAME_1 = "Use of the METS root element (element mets)";
 
   /**
-   * Constant  Module Name "Use of the METS header (element metsHdr)".
+   * Constant Module Name "Use of the METS header (element metsHdr)".
    */
   public static final String CSIP_MODULE_NAME_2 = "Use of the METS header (element metsHdr)";
 
   /**
-   * Constant  Module Name "Use of the METS descriptive metadata section (element dmdSec)".
+   * Constant Module Name "Use of the METS descriptive metadata section (element
+   * dmdSec)".
    */
   public static final String CSIP_MODULE_NAME_3 = "Use of the METS descriptive metadata section (element dmdSec)";
 
   /**
-   * Constant  Module Name "Use of the METS administrative metadata section (element amdSec)".
+   * Constant Module Name "Use of the METS administrative metadata section
+   * (element amdSec)".
    */
   public static final String CSIP_MODULE_NAME_4 = "Use of the METS administrative metadata section (element amdSec)";
 
   /**
-   * Constant  Module Name "Use of the METS file section (element fileSec)".
+   * Constant Module Name "Use of the METS file section (element fileSec)".
    */
   public static final String CSIP_MODULE_NAME_5 = "Use of the METS file section (element fileSec)";
 
   /**
-   * Constant  Module Name "Use of the METS structural map (<structMap>)".
+   * Constant Module Name "Use of the METS structural map (<structMap>)".
    */
   public static final String CSIP_MODULE_NAME_6 = "Use of the METS structural map (<structMap>)";
 
   /**
-   * Constant  Module Name "Extended use of the METS root element (element mets)".
+   * Constant Module Name "Extended use of the METS root element (element mets)".
    */
   public static final String SIP_MODULE_NAME_1 = "Extended use of the METS root element (element mets)";
 
   /**
-   * Constant  Module Name "Extended use of the METS header (element metsHdr)".
+   * Constant Module Name "Extended use of the METS header (element metsHdr)".
    */
   public static final String SIP_MODULE_NAME_2 = "Extended use of the METS header (element metsHdr)";
 
   /**
-   * Constant  Module Name "Extended use of the METS file section (element fileSec)".
+   * Constant Module Name "Extended use of the METS file section (element
+   * fileSec)".
    */
   public static final String SIP_MODULE_NAME_3 = "Extended use of the METS file section (element fileSec)";
 
   /**
-   * Constant  Module Name "Structural metadata - Digital objects".
+   * Constant Module Name "Structural metadata - Digital objects".
    */
   public static final String AIP_MODULE_NAME_2 = " Structural metadata - Digital objects";
 

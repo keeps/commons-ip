@@ -1,7 +1,6 @@
 package org.roda_project.commons_ip2.validator.reporter;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;

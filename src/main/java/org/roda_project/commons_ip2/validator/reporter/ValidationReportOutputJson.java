@@ -54,7 +54,7 @@ public class ValidationReportOutputJson {
    */
   private int skipped;
   /**
-   * the number of notes
+   * the number of notes.
    */
   private int notes;
 
@@ -143,7 +143,7 @@ public class ValidationReportOutputJson {
       Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_CSIP);
     jsonGenerator.writeEndObject();
     if (ipType != null) {
-      if (ipType.equals("SIP")) {
+      if (Constants.ID_TYPE_SIP.equals(ipType)) {
         // header -> specifications -> SIP
         jsonGenerator.writeStartObject();
         jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
@@ -151,7 +151,7 @@ public class ValidationReportOutputJson {
         jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
           Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_SIP);
         jsonGenerator.writeEndObject();
-      } else if (ipType.equals("AIP")) {
+      } else if (Constants.ID_TYPE_AIP.equals(ipType)) {
         // header -> specifications -> AIP
         jsonGenerator.writeStartObject();
         jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
@@ -194,13 +194,13 @@ public class ValidationReportOutputJson {
     final List<String> issues, final String detail) {
     try {
       String level = null;
-      if (id.startsWith("CSIP")) {
+      if (id.startsWith(Constants.ID_TYPE_CSIP)) {
         level = ConstantsCSIPspec.getSpecificationLevel(id);
       } else {
-        if (id.startsWith("SIP")) {
+        if (id.startsWith(Constants.ID_TYPE_SIP)) {
           level = ConstantsSIPspec.getSpecificationLevel(id);
         } else {
-          if (id.startsWith("AIP")) {
+          if (id.startsWith(Constants.ID_TYPE_AIP)) {
             level = ConstantsAIPspec.getSpecificationLevel(id);
           }
         }
@@ -256,13 +256,13 @@ public class ValidationReportOutputJson {
       final List<String> issues = details.getIssues();
       final String detail = details.getDetail();
       String level = null;
-      if (details.getSpecification().startsWith("CSIP")) {
+      if (details.getSpecification().startsWith(Constants.ID_TYPE_CSIP)) {
         level = ConstantsCSIPspec.getSpecificationLevel(entry.getKey());
       } else {
-        if (details.getSpecification().startsWith("SIP")) {
+        if (details.getSpecification().startsWith(Constants.ID_TYPE_SIP)) {
           level = ConstantsSIPspec.getSpecificationLevel(entry.getKey());
         } else {
-          if (details.getSpecification().startsWith("AIP")) {
+          if (details.getSpecification().startsWith(Constants.ID_TYPE_AIP)) {
             level = ConstantsAIPspec.getSpecificationLevel(entry.getKey());
           }
         }
@@ -274,7 +274,7 @@ public class ValidationReportOutputJson {
         skipped++;
       } else {
         if (details.isValid()) {
-          if (!level.equals("MAY") || issues.isEmpty()) {
+          if (!Constants.REQUIREMENT_LEVEL_MAY.equals(level) || issues.isEmpty()) {
             success++;
           } else {
             notes++;
@@ -282,17 +282,17 @@ public class ValidationReportOutputJson {
           componentValidationResult(details.getSpecification(), entry.getKey(),
             Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_PASSED, issues, detail);
         } else {
-          if (level.equals("MAY")) {
+          if (Constants.REQUIREMENT_LEVEL_MAY.equals(level)) {
             componentValidationResult(details.getSpecification(), entry.getKey(),
               Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_PASSED, issues, detail);
             notes++;
           } else {
             componentValidationResult(details.getSpecification(), entry.getKey(),
               Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_FAILED, issues, detail);
-            if (level.equals("MUST")) {
+            if (Constants.REQUIREMENT_LEVEL_MUST.equals(level)) {
               errors++;
             } else {
-              if (level.equals("SHOULD")) {
+              if (Constants.REQUIREMENT_LEVEL_SHOULD.equals(level)) {
                 warnings++;
               }
             }

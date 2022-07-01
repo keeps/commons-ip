@@ -6,11 +6,6 @@ public final class ConstantsCSIPspec {
     // do nothing
   }
 
-  /* Errors and ID's for constants in validation of sip path */
-  public static final String VALIDATION_REPORT_PATH_DOES_NOT_EXIST_ID = "Path";
-  public static final String VALIDATION_REPORT_METS_NOT_FOUND_ID = "METS";
-  public static final String VALIDATION_REPORT_METS_NOT_FOUND_DETAIL = "Root METS.xml not found";
-
   /* Use of the METS root element (element mets) */
 
   /* CSIPSTR0 - Invalid METS Schema */
@@ -2026,7 +2021,8 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification description for id "CSIP41".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP41_DESCRIPTION = "Size of the referenced file in bytes.";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP41_DESCRIPTION = "Size of the "
+    + "referenced file in bytes.";
 
   /**
    * Constant specification cardinality for id "CSIP41".
@@ -2058,7 +2054,8 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification description for id "CSIP42".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP42_DESCRIPTION = "Creation date of the referenced file.";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP42_DESCRIPTION = "Creation date "
+    + "of the referenced file.";
 
   /**
    * Constant specification cardinality for id "CSIP42".
@@ -2118,13 +2115,14 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification location for id "CSIP44".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP44_LOCATION = "mets/amdSec/digiprovMD/mdRef/@CHECKSUMTYPE";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP44_LOCATION = "mets/amdSec"
+    + "/digiprovMD/mdRef/@CHECKSUMTYPE";
 
   /**
    * Constant specification description for id "CSIP44".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP44_DESCRIPTION = "The type of checksum following "
-    + "the value list present in the METS-standard " + "which has been used for calculating "
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP44_DESCRIPTION = "The type " + "of checksum following "
+    + "the value list present" + "in the METS-standard " + "which has been used for calculating "
     + "the checksum for the referenced file.";
 
   /**
@@ -2801,7 +2799,8 @@ public final class ConstantsCSIPspec {
    */
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP62_LOCATION = "mets/fileSec/fileGrp"
     + "[@USE=’Representations’]/@csip:CONTENTINFORMATIONTYPE";
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP62_DESCRIPTION = "An added attribute which states the name of the content information type "
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP62_DESCRIPTION = "An added attribute "
+    + "which states the name of the content information type "
     + "specification used to create the package. The vocabulary will evolve under "
     + "the curation of the DILCIS Board as additional content information type "
     + "specifications are developed. This attribute is mandatory when the "
@@ -3756,8 +3755,8 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification description for id "CSIP91".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP91_DESCRIPTION = "When there is administrative metadata "
-    + "and the amdSec is present, " + "all administrative metadata "
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP91_DESCRIPTION = "When there "
+    + "is administrative metadata " + "and the amdSec is present, " + "all administrative metadata "
     + "MUST be referenced via the administrative sections different identifiers."
     + "All of the <amdSec> identifiers are listed in a " + "single @ADMID using spaces as delimiters.";
 
@@ -4071,8 +4070,8 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification description for id "CSIP99".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP99_DESCRIPTION = "The schema division <div> element’s @LABEL "
-    + "attribute has the value “Schemas” from the vocabulary. ";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP99_DESCRIPTION = "The schema division "
+    + "<div> element’s @LABEL " + "attribute has the value “Schemas” from the vocabulary. ";
 
   /**
    * Constant specification cardinality for id "CSIP99".
@@ -4175,8 +4174,9 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification description for id "CSIP101".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP101_DESCRIPTION = "When no representations are present the content "
-    + "referenced in the file section file " + "group with @USE attribute value "
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP101_DESCRIPTION = "When no "
+    + "representations are present the content " + "referenced in the file section file "
+    + "group with @USE attribute value "
     + "“Representations” is described in the structural map as a single sub division.";
 
   /**
