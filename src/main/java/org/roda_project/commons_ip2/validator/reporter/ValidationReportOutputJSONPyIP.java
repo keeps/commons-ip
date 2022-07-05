@@ -6,15 +6,15 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-
 import org.roda_project.commons_ip2.validator.pyipModel.ChecksumAlg;
 import org.roda_project.commons_ip2.validator.pyipModel.MetadataStatus;
 import org.roda_project.commons_ip2.validator.pyipModel.StructStatus;
 import org.roda_project.commons_ip2.validator.pyipModel.ValidationReport;
 import org.roda_project.commons_ip2.validator.reporter.pyipUtils.PyIPUtils;
+
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 
 /** {@author João Gomes <jgomes@keep.pt>}. */
 public class ValidationReportOutputJSONPyIP {

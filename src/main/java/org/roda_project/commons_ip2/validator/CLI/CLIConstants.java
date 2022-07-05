@@ -116,7 +116,7 @@ public final class CLIConstants {
   /**
    * Short option type of report without ident.
    */
-  public static final String CLI_CREATE_SHORT_OPTION_TYPE_OF_REPORT_WITHOUT_IDENT = "r";
+  public static final String CLI_VALIDATE_SHORT_OPTION_TYPE_OF_REPORT_WITHOUT_IDENT = "r";
 
   /**
    * Short option verbose without ident.

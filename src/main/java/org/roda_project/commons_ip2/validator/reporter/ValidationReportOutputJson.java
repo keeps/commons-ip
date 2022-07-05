@@ -20,20 +20,63 @@ import com.fasterxml.jackson.core.JsonGenerator;
 
 /** {@author João Gomes <jgomes@keep.pt>}. */
 public class ValidationReportOutputJson {
+  /**
+   * {@link Logger}.
+   */
   private static final Logger LOGGER = LoggerFactory.getLogger(ValidationReportOutputJson.class);
+  /**
+   * {@link Path} the sipPath.
+   */
   private final Path sipPath;
+  /**
+   * the {@link OutputStream}.
+   */
   private OutputStream outputStream;
+  /**
+   * the {@link JsonGenerator}.
+   */
   private JsonGenerator jsonGenerator;
+  /**
+   * the number of requirements validated with success.
+   */
   private int success;
+
+  /**
+   * the number of requirements validated with errors.
+   */
   private int errors;
+  /**
+   * the number of requirements validated with warnings.
+   */
   private int warnings;
+  /**
+   * the number of requirements skipped.
+   */
   private int skipped;
+  /**
+   * the number of notes.
+   */
   private int notes;
 
+  /**
+   * {@link Map} with the results.
+   */
   private Map<String, ReporterDetails> results = new TreeMap<>(new RequirementsComparator());
+  /**
+   * {@link String}.
+   */
   private String ipType = "";
 
-  public ValidationReportOutputJson(Path sipPath, OutputStream outputStream) {
+  /**
+   * The public constructor that sets the {@link Path} and the
+   * {@link OutputStream}.
+   * 
+   * @param sipPath
+   *          {@link Path}.
+   * @param outputStream
+   *          {@link OutputStream}.
+   */
+  public ValidationReportOutputJson(final Path sipPath, final OutputStream outputStream) {
     this.sipPath = sipPath;
     this.outputStream = outputStream;
   }
@@ -66,7 +109,7 @@ public class ValidationReportOutputJson {
     return results;
   }
 
-  public void setIpType(String ipType) {
+  public void setIpType(final String ipType) {
     this.ipType = ipType;
   }
 
@@ -81,7 +124,7 @@ public class ValidationReportOutputJson {
     this.errors = 0;
     this.warnings = 0;
     // Depois receber parametro new BufferedOutputStream(System.out)
-    JsonFactory jsonFactory = new JsonFactory();
+    final JsonFactory jsonFactory = new JsonFactory();
     jsonGenerator = jsonFactory.createGenerator(this.outputStream, JsonEncoding.UTF8).useDefaultPrettyPrinter();
     jsonGenerator.writeStartObject();
     // header object
@@ -100,7 +143,7 @@ public class ValidationReportOutputJson {
       Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_CSIP);
     jsonGenerator.writeEndObject();
     if (ipType != null) {
-      if (ipType.equals("SIP")) {
+      if (Constants.ID_TYPE_SIP.equals(ipType)) {
         // header -> specifications -> SIP
         jsonGenerator.writeStartObject();
         jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
@@ -108,7 +151,7 @@ public class ValidationReportOutputJson {
         jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
           Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_SIP);
         jsonGenerator.writeEndObject();
-      } else if (ipType.equals("AIP")) {
+      } else if (Constants.ID_TYPE_AIP.equals(ipType)) {
         // header -> specifications -> AIP
         jsonGenerator.writeStartObject();
         jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID,
@@ -121,7 +164,7 @@ public class ValidationReportOutputJson {
     jsonGenerator.writeEndArray();
     // header -> version_commons_ip
     jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_VERSION_COMMONS_IP,
-      Constants.VALIDATION_REPORT_SPECIFICATION_COMMONS_IP_VERSION);
+      getClass().getPackage().getImplementationVersion());
     // header -> date (date of sip validation)
     jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_DATE,
       new org.joda.time.DateTime().toString());
@@ -147,17 +190,17 @@ public class ValidationReportOutputJson {
    * @param detail
    *          the {@link String} the detail.
    */
-  public void componentValidationResult(String specification, String id, String status, List<String> issues,
-    String detail) {
+  public void componentValidationResult(final String specification, final String id, final String status,
+    final List<String> issues, final String detail) {
     try {
       String level = null;
-      if (id.startsWith("CSIP")) {
+      if (id.startsWith(Constants.ID_TYPE_CSIP)) {
         level = ConstantsCSIPspec.getSpecificationLevel(id);
       } else {
-        if (id.startsWith("SIP")) {
+        if (id.startsWith(Constants.ID_TYPE_SIP)) {
           level = ConstantsSIPspec.getSpecificationLevel(id);
         } else {
-          if (id.startsWith("AIP")) {
+          if (id.startsWith(Constants.ID_TYPE_AIP)) {
             level = ConstantsAIPspec.getSpecificationLevel(id);
           }
         }
@@ -175,8 +218,8 @@ public class ValidationReportOutputJson {
       writeIssuesByLevel(level, issues);
       jsonGenerator.writeEndObject();
       jsonGenerator.writeEndObject();
-    } catch (IOException e) {
-      StringBuilder message = new StringBuilder();
+    } catch (final IOException e) {
+      final StringBuilder message = new StringBuilder();
       message.append("Could not write specification ").append(specification).append("result in file");
       LOGGER.error(message.toString(), e);
     }
@@ -188,7 +231,7 @@ public class ValidationReportOutputJson {
    * @param status
    *          {@link String} with the result of validation
    */
-  public void componentValidationFinish(String status) {
+  public void componentValidationFinish(final String status) {
     try {
       jsonGenerator.writeEndArray();
       jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_SUMMARY);
@@ -201,7 +244,7 @@ public class ValidationReportOutputJson {
       jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_RESULT, status);
       jsonGenerator.writeEndObject();
       jsonGenerator.writeEndObject();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       LOGGER.error("Could not finish report!", e);
     }
   }
@@ -209,17 +252,17 @@ public class ValidationReportOutputJson {
   /** Write the results of validation in the report. */
   public void validationResults() {
     for (Map.Entry<String, ReporterDetails> entry : results.entrySet()) {
-      ReporterDetails details = entry.getValue();
-      List<String> issues = details.getIssues();
-      String detail = details.getDetail();
+      final ReporterDetails details = entry.getValue();
+      final List<String> issues = details.getIssues();
+      final String detail = details.getDetail();
       String level = null;
-      if (details.getSpecification().startsWith("CSIP")) {
+      if (details.getSpecification().startsWith(Constants.ID_TYPE_CSIP)) {
         level = ConstantsCSIPspec.getSpecificationLevel(entry.getKey());
       } else {
-        if (details.getSpecification().startsWith("SIP")) {
+        if (details.getSpecification().startsWith(Constants.ID_TYPE_SIP)) {
           level = ConstantsSIPspec.getSpecificationLevel(entry.getKey());
         } else {
-          if (details.getSpecification().startsWith("AIP")) {
+          if (details.getSpecification().startsWith(Constants.ID_TYPE_AIP)) {
             level = ConstantsAIPspec.getSpecificationLevel(entry.getKey());
           }
         }
@@ -231,7 +274,7 @@ public class ValidationReportOutputJson {
         skipped++;
       } else {
         if (details.isValid()) {
-          if (!level.equals("MAY") || issues.isEmpty()) {
+          if (!Constants.REQUIREMENT_LEVEL_MAY.equals(level) || issues.isEmpty()) {
             success++;
           } else {
             notes++;
@@ -239,17 +282,17 @@ public class ValidationReportOutputJson {
           componentValidationResult(details.getSpecification(), entry.getKey(),
             Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_PASSED, issues, detail);
         } else {
-          if (level.equals("MAY")) {
+          if (Constants.REQUIREMENT_LEVEL_MAY.equals(level)) {
             componentValidationResult(details.getSpecification(), entry.getKey(),
               Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_PASSED, issues, detail);
             notes++;
           } else {
             componentValidationResult(details.getSpecification(), entry.getKey(),
               Constants.VALIDATION_REPORT_SPECIFICATION_TESTING_OUTCOME_FAILED, issues, detail);
-            if (level.equals("MUST")) {
+            if (Constants.REQUIREMENT_LEVEL_MUST.equals(level)) {
               errors++;
             } else {
-              if (level.equals("SHOULD")) {
+              if (Constants.REQUIREMENT_LEVEL_SHOULD.equals(level)) {
                 warnings++;
               }
             }
@@ -266,12 +309,12 @@ public class ValidationReportOutputJson {
         jsonGenerator.close();
         this.outputStream.close();
       }
-    } catch (IOException e) {
+    } catch (final IOException e) {
       LOGGER.debug("Unable to close validation reporter file", e);
     }
   }
 
-  private void writeSpecificationDetails(String id) throws IOException {
+  private void writeSpecificationDetails(final String id) throws IOException {
     String name = null;
     String location = null;
     String description = null;
@@ -308,7 +351,7 @@ public class ValidationReportOutputJson {
     jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_LEVEL, level);
   }
 
-  private void writeIssuesByLevel(String level, List<String> issues) throws IOException {
+  private void writeIssuesByLevel(final String level, final List<String> issues) throws IOException {
     switch (level) {
       case "MUST":
         jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_ISSUES);
@@ -373,7 +416,7 @@ public class ValidationReportOutputJson {
    */
   public boolean validFileComponent() {
     for (Map.Entry<String, ReporterDetails> result : results.entrySet()) {
-      String strCsip = result.getKey();
+      final String strCsip = result.getKey();
       if ((strCsip.equals("CSIPSTR1") || strCsip.equals("CSIPSTR4")) && !result.getValue().isValid()) {
         return false;
       }

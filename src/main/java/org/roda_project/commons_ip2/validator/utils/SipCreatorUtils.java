@@ -98,9 +98,11 @@ public final class SipCreatorUtils {
    * @return if exists all the paths or not.
    */
   public static boolean validateRepresentationPaths(final String[] representationData) {
-    for (String data : representationData) {
-      if (!Files.exists(Paths.get(data))) {
-        return false;
+    if(representationData != null) {
+      for (String data : representationData) {
+        if (!Files.exists(Paths.get(data))) {
+          return false;
+        }
       }
     }
     return true;
@@ -347,6 +349,22 @@ public final class SipCreatorUtils {
       filesInDirectory = walk.filter(Files::isRegularFile).collect(Collectors.toList());
     }
     return filesInDirectory;
+  }
+
+  /**
+   * Validates if at least something is given as parameter.
+   * 
+   * @param metadataFile
+   *          {@link String}
+   * @param documentation
+   *          {@link String[]}
+   * @param representationData
+   *          {@link String[]}
+   * @return true if at least one file has given as parameter.
+   */
+  public static boolean validateAllOptions(final String metadataFile, final String[] documentation,
+    final String[] representationData) {
+    return metadataFile != null || documentation != null || representationData != null;
   }
 
 }

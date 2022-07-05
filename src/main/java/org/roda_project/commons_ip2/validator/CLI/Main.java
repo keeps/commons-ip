@@ -28,14 +28,14 @@ public final class Main {
         filteredArgs.remove(0);
         final CLIValidator cliValidator = new CLIValidator();
         cliValidator.start(filteredArgs.toArray(new String[] {}));
-      }
-      if (args[0].equals(CLIConstants.CLI_OPTION_CREATE)) {
+      } else if (args[0].equals(CLIConstants.CLI_OPTION_CREATE)) {
         final List<String> filteredArgs = new ArrayList<>(Arrays.asList(args));
         filteredArgs.remove(0);
         final CLICreator cliCreator = new CLICreator();
         cliCreator.start(filteredArgs.toArray(new String[] {}));
       } else {
         CLIUtils.printUsage(System.out);
+
       }
     }
   }

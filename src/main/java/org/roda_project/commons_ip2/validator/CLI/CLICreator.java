@@ -165,6 +165,13 @@ public class CLICreator {
             ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_SUBMITTER_AGENT_ID_WITHOUT_IDENT)
             : commandLine.getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_SUBMITTER_AGENT_ID_WITHOUT_IDENT);
 
+        if (!SipCreatorUtils.validateAllOptions(metadataFile, documentation, representationData)) {
+          CLIUtils.printErrors(System.out,
+            "You have to add at least one metadata file or documentation file or representation data file");
+          printUsageCreate(System.out);
+          return ExitCodes.EXIT_CODE_CREATE_INVALID_PATHS;
+        }
+
         if (!SipCreatorUtils.validateMetadataPath(metadataFile)) {
           CLIUtils.printErrors(System.out, "The metadata file given does not exist");
           return ExitCodes.EXIT_CODE_CREATE_INVALID_PATHS;
@@ -179,6 +186,7 @@ public class CLICreator {
           CLIUtils.printErrors(System.out, "Make sure if all the documentation paths exists");
           return ExitCodes.EXIT_CODE_CREATE_INVALID_PATHS;
         }
+
 
         try {
           final Path eark2SIP = SipCreatorUtils.createEARK2SIP(metadataFile, metadataType, metadataVersion,
