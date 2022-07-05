@@ -98,9 +98,11 @@ public final class SipCreatorUtils {
    * @return if exists all the paths or not.
    */
   public static boolean validateRepresentationPaths(final String[] representationData) {
-    for (String data : representationData) {
-      if (!Files.exists(Paths.get(data))) {
-        return false;
+    if(representationData != null) {
+      for (String data : representationData) {
+        if (!Files.exists(Paths.get(data))) {
+          return false;
+        }
       }
     }
     return true;
