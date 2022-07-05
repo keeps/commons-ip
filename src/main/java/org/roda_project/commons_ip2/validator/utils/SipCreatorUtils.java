@@ -217,51 +217,41 @@ public final class SipCreatorUtils {
 
   private static void addMetadataToSIP(final SIP sip, final String metadataFile, final String metadataType,
     final String metadataVersion) throws IPException {
-    MetadataType.MetadataTypeEnum metadataTypeValue = null;
+    MetadataType metadataTypeEnum = null;
     String version = metadataVersion;
     if (metadataType == null && metadataVersion == null) {
-      metadataTypeValue = getMetadataTypeFromMetadataFile(metadataFile);
+      metadataTypeEnum = getMetadataTypeFromMetadataFile(metadataFile);
       version = getMetadataVersionFromMetadataFile(metadataFile);
     } else if (metadataVersion != null && metadataType == null) {
-      metadataTypeValue = getMetadataTypeFromMetadataFile(metadataFile);
+      metadataTypeEnum = getMetadataTypeFromMetadataFile(metadataFile);
     } else if (metadataVersion == null) {
-      metadataTypeValue = getType(metadataType);
+      metadataTypeEnum = new MetadataType(metadataType);
       version = getMetadataVersionFromMetadataFile(metadataFile);
     } else {
-      metadataTypeValue = getType(metadataType);
+      metadataTypeEnum = new MetadataType(metadataType);
     }
 
     final IPDescriptiveMetadata descriptiveMetadata = new IPDescriptiveMetadata(new IPFile(Paths.get(metadataFile)),
-      new MetadataType(metadataTypeValue), version);
+    metadataTypeEnum, version);
     sip.addDescriptiveMetadata(descriptiveMetadata);
   }
 
-  private static MetadataType.MetadataTypeEnum getMetadataTypeFromMetadataFile(final String metadataFile) {
+  private static MetadataType getMetadataTypeFromMetadataFile(final String metadataFile) {
     final Path metadataPath = Paths.get(metadataFile);
     String filename = metadataPath.getFileName().toString();
-    filename = filename.split(DOT_REGEX)[0];
+    String metadataTypeValue = filename = filename.split(DOT_REGEX)[0];
 
-    MetadataType.MetadataTypeEnum metadataType = getType(filename);
+    MetadataType metadataType = new MetadataType(metadataTypeValue);
 
-    if (metadataType == null) {
+    if (metadataType == MetadataType.OTHER()) {
       final String[] splitedFileName = filename.split(UNDERSCORE);
       if (splitedFileName.length == 2) {
-        metadataType = getType(splitedFileName[0]);
+        metadataType = new MetadataType(splitedFileName[0]);
       }
     }
     return metadataType;
   }
 
-  private static MetadataType.MetadataTypeEnum getType(final String type) {
-    final List<MetadataType.MetadataTypeEnum> metadataEnumList = Arrays.asList(MetadataType.MetadataTypeEnum.values());
-    for (MetadataType.MetadataTypeEnum metadataTypeEnum : metadataEnumList) {
-      if (type.equalsIgnoreCase(metadataTypeEnum.getType())) {
-        return metadataTypeEnum;
-      }
-    }
-
-    return null;
-  }
 
   private static String getMetadataVersionFromMetadataFile(final String metadataFile) {
     final Path metadataPath = Paths.get(metadataFile);
