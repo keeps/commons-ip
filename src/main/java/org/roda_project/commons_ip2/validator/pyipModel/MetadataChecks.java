@@ -1,19 +1,35 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.roda_project.commons_ip2.validator.constants.Constants;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /** MetadataChecks. */
 public class MetadataChecks {
+  /**
+   * {@link MetadataChecks}.
+   */
   @JsonProperty("status")
   private MetadataStatus status = null;
 
+  /**
+   * {@link List} of {@link TestResult}.
+   */
   @JsonProperty("messages")
   private List<TestResult> messages = null;
 
-  public MetadataChecks status(MetadataStatus status) {
+  /**
+   * Set the {@link MetadataStatus}.
+   * 
+   * @param status
+   *          {@link MetadataStatus}.
+   * @return {@link MetadataChecks}.
+   */
+  public MetadataChecks status(final MetadataStatus status) {
     this.status = status;
     return this;
   }
@@ -27,16 +43,30 @@ public class MetadataChecks {
     return status;
   }
 
-  public void setStatus(MetadataStatus status) {
+  public void setStatus(final MetadataStatus status) {
     this.status = status;
   }
 
-  public MetadataChecks messages(List<TestResult> messages) {
+  /**
+   * Set the {@link List} of {@link TestResult}.
+   * 
+   * @param messages
+   *          {@link List} of {@link TestResult}.
+   * @return {@link MetadataChecks}.
+   */
+  public MetadataChecks messages(final List<TestResult> messages) {
     this.messages = messages;
     return this;
   }
 
-  public MetadataChecks addMessagesItem(TestResult messagesItem) {
+  /**
+   * Add a new {@link TestResult} to the {@link List}.
+   * 
+   * @param messagesItem
+   *          {@link TestResult}.
+   * @return {@link MetadataChecks}.
+   */
+  public MetadataChecks addMessagesItem(final TestResult messagesItem) {
     if (this.messages == null) {
       this.messages = new ArrayList<TestResult>();
     }
@@ -53,21 +83,20 @@ public class MetadataChecks {
     return messages;
   }
 
-  public void setMessages(List<TestResult> messages) {
+  public void setMessages(final List<TestResult> messages) {
     this.messages = messages;
   }
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(final java.lang.Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MetadataChecks metadataChecks = (MetadataChecks) o;
-    return Objects.equals(this.status, metadataChecks.status)
-        && Objects.equals(this.messages, metadataChecks.messages);
+    final MetadataChecks metadataChecks = (MetadataChecks) o;
+    return Objects.equals(this.status, metadataChecks.status) && Objects.equals(this.messages, metadataChecks.messages);
   }
 
   @Override
@@ -77,19 +106,20 @@ public class MetadataChecks {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
     sb.append("class MetadataChecks {\n");
 
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
-    sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append(Constants.END_OF_LINE);
+    sb.append("    messages: ").append(toIndentedString(messages)).append(Constants.END_OF_LINE);
     sb.append("}");
     return sb.toString();
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(final java.lang.Object o) {
     if (o == null) {
       return "null";
     }
