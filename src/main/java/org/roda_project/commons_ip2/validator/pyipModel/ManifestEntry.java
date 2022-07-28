@@ -1,22 +1,40 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.roda_project.commons_ip2.validator.constants.Constants;
+
 /** ManifestEntry. */
 public class ManifestEntry {
+  /**
+   * {@link String}.
+   */
   @JsonProperty("path")
   private String path = null;
 
+  /**
+   * {@link Integer}.
+   */
   @JsonProperty("size")
   private Integer size = 0;
 
+  /**
+   * {@link List}.
+   */
   @JsonProperty("checksums")
   private List<Checksum> checksums = null;
 
-  public ManifestEntry path(String path) {
+  /**
+   * Set the path of {@link ManifestEntry}.
+   * 
+   * @param path
+   *          {@link String}.
+   * @return {@link ManifestEntry}
+   */
+  public ManifestEntry path(final String path) {
     this.path = path;
     return this;
   }
@@ -30,11 +48,11 @@ public class ManifestEntry {
     return path;
   }
 
-  public void setPath(String path) {
+  public void setPath(final String path) {
     this.path = path;
   }
 
-  public ManifestEntry size(Integer size) {
+  public ManifestEntry size(final Integer size) {
     this.size = size;
     return this;
   }
@@ -48,16 +66,28 @@ public class ManifestEntry {
     return size;
   }
 
-  public void setSize(Integer size) {
+  public void setSize(final Integer size) {
     this.size = size;
   }
 
-  public ManifestEntry checksums(List<Checksum> checksums) {
+  /**
+   * Set the {@link List} of {@link Checksum}.
+   * @param checksums
+   *        {@link List} of {@link  Checksum}.
+   * @return {@link ManifestEntry}.
+   */
+  public ManifestEntry checksums(final List<Checksum> checksums) {
     this.checksums = checksums;
     return this;
   }
 
-  public ManifestEntry addChecksumsItem(Checksum checksumsItem) {
+  /**
+   * Add a new {@link Checksum} to the {@link List}.
+   * @param checksumsItem
+   *      {@link Checksum}.
+   * @return {@link ManifestEntry}.
+   */
+  public ManifestEntry addChecksumsItem(final Checksum checksumsItem) {
     if (this.checksums == null) {
       this.checksums = new ArrayList<Checksum>();
     }
@@ -74,22 +104,21 @@ public class ManifestEntry {
     return checksums;
   }
 
-  public void setChecksums(List<Checksum> checksums) {
+  public void setChecksums(final List<Checksum> checksums) {
     this.checksums = checksums;
   }
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(final java.lang.Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ManifestEntry manifestEntry = (ManifestEntry) o;
-    return Objects.equals(this.path, manifestEntry.path)
-        && Objects.equals(this.size, manifestEntry.size)
-        && Objects.equals(this.checksums, manifestEntry.checksums);
+    final ManifestEntry manifestEntry = (ManifestEntry) o;
+    return Objects.equals(this.path, manifestEntry.path) && Objects.equals(this.size, manifestEntry.size)
+      && Objects.equals(this.checksums, manifestEntry.checksums);
   }
 
   @Override
@@ -99,23 +128,24 @@ public class ManifestEntry {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
     sb.append("class ManifestEntry {\n");
 
-    sb.append("    path: ").append(toIndentedString(path)).append("\n");
-    sb.append("    size: ").append(toIndentedString(size)).append("\n");
-    sb.append("    checksums: ").append(toIndentedString(checksums)).append("\n");
+    sb.append("    path: ").append(toIndentedString(path)).append(Constants.END_OF_LINE);
+    sb.append("    size: ").append(toIndentedString(size)).append(Constants.END_OF_LINE);
+    sb.append("    checksums: ").append(toIndentedString(checksums)).append(Constants.END_OF_LINE);
     sb.append("}");
     return sb.toString();
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(final java.lang.Object o) {
     if (o == null) {
       return "null";
     }
-    return o.toString().replace("\n", "\n    ");
+    return o.toString().replace(Constants.END_OF_LINE, "\n    ");
   }
 }

@@ -1,17 +1,33 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+
+import org.roda_project.commons_ip2.validator.constants.Constants;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** ManifestSummary. */
 public class ManifestSummary {
+  /**
+   * the number of files.
+   */
   @JsonProperty("fileCount")
   private Integer fileCount = 0;
 
+  /**
+   * the total size.
+   */
   @JsonProperty("totalSize")
   private Integer totalSize = null;
 
-  public ManifestSummary fileCount(Integer fileCount) {
+  /**
+   * Set the fileCount.
+   * 
+   * @param fileCount
+   *          {@link Integer}.
+   * @return {@link ManifestSummary}
+   */
+  public ManifestSummary fileCount(final Integer fileCount) {
     this.fileCount = fileCount;
     return this;
   }
@@ -25,11 +41,18 @@ public class ManifestSummary {
     return fileCount;
   }
 
-  public void setFileCount(Integer fileCount) {
+  public void setFileCount(final Integer fileCount) {
     this.fileCount = fileCount;
   }
 
-  public ManifestSummary totalSize(Integer totalSize) {
+  /**
+   * Set the total size.
+   * 
+   * @param totalSize
+   *          {@link Integer}.
+   * @return {@link ManifestSummary}.
+   */
+  public ManifestSummary totalSize(final Integer totalSize) {
     this.totalSize = totalSize;
     return this;
   }
@@ -43,21 +66,21 @@ public class ManifestSummary {
     return totalSize;
   }
 
-  public void setTotalSize(Integer totalSize) {
+  public void setTotalSize(final Integer totalSize) {
     this.totalSize = totalSize;
   }
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(final java.lang.Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ManifestSummary manifestSummary = (ManifestSummary) o;
+    final ManifestSummary manifestSummary = (ManifestSummary) o;
     return Objects.equals(this.fileCount, manifestSummary.fileCount)
-        && Objects.equals(this.totalSize, manifestSummary.totalSize);
+      && Objects.equals(this.totalSize, manifestSummary.totalSize);
   }
 
   @Override
@@ -67,22 +90,23 @@ public class ManifestSummary {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
     sb.append("class ManifestSummary {\n");
 
-    sb.append("    fileCount: ").append(toIndentedString(fileCount)).append("\n");
-    sb.append("    totalSize: ").append(toIndentedString(totalSize)).append("\n");
+    sb.append("    fileCount: ").append(toIndentedString(fileCount)).append(Constants.END_OF_LINE);
+    sb.append("    totalSize: ").append(toIndentedString(totalSize)).append(Constants.END_OF_LINE);
     sb.append("}");
     return sb.toString();
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(final java.lang.Object o) {
     if (o == null) {
       return "null";
     }
-    return o.toString().replace("\n", "\n    ");
+    return o.toString().replace(Constants.END_OF_LINE, "\n    ");
   }
 }

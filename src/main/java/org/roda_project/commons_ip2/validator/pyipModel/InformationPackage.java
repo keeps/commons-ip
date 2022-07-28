@@ -1,20 +1,32 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+
+import org.roda_project.commons_ip2.validator.constants.Constants;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** InformationPackage. */
 public class InformationPackage {
+  /**
+   * {@link PackageDetails}.
+   */
   @JsonProperty("details")
   private PackageDetails details = null;
 
+  /**
+   * {@link ProfileDetails}.
+   */
   @JsonProperty("profile")
   private ProfileDetails profile = null;
 
+  /**
+   * {@link Representation}.
+   */
   @JsonProperty("representations")
   private Representation representations = null;
 
-  public InformationPackage details(PackageDetails details) {
+  public InformationPackage details(final PackageDetails details) {
     this.details = details;
     return this;
   }
@@ -28,11 +40,11 @@ public class InformationPackage {
     return details;
   }
 
-  public void setDetails(PackageDetails details) {
+  public void setDetails(final PackageDetails details) {
     this.details = details;
   }
 
-  public InformationPackage profile(ProfileDetails profile) {
+  public InformationPackage profile(final ProfileDetails profile) {
     this.profile = profile;
     return this;
   }
@@ -46,11 +58,11 @@ public class InformationPackage {
     return profile;
   }
 
-  public void setProfile(ProfileDetails profile) {
+  public void setProfile(final ProfileDetails profile) {
     this.profile = profile;
   }
 
-  public InformationPackage representations(Representation representations) {
+  public InformationPackage representations(final Representation representations) {
     this.representations = representations;
     return this;
   }
@@ -64,22 +76,22 @@ public class InformationPackage {
     return representations;
   }
 
-  public void setRepresentations(Representation representations) {
+  public void setRepresentations(final Representation representations) {
     this.representations = representations;
   }
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(final java.lang.Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    InformationPackage informationPackage = (InformationPackage) o;
+    final InformationPackage informationPackage = (InformationPackage) o;
     return Objects.equals(this.details, informationPackage.details)
-        && Objects.equals(this.profile, informationPackage.profile)
-        && Objects.equals(this.representations, informationPackage.representations);
+      && Objects.equals(this.profile, informationPackage.profile)
+      && Objects.equals(this.representations, informationPackage.representations);
   }
 
   @Override
@@ -89,20 +101,21 @@ public class InformationPackage {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
     sb.append("class InformationPackage {\n");
 
-    sb.append("    details: ").append(toIndentedString(details)).append("\n");
-    sb.append("    profile: ").append(toIndentedString(profile)).append("\n");
-    sb.append("    representations: ").append(toIndentedString(representations)).append("\n");
+    sb.append("    details: ").append(toIndentedString(details)).append(Constants.END_OF_LINE);
+    sb.append("    profile: ").append(toIndentedString(profile)).append(Constants.END_OF_LINE);
+    sb.append("    representations: ").append(toIndentedString(representations)).append(Constants.END_OF_LINE);
     sb.append("}");
     return sb.toString();
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(final java.lang.Object o) {
     if (o == null) {
       return "null";
     }

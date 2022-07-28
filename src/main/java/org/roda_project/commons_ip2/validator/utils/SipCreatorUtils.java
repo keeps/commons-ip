@@ -98,7 +98,7 @@ public final class SipCreatorUtils {
    * @return if exists all the paths or not.
    */
   public static boolean validateRepresentationPaths(final String[] representationData) {
-    if(representationData != null) {
+    if (representationData != null) {
       for (String data : representationData) {
         if (!Files.exists(Paths.get(data))) {
           return false;
@@ -232,18 +232,18 @@ public final class SipCreatorUtils {
     }
 
     final IPDescriptiveMetadata descriptiveMetadata = new IPDescriptiveMetadata(new IPFile(Paths.get(metadataFile)),
-    metadataTypeEnum, version);
+      metadataTypeEnum, version);
     sip.addDescriptiveMetadata(descriptiveMetadata);
   }
 
   private static MetadataType getMetadataTypeFromMetadataFile(final String metadataFile) {
     final Path metadataPath = Paths.get(metadataFile);
     String filename = metadataPath.getFileName().toString();
-    String metadataTypeValue = filename = filename.split(DOT_REGEX)[0];
+    final String metadataTypeValue = filename = filename.split(DOT_REGEX)[0];
 
     MetadataType metadataType = new MetadataType(metadataTypeValue);
 
-    if (metadataType == MetadataType.OTHER()) {
+    if (MetadataType.OTHER().equals(metadataType)) {
       final String[] splitedFileName = filename.split(UNDERSCORE);
       if (splitedFileName.length == 2) {
         metadataType = new MetadataType(splitedFileName[0]);
@@ -251,7 +251,6 @@ public final class SipCreatorUtils {
     }
     return metadataType;
   }
-
 
   private static String getMetadataVersionFromMetadataFile(final String metadataFile) {
     final Path metadataPath = Paths.get(metadataFile);
