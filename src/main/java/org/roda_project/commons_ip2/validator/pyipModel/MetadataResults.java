@@ -1,17 +1,33 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+
+import org.roda_project.commons_ip2.validator.constants.Constants;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** MetadataResults. */
 public class MetadataResults {
+  /**
+   * {@link MetadataChecks}.
+   */
   @JsonProperty("schemaResults")
   private MetadataChecks schemaResults = null;
 
+  /**
+   * {@link MetadataChecks}.
+   */
   @JsonProperty("schematronResults")
   private MetadataChecks schematronResults = null;
 
-  public MetadataResults schemaResults(MetadataChecks schemaResults) {
+  /**
+   * Set the schema results.
+   * 
+   * @param schemaResults
+   *          {@link MetadataChecks}.
+   * @return {@link MetadataResults}.
+   */
+  public MetadataResults schemaResults(final MetadataChecks schemaResults) {
     this.schemaResults = schemaResults;
     return this;
   }
@@ -25,11 +41,18 @@ public class MetadataResults {
     return schemaResults;
   }
 
-  public void setSchemaResults(MetadataChecks schemaResults) {
+  public void setSchemaResults(final MetadataChecks schemaResults) {
     this.schemaResults = schemaResults;
   }
 
-  public MetadataResults schematronResults(MetadataChecks schematronResults) {
+  /**
+   * Set the shematron results.
+   * 
+   * @param schematronResults
+   *          {@link MetadataChecks}.
+   * @return {@link MetadataResults}.
+   */
+  public MetadataResults schematronResults(final MetadataChecks schematronResults) {
     this.schematronResults = schematronResults;
     return this;
   }
@@ -43,21 +66,21 @@ public class MetadataResults {
     return schematronResults;
   }
 
-  public void setSchematronResults(MetadataChecks schematronResults) {
+  public void setSchematronResults(final MetadataChecks schematronResults) {
     this.schematronResults = schematronResults;
   }
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(final java.lang.Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MetadataResults metadataResults = (MetadataResults) o;
+    final MetadataResults metadataResults = (MetadataResults) o;
     return Objects.equals(this.schemaResults, metadataResults.schemaResults)
-        && Objects.equals(this.schematronResults, metadataResults.schematronResults);
+      && Objects.equals(this.schematronResults, metadataResults.schematronResults);
   }
 
   @Override
@@ -67,22 +90,23 @@ public class MetadataResults {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
     sb.append("class MetadataResults {\n");
 
-    sb.append("    schemaResults: ").append(toIndentedString(schemaResults)).append("\n");
-    sb.append("    schematronResults: ").append(toIndentedString(schematronResults)).append("\n");
+    sb.append("    schemaResults: ").append(toIndentedString(schemaResults)).append(Constants.END_OF_LINE);
+    sb.append("    schematronResults: ").append(toIndentedString(schematronResults)).append(Constants.END_OF_LINE);
     sb.append("}");
     return sb.toString();
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(final java.lang.Object o) {
     if (o == null) {
       return "null";
     }
-    return o.toString().replace("\n", "\n    ");
+    return o.toString().replace(Constants.END_OF_LINE, "\n    ");
   }
 }

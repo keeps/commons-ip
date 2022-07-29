@@ -5,18 +5,37 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 /** Gets or Sets structStatus. */
 public enum StructStatus {
+  /**
+   * Enum for value Unknown.
+   */
   UNKNOWN("Unknown"),
+  /**
+   * Enum for value NotWellFormed.
+   */
   NOTWELLFORMED("NotWellFormed"),
+  /**
+   * Enum for value WellFormed.
+   */
   WELLFORMED("WellFormed");
 
+  /**
+   * {@link String}.
+   */
   private String value;
 
-  StructStatus(String value) {
+  StructStatus(final String value) {
     this.value = value;
   }
 
+  /**
+   * Get the {@link StructStatus} for the {@link String}.
+   * 
+   * @param text
+   *          {@link String}.
+   * @return {@link StructStatus}.
+   */
   @JsonCreator
-  public static StructStatus fromValue(String text) {
+  public static StructStatus fromValue(final String text) {
     for (StructStatus b : StructStatus.values()) {
       if (String.valueOf(b.value).equals(text)) {
         return b;

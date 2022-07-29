@@ -1,14 +1,26 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.roda_project.commons_ip2.validator.constants.Constants;
 
 /** Representation. */
 public class Representation {
+  /**
+   * {@link String}.
+   */
   @JsonProperty("name")
   private String name = null;
 
-  public Representation name(String name) {
+  /**
+   * Set the name.
+   * 
+   * @param name
+   *          {@link String}.
+   * @return {@link Representation}.
+   */
+  public Representation name(final String name) {
     this.name = name;
     return this;
   }
@@ -22,19 +34,19 @@ public class Representation {
     return name;
   }
 
-  public void setName(String name) {
+  public void setName(final String name) {
     this.name = name;
   }
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(final java.lang.Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Representation representation = (Representation) o;
+    final Representation representation = (Representation) o;
     return Objects.equals(this.name, representation.name);
   }
 
@@ -45,21 +57,22 @@ public class Representation {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
     sb.append("class Representation {\n");
 
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append(Constants.END_OF_LINE);
     sb.append("}");
     return sb.toString();
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(final java.lang.Object o) {
     if (o == null) {
       return "null";
     }
-    return o.toString().replace("\n", "\n    ");
+    return o.toString().replace(Constants.END_OF_LINE, "\n    ");
   }
 }

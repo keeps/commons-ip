@@ -1,19 +1,35 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.roda_project.commons_ip2.validator.constants.Constants;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /** PackageDetails. */
 public class PackageDetails {
+  /**
+   * {@link String}.
+   */
   @JsonProperty("name")
   private String name = null;
 
+  /**
+   * {@link List} of {@link Checksum}.
+   */
   @JsonProperty("checksums")
   private List<Checksum> checksums = null;
 
-  public PackageDetails name(String name) {
+  /**
+   * Set the name.
+   * 
+   * @param name
+   *          {@link String}.
+   * @return {@link PackageDetails}.
+   */
+  public PackageDetails name(final String name) {
     this.name = name;
     return this;
   }
@@ -27,16 +43,30 @@ public class PackageDetails {
     return name;
   }
 
-  public void setName(String name) {
+  public void setName(final String name) {
     this.name = name;
   }
 
-  public PackageDetails checksums(List<Checksum> checksums) {
+  /**
+   * Set the {@link List} of {@link Checksum}.
+   * 
+   * @param checksums
+   *          {@link List} of {@link Checksum}.
+   * @return {@link PackageDetails}.
+   */
+  public PackageDetails checksums(final List<Checksum> checksums) {
     this.checksums = checksums;
     return this;
   }
 
-  public PackageDetails addChecksumsItem(Checksum checksumsItem) {
+  /**
+   * Add a new {@link Checksum} to the {@link List}.
+   * 
+   * @param checksumsItem
+   *          {@link Checksum}.
+   * @return {@link PackageDetails}.
+   */
+  public PackageDetails addChecksumsItem(final Checksum checksumsItem) {
     if (this.checksums == null) {
       this.checksums = new ArrayList<Checksum>();
     }
@@ -53,21 +83,20 @@ public class PackageDetails {
     return checksums;
   }
 
-  public void setChecksums(List<Checksum> checksums) {
+  public void setChecksums(final List<Checksum> checksums) {
     this.checksums = checksums;
   }
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(final java.lang.Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    PackageDetails packageDetails = (PackageDetails) o;
-    return Objects.equals(this.name, packageDetails.name)
-        && Objects.equals(this.checksums, packageDetails.checksums);
+    final PackageDetails packageDetails = (PackageDetails) o;
+    return Objects.equals(this.name, packageDetails.name) && Objects.equals(this.checksums, packageDetails.checksums);
   }
 
   @Override
@@ -77,19 +106,20 @@ public class PackageDetails {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
     sb.append("class PackageDetails {\n");
 
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    checksums: ").append(toIndentedString(checksums)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append(Constants.END_OF_LINE);
+    sb.append("    checksums: ").append(toIndentedString(checksums)).append(Constants.END_OF_LINE);
     sb.append("}");
     return sb.toString();
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(final java.lang.Object o) {
     if (o == null) {
       return "null";
     }
