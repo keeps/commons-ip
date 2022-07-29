@@ -1,19 +1,34 @@
 package org.roda_project.commons_ip2.validator.pyipModel;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.roda_project.commons_ip2.validator.constants.Constants;
+
 /** StructResults. */
 public class StructResults {
+  /**
+   * {@link StructStatus}.
+   */
   @JsonProperty("status")
   private StructStatus status = null;
 
+  /**
+   * {@link List}.
+   */
   @JsonProperty("messages")
   private List<TestResult> messages = null;
 
-  public StructResults status(StructStatus status) {
+  /**
+   * Set the {@link StructStatus}.
+   * 
+   * @param status
+   *          {@link StructStatus}.
+   * @return {@link StructResults}.
+   */
+  public StructResults status(final StructStatus status) {
     this.status = status;
     return this;
   }
@@ -27,16 +42,30 @@ public class StructResults {
     return status;
   }
 
-  public void setStatus(StructStatus status) {
+  public void setStatus(final StructStatus status) {
     this.status = status;
   }
 
-  public StructResults messages(List<TestResult> messages) {
+  /**
+   * Set the {@link List} of {@link TestResult}.
+   * 
+   * @param messages
+   *          {@link List} of {@link TestResult}.
+   * @return {@link StructResults}.
+   */
+  public StructResults messages(final List<TestResult> messages) {
     this.messages = messages;
     return this;
   }
 
-  public StructResults addMessagesItem(TestResult messagesItem) {
+  /**
+   * Add {@link TestResult} to the {@link List}.
+   * 
+   * @param messagesItem
+   *          {@link TestResult}.
+   * @return {@link StructResults}.
+   */
+  public StructResults addMessagesItem(final TestResult messagesItem) {
     if (this.messages == null) {
       this.messages = new ArrayList<TestResult>();
     }
@@ -53,21 +82,20 @@ public class StructResults {
     return messages;
   }
 
-  public void setMessages(List<TestResult> messages) {
+  public void setMessages(final List<TestResult> messages) {
     this.messages = messages;
   }
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(final java.lang.Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    StructResults structResults = (StructResults) o;
-    return Objects.equals(this.status, structResults.status)
-        && Objects.equals(this.messages, structResults.messages);
+    final StructResults structResults = (StructResults) o;
+    return Objects.equals(this.status, structResults.status) && Objects.equals(this.messages, structResults.messages);
   }
 
   @Override
@@ -77,22 +105,23 @@ public class StructResults {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
     sb.append("class StructResults {\n");
 
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
-    sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append(Constants.END_OF_LINE);
+    sb.append("    messages: ").append(toIndentedString(messages)).append(Constants.END_OF_LINE);
     sb.append("}");
     return sb.toString();
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(final java.lang.Object o) {
     if (o == null) {
       return "null";
     }
-    return o.toString().replace("\n", "\n    ");
+    return o.toString().replace(Constants.END_OF_LINE, "\n    ");
   }
 }
