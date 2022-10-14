@@ -651,6 +651,8 @@ public class EARKUtils {
       } else if (IPConstants.PRESERVATION.equalsIgnoreCase(metadataType)) {
         IPMetadata preservationMetadata = new IPMetadata(metadataFile.get());
         preservationMetadata.setCreateDate(mdRef.getCREATED());
+        preservationMetadata.setMetadataType(MetadataType.MetadataTypeEnum.valueOf(mdRef.getMDTYPE()));
+        preservationMetadata.setId(mdRef.getID());
         if (representation == null) {
           ip.addPreservationMetadata(preservationMetadata);
         } else {
