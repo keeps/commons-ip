@@ -1,0 +1,6 @@
+title: Title
+level: item
+simpledc.creator: Creator
+simpledc.publisher: Publisher
+simpledc.identifier: Id
+simpledc.date: 2016-01-01

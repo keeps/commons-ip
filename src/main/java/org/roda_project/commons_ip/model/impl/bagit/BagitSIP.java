@@ -2,17 +2,19 @@
  * The contents of this file are subject to the license and copyright
  * detailed in the LICENSE file at the root of the source
  * tree and available online at
- *
+ * 
  * https://github.com/keeps/commons-ip
  */
 package org.roda_project.commons_ip.model.impl.bagit;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.channels.ClosedByInterruptException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.NoSuchAlgorithmException;
+import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,7 +24,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip.model.IPConstants;
 import org.roda_project.commons_ip.model.IPContentType;
 import org.roda_project.commons_ip.model.IPFile;
@@ -32,19 +33,33 @@ import org.roda_project.commons_ip.model.SIP;
 import org.roda_project.commons_ip.model.impl.ModelUtils;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.Utils;
+import org.roda_project.commons_ip.utils.ZIPUtils;
+import org.roda_project.commons_ip.utils.ZipEntryInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gov.loc.repository.bagit.Bag;
-import gov.loc.repository.bagit.BagFactory;
-import gov.loc.repository.bagit.BagFile;
-import gov.loc.repository.bagit.PreBag;
-import gov.loc.repository.bagit.utilities.SimpleResult;
-import gov.loc.repository.bagit.utilities.namevalue.NameValueReader.NameValue;
-import gov.loc.repository.bagit.writer.impl.ZipWriter;
+import gov.loc.repository.bagit.creator.BagCreator;
+import gov.loc.repository.bagit.domain.Bag;
+import gov.loc.repository.bagit.domain.Manifest;
+import gov.loc.repository.bagit.domain.Metadata;
+import gov.loc.repository.bagit.exceptions.CorruptChecksumException;
+import gov.loc.repository.bagit.exceptions.FileNotInPayloadDirectoryException;
+import gov.loc.repository.bagit.exceptions.InvalidBagitFileFormatException;
+import gov.loc.repository.bagit.exceptions.MaliciousPathException;
+import gov.loc.repository.bagit.exceptions.MissingBagitFileException;
+import gov.loc.repository.bagit.exceptions.MissingPayloadDirectoryException;
+import gov.loc.repository.bagit.exceptions.MissingPayloadManifestException;
+import gov.loc.repository.bagit.exceptions.UnparsableVersionException;
+import gov.loc.repository.bagit.exceptions.UnsupportedAlgorithmException;
+import gov.loc.repository.bagit.exceptions.VerificationException;
+import gov.loc.repository.bagit.hash.StandardSupportedAlgorithms;
+import gov.loc.repository.bagit.reader.BagReader;
+import gov.loc.repository.bagit.verify.BagVerifier;
 
 public class BagitSIP extends SIP {
   private static final Logger LOGGER = LoggerFactory.getLogger(BagitSIP.class);
+  private static final String SIP_TEMP_DIR = "BAGIT";
+  private static final String SIP_FILE_EXTENSION = ".zip";
 
   public BagitSIP() {
     super();
@@ -65,7 +80,7 @@ public class BagitSIP extends SIP {
   }
 
   /**
-   * 
+   *
    * build and all build related methods
    * _________________________________________________________________________
    */
@@ -125,67 +140,80 @@ public class BagitSIP extends SIP {
   public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
     throws IPException, InterruptedException {
     IPConstants.METS_ENCODE_AND_DECODE_HREF = true;
+    Path buildDir = ModelUtils.createBuildDir(SIP_TEMP_DIR);
+    Path zipPath = getZipPath(destinationDirectory, fileNameWithoutExtension);
 
-    Path namePath;
-    if (StringUtils.isNotBlank(fileNameWithoutExtension)) {
-      namePath = destinationDirectory.resolve(fileNameWithoutExtension);
-    } else {
-      namePath = destinationDirectory.resolve(getId());
-    }
+    try {
+      Map<String, ZipEntryInfo> zipEntries = getZipEntries();
 
-    Path data = namePath.resolve(IPConstants.BAGIT_DATA_FOLDER);
-    int fileCounter = 0;
-
-    for (IPRepresentation rep : getRepresentations()) {
-      Path representationPath = data.resolve(rep.getRepresentationID());
-      for (IPFile file : rep.getData()) {
-        createFiles(file, representationPath);
-        fileCounter++;
-      }
-    }
-
-    BagFactory bf = new BagFactory();
-    PreBag pb = bf.createPreBag(new File(namePath.toString()));
-    try (Bag b = pb.makeBagInPlace(BagFactory.Version.V0_97, false)) {
-
-      // additional metadata
+      // Create Metadata
       Path metadataPath = getDescriptiveMetadata().get(0).getMetadata().getPath();
       Map<String, String> metadataList = BagitUtils.getBagitInfo(metadataPath);
+      Metadata metadata = new Metadata();
       for (Entry<String, String> entry : metadataList.entrySet()) {
-        b.getBagInfoTxt().put(entry.getKey(), entry.getValue());
+        metadata.add(entry.getKey(), entry.getValue());
       }
-      b.getBagInfoTxt().put(IPConstants.BAGIT_VENDOR, IPConstants.BAGIT_VENDOR_COMMONS_IP);
+      metadata.add(IPConstants.BAGIT_VENDOR, IPConstants.BAGIT_VENDOR_COMMONS_IP);
 
-      b.makeComplete();
+      // representation data
+      BagitUtils.addRepresentationToZipAndBagit(this, getRepresentations(), zipEntries, buildDir);
 
-      notifySipBuildPackagingStarted(fileCounter);
-      ZipWriter zipWriter = new ZipWriter(bf);
-      zipWriter.write(b, new File(namePath.toString()));
-      zipWriter.endPayload();
-      notifySipBuildPackagingEnded();
-    } catch (IOException e) {
-      LOGGER.error("Could not make bag in place", e);
+      // Create Bag
+      BagCreator.bagInPlace(buildDir, Arrays.asList(StandardSupportedAlgorithms.SHA256), false, metadata);
+
+      // Add bag files to zip
+      BagitUtils.addBagFileToZip(zipEntries, buildDir, BagitUtils.BAGIT_FILE_NAME);
+      BagitUtils.addBagFileToZip(zipEntries, buildDir, BagitUtils.BAGIT_INFO_FILE_NAME);
+      BagitUtils.addBagFileToZip(zipEntries, buildDir,
+        BagitUtils.BAGIT_MANIFEST_FILE_NAME + StandardSupportedAlgorithms.SHA256.getBagitName());
+      BagitUtils.addBagFileToZip(zipEntries, buildDir,
+        BagitUtils.BAGIT_TAG_MANIFEST_FILE_NAME + StandardSupportedAlgorithms.SHA256.getBagitName());
+
+      createZipFile(zipPath, zipEntries);
+      return zipPath;
+    } catch (IOException | NoSuchAlgorithmException e) {
+      throw new IPException("Could not make bag in place", e);
+    } finally {
+      ModelUtils.deleteBuildDir(buildDir);
     }
 
-    return namePath;
   }
 
-  private void createFiles(IPFile file, Path representationPath) {
-    String relativeFilePath = ModelUtils.getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
-    Path destination = representationPath.resolve(relativeFilePath);
+  private Path getZipPath(Path destinationDirectory, String fileNameWithoutExtension) throws IPException {
+    Path zipPath;
+    if (fileNameWithoutExtension != null) {
+      zipPath = destinationDirectory.resolve(fileNameWithoutExtension + SIP_FILE_EXTENSION);
+    } else {
+      zipPath = destinationDirectory.resolve(getId() + SIP_FILE_EXTENSION);
+    }
+
     try {
-      Files.createDirectories(destination.getParent());
-      try (InputStream input = Files.newInputStream(file.getPath());
-        OutputStream output = Files.newOutputStream(destination);) {
-        IOUtils.copyLarge(input, output);
+      if (Files.exists(zipPath)) {
+        Files.delete(zipPath);
       }
     } catch (IOException e) {
-      LOGGER.error("Error creating file {} on bagit data folder", file.getFileName(), e);
+      throw new IPException("Error deleting already existing ZIP", e);
+    }
+
+    return zipPath;
+  }
+
+  private void createZipFile(Path zipPath, Map<String, ZipEntryInfo> zipEntries)
+    throws IPException, InterruptedException {
+    try {
+      notifySipBuildPackagingStarted(zipEntries.size());
+      ZIPUtils.zip(zipEntries, Files.newOutputStream(zipPath), this, true, true);
+    } catch (ClosedByInterruptException e) {
+      throw new InterruptedException();
+    } catch (IOException e) {
+      throw new IPException("Error generating Bagit ZIP file. Reason: " + e.getMessage(), e);
+    } finally {
+      notifySipBuildPackagingEnded();
     }
   }
 
   /**
-   * 
+   *
    * parse and all parse related methods; during parse, validation is also
    * conducted and stored inside the SIP
    * _________________________________________________________________________
@@ -205,35 +233,41 @@ public class BagitSIP extends SIP {
 
   private static SIP parseBagit(final Path source, final Path destinationDirectory) throws ParseException {
     IPConstants.METS_ENCODE_AND_DECODE_HREF = true;
-
     SIP sip = new BagitSIP();
-    BagFactory bagFactory = new BagFactory();
 
-    try (Bag bag = bagFactory.createBag(source.toFile())) {
-      SimpleResult result = bag.verifyPayloadManifests();
-      if (result.isSuccess()) {
-        Map<String, String> metadataMap = new HashMap<>();
-        for (NameValue nameValue : bag.getBagInfoTxt().asList()) {
-          String key = nameValue.getKey();
-          String value = nameValue.getValue();
+    Path sipPath = BagitUtils.extractBagitIPIfInZipFormat(source, destinationDirectory);
+    sip.setBasePath(sipPath);
 
-          if (IPConstants.BAGIT_PARENT.equals(key)) {
-            sip.setAncestors(Arrays.asList(value));
-          } else {
-            if (IPConstants.BAGIT_ID.equals(key)) {
-              sip.setId(value);
-            }
-            metadataMap.put(key, value);
+    try (BagVerifier verifier = new BagVerifier()) {
+      BagReader reader = new BagReader();
+      Bag bag = reader.read(sipPath);
+      verifier.isValid(bag, false);
+
+      Map<String, String> metadataMap = new HashMap<>();
+
+      for (AbstractMap.SimpleImmutableEntry<String, String> nameValue : bag.getMetadata().getAll()) {
+        String key = nameValue.getKey();
+        String value = nameValue.getValue();
+
+        if (IPConstants.BAGIT_PARENT.equals(key)) {
+          sip.setAncestors(Arrays.asList(value));
+        } else {
+          if (IPConstants.BAGIT_ID.equals(key)) {
+            sip.setId(value);
           }
+          metadataMap.put(key, value);
         }
+      }
 
-        String vendor = metadataMap.get(IPConstants.BAGIT_VENDOR);
-        Path metadataPath = destinationDirectory.resolve(Utils.generateRandomAndPrefixedUUID());
-        sip.addDescriptiveMetadata(BagitUtils.createBagitMetadata(metadataMap, metadataPath));
-        Map<String, IPRepresentation> representations = new HashMap<>();
+      String vendor = metadataMap.get(IPConstants.BAGIT_VENDOR);
+      Path metadataPath = destinationDirectory.resolve(Utils.generateRandomAndPrefixedUUID());
+      sip.addDescriptiveMetadata(BagitUtils.createBagitMetadata(metadataMap, metadataPath));
+      Map<String, IPRepresentation> representations = new HashMap<>();
 
-        for (BagFile bagFile : bag.getPayload()) {
-          List<String> split = Arrays.asList(bagFile.getFilepath().split("/"));
+      for (Manifest payLoadManifest : bag.getPayLoadManifests()) {
+        Map<Path, String> fileToChecksumMap = payLoadManifest.getFileToChecksumMap();
+        for (Path payload : fileToChecksumMap.keySet()) {
+          List<String> split = Arrays.asList(sipPath.relativize(payload).toString().split("/"));
           if (split.size() > 1 && IPConstants.BAGIT_DATA_FOLDER.equals(split.get(0))) {
             String representationId = "rep1";
             int beginIndex = 1;
@@ -249,7 +283,7 @@ public class BagitSIP extends SIP {
             IPRepresentation representation = representations.get(representationId);
             List<String> directoryPath = split.subList(beginIndex, split.size() - 1);
             Path destPath = destinationDirectory.resolve(split.get(split.size() - 1));
-            try (InputStream bagStream = bagFile.newInputStream();
+            try (InputStream bagStream = Files.newInputStream(payload);
               OutputStream destStream = Files.newOutputStream(destPath)) {
               IOUtils.copyLarge(bagStream, destStream);
             }
@@ -258,18 +292,20 @@ public class BagitSIP extends SIP {
             representation.addFile(file);
           }
         }
+      }
 
-        for (IPRepresentation rep : representations.values()) {
-          sip.addRepresentation(rep);
-        }
-
-      } else {
-        throw new ParseException(result.getMessages().toString());
+      for (IPRepresentation rep : representations.values()) {
+        sip.addRepresentation(rep);
       }
 
       return sip;
-    } catch (final IPException | IOException e) {
+    } catch (final IPException | IOException | UnparsableVersionException e) {
       throw new ParseException("Error parsing bagit SIP", e);
+    } catch (MissingPayloadManifestException | MissingBagitFileException | InterruptedException
+      | FileNotInPayloadDirectoryException | InvalidBagitFileFormatException | VerificationException
+      | UnsupportedAlgorithmException | CorruptChecksumException | MaliciousPathException
+      | MissingPayloadDirectoryException e) {
+      throw new ParseException("Error validating bagit SIP", e);
     }
   }
 
@@ -277,5 +313,4 @@ public class BagitSIP extends SIP {
   public Set<String> getExtraChecksumAlgorithms() {
     return Collections.emptySet();
   }
-
 }
