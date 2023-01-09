@@ -227,7 +227,7 @@ public class EARKSIP extends SIP {
     if (fileNameWithoutExtension != null) {
       zipPath = destinationDirectory.resolve(fileNameWithoutExtension + SIP_FILE_EXTENSION);
     } else {
-      zipPath = destinationDirectory.resolve(getId() + SIP_FILE_EXTENSION);
+      zipPath = destinationDirectory.resolve(getId().replaceAll("[^a-zA-Z0-9-_\\.]", "_") + SIP_FILE_EXTENSION);
     }
 
     try {
