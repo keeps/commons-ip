@@ -133,7 +133,7 @@ public final class ZIPUtils {
       LOGGER.debug("Zipping file {}", file.getFilePath());
       ZipEntry entry;
       if (createSipIdFolder) {
-        entry = new ZipEntry(sip.getId() + "/" + file.getName());
+        entry = new ZipEntry(sip.getId().replaceAll("[^a-zA-Z0-9-_\\.]", "_") + "/" + file.getName());
       } else {
         entry = new ZipEntry(file.getName());
       }
