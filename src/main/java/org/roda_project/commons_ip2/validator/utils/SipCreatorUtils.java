@@ -170,6 +170,9 @@ public final class SipCreatorUtils {
     if (id == null) {
       id = Utils.generateRandomAndPrefixedUUID();
     }
+    else {
+      id = sipID.replaceAll("[^a-zA-Z0-9-_\\.]", "_");
+    }
 
     final SIP sip = new EARKSIP(id, IPContentType.getMIXED(), IPContentInformationType.getMIXED());
     sip.addCreatorSoftwareAgent("RODA Commons IP", softwareVersion);
