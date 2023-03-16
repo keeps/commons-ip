@@ -20,6 +20,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.commons.lang3.StringUtils;
+import org.roda_project.commons_ip.model.MetadataType;
 import org.roda_project.commons_ip.utils.IPEnums.IPType;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
@@ -336,7 +337,7 @@ public final class EARKMETSUtils {
 
   public static MdRef addOtherMetadataToMETS(final MetsWrapper metsWrapper, final IPMetadata otherMetadata,
     final String otherMetadataPath) throws IPException, InterruptedException {
-    return addMetadataToMETS(metsWrapper, otherMetadata, otherMetadataPath, "OTHER", null, null, false);
+    return addMetadataToMETS(metsWrapper, otherMetadata, otherMetadataPath, MetadataType.MetadataTypeEnum.OTHER.getType() , otherMetadata.getId(), null, false);
   }
 
   private static MdRef addMetadataToMETS(final MetsWrapper metsWrapper, final IPMetadata metadata,
