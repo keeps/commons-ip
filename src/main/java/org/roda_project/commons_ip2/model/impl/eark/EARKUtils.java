@@ -351,7 +351,7 @@ public final class EARKUtils {
         addAgentsToMETS(mainMets, ip, null);
 
         ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.MAIN_METS_IS_VALID, ipPath, mainMETSFile);
-      } catch (JAXBException | ParseException | SAXException e) {
+      } catch (JAXBException | ParseException | SAXException | IOException e) {
         mainMets = null;
         ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.MAIN_METS_NOT_VALID,
           ValidationEntry.LEVEL.ERROR, e, ip.getBasePath(), mainMETSFile);
@@ -414,7 +414,7 @@ public final class EARKUtils {
         setRepresentationContentType(representationMets, representation);
         ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.REPRESENTATION_METS_IS_VALID,
           ip.getBasePath(), representationMetsFile);
-      } catch (JAXBException | ParseException | SAXException e) {
+      } catch (JAXBException | ParseException | SAXException | IOException e) {
         representationMets = null;
         ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.REPRESENTATION_METS_NOT_VALID,
           ValidationEntry.LEVEL.ERROR, e, ip.getBasePath(), representationMetsFile);
