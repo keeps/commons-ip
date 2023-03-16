@@ -7,6 +7,7 @@
  */
 package org.roda_project.commons_ip2.utils;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -49,7 +50,7 @@ public final class METSUtils {
     // do nothing
   }
 
-  public static Mets instantiateMETSFromFile(Path metsFile) throws JAXBException, SAXException {
+  public static Mets instantiateMETSFromFile(Path metsFile) throws JAXBException, SAXException, IOException {
     JAXBContext jaxbContext = JAXBContext.newInstance(Mets.class);
     Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
     SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
@@ -59,7 +60,7 @@ public final class METSUtils {
     Source metsSchemaSource = new StreamSource(metsSchemaInputStream);
     Schema schema = factory.newSchema(metsSchemaSource);
     jaxbUnmarshaller.setSchema(schema);
-    return (Mets) jaxbUnmarshaller.unmarshal(metsFile.toFile());
+    return (Mets) jaxbUnmarshaller.unmarshal(new BufferedInputStream(Files.newInputStream(metsFile.toAbsolutePath())));
   }
 
   public static Path marshallMETS(Mets mets, Path tempMETSFile, boolean rootMETS)
