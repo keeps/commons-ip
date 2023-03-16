@@ -87,7 +87,7 @@ public final class SipCreatorUtils {
     if (metadataFile != null) {
       return Files.exists(Paths.get(metadataFile));
     }
-    return false;
+    return true;
   }
 
   /**
