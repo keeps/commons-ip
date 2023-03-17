@@ -175,7 +175,13 @@ public final class SipCreatorUtils {
     }
 
     final SIP sip = new EARKSIP(id, IPContentType.getMIXED(), IPContentInformationType.getMIXED());
-    sip.addCreatorSoftwareAgent("RODA Commons IP", softwareVersion);
+    String softVersion="DEVELOPMENT-VERSION";
+
+    if (softwareVersion!=null) {
+      softVersion=softwareVersion;
+    }
+
+    sip.addCreatorSoftwareAgent("RODA Commons IP", softVersion);
     sip.addSubmitterAgent(submitterAgentName, submitterAgentID);
 
     sip.setDescription("SIP created by commons-ip cli tool");
