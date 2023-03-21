@@ -1,5 +1,7 @@
 package org.roda_project.commons_ip2.validator.utils;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 import org.roda_project.commons_ip2.validator.constants.Constants;
@@ -66,11 +68,15 @@ public final class Message {
 
   private static String calculateInnerMessage(final boolean isZip, final String key, final String split) {
     final StringBuilder message = new StringBuilder();
+    Path keyPath = Paths.get(key);
+    Path splitPath = Paths.get(split);
+    String subtracted = splitPath.relativize(keyPath).toString();
+
     if (isZip) {
-      message.append(key.split(split)[1].startsWith(Constants.SEPARATOR) ? key.split(split)[1]
-        : Constants.SEPARATOR + key.split(split)[1]).append(", ");
+      message.append(subtracted.startsWith(Constants.SEPARATOR) ? subtracted
+        : Constants.SEPARATOR + subtracted).append(", ");
     } else {
-      message.append(key.split(split)[1]);
+      message.append(subtracted);
     }
     return message.toString();
   }
