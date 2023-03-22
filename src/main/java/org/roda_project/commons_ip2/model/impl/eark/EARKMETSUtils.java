@@ -22,6 +22,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip.utils.IPEnums.IPType;
 import org.roda_project.commons_ip.utils.IPException;
+import org.roda_project.commons_ip.utils.METSEnums;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
 import org.roda_project.commons_ip.utils.METSEnums.LocType;
 import org.roda_project.commons_ip.utils.ValidationConstants;
@@ -396,7 +397,7 @@ public final class EARKMETSUtils {
 
   private static MdRef createMdRef(final String id, final String metadataPath) {
     final MdRef mdRef = new MdRef();
-    mdRef.setID(escapeNCName(id));
+    mdRef.setID(METSEnums.FILE_ID_PREFIX + escapeNCName(id));
     mdRef.setType(IPConstants.METS_TYPE_SIMPLE);
     mdRef.setLOCTYPE(LocType.URL.toString());
     mdRef.setHref(METSUtils.encodeHref(metadataPath));
