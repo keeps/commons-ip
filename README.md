@@ -71,7 +71,7 @@ metadata type: **EAD**, metadata version: **2002**)
 
 Examples:
 
-###Full create SIP command with long options:
+### Full create SIP command with long options:
 
 ```
 java -jar commons-ip-cli-2.X.Y.jar create --metadata-file metadata.xml --metadata-type ead --metadata-version 2002 \
@@ -79,7 +79,7 @@ java -jar commons-ip-cli-2.X.Y.jar create --metadata-file metadata.xml --metadat
 --sip-id sip1 --ancestors sip2 sip3 --documentation documentation1 documentationFolder -p folder2 --path folder2 --submitter-agent-name agent1 --submitter-agent-id 123
 ```
 
-###Full create SIP command with short options:
+### Full create SIP command with short options:
 
 ```
 java -jar commons-ip-cli-2.X.Y.jar create -mf metadata.xml -mt ead -mv 2002 \
