@@ -1,18 +1,5 @@
 package org.roda_project.commons_ip2.validator.component.descriptiveMetadataComponent;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URLDecoder;
-import java.nio.file.Paths;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip2.mets_v1_12.beans.AmdSecType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType;
@@ -34,6 +21,18 @@ import org.roda_project.commons_ip2.validator.utils.Message;
 import org.roda_project.commons_ip2.validator.utils.MetadataType;
 import org.roda_project.commons_ip2.validator.utils.ResultsUtils;
 import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLDecoder;
+import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /** {@author João Gomes <jgomes@keep.pt>}. */
 public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
@@ -578,7 +577,7 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
           }
           if (!structureValidatorState.getZipManager().checkPathExists(structureValidatorState.getIpPath(),
             path.toString())) {
-            message.append("mets/dmdSec/mdRef/@xlink:href ").append(path).append(" in %1$s does not exist");
+            message.append("mets/dmdSec/mdRef/@xlink:href ").append(path.toString().replace("%", "%%")).append(" in %1$s does not exist");
             details.setValid(false);
             details.addIssue(Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
               metsValidatorState.isRootMets()));
@@ -700,14 +699,11 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
             }
             if (!structureValidatorState.getZipManager().verifySize(structureValidatorState.getIpPath(),
               file.toString(), size)) {
-              message.append("mets/dmdSec/mdRef/@SIZE ").append(size).append(" in %1$s and size of file (").append(file)
+              message.append("mets/dmdSec/mdRef/@SIZE ").append(size).append(" in %1$s and size of file (").append(file.toString().replace("%", "%%"))
                 .append(") isn't equal");
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                Message.createErrorMessage(
-                  Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
-                    metsValidatorState.isRootMets()),
-                  metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-                false, false);
+                Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                    metsValidatorState.isRootMets()),false, false);
             }
           } else {
             if (metsValidatorState.isRootMets()) {
