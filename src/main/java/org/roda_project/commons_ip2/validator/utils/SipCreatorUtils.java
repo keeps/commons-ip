@@ -1,5 +1,18 @@
 package org.roda_project.commons_ip2.validator.utils;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip2.model.IPContentInformationType;
 import org.roda_project.commons_ip2.model.IPContentType;
@@ -175,13 +188,13 @@ public final class SipCreatorUtils {
                                     final String[] representation, String[] metadataSchema, final boolean targetOnly,
                                     final String sipID, final String[] ancestors, final String[] documentation, final String softwareVersion,
                                     final String path, final String submitterAgentName, final String submitterAgentID, final String checksum)
-    throws IPException, InterruptedException {
+          throws IPException, InterruptedException, UnsupportedEncodingException {
     String id = sipID;
     if (id == null) {
       id = Utils.generateRandomAndPrefixedUUID();
     }
     else {
-      id = sipID.replaceAll("[^a-zA-Z0-9-_\\.]", "_");
+      id = URLEncoder.encode(sipID, "UTF-8").replace("*", "%2A");
     }
 
     final SIP sip = new EARKSIP(id, IPContentType.getMIXED(), IPContentInformationType.getMIXED());

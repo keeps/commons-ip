@@ -2,6 +2,7 @@ package org.roda_project.commons_ip2.validator.CLI;
 
 import java.io.PrintStream;
 import java.nio.file.Files;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -228,6 +229,8 @@ public class CLICreator {
         } catch (IPException | InterruptedException e) {
           CLIUtils.printErrors(System.out, "Can't create the sip");
           return ExitCodes.EXIT_CODE_CREATE_CANNOT_SIP;
+        } catch (UnsupportedEncodingException e) {
+          CLIUtils.printErrors(System.out, "Error encoding the sip id");
         }
 
       } else {

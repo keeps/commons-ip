@@ -425,7 +425,7 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
               }
               if (!structureValidatorState.getZipManager().checkPathExists(structureValidatorState.getIpPath(),
                 filePath.toString())) {
-                message.append("mets/fileSec/fileGrp[@USE=’Schemas’] ").append(filePath)
+                message.append("mets/fileSec/fileGrp[@USE=’Schemas’] ").append(filePath.toString().replace("%", "%%"))
                   .append(" doesn't exists (%1$s)");
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
                   message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
