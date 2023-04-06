@@ -369,7 +369,12 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
           metadataFiles = metadataFiles.entrySet().stream().filter(entry -> !entry.getKey().contains("/descriptive/"))
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
           for (AmdSecType amd : metsValidatorState.getMets().getAmdSec()) {
-            for (MdSecType md : amd.getDigiprovMD()) {
+            final List<MdSecType> allMdSecTypes = new ArrayList<>();
+            allMdSecTypes.addAll(amd.getDigiprovMD());
+            allMdSecTypes.addAll(amd.getRightsMD());
+            allMdSecTypes.addAll(amd.getTechMD());
+            allMdSecTypes.addAll(amd.getSourceMD());
+            for (MdSecType md : allMdSecTypes) {
               final MdSecType.MdRef mdRef = md.getMdRef();
               if (mdRef != null && mdRef.getHref() != null) {
                 final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), UTF_8);

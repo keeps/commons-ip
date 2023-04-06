@@ -252,7 +252,12 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
           }
           if (metadataFiles.containsValue(false)) {
             for (AmdSecType amd : mets.getAmdSec()) {
-              for (MdSecType md : amd.getDigiprovMD()) {
+              final List<MdSecType> allMdSecTypes = new ArrayList<>();
+              allMdSecTypes.addAll(amd.getDigiprovMD());
+              allMdSecTypes.addAll(amd.getRightsMD());
+              allMdSecTypes.addAll(amd.getTechMD());
+              allMdSecTypes.addAll(amd.getSourceMD());
+              for (MdSecType md : allMdSecTypes) {
                 final MdSecType.MdRef mdRef = md.getMdRef();
                 if (mdRef != null && mdRef.getHref() != null) {
                   final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), ENCODING_UTF_8);
