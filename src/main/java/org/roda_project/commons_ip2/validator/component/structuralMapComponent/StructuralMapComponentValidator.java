@@ -774,8 +774,12 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
     final List<String> amdSecIDs = new ArrayList<>();
     if (amdSec != null && !amdSec.isEmpty()) {
       for (AmdSecType amdSecType : amdSec) {
-        final List<MdSecType> digiProv = amdSecType.getDigiprovMD();
-        for (MdSecType mdSecType : digiProv) {
+        final List<MdSecType> allMDS = new ArrayList<>();
+        allMDS.addAll(amdSecType.getDigiprovMD());
+        allMDS.addAll(amdSecType.getRightsMD());
+        allMDS.addAll(amdSecType.getTechMD());
+        allMDS.addAll(amdSecType.getSourceMD());
+        for (MdSecType mdSecType : allMDS) {
           amdSecIDs.add(mdSecType.getID());
         }
       }
