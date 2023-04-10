@@ -613,11 +613,11 @@ public final class EARKMETSUtils {
       final FileGrp schemasFileGroup = createFileGroup(IPConstants.SCHEMAS_WITH_FIRST_LETTER_CAPITAL);
       fileSec.getFileGrp().add(schemasFileGroup);
       metsWrapper.setSchemasFileGroup(schemasFileGroup);
-      if (IPType.AIP.toString().equals(type) && isSubmission) {
-        final FileGrp submissionFileGroup = createFileGroup(IPConstants.SUBMISSION);
-        fileSec.getFileGrp().add(submissionFileGroup);
-        metsWrapper.setSubmissionFileGroup(submissionFileGroup);
-      }
+    }
+    if (IPType.AIP.toString().equals(type) && isSubmission) {
+      final FileGrp submissionFileGroup = createFileGroup(IPConstants.SUBMISSION);
+      fileSec.getFileGrp().add(submissionFileGroup);
+      metsWrapper.setSubmissionFileGroup(submissionFileGroup);
     }
     if (isDocumentation) {
       final FileGrp documentationFileGroup = createFileGroup(IPConstants.DOCUMENTATION_WITH_FIRST_LETTER_CAPITAL);
