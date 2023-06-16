@@ -101,6 +101,11 @@ public final class CLIConstants {
 
   public static final String CLI_CREATE_OPTION_SUBMITTER_AGENT_ID = "-aid";
 
+  /**
+   * CLI option to only add contents of target representation folder.
+   */
+  public static final String CLI_CREATE_OPTION_REPRESENTATION_DATA_ONLY_TARGET = "-to" ;
+
   /* OPTIONS WITHOUT "-" char */
 
   /**
@@ -162,6 +167,15 @@ public final class CLIConstants {
    * Short option representation data without ident.
    */
   public static final String CLI_CREATE_SHORT_OPTION_REPRESENTATION_DATA_WITHOUT_IDENT = "rd";
+
+  /**
+   * Long option representation data only target files.
+   */
+  public static final String CLI_CREATE_LONG_OPTION_REPRESENTATION_DATA_ONLY_TARGET ="target-only" ;
+  /**
+   * Short option representation data only target files.
+   */
+  public static final String CLI_CREATE_SHORT_OPTION_REPRESENTATION_DATA_ONLY_TARGET = "to";
 
   /**
    * Long option representation type without ident.
