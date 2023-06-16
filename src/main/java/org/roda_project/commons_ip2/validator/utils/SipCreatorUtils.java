@@ -162,7 +162,7 @@ public final class SipCreatorUtils {
    *           if some error occur.
    */
   public static Path createEARK2SIP(final String metadataFile, final String metadataType, final String metadataVersion,
-    final String[] representationData, final String representationType, final String representationID,
+    final String[] representationData, final boolean targetOnly, final String representationType, final String representationID,
     final String sipID, final String[] ancestors, final String[] documentation, final String softwareVersion,
     final String path, final String submitterAgentName, final String submitterAgentID)
     throws IPException, InterruptedException {
@@ -196,7 +196,7 @@ public final class SipCreatorUtils {
 
     if (representationData != null) {
       try {
-        addRepresentationDataToSIP(sip, representationData, representationType, representationID);
+        addRepresentationDataToSIP(sip, representationData, targetOnly,representationType, representationID);
       } catch (final IPException e) {
         CLIUtils.printErrors(System.out, "Cannot add representation to the SIP.");
       }
@@ -275,7 +275,7 @@ public final class SipCreatorUtils {
   }
 
   private static void addRepresentationDataToSIP(final SIP sip, final String[] representationData,
-    final String representationType, final String representationID) throws IPException {
+    final boolean targetOnly, final String representationType, final String representationID) throws IPException {
     String id = representationID;
     if (id == null) {
       id = "rep1";
@@ -290,21 +290,21 @@ public final class SipCreatorUtils {
 
     for (String data : representationData) {
       final Path dataPath = Paths.get(data);
-      addFileToRepresentation(representation, dataPath, new ArrayList<>());
+      addFileToRepresentation(representation, targetOnly, dataPath, new ArrayList<>());
     }
 
   }
 
-  private static void addFileToRepresentation(final IPRepresentation representation, final Path dataPath,
+  private static void addFileToRepresentation(final IPRepresentation representation, final boolean targetOnly, final Path dataPath,
     final List<String> relativePath) {
     if (Files.isDirectory(dataPath)) {
       final List<String> newRelativePath = new ArrayList<>(relativePath);
-      newRelativePath.add(dataPath.getFileName().toString());
+      if (!targetOnly) newRelativePath.add(dataPath.getFileName().toString());
       // recursive call to all the node's children
       final File[] files = dataPath.toFile().listFiles();
       if (files != null) {
         for (File file : files) {
-          addFileToRepresentation(representation, file.toPath(), newRelativePath);
+          addFileToRepresentation(representation, false, file.toPath(), newRelativePath);
         }
       }
     } else {

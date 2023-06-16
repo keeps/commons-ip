@@ -60,6 +60,12 @@ public class CLICreator {
     representationData.setRequired(false);
     parameters.addOption(representationData);
 
+    final Option targetOnly = new Option(CLIConstants.CLI_CREATE_SHORT_OPTION_REPRESENTATION_DATA_ONLY_TARGET,
+      CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_DATA_ONLY_TARGET, false, "Target Only");
+    targetOnly.setArgs(0);
+    targetOnly.setRequired(false);
+    parameters.addOption(targetOnly);
+
     final Option representationID = new Option(CLIConstants.CLI_CREATE_SHORT_OPTION_REPRESENTATION_ID_WITHOUT_IDENT,
       CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_ID_WITHOUT_IDENT, true, "Representation ID");
     representationID.setArgs(1);
@@ -133,6 +139,9 @@ public class CLICreator {
           .getOptionValues(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_DATA_WITHOUT_IDENT) == null
             ? commandLine.getOptionValues(CLIConstants.CLI_CREATE_SHORT_OPTION_REPRESENTATION_DATA_WITHOUT_IDENT)
             : commandLine.getOptionValues(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_DATA_WITHOUT_IDENT);
+        final boolean targetOnly = (commandLine
+          .hasOption(CLIConstants.CLI_CREATE_SHORT_OPTION_REPRESENTATION_DATA_ONLY_TARGET) || (commandLine
+          .hasOption(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_DATA_ONLY_TARGET)));
         final String representationType = commandLine
           .getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_TYPE_WITHOUT_IDENT) == null
             ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_REPRESENTATION_TYPE_WITHOUT_IDENT)
@@ -190,7 +199,7 @@ public class CLICreator {
 
         try {
           final Path eark2SIP = SipCreatorUtils.createEARK2SIP(metadataFile, metadataType, metadataVersion,
-            representationData, representationType, representationID, sipID, ancestors, documentation,
+            representationData, targetOnly, representationType, representationID, sipID, ancestors, documentation,
             getClass().getPackage().getImplementationVersion(), path, submitterAgentName, submitterAgentID);
           System.out.println("Created the sip in " + eark2SIP.normalize().toAbsolutePath());
         } catch (IPException | InterruptedException e) {
@@ -251,6 +260,9 @@ public class CLICreator {
     out.append(CLIConstants.TAB).append(CLIConstants.CLI_CREATE_OPTION_SUBMITTER_AGENT_ID)
       .append(", --submitter-agent-id").append(CLIConstants.DOUBLE_TAB)
       .append("(optional) The identification code of the submitter id").append(CLIConstants.END_OF_LINE);
+    out.append(CLIConstants.TAB).append(CLIConstants.CLI_CREATE_OPTION_REPRESENTATION_DATA_ONLY_TARGET)
+      .append(", --target-only").append(CLIConstants.DOUBLE_TAB)
+      .append("(optional) Only add contents of target representation folder").append(CLIConstants.END_OF_LINE);
     printStream.append(out).flush();
   }
 
