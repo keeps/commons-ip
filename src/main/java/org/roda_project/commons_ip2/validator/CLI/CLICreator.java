@@ -1,7 +1,10 @@
 package org.roda_project.commons_ip2.validator.CLI;
 
 import java.io.PrintStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -35,6 +38,18 @@ public class CLICreator {
   public CLICreator() {
     this.parameters = new Options();
     this.parser = new DefaultParser();
+
+    final Option metadata = new Option("m", "metadata", true,
+      "Metadata");
+    metadata.setArgs(Option.UNLIMITED_VALUES);
+    metadata.setRequired(false);
+    parameters.addOption(metadata);
+
+    final Option representation = new Option("r",
+      "representation", true, "Representation");
+    representation.setArgs(Option.UNLIMITED_VALUES);
+    representation.setRequired(false);
+    parameters.addOption(representation);
 
     final Option metadataFile = new Option("mf", CLIConstants.CLI_CREATE_LONG_OPTION_METADATA_FILE_WITHOUT_IDENT, true,
       "Metadata file");
@@ -129,33 +144,17 @@ public class CLICreator {
     try {
       final CommandLine commandLine = parser.parse(parameters, args);
       if (validateOptions(commandLine)) {
-        final String metadataFile = commandLine
-          .getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_METADATA_FILE_WITHOUT_IDENT) == null
-            ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_METADATA_FILE_WITHOUT_IDENT)
-            : commandLine.getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_METADATA_FILE_WITHOUT_IDENT);
-        final String metadataType = commandLine
-          .getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_METADATA_TYPE_WITHOUT_IDENT) == null
-            ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_METADATA_TYPE_WITHOUT_IDENT)
-            : commandLine.getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_METADATA_TYPE_WITHOUT_IDENT);
-        final String metadataVersion = commandLine
-          .getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_METADATA_VERSION_WITHOUT_IDENT) == null
-            ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_METADATA_FILE_WITHOUT_IDENT)
-            : commandLine.getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_METADATA_VERSION_WITHOUT_IDENT);
-        final String[] representationData = commandLine
-          .getOptionValues(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_DATA_WITHOUT_IDENT) == null
-            ? commandLine.getOptionValues(CLIConstants.CLI_CREATE_SHORT_OPTION_REPRESENTATION_DATA_WITHOUT_IDENT)
-            : commandLine.getOptionValues(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_DATA_WITHOUT_IDENT);
+        final String[] metadata = commandLine
+          .getOptionValues(CLIConstants.CLI_CREATE_LONG_OPTION_METADATA_WITHOUT_IDENT) == null
+          ? commandLine.getOptionValues(CLIConstants.CLI_CREATE_SHORT_OPTION_METADATA_WITHOUT_IDENT)
+          : commandLine.getOptionValues(CLIConstants.CLI_CREATE_LONG_OPTION_METADATA_WITHOUT_IDENT);
+        final String[] representation = commandLine
+          .getOptionValues(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_WITHOUT_IDENT) == null
+          ? commandLine.getOptionValues(CLIConstants.CLI_CREATE_SHORT_OPTION_REPRESENTATION_WITHOUT_IDENT)
+          : commandLine.getOptionValues(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_WITHOUT_IDENT);
         final boolean targetOnly = (commandLine
           .hasOption(CLIConstants.CLI_CREATE_SHORT_OPTION_REPRESENTATION_DATA_ONLY_TARGET) || (commandLine
-          .hasOption(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_DATA_ONLY_TARGET)));
-        final String representationType = commandLine
-          .getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_TYPE_WITHOUT_IDENT) == null
-            ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_REPRESENTATION_TYPE_WITHOUT_IDENT)
-            : commandLine.getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_TYPE_WITHOUT_IDENT);
-        final String representationID = commandLine
-          .getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_ID_WITHOUT_IDENT) == null
-            ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_REPRESENTATION_ID_WITHOUT_IDENT)
-            : commandLine.getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_ID_WITHOUT_IDENT);
+          .hasOption(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_DATA_ONLY_TARGET)));  
         final String sipID = commandLine
           .getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_SIP_ID_WITHOUT_IDENT) == null
             ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_SIP_ID_WITHOUT_IDENT)
@@ -183,19 +182,19 @@ public class CLICreator {
           .getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_CHECKSUM_ALG) == null
             ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_CHECKSUM_ALG)
             : commandLine.getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_CHECKSUM_ALG);
-        if (!SipCreatorUtils.validateAllOptions(metadataFile, documentation, representationData)) {
+        if (!SipCreatorUtils.validateAllOptions(metadata, documentation, representation)) {
           CLIUtils.printErrors(System.out,
             "You have to add at least one metadata file or documentation file or representation data file");
           printUsageCreate(System.out);
           return ExitCodes.EXIT_CODE_CREATE_INVALID_PATHS;
         }
 
-        if (!SipCreatorUtils.validateMetadataPath(metadataFile)) {
-          CLIUtils.printErrors(System.out, "The metadata file given does not exist");
+        if (!SipCreatorUtils.validateMetadataPath(metadata)) {
+          CLIUtils.printErrors(System.out, "The metadata file(s) given does not exist");
           return ExitCodes.EXIT_CODE_CREATE_INVALID_PATHS;
         }
 
-        if (!SipCreatorUtils.validateRepresentationPaths(representationData)) {
+        if (!SipCreatorUtils.validateRepresentationPaths(representation)) {
           CLIUtils.printErrors(System.out, "Make sure if all the representation data paths exists");
           return ExitCodes.EXIT_CODE_CREATE_INVALID_PATHS;
         }
@@ -212,8 +211,8 @@ public class CLICreator {
         }
 
         try {
-          final Path eark2SIP = SipCreatorUtils.createEARK2SIP(metadataFile, metadataType, metadataVersion,
-            representationData,targetOnly, representationType, representationID, sipID, ancestors, documentation,
+          final Path eark2SIP = SipCreatorUtils.createEARK2SIP(metadata,
+            representation, targetOnly, sipID, ancestors, documentation,
             getClass().getPackage().getImplementationVersion(), path, submitterAgentName, submitterAgentID, checkSum);
           System.out.println("Created the sip in " + eark2SIP.normalize().toAbsolutePath());
         } catch (IPException | InterruptedException e) {
@@ -285,36 +284,31 @@ public class CLICreator {
 
   private boolean validateOptions(final CommandLine commandLine) {
 
-    final String metadataFile = commandLine
-      .getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_METADATA_FILE_WITHOUT_IDENT) == null
-        ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_METADATA_FILE_WITHOUT_IDENT)
-        : commandLine.getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_METADATA_FILE_WITHOUT_IDENT);
-    final String metadataType = commandLine
-      .getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_METADATA_TYPE_WITHOUT_IDENT) == null
-        ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_METADATA_TYPE_WITHOUT_IDENT)
-        : commandLine.getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_METADATA_TYPE_WITHOUT_IDENT);
-    final String metadataVersion = commandLine
-      .getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_METADATA_VERSION_WITHOUT_IDENT) == null
-        ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_METADATA_VERSION_WITHOUT_IDENT)
-        : commandLine.getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_METADATA_VERSION_WITHOUT_IDENT);
+    final String[] metadata = commandLine
+      .getOptionValues(CLIConstants.CLI_CREATE_LONG_OPTION_METADATA_WITHOUT_IDENT) == null
+      ? commandLine.getOptionValues(CLIConstants.CLI_CREATE_SHORT_OPTION_METADATA_WITHOUT_IDENT)
+      : commandLine.getOptionValues(CLIConstants.CLI_CREATE_LONG_OPTION_METADATA_WITHOUT_IDENT);
 
-    final String[] representationData = commandLine
-      .getOptionValues(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_DATA_WITHOUT_IDENT) == null
-        ? commandLine.getOptionValues(CLIConstants.CLI_CREATE_SHORT_OPTION_REPRESENTATION_DATA_WITHOUT_IDENT)
-        : commandLine.getOptionValues(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_DATA_WITHOUT_IDENT);
-    final String representationType = commandLine
-      .getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_TYPE_WITHOUT_IDENT) == null
-        ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_REPRESENTATION_TYPE_WITHOUT_IDENT)
-        : commandLine.getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_TYPE_WITHOUT_IDENT);
-    final String representationID = commandLine
-      .getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_ID_WITHOUT_IDENT) == null
-        ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_REPRESENTATION_ID_WITHOUT_IDENT)
-        : commandLine.getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_ID_WITHOUT_IDENT);
+    final String[] representation = commandLine
+      .getOptionValues(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_WITHOUT_IDENT) == null
+      ? commandLine.getOptionValues(CLIConstants.CLI_CREATE_SHORT_OPTION_REPRESENTATION_WITHOUT_IDENT)
+      : commandLine.getOptionValues(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_WITHOUT_IDENT);
 
-    final boolean metadataValid = SipCreatorUtils.validateMetadataOptions(metadataFile, metadataType, metadataVersion);
-    final boolean representationValid = SipCreatorUtils.validateRepresentationOptions(representationData,
-      representationType, representationID);
+    for(String metadataInfo : metadata){
+      String[] metadataInfoArray = metadataInfo.split(";");
+      if(!SipCreatorUtils.validateMetadataOptions(metadataInfoArray[0], metadataInfoArray[1], metadataInfoArray[2])){
+        return false;
+      }
+    }
 
-    return metadataValid && representationValid;
+    for(String representationInfo: representation){
+      String[] representationInfoArray = representationInfo.split(";");
+      String[] representationFiles = representationInfoArray[0].split(",");
+      if(!SipCreatorUtils.validateRepresentationOptions(representationFiles,
+        representationInfoArray[1],  representationInfoArray[2])){
+        return false;
+      }
+    }
+    return true;
   }
 }

@@ -51,17 +51,13 @@ To validate a SIP have to use the following options:
 To create a EARK-2 SIP have to use the following options:
 
 * **create**, [REQUIRED] this option is for the CLI to know that is to perform the creation of a EARK-2 SIP.
-* **-mf** or **--metadata-file**, [OPTIONAL] Path to a metadata file.
-* **-mt** or **--metadata-type**, [OPTIONAL] the type of the metadata.
-* **-mv** or **--metadata-version**, [OPTIONAL] the version of the metadata.
+* **-m** or **-metadata** [OPTIONAL] Path to a metadata file; [OPTIONAL] the type of the metadata; [OPTIONAL] the version of the metadata
 
 **NOTE:** if does not give the metadata type and the metadata version, the tool try to obtain this values from the file
 name in the following formats (file: **ead.xml** -> result: metadata type: **EAD**; file: **ead_2002.xml** -> result:
 metadata type: **EAD**, metadata version: **2002**)
 
-* **-rd** or **--representation-data**, [OPTIONAL] Path(s) folders or files to add in representation.
-* **-rt** or **--representation-type**, [OPTIONAL] Type of the representation.
-* **-rid** or **--representation-id**, [OPTIONAL] ID of representation.
+* **-r** or **-representation** [OPTIONAL] Path(s) folders or files to add in representation separated by commas; [OPTIONAL] Type of the representation; [OPTIONAL] ID of representation
 * **-sid** or **--sip-id**, [OPTIONAL] ID of the SIP.
 * **-doc** or **--documentation**, [OPTIONAL] Path(s) to folders or files to add in documentation of SIP.
 * **-p** or **--path**, [OPTIONAL] Path to save the SIP.
@@ -74,16 +70,16 @@ Examples:
 ### Full create SIP command with long options:
 
 ```
-java -jar commons-ip-cli-2.X.Y.jar create --metadata-file metadata.xml --metadata-type ead --metadata-version 2002 \
---representation-data dataFile1.pdf dataFolder1 dataFile2.png --representation-type Mixed --representation-id representation1 \
+java -jar commons-ip-cli-2.X.Y.jar create --metadata "metadata.xml;ead;2002" \
+--representation "dataFile1.pdf,dataFolder1,dataFile2.png;Mixed;representation1" \
 --sip-id sip1 --ancestors sip2 sip3 --documentation documentation1 documentationFolder -p folder2 --path folder2 --submitter-agent-name agent1 --submitter-agent-id 123
 ```
 
 ### Full create SIP command with short options:
 
 ```
-java -jar commons-ip-cli-2.X.Y.jar create -mf metadata.xml -mt ead -mv 2002 \
--rd dataFile1.pdf dataFolder1 dataFile2.png -rt Mixed -rid representation1 \
+java -jar commons-ip-cli-2.X.Y.jar create -m "metadata.xml;ead;2002" \
+-r "dataFile1.pdf,dataFolder1,dataFile2.png;Mixed;representation1" \
 -sid sip1 -a sip2 sip3 -doc documentation1 documentationFolder -p folder2 -sn agent1 -aid 123
 ```
 

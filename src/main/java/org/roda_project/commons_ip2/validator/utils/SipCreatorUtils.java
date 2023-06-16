@@ -79,15 +79,20 @@ public final class SipCreatorUtils {
   }
 
   /**
-   * Check if the path to the metadata file exists.
+   * Check if the path to the metadata files exists.
    * 
-   * @param metadataFile
+   * @param metadata
    *          the path to the metadata file.
    * @return if exists or not.
    */
-  public static boolean validateMetadataPath(final String metadataFile) {
-    if (metadataFile != null) {
-      return Files.exists(Paths.get(metadataFile));
+  public static boolean validateMetadataPath(final String[] metadata) {
+    if (metadata != null) {
+      for(String metadataInfo : metadata){
+        String metadataFile = metadataInfo.split(";")[0];
+        if(!Files.exists(Paths.get(metadataFile))){
+          return false;
+        }
+      }
     }
     return true;
   }
@@ -95,15 +100,18 @@ public final class SipCreatorUtils {
   /**
    * Check if the paths representation data exists.
    *
-   * @param representationData
+   * @param representation
    *          the paths to the representation data files or folders.
    * @return if exists all the paths or not.
    */
-  public static boolean validateRepresentationPaths(final String[] representationData) {
-    if (representationData != null) {
-      for (String data : representationData) {
-        if (!Files.exists(Paths.get(data))) {
-          return false;
+  public static boolean validateRepresentationPaths(final String[] representation) {
+    if (representation != null) {
+      for(String representationInfo : representation){
+        String representationFilesList = representationInfo.split(";")[0];
+        for(String representationFile : representationFilesList.split(",")){
+          if (!Files.exists(Paths.get(representationFile))) {
+            return false;
+          }
         }
       }
     }
@@ -149,41 +157,22 @@ public final class SipCreatorUtils {
 
   /**
    * Create the EARK2 SIP with the args passed to the CLI.
-   * 
-   * @param metadataFile
-   *          the path to the metadata file.
-   * @param metadataType
-   *          the type of the metadata.
-   * @param metadataVersion
-   *          the version of the metadata.
-   * @param representationData
-   *          the paths to the representation data files or folders.
-   * @param representationType
-   *          the type of content in representation.
-   * @param representationID
-   *          the representation id.
-   * @param sipID
-   *          the SIP id.
-   * @param ancestors
-   *          the ancestors of the SIP.
-   * @param documentation
-   *          the paths to the documentation files or folders.
-   * @param softwareVersion
-   *          the software version.
-   * @param path
-   *          the path to save the SIP.
-   * @param submitterAgentName
-   *          the name of the submitter agent.
-   * @param submitterAgentID
-   *          the id of the submitter agent
+   *
+   * @param metadata           the path to the metadata file, its type and version.
+   * @param representation     the paths to the representation data files or folders, the type of content in representation and the representation id.
+   * @param sipID              the SIP id.
+   * @param ancestors          the ancestors of the SIP.
+   * @param documentation      the paths to the documentation files or folders.
+   * @param softwareVersion    the software version.
+   * @param path               the path to save the SIP.
+   * @param submitterAgentName the name of the submitter agent.
+   * @param submitterAgentID   the id of the submitter agent
    * @return {@link SIP}.
-   * @throws IPException
-   *           if some error occur.
-   * @throws InterruptedException
-   *           if some error occur.
+   * @throws IPException          if some error occur.
+   * @throws InterruptedException if some error occur.
    */
-  public static Path createEARK2SIP(final String metadataFile, final String metadataType, final String metadataVersion,
-    final String[] representationData, final boolean targetOnly, final String representationType, final String representationID,
+  public static Path createEARK2SIP(final String[] metadata,
+                                    final String[] representation, final boolean targetOnly,
     final String sipID, final String[] ancestors, final String[] documentation, final String softwareVersion,
     final String path, final String submitterAgentName, final String submitterAgentID, final String checksum)
     throws IPException, InterruptedException {
@@ -210,17 +199,25 @@ public final class SipCreatorUtils {
       sip.setChecksum(checksum);
     }
 
-    if (metadataFile != null) {
+    if (metadata != null) {
       try {
-        addMetadataToSIP(sip, metadataFile, metadataType, metadataVersion);
+        for(String metadataInfo : metadata){
+          String[] metadataInfoArray = metadataInfo.split(";");
+          addMetadataToSIP(sip, metadataInfoArray[0], metadataInfoArray[1], metadataInfoArray[2]);
+        }
       } catch (final IPException e) {
         CLIUtils.printErrors(System.out, "Cannot add metadata to the SIP.");
       }
     }
 
-    if (representationData != null) {
+    if (representation != null) {
       try {
-        addRepresentationDataToSIP(sip, representationData, targetOnly,representationType, representationID);
+        for(String representationInfo : representation){
+          String[] representationInfoArray = representationInfo.split(";");
+          String[] representationFiles = representationInfoArray[0].split(",");
+          addRepresentationDataToSIP(sip, representationFiles, targetOnly, representationInfoArray[1], representationInfoArray[2]);
+        }
+
       } catch (final IPException e) {
         CLIUtils.printErrors(System.out, "Cannot add representation to the SIP.");
       }
@@ -376,17 +373,17 @@ public final class SipCreatorUtils {
   /**
    * Validates if at least something is given as parameter.
    * 
-   * @param metadataFile
+   * @param metadata
    *          {@link String}
    * @param documentation
    *          {@link String[]}
-   * @param representationData
+   * @param representation
    *          {@link String[]}
    * @return true if at least one file has given as parameter.
    */
-  public static boolean validateAllOptions(final String metadataFile, final String[] documentation,
-    final String[] representationData) {
-    return metadataFile != null || documentation != null || representationData != null;
+  public static boolean validateAllOptions(final String[] metadata, final String[] documentation,
+                                           final String[] representation) {
+    return metadata != null || documentation != null || representation != null;
   }
 
 }
