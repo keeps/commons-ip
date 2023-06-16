@@ -134,6 +134,26 @@ public final class CLIConstants {
   public static final String CLI_CREATE_SHORT_OPTION_VERBOSE_WITHOUT_IDENT = "v";
 
   /**
+   * Long option metadata without ident.
+   */
+  public static final String CLI_CREATE_LONG_OPTION_METADATA_WITHOUT_IDENT = "metadata";
+
+  /**
+   * Short option metadata without ident.
+   */
+  public static final String CLI_CREATE_SHORT_OPTION_METADATA_WITHOUT_IDENT = "m";
+
+  /**
+   * Long option representation without ident.
+   */
+  public static final String CLI_CREATE_LONG_OPTION_REPRESENTATION_WITHOUT_IDENT = "representation";
+
+  /**
+   * Short option representation without ident.
+   */
+  public static final String CLI_CREATE_SHORT_OPTION_REPRESENTATION_WITHOUT_IDENT = "r";
+
+  /**
    * Long option metadata file without ident.
    */
   public static final String CLI_CREATE_LONG_OPTION_METADATA_FILE_WITHOUT_IDENT = "metadata-file";
