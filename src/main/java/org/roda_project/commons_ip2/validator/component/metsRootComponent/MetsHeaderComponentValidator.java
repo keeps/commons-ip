@@ -62,7 +62,11 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
   public Map<String, ReporterDetails> validate(final StructureValidatorState structureValidatorState,
     final MetsValidatorState metsValidatorState) throws IOException {
     metsHdr = metsValidatorState.getMets().getMetsHdr();
-    agents = metsHdr.getAgent();
+
+    if (metsHdr != null) {
+      agents = metsHdr.getAgent();
+    }
+
     final Map<String, ReporterDetails> results = new HashMap<>();
 
     final ReporterDetails skippedCSIP;
