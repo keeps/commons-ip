@@ -3,6 +3,7 @@ package org.roda_project.commons_ip2.validator.sipComponents.sipMetsRootComponen
 import java.util.HashMap;
 import java.util.Map;
 
+import org.roda_project.commons_ip2.model.IPConstants;
 import org.roda_project.commons_ip2.validator.component.MetsValidatorImpl;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsSIPspec;
@@ -67,11 +68,10 @@ public class SipMetsComponent extends MetsValidatorImpl {
    */
   private ReporterDetails validateSIP2(final MetsValidatorState metsValidatorState) {
     final String profile = metsValidatorState.getMets().getPROFILE();
-    final String profileValue = "https://earkcsip.dilcis.eu/profile/E-ARK-CSIP.xml";
     if (profile != null) {
-      if (!profile.equals(profileValue)) {
+      if (!profile.equals(IPConstants.COMMON_SPEC_PROFILE)) {
         final StringBuilder message = new StringBuilder();
-        message.append("mets/@PROFILE value isn't ").append(profileValue).append(" %1$s");
+        message.append("mets/@PROFILE value isn't ").append(IPConstants.COMMON_SPEC_PROFILE).append(" %1$s");
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION, Message.createErrorMessage(
           message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
       }

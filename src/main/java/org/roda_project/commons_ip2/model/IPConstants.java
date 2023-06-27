@@ -73,7 +73,7 @@ public final class IPConstants {
 
   // Common Specification (& E-ARK)
   public static final String COMMON_SPEC_STRUCTURAL_MAP = "CSIP";
-  public static final String COMMON_SPEC_PROFILE = "https://earkcsip.dilcis.eu/profile/E-ARK-CSIP.xml";
+  public static final String COMMON_SPEC_PROFILE = "https://earksip.dilcis.eu/profile/E-ARK-SIP.xml";
 
   // RODA
   public static final String RODA_STRUCTURAL_MAP = "RODA structural map";
