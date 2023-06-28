@@ -41,7 +41,7 @@ public class EARKSIP extends SIP {
 
   public EARKSIP() {
     super();
-    setProfile(IPConstants.COMMON_SPEC_PROFILE);
+    setProfile(IPConstants.SIP_SPEC_PROFILE);
   }
 
   /**
@@ -50,7 +50,7 @@ public class EARKSIP extends SIP {
    */
   public EARKSIP(String sipId) {
     super(sipId);
-    setProfile(IPConstants.COMMON_SPEC_PROFILE);
+    setProfile(IPConstants.SIP_SPEC_PROFILE);
   }
 
   /**
@@ -59,7 +59,7 @@ public class EARKSIP extends SIP {
    */
   public EARKSIP(String sipId, IPContentType contentType, IPContentInformationType contentInformationType) {
     super(sipId, contentType, contentInformationType);
-    setProfile(IPConstants.COMMON_SPEC_PROFILE);
+    setProfile(IPConstants.SIP_SPEC_PROFILE);
   }
 
   /**

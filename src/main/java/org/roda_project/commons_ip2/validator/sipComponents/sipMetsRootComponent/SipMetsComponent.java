@@ -69,9 +69,9 @@ public class SipMetsComponent extends MetsValidatorImpl {
   private ReporterDetails validateSIP2(final MetsValidatorState metsValidatorState) {
     final String profile = metsValidatorState.getMets().getPROFILE();
     if (profile != null) {
-      if (!profile.equals(IPConstants.COMMON_SPEC_PROFILE)) {
+      if (!profile.equals(IPConstants.SIP_SPEC_PROFILE)) {
         final StringBuilder message = new StringBuilder();
-        message.append("mets/@PROFILE value isn't ").append(IPConstants.COMMON_SPEC_PROFILE).append(" %1$s");
+        message.append("mets/@PROFILE value isn't ").append(IPConstants.SIP_SPEC_PROFILE).append(" %1$s");
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_SIP_VERSION, Message.createErrorMessage(
           message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
       }
