@@ -56,11 +56,11 @@ public class MetsHandler extends DefaultHandler {
 
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) {
-    if (qName.equals(section)) {
+    if (localName.equals(section)) {
       sectionFound = true;
     }
 
-    if (qName.equals(element) && sectionFound) {
+    if (localName.equals(element) && sectionFound) {
       String id = null;
       String type = null;
       String href = null;
@@ -90,7 +90,7 @@ public class MetsHandler extends DefaultHandler {
 
   @Override
   public void endElement(final String uri, final String localName, final String qName) throws SAXException {
-    if (qName.equals(section)) {
+    if (localName.equals(section)) {
       sectionFound = false;
     }
   }
