@@ -14,6 +14,7 @@ import org.roda_project.commons_ip2.mets_v1_12.beans.DivType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MetsType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.StructMapType;
+import org.roda_project.commons_ip2.model.IPConstants;
 import org.roda_project.commons_ip2.validator.common.MetsParser;
 import org.roda_project.commons_ip2.validator.component.MetsValidatorImpl;
 import org.roda_project.commons_ip2.validator.constants.Constants;
@@ -525,13 +526,14 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         final String id = struct.getID();
-        if (id == null) {
+        final String label = struct.getLABEL();
+        if (id == null && label.equals(IPConstants.COMMON_SPEC_STRUCTURAL_MAP)) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
             Message.createErrorMessage("mets/structMap[@LABEL='CSIP']/@ID in %1$s can't be null",
               metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
             false, false);
         } else {
-          if (metsValidatorState.checkMetsInternalId(id)) {
+          if (id != null && metsValidatorState.checkMetsInternalId(id)) {
             final StringBuilder message = new StringBuilder();
             message.append("Value ").append(id)
               .append(" in %1$s for mets/structMap[@LABEL='CSIP']/@ID isn't unique in the package");
