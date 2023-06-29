@@ -179,31 +179,31 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID);
         ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID,
           validateCSIP72(metsValidatorState)
-            .setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
+            .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
         /* CSIP73 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP73_ID);
         ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP73_ID,
           validateCSIP73(metsValidatorState)
-            .setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
+            .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
         /* CSIP74 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP74_ID);
         ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP74_ID,
           validateCSIP74(metsValidatorState)
-            .setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
+            .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
         /* CSIP75 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP75_ID);
         ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP75_ID,
           validateCSIP75(metsValidatorState)
-            .setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
+            .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
         /* CSIP76 */
         notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP76_ID);
         ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP76_ID,
           validateCSIP76(metsValidatorState)
-            .setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
+            .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
         if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP76_ID)) {
 
@@ -211,19 +211,19 @@ public class FileSectionComponentValidator extends MetsValidatorImpl {
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP77_ID);
           ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP77_ID,
             validateCSIP77(metsValidatorState)
-              .setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
+              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP78 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP78_ID);
           ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP78_ID,
             validateCSIP78(structureValidatorState, metsValidatorState)
-              .setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
+              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
           /* CSIP79 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP79_ID);
           ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP79_ID,
             validateCSIP79(structureValidatorState, metsValidatorState)
-              .setSpecification(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP72_ID));
+              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
 
         } else {
           final String message = Message.createErrorMessage(
