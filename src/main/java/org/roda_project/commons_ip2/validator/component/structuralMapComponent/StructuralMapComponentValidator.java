@@ -436,20 +436,13 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
           metsValidatorState.isRootMets()),
         false, false);
     } else {
-      int numberOfCSIPstructMaps = 0;
       for (StructMapType struct : structMap) {
-        if (struct.getLABEL().equals("CSIP")) {
-          numberOfCSIPstructMaps++;
+        if(struct == null) {
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            Message.createErrorMessage("mets/structMap in %1$s can't be null", metsValidatorState.getMetsName(),
+              metsValidatorState.isRootMets()),
+            false, false);
         }
-      }
-      if (numberOfCSIPstructMaps != 1) {
-        final String message = numberOfCSIPstructMaps == 0
-          ? "Must have one structMap with the mets/structMap[@LABEL='CSIP'] in "
-            + "%1$s doens't appear mets/structMap[@LABEL='CSIP']."
-          : "Only one structMap with the mets/structMap/@LABEL value CSIP is allowed. " + "See %1$s";
-        return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          Message.createErrorMessage(message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false,
-          false);
       }
     }
     return new ReporterDetails();
@@ -465,7 +458,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
       for (StructMapType struct : structMap) {
         final String type = struct.getTYPE();
         final String label = struct.getLABEL();
-        if (label.equals("CSIP")) {
+        if (label != null && label.equals("CSIP")) {
           if (type == null) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
               Message.createErrorMessage("mets/structMap[@TYPE='PHYSICAL'] in %1$s can't be null",
@@ -495,20 +488,16 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
       int numberOfCsipLabels = 0;
       for (StructMapType struct : structMap) {
         final String label = struct.getLABEL();
-        if (label == null) {
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-            Message.createErrorMessage("mets/structMap[@LABEL='CSIP'] in %1$s can't be null",
-              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-            false, false);
-        } else {
-          if (label.equals("CSIP")) {
-            numberOfCsipLabels++;
-          }
+        if (label != null && label.equals("CSIP")) {
+          numberOfCsipLabels++;
         }
       }
       if (numberOfCsipLabels != 1) {
+        final String message = numberOfCsipLabels == 0
+          ? "Must have one structMap with the mets/structMap[@LABEL='CSIP'] in %1$s"
+          : "Only one structMap with the mets/structMap/@LABEL value CSIP is allowed. " + "See %1$s";
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-          Message.createErrorMessage("mets/structMap[@LABEL='CSIP'] value in %1$s must be CSIP",
+          Message.createErrorMessage(message,
             metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
           false, false);
       }
@@ -527,7 +516,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
       for (StructMapType struct : structMap) {
         final String id = struct.getID();
         final String label = struct.getLABEL();
-        if (id == null && label.equals(IPConstants.COMMON_SPEC_STRUCTURAL_MAP)) {
+        if (id == null && label != null && label.equals(IPConstants.COMMON_SPEC_STRUCTURAL_MAP)) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
             Message.createErrorMessage("mets/structMap[@LABEL='CSIP']/@ID in %1$s can't be null",
               metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
@@ -556,7 +545,8 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     if (structMap != null) {
       for (StructMapType struct : structMap) {
-        if (struct.getLABEL().equals("CSIP")) {
+        String label = struct.getLABEL();
+        if (label != null && label.equals("CSIP")) {
           final DivType div = struct.getDiv();
           if (div == null) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
