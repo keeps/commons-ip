@@ -673,15 +673,27 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
         final DivType div = struct.getDiv();
         if (div != null && div.getLABEL().equals("CSIP")) {
           final List<DivType> divs = div.getDiv();
+          int counter = 0;
           for (DivType d : divs) {
             if (d.getLABEL().equals("Metadata")) {
+              counter++;
+            }
+          }
+          if (counter == 0) {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                 Message.createErrorMessage(
                   "You have metadata files, must add mets/structMap[@LABEL='CSIP']"
                     + "/div/div[@LABEL='Metadata'] in %1$s",
                   metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
                 false, false);
-            }
+          }
+          if (counter > 1) {
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+              Message.createErrorMessage(
+                "You have more than one mets/structMap[@LABEL='CSIP']"
+                  + "/div/div[@LABEL='Metadata'] in %1$s",
+                metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+              false, false);
           }
         }
       }
