@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip2.mets_v1_12.beans.AmdSecType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
@@ -570,6 +571,12 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
           } else {
             path.append(metsValidatorState.getMetsPath()).append(hrefDecoded);
           }
+          if (StringUtils.isBlank(href)){
+            message.append("mets/dmdSec/mdRef/@xlink:href ").append(path).append(" in %1$s is empty");
+            details.setValid(false);
+            details.addIssue(Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+              metsValidatorState.isRootMets()));
+          }
           if (!structureValidatorState.getZipManager().checkPathExists(structureValidatorState.getIpPath(),
             path.toString())) {
             message.append("mets/dmdSec/mdRef/@xlink:href ").append(path).append(" in %1$s does not exist");
@@ -578,6 +585,14 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
               metsValidatorState.isRootMets()));
           }
         } else {
+          if (StringUtils.isBlank(href)){
+            message.append("mets/dmdSec/mdRef/@xlink:href ")
+              .append(Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded))
+              .append(" in %1$s is empty");
+            details.setValid(false);
+            details.addIssue(Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+              metsValidatorState.isRootMets()));
+          }
           if (!structureValidatorState.getFolderManager()
             .checkPathExists(Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded))) {
             message.append("mets/dmdSec/mdRef/@xlink:href ")
