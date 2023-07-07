@@ -165,6 +165,7 @@ public final class SipCreatorUtils {
    *
    * @param metadata           the path to the metadata file, its type and version.
    * @param representation     the paths to the representation data files or folders, the type of content in representation and the representation id.
+   * @param metadataSchema     the path to the metadata schema file.
    * @param sipID              the SIP id.
    * @param ancestors          the ancestors of the SIP.
    * @param documentation      the paths to the documentation files or folders.
@@ -176,8 +177,8 @@ public final class SipCreatorUtils {
    * @throws IPException          if some error occur.
    * @throws InterruptedException if some error occur.
    */
-  public static Path createEARK2SIP(final String[] metadata,
-                                    final String[] representation, final boolean targetOnly,
+  public static Path createEARK2SIP(final String metadataFile, final String metadataType, final String metadataVersion,
+    final String[] representationData, final boolean targetOnly, final String representationType, final String representationID,
     final String sipID, final String[] ancestors, final String[] documentation, final String softwareVersion,
     final String path, final String submitterAgentName, final String submitterAgentID, final String checksum)
     throws IPException, InterruptedException {
@@ -213,6 +214,10 @@ public final class SipCreatorUtils {
       } catch (final IPException e) {
         CLIUtils.printErrors(System.out, "Cannot add metadata to the SIP.");
       }
+    }
+
+    if (metadataSchema != null){
+      sip.addSchema(new IPFile(Paths.get(metadataSchema)));
     }
 
     if (representation != null) {
