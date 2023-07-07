@@ -437,7 +437,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
     } else {
       int numberOfCSIPstructMaps = 0;
       for (StructMapType struct : structMap) {
-        if (struct.getLABEL().equals("CSIP")) {
+        if (struct.getLABEL() != null && struct.getLABEL().equals("CSIP")) {
           numberOfCSIPstructMaps++;
         }
       }
@@ -670,9 +670,8 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
     }
     if (isMetadata) {
       for (StructMapType struct : structMap) {
-        final DivType div = struct.getDiv();
-        if (div != null && div.getLABEL().equals("CSIP")) {
-          final List<DivType> divs = div.getDiv();
+        if (struct.getLABEL() != null && struct.getLABEL().equals("CSIP")) {
+          final List<DivType> divs = struct.getDiv().getDiv();
           int counter = 0;
           for (DivType d : divs) {
             if (d.getLABEL().equals("Metadata")) {
@@ -1621,9 +1620,8 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     if (structMap != null) {
       for (StructMapType struct : structMap) {
-        final DivType firstDiv = struct.getDiv();
-        if (firstDiv != null && firstDiv.getLABEL().equals("CSIP")) {
-          final List<DivType> divs = firstDiv.getDiv();
+        if (struct.getLABEL() != null && struct.getLABEL().equals("CSIP")) {
+          final List<DivType> divs = struct.getDiv().getDiv();
           for (DivType div : divs) {
             final String id = div.getID();
             if (id == null) {
