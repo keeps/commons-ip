@@ -420,7 +420,12 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
     final ReporterDetails details = new ReporterDetails();
     for (MdSecType mdSec : dmdSec) {
       final String status = mdSec.getSTATUS();
-      if (status != null && !dmdSecStatus.contains(status)) {
+      if (status == null){
+        return new ReporterDetails(
+          Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+          "The mets/dmdSec/@STATUS is missing.", true, false);
+      }
+      else if (!dmdSecStatus.contains(status)) {
         final StringBuilder message = new StringBuilder();
         message.append("Value ").append(status).append(" in %1$s for mets/dmdSec/@STATUS isn't valid");
         details.setValid(false);
