@@ -137,7 +137,7 @@ public class EARKSIPTest {
   private Path createFullEARKSIPS()
     throws IPException, InterruptedException, DatatypeConfigurationException, URISyntaxException {
     // 1) instantiate E-ARK SIP object
-    SIP sip = new EARKSIP("SIP_S_1", IPContentType.getMIXED(), IPContentInformationType.getMIXED());
+    SIP sip = new EARKSIP("SIP_S_1", IPContentType.getMIXED(), IPContentInformationType.getMIXED(), "2.1.0");
     sip.addCreatorSoftwareAgent("RODA Commons IP", "2.0.0");
 
     // 1.1) set optional human-readable description
@@ -249,7 +249,7 @@ public class EARKSIPTest {
   private Path createFullEARKSIP() throws IPException, InterruptedException {
 
     // 1) instantiate E-ARK SIP object
-    SIP sip = new EARKSIP("SIP_1", IPContentType.getMIXED(), IPContentInformationType.getMIXED());
+    SIP sip = new EARKSIP("SIP_1", IPContentType.getMIXED(), IPContentInformationType.getMIXED(), "2.1.0");
     sip.addCreatorSoftwareAgent("RODA Commons IP", "2.0.0");
 
     // 1.1) set optional human-readable description
@@ -397,7 +397,7 @@ public class EARKSIPTest {
   private Path createFullEARKSIP_For_Test_Compliance() throws IPException, InterruptedException {
 
     // 1) instantiate E-ARK SIP object
-    SIP sip = new EARKSIP("SIP_1", IPContentType.getMIXED(), IPContentInformationType.getMIXED());
+    SIP sip = new EARKSIP("SIP_1", IPContentType.getMIXED(), IPContentInformationType.getMIXED(), "2.1.0");
     sip.addCreatorSoftwareAgent("RODA Commons IP", "2.0.0");
 
     // 1.1) set optional human-readable description

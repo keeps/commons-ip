@@ -41,6 +41,10 @@ import org.slf4j.LoggerFactory;
 public class EARKAIP extends AIPWrap {
   private static final Logger LOGGER = LoggerFactory.getLogger(EARKAIP.class);
   private static final String TEMP_DIR = "EARKAIP";
+  private static String EARK_VERSION = "2.1.0";
+  private static EARKUtils earkUtils;
+  private EARKMETSGenerator metsgenerator;
+  private METSGeneratorFactory factory = new METSGeneratorFactory();
 
   /**
    * Constructor.
@@ -48,8 +52,10 @@ public class EARKAIP extends AIPWrap {
    * @param aip
    *          the {@link AIP} to warp.
    */
-  public EARKAIP(final AIP aip) {
+  public EARKAIP(final AIP aip, String version) {
     super(aip);
+    this.metsgenerator = factory.getMetsGenerator(version);
+    this.earkUtils = new EARKUtils(version);
   }
 
   public static AIP parse(final Path source) throws ParseException {
@@ -75,32 +81,32 @@ public class EARKAIP extends AIPWrap {
 
   private static AIP parseEARKAIPFromPath(final Path aipPath) throws ParseException {
     try {
-      final AIP aip = new EARKAIP(new BasicAIP());
+      final AIP aip = new EARKAIP(new BasicAIP(), EARK_VERSION);
       aip.setBasePath(aipPath);
-      final MetsWrapper metsWrapper = EARKUtils.processMainMets(aip, aipPath);
+      final MetsWrapper metsWrapper = earkUtils.processMainMets(aip, aipPath);
 
       if (aip.isValid()) {
 
-        final StructMapType structMap = EARKUtils.getEARKStructMap(metsWrapper, aip, true);
+        final StructMapType structMap = earkUtils.getEARKStructMap(metsWrapper, aip, true);
 
         if (structMap != null) {
-          EARKUtils.preProcessStructMap(metsWrapper, structMap);
+          earkUtils.preProcessStructMap(metsWrapper, structMap);
 
-          EARKUtils.processDescriptiveMetadata(metsWrapper, aip, LOGGER, null, aip.getBasePath());
+          earkUtils.processDescriptiveMetadata(metsWrapper, aip, LOGGER, null, aip.getBasePath());
 
-          EARKUtils.processOtherMetadata(metsWrapper, aip, LOGGER, null, aip.getBasePath());
+          earkUtils.processOtherMetadata(metsWrapper, aip, LOGGER, null, aip.getBasePath());
 
-          EARKUtils.processPreservationMetadata(metsWrapper, aip, LOGGER, null, aip.getBasePath());
+          earkUtils.processPreservationMetadata(metsWrapper, aip, LOGGER, null, aip.getBasePath());
 
-          EARKUtils.processRepresentations(metsWrapper, aip, LOGGER);
+          earkUtils.processRepresentations(metsWrapper, aip, LOGGER);
 
-          EARKUtils.processSchemasMetadata(metsWrapper, aip, aip.getBasePath());
+          earkUtils.processSchemasMetadata(metsWrapper, aip, aip.getBasePath());
 
-          EARKUtils.processDocumentationMetadata(metsWrapper, aip, aip.getBasePath());
+          earkUtils.processDocumentationMetadata(metsWrapper, aip, aip.getBasePath());
 
-          EARKUtils.processSubmissionMetadata(metsWrapper, aip, aip.getBasePath());
+          earkUtils.processSubmissionMetadata(metsWrapper, aip, aip.getBasePath());
 
-          EARKUtils.processAncestors(metsWrapper, aip);
+          earkUtils.processAncestors(metsWrapper, aip);
         }
       }
 
@@ -144,25 +150,25 @@ public class EARKAIP extends AIPWrap {
       boolean isSubmission = (this.getSubmissions() != null && !this.getSubmissions().isEmpty());
       boolean isRepresentations = (this.getRepresentations() != null && !this.getRepresentations().isEmpty());
 
-      final MetsWrapper mainMETSWrapper = EARKMETSUtils.generateMETS(StringUtils.join(this.getIds(), " "),
+      final MetsWrapper mainMETSWrapper = metsgenerator.generateMETS(StringUtils.join(this.getIds(), " "),
         this.getDescription(), this.getProfile(), true, Optional.ofNullable(this.getAncestors()), null,
         this.getHeader(), this.getType(), this.getContentType(), this.getContentInformationType(), isMetadata,
         isMetadataOther, isSchemas, isDocumentation, isSubmission, isRepresentations, false);
 
-      EARKUtils.addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
+      earkUtils.addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
 
-      EARKUtils.addPreservationMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getPreservationMetadata(), null);
+      earkUtils.addPreservationMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getPreservationMetadata(), null);
 
-      EARKUtils.addOtherMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getOtherMetadata(), null);
+      earkUtils.addOtherMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getOtherMetadata(), null);
 
-      EARKUtils.addRepresentationsToZipAndMETS(this, getRepresentations(), zipEntries, mainMETSWrapper, buildDir,
+      earkUtils.addRepresentationsToZipAndMETS(this, getRepresentations(), zipEntries, mainMETSWrapper, buildDir,
         IPEnums.SipType.EARK2);
 
-      EARKUtils.addSchemasToZipAndMETS(zipEntries, mainMETSWrapper, getSchemas(), null);
+      earkUtils.addSchemasToZipAndMETS(zipEntries, mainMETSWrapper, getSchemas(), null);
 
-      EARKUtils.addDocumentationToZipAndMETS(zipEntries, mainMETSWrapper, getDocumentation(), null);
+      earkUtils.addDocumentationToZipAndMETS(zipEntries, mainMETSWrapper, getDocumentation(), null);
 
-      EARKUtils.addSubmissionsToZipAndMETS(zipEntries, mainMETSWrapper, getSubmissions());
+      earkUtils.addSubmissionsToZipAndMETS(zipEntries, mainMETSWrapper, getSubmissions());
 
       METSUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, buildDir);
 

@@ -64,9 +64,11 @@ import org.xml.sax.SAXException;
 
 public final class EARKUtils {
   protected static boolean VALIDATION_FAIL_IF_REPRESENTATION_METS_DOES_NOT_HAVE_TWO_PARTS = false;
+  private static METSGeneratorFactory factory = new METSGeneratorFactory();
+  private static EARKMETSGenerator metsGenerator;
 
-  private EARKUtils() {
-    // do nothing
+  public EARKUtils(String version) {
+    this.metsGenerator=factory.getMetsGenerator(version);
   }
 
   protected static void addDescriptiveMetadataToZipAndMETS(Map<String, ZipEntryInfo> zipEntries,
@@ -81,7 +83,7 @@ public final class EARKUtils {
 
         String descriptiveFilePath = IPConstants.DESCRIPTIVE_FOLDER
           + ModelUtils.getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
-        MdRef mdRef = EARKMETSUtils.addDescriptiveMetadataToMETS(metsWrapper, dm, descriptiveFilePath);
+        MdRef mdRef = metsGenerator.addDescriptiveMetadataToMETS(metsWrapper, dm, descriptiveFilePath);
 
         if (representationId != null) {
           descriptiveFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
@@ -104,7 +106,7 @@ public final class EARKUtils {
 
         String preservationMetadataPath = IPConstants.PRESERVATION_FOLDER
           + ModelUtils.getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
-        MdRef mdRef = EARKMETSUtils.addPreservationMetadataToMETS(metsWrapper, pm, preservationMetadataPath);
+        MdRef mdRef = metsGenerator.addPreservationMetadataToMETS(metsWrapper, pm, preservationMetadataPath);
 
         if (representationId != null) {
           preservationMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId
@@ -126,7 +128,7 @@ public final class EARKUtils {
 
         String otherMetadataPath = IPConstants.OTHER_FOLDER + ModelUtils.getFoldersFromList(file.getRelativeFolders())
           + file.getFileName();
-        MdRef mdRef = EARKMETSUtils.addOtherMetadataToMETS(metsWrapper, om, otherMetadataPath);
+        MdRef mdRef = metsGenerator.addOtherMetadataToMETS(metsWrapper, om, otherMetadataPath);
 
         if (representationId != null) {
           otherMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
@@ -162,16 +164,15 @@ public final class EARKUtils {
           && !representation.getSchemas().isEmpty());
         final boolean isRepresentationsData = (representation.getData() != null && !representation.getData().isEmpty());
         final IPHeader header = new IPHeader(IPEnums.IPStatus.NEW).setAgents(representation.getAgents());
-
         final MetsWrapper representationMETSWrapper;
         if (!IPEnums.SipType.EARK2S.equals(sipType)) {
-          representationMETSWrapper = EARKMETSUtils.generateMETS(representationId, representation.getDescription(),
+          representationMETSWrapper = metsGenerator.generateMETS(representationId, representation.getDescription(),
             ip.getProfile(), false, Optional.empty(), null, header,
             mainMETSWrapper.getMets().getMetsHdr().getOAISPACKAGETYPE(), representation.getContentType(),
             representation.getContentInformationType(), isRepresentationMetadata, isRepresentationMetadataOther,
             isRepresentationSchemas, isRepresentationDocumentation, false, false, isRepresentationsData);
         } else {
-          representationMETSWrapper = EARKMETSUtils.generateMetsShallow(representation, ip.getProfile(), false,
+          representationMETSWrapper = metsGenerator.generateMetsShallow(representation, ip.getProfile(), false,
             Optional.empty(), null, header, mainMETSWrapper.getMets().getMetsHdr().getOAISPACKAGETYPE(),
             isRepresentationMetadata, isRepresentationMetadataOther, isRepresentationSchemas,
             isRepresentationDocumentation, false, false, isRepresentationsData);
@@ -203,12 +204,12 @@ public final class EARKUtils {
           representationId);
 
         // add representation METS to Zip file and to main METS file
-        EARKMETSUtils.addRepresentationMETSToZipAndToMainMETS(zipEntries, mainMETSWrapper, representationId,
+        metsGenerator.addRepresentationMETSToZipAndToMainMETS(zipEntries, mainMETSWrapper, representationId,
           representationMETSWrapper, IPConstants.REPRESENTATIONS_FOLDER + representationId
             + IPConstants.ZIP_PATH_SEPARATOR + IPConstants.METS_FILE,
           buildDir);
 
-        EARKMETSUtils.cleanFileGrpStructure();
+        metsGenerator.cleanFileGrpStructure();
       }
       if (ip instanceof SIP) {
         ((SIP) ip).notifySipBuildRepresentationsProcessingEnded();
@@ -232,7 +233,7 @@ public final class EARKUtils {
         if (file instanceof IPFile) {
           String dataFilePath = IPConstants.DATA_FOLDER + ModelUtils.getFoldersFromList(file.getRelativeFolders())
             + file.getFileName();
-          FileType fileType = EARKMETSUtils.addDataFileToMETS(representationMETSWrapper, dataFilePath, file.getPath());
+          FileType fileType = metsGenerator.addDataFileToMETS(representationMETSWrapper, dataFilePath, file.getPath());
 
           dataFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
             + dataFilePath;
@@ -240,7 +241,7 @@ public final class EARKUtils {
         } else if (file instanceof IPFileShallow) {
           IPFileShallow shallow = (IPFileShallow) file;
           if (shallow.getFileLocation() != null) {
-            EARKMETSUtils.addDataFileToMETS(representationMETSWrapper, shallow);
+            metsGenerator.addDataFileToMETS(representationMETSWrapper, shallow);
           }
         }
 
@@ -265,7 +266,7 @@ public final class EARKUtils {
 
         String schemaFilePath = IPConstants.SCHEMAS_FOLDER + ModelUtils.getFoldersFromList(schema.getRelativeFolders())
           + schema.getFileName();
-        FileType fileType = EARKMETSUtils.addSchemaFileToMETS(metsWrapper, schemaFilePath, schema.getPath());
+        FileType fileType = metsGenerator.addSchemaFileToMETS(metsWrapper, schemaFilePath, schema.getPath());
 
         if (representationId != null) {
           schemaFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
@@ -286,7 +287,7 @@ public final class EARKUtils {
 
         String documentationFilePath = IPConstants.DOCUMENTATION_FOLDER
           + ModelUtils.getFoldersFromList(doc.getRelativeFolders()) + doc.getFileName();
-        FileType fileType = EARKMETSUtils.addDocumentationFileToMETS(metsWrapper, documentationFilePath, doc.getPath());
+        FileType fileType = metsGenerator.addDocumentationFileToMETS(metsWrapper, documentationFilePath, doc.getPath());
 
         if (representationId != null) {
           documentationFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
@@ -329,7 +330,7 @@ public final class EARKUtils {
         }
         final String submissionFilePath = IPConstants.SUBMISSION_FOLDER
           + ModelUtils.getFoldersFromList(submission.getRelativeFolders()) + submission.getFileName();
-        final FileType fileType = EARKMETSUtils.addSubmissionFileToMETS(metsWrapper, submissionFilePath,
+        final FileType fileType = metsGenerator.addSubmissionFileToMETS(metsWrapper, submissionFilePath,
           submission.getPath());
         ZIPUtils.addFileTypeFileToZip(zipEntries, submission.getPath(), submissionFilePath, fileType);
       }
@@ -393,9 +394,9 @@ public final class EARKUtils {
     if (mets.getMetsHdr() != null && mets.getMetsHdr().getAgent() != null) {
       for (Agent agent : mets.getMetsHdr().getAgent()) {
         if (representation == null) {
-          ip.addAgent(EARKMETSUtils.createIPAgent(ip, agent));
+          ip.addAgent(metsGenerator.createIPAgent(ip, agent));
         } else {
-          representation.addAgent(EARKMETSUtils.createIPAgent(ip, agent));
+          representation.addAgent(metsGenerator.createIPAgent(ip, agent));
         }
       }
     }
@@ -886,7 +887,7 @@ public final class EARKUtils {
     Mets mets = metsWrapper.getMets();
 
     if (mets.getStructMap() != null && !mets.getStructMap().isEmpty()) {
-      ip.setAncestors(EARKMETSUtils.extractAncestorsFromStructMap(mets));
+      ip.setAncestors(metsGenerator.extractAncestorsFromStructMap(mets));
     }
 
     return ip;

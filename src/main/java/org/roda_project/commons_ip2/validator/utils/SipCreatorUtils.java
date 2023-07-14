@@ -7,6 +7,8 @@ import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,19 +25,6 @@ import org.roda_project.commons_ip2.model.MetadataType;
 import org.roda_project.commons_ip2.model.SIP;
 import org.roda_project.commons_ip2.model.impl.eark.EARKSIP;
 import org.roda_project.commons_ip2.utils.Utils;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * {@author João Gomes <jgomes@keep.pt>}.
@@ -99,9 +88,9 @@ public final class SipCreatorUtils {
    */
   public static boolean validateMetadataPath(final String[] metadata) {
     if (metadata != null) {
-      for(String metadataInfo : metadata){
+      for (String metadataInfo : metadata) {
         String metadataFile = metadataInfo.split(";")[0];
-        if(!Files.exists(Paths.get(metadataFile))){
+        if (!Files.exists(Paths.get(metadataFile))) {
           return false;
         }
       }
@@ -118,9 +107,9 @@ public final class SipCreatorUtils {
    */
   public static boolean validateRepresentationPaths(final String[] representation) {
     if (representation != null) {
-      for(String representationInfo : representation){
+      for (String representationInfo : representation) {
         String representationFilesList = representationInfo.split(";")[0];
-        for(String representationFile : representationFilesList.split(",")){
+        for (String representationFile : representationFilesList.split(",")) {
           if (!Files.exists(Paths.get(representationFile))) {
             return false;
           }
@@ -166,42 +155,54 @@ public final class SipCreatorUtils {
     return true;
   }
 
-
   /**
    * Create the EARK2 SIP with the args passed to the CLI.
    *
-   * @param metadata           the path to the metadata file, its type and version.
-   * @param representation     the paths to the representation data files or folders, the type of content in representation and the representation id.
-   * @param metadataSchema     the path to the metadata schema file.
-   * @param sipID              the SIP id.
-   * @param ancestors          the ancestors of the SIP.
-   * @param documentation      the paths to the documentation files or folders.
-   * @param softwareVersion    the software version.
-   * @param path               the path to save the SIP.
-   * @param submitterAgentName the name of the submitter agent.
-   * @param submitterAgentID   the id of the submitter agent
+   * @param metadata
+   *          the path to the metadata file, its type and version.
+   * @param representation
+   *          the paths to the representation data files or folders, the type of
+   *          content in representation and the representation id.
+   * @param metadataSchema
+   *          the path to the metadata schema file.
+   * @param sipID
+   *          the SIP id.
+   * @param ancestors
+   *          the ancestors of the SIP.
+   * @param documentation
+   *          the paths to the documentation files or folders.
+   * @param softwareVersion
+   *          the software version.
+   * @param path
+   *          the path to save the SIP.
+   * @param submitterAgentName
+   *          the name of the submitter agent.
+   * @param submitterAgentID
+   *          the id of the submitter agent
    * @return {@link SIP}.
-   * @throws IPException          if some error occur.
-   * @throws InterruptedException if some error occur.
+   * @throws IPException
+   *           if some error occur.
+   * @throws InterruptedException
+   *           if some error occur.
    */
-  public static Path createEARK2SIP(final String[] metadata,
-                                    final String[] representation, String[] metadataSchema, final boolean targetOnly,
-                                    final String sipID, final String[] ancestors, final String[] documentation, final String softwareVersion,
-                                    final String path, final String submitterAgentName, final String submitterAgentID, final String checksum)
-          throws IPException, InterruptedException, UnsupportedEncodingException {
+  public static Path createEARK2SIP(final String[] metadata, final String[] representation, String[] metadataSchema,
+    final boolean targetOnly, final String sipID, final String[] ancestors, final String[] documentation,
+    final String softwareVersion, final String path, final String submitterAgentName, final String submitterAgentID,
+    final String checksum, final String version)
+    throws IPException, InterruptedException, UnsupportedEncodingException {
     String id = sipID;
     if (id == null) {
       id = Utils.generateRandomAndPrefixedUUID();
-    }
-    else {
+    } else {
       id = URLEncoder.encode(sipID, "UTF-8").replace("*", "%2A");
     }
 
-    final SIP sip = new EARKSIP(id, IPContentType.getMIXED(), IPContentInformationType.getMIXED());
-    String softVersion="DEVELOPMENT-VERSION";
+    final SIP sip = new EARKSIP(id, IPContentType.getMIXED(), IPContentInformationType.getMIXED(), version);
 
-    if (softwareVersion!=null) {
-      softVersion=softwareVersion;
+    String softVersion = "DEVELOPMENT-VERSION";
+
+    if (softwareVersion != null) {
+      softVersion = softwareVersion;
     }
 
     sip.addCreatorSoftwareAgent("RODA Commons IP", softVersion);
@@ -214,7 +215,7 @@ public final class SipCreatorUtils {
 
     if (metadata != null) {
       try {
-        for(String metadataInfo : metadata){
+        for (String metadataInfo : metadata) {
           String[] metadataInfoArray = metadataInfo.split(";");
           addMetadataToSIP(sip, metadataInfoArray);
         }
@@ -222,15 +223,15 @@ public final class SipCreatorUtils {
         CLIUtils.printErrors(System.out, "Cannot add metadata to the SIP.");
       }
     }
-    if (metadataSchema != null){
-      for(String schema : metadataSchema){
+    if (metadataSchema != null) {
+      for (String schema : metadataSchema) {
         sip.addSchema(new IPFile(Paths.get(schema)));
       }
     }
 
     if (representation != null) {
       try {
-        for(String representationInfo : representation){
+        for (String representationInfo : representation) {
           String[] representationInfoArray = representationInfo.split(";");
           String[] representationFiles = representationInfoArray[0].split(",");
           addRepresentationDataToSIP(sip, representationFiles, targetOnly, representationInfoArray);
@@ -338,11 +339,12 @@ public final class SipCreatorUtils {
 
   }
 
-  private static void addFileToRepresentation(final IPRepresentation representation, final boolean targetOnly, final Path dataPath,
-    final List<String> relativePath) {
+  private static void addFileToRepresentation(final IPRepresentation representation, final boolean targetOnly,
+    final Path dataPath, final List<String> relativePath) {
     if (Files.isDirectory(dataPath)) {
       final List<String> newRelativePath = new ArrayList<>(relativePath);
-      if (!targetOnly) newRelativePath.add(dataPath.getFileName().toString());
+      if (!targetOnly)
+        newRelativePath.add(dataPath.getFileName().toString());
       // recursive call to all the node's children
       final File[] files = dataPath.toFile().listFiles();
       if (files != null) {
@@ -404,8 +406,14 @@ public final class SipCreatorUtils {
    * @return true if at least one file has given as parameter.
    */
   public static boolean validateAllOptions(final String[] metadata, final String[] documentation,
-                                           final String[] representation) {
+    final String[] representation) {
     return metadata != null || documentation != null || representation != null;
   }
 
+  public static boolean validateVersion(String version) {
+    if (version != null) {
+      return (version.equals("2.1.0") || version.equals("2.0.4"));
+    }
+    return true;
+  }
 }
