@@ -421,18 +421,12 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
     final ReporterDetails details = new ReporterDetails();
     for (MdSecType mdSec : dmdSec) {
       final String status = mdSec.getSTATUS();
-      if (status == null) {
+      if (status != null && !dmdSecStatus.contains(status)) {
+        final StringBuilder message = new StringBuilder();
+        message.append("Value ").append(status).append(" in %1$s for mets/dmdSec/@STATUS isn't valid");
         details.setValid(false);
-        details.addIssue(Message.createErrorMessage("mets/dmdSec/@STATUS in %1$s can't be null",
-          metsValidatorState.getMetsName(), metsValidatorState.isRootMets()));
-      } else {
-        if (!dmdSecStatus.contains(status)) {
-          final StringBuilder message = new StringBuilder();
-          message.append("Value ").append(status).append(" in %1$s for mets/dmdSec/@STATUS isn't valid");
-          details.setValid(false);
-          details.addIssue(Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
-            metsValidatorState.isRootMets()));
-        }
+        details.addIssue(Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+          metsValidatorState.isRootMets()));
       }
     }
     return details;
