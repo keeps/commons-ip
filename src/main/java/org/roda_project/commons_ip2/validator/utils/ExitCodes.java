@@ -51,7 +51,10 @@ public final class ExitCodes {
    */
   public static final int EXIT_CODE_CREATE_INVALID_CHECKSUM = 5;
 
-
+  /**
+   * Exit code when the given eark version is invalid
+   */
+  public static final int EXIT_CODE_CREATE_INVALID_VERSION=6;
 
   private ExitCodes() {
     // do nothing.

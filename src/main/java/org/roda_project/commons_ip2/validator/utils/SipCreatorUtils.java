@@ -5,13 +5,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.security.MessageDigest;
 
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip2.model.IPContentInformationType;
@@ -179,7 +179,8 @@ public final class SipCreatorUtils {
   public static Path createEARK2SIP(final String[] metadata,
                                     final String[] representation, final boolean targetOnly,
     final String sipID, final String[] ancestors, final String[] documentation, final String softwareVersion,
-    final String path, final String submitterAgentName, final String submitterAgentID, final String checksum)
+    final String path, final String submitterAgentName, final String submitterAgentID, final String checksum,
+    final String version)
     throws IPException, InterruptedException {
     String id = sipID;
     if (id == null) {
@@ -189,7 +190,8 @@ public final class SipCreatorUtils {
       id = sipID.replaceAll("[^a-zA-Z0-9-_\\.]", "_");
     }
 
-    final SIP sip = new EARKSIP(id, IPContentType.getMIXED(), IPContentInformationType.getMIXED());
+    final SIP sip = new EARKSIP(id, IPContentType.getMIXED(), IPContentInformationType.getMIXED(), version);
+
     String softVersion="DEVELOPMENT-VERSION";
 
     if (softwareVersion!=null) {
@@ -395,4 +397,10 @@ public final class SipCreatorUtils {
     return metadata != null || documentation != null || representation != null;
   }
 
+  public static boolean validateVersion(String version) {
+    if (version != null) {
+      return (version.equals("2.1.0") || version.equals("2.0.4"));
+    }
+    return true;
+  }
 }

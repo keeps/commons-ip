@@ -1,10 +1,7 @@
 package org.roda_project.commons_ip2.validator.CLI;
 
 import java.io.PrintStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -131,6 +128,12 @@ public class CLICreator {
     submitterAgentName.setRequired(false);
     parameters.addOption(submitterAgentName);
 
+    final Option version = new Option(CLIConstants.CLI_CREATE_SHORT_OPTION_EARK_VERSION_WITHOUT_IDENT,
+      CLIConstants.CLI_CREATE_LONG_OPTION_EARK_VERSION_WITHOUT_IDENT, true, "Version of the eark sip");
+    version.setArgs(1);
+    version.setRequired(false);
+    parameters.addOption(version);
+
   }
 
   /**
@@ -154,7 +157,7 @@ public class CLICreator {
           : commandLine.getOptionValues(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_WITHOUT_IDENT);
         final boolean targetOnly = (commandLine
           .hasOption(CLIConstants.CLI_CREATE_SHORT_OPTION_REPRESENTATION_DATA_ONLY_TARGET) || (commandLine
-          .hasOption(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_DATA_ONLY_TARGET)));  
+            .hasOption(CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_DATA_ONLY_TARGET)));
         final String sipID = commandLine
           .getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_SIP_ID_WITHOUT_IDENT) == null
             ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_SIP_ID_WITHOUT_IDENT)
@@ -178,6 +181,10 @@ public class CLICreator {
           .getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_SUBMITTER_AGENT_ID_WITHOUT_IDENT) == null
             ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_SUBMITTER_AGENT_ID_WITHOUT_IDENT)
             : commandLine.getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_SUBMITTER_AGENT_ID_WITHOUT_IDENT);
+        final String version = commandLine
+          .getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_EARK_VERSION_WITHOUT_IDENT) == null
+            ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_EARK_VERSION_WITHOUT_IDENT)
+            : commandLine.getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_EARK_VERSION_WITHOUT_IDENT);
         final String checkSum = commandLine
           .getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_CHECKSUM_ALG) == null
             ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_CHECKSUM_ALG)
@@ -193,7 +200,10 @@ public class CLICreator {
           CLIUtils.printErrors(System.out, "The metadata file(s) given does not exist");
           return ExitCodes.EXIT_CODE_CREATE_INVALID_PATHS;
         }
-
+        if (!SipCreatorUtils.validateVersion(version)) {
+          CLIUtils.printErrors(System.out, "The eark version you specified does not exist");
+          return ExitCodes.EXIT_CODE_CREATE_INVALID_VERSION;
+        }
         if (!SipCreatorUtils.validateRepresentationPaths(representation)) {
           CLIUtils.printErrors(System.out, "Make sure if all the representation data paths exists");
           return ExitCodes.EXIT_CODE_CREATE_INVALID_PATHS;
@@ -213,7 +223,8 @@ public class CLICreator {
         try {
           final Path eark2SIP = SipCreatorUtils.createEARK2SIP(metadata,
             representation, targetOnly, sipID, ancestors, documentation,
-            getClass().getPackage().getImplementationVersion(), path, submitterAgentName, submitterAgentID, checkSum);
+            getClass().getPackage().getImplementationVersion(), path,
+            submitterAgentName, submitterAgentID, checkSum, version);
           System.out.println("Created the sip in " + eark2SIP.normalize().toAbsolutePath());
         } catch (IPException | InterruptedException e) {
           CLIUtils.printErrors(System.out, "Can't create the sip");
@@ -273,6 +284,9 @@ public class CLICreator {
     out.append(CLIConstants.TAB).append(CLIConstants.CLI_CREATE_OPTION_SUBMITTER_AGENT_ID)
       .append(", --submitter-agent-id").append(CLIConstants.DOUBLE_TAB)
       .append("(optional) The identification code of the submitter id").append(CLIConstants.END_OF_LINE);
+    out.append(CLIConstants.TAB).append(CLIConstants.CLI_CREATE_OPTION_EARK_VERSION).append(", --eark-version")
+      .append(CLIConstants.DOUBLE_TAB).append("(optional) The version of the eark sip to be created")
+      .append(CLIConstants.END_OF_LINE);
     out.append(CLIConstants.TAB).append(CLIConstants.CLI_CREATE_OPTION_REPRESENTATION_DATA_ONLY_TARGET)
       .append(", --target-only").append(CLIConstants.DOUBLE_TAB)
       .append("(optional) Only add contents of target representation folder").append(CLIConstants.END_OF_LINE);
