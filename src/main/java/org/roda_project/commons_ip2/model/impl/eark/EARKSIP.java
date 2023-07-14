@@ -38,10 +38,16 @@ public class EARKSIP extends SIP {
 
   private static final String SIP_TEMP_DIR = "EARKSIP";
   private static final String SIP_FILE_EXTENSION = ".zip";
+  private String EARK_VERSION = "2.1.0";
+  private EARKMETSGenerator metsgenerator;
+  private METSGeneratorFactory factory = new METSGeneratorFactory();
+  private static EARKUtils earkUtils;
 
   public EARKSIP() {
     super();
     setProfile(IPConstants.COMMON_SPEC_PROFILE);
+    this.metsgenerator = factory.getMetsGenerator(EARK_VERSION);
+    this.earkUtils = new EARKUtils(EARK_VERSION);
   }
 
   /**
@@ -49,17 +55,32 @@ public class EARKSIP extends SIP {
    *          will be used as OBJID in METS (/mets[@OBJID])
    */
   public EARKSIP(String sipId) {
+    new EARKSIP(sipId, EARK_VERSION);
+  }
+
+  public EARKSIP(String sipId, String version) {
     super(sipId);
     setProfile(IPConstants.COMMON_SPEC_PROFILE);
+    this.metsgenerator = factory.getMetsGenerator(version);
+    this.EARK_VERSION = version;
+    this.earkUtils = new EARKUtils(version);
   }
 
   /**
    * @param sipId
    *          will be used as OBJID in METS (/mets[@OBJID])
    */
+
   public EARKSIP(String sipId, IPContentType contentType, IPContentInformationType contentInformationType) {
+    new EARKSIP(sipId, contentType, contentInformationType, EARK_VERSION);
+  }
+
+  public EARKSIP(String sipId, IPContentType contentType, IPContentInformationType contentInformationType, String version) {
     super(sipId, contentType, contentInformationType);
     setProfile(IPConstants.COMMON_SPEC_PROFILE);
+    this.metsgenerator = factory.getMetsGenerator(version);
+    this.EARK_VERSION = version;
+    this.earkUtils = new EARKUtils(version);
   }
 
   /**
@@ -89,21 +110,21 @@ public class EARKSIP extends SIP {
       Path sipPath = ZIPUtils.extractIPIfInZipFormat(source, destinationDirectory);
       sip.setBasePath(sipPath);
 
-      MetsWrapper metsWrapper = EARKUtils.processMainMets(sip, sipPath);
+      MetsWrapper metsWrapper = earkUtils.processMainMets(sip, sipPath);
 
       if (sip.isValid()) {
 
-        StructMapType structMap = EARKUtils.getEARKStructMap(metsWrapper, sip, true);
+        StructMapType structMap = earkUtils.getEARKStructMap(metsWrapper, sip, true);
 
         if (structMap != null) {
-          EARKUtils.preProcessStructMap(metsWrapper, structMap);
-          EARKUtils.processDescriptiveMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
-          EARKUtils.processOtherMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
-          EARKUtils.processPreservationMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
-          EARKUtils.processRepresentations(metsWrapper, sip, LOGGER);
-          EARKUtils.processSchemasMetadata(metsWrapper, sip, sip.getBasePath());
-          EARKUtils.processDocumentationMetadata(metsWrapper, sip, sip.getBasePath());
-          EARKUtils.processAncestors(metsWrapper, sip);
+          earkUtils.preProcessStructMap(metsWrapper, structMap);
+          earkUtils.processDescriptiveMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
+          earkUtils.processOtherMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
+          earkUtils.processPreservationMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
+          earkUtils.processRepresentations(metsWrapper, sip, LOGGER);
+          earkUtils.processSchemasMetadata(metsWrapper, sip, sip.getBasePath());
+          earkUtils.processDocumentationMetadata(metsWrapper, sip, sip.getBasePath());
+          earkUtils.processAncestors(metsWrapper, sip);
         }
       }
 
@@ -192,7 +213,7 @@ public class EARKSIP extends SIP {
     try {
       Map<String, ZipEntryInfo> zipEntries = getZipEntries();
       //default metadata need to be added before creating the mets in order to add them in the mets file
-      EARKUtils.addDefaultSchemas(LOGGER, getSchemas(), buildDir);
+      earkUtils.addDefaultSchemas(LOGGER, getSchemas(), buildDir);
 
       boolean isMetadataOther = (this.getOtherMetadata() != null && !this.getOtherMetadata().isEmpty());
       boolean isMetadata = ((this.getDescriptiveMetadata() != null && !this.getDescriptiveMetadata().isEmpty())
@@ -200,18 +221,18 @@ public class EARKSIP extends SIP {
       boolean isDocumentation = (this.getDocumentation() != null && !this.getDocumentation().isEmpty());
       boolean isSchemas = (this.getSchemas() != null && !this.getSchemas().isEmpty());
       boolean isRepresentations = (this.getRepresentations() != null && !this.getRepresentations().isEmpty());
-      MetsWrapper mainMETSWrapper = EARKMETSUtils.generateMETS(StringUtils.join(this.getIds(), " "),
+      MetsWrapper mainMETSWrapper = metsgenerator.generateMETS(StringUtils.join(this.getIds(), " "),
         this.getDescription(), this.getProfile(), true, Optional.ofNullable(this.getAncestors()), null,
         this.getHeader(), this.getType(), this.getContentType(), this.getContentInformationType(), isMetadata,
         isMetadataOther, isSchemas, isDocumentation, false, isRepresentations, false);
 
-      EARKUtils.addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
-      EARKUtils.addPreservationMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getPreservationMetadata(), null);
-      EARKUtils.addOtherMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getOtherMetadata(), null);
-      EARKUtils.addRepresentationsToZipAndMETS(this, getRepresentations(), zipEntries, mainMETSWrapper, buildDir,
+      earkUtils.addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
+      earkUtils.addPreservationMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getPreservationMetadata(), null);
+      earkUtils.addOtherMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getOtherMetadata(), null);
+      earkUtils.addRepresentationsToZipAndMETS(this, getRepresentations(), zipEntries, mainMETSWrapper, buildDir,
         sipType);
-      EARKUtils.addSchemasToZipAndMETS(zipEntries, mainMETSWrapper, getSchemas(), null);
-      EARKUtils.addDocumentationToZipAndMETS(zipEntries, mainMETSWrapper, getDocumentation(), null);
+      earkUtils.addSchemasToZipAndMETS(zipEntries, mainMETSWrapper, getSchemas(), null);
+      earkUtils.addDocumentationToZipAndMETS(zipEntries, mainMETSWrapper, getDocumentation(), null);
       METSUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, buildDir);
 
       createZipFile(zipEntries, zipPath);

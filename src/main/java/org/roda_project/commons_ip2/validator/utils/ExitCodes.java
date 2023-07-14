@@ -46,6 +46,8 @@ public final class ExitCodes {
    */
   public static final int EXIT_CODE_CREATE_INVALID_PATHS = 4;
 
+  public static final int EXIT_CODE_CREATE_INVALID_VERSION=5;
+
   private ExitCodes() {
     // do nothing.
   }

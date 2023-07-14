@@ -104,6 +104,13 @@ public class CLICreator {
     submitterAgentName.setRequired(false);
     parameters.addOption(submitterAgentName);
 
+    final Option version = new Option(
+      CLIConstants.CLI_CREATE_SHORT_OPTION_EARK_VERSION_WITHOUT_IDENT,
+      CLIConstants.CLI_CREATE_LONG_OPTION_EARK_VERSION_WITHOUT_IDENT, true, "Version of the eark sip");
+    version.setArgs(1);
+    version.setRequired(false);
+    parameters.addOption(version);
+
   }
 
   /**
@@ -164,12 +171,22 @@ public class CLICreator {
           .getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_SUBMITTER_AGENT_ID_WITHOUT_IDENT) == null
             ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_SUBMITTER_AGENT_ID_WITHOUT_IDENT)
             : commandLine.getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_SUBMITTER_AGENT_ID_WITHOUT_IDENT);
+        final String version = commandLine
+          .getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_EARK_VERSION_WITHOUT_IDENT) == null
+          ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_EARK_VERSION_WITHOUT_IDENT)
+          : commandLine.getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_EARK_VERSION_WITHOUT_IDENT);
 
         if (!SipCreatorUtils.validateAllOptions(metadataFile, documentation, representationData)) {
           CLIUtils.printErrors(System.out,
             "You have to add at least one metadata file or documentation file or representation data file");
           printUsageCreate(System.out);
           return ExitCodes.EXIT_CODE_CREATE_INVALID_PATHS;
+        }
+
+        if (!SipCreatorUtils.validateVersion(version)) {
+          CLIUtils.printErrors(System.out,
+            "The eark version you specified does not exist");
+          return ExitCodes.EXIT_CODE_CREATE_INVALID_VERSION;
         }
 
         if (!SipCreatorUtils.validateMetadataPath(metadataFile)) {
@@ -191,7 +208,7 @@ public class CLICreator {
         try {
           final Path eark2SIP = SipCreatorUtils.createEARK2SIP(metadataFile, metadataType, metadataVersion,
             representationData, representationType, representationID, sipID, ancestors, documentation,
-            getClass().getPackage().getImplementationVersion(), path, submitterAgentName, submitterAgentID);
+            getClass().getPackage().getImplementationVersion(), path, submitterAgentName, submitterAgentID, version);
           System.out.println("Created the sip in " + eark2SIP.normalize().toAbsolutePath());
         } catch (IPException | InterruptedException e) {
           CLIUtils.printErrors(System.out, "Can't create the sip");
@@ -251,6 +268,9 @@ public class CLICreator {
     out.append(CLIConstants.TAB).append(CLIConstants.CLI_CREATE_OPTION_SUBMITTER_AGENT_ID)
       .append(", --submitter-agent-id").append(CLIConstants.DOUBLE_TAB)
       .append("(optional) The identification code of the submitter id").append(CLIConstants.END_OF_LINE);
+    out.append(CLIConstants.TAB).append(CLIConstants.CLI_CREATE_OPTION_EARK_VERSION)
+      .append(", --eark-version").append(CLIConstants.DOUBLE_TAB)
+      .append("(optional) The version of the eark sip to be created").append(CLIConstants.END_OF_LINE);
     printStream.append(out).flush();
   }
 

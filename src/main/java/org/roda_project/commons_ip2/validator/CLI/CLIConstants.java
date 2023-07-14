@@ -101,6 +101,12 @@ public final class CLIConstants {
 
   public static final String CLI_CREATE_OPTION_SUBMITTER_AGENT_ID = "-aid";
 
+  /**
+   * CLI option to give the eark version.
+   */
+  public static final String CLI_CREATE_OPTION_EARK_VERSION = "-ev";
+
+
   /* OPTIONS WITHOUT "-" char */
 
   /**
@@ -184,6 +190,11 @@ public final class CLIConstants {
   public static final String CLI_CREATE_SHORT_OPTION_REPRESENTATION_ID_WITHOUT_IDENT = "rid";
 
   /**
+   * Short option representation id without ident.
+   */
+  public static final String CLI_CREATE_SHORT_OPTION_EARK_VERSION_WITHOUT_IDENT = "ev";
+
+  /**
    * Long option SIP id without ident.
    */
   public static final String CLI_CREATE_LONG_OPTION_SIP_ID_WITHOUT_IDENT = "sip-id";
@@ -227,6 +238,11 @@ public final class CLIConstants {
    * Long option submitter agent name without ident.
    */
   public static final String CLI_CREATE_LONG_OPTION_SUBMITTER_AGENT_NAME_WITHOUT_IDENT = "submitter-agent-name";
+
+  /**
+   * Long option eark version without ident.
+   */
+  public static final String CLI_CREATE_LONG_OPTION_EARK_VERSION_WITHOUT_IDENT = "eark-version";
 
   /**
    * Short option Ancestors without ident.
