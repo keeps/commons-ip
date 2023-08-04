@@ -46,6 +46,13 @@ public final class ExitCodes {
    */
   public static final int EXIT_CODE_CREATE_INVALID_PATHS = 4;
 
+  /**
+   * Exit code when the given checksum algorithms are invalid.
+   */
+  public static final int EXIT_CODE_CREATE_INVALID_CHECKSUM = 5;
+
+
+
   private ExitCodes() {
     // do nothing.
   }

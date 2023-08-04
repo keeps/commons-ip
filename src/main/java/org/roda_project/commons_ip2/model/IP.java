@@ -54,6 +54,8 @@ public abstract class IP implements IPInterface {
 
   private ValidationReport validationReport;
 
+  private String checksumAlgorithm;
+
   public IP() {
     this.setId(Utils.generateRandomAndPrefixedUUID());
     this.profile = "NOT_DEFINED";
@@ -65,6 +67,7 @@ public abstract class IP implements IPInterface {
     this.ancestors = new ArrayList<>();
 
     this.description = "";
+    this.checksumAlgorithm = "SHA-256";
 
     this.descriptiveMetadata = new ArrayList<>();
     this.preservationMetadata = new ArrayList<>();
@@ -95,6 +98,14 @@ public abstract class IP implements IPInterface {
   public IP setId(final String id) {
     this.ids = Arrays.asList(id);
     return this;
+  }
+
+  public void setChecksum(final String checksum) {
+    this.checksumAlgorithm = checksum;
+  }
+
+  public String getChecksum() {
+    return this.checksumAlgorithm;
   }
 
   @Override

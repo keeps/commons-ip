@@ -5,11 +5,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.security.MessageDigest;
 
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip2.model.IPContentInformationType;
@@ -127,6 +129,25 @@ public final class SipCreatorUtils {
   }
 
   /**
+   * Check if the checksum algorithms exist.
+   *
+   * @param checksumAlg
+   *          the checksum algorithm(s).
+   * @return if exists all the algorithms or not.
+   */
+  public static boolean validateChecksumAlg(final String checksumAlg) {
+    if (checksumAlg != null) {
+      try {
+        MessageDigest.getInstance(checksumAlg);
+      } catch (NoSuchAlgorithmException e) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+
+  /**
    * Create the EARK2 SIP with the args passed to the CLI.
    * 
    * @param metadataFile
@@ -164,7 +185,7 @@ public final class SipCreatorUtils {
   public static Path createEARK2SIP(final String metadataFile, final String metadataType, final String metadataVersion,
     final String[] representationData, final boolean targetOnly, final String representationType, final String representationID,
     final String sipID, final String[] ancestors, final String[] documentation, final String softwareVersion,
-    final String path, final String submitterAgentName, final String submitterAgentID)
+    final String path, final String submitterAgentName, final String submitterAgentID, final String checksum)
     throws IPException, InterruptedException {
     String id = sipID;
     if (id == null) {
@@ -183,8 +204,11 @@ public final class SipCreatorUtils {
 
     sip.addCreatorSoftwareAgent("RODA Commons IP", softVersion);
     sip.addSubmitterAgent(submitterAgentName, submitterAgentID);
-
     sip.setDescription("SIP created by commons-ip cli tool");
+
+    if (checksum != null) {
+      sip.setChecksum(checksum);
+    }
 
     if (metadataFile != null) {
       try {
