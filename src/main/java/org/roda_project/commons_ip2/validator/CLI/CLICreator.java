@@ -69,6 +69,12 @@ public class CLICreator {
     metadataVersion.setRequired(false);
     parameters.addOption(metadataVersion);
 
+    final Option metadataSchema = new Option(CLIConstants.CLI_CREATE_SHORT_OPTION_METADATA_SCHEMA_WITHOUT_IDENT,
+      CLIConstants.CLI_CREATE_LONG_OPTION_METADATA_SCHEMA_WITHOUT_IDENT, true, "Metadata Schema");
+    metadataSchema.setArgs(Option.UNLIMITED_VALUES);
+    metadataSchema.setRequired(false);
+    parameters.addOption(metadataSchema);
+
     final Option representationData = new Option(CLIConstants.CLI_CREATE_SHORT_OPTION_REPRESENTATION_DATA_WITHOUT_IDENT,
       CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_DATA_WITHOUT_IDENT, true, "Representation Data");
     representationData.setArgs(Option.UNLIMITED_VALUES);
@@ -182,6 +188,10 @@ public class CLICreator {
           .getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_CHECKSUM_ALG) == null
             ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_CHECKSUM_ALG)
             : commandLine.getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_CHECKSUM_ALG);
+        final String[] metadataSchema = commandLine
+          .getOptionValues(CLIConstants.CLI_CREATE_LONG_OPTION_METADATA_SCHEMA_WITHOUT_IDENT) == null
+          ? commandLine.getOptionValues(CLIConstants.CLI_CREATE_SHORT_OPTION_METADATA_SCHEMA_WITHOUT_IDENT)
+          : commandLine.getOptionValues(CLIConstants.CLI_CREATE_LONG_OPTION_METADATA_SCHEMA_WITHOUT_IDENT);
         if (!SipCreatorUtils.validateAllOptions(metadata, documentation, representation)) {
           CLIUtils.printErrors(System.out,
             "You have to add at least one metadata file or documentation file or representation data file");
@@ -212,7 +222,7 @@ public class CLICreator {
 
         try {
           final Path eark2SIP = SipCreatorUtils.createEARK2SIP(metadata,
-            representation, targetOnly, sipID, ancestors, documentation,
+            representation,  metadataSchema, targetOnly, sipID, ancestors, documentation,
             getClass().getPackage().getImplementationVersion(), path, submitterAgentName, submitterAgentID, checkSum);
           System.out.println("Created the sip in " + eark2SIP.normalize().toAbsolutePath());
         } catch (IPException | InterruptedException e) {
@@ -249,6 +259,9 @@ public class CLICreator {
       .append(CLIConstants.DOUBLE_TAB).append("(optional) The type of the metadata").append(CLIConstants.END_OF_LINE);
     out.append(CLIConstants.TAB).append(CLIConstants.CLI_CREATE_OPTION_METADATA_VERSION).append(", --metadata-version")
       .append(CLIConstants.DOUBLE_TAB).append("(optional) The version of the metadata")
+      .append(CLIConstants.END_OF_LINE);
+    out.append(CLIConstants.TAB).append(CLIConstants.CLI_CREATE_OPTION_METADATA_SCHEMA).append(", --metadata-schema")
+      .append(CLIConstants.DOUBLE_TAB).append("(optional) Path to the metadata schema file")
       .append(CLIConstants.END_OF_LINE);
     out.append(CLIConstants.TAB).append(CLIConstants.CLI_CREATE_OPTION_REPRESENTATION_DATA)
       .append(", --representation-data").append(CLIConstants.DOUBLE_TAB)

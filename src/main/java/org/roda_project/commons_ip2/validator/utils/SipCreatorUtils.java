@@ -1,18 +1,5 @@
 package org.roda_project.commons_ip2.validator.utils;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.security.MessageDigest;
-
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip2.model.IPContentInformationType;
 import org.roda_project.commons_ip2.model.IPContentType;
@@ -23,6 +10,19 @@ import org.roda_project.commons_ip2.model.MetadataType;
 import org.roda_project.commons_ip2.model.SIP;
 import org.roda_project.commons_ip2.model.impl.eark.EARKSIP;
 import org.roda_project.commons_ip2.utils.Utils;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * {@author João Gomes <jgomes@keep.pt>}.
@@ -45,12 +45,8 @@ public final class SipCreatorUtils {
   /**
    * Validates the metadata options.
    * 
-   * @param metadataFile
-   *          the metadata file arg.
-   * @param metadataType
-   *          the metadata type arg.
-   * @param metadataVersion
-   *          the metadata version arg.
+   * @param metadataInfoArray
+   *          contains the metadata file arg, type arg and version arg.
    * @return a flag if is valid or not.
    */
   public static boolean validateMetadataOptions(final String[] metadataInfoArray) {
@@ -69,10 +65,8 @@ public final class SipCreatorUtils {
    * 
    * @param representationData
    *          the paths to the representation data.
-   * @param representationType
-   *          the representation type.
-   * @param representationID
-   *          the representation id.
+   * @param representationInfo
+   *          contains the representation type and id.
    * @return flag if is valid or not.
    */
   public static boolean validateRepresentationOptions(final String[] representationData,
@@ -165,6 +159,7 @@ public final class SipCreatorUtils {
    *
    * @param metadata           the path to the metadata file, its type and version.
    * @param representation     the paths to the representation data files or folders, the type of content in representation and the representation id.
+   * @param metadataSchema     the path to the metadata schema file.
    * @param sipID              the SIP id.
    * @param ancestors          the ancestors of the SIP.
    * @param documentation      the paths to the documentation files or folders.
@@ -177,9 +172,9 @@ public final class SipCreatorUtils {
    * @throws InterruptedException if some error occur.
    */
   public static Path createEARK2SIP(final String[] metadata,
-                                    final String[] representation, final boolean targetOnly,
-    final String sipID, final String[] ancestors, final String[] documentation, final String softwareVersion,
-    final String path, final String submitterAgentName, final String submitterAgentID, final String checksum)
+                                    final String[] representation, String[] metadataSchema, final boolean targetOnly,
+                                    final String sipID, final String[] ancestors, final String[] documentation, final String softwareVersion,
+                                    final String path, final String submitterAgentName, final String submitterAgentID, final String checksum)
     throws IPException, InterruptedException {
     String id = sipID;
     if (id == null) {
@@ -212,6 +207,11 @@ public final class SipCreatorUtils {
         }
       } catch (final IPException e) {
         CLIUtils.printErrors(System.out, "Cannot add metadata to the SIP.");
+      }
+    }
+    if (metadataSchema != null){
+      for(String schema : metadataSchema){
+        sip.addSchema(new IPFile(Paths.get(schema)));
       }
     }
 

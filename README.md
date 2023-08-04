@@ -52,6 +52,7 @@ To create a EARK-2 SIP have to use the following options:
 
 * **create**, [REQUIRED] this option is for the CLI to know that is to perform the creation of a EARK-2 SIP.
 * **-m** or **-metadata** [OPTIONAL] Path to a metadata file; [OPTIONAL] the type of the metadata; [OPTIONAL] the version of the metadata
+* **-ms** or **metadata-schema**, [OPTIONAL] Path to the metadata schema file.
 
 **NOTE:** if does not give the metadata type and the metadata version, the tool try to obtain this values from the file
 name in the following formats (file: **ead.xml** -> result: metadata type: **EAD**; file: **ead_2002.xml** -> result:
@@ -70,7 +71,7 @@ Examples:
 ### Full create SIP command with long options:
 
 ```
-java -jar commons-ip-cli-2.X.Y.jar create --metadata "metadata.xml;ead;2002" \
+java -jar commons-ip-cli-2.X.Y.jar create --metadata "metadata.xml;ead;2002" --metadata-schema ead2002.xsd \
 --representation "dataFile1.pdf,dataFolder1,dataFile2.png;Mixed;representation1" \
 --sip-id sip1 --ancestors sip2 sip3 --documentation documentation1 documentationFolder -p folder2 --path folder2 --submitter-agent-name agent1 --submitter-agent-id 123
 ```
@@ -78,7 +79,7 @@ java -jar commons-ip-cli-2.X.Y.jar create --metadata "metadata.xml;ead;2002" \
 ### Full create SIP command with short options:
 
 ```
-java -jar commons-ip-cli-2.X.Y.jar create -m "metadata.xml;ead;2002" \
+java -jar commons-ip-cli-2.X.Y.jar create -m "metadata.xml;ead;2002" -ms ead2002.xsd \
 -r "dataFile1.pdf,dataFolder1,dataFile2.png;Mixed;representation1" \
 -sid sip1 -a sip2 sip3 -doc documentation1 documentationFolder -p folder2 -sn agent1 -aid 123
 ```

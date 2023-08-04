@@ -56,6 +56,11 @@ public final class CLIConstants {
   public static final String CLI_CREATE_OPTION_METADATA_VERSION = "-mv";
 
   /**
+   * Short option metadata schema file.
+   */
+  public static final String CLI_CREATE_OPTION_METADATA_SCHEMA = "-ms";
+
+  /**
    * CLI option to add data to the representation.
    */
   public static final String CLI_CREATE_OPTION_REPRESENTATION_DATA = "-rd";
@@ -187,6 +192,16 @@ public final class CLIConstants {
    * Long option representation data without ident.
    */
   public static final String CLI_CREATE_LONG_OPTION_REPRESENTATION_DATA_WITHOUT_IDENT = "representation-data";
+
+  /**
+   * Long option metadata version without ident.
+   */
+  public static final String CLI_CREATE_LONG_OPTION_METADATA_SCHEMA_WITHOUT_IDENT = "metadata-schema";
+
+  /**
+   * Short option metadata schema file without ident.
+   */
+  public static final String CLI_CREATE_SHORT_OPTION_METADATA_SCHEMA_WITHOUT_IDENT = "ms";
 
   /**
    * Short option representation data without ident.
