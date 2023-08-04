@@ -237,11 +237,23 @@ public class ZipManager {
     int count = 0;
     ZipFile zipFile = new ZipFile(path.toFile());
     Enumeration entries = zipFile.entries();
-    while (entries.hasMoreElements()) {
-      ZipEntry entry = (ZipEntry) entries.nextElement();
-      if (entry.getName().matches(regex)) {
-        if (!entry.isDirectory()) {
-          count++;
+
+    if (regex.contains("descriptive")) {
+      while (entries.hasMoreElements()) {
+        ZipEntry entry = (ZipEntry) entries.nextElement();
+        if (entry.getName().matches(regex)) {
+          if (!entry.isDirectory()) {
+            count++;
+          }
+        }
+      }
+    } else {
+      while (entries.hasMoreElements()) {
+        ZipEntry entry = (ZipEntry) entries.nextElement();
+        if (entry.getName().matches(regex)) {
+          if (!entry.isDirectory() && !entry.toString().contains("descriptive")) {
+            count++;
+          }
         }
       }
     }

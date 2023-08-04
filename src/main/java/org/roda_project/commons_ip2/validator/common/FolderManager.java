@@ -107,21 +107,27 @@ public class FolderManager {
   public int countMetadataFiles(final Path path) {
     int count = 0;
     final File[] folder = path.toFile().listFiles();
-    if (folder != null) {
-      for (File f : folder) {
-        if (f.getName().equals("metadata")) {
-          if (f.isDirectory()) {
-            final File[] metadataFiles = f.listFiles();
-            if (metadataFiles != null) {
-              if (metadataFiles.length != 0) {
+    if (path.toString().contains("descriptive")) {
+      for (File ignored : folder) {
+        count++;
+      }
+    } else {
+      if (folder != null) {
+        for (File f : folder) {
+          if (f.getName().equals("metadata")) {
+            if (f.isDirectory()) {
+              final File[] metadataFiles = f.listFiles();
+              if (metadataFiles != null) {
                 for (File metadata : metadataFiles) {
-                  if (metadata.isDirectory()) {
+                  if (metadata.isDirectory() && !metadata.toString().contains("descriptive")) {
                     final File[] descriptiveFiles = metadata.listFiles();
                     if (descriptiveFiles != null) {
                       count += descriptiveFiles.length;
                     }
                   } else {
-                    count++;
+                    if (!metadata.toString().contains("descriptive")) {
+                      count++;
+                    }
                   }
                 }
               }
@@ -136,11 +142,11 @@ public class FolderManager {
   public Map<String, InputStream> getSubMets(final Path path) throws FileNotFoundException {
     final HashMap<String, InputStream> subMets = new HashMap<>();
     final File[] representationsFolder = path.resolve("representations").toFile().listFiles();
-    if (representationsFolder != null && representationsFolder.length != 0) {
+    if (representationsFolder != null) {
       for (File representation : representationsFolder) {
         if (representation.isDirectory()) {
           final File[] representationFiles = representation.listFiles();
-          if (representationFiles != null && representationFiles.length != 0) {
+          if (representationFiles != null) {
             for (File file : representationFiles) {
               if (file.getName().equals("METS.xml")) {
                 final InputStream subStream = new FileInputStream(file.getPath());
@@ -195,7 +201,7 @@ public class FolderManager {
 
   public boolean checkIfExistsFolderInsideRepresentation(final Path path, final String folder) {
     final File[] representationFiles = path.resolve("representations").toFile().listFiles();
-    if (representationFiles != null && representationFiles.length != 0) {
+    if (representationFiles != null) {
       for (File representation : representationFiles) {
         if (representation.isDirectory()) {
           final File[] filesInsideRepresentation = representation.listFiles();
