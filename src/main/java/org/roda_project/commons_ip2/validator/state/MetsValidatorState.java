@@ -134,6 +134,13 @@ public class MetsValidatorState {
   }
 
   /**
+   * Delete all entries from metsInternalIds list
+   */
+  public void flushEntries() {
+    metsInternalIds.clear();
+  }
+
+  /**
    * Get {@link Map} all files in IP.
    *
    * @return {@link Map}
