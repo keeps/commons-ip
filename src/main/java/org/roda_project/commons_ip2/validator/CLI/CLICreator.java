@@ -72,6 +72,12 @@ public class CLICreator {
     representationID.setRequired(false);
     parameters.addOption(representationID);
 
+    final Option checksumAlg = new Option(CLIConstants.CLI_CREATE_SHORT_OPTION_CHECKSUM_ALG,
+      CLIConstants.CLI_CREATE_LONG_OPTION_CHECKSUM_ALG, true, "Checksum Algorithms");
+    checksumAlg.setArgs(1);
+    checksumAlg.setRequired(false);
+    parameters.addOption(checksumAlg);
+
     final Option representationType = new Option(CLIConstants.CLI_CREATE_SHORT_OPTION_REPRESENTATION_TYPE_WITHOUT_IDENT,
       CLIConstants.CLI_CREATE_LONG_OPTION_REPRESENTATION_TYPE_WITHOUT_IDENT, true, "Representation Type");
     representationType.setArgs(1);
@@ -114,7 +120,7 @@ public class CLICreator {
 
   /**
    * Start the creation CLI.
-   * 
+   *
    * @param args
    *          the args given to the CLI.
    * @return a exit code.
@@ -173,7 +179,10 @@ public class CLICreator {
           .getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_SUBMITTER_AGENT_ID_WITHOUT_IDENT) == null
             ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_SUBMITTER_AGENT_ID_WITHOUT_IDENT)
             : commandLine.getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_SUBMITTER_AGENT_ID_WITHOUT_IDENT);
-
+        final String checkSum = commandLine
+          .getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_CHECKSUM_ALG) == null
+            ? commandLine.getOptionValue(CLIConstants.CLI_CREATE_SHORT_OPTION_CHECKSUM_ALG)
+            : commandLine.getOptionValue(CLIConstants.CLI_CREATE_LONG_OPTION_CHECKSUM_ALG);
         if (!SipCreatorUtils.validateAllOptions(metadataFile, documentation, representationData)) {
           CLIUtils.printErrors(System.out,
             "You have to add at least one metadata file or documentation file or representation data file");
@@ -196,11 +205,16 @@ public class CLICreator {
           return ExitCodes.EXIT_CODE_CREATE_INVALID_PATHS;
         }
 
+        if (!SipCreatorUtils.validateChecksumAlg(checkSum)) {
+          CLIUtils.printErrors(System.out, "Make sure that the checksum algorithm is valid. You can check the "
+            + "existing algorithms here: https://github.com/keeps/commons-ip/blob/master/CHECKSUM_ALGORITHMS.md");
+          return ExitCodes.EXIT_CODE_CREATE_INVALID_CHECKSUM;
+        }
 
         try {
           final Path eark2SIP = SipCreatorUtils.createEARK2SIP(metadataFile, metadataType, metadataVersion,
-            representationData, targetOnly, representationType, representationID, sipID, ancestors, documentation,
-            getClass().getPackage().getImplementationVersion(), path, submitterAgentName, submitterAgentID);
+            representationData,targetOnly, representationType, representationID, sipID, ancestors, documentation,
+            getClass().getPackage().getImplementationVersion(), path, submitterAgentName, submitterAgentID, checkSum);
           System.out.println("Created the sip in " + eark2SIP.normalize().toAbsolutePath());
         } catch (IPException | InterruptedException e) {
           CLIUtils.printErrors(System.out, "Can't create the sip");
@@ -263,6 +277,9 @@ public class CLICreator {
     out.append(CLIConstants.TAB).append(CLIConstants.CLI_CREATE_OPTION_REPRESENTATION_DATA_ONLY_TARGET)
       .append(", --target-only").append(CLIConstants.DOUBLE_TAB)
       .append("(optional) Only add contents of target representation folder").append(CLIConstants.END_OF_LINE);
+    out.append(CLIConstants.TAB).append(CLIConstants.CLI_CREATE_OPTION_CHECKSUM_ALG)
+      .append(", --checksum-alg").append(CLIConstants.DOUBLE_TAB)
+      .append("(optional) Checksum Algorithm").append(CLIConstants.END_OF_LINE);
     printStream.append(out).flush();
   }
 

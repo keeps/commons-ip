@@ -106,6 +106,11 @@ public final class CLIConstants {
    */
   public static final String CLI_CREATE_OPTION_REPRESENTATION_DATA_ONLY_TARGET = "-to" ;
 
+  /**
+   * CLI option to give the checksum algorithm.
+   */
+  public static final String CLI_CREATE_OPTION_CHECKSUM_ALG = "-ca";
+
   /* OPTIONS WITHOUT "-" char */
 
   /**
@@ -191,6 +196,16 @@ public final class CLIConstants {
    * Long option representation id without ident.
    */
   public static final String CLI_CREATE_LONG_OPTION_REPRESENTATION_ID_WITHOUT_IDENT = "representation-id";
+
+  /**
+   * Long option checksum algorithm.
+   */
+  public static final String CLI_CREATE_LONG_OPTION_CHECKSUM_ALG = "checksum-alg";
+
+  /**
+   * Short option checksum algorithm.
+   */
+  public static final String CLI_CREATE_SHORT_OPTION_CHECKSUM_ALG = "ca";
 
   /**
    * Short option representation id without ident.
