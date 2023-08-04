@@ -184,6 +184,7 @@ public class EARKSIPValidator {
         metsValidatorState);
       ResultsUtils.mergeResults(validationReportOutputJson.getResults(), componentResults);
     }
+    metsValidatorState.flushEntries();
     validateIpTypeExtendedComponents();
   }
 
