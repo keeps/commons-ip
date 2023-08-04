@@ -268,12 +268,9 @@
                                     <shadedClassifierName>jar-with-dependencies</shadedClassifierName>
                                     <createDependencyReducedPom>false</createDependencyReducedPom>
                                     <transformers>
-                                        <transformer
-                                                implementation="org.apache.maven.plugins.shade.resource.ComponentsXmlResourceTransformer"/>
-                                        <transformer
-                                                implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                                        <transformer
-                                                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ComponentsXmlResourceTransformer"/>
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                             <mainClass>org.roda_project.commons_ip.command_line.Main</mainClass>
                                         </transformer>
                                     </transformers>
@@ -396,7 +393,7 @@
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
-            <version>2.3.5</version>
+            <version>2.3.8</version>
         </dependency>
 
         <!-- PyIP dependencies -->
