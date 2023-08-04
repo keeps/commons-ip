@@ -53,8 +53,10 @@ public final class SipCreatorUtils {
    *          the metadata version arg.
    * @return a flag if is valid or not.
    */
-  public static boolean validateMetadataOptions(final String metadataFile, final String metadataType,
-    final String metadataVersion) {
+  public static boolean validateMetadataOptions(final String[] metadataInfoArray) {
+    String metadataFile = (metadataInfoArray.length >= 1) ? metadataInfoArray[0] : null;
+    String metadataType = (metadataInfoArray.length >= 2) ? metadataInfoArray[1] : null;
+    String metadataVersion = (metadataInfoArray.length == 3) ? metadataInfoArray[2] : null;
     if (metadataFile == null && metadataType == null && metadataVersion == null) {
       return true;
     } else {
@@ -74,7 +76,10 @@ public final class SipCreatorUtils {
    * @return flag if is valid or not.
    */
   public static boolean validateRepresentationOptions(final String[] representationData,
-    final String representationType, final String representationID) {
+    final String[] representationInfo) {
+    String representationType = (representationInfo.length >= 2) ? representationInfo[1] : null;
+    String representationID = (representationInfo.length == 3) ? representationInfo[2] : null;
+
     return representationData != null || (representationType == null && representationID == null);
   }
 
@@ -203,7 +208,7 @@ public final class SipCreatorUtils {
       try {
         for(String metadataInfo : metadata){
           String[] metadataInfoArray = metadataInfo.split(";");
-          addMetadataToSIP(sip, metadataInfoArray[0], metadataInfoArray[1], metadataInfoArray[2]);
+          addMetadataToSIP(sip, metadataInfoArray);
         }
       } catch (final IPException e) {
         CLIUtils.printErrors(System.out, "Cannot add metadata to the SIP.");
@@ -215,7 +220,7 @@ public final class SipCreatorUtils {
         for(String representationInfo : representation){
           String[] representationInfoArray = representationInfo.split(";");
           String[] representationFiles = representationInfoArray[0].split(",");
-          addRepresentationDataToSIP(sip, representationFiles, targetOnly, representationInfoArray[1], representationInfoArray[2]);
+          addRepresentationDataToSIP(sip, representationFiles, targetOnly, representationInfoArray);
         }
 
       } catch (final IPException e) {
@@ -245,8 +250,10 @@ public final class SipCreatorUtils {
     return sip.build(buildPath);
   }
 
-  private static void addMetadataToSIP(final SIP sip, final String metadataFile, final String metadataType,
-    final String metadataVersion) throws IPException {
+  private static void addMetadataToSIP(final SIP sip, final String[] metadataInfoArray) throws IPException {
+    String metadataFile = (metadataInfoArray.length >= 1) ? metadataInfoArray[0] : null;
+    String metadataType = (metadataInfoArray.length >= 2) ? metadataInfoArray[1] : null;
+    String metadataVersion = (metadataInfoArray.length == 3) ? metadataInfoArray[2] : null;
     MetadataType metadataTypeEnum = null;
     String version = metadataVersion;
     if (metadataType == null && metadataVersion == null) {
@@ -296,8 +303,10 @@ public final class SipCreatorUtils {
   }
 
   private static void addRepresentationDataToSIP(final SIP sip, final String[] representationData,
-    final boolean targetOnly, final String representationType, final String representationID) throws IPException {
-    String id = representationID;
+    final boolean targetOnly, final String[] representationInfo) throws IPException {
+    String representationType = (representationInfo.length == 2) ? representationInfo[1] : null;
+    String id = (representationInfo.length == 3) ? representationInfo[2] : null;
+
     if (id == null) {
       id = "rep1";
     }

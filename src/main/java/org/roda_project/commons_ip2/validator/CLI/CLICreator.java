@@ -296,7 +296,7 @@ public class CLICreator {
 
     for(String metadataInfo : metadata){
       String[] metadataInfoArray = metadataInfo.split(";");
-      if(!SipCreatorUtils.validateMetadataOptions(metadataInfoArray[0], metadataInfoArray[1], metadataInfoArray[2])){
+      if(!SipCreatorUtils.validateMetadataOptions(metadataInfoArray)){
         return false;
       }
     }
@@ -304,8 +304,7 @@ public class CLICreator {
     for(String representationInfo: representation){
       String[] representationInfoArray = representationInfo.split(";");
       String[] representationFiles = representationInfoArray[0].split(",");
-      if(!SipCreatorUtils.validateRepresentationOptions(representationFiles,
-        representationInfoArray[1],  representationInfoArray[2])){
+      if(!SipCreatorUtils.validateRepresentationOptions(representationFiles, representationInfoArray)){
         return false;
       }
     }
