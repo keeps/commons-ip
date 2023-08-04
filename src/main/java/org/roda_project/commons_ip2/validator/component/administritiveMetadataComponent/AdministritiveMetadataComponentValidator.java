@@ -342,11 +342,11 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
         regex = metsValidatorState.getMetsPath() + "metadata/.*";
       }
       if (amdSec == null || amdSec.isEmpty()) {
-        if (structureValidatorState.getZipManager().countMetadataFiles(structureValidatorState.getIpPath(), regex) != 0
-          && (metsValidatorState.getMets().getDmdSec() == null || metsValidatorState.getMets().getDmdSec().isEmpty())) {
+        if (structureValidatorState.getZipManager().countMetadataFiles(structureValidatorState.getIpPath(),
+          regex) != 0) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
             Message.createErrorMessage(
-              "You have files in the metadata/folder, " + "you must have mets/dmdSec or mets/amdSec in %1$s",
+              "You have administrative files in the metadata/folder, " + "you must have mets/amdSec in %1$s",
               metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
             false, false);
         }
@@ -428,11 +428,10 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
     } else {
       if (amdSec == null || amdSec.isEmpty()) {
         if (structureValidatorState.getFolderManager()
-          .countMetadataFiles(Paths.get(metsValidatorState.getMetsPath())) != 0
-          && (metsValidatorState.getMets().getDmdSec() == null || metsValidatorState.getMets().getDmdSec().isEmpty())) {
+          .countMetadataFiles(Paths.get(metsValidatorState.getMetsPath())) != 0) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
             Message.createErrorMessage(
-              "You have files in the metadata/folder, " + "you must have mets/dmdSec or mets/amdSec in %1$s",
+              "You have administrative files in the metadata/folder, " + "you must have mets/amdSec in %1$s",
               metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
             false, false);
         }

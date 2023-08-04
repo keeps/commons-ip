@@ -201,7 +201,7 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
       if (metsValidatorState.isRootMets()) {
         final String objectid = metsValidatorState.getMets().getOBJID();
         if (objectid != null) {
-          regex = objectid + "/metadata/.*";
+          regex = objectid + "/metadata/descriptive/.*";
         } else {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
             Message.createErrorMessage("mets/@OBJECTID in %1$s can't be null", metsValidatorState.getMetsName(),
@@ -209,25 +209,24 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
             false, false);
         }
       } else {
-        regex = metsValidatorState.getMetsPath() + "metadata/.*";
+        regex = metsValidatorState.getMetsPath() + "/metadata/descriptive/.*";
       }
       final ZipManager zipManager = structureValidatorState.getZipManager();
 
       if (dmdSec == null || dmdSec.isEmpty()) {
         if (zipManager.countMetadataFiles(structureValidatorState.getIpPath(), regex) != 0) {
-          if (mets.getAmdSec() == null || mets.getAmdSec().isEmpty()) {
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              Message.createErrorMessage(
-                "You have files in the metadata/folder, " + "you must have mets/dmdSec or mets/amdSec in %1$s",
-                metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-              false, false);
-          }
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            Message.createErrorMessage(
+              "You have files in the metadata/descriptive/folder, " + "you must have mets/dmdSec in %1$s",
+              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+            false, false);
         }
       } else {
         if (zipManager.countMetadataFiles(structureValidatorState.getIpPath(), regex) == 0) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
             Message.createErrorMessage(
-              "Doesn't have files in metadata folder but have " + "dmdSec in %1$s; Put the files under metadata folder",
+              "Doesn't have files in metadata/descriptive folder but have "
+                + "dmdSec in %1$s; Put the files under metadata folder",
               metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
             false, false);
         } else {
@@ -298,20 +297,21 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
     } else {
       final FolderManager folderManager = structureValidatorState.getFolderManager();
       if (mets.getDmdSec() == null || mets.getDmdSec().isEmpty()) {
-        if (folderManager.countMetadataFiles(Paths.get(metsValidatorState.getMetsPath())) != 0) {
-          if (mets.getAmdSec() == null || mets.getAmdSec().isEmpty()) {
-            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              Message.createErrorMessage(
-                "You have files in the metadata/folder, " + "you must have mets/dmdSec or mets/amdSec in %1$s",
-                metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-              false, false);
-          }
-        }
-      } else {
-        if (folderManager.countMetadataFiles(Paths.get(metsValidatorState.getMetsPath())) == 0) {
+        if (folderManager
+          .countMetadataFiles(Paths.get(metsValidatorState.getMetsPath() + "/metadata/descriptive/")) != 0) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
             Message.createErrorMessage(
-              "Doesn't have files in metadata folder but have " + "dmdSec in %1$s. Put the files under metadata folder",
+              "You have files in the metadata/descriptive/folder, " + "you must have mets/dmdSec in %1$s",
+              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+            false, false);
+        }
+      } else {
+        if (folderManager
+          .countMetadataFiles(Paths.get(metsValidatorState.getMetsPath() + "/metadata/descriptive/")) == 0) {
+          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+            Message.createErrorMessage(
+              "Doesn't have files in metadata/descriptive folder but have "
+                + "dmdSec in %1$s. Put the files under metadata folder",
               metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
             false, false);
         } else {
