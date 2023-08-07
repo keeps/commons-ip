@@ -7,7 +7,7 @@ on:
       - "**"
 
 jobs:
-  deploy:
+  release:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,7 +24,7 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven-
       - name: Set POM Version
-        run: mvn versions:set versions:commit -DnewVersion=${{ github.ref }}
+        run: mvn versions:set versions:commit -DnewVersion=${{ github.ref_name }}
       - name: Build Jar
         run: mvn --batch-mode clean package -P cli
         env:
@@ -36,9 +36,9 @@ jobs:
       - name: Release to GitHub
         uses: softprops/action-gh-release@v1
         with:
-          name: Version ${{ github.ref }}
-          tag_name: ${{ github.ref }}
+          name: Version ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
           draft: true
-          files: target/commons-ip2-cli-${{ github.ref }}.jar
+          files: target/commons-ip2-cli-${{ github.ref_name }}.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
