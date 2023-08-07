@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.roda-project</groupId>
   <artifactId>commons-ip2</artifactId>
   <packaging>jar</packaging>
-  <version>2.5.0-SNAPSHOT</version>
+  <version>2.4.0-SNAPSHOT</version>
   <name>RODA Commons IP - Library to manipulate Information Packages of different formats: RODA,
     E-ARK, BagIt,
     Hungarian SIP 4, etc.
@@ -73,12 +73,13 @@
                 </goals>
                 <configuration>
                   <rules>
+                    <banDuplicatePomDependencyVersions/>
                     <requireMavenVersion>
-                      <version>3.8.6</version>
-                      <message>Invalid Maven version. It should, at least, be 3.8.6</message>
+                      <version>[3.9,)</version>
+                      <message>Invalid Maven version. It should be 3.9.X</message>
                     </requireMavenVersion>
                     <requireJavaVersion>
-                      <version>8</version>
+                      <version>17</version>
                     </requireJavaVersion>
                   </rules>
                 </configuration>
@@ -88,7 +89,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.3</version>
+            <version>3.11.0</version>
             <configuration>
               <source>${java_version}</source>
               <target>${java_version}</target>
@@ -97,7 +98,7 @@
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.1</version>
+            <version>0.8.10</version>
             <executions>
               <execution>
                 <id>default-prepare-agent</id>
@@ -176,9 +177,9 @@
             </configuration>
           </plugin>
           <plugin>
-            <groupId>pl.project13.maven</groupId>
-            <artifactId>git-commit-id-plugin</artifactId>
-            <version>2.2.4</version>
+            <groupId>io.github.git-commit-id</groupId>
+            <artifactId>git-commit-id-maven-plugin</artifactId>
+            <version>6.0.0</version>
             <executions>
               <execution>
                 <goals>
@@ -199,7 +200,6 @@
               <format>json</format>
             </configuration>
           </plugin>
-
         </plugins>
       </build>
     </profile>
@@ -220,12 +220,13 @@
                 </goals>
                 <configuration>
                   <rules>
+                    <banDuplicatePomDependencyVersions/>
                     <requireMavenVersion>
-                      <version>3.8.6</version>
-                      <message>Invalid Maven version. It should, at least, be 3.8.6</message>
+                      <version>[3.9,)</version>
+                      <message>Invalid Maven version. It should be 3.9.X</message>
                     </requireMavenVersion>
                     <requireJavaVersion>
-                      <version>8</version>
+                      <version>17</version>
                     </requireJavaVersion>
                   </rules>
                 </configuration>
@@ -235,7 +236,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.3</version>
+            <version>3.11.0</version>
             <configuration>
               <source>${java_version}</source>
               <target>${java_version}</target>
@@ -268,6 +269,30 @@
                 </configuration>
               </execution>
             </executions>
+          </plugin>
+          <plugin>
+            <groupId>io.github.git-commit-id</groupId>
+            <artifactId>git-commit-id-maven-plugin</artifactId>
+            <version>6.0.0</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>revision</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <!-- this is false by default, forces the plugin to generate the file -->
+              <generateGitPropertiesFile>true</generateGitPropertiesFile>
+
+              <!-- The path for the properties file to be generated. See Super Pom
+                  for default variable reference
+                  https://maven.apache.org/guides/introduction/introduction-to-the-pom.html -->
+              <generateGitPropertiesFilename>
+                ${project.build.directory}/classes/version.json
+              </generateGitPropertiesFilename>
+              <format>json</format>
+            </configuration>
           </plugin>
         </plugins>
       </build>
