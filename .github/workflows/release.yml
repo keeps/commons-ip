@@ -23,11 +23,8 @@ jobs:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven-
-      - name: Get release version
-        id: tag
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\/}
       - name: Set POM Version
-        run: mvn versions:set versions:commit -DnewVersion=${{ steps.tag.outputs.VERSION }}
+        run: mvn versions:set versions:commit -DnewVersion=${{ github.ref }}
       - name: Build Jar
         run: mvn --batch-mode clean package -P cli
         env:
@@ -39,9 +36,9 @@ jobs:
       - name: Release to GitHub
         uses: softprops/action-gh-release@v1
         with:
-          name: Version ${{ steps.tag.outputs.VERSION }}
-          tag_name: ${{ steps.tag.outputs.VERSION }}
+          name: Version ${{ github.ref }}
+          tag_name: ${{ github.ref }}
           draft: true
-          files: target/commons-ip2-cli-${{ steps.tag.outputs.VERSION }}.jar
+          files: target/commons-ip2-cli-${{ github.ref }}.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
