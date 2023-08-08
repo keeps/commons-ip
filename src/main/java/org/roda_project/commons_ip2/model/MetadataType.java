@@ -7,6 +7,7 @@
  */
 package org.roda_project.commons_ip2.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +15,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 public class MetadataType implements Serializable {
+  @Serial
   private static final long serialVersionUID = 9052247527983339112L;
 
   public enum MetadataTypeEnum {
@@ -22,7 +24,7 @@ public class MetadataType implements Serializable {
     PREMISRIGHTS("PREMIS:RIGHTS"), PREMISEVENT("PREMIS:EVENT"), TEXTMD("TEXTMD"), METSRIGHTS("METSRIGHTS"),
     ISO191152003("ISO 19115:2003"), NAP("NAP"), EACCPF("EAC-CPF"), LIDO("LIDO"), OTHER("OTHER");
 
-    protected static final Map<String, MetadataTypeEnum> typeToEnum = new HashMap<>();
+    private static final Map<String, MetadataTypeEnum> typeToEnum = new HashMap<>();
     static {
       for (MetadataTypeEnum metadataTypeEnum : MetadataTypeEnum.values()) {
         typeToEnum.put(metadataTypeEnum.getType(), metadataTypeEnum);
@@ -31,7 +33,7 @@ public class MetadataType implements Serializable {
 
     private final String type;
 
-    private MetadataTypeEnum(final String type) {
+    MetadataTypeEnum(final String type) {
       this.type = type;
     }
 
@@ -117,9 +119,8 @@ public class MetadataType implements Serializable {
       return true;
     if (obj == null)
       return false;
-    if (!(obj instanceof MetadataType))
+    if (!(obj instanceof MetadataType other))
       return false;
-    MetadataType other = (MetadataType) obj;
     return this.type == other.getType() && this.otherType.equals(other.getOtherType());
   }
 

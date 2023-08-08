@@ -2,404 +2,405 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.roda-project</groupId>
-  <artifactId>commons-ip2</artifactId>
-  <packaging>jar</packaging>
-  <version>2.4.0-SNAPSHOT</version>
-  <name>RODA Commons IP - Library to manipulate Information Packages of different formats: RODA,
-    E-ARK, BagIt,
-    Hungarian SIP 4, etc.
-  </name>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.roda-project</groupId>
+    <artifactId>commons-ip2</artifactId>
+    <packaging>jar</packaging>
+    <version>2.4.0-SNAPSHOT</version>
+    <name>RODA Commons IP - Library to manipulate Information Packages of different formats: RODA,
+        E-ARK, BagIt,
+        Hungarian SIP 4, etc.
+    </name>
 
-  <scm>
-    <url>https://github.com/keeps/commons-ip</url>
-  </scm>
-  <organization>
-    <name>KEEP SOLUTIONS</name>
-    <url>https://www.keep.pt</url>
-  </organization>
+    <scm>
+        <url>https://github.com/keeps/commons-ip</url>
+    </scm>
+    <organization>
+        <name>KEEP SOLUTIONS</name>
+        <url>https://www.keep.pt</url>
+    </organization>
 
-  <distributionManagement>
-    <repository>
-      <id>github</id>
-      <name>GitHub Packages</name>
-      <url>https://maven.pkg.github.com/keeps/commons-ip</url>
-    </repository>
-  </distributionManagement>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/keeps/commons-ip</url>
+        </repository>
+    </distributionManagement>
 
-  <developers>
-    <developer>
-      <id>hsilva</id>
-      <name>Helder Silva</name>
-      <email>hsilva@keep.pt</email>
-      <organization>KEEP SOLUTIONS</organization>
-      <organizationUrl>http://www.keep.pt</organizationUrl>
-      <timezone>0</timezone>
-    </developer>
-    <developer>
-      <id>jgomes</id>
-      <name>João Gomes</name>
-      <email>jgomes@keep.pt</email>
-      <organization>KEEP SOLUTIONS</organization>
-      <organizationUrl>http://www.keep.pt</organizationUrl>
-      <timezone>0</timezone>
-    </developer>
-  </developers>
+    <developers>
+        <developer>
+            <id>hsilva</id>
+            <name>Helder Silva</name>
+            <email>hsilva@keep.pt</email>
+            <organization>KEEP SOLUTIONS</organization>
+            <organizationUrl>https://www.keep.pt</organizationUrl>
+            <timezone>0</timezone>
+        </developer>
+        <developer>
+            <id>jgomes</id>
+            <name>João Gomes</name>
+            <email>jgomes@keep.pt</email>
+            <organization>KEEP SOLUTIONS</organization>
+            <organizationUrl>https://www.keep.pt</organizationUrl>
+            <timezone>0</timezone>
+        </developer>
+    </developers>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java_version>17</java_version>
-    <version.jackson>2.15.2</version.jackson>
-  </properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java_version>17</java_version>
+        <version.jackson>2.15.2</version.jackson>
+    </properties>
 
-  <profiles>
-    <profile>
-      <id>default</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-enforcer-plugin</artifactId>
-            <version>3.3.0</version>
-            <executions>
-              <execution>
-                <id>enforce-maven</id>
-                <goals>
-                  <goal>enforce</goal>
-                </goals>
-                <configuration>
-                  <rules>
-                    <banDuplicatePomDependencyVersions/>
-                    <requireMavenVersion>
-                      <version>[3.9,)</version>
-                      <message>Invalid Maven version. It should be 3.9.X</message>
-                    </requireMavenVersion>
-                    <requireJavaVersion>
-                      <version>17</version>
-                    </requireJavaVersion>
-                  </rules>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.11.0</version>
-            <configuration>
-              <source>${java_version}</source>
-              <target>${java_version}</target>
-            </configuration>
-          </plugin>
-          <plugin>
-            <groupId>org.jacoco</groupId>
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.10</version>
-            <executions>
-              <execution>
-                <id>default-prepare-agent</id>
-                <goals>
-                  <goal>prepare-agent</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>check</id>
-                <goals>
-                  <goal>check</goal>
-                </goals>
-                <configuration>
-                  <rules>
-                    <rule>
-                      <element>CLASS</element>
-                      <limits>
-                        <limit>
-                          <counter>LINE</counter>
-                          <value>COVEREDRATIO</value>
-                          <minimum>0.7</minimum>
-                        </limit>
-                        <limit>
-                          <counter>BRANCH</counter>
-                          <value>COVEREDRATIO</value>
-                          <minimum>0.7</minimum>
-                        </limit>
-                      </limits>
-                      <excludes>
-                        <!-- 20180814 hsilva: will not test model entities per se -->
-                        <exclude>org.roda_project.commons_ip2.model.*</exclude>
-                        <!-- 20180814 hsilva: will not test xml beans per se -->
-                        <exclude>org.roda_project.commons_ip2.mets_v1_11.beans.*</exclude>
-                        <!-- 20180814 hsilva: will not test this as it is here for future
-                            memory -->
-                        <exclude>org.roda_project.commons_ip2.command_line.Main</exclude>
-                        <!-- 20180814 hsilva: will not test utils per se -->
-                        <exclude>org.roda_project.commons_ip2.utils.*</exclude>
-                      </excludes>
-                    </rule>
-                  </rules>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-source-plugin</artifactId>
-            <version>3.0.1</version>
-            <executions>
-              <execution>
-                <id>attach-sources</id>
-                <phase>install</phase>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>com.mycila</groupId>
-            <artifactId>license-maven-plugin</artifactId>
-            <version>3.0</version>
-            <configuration>
-              <header>LICENSE_HEADER.txt</header>
-              <keywords>
-                <keyword>license</keyword>
-                <keyword>copyright</keyword>
-              </keywords>
-              <properties>
-                <project.license.url>https://github.com/keeps/commons-ip</project.license.url>
-              </properties>
-              <includes>
-                <include>**/*.java</include>
-              </includes>
-            </configuration>
-          </plugin>
-          <plugin>
-            <groupId>io.github.git-commit-id</groupId>
-            <artifactId>git-commit-id-maven-plugin</artifactId>
-            <version>6.0.0</version>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>revision</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <!-- this is false by default, forces the plugin to generate the file -->
-              <generateGitPropertiesFile>true</generateGitPropertiesFile>
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <version>3.3.0</version>
+                        <executions>
+                            <execution>
+                                <id>enforce-maven</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <banDuplicatePomDependencyVersions/>
+                                        <requireMavenVersion>
+                                            <version>[3.9,)</version>
+                                            <message>Invalid Maven version. It should be 3.9.X</message>
+                                        </requireMavenVersion>
+                                        <requireJavaVersion>
+                                            <version>17</version>
+                                        </requireJavaVersion>
+                                    </rules>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.11.0</version>
+                        <configuration>
+                            <source>${java_version}</source>
+                            <target>${java_version}</target>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.10</version>
+                        <executions>
+                            <execution>
+                                <id>default-prepare-agent</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>check</id>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <rule>
+                                            <element>CLASS</element>
+                                            <limits>
+                                                <limit>
+                                                    <counter>LINE</counter>
+                                                    <value>COVEREDRATIO</value>
+                                                    <minimum>0.7</minimum>
+                                                </limit>
+                                                <limit>
+                                                    <counter>BRANCH</counter>
+                                                    <value>COVEREDRATIO</value>
+                                                    <minimum>0.7</minimum>
+                                                </limit>
+                                            </limits>
+                                            <excludes>
+                                                <!-- 20180814 hsilva: will not test model entities per se -->
+                                                <exclude>org.roda_project.commons_ip2.model.*</exclude>
+                                                <!-- 20180814 hsilva: will not test xml beans per se -->
+                                                <exclude>org.roda_project.commons_ip2.mets_v1_11.beans.*</exclude>
+                                                <!-- 20180814 hsilva: will not test this as it is here for future
+                                                    memory -->
+                                                <exclude>org.roda_project.commons_ip2.command_line.Main</exclude>
+                                                <!-- 20180814 hsilva: will not test utils per se -->
+                                                <exclude>org.roda_project.commons_ip2.utils.*</exclude>
+                                            </excludes>
+                                        </rule>
+                                    </rules>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.0.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.mycila</groupId>
+                        <artifactId>license-maven-plugin</artifactId>
+                        <version>3.0</version>
+                        <configuration>
+                            <header>LICENSE_HEADER.txt</header>
+                            <keywords>
+                                <keyword>license</keyword>
+                                <keyword>copyright</keyword>
+                            </keywords>
+                            <properties>
+                                <project.license.url>https://github.com/keeps/commons-ip</project.license.url>
+                            </properties>
+                            <includes>
+                                <include>**/*.java</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>io.github.git-commit-id</groupId>
+                        <artifactId>git-commit-id-maven-plugin</artifactId>
+                        <version>6.0.0</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>revision</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <!-- this is false by default, forces the plugin to generate the file -->
+                            <generateGitPropertiesFile>true</generateGitPropertiesFile>
 
-              <!-- The path for the properties file to be generated. See Super Pom
-                  for default variable reference
-                  https://maven.apache.org/guides/introduction/introduction-to-the-pom.html -->
-              <generateGitPropertiesFilename>
-                ${project.build.directory}/classes/version.json
-              </generateGitPropertiesFilename>
-              <format>json</format>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>cli</id>
-      <build>
-        <finalName>commons-ip2-cli-${project.version}</finalName>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-enforcer-plugin</artifactId>
-            <version>3.3.0</version>
-            <executions>
-              <execution>
-                <id>enforce-maven</id>
-                <goals>
-                  <goal>enforce</goal>
-                </goals>
-                <configuration>
-                  <rules>
-                    <banDuplicatePomDependencyVersions/>
-                    <requireMavenVersion>
-                      <version>[3.9,)</version>
-                      <message>Invalid Maven version. It should be 3.9.X</message>
-                    </requireMavenVersion>
-                    <requireJavaVersion>
-                      <version>17</version>
-                    </requireJavaVersion>
-                  </rules>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.11.0</version>
-            <configuration>
-              <source>${java_version}</source>
-              <target>${java_version}</target>
-            </configuration>
-          </plugin>
-          <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <version>3.4.2</version>
-            <executions>
-              <execution>
-                <id>make-assembly</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>single</goal>
-                </goals>
-                <configuration>
-                  <attach>false</attach>
-                  <archive>
-                    <manifest>
-                      <addClasspath>true</addClasspath>
-                      <classpathPrefix>lib/</classpathPrefix>
-                      <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                      <mainClass>org.roda_project.commons_ip2.validator.CLI.Main</mainClass>
-                    </manifest>
-                  </archive>
-                  <descriptorRefs>
-                    <descriptorRef>jar-with-dependencies</descriptorRef>
-                  </descriptorRefs>
-                  <appendAssemblyId>false</appendAssemblyId>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>io.github.git-commit-id</groupId>
-            <artifactId>git-commit-id-maven-plugin</artifactId>
-            <version>6.0.0</version>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>revision</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <!-- this is false by default, forces the plugin to generate the file -->
-              <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                            <!-- The path for the properties file to be generated. See Super Pom
+                                for default variable reference
+                                https://maven.apache.org/guides/introduction/introduction-to-the-pom.html -->
+                            <generateGitPropertiesFilename>
+                                ${project.build.directory}/classes/version.json
+                            </generateGitPropertiesFilename>
+                            <format>json</format>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>cli</id>
+            <build>
+                <finalName>commons-ip2-cli-${project.version}</finalName>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <version>3.3.0</version>
+                        <executions>
+                            <execution>
+                                <id>enforce-maven</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <banDuplicatePomDependencyVersions/>
+                                        <requireMavenVersion>
+                                            <version>[3.9,)</version>
+                                            <message>Invalid Maven version. It should be 3.9.X</message>
+                                        </requireMavenVersion>
+                                        <requireJavaVersion>
+                                            <version>17</version>
+                                        </requireJavaVersion>
+                                    </rules>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.11.0</version>
+                        <configuration>
+                            <source>${java_version}</source>
+                            <target>${java_version}</target>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <version>3.4.2</version>
+                        <executions>
+                            <execution>
+                                <id>make-assembly</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                                <configuration>
+                                    <attach>false</attach>
+                                    <archive>
+                                        <manifest>
+                                            <addClasspath>true</addClasspath>
+                                            <classpathPrefix>lib/</classpathPrefix>
+                                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                            <mainClass>org.roda_project.commons_ip2.cli.Main</mainClass>
+                                        </manifest>
+                                    </archive>
+                                    <descriptorRefs>
+                                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                                    </descriptorRefs>
+                                    <appendAssemblyId>false</appendAssemblyId>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>io.github.git-commit-id</groupId>
+                        <artifactId>git-commit-id-maven-plugin</artifactId>
+                        <version>6.0.0</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>revision</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <!-- this is false by default, forces the plugin to generate the file -->
+                            <generateGitPropertiesFile>true</generateGitPropertiesFile>
 
-              <!-- The path for the properties file to be generated. See Super Pom
-                  for default variable reference
-                  https://maven.apache.org/guides/introduction/introduction-to-the-pom.html -->
-              <generateGitPropertiesFilename>
-                ${project.build.directory}/classes/version.json
-              </generateGitPropertiesFilename>
-              <format>json</format>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
+                            <!-- The path for the properties file to be generated. See Super Pom
+                                for default variable reference
+                                https://maven.apache.org/guides/introduction/introduction-to-the-pom.html -->
+                            <generateGitPropertiesFilename>
+                                ${project.build.directory}/classes/version.json
+                            </generateGitPropertiesFilename>
+                            <format>json</format>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
-  <dependencies>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>1.4.9</version>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>3.12.0</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.13.0</version>
-    </dependency>
-    <dependency>
-      <groupId>gov.loc</groupId>
-      <artifactId>bagit</artifactId>
-      <version>5.2.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-configuration2</artifactId>
-      <version>2.9.0</version>
-    </dependency>
-    <dependency>
-      <!-- needed for commons-configuration2 -->
-      <groupId>commons-beanutils</groupId>
-      <artifactId>commons-beanutils</artifactId>
-      <version>1.9.4</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jdom</groupId>
-      <artifactId>jdom2</artifactId>
-      <version>2.0.6.1</version>
-    </dependency>
-
-    <!-- Jackson.core dependency for Validation Reporter and joda-time -->
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-core</artifactId>
-      <version>${version.jackson}</version>
-    </dependency>
-    <dependency>
-      <groupId>joda-time</groupId>
-      <artifactId>joda-time</artifactId>
-      <version>2.12.5</version>
-    </dependency>
-
-    <!-- CLI dependecies -->
-    <dependency>
-      <groupId>commons-cli</groupId>
-      <artifactId>commons-cli</artifactId>
-      <version>1.4</version>
-    </dependency>
-
-    <!-- Java11 dependencies -->
-    <dependency>
-      <groupId>javax.xml.bind</groupId>
-      <artifactId>jaxb-api</artifactId>
-      <version>2.3.1</version>
-    </dependency>
-    <dependency>
-      <groupId>javax.activation</groupId>
-      <artifactId>activation</artifactId>
-      <version>1.1.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.glassfish.jaxb</groupId>
-      <artifactId>jaxb-runtime</artifactId>
-      <version>2.3.8</version>
-    </dependency>
-
-    <!-- PyIP dependencies -->
-    <dependency>
-      <groupId>com.github.joschi.jackson</groupId>
-      <artifactId>jackson-datatype-threetenbp</artifactId>
-      <version>2.12.5</version>
-    </dependency>
-  </dependencies>
-
-  <dependencyManagement>
     <dependencies>
-      <!-- forcing transitive dependencies to upgrade due to identified vulnerabilities -->
-      <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-text</artifactId>
-        <version>1.10.0</version>
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-        <version>${version.jackson}</version>
-      </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.4.9</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.13.0</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.loc</groupId>
+            <artifactId>bagit</artifactId>
+            <version>5.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-configuration2</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+        <dependency>
+            <!-- needed for commons-configuration2 -->
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.9.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>jdom2</artifactId>
+            <version>2.0.6.1</version>
+        </dependency>
+
+        <!-- Jackson.core dependency for Validation Reporter and joda-time -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${version.jackson}</version>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.12.5</version>
+        </dependency>
+
+        <!-- CLI dependecies -->
+        <!-- https://mvnrepository.com/artifact/info.picocli/picocli -->
+        <dependency>
+            <groupId>info.picocli</groupId>
+            <artifactId>picocli</artifactId>
+            <version>4.7.4</version>
+        </dependency>
+
+        <!-- Java11 dependencies -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>2.3.8</version>
+        </dependency>
+
+        <!-- PyIP dependencies -->
+        <dependency>
+            <groupId>com.github.joschi.jackson</groupId>
+            <artifactId>jackson-datatype-threetenbp</artifactId>
+            <version>2.12.5</version>
+        </dependency>
     </dependencies>
-  </dependencyManagement>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- forcing transitive dependencies to upgrade due to identified vulnerabilities -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-text</artifactId>
+                <version>1.10.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${version.jackson}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

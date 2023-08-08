@@ -9,10 +9,10 @@ import java.util.stream.Collectors;
 import org.roda_project.commons_ip2.validator.constants.ConstantsAIPspec;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.constants.ConstantsSIPspec;
-import org.roda_project.commons_ip2.validator.pyipModel.MetadataChecks;
-import org.roda_project.commons_ip2.validator.pyipModel.MetadataStatus;
-import org.roda_project.commons_ip2.validator.pyipModel.Severity;
-import org.roda_project.commons_ip2.validator.pyipModel.TestResult;
+import org.roda_project.commons_ip2.validator.model.pyip.MetadataChecks;
+import org.roda_project.commons_ip2.validator.model.pyip.MetadataStatus;
+import org.roda_project.commons_ip2.validator.model.pyip.Severity;
+import org.roda_project.commons_ip2.validator.model.pyip.TestResult;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.reporter.RequirementsComparator;
 

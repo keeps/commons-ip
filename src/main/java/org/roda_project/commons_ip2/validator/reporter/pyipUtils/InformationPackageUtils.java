@@ -10,12 +10,12 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.xml.bind.DatatypeConverter;
 
-import org.roda_project.commons_ip2.validator.pyipModel.Checksum;
-import org.roda_project.commons_ip2.validator.pyipModel.ChecksumAlg;
-import org.roda_project.commons_ip2.validator.pyipModel.IpType;
-import org.roda_project.commons_ip2.validator.pyipModel.PackageDetails;
-import org.roda_project.commons_ip2.validator.pyipModel.ProfileDetails;
-import org.roda_project.commons_ip2.validator.pyipModel.Representation;
+import org.roda_project.commons_ip2.validator.model.pyip.Checksum;
+import org.roda_project.commons_ip2.validator.model.pyip.ChecksumAlg;
+import org.roda_project.commons_ip2.validator.model.pyip.IpType;
+import org.roda_project.commons_ip2.validator.model.pyip.PackageDetails;
+import org.roda_project.commons_ip2.validator.model.pyip.ProfileDetails;
+import org.roda_project.commons_ip2.validator.model.pyip.Representation;
 
 /** {@author João Gomes <jgomes@keep.pt>}. */
 public final class InformationPackageUtils {

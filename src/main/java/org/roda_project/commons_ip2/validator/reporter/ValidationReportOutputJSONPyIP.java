@@ -6,10 +6,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.roda_project.commons_ip2.validator.pyipModel.ChecksumAlg;
-import org.roda_project.commons_ip2.validator.pyipModel.MetadataStatus;
-import org.roda_project.commons_ip2.validator.pyipModel.StructStatus;
-import org.roda_project.commons_ip2.validator.pyipModel.ValidationReport;
+import org.roda_project.commons_ip2.validator.model.pyip.ChecksumAlg;
+import org.roda_project.commons_ip2.validator.model.pyip.MetadataStatus;
+import org.roda_project.commons_ip2.validator.model.pyip.StructStatus;
+import org.roda_project.commons_ip2.validator.model.pyip.ValidationReport;
 import org.roda_project.commons_ip2.validator.reporter.pyipUtils.PyIPUtils;
 
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
