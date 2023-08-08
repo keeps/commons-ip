@@ -7,9 +7,9 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
-import org.roda_project.commons_ip2.validator.pyipModel.Severity;
-import org.roda_project.commons_ip2.validator.pyipModel.StructStatus;
-import org.roda_project.commons_ip2.validator.pyipModel.TestResult;
+import org.roda_project.commons_ip2.validator.model.pyip.Severity;
+import org.roda_project.commons_ip2.validator.model.pyip.StructStatus;
+import org.roda_project.commons_ip2.validator.model.pyip.TestResult;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.reporter.RequirementsComparator;
 
