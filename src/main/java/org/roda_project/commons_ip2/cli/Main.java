@@ -19,14 +19,7 @@ public class Main implements Callable<Integer> {
   }
 
   public static void main(String... args) {
-    CommandLine commandLine = new CommandLine(new Main());
-    commandLine.parseArgs(args);
-    if (commandLine.isVersionHelpRequested()) {
-      commandLine.printVersionHelp(System.out);
-      System.exit(0);
-    } else {
-      int exitCode = commandLine.execute(args);
-      System.exit(exitCode);
-    }
+    int exitCode = new CommandLine(new Main()).execute(args);
+    System.exit(exitCode);
   }
 }

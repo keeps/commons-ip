@@ -13,10 +13,7 @@ import org.xml.sax.SAXException;
 import picocli.CommandLine;
 
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,12 +25,14 @@ import java.util.concurrent.Callable;
 /**
  * @author Miguel Guimarães <mguimaraes@keep.pt>
  */
-@CommandLine.Command(name = "validate", usageHelpAutoWidth = true, description = "test", showAtFileInUsageHelp = true)
+@CommandLine.Command(name = "validate", usageHelpAutoWidth = true, description = "Validates E-ARK IP packages against the specification")
 public class Validate implements Callable<Integer> {
+
+  private enum ReportType {COMMONS_IP, PYIP}
 
   @CommandLine.Option(names = {"-h", "--help"}, usageHelp = true, description = "display this help and exit")
   boolean help;
-  
+
   @CommandLine.Option(names = {"-i",
     "--inputs"}, arity = "1..*", required = true, description = "Paths to the SIPs archive file or files")
   private String[] sipPaths;
@@ -43,8 +42,8 @@ public class Validate implements Callable<Integer> {
   private String reportPathDir;
 
   @CommandLine.Option(names = {"-r",
-    "--reporter-type"}, description = "Report type", showDefaultValue = CommandLine.Help.Visibility.NEVER, defaultValue = "default")
-  private String reportType;
+    "--reporter-type"}, description = "Report type (possible values: ${COMPLETION-CANDIDATES})", showDefaultValue = CommandLine.Help.Visibility.ALWAYS, defaultValue = "COMMONS_IP")
+  private ReportType reportType;
 
   @CommandLine.Option(names = {"-v",
     "--verbose"}, description = "Verbose command line output with all validation steps", type = Boolean.class)
@@ -62,13 +61,14 @@ public class Validate implements Callable<Integer> {
     return 0;
   }
 
-  private void handleSipValidation(final String sip, final String reportPathDir, final String reportType,
-    final boolean verbose) throws IOException, ParserConfigurationException, SAXException, NoSuchAlgorithmException, CLIException {
+  private void handleSipValidation(final String sip, final String reportPathDir, final ReportType reportType,
+    final boolean verbose)
+    throws IOException, ParserConfigurationException, SAXException, NoSuchAlgorithmException, CLIException {
     final Path sipPath = Paths.get(sip);
 
     Path reportPath = obtainReportPath(sipPath, reportPathDir);
 
-    if (reportType.equals("default")) {
+    if (reportType.equals(ReportType.COMMONS_IP)) {
       final OutputStream outputStream = createReportOutputStream(reportPath);
       if (outputStream != null) {
         final ValidationReportOutputJson jsonReporter = new ValidationReportOutputJson(sipPath, outputStream);
@@ -80,7 +80,7 @@ public class Validate implements Callable<Integer> {
       } else {
         throw new CLIException("test");
       }
-    } else if (reportType.equals("eark")) {
+    } else if (reportType.equals(ReportType.PYIP)) {
       final ValidationReportOutputJSONPyIP jsonReporter = new ValidationReportOutputJSONPyIP(reportPath, sipPath);
       final EARKPyIPValidator earkPyIPValidator = new EARKPyIPValidator(jsonReporter);
       if (verbose) {
