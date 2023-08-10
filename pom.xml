@@ -259,7 +259,7 @@
                       <addClasspath>true</addClasspath>
                       <classpathPrefix>lib/</classpathPrefix>
                       <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                      <mainClass>org.roda_project.commons_ip2.validator.CLI.Main</mainClass>
+                      <mainClass>org.roda_project.commons_ip2.cli.Main</mainClass>
                     </manifest>
                   </archive>
                   <descriptorRefs>

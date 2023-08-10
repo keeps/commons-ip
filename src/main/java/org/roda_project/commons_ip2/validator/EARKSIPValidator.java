@@ -11,24 +11,24 @@ import java.util.Map;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.roda_project.commons_ip2.validator.aipComponents.aipFileSectionComponent.AipFileSectionComponent;
+import org.roda_project.commons_ip2.validator.components.aipFileSectionComponent.AipFileSectionComponent;
 import org.roda_project.commons_ip2.validator.common.InstatiateMets;
-import org.roda_project.commons_ip2.validator.component.MetsValidator;
-import org.roda_project.commons_ip2.validator.component.administritiveMetadataComponent.AdministritiveMetadataComponentValidator;
-import org.roda_project.commons_ip2.validator.component.descriptiveMetadataComponent.DescriptiveMetadataComponentValidator;
-import org.roda_project.commons_ip2.validator.component.fileComponent.StructureComponentValidator;
-import org.roda_project.commons_ip2.validator.component.fileSectionComponent.FileSectionComponentValidator;
-import org.roda_project.commons_ip2.validator.component.metsRootComponent.MetsComponentValidator;
-import org.roda_project.commons_ip2.validator.component.metsRootComponent.MetsHeaderComponentValidator;
-import org.roda_project.commons_ip2.validator.component.structuralMapComponent.StructuralMapComponentValidator;
+import org.roda_project.commons_ip2.validator.components.MetsValidator;
+import org.roda_project.commons_ip2.validator.components.administritiveMetadataComponent.AdministritiveMetadataComponentValidator;
+import org.roda_project.commons_ip2.validator.components.descriptiveMetadataComponent.DescriptiveMetadataComponentValidator;
+import org.roda_project.commons_ip2.validator.components.fileComponent.StructureComponentValidator;
+import org.roda_project.commons_ip2.validator.components.fileSectionComponent.FileSectionComponentValidator;
+import org.roda_project.commons_ip2.validator.components.metsRootComponent.MetsComponentValidator;
+import org.roda_project.commons_ip2.validator.components.metsRootComponent.MetsHeaderComponentValidator;
+import org.roda_project.commons_ip2.validator.components.structuralMapComponent.StructuralMapComponentValidator;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReportOutputJson;
-import org.roda_project.commons_ip2.validator.sipComponents.sipFileSectionComponent.SipFileSectionComponent;
-import org.roda_project.commons_ip2.validator.sipComponents.sipMetsRootComponent.SipMetsComponent;
-import org.roda_project.commons_ip2.validator.sipComponents.sipMetsRootComponent.SipMetsHdrComponent;
+import org.roda_project.commons_ip2.validator.components.sipFileSectionComponent.SipFileSectionComponent;
+import org.roda_project.commons_ip2.validator.components.sipMetsRootComponent.SipMetsComponent;
+import org.roda_project.commons_ip2.validator.components.sipMetsRootComponent.SipMetsHdrComponent;
 import org.roda_project.commons_ip2.validator.state.MetsValidatorState;
 import org.roda_project.commons_ip2.validator.state.StructureValidatorState;
 import org.roda_project.commons_ip2.validator.utils.ResultsUtils;
@@ -243,8 +243,7 @@ public class EARKSIPValidator {
       message.append(Constants.OPEN_SQUARE_BRACKET).append(cause.getClass().getSimpleName())
         .append(Constants.CLOSE_SQUARE_BRACKET).append(Constants.EMPTY_SPACE).append(cause.getMessage());
 
-      if (cause instanceof SAXParseException) {
-        final SAXParseException e1 = (SAXParseException) cause;
+      if (cause instanceof SAXParseException e1) {
         message.append(" (file: ").append(mets).append(", line: ").append(e1.getLineNumber()).append(", column: ")
           .append(e1.getColumnNumber()).append(")");
       }
@@ -341,7 +340,7 @@ public class EARKSIPValidator {
   private void validateSIPComponents() throws IOException {
     aipComponents.clear();
     for (MetsValidator component : sipComponents) {
-      if (component instanceof SipFileSectionComponent) {
+      if (component instanceof SipFileSectionComponent component1) {
         ((SipFileSectionComponent) component).setIsToValidate(ResultsUtils.isResultValid(
           validationReportOutputJson.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID));
       }

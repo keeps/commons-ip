@@ -8,14 +8,14 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.roda_project.commons_ip2.validator.constants.Constants;
-import org.roda_project.commons_ip2.validator.pyipModel.InformationPackage;
-import org.roda_project.commons_ip2.validator.pyipModel.MetadataChecks;
-import org.roda_project.commons_ip2.validator.pyipModel.MetadataResults;
-import org.roda_project.commons_ip2.validator.pyipModel.MetadataStatus;
-import org.roda_project.commons_ip2.validator.pyipModel.StructResults;
-import org.roda_project.commons_ip2.validator.pyipModel.StructStatus;
-import org.roda_project.commons_ip2.validator.pyipModel.TestResult;
-import org.roda_project.commons_ip2.validator.pyipModel.ValidationReport;
+import org.roda_project.commons_ip2.validator.model.pyip.InformationPackage;
+import org.roda_project.commons_ip2.validator.model.pyip.MetadataChecks;
+import org.roda_project.commons_ip2.validator.model.pyip.MetadataResults;
+import org.roda_project.commons_ip2.validator.model.pyip.MetadataStatus;
+import org.roda_project.commons_ip2.validator.model.pyip.StructResults;
+import org.roda_project.commons_ip2.validator.model.pyip.StructStatus;
+import org.roda_project.commons_ip2.validator.model.pyip.TestResult;
+import org.roda_project.commons_ip2.validator.model.pyip.ValidationReport;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 
 /** {@author João Gomes <jgomes@keep.pt>}. */
