@@ -41,7 +41,7 @@ public class Create implements Callable<Integer> {
   CSIPVersion version = CSIPVersion.V210;
 
   @CommandLine.Option(names = {"-p", "--path"}, arity = "1", description = "Path where the E-ARK SIP should be saved")
-  String path;
+  String path = System.getProperty("user.dir");
 
   @CommandLine.Option(names = {"--submitter-name"}, description = "Submitter agent name", paramLabel = "<name>")
   String submitterAgentName;

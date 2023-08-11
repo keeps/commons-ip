@@ -150,7 +150,10 @@ public class SIPBuilderUtils {
     final IPDescriptiveMetadata descriptiveMetadata = new IPDescriptiveMetadata(new IPFile(Paths.get(metadataFile)),
       metadataTypeEnum, version);
     sip.addDescriptiveMetadata(descriptiveMetadata);
-    sip.addSchema(new IPFile(Paths.get(metadataGroup.getMetadata().getMetadataSchema())));
+    String metadataSchema = metadataGroup.getMetadata().getMetadataSchema();
+    if(metadataSchema != null){
+      sip.addSchema(new IPFile(Paths.get(metadataSchema)));
+    }
   }
 
   private static MetadataType getMetadataTypeFromMetadataFile(final String metadataFile) {

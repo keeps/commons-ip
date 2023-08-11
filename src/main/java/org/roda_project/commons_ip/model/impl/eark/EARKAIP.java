@@ -267,6 +267,7 @@ public class EARKAIP extends AIPWrap {
 
       return aip;
     } catch (final IPException e) {
+      LOGGER.debug("Error parsing E-ARK AIP", e);
       throw new ParseException("Error parsing E-ARK AIP", e);
     }
   }

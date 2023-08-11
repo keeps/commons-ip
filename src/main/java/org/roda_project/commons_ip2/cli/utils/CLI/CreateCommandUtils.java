@@ -45,7 +45,10 @@ public class CreateCommandUtils {
   public static boolean validateMetadataSchemaPaths(final List<MetadataGroup> metadataGroups) {
     if (metadataGroups != null) {
       return metadataGroups.stream()
-        .allMatch(metadata -> Files.exists(Paths.get(metadata.getMetadata().getMetadataSchema())));
+        .allMatch(metadata -> {
+          String schemaPath = metadata.getMetadata().getMetadataSchema();
+          return schemaPath == null || Files.exists(Paths.get(schemaPath));
+        });
     }
 
     return true;

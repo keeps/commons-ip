@@ -4,6 +4,7 @@ import org.roda_project.commons_ip2.cli.model.exception.mappers.CommonsIPExcepti
 import org.roda_project.commons_ip2.cli.model.exception.handlers.PrintExceptionMessageHandler;
 import org.roda_project.commons_ip2.cli.model.exception.handlers.ShortErrorMessageHandler;
 import org.roda_project.commons_ip2.cli.providers.VersionProvider;
+import org.roda_project.commons_ip2.validator.constants.Constants;
 import picocli.CommandLine;
 
 /**
@@ -13,10 +14,8 @@ import picocli.CommandLine;
   Validate.class}, mixinStandardHelpOptions = true, versionProvider = VersionProvider.class)
 public class Main implements Runnable {
   public static void main(String... args) {
-    System.exit(new CommandLine(new Main()).setCaseInsensitiveEnumValuesAllowed(true)
-      .setExitCodeExceptionMapper(new CommonsIPExceptionMapper())
-      .setParameterExceptionHandler(new ShortErrorMessageHandler())
-      .setExecutionExceptionHandler(new PrintExceptionMessageHandler()).setUsageHelpAutoWidth(true).execute(args));
+    System.setProperty(Constants.PROPERTY_KEY_HOME, System.getProperty("user.dir"));
+    System.exit(new CommandLine(new Main()).execute(args));
   }
 
   @CommandLine.Spec

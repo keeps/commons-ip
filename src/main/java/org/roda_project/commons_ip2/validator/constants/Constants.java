@@ -386,6 +386,8 @@ public final class Constants {
    */
   public static final String AIP_MODULE_NAME_2 = " Structural metadata - Digital objects";
 
+  public static final String PROPERTY_KEY_HOME = "commonsIp.home";
+
   private Constants() {
   }
 }

@@ -8,7 +8,7 @@ import picocli.CommandLine;
 public class Metadata {
   @CommandLine.Option(names = "--metadata-file", required = true, paramLabel = "<path>", description = "Path to descriptive metadata file")
   String metadataFile;
-  @CommandLine.Option(names = "--metadata-type", required = true, paramLabel = "<type>", description = "Descriptive metadata type")
+  @CommandLine.Option(names = "--metadata-type", paramLabel = "<type>", description = "Descriptive metadata type")
   String metadataType;
   @CommandLine.Option(names = "--metadata-version", paramLabel = "<version>", description = "Descriptive metadata version")
   String metadataVersion;
