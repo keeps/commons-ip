@@ -1,5 +1,6 @@
 package org.roda_project.commons_ip2.validator.state;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -35,6 +36,8 @@ public class MetsValidatorState {
    * Type of the ip.
    */
   private String ipType = null;
+
+  private Path sipPath = null;
 
   /**
    * Get the {@link Mets} object.
@@ -176,5 +179,16 @@ public class MetsValidatorState {
    */
   public void setIpType(final String ipType) {
     this.ipType = ipType;
+  }
+
+
+
+
+  public void setSipPath(Path earksipPath) {
+    this.sipPath=earksipPath;
+  }
+
+  public Path getSipPath() {
+    return this.sipPath;
   }
 }

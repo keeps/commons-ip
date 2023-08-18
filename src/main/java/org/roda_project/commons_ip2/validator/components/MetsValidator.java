@@ -3,6 +3,7 @@ package org.roda_project.commons_ip2.validator.components;
 import java.io.IOException;
 import java.util.Map;
 
+import org.roda_project.commons_ip2.validator.components.metsRootComponent.METSfile;
 import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.state.MetsValidatorState;

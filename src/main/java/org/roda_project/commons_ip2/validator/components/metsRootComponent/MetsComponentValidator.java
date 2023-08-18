@@ -38,6 +38,8 @@ public class MetsComponentValidator extends MetsValidatorImpl {
    */
   private final List<String> contentInformationTypesList;
 
+  METSfile metsFile = METSfile.getInstance();
+
   /**
    * Initialize all objects needed to validation of this component.
    *
@@ -70,6 +72,7 @@ public class MetsComponentValidator extends MetsValidatorImpl {
   public Map<String, ReporterDetails> validate(final StructureValidatorState structureValidatorState,
     final MetsValidatorState metsValidatorState) throws IOException {
     final Map<String, ReporterDetails> results = new HashMap<>();
+
     /* CSIP1 */
 
     notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP1_ID);
@@ -124,7 +127,11 @@ public class MetsComponentValidator extends MetsValidatorImpl {
   private ReporterDetails validateCSIP1(final StructureValidatorState structureValidatorState,
     final MetsValidatorState metsValidatorState) throws IOException {
     final ReporterDetails details = new ReporterDetails();
-    final String objid = metsValidatorState.getMets().getOBJID();
+    metsFile.setObjID(Handler.getNode(metsValidatorState.getSipPath(), metsValidatorState.getMetsPath(),
+      "/mets:mets/@OBJID", "metadata"));
+
+    final String objid = metsFile.getObjID();
+
     if (objid == null) {
       details.addIssue(Message.createErrorMessage("mets/@OBJID can't be null in %1$s the value is null.",
         metsValidatorState.getMetsName(), metsValidatorState.isRootMets()));
@@ -168,7 +175,9 @@ public class MetsComponentValidator extends MetsValidatorImpl {
    * @return {@link ReporterDetails}
    */
   private ReporterDetails validateCSIP2(final MetsValidatorState metsValidatorState) {
-    final String type = metsValidatorState.getMets().getTYPE();
+    metsFile.setType(Handler.getNode(metsValidatorState.getSipPath(), metsValidatorState.getMetsPath(),
+      "/mets:mets/@TYPE", "metadata"));
+    final String type = metsFile.getType();
     if (StringUtils.isBlank(type)) {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
         Message.createErrorMessage("mets/@TYPE can't be null, in %1$s the value is null",
@@ -196,8 +205,10 @@ public class MetsComponentValidator extends MetsValidatorImpl {
    */
   private ReporterDetails validateCSIP3(final MetsValidatorState metsValidatorState) {
     final ReporterDetails details = new ReporterDetails();
-    final String type = metsValidatorState.getMets().getTYPE();
-    final String otherType = metsValidatorState.getMets().getOTHERTYPE();
+    final String type = metsFile.getType();
+    metsFile.setOtherType(Handler.getNode(metsValidatorState.getSipPath(), metsValidatorState.getMetsPath(),
+      "/mets:mets/@csip:OTHERTYPE", "csip"));
+    final String otherType = metsFile.getOtherType();
     if (type != null && type.equals("OTHER") && (otherType == null || otherType.equals(""))) {
       details.setValid(false);
       details.addIssue(Message.createErrorMessage(
@@ -220,7 +231,9 @@ public class MetsComponentValidator extends MetsValidatorImpl {
    * @return {@link ReporterDetails}
    */
   private ReporterDetails validateCSIP4(final MetsValidatorState metsValidatorState) {
-    final String contentInformationType = metsValidatorState.getMets().getCONTENTINFORMATIONTYPE();
+    metsFile.setContentInformationType(Handler.getNode(metsValidatorState.getSipPath(),
+      metsValidatorState.getMetsPath(), "/mets:mets/@csip:CONTENTINFORMATIONTYPE", "csip"));
+    final String contentInformationType = metsFile.getContentInformationType();
     if (contentInformationType != null) {
       if (!contentInformationTypesList.contains(contentInformationType)) {
         final StringBuilder message = new StringBuilder();
@@ -249,8 +262,10 @@ public class MetsComponentValidator extends MetsValidatorImpl {
    * @return {@link ReporterDetails}
    */
   private ReporterDetails validateCSIP5(final MetsValidatorState metsValidatorState) {
-    final String contentInformationType = metsValidatorState.getMets().getCONTENTINFORMATIONTYPE();
-    final String otherContentInformationType = metsValidatorState.getMets().getOTHERCONTENTINFORMATIONTYPE();
+    final String contentInformationType = metsFile.getContentInformationType();
+    metsFile.setOtherContentInformationType(Handler.getNode(metsValidatorState.getSipPath(),
+      metsValidatorState.getMetsPath(), "/mets:mets/@csip:OTHERCONTENTINFORMATIONTYPE", "csip"));
+    final String otherContentInformationType = metsFile.getOtherContentInformationType();
     if (contentInformationType == null) {
       return new ReporterDetails();
     }
@@ -276,7 +291,9 @@ public class MetsComponentValidator extends MetsValidatorImpl {
    */
   private ReporterDetails validateCSIP6(final MetsValidatorState metsValidatorState) {
     final ReporterDetails details = new ReporterDetails();
-    final String profile = metsValidatorState.getMets().getPROFILE();
+    metsFile.setProfile(Handler.getNode(metsValidatorState.getSipPath(), metsValidatorState.getMetsPath(),
+      "/mets:mets/@PROFILE", "metadata"));
+    final String profile = metsFile.getProfile();
     if (profile == null || profile.equals("")) {
       details.setValid(false);
       details

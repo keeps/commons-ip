@@ -38,7 +38,7 @@ public class Validate implements Callable<Integer> {
 
   @CommandLine.Option(names = {"-o",
     "--output-report-dir"}, paramLabel = "<path>", description = "Path to save the validation report. If not set a report will be generated in the same folder as the IP package.")
-  String reportPathDir;
+  String reportPathDir =  System.getProperty("user.dir");
 
   @CommandLine.Option(names = {"-r",
     "--reporter-type"}, paramLabel = "<type>", description = "Report type (possible values: ${COMPLETION-CANDIDATES})")

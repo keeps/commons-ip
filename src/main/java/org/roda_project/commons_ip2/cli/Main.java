@@ -13,10 +13,11 @@ import picocli.CommandLine;
   Validate.class}, mixinStandardHelpOptions = true, versionProvider = VersionProvider.class)
 public class Main implements Runnable {
   public static void main(String... args) {
-    System.exit(new CommandLine(new Main()).setCaseInsensitiveEnumValuesAllowed(true)
-      .setExitCodeExceptionMapper(new CommonsIPExceptionMapper())
-      .setParameterExceptionHandler(new ShortErrorMessageHandler())
-      .setExecutionExceptionHandler(new PrintExceptionMessageHandler()).setUsageHelpAutoWidth(true).execute(args));
+    System.exit(new CommandLine(new Main())//.setCaseInsensitiveEnumValuesAllowed(true)
+      //.setExitCodeExceptionMapper(new CommonsIPExceptionMapper())
+      //.setParameterExceptionHandler(new ShortErrorMessageHandler())
+      //.setExecutionExceptionHandler(new PrintExceptionMessageHandler()).setUsageHelpAutoWidth(true)
+      .execute(args));
   }
 
   @CommandLine.Spec

@@ -11,24 +11,24 @@ import java.util.Map;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.roda_project.commons_ip2.validator.components.aipFileSectionComponent.AipFileSectionComponent;
 import org.roda_project.commons_ip2.validator.common.InstatiateMets;
 import org.roda_project.commons_ip2.validator.components.MetsValidator;
 import org.roda_project.commons_ip2.validator.components.administritiveMetadataComponent.AdministritiveMetadataComponentValidator;
+import org.roda_project.commons_ip2.validator.components.aipFileSectionComponent.AipFileSectionComponent;
 import org.roda_project.commons_ip2.validator.components.descriptiveMetadataComponent.DescriptiveMetadataComponentValidator;
 import org.roda_project.commons_ip2.validator.components.fileComponent.StructureComponentValidator;
 import org.roda_project.commons_ip2.validator.components.fileSectionComponent.FileSectionComponentValidator;
 import org.roda_project.commons_ip2.validator.components.metsRootComponent.MetsComponentValidator;
 import org.roda_project.commons_ip2.validator.components.metsRootComponent.MetsHeaderComponentValidator;
+import org.roda_project.commons_ip2.validator.components.sipFileSectionComponent.SipFileSectionComponent;
+import org.roda_project.commons_ip2.validator.components.sipMetsRootComponent.SipMetsComponent;
+import org.roda_project.commons_ip2.validator.components.sipMetsRootComponent.SipMetsHdrComponent;
 import org.roda_project.commons_ip2.validator.components.structuralMapComponent.StructuralMapComponentValidator;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReportOutputJson;
-import org.roda_project.commons_ip2.validator.components.sipFileSectionComponent.SipFileSectionComponent;
-import org.roda_project.commons_ip2.validator.components.sipMetsRootComponent.SipMetsComponent;
-import org.roda_project.commons_ip2.validator.components.sipMetsRootComponent.SipMetsHdrComponent;
 import org.roda_project.commons_ip2.validator.state.MetsValidatorState;
 import org.roda_project.commons_ip2.validator.state.StructureValidatorState;
 import org.roda_project.commons_ip2.validator.utils.ResultsUtils;
@@ -98,7 +98,6 @@ public class EARKSIPValidator {
     this.csipComponents.add(new AdministritiveMetadataComponentValidator());
     this.csipComponents.add(new FileSectionComponentValidator());
     this.csipComponents.add(new StructuralMapComponentValidator());
-
     this.sipComponents.add(new SipMetsComponent());
     this.sipComponents.add(new SipMetsHdrComponent());
     this.sipComponents.add(new SipFileSectionComponent());
@@ -142,7 +141,7 @@ public class EARKSIPValidator {
     final Map<String, ReporterDetails> structureValidationResults = structureComponent
       .validate(structureValidatorState);
     validationReportOutputJson.getResults().putAll(structureValidationResults);
-
+    metsValidatorState.setSipPath(earksipPath);
     if (validationReportOutputJson.validFileComponent()) {
       final Map<String, InputStream> subMets;
       if (structureValidatorState.isZipFileFlag()) {
@@ -200,13 +199,13 @@ public class EARKSIPValidator {
   private void validateSubMets(final Map<String, InputStream> subMets, final boolean isZip) {
     for (Map.Entry<String, InputStream> entry : subMets.entrySet()) {
 
-      final InstatiateMets instatiateMets = new InstatiateMets(entry.getValue());
+      // final InstatiateMets instatiateMets = new InstatiateMets(entry.getValue());
       try {
-        metsValidatorState.setMets(instatiateMets.instatiateMetsFile());
-        metsValidatorState.setIpType(metsValidatorState.getMets().getMetsHdr().getOAISPACKAGETYPE());
+        // metsValidatorState.setMets(instatiateMets.instatiateMetsFile());
+        // metsValidatorState.setIpType(metsValidatorState.getMets().getMetsHdr().getOAISPACKAGETYPE());
         setupMetsValidatorState(entry.getKey(), isZip, false);
         validateComponents();
-      } catch (IOException | JAXBException | SAXException e) {
+      } catch (IOException e) {
         final String message = createExceptionMessage(e, entry.getKey());
         final ReporterDetails csipStr0 = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message,
           false, false);

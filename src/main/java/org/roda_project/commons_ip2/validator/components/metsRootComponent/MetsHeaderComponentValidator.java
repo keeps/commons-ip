@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.roda_project.commons_ip2.mets_v1_12.beans.MetsType;
@@ -42,6 +41,12 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
    */
   private List<MetsType.MetsHdr.Agent> agents;
 
+  METSfile metsFile = METSfile.getInstance();
+
+
+
+
+
   /**
    * Initialize all objects needed to validation of this component.
    *
@@ -61,11 +66,9 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
   @Override
   public Map<String, ReporterDetails> validate(final StructureValidatorState structureValidatorState,
     final MetsValidatorState metsValidatorState) throws IOException {
-    metsHdr = metsValidatorState.getMets().getMetsHdr();
+    METSfile metsFile = METSfile.getInstance();
 
-    if (metsHdr != null) {
-      agents = metsHdr.getAgent();
-    }
+    Handler.getHeader(metsValidatorState.getSipPath(), metsValidatorState.getMetsPath());
 
     final Map<String, ReporterDetails> results = new HashMap<>();
 
@@ -170,6 +173,7 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
    */
   private ReporterDetails validateCSIP117(final MetsValidatorState metsValidatorState) {
     final ReporterDetails details = new ReporterDetails();
+
     if (metsHdr == null) {
       details.setValid(false);
       details.addIssue(Message.createErrorMessage("mets/metsHdr can't be null, in %1$s the mets/metsHdr does not exist",
@@ -184,7 +188,9 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
    */
   private ReporterDetails validateCSIP7(final MetsValidatorState metsValidatorState) {
     final ReporterDetails details = new ReporterDetails();
-    final XMLGregorianCalendar createDate = metsHdr.getCREATEDATE();
+
+    // final XMLGregorianCalendar createDate = metsHdr.getCREATEDATE();
+    String createDate = null;
     if (createDate == null) {
       details.setValid(false);
       details.addIssue(Message.createErrorMessage("mets/metsHdr/@CREATEDATE can't be null, in %1$s the value is null",

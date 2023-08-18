@@ -26,7 +26,7 @@ public final class Constants {
   /**
    * Constant METS file.
    */
-  public static final String METS_FILE = "METS.xml";
+  public static final String       METS_FILE = "METS.xml";
 
   /**
    * Constant ID type CSIP.

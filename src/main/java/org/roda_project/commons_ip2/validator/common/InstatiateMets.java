@@ -1,5 +1,7 @@
 package org.roda_project.commons_ip2.validator.common;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.xml.XMLConstants;
@@ -22,7 +24,7 @@ public class InstatiateMets {
   /**
    * {@link InputStream}.
    */
-  private final InputStream stream;
+  private InputStream stream;
 
   /**
    * Constructor that sets the {@link InputStream}.
@@ -32,6 +34,10 @@ public class InstatiateMets {
    */
   public InstatiateMets(final InputStream stream) {
     this.stream = stream;
+  }
+
+  public InstatiateMets() {
+
   }
 
   /**
@@ -54,5 +60,11 @@ public class InstatiateMets {
     final Schema schema = factory.newSchema(metsSchemaSource);
     jaxbUnmarshaller.setSchema(schema);
     return (Mets) jaxbUnmarshaller.unmarshal(stream);
+  }
+
+  public Mets unmarshal(String path) throws JAXBException, IOException {
+    JAXBContext context = JAXBContext.newInstance(Mets.class);
+    return (Mets) context.createUnmarshaller()
+      .unmarshal(new FileReader(path));
   }
 }
