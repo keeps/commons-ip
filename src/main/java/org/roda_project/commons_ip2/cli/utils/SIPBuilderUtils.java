@@ -163,7 +163,7 @@ public class SIPBuilderUtils {
 
     MetadataType metadataType = new MetadataType(metadataTypeValue);
 
-    if (MetadataType.OTHER().equals(metadataType)) {
+    if (MetadataType.MetadataTypeEnum.OTHER.equals(metadataType.getType())) {
       final String[] splitFileName = filename.split(UNDERSCORE);
       if (splitFileName.length == 2) {
         metadataType = new MetadataType(splitFileName[0]);

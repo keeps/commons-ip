@@ -462,11 +462,11 @@ public abstract class IP implements IPInterface {
       + validationReport + "]";
   }
 
-  public static IP parse(final Path source) throws ParseException {
+  public IP parse(final Path source) throws ParseException {
     throw new ParseException("One must implement static method parse in a concrete class");
   }
 
-  public static IP parse(final Path source, final Path destinationDirectory) throws ParseException {
+  public IP parse(final Path source, final Path destinationDirectory) throws ParseException {
     throw new ParseException("One must implement static method parse in a concrete class");
   }
 

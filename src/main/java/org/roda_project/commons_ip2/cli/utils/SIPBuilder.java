@@ -116,7 +116,7 @@ public class SIPBuilder {
 
     sip.addCreatorSoftwareAgent("RODA commons-ip", softVersion);
     sip.addSubmitterAgent(submitterAgentName, submitterAgentId);
-    sip.setDescription("SIP created by commons-ip cli tool");
+    sip.setDescription("SIP created by commons-ip CLI");
 
     if (checksum != null) {
       sip.setChecksum(checksum.toString());

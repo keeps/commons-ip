@@ -21,7 +21,7 @@ public class IPMetadata implements Serializable {
   private String id;
   private Optional<XMLGregorianCalendar> createDate;
   private IPFileInterface metadata;
-  private MetadataType metadataType = MetadataType.OTHER();
+  private MetadataType metadataType = new MetadataType(MetadataTypeEnum.OTHER);
   private MetadataStatus metadataStatus = MetadataStatus.CURRENT;
 
   public IPMetadata() {
@@ -32,7 +32,7 @@ public class IPMetadata implements Serializable {
     id = Utils.generateRandomAndPrefixedUUID();
     createDate = Utils.getCurrentTime();
     this.metadata = metadata;
-    metadataType = MetadataType.OTHER();
+    metadataType = new MetadataType(MetadataTypeEnum.OTHER);
   }
 
   public IPMetadata(IPFileInterface metadata, MetadataType metadataType) {

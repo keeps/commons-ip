@@ -41,8 +41,9 @@ public class ParseEARK2STest {
   public void buildEARKSip2withFolders() throws IPException, InterruptedException, ParseException {
     LOGGER.info("Creating EARK SIP 2");
     Path zipSIPS = Paths.get("src/test/resources/SIP-S/shallowFileFolderAndEmptyFolder.zip");
+    EARKSIP earksip = new EARKSIP();
     // 1) invoke static method parse and that's it
-    SIP earkSIP = EARKSIP.parse(zipSIPS, tempFolder);
+    SIP earkSIP = earksip.parse(zipSIPS, tempFolder);
 
     List<IPFileInterface> files = earkSIP.getRepresentations().get(0).getData();
     Assert.assertEquals(4, files.size());
