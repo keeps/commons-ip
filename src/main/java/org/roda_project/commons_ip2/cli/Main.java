@@ -13,7 +13,8 @@ import picocli.CommandLine;
   Validate.class}, mixinStandardHelpOptions = true, versionProvider = VersionProvider.class)
 public class Main implements Runnable {
   public static void main(String... args) {
-    System.exit(new CommandLine(new Main()).execute(args));
+    System.exit(new CommandLine(new Main()).setExecutionExceptionHandler(new PrintExceptionMessageHandler())
+      .setParameterExceptionHandler(new ShortErrorMessageHandler()).setUsageHelpAutoWidth(true).execute(args));
   }
 
   @CommandLine.Spec
