@@ -21,13 +21,13 @@ import static org.roda_project.commons_ip2.cli.model.ExitCodes.EXIT_CODE_OK;
 /**
  * @author Miguel Guimarães <mguimaraes@keep.pt>
  */
-@CommandLine.Command(name = "create", description = "Creates E-ARK SIP packages", showDefaultValues = true)
+@CommandLine.Command(name = "create", description = "Creates E-ARK SIP packages%n", showDefaultValues = true)
 public class Create implements Callable<Integer> {
 
-  @CommandLine.ArgGroup(exclusive = false, multiplicity = "0..*", heading = "This is the descriptive metadata section%n")
+  @CommandLine.ArgGroup(exclusive = false, multiplicity = "0..*", heading = "This is the descriptive metadata section:%n")
   List<MetadataGroup> metadataListArgs = new ArrayList<>();
 
-  @CommandLine.ArgGroup(exclusive = false, multiplicity = "0..*", heading = "This is the representation section%n")
+  @CommandLine.ArgGroup(exclusive = false, multiplicity = "0..*", heading = "This is the representation section:%n")
   List<RepresentationGroup> representationListArgs = new ArrayList<>();
 
   @CommandLine.Option(names = {"-h", "--help"}, usageHelp = true, description = "display this help and exit")
@@ -57,7 +57,7 @@ public class Create implements Callable<Integer> {
   List<String> ancestors;
 
   @CommandLine.Option(names = {"-C",
-    "--checksum"}, description = "Checksum algorithms (possible values: ${COMPLETION-CANDIDATES})")
+    "--checksum"}, paramLabel = "<algorithm>",description = "Checksum algorithms (possible values: ${COMPLETION-CANDIDATES})")
   Checksum checksum = Checksum.SHA256;
 
   @CommandLine.Option(names = {"-d",

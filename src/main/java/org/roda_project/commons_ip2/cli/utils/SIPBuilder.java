@@ -39,6 +39,7 @@ public class SIPBuilder {
   private List<String> documentation = new ArrayList<>();
 
   private String softwareVersion;
+
   public SIPBuilder() {
     // Empty Constructor
   }
@@ -104,7 +105,8 @@ public class SIPBuilder {
   }
 
   public Path build() throws SIPBuilderException, InterruptedException {
-    final SIP sip = new EARKSIP(SIPBuilderUtils.getOrGenerateID(this.sipId), IPContentType.getMIXED(), IPContentInformationType.getMIXED(), version.toString());
+    final SIP sip = new EARKSIP(SIPBuilderUtils.getOrGenerateID(this.sipId), IPContentType.getMIXED(),
+      IPContentInformationType.getMIXED(), version.toString());
 
     String softVersion = "DEVELOPMENT-VERSION";
 
@@ -112,7 +114,7 @@ public class SIPBuilder {
       softVersion = softwareVersion;
     }
 
-    sip.addCreatorSoftwareAgent("RODA Commons IP", softVersion);
+    sip.addCreatorSoftwareAgent("RODA commons-ip", softVersion);
     sip.addSubmitterAgent(submitterAgentName, submitterAgentId);
     sip.setDescription("SIP created by commons-ip cli tool");
 
@@ -126,7 +128,6 @@ public class SIPBuilder {
       LOGGER.debug("Cannot add metadata to the SIP", e);
       throw new SIPBuilderException("Cannot add metadata to the SIP.");
     }
-
 
     try {
       SIPBuilderUtils.addRepresentationGroupsToSIP(sip, representationArgs, targetOnly);
