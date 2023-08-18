@@ -1,7 +1,19 @@
-package org.roda_project.commons_ip2.model;
+package org.roda_project.commons_ip2.model.impl.eark;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import javax.xml.bind.JAXBException;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.commons.lang3.StringUtils;
-import org.roda_project.commons_ip.model.MetadataType;
 import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.METSEnums;
@@ -15,6 +27,21 @@ import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MetsType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.StructMapType;
+import org.roda_project.commons_ip2.model.IPAgent;
+import org.roda_project.commons_ip2.model.IPAgentNoteTypeEnum;
+import org.roda_project.commons_ip2.model.IPAltRecordID;
+import org.roda_project.commons_ip2.model.IPConstants;
+import org.roda_project.commons_ip2.model.IPContentInformationType;
+import org.roda_project.commons_ip2.model.IPContentType;
+import org.roda_project.commons_ip2.model.IPDescriptiveMetadata;
+import org.roda_project.commons_ip2.model.IPFileInterface;
+import org.roda_project.commons_ip2.model.IPFileShallow;
+import org.roda_project.commons_ip2.model.IPHeader;
+import org.roda_project.commons_ip2.model.IPInterface;
+import org.roda_project.commons_ip2.model.IPMetadata;
+import org.roda_project.commons_ip2.model.IPRepresentation;
+import org.roda_project.commons_ip2.model.MetsWrapper;
+import org.roda_project.commons_ip2.model.ValidationEntry;
 import org.roda_project.commons_ip2.model.impl.ModelUtils;
 import org.roda_project.commons_ip2.utils.METSUtils;
 import org.roda_project.commons_ip2.utils.StructMapDiv;
@@ -25,39 +52,15 @@ import org.roda_project.commons_ip2.utils.ZIPUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.bind.JAXBException;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+public abstract class EARKMETSCreator {
+  private static final Logger LOGGER = LoggerFactory.getLogger(EARKMETSCreator.class);
+  private final Map<String, MetsType.FileSec.FileGrp> dataFileGrp = new HashMap<>();
 
-/**
- * @author Carlos Afonso <cafonso@keep.pt>
- */
-public abstract class IPMets {
-  /**
-   * {@link Logger}.
-   */
-  private static final Logger LOGGER = LoggerFactory.getLogger(IPMets.class);
-
-  /**
-   * {@link HashMap} with all data fileGrps.
-   */
-  private static final Map<String, MetsType.FileSec.FileGrp> dataFileGrp = new HashMap<>();
-
-
-  public MetsWrapper generateMETS(final String id, final String label, final String profile,
-                                         final boolean mainMets, final Optional<List<String>> ancestors, final Path metsPath, final IPHeader ipHeader,
-                                         final String type, final IPContentType contentType, final IPContentInformationType contentInformationType,
-                                         final boolean isMetadata, final boolean isMetadataOther, final boolean isSchemas, final boolean isDocumentation,
-                                         final boolean isSubmission, final boolean isRepresentations, final boolean isRepresentationsData)
-    throws IPException {
+  public MetsWrapper generateMETS(final String id, final String label, final String profile, final boolean mainMets,
+    final Optional<List<String>> ancestors, final Path metsPath, final IPHeader ipHeader, final String type,
+    final IPContentType contentType, final IPContentInformationType contentInformationType, final boolean isMetadata,
+    final boolean isMetadataOther, final boolean isSchemas, final boolean isDocumentation, final boolean isSubmission,
+    final boolean isRepresentations, final boolean isRepresentationsData) throws IPException {
     final Mets mets = new Mets();
     final MetsWrapper metsWrapper = new MetsWrapper(mets, metsPath);
 
@@ -136,11 +139,11 @@ public abstract class IPMets {
    * @throws IPException
    *           if some error occurs.
    */
-  public  MetsWrapper generateMetsShallow(final IPRepresentation representation, final String profile,
-                                                final boolean mainMets, final Optional<List<String>> ancestors, final Path metsPath, final IPHeader ipHeader,
-                                                final String type, final boolean isMetadata, final boolean isMetadataOther, final boolean isSchemas,
-                                                final boolean isDocumentation, final boolean isSubmission, final boolean isRepresentations,
-                                                final boolean isRepresentationsData) throws IPException {
+  public MetsWrapper generateMetsShallow(final IPRepresentation representation, final String profile,
+    final boolean mainMets, final Optional<List<String>> ancestors, final Path metsPath, final IPHeader ipHeader,
+    final String type, final boolean isMetadata, final boolean isMetadataOther, final boolean isSchemas,
+    final boolean isDocumentation, final boolean isSubmission, final boolean isRepresentations,
+    final boolean isRepresentationsData) throws IPException {
 
     final Mets mets = new Mets();
     final MetsWrapper metsWrapper = new MetsWrapper(mets, metsPath);
@@ -188,21 +191,21 @@ public abstract class IPMets {
     return metsWrapper;
   }
 
-  private static MetsType.FileSec.FileGrp createFileGroup(final String use) {
+  protected MetsType.FileSec.FileGrp createFileGroup(final String use) {
     final MetsType.FileSec.FileGrp fileGroup = new MetsType.FileSec.FileGrp();
     fileGroup.setID(Utils.generateRandomAndPrefixedUUID());
     fileGroup.setUSE(use);
     return fileGroup;
   }
 
-  private static DivType createDivForStructMap(final String label) {
+  protected DivType createDivForStructMap(final String label) {
     final DivType div = new DivType();
     div.setID(Utils.generateRandomAndPrefixedUUID());
     div.setLABEL(label);
     return div;
   }
 
-  private static DivType createRepresentationDivForStructMap(final String representationId, final DivType.Mptr mptr) {
+  protected DivType createRepresentationDivForStructMap(final String representationId, final DivType.Mptr mptr) {
     final DivType div = new DivType();
     div.setID(Utils.generateRandomAndPrefixedUUID());
     div.setLABEL(IPConstants.REPRESENTATIONS_WITH_FIRST_LETTER_CAPITAL + "/" + representationId);
@@ -210,9 +213,9 @@ public abstract class IPMets {
     return div;
   }
 
-  public static void addRepresentationMETSToZipAndToMainMETS(final Map<String, ZipEntryInfo> zipEntries,
-                                                             final MetsWrapper mainMETSWrapper, final String representationId, final MetsWrapper representationMETSWrapper,
-                                                             final String representationMetsPath, final Path buildDir) throws IPException, InterruptedException {
+  public void addRepresentationMETSToZipAndToMainMETS(final Map<String, ZipEntryInfo> zipEntries,
+    final MetsWrapper mainMETSWrapper, final String representationId, final MetsWrapper representationMETSWrapper,
+    final String representationMetsPath, final Path buildDir) throws IPException, InterruptedException {
     try {
       if (Thread.interrupted()) {
         throw new InterruptedException();
@@ -247,8 +250,8 @@ public abstract class IPMets {
     }
   }
 
-  private static void addMETSToZip(final Map<String, ZipEntryInfo> zipEntries, final MetsWrapper metsWrapper,
-                                   final String metsPath, final Path buildDir, final boolean mainMets, final FileType fileType)
+  protected void addMETSToZip(final Map<String, ZipEntryInfo> zipEntries, final MetsWrapper metsWrapper,
+    final String metsPath, final Path buildDir, final boolean mainMets, final FileType fileType)
     throws JAXBException, IOException, IPException {
     final Path temp = Files.createTempFile(buildDir, IPConstants.METS_FILE_NAME, IPConstants.METS_FILE_EXTENSION);
     ZIPUtils.addMETSFileToZip(zipEntries, temp, metsPath, metsWrapper.getMets(), mainMets, fileType);
@@ -268,7 +271,7 @@ public abstract class IPMets {
     return agent;
   }
 
-  public static IPAgent createIPAgent(final IPInterface ip, final MetsType.MetsHdr.Agent agent) {
+  protected IPAgent createIPAgent(final IPInterface ip, final MetsType.MetsHdr.Agent agent) {
     final IPAgent ipAgent = new IPAgent();
     METSEnums.CreatorType agentType;
     try {
@@ -295,22 +298,24 @@ public abstract class IPMets {
     return ipAgent;
   }
 
-  public static MdSecType.MdRef addDescriptiveMetadataToMETS(final MetsWrapper metsWrapper,
-                                                             final IPDescriptiveMetadata descriptiveMetadata, final String descriptiveMetadataPath)
+  protected MdSecType.MdRef addDescriptiveMetadataToMETS(final MetsWrapper metsWrapper,
+    final IPDescriptiveMetadata descriptiveMetadata, final String descriptiveMetadataPath)
     throws IPException, InterruptedException {
     return addMetadataToMETS(metsWrapper, descriptiveMetadata, descriptiveMetadataPath,
       descriptiveMetadata.getMetadataType().getType().getType(), descriptiveMetadata.getMetadataType().getOtherType(),
       descriptiveMetadata.getMetadataVersion(), true);
   }
 
-  public static MdSecType.MdRef addOtherMetadataToMETS(final MetsWrapper metsWrapper, final IPMetadata otherMetadata,
-                                                       final String otherMetadataPath) throws IPException, InterruptedException {
-    return addMetadataToMETS(metsWrapper, otherMetadata, otherMetadataPath, MetadataType.MetadataTypeEnum.OTHER.getType() , otherMetadata.getId(), null, false);
+  protected MdSecType.MdRef addOtherMetadataToMETS(final MetsWrapper metsWrapper, final IPMetadata otherMetadata,
+    final String otherMetadataPath) throws IPException, InterruptedException {
+    return addMetadataToMETS(metsWrapper, otherMetadata, otherMetadataPath,
+      org.roda_project.commons_ip.model.MetadataType.MetadataTypeEnum.OTHER.getType(), otherMetadata.getId(), null,
+      false);
   }
 
-  private static MdSecType.MdRef addMetadataToMETS(final MetsWrapper metsWrapper, final IPMetadata metadata,
-                                                   final String metadataPath, final String mdType, final String mdOtherType, final String mdTypeVersion,
-                                                   final boolean isDescriptive) throws IPException, InterruptedException {
+  protected MdSecType.MdRef addMetadataToMETS(final MetsWrapper metsWrapper, final IPMetadata metadata,
+    final String metadataPath, final String mdType, final String mdOtherType, final String mdTypeVersion,
+    final boolean isDescriptive) throws IPException, InterruptedException {
     final MdSecType dmdSec = new MdSecType();
     dmdSec.setSTATUS(metadata.getMetadataStatus().toString());
     dmdSec.setID(Utils.generateRandomAndPrefixedUUID());
@@ -339,8 +344,8 @@ public abstract class IPMets {
     return mdRef;
   }
 
-  public static MdSecType.MdRef addPreservationMetadataToMETS(final MetsWrapper metsWrapper,
-                                                              final IPMetadata preservationMetadata, final String preservationMetadataPath)
+  protected MdSecType.MdRef addPreservationMetadataToMETS(final MetsWrapper metsWrapper,
+    final IPMetadata preservationMetadata, final String preservationMetadataPath)
     throws IPException, InterruptedException {
     final MdSecType digiprovMD = new MdSecType();
     digiprovMD.setSTATUS(preservationMetadata.getMetadataStatus().toString());
@@ -359,11 +364,11 @@ public abstract class IPMets {
     return mdRef;
   }
 
-  private static String escapeNCName(final String id) {
+  protected String escapeNCName(final String id) {
     return id.replaceAll("[:@$%&/+,;\\s]", "_");
   }
 
-  private static MdSecType.MdRef createMdRef(final String id, final String metadataPath) {
+  protected MdSecType.MdRef createMdRef(final String id, final String metadataPath) {
     final MdSecType.MdRef mdRef = new MdSecType.MdRef();
     mdRef.setID(METSEnums.FILE_ID_PREFIX + escapeNCName(id));
     mdRef.setType(IPConstants.METS_TYPE_SIMPLE);
@@ -372,7 +377,7 @@ public abstract class IPMets {
     return mdRef;
   }
 
-  public static void addDataFileToMETS(final MetsWrapper representationMETS, final IPFileShallow shallow) {
+  protected void addDataFileToMETS(final MetsWrapper representationMETS, final IPFileShallow shallow) {
     final FileType file = shallow.getFileType();
     file.setID(Utils.generateRandomAndPrefixedFileID());
 
@@ -383,8 +388,8 @@ public abstract class IPMets {
     addDataFileFromShallow(representationMETS.getDataFileGroup().getFileGrp(), shallow, file);
   }
 
-  public static FileType addDataFileToMETS(final MetsWrapper representationMETS, final String dataFilePath,
-                                           final Path dataFile) throws IPException, InterruptedException {
+  protected FileType addDataFileToMETS(final MetsWrapper representationMETS, final String dataFilePath,
+    final Path dataFile) throws IPException, InterruptedException {
     final FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedFileID());
 
@@ -405,8 +410,8 @@ public abstract class IPMets {
     return file;
   }
 
-  public static FileType addSchemaFileToMETS(final MetsWrapper metsWrapper, final String schemaFilePath,
-                                             final Path schemaFile) throws IPException, InterruptedException {
+  protected FileType addSchemaFileToMETS(final MetsWrapper metsWrapper, final String schemaFilePath,
+    final Path schemaFile) throws IPException, InterruptedException {
     final FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedFileID());
 
@@ -429,8 +434,8 @@ public abstract class IPMets {
     return file;
   }
 
-  public static FileType addSubmissionFileToMETS(final MetsWrapper metsWrapper, final String submissionFilePath,
-                                                 final Path submissionFile) throws IPException, InterruptedException {
+  protected FileType addSubmissionFileToMETS(final MetsWrapper metsWrapper, final String submissionFilePath,
+    final Path submissionFile) throws IPException, InterruptedException {
     final FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedFileID());
 
@@ -449,8 +454,8 @@ public abstract class IPMets {
     return file;
   }
 
-  public static FileType addDocumentationFileToMETS(final MetsWrapper metsWrapper, final String documentationFilePath,
-                                                    final Path documentationFile) throws IPException, InterruptedException {
+  protected FileType addDocumentationFileToMETS(final MetsWrapper metsWrapper, final String documentationFilePath,
+    final Path documentationFile) throws IPException, InterruptedException {
     final FileType file = new FileType();
     file.setID(Utils.generateRandomAndPrefixedFileID());
 
@@ -472,7 +477,7 @@ public abstract class IPMets {
     return file;
   }
 
-  private static StructMapType generateAncestorStructMap(final List<String> ancestors) {
+  protected StructMapType generateAncestorStructMap(final List<String> ancestors) {
     final StructMapType structMap = new StructMapType();
     structMap.setID(Utils.generateRandomAndPrefixedUUID());
     structMap.setLABEL(IPConstants.RODA_STRUCTURAL_MAP);
@@ -492,7 +497,7 @@ public abstract class IPMets {
     return structMap;
   }
 
-  public static List<String> extractAncestorsFromStructMap(final Mets mets) {
+  protected List<String> extractAncestorsFromStructMap(final Mets mets) {
     final List<String> ancestors = new ArrayList<>();
 
     for (StructMapType structMap : mets.getStructMap()) {
@@ -520,8 +525,8 @@ public abstract class IPMets {
 
   // Common methods to GenerateMets
 
-  private static void addBasicAttributesToMets(final Mets mets, final String id, final String label,
-                                               final String profile, final IPContentType contentType, final IPContentInformationType contentInformationType) {
+  protected void addBasicAttributesToMets(final Mets mets, final String id, final String label, final String profile,
+    final IPContentType contentType, final IPContentInformationType contentInformationType) {
 
     mets.setOBJID(id);
     mets.setPROFILE(profile);
@@ -566,41 +571,43 @@ public abstract class IPMets {
 
     mets.setMetsHdr(header);
   }
+
   // Separation of actions in generateMets
 
-  private static void addAmdSecToMets(final Mets mets) {
+  protected void addAmdSecToMets(final Mets mets) {
     final AmdSecType amdSec = new AmdSecType();
     amdSec.setID(Utils.generateRandomAndPrefixedUUID());
     mets.getAmdSec().add(amdSec);
   }
 
-  private static void addCommonFileGrpToMets(final MetsWrapper metsWrapper, final MetsType.FileSec fileSec,
-                                             final boolean isSchemas, final boolean isSubmission, final boolean isDocumentation, final String type) {
+  protected void addCommonFileGrpToMets(final MetsWrapper metsWrapper, final MetsType.FileSec fileSec,
+    final boolean isSchemas, final boolean isSubmission, final boolean isDocumentation, final String type) {
     if (isSchemas) {
       final MetsType.FileSec.FileGrp schemasFileGroup = createFileGroup(IPConstants.SCHEMAS_WITH_FIRST_LETTER_CAPITAL);
       fileSec.getFileGrp().add(schemasFileGroup);
       metsWrapper.setSchemasFileGroup(schemasFileGroup);
-      if (IPEnums.IPType.AIP.toString().equals(type) && isSubmission) {
-        final MetsType.FileSec.FileGrp submissionFileGroup = createFileGroup(IPConstants.SUBMISSION);
-        fileSec.getFileGrp().add(submissionFileGroup);
-        metsWrapper.setSubmissionFileGroup(submissionFileGroup);
-      }
+    }
+    if (IPEnums.IPType.AIP.toString().equals(type) && isSubmission) {
+      final MetsType.FileSec.FileGrp submissionFileGroup = createFileGroup(IPConstants.SUBMISSION);
+      fileSec.getFileGrp().add(submissionFileGroup);
+      metsWrapper.setSubmissionFileGroup(submissionFileGroup);
     }
     if (isDocumentation) {
-      final MetsType.FileSec.FileGrp documentationFileGroup = createFileGroup(IPConstants.DOCUMENTATION_WITH_FIRST_LETTER_CAPITAL);
+      final MetsType.FileSec.FileGrp documentationFileGroup = createFileGroup(
+        IPConstants.DOCUMENTATION_WITH_FIRST_LETTER_CAPITAL);
       fileSec.getFileGrp().add(documentationFileGroup);
       metsWrapper.setDocumentationFileGroup(documentationFileGroup);
     }
   }
 
-  private static MetsType.FileSec createFileSec() {
+  protected MetsType.FileSec createFileSec() {
     final MetsType.FileSec fileSec = new MetsType.FileSec();
     fileSec.setID(Utils.generateRandomAndPrefixedUUID());
     return fileSec;
   }
 
-  private static void addDataFileGrpToMets(final MetsWrapper metsWrapper, final MetsType.FileSec fileSec, final boolean mainMets,
-                                           final boolean isRepresentationsData) {
+  protected void addDataFileGrpToMets(final MetsWrapper metsWrapper, final MetsType.FileSec fileSec,
+    final boolean mainMets, final boolean isRepresentationsData) {
     if (!mainMets && isRepresentationsData) {
       final MetsType.FileSec.FileGrp dataFileGroup = createFileGroup(IPConstants.DATA_WITH_FIRST_LETTER_CAPITAL);
       fileSec.getFileGrp().add(dataFileGroup);
@@ -608,7 +615,7 @@ public abstract class IPMets {
     }
   }
 
-  private static StructMapType createStructMap() {
+  protected StructMapType createStructMap() {
     final StructMapType structMap = new StructMapType();
     structMap.setID(Utils.generateRandomAndPrefixedUUID());
     structMap.setTYPE(IPConstants.METS_TYPE_PHYSICAL);
@@ -616,9 +623,9 @@ public abstract class IPMets {
     return structMap;
   }
 
-  private static DivType addCommonDivsToMainDiv(final MetsWrapper metsWrapper, final String id,
-                                                final boolean isMetadata, final boolean isMetadataOther, final boolean isSchemas, final boolean isDocumentation,
-                                                final boolean isSubmission, final String type) {
+  protected DivType addCommonDivsToMainDiv(final MetsWrapper metsWrapper, final String id, final boolean isMetadata,
+    final boolean isMetadataOther, final boolean isSchemas, final boolean isDocumentation, final boolean isSubmission,
+    final String type) {
     final DivType mainDiv = createDivForStructMap(id);
     metsWrapper.setMainDiv(mainDiv);
     // metadata
@@ -658,8 +665,8 @@ public abstract class IPMets {
     return mainDiv;
   }
 
-  private static void addDataDivToMets(final MetsWrapper metsWrapper, final DivType mainDiv, final boolean mainMets,
-                                       final boolean isRepresentationsData) {
+  protected void addDataDivToMets(final MetsWrapper metsWrapper, final DivType mainDiv, final boolean mainMets,
+    final boolean isRepresentationsData) {
     if (!mainMets && isRepresentationsData) {
       final DivType dataDiv = createDivForStructMap(IPConstants.DATA_WITH_FIRST_LETTER_CAPITAL);
       metsWrapper.setDataDiv(dataDiv);
@@ -667,7 +674,7 @@ public abstract class IPMets {
     }
   }
 
-  private static void addAncestorsToMets(final Mets mets, final Optional<List<String>> ancestors) {
+  protected void addAncestorsToMets(final Mets mets, final Optional<List<String>> ancestors) {
     // RODA struct map
     if (ancestors.isPresent() && !ancestors.get().isEmpty()) {
       final StructMapType structMapParent = generateAncestorStructMap(ancestors.get());
@@ -675,7 +682,7 @@ public abstract class IPMets {
     }
   }
 
-  public static Map<String, MetsType.FileSec.FileGrp> getDataFileGrp() {
+  protected Map<String, MetsType.FileSec.FileGrp> getDataFileGrp() {
     return dataFileGrp;
   }
 
@@ -686,7 +693,7 @@ public abstract class IPMets {
    * @param representation
    *          {@link IPRepresentation}
    */
-  private static void addFileGrps(final IPRepresentation representation) {
+  protected void addFileGrps(final IPRepresentation representation) {
 
     for (IPFileInterface file : representation.getData()) {
       final String dataFilePath;
@@ -704,8 +711,8 @@ public abstract class IPMets {
   }
 
   /**
-   * Creates the Shallow {@link MetsType.FileSec.FileGrp} and adds to {@link MetsWrapper} and
-   * {@link MetsType.FileSec}.
+   * Creates the Shallow {@link MetsType.FileSec.FileGrp} and adds to
+   * {@link MetsWrapper} and {@link MetsType.FileSec}.
    *
    * @param metsWrapper
    *          {@link MetsWrapper}.
@@ -718,8 +725,8 @@ public abstract class IPMets {
    * @param representation
    *          {@link IPRepresentation}.
    */
-  private static void createShallowFileGrps(final MetsWrapper metsWrapper, final MetsType.FileSec fileSec,
-                                            final boolean mainMets, final boolean isRepresentationsData, final IPRepresentation representation) {
+  protected void createShallowFileGrps(final MetsWrapper metsWrapper, final MetsType.FileSec fileSec,
+    final boolean mainMets, final boolean isRepresentationsData, final IPRepresentation representation) {
     if (!mainMets && isRepresentationsData) {
       addFileGrps(representation);
       for (Map.Entry<String, MetsType.FileSec.FileGrp> entry : dataFileGrp.entrySet()) {
@@ -746,8 +753,8 @@ public abstract class IPMets {
    * @param isRepresentationsData
    *          boolean if have Data in Representation.
    */
-  private static void createAndAddShallowDataDiv(final MetsWrapper metsWrapper, final IPRepresentation representation,
-                                                 final DivType mainDiv, final boolean mainMets, final boolean isRepresentationsData) {
+  protected void createAndAddShallowDataDiv(final MetsWrapper metsWrapper, final IPRepresentation representation,
+    final DivType mainDiv, final boolean mainMets, final boolean isRepresentationsData) {
     if (!mainMets && isRepresentationsData) {
       final Tree<StructMapDiv> dataDivsTree = createTree(representation);
       DivType dataDiv = createDivForStructMap(dataDivsTree.getRoot().getLabel());
@@ -769,7 +776,7 @@ public abstract class IPMets {
    *          {@link IPRepresentation}.
    * @return {@link Tree} of {@link StructMapDiv}.
    */
-  private static Tree<StructMapDiv> createTree(IPRepresentation representation) {
+  protected Tree<StructMapDiv> createTree(IPRepresentation representation) {
     final Tree<StructMapDiv> divsTree = new Tree<>(new StructMapDiv(IPConstants.DATA_WITH_FIRST_LETTER_CAPITAL));
     for (IPFileInterface file : representation.getData()) {
       IPFileShallow shallow = (IPFileShallow) file;
@@ -794,8 +801,8 @@ public abstract class IPMets {
    * @param fileRelativeFolders
    *          {@link List} of {@link String} of file Relative folders.
    */
-  private static void addNodes(final Tree<StructMapDiv> divTree, final String fileLocation,
-                               List<String> fileRelativeFolders) {
+  protected void addNodes(final Tree<StructMapDiv> divTree, final String fileLocation,
+    List<String> fileRelativeFolders) {
     if (fileRelativeFolders == null || fileRelativeFolders.isEmpty()) {
       if (fileLocation != null) {
         divTree.getRoot().setFileLocation(fileLocation);
@@ -820,7 +827,7 @@ public abstract class IPMets {
    * @param dataDiv
    *          {@link DivType}.
    */
-  private static void createDataDiv(Tree<StructMapDiv> dataDivsTree, DivType dataDiv) {
+  protected void createDataDiv(Tree<StructMapDiv> dataDivsTree, DivType dataDiv) {
     if (!dataDivsTree.getChilds().isEmpty()) {
       for (Tree<StructMapDiv> child : dataDivsTree.getChilds()) {
         DivType div = createDivForStructMap(child.getRoot().getLabel());
@@ -845,7 +852,7 @@ public abstract class IPMets {
    * @param file
    *          {@link FileType}.
    */
-  private static void addDataFileFromShallow(List<FileGrpType> fileGrpTypes, IPFileShallow shallow, FileType file) {
+  protected void addDataFileFromShallow(List<FileGrpType> fileGrpTypes, IPFileShallow shallow, FileType file) {
     for (FileGrpType fileGrpType : fileGrpTypes) {
       final String dataFilePath;
       if (shallow.getRelativeFolders() == null || shallow.getRelativeFolders().isEmpty()) {
@@ -862,7 +869,7 @@ public abstract class IPMets {
   /**
    * Clean the {@link HashMap} data.
    */
-  public static void cleanFileGrpStructure() {
+  protected void cleanFileGrpStructure() {
     dataFileGrp.clear();
   }
 }

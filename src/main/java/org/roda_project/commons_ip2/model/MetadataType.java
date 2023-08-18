@@ -123,9 +123,4 @@ public class MetadataType implements Serializable {
       return false;
     return this.type == other.getType() && this.otherType.equals(other.getOtherType());
   }
-
-  public static MetadataType OTHER() {
-    return new MetadataType(MetadataTypeEnum.OTHER);
-  }
-
 }

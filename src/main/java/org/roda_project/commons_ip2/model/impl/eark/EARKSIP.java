@@ -38,16 +38,17 @@ public class EARKSIP extends SIP {
 
   private static final String SIP_TEMP_DIR = "EARKSIP";
   private static final String SIP_FILE_EXTENSION = ".zip";
-  private String EARK_VERSION = "2.1.0";
-  private EARKMETSGenerator metsgenerator;
-  private METSGeneratorFactory factory = new METSGeneratorFactory();
-  private static EARKUtils earkUtils;
+
+  private static final String DEFAULT_SIP_VERSION = "2.1.0";
+
+  private EARKMETSCreator metsCreator;
 
   public EARKSIP() {
     super();
     setProfile(IPConstants.SIP_SPEC_PROFILE);
-    this.metsgenerator = factory.getMetsGenerator(EARK_VERSION);
-    this.earkUtils = new EARKUtils(EARK_VERSION);
+
+    METSGeneratorFactory factory = new METSGeneratorFactory();
+    metsCreator = factory.getGenerator(DEFAULT_SIP_VERSION);
   }
 
   /**
@@ -55,32 +56,27 @@ public class EARKSIP extends SIP {
    *          will be used as OBJID in METS (/mets[@OBJID])
    */
   public EARKSIP(String sipId) {
-    new EARKSIP(sipId, EARK_VERSION);
-  }
-
-  public EARKSIP(String sipId, String version) {
     super(sipId);
     setProfile(IPConstants.SIP_SPEC_PROFILE);
-    this.metsgenerator = factory.getMetsGenerator(version);
-    this.EARK_VERSION = version;
-    this.earkUtils = new EARKUtils(version);
+
+    METSGeneratorFactory factory = new METSGeneratorFactory();
+    metsCreator = factory.getGenerator(DEFAULT_SIP_VERSION);
   }
 
   /**
    * @param sipId
    *          will be used as OBJID in METS (/mets[@OBJID])
    */
-
   public EARKSIP(String sipId, IPContentType contentType, IPContentInformationType contentInformationType) {
-    new EARKSIP(sipId, contentType, contentInformationType, EARK_VERSION);
+    new EARKSIP(sipId, contentType, contentInformationType, DEFAULT_SIP_VERSION);
   }
 
   public EARKSIP(String sipId, IPContentType contentType, IPContentInformationType contentInformationType, String version) {
-    super(sipId, contentType, contentInformationType);
+    super(sipId, contentType,contentInformationType);
     setProfile(IPConstants.SIP_SPEC_PROFILE);
-    this.metsgenerator = factory.getMetsGenerator(version);
-    this.EARK_VERSION = version;
-    this.earkUtils = new EARKUtils(version);
+
+    METSGeneratorFactory factory = new METSGeneratorFactory();
+    metsCreator = factory.getGenerator(version);
   }
 
   /**
@@ -90,11 +86,11 @@ public class EARKSIP extends SIP {
    * _________________________________________________________________________
    */
 
-  public static SIP parse(Path source, Path destinationDirectory) throws ParseException {
+  public SIP parse(Path source, Path destinationDirectory) throws ParseException {
     return parseEARKSIP(source, destinationDirectory);
   }
 
-  public static SIP parse(Path source) throws ParseException {
+  public SIP parse(Path source) throws ParseException {
     try {
       return parse(source, Files.createTempDirectory("unzipped"));
     } catch (IOException e) {
@@ -102,10 +98,12 @@ public class EARKSIP extends SIP {
     }
   }
 
-  private static SIP parseEARKSIP(final Path source, final Path destinationDirectory) throws ParseException {
+  private SIP parseEARKSIP(final Path source, final Path destinationDirectory) throws ParseException {
     try {
       IPConstants.METS_ENCODE_AND_DECODE_HREF = true;
       SIP sip = new EARKSIP();
+
+      EARKUtils earkUtils = new EARKUtils(metsCreator);
 
       Path sipPath = ZIPUtils.extractIPIfInZipFormat(source, destinationDirectory);
       sip.setBasePath(sipPath);
@@ -133,12 +131,6 @@ public class EARKSIP extends SIP {
       throw new ParseException("Error parsing E-ARK SIP", e);
     }
   }
-
-  /**
-   *
-   * build and all build related methods
-   * _________________________________________________________________________
-   */
 
   /**
    *
@@ -209,6 +201,9 @@ public class EARKSIP extends SIP {
     IPEnums.SipType sipType) throws IPException, InterruptedException {
     IPConstants.METS_ENCODE_AND_DECODE_HREF = true;
     Path buildDir = ModelUtils.createBuildDir(SIP_TEMP_DIR);
+
+    EARKUtils earkUtils = new EARKUtils(metsCreator);
+
     Path zipPath = getZipPath(destinationDirectory, fileNameWithoutExtension);
     try {
       Map<String, ZipEntryInfo> zipEntries = getZipEntries();
@@ -221,7 +216,8 @@ public class EARKSIP extends SIP {
       boolean isDocumentation = (this.getDocumentation() != null && !this.getDocumentation().isEmpty());
       boolean isSchemas = (this.getSchemas() != null && !this.getSchemas().isEmpty());
       boolean isRepresentations = (this.getRepresentations() != null && !this.getRepresentations().isEmpty());
-      MetsWrapper mainMETSWrapper = metsgenerator.generateMETS(StringUtils.join(this.getIds(), " "),
+
+      MetsWrapper mainMETSWrapper = metsCreator.generateMETS(StringUtils.join(this.getIds(), " "),
         this.getDescription(), this.getProfile(), true, Optional.ofNullable(this.getAncestors()), null,
         this.getHeader(), this.getType(), this.getContentType(), this.getContentInformationType(), isMetadata,
         isMetadataOther, isSchemas, isDocumentation, false, isRepresentations, false);

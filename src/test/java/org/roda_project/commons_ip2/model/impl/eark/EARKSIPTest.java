@@ -351,8 +351,9 @@ public class EARKSIPTest {
   }
 
   private void parseAndValidateFullEARKSIPS(Path zipSIPS) throws ParseException {
+    EARKSIP earksip = new EARKSIP();
     // 1) invoke static method parse and that's it
-    SIP earkSIP = EARKSIP.parse(zipSIPS, tempFolder);
+    SIP earkSIP = earksip.parse(zipSIPS, tempFolder);
 
     // general assessment
     earkSIP.getValidationReport().getValidationEntries().stream().filter(e -> e.getLevel() == LEVEL.ERROR)
@@ -373,8 +374,10 @@ public class EARKSIPTest {
 
   private void parseAndValidateFullEARKSIP(Path zipSIP) throws ParseException {
 
+    EARKSIP earksip = new EARKSIP();
+
     // 1) invoke static method parse and that's it
-    SIP earkSIP = EARKSIP.parse(zipSIP, tempFolder);
+    SIP earkSIP = earksip.parse(zipSIP, tempFolder);
 
     // general assessment
     earkSIP.getValidationReport().getValidationEntries().stream().filter(e -> e.getLevel() == LEVEL.ERROR)
