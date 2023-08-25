@@ -265,14 +265,14 @@ public class EARKSIPValidator {
         ipPath = earksipPath.resolve(Constants.METS_FILE).toString();
       }
 
-      final InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
+      //final InstatiateMets metsRoot = new InstatiateMets(metsRootStream);
       metsValidatorState.setMetsPath(earksipPath.toString());
       metsValidatorState.setMetsName(ipPath);
       metsValidatorState.setIsRootMets(true);
 
-      metsValidatorState.setMets(metsRoot.instatiateMetsFile());
+      //metsValidatorState.setMets(metsRoot.instatiateMetsFile());
       validateComponents();
-    } catch (IOException | JAXBException | SAXException e) {
+    } catch (IOException e) {
       final String message = createExceptionMessage(e,
         earksipPath.toString() + Constants.SEPARATOR + Constants.METS_FILE);
       final ReporterDetails csipStr0 = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message,

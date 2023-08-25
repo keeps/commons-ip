@@ -1,17 +1,21 @@
 package org.roda_project.commons_ip2.validator.components.metsRootComponent;
 
+import java.util.List;
+
 /**
  * @author Carlos Afonso <cafonso@keep.pt>
  */
 public class METSfile {
+  private static METSfile instance = null;
   private String objID;
   private String type;
   private String profile;
   private String otherType;
   private String contentInformationType;
   private String otherContentInformationType;
-  private static METSfile instance = null;
-
+  private String createDate;
+  private String OAISPackage;
+  private List<Agent> agents;
   private METSfile() {
   }
 
@@ -70,8 +74,35 @@ public class METSfile {
     this.otherContentInformationType = otherContentInformationType;
   }
 
+  public void setCreateDate(String date) {
+    this.createDate = date;
+  }
+
+  public String getCreateDate() {
+    return this.createDate;
+  }
+
+  public void setOAISPackageType(String packageType) {
+    this.OAISPackage = packageType;
+  }
+
+  public String getOAISPackageType() {
+    return this.OAISPackage;
+  }
+
+  public List<Agent> getAgents() {
+    return this.agents;
+  }
+
+  public void setAgents(List<Agent> agents) {
+    for (int i = 0; i < agents.size(); i++) {
+      this.agents.add(agents.get(i));
+    }
+  }
+
   public static void destroy() {
     instance = null;
   }
+
 
 }

@@ -34,18 +34,14 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
   /**
    * {@link MetsType.MetsHdr}.
    */
-  private MetsType.MetsHdr metsHdr;
+  private boolean metsHdr;
 
   /**
    * {@link List} of {@link MetsType.MetsHdr.Agent}.
    */
-  private List<MetsType.MetsHdr.Agent> agents;
+  private List<Agent> agents;
 
   METSfile metsFile = METSfile.getInstance();
-
-
-
-
 
   /**
    * Initialize all objects needed to validation of this component.
@@ -66,9 +62,14 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
   @Override
   public Map<String, ReporterDetails> validate(final StructureValidatorState structureValidatorState,
     final MetsValidatorState metsValidatorState) throws IOException {
-    METSfile metsFile = METSfile.getInstance();
 
-    Handler.getHeader(metsValidatorState.getSipPath(), metsValidatorState.getMetsPath());
+    metsHdr = Handler.getHeader(metsValidatorState.getSipPath(), metsValidatorState.getMetsPath());
+
+    metsFile.setAgents(Handler.getAgents(metsValidatorState.getSipPath(), metsValidatorState.getMetsPath()));
+
+    if (metsHdr == true) {
+      agents = metsFile.getAgents();
+    }
 
     final Map<String, ReporterDetails> results = new HashMap<>();
 
@@ -174,7 +175,7 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
   private ReporterDetails validateCSIP117(final MetsValidatorState metsValidatorState) {
     final ReporterDetails details = new ReporterDetails();
 
-    if (metsHdr == null) {
+    if (metsHdr == false) {
       details.setValid(false);
       details.addIssue(Message.createErrorMessage("mets/metsHdr can't be null, in %1$s the mets/metsHdr does not exist",
         metsValidatorState.getMetsName(), metsValidatorState.isRootMets()));
@@ -189,8 +190,10 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
   private ReporterDetails validateCSIP7(final MetsValidatorState metsValidatorState) {
     final ReporterDetails details = new ReporterDetails();
 
-    // final XMLGregorianCalendar createDate = metsHdr.getCREATEDATE();
-    String createDate = null;
+    metsFile.setCreateDate(Handler.getNode(metsValidatorState.getSipPath(), metsValidatorState.getMetsPath(),
+      "/mets:mets/mets:metsHdr/@CREATEDATE", "metadata"));
+
+    String createDate = metsFile.getCreateDate();
     if (createDate == null) {
       details.setValid(false);
       details.addIssue(Message.createErrorMessage("mets/metsHdr/@CREATEDATE can't be null, in %1$s the value is null",
@@ -206,7 +209,12 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
    */
   private ReporterDetails validateCSIP9(final MetsValidatorState metsValidatorState) {
     final ReporterDetails details = new ReporterDetails();
-    final String oaisPackageType = metsHdr.getOAISPACKAGETYPE();
+
+    metsFile.setOAISPackageType(Handler.getNode(metsValidatorState.getSipPath(), metsValidatorState.getMetsPath(),
+      "/mets:mets/mets:metsHdr/@csip:OAISPACKAGETYPE", "csip"));
+
+    final String oaisPackageType = metsFile.getOAISPackageType();
+
     if (oaisPackageType == null || oaisPackageType.equals("")) {
       details.setValid(false);
       details.addIssue(Message.createErrorMessage(
@@ -262,8 +270,8 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
     final ReporterDetails details = new ReporterDetails();
     boolean found = false;
     if (agents != null && !agents.isEmpty()) {
-      for (MetsType.MetsHdr.Agent a : agents) {
-        final String role = a.getROLE();
+      for (Agent a : agents) {
+        final String role = a.getRole();
         final String type = a.getTYPE();
         final String otherType = a.getOTHERTYPE();
         if ((role != null && role.equals("CREATOR")) && (type != null && type.equals("OTHER"))
@@ -292,8 +300,8 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
 
   private ReporterDetails validateCSIP12(final MetsValidatorState metsValidatorState) {
     if (agents != null && !agents.isEmpty()) {
-      for (MetsType.MetsHdr.Agent a : agents) {
-        final String role = a.getROLE();
+      for (Agent a : agents) {
+        final String role = a.getRole();
         final String type = a.getTYPE();
         final String otherType = a.getOTHERTYPE();
         if ((role != null && role.equals("CREATOR")) && (type != null && type.equals("OTHER"))
@@ -319,8 +327,8 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
 
   private ReporterDetails validateCSIP13(final MetsValidatorState metsValidatorState) {
     if (agents != null && !agents.isEmpty()) {
-      for (MetsType.MetsHdr.Agent a : agents) {
-        final String role = a.getROLE();
+      for (Agent a : agents) {
+        final String role = a.getRole();
         final String type = a.getTYPE();
         final String otherType = a.getOTHERTYPE();
         if ((role != null && role.equals("CREATOR")) && (type != null && type.equals("OTHER"))
@@ -347,8 +355,8 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
 
   private ReporterDetails validateCSIP14(final MetsValidatorState metsValidatorState) {
     if (agents != null && !agents.isEmpty()) {
-      for (MetsType.MetsHdr.Agent a : agents) {
-        final String role = a.getROLE();
+      for (Agent a : agents) {
+        final String role = a.getRole();
         final String type = a.getTYPE();
         final String otherType = a.getOTHERTYPE();
         if ((role != null && role.equals("CREATOR")) && (type != null && type.equals("OTHER"))
@@ -381,36 +389,27 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
 
   private ReporterDetails validateCSIP15(final MetsValidatorState metsValidatorState) {
     if (agents != null && !agents.isEmpty()) {
-      for (MetsType.MetsHdr.Agent a : agents) {
-        final String role = a.getROLE();
+      for (Agent a : agents) {
+        final String role = a.getRole();
         final String type = a.getTYPE();
         final String otherType = a.getOTHERTYPE();
         if ((role != null && role.equals("CREATOR")) && (type != null && type.equals("OTHER"))
           && (otherType != null && otherType.equals("SOFTWARE"))) {
-          final List<MetsType.MetsHdr.Agent.Note> notes = a.getNote();
-          if (notes == null || notes.isEmpty()) {
+          final Note notes = a.getNote();
+          if (notes == null) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
               Message.createErrorMessage("mets/metsHdr/agent/note can't be null, in %1$s the value is null",
                 metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
               false, false);
           } else {
-            if (notes.size() > 1) {
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                Message.createErrorMessage(
-                  "mets/metsHdr/agent/note exists more than once, " + "in %1$s exists more than once note",
-                  metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-                false, false);
-            } else {
-              for (MetsType.MetsHdr.Agent.Note note : notes) {
-                if (note.getValue().isEmpty()) {
+            if (notes.getValue().isEmpty()) {
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                     Message.createErrorMessage("mets/metsHdr/agent/note can't be empty, in %1$s the note is empty",
                       metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
                     false, false);
                 }
               }
-            }
-          }
+
         }
       }
     } else {
@@ -429,21 +428,20 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
     if (agents == null || agents.isEmpty()) {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", true, true);
     }
-    for (MetsType.MetsHdr.Agent a : agents) {
-      final String role = a.getROLE();
+    for (Agent a : agents) {
+      final String role = a.getRole();
       final String type = a.getTYPE();
       final String otherType = a.getOTHERTYPE();
       if ((role != null && role.equals("CREATOR")) && (type != null && type.equals("OTHER"))
         && (otherType != null && otherType.equals("SOFTWARE"))) {
-        final List<MetsType.MetsHdr.Agent.Note> notes = a.getNote();
-        if (notes == null || notes.isEmpty()) {
+        final Note notes = a.getNote();
+        if (notes == null) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
             Message.createErrorMessage("mets/metsHdr/agent/note can't be null, in the %1$s the value is null",
               metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
             false, false);
         } else {
-          for (MetsType.MetsHdr.Agent.Note note : notes) {
-            if (note.getNOTETYPE() == null) {
+          if (notes.getNOTETYPE() == null) {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                 Message.createErrorMessage(
                   "mets/metsHdr/agent/note[@csip:NOTETYPE=’SOFTWARE VERSION’] "
@@ -451,15 +449,14 @@ public class MetsHeaderComponentValidator extends MetsValidatorImpl {
                   metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
                 false, false);
             } else {
-              if (!note.getNOTETYPE().equals("SOFTWARE VERSION")) {
+              if (!notes.getNOTETYPE().equals("csip:NOTETYPE=\"SOFTWARE VERSION\"")) {
                 final StringBuilder message = new StringBuilder();
-                message.append("Value ").append(note.getNOTETYPE())
+                message.append("Value ").append(notes.getNOTETYPE())
                   .append(" in %1$s for mets/metsHdr/agent/note[@csip:NOTETYPE=’SOFTWARE VERSION’] "
                     + "isn't valid, the value must be SOFTWARE VERSION");
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
                   message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
               }
-            }
           }
         }
       }

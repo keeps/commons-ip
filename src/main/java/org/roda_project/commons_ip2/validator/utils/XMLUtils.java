@@ -233,19 +233,19 @@ public class XMLUtils {
     return xPath;
   }
 
-  public static Element getChild(Element parent, String name) {
+  public static String getChild(Element parent, String name) {
     for (Node child = parent.getFirstChild(); child != null; child = child.getNextSibling()) {
-      if (child instanceof Element && name.equals(child.getNodeName())) {
-        return (Element) child;
+      if (child instanceof Node && name.equals(child.getLocalName())) {
+        return child.getTextContent();
       }
     }
     return null;
   }
 
-  public static String getChildTextContext(Element parent, String name) {
+  public static Node getChildTextContext(Element parent, String name) {
     for (Node child = parent.getFirstChild(); child != null; child = child.getNextSibling()) {
-      if (child instanceof Element && name.equals(child.getNodeName())) {
-        return child.getTextContent();
+      if (child instanceof Node && name.equals(child.getLocalName())) {
+        return child.getAttributes().item(0);
       }
     }
     return null;
@@ -257,7 +257,7 @@ public class XMLUtils {
       return null;
 
     if (parent.getNodeName().equals(tagName)) {
-      return getChildTextContext(parent, "name");
+      //return getChildTextContext(parent, "name");
     }
 
     return getParentNameByTagName(parent, tagName);
