@@ -107,12 +107,12 @@ public class FolderManager {
   public int countMetadataFiles(final Path path) {
     int count = 0;
     final File[] folder = path.toFile().listFiles();
-    if (path.toString().contains("descriptive")) {
-      for (File ignored : folder) {
-        count++;
-      }
-    } else {
-      if (folder != null) {
+    if (folder != null) {
+      if (path.toString().contains("descriptive")) {
+        for (File ignored : folder) {
+          count++;
+        }
+      } else {
         for (File f : folder) {
           if (f.getName().equals("metadata")) {
             if (f.isDirectory()) {
