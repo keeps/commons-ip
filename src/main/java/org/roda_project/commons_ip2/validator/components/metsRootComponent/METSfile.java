@@ -1,5 +1,6 @@
 package org.roda_project.commons_ip2.validator.components.metsRootComponent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +16,9 @@ public class METSfile {
   private String otherContentInformationType;
   private String createDate;
   private String OAISPackage;
-  private List<Agent> agents;
+  private List<Agent> agents = new ArrayList<>();
+  private List<MdSec> dmdSecs = new ArrayList<>();
+  private List<AmdSec> amdSecs = new ArrayList<>();
   private METSfile() {
   }
 
@@ -92,6 +95,26 @@ public class METSfile {
 
   public List<Agent> getAgents() {
     return this.agents;
+  }
+
+  public List<MdSec> getDmdSecs() {
+    return dmdSecs;
+  }
+
+  public void setDmdSecs(List<MdSec> dmdSecs) {
+    for (int i = 0; i < dmdSecs.size(); i++) {
+      this.dmdSecs.add(dmdSecs.get(i));
+    }
+  }
+
+  public List<AmdSec> getAmdSecs() {
+    return amdSecs;
+  }
+
+  public void setAmdSecs(List<AmdSec> amdSecs) {
+    for (int i = 0; i < amdSecs.size(); i++) {
+      this.amdSecs.add(amdSecs.get(i));
+    }
   }
 
   public void setAgents(List<Agent> agents) {

@@ -30,6 +30,7 @@ import org.apache.commons.text.translate.EntityArrays;
 import org.apache.commons.text.translate.LookupTranslator;
 import org.apache.commons.text.translate.UnicodeEscaper;
 import org.apache.commons.text.translate.UnicodeUnescaper;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -242,13 +243,23 @@ public class XMLUtils {
     return null;
   }
 
-  public static Node getChildTextContext(Element parent, String name) {
+  public static String getChildTextContext(Element parent, String name) {
     for (Node child = parent.getFirstChild(); child != null; child = child.getNextSibling()) {
       if (child instanceof Node && name.equals(child.getLocalName())) {
-        return child.getAttributes().item(0);
+        return child.getAttributes().item(0).toString();
       }
     }
     return null;
+  }
+
+  public static String getNodeValue(Node node, String tag) {
+    String result;
+    try {
+      result = node.getAttributes().getNamedItem(tag).getNodeValue();
+    } catch (NullPointerException e) {
+      return "";
+    }
+    return result;
   }
 
   public static String getParentNameByTagName(Element child, String tagName) {

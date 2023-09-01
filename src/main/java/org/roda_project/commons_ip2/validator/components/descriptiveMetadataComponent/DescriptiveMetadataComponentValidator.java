@@ -10,6 +10,9 @@ import org.roda_project.commons_ip2.validator.common.FolderManager;
 import org.roda_project.commons_ip2.validator.common.MetsParser;
 import org.roda_project.commons_ip2.validator.common.ZipManager;
 import org.roda_project.commons_ip2.validator.components.MetsValidatorImpl;
+import org.roda_project.commons_ip2.validator.components.metsRootComponent.Handler;
+import org.roda_project.commons_ip2.validator.components.metsRootComponent.METSfile;
+import org.roda_project.commons_ip2.validator.components.metsRootComponent.MdSec;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.handlers.MetsHandler;
@@ -48,7 +51,7 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
   /**
    * {@link List}.
    */
-  private List<MdSecType> dmdSec;
+  private List<MdSec> dmdSec;
   /**
    * {@link List}.
    */
@@ -57,6 +60,8 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
    * {@link Map}.
    */
   private HashMap<String, String> dmdSecType;
+
+  METSfile metsFile = METSfile.getInstance();
 
   /**
    * Initialize all objects needed to validation of this component.
@@ -76,7 +81,8 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
   @Override
   public Map<String, ReporterDetails> validate(final StructureValidatorState structureValidatorState,
     final MetsValidatorState metsValidatorState) throws IOException {
-    this.dmdSec = metsValidatorState.getMets().getDmdSec();
+    metsFile.setDmdSecs(Handler.getDmdSec(metsValidatorState.getSipPath(), metsValidatorState.getMetsPath()));
+    this.dmdSec =metsFile.getDmdSecs();
     ReporterDetails csip;
     final Map<String, ReporterDetails> results = new HashMap<>();
 
@@ -198,7 +204,7 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
     if (structureValidatorState.isZipFileFlag()) {
       final String regex;
       if (metsValidatorState.isRootMets()) {
-        final String objectid = metsValidatorState.getMets().getOBJID();
+        final String objectid = metsFile.getObjID();
         if (objectid != null) {
           regex = objectid + "/metadata/descriptive/.*";
         } else {
@@ -232,8 +238,8 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
           Map<String, Boolean> metadataFiles = zipManager.getMetadataFiles(structureValidatorState.getIpPath(), regex);
           metadataFiles = metadataFiles.entrySet().stream().filter(entry -> !entry.getKey().contains("/preservation/"))
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-          for (MdSecType md : dmdSec) {
-            final MdSecType.MdRef mdRef = md.getMdRef();
+          for (MdSec md : dmdSec) {
+            final MdSec mdRef = md.getMdRef();
             if (mdRef != null && mdRef.getHref() != null) {
               final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), ENCODING_UTF_8);
               if (metsValidatorState.isRootMets()) {
@@ -318,8 +324,8 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
             .getMetadataFiles(Paths.get(metsValidatorState.getMetsPath()));
           metadataFiles = metadataFiles.entrySet().stream().filter(entry -> !entry.getKey().contains("/preservation/"))
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-          for (MdSecType md : dmdSec) {
-            final MdSecType.MdRef mdRef = md.getMdRef();
+          for (MdSec md : dmdSec) {
+            final MdSec mdRef = md.getMdRef();
             if (mdRef != null) {
               final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), ENCODING_UTF_8);
               if (hrefDecoded != null) {
@@ -369,12 +375,12 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
    */
   private ReporterDetails validateCSIP18(final MetsValidatorState metsValidatorState) {
     if (dmdSec != null && !dmdSec.isEmpty()) {
-      for (MdSecType mdSec : dmdSec) {
-        if (!metsValidatorState.checkMetsInternalId(mdSec.getID())) {
-          metsValidatorState.addMetsInternalId(mdSec.getID());
+      for (MdSec mdSec : dmdSec) {
+        if (!metsValidatorState.checkMetsInternalId(mdSec.getId())) {
+          metsValidatorState.addMetsInternalId(mdSec.getId());
         } else {
           final StringBuilder message = new StringBuilder();
-          message.append("Value ").append(mdSec.getID())
+          message.append("Value ").append(mdSec.getId())
             .append(" in %1$s for mets/dmdSec/@ID isn't unique in the package");
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
             message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
@@ -395,8 +401,8 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
    */
   private ReporterDetails validateCSIP19(final MetsValidatorState metsValidatorState) {
     if (dmdSec != null && !dmdSec.isEmpty()) {
-      for (MdSecType mdSec : dmdSec) {
-        if (mdSec.getCREATED() == null) {
+      for (MdSec mdSec : dmdSec) {
+        if (mdSec.getCreated() == null) {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
             Message.createErrorMessage("mets/dmdSec/@CREATED in %1$s can't be null", metsValidatorState.getMetsName(),
               metsValidatorState.isRootMets()),
@@ -418,8 +424,8 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
    */
   private ReporterDetails validateCSIP20(final MetsValidatorState metsValidatorState) {
     final ReporterDetails details = new ReporterDetails();
-    for (MdSecType mdSec : dmdSec) {
-      final String status = mdSec.getSTATUS();
+    for (MdSec mdSec : dmdSec) {
+      final String status = mdSec.getStatus();
       if (status == null){
         return new ReporterDetails(
           Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
@@ -443,8 +449,8 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
   private ReporterDetails validateCSIP21(final MetsValidatorState metsValidatorState) {
     final ReporterDetails details = new ReporterDetails();
     if (dmdSec != null && !dmdSec.isEmpty()) {
-      for (MdSecType mdSec : dmdSec) {
-        final MdSecType.MdRef mdRef = mdSec.getMdRef();
+      for (MdSec mdSec : dmdSec) {
+        final MdSec mdRef = mdSec.getMdRef();
         if (mdRef == null) {
           details.setValid(false);
           details.addIssue(Message.createErrorMessage(
@@ -463,9 +469,9 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
 
   private ReporterDetails validateCSIP22(final MetsValidatorState metsValidatorState) {
     final ReporterDetails details = new ReporterDetails();
-    for (MdSecType mdSec : dmdSec) {
-      final MdSecType.MdRef mdRef = mdSec.getMdRef();
-      final String loctype = mdRef.getLOCTYPE();
+    for (MdSec mdSec : dmdSec) {
+      final MdSec mdRef = mdSec.getMdRef();
+      final String loctype = mdRef.getLoctype();
       if (loctype == null) {
         details.setValid(false);
         details.addIssue(Message.createErrorMessage("mets/dmdSec/mdRef[@LOCTYPE=’URL’] in %1$s can't be null",
@@ -514,7 +520,7 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
       metsParser.parse(dmdSecHandler, metsStream);
     }
     int numberOfMdRefs = 0;
-    for (MdSecType mdSec : dmdSec) {
+    for (MdSec mdSec : dmdSec) {
       if (mdSec.getMdRef() != null) {
         numberOfMdRefs++;
       }
@@ -557,8 +563,8 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
     final MetsValidatorState metsValidatorState) throws IOException {
     final ReporterDetails details = new ReporterDetails();
     final StringBuilder message = new StringBuilder();
-    for (MdSecType mdSec : dmdSec) {
-      final MdSecType.MdRef mdRef = mdSec.getMdRef();
+    for (MdSec mdSec : dmdSec) {
+      final MdSec mdRef = mdSec.getMdRef();
       final String href = mdRef.getHref();
       if (href != null) {
         final String hrefDecoded = URLDecoder.decode(href, ENCODING_UTF_8);
@@ -620,10 +626,10 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
     for (MetadataType md : MetadataType.values()) {
       tmp.add(md.toString());
     }
-    for (MdSecType mdSec : dmdSec) {
-      final MdSecType.MdRef mdRef = mdSec.getMdRef();
+    for (MdSec mdSec : dmdSec) {
+      final MdSec mdRef = mdSec.getMdRef();
       if (mdRef != null) {
-        final String mdType = mdRef.getMDTYPE();
+        final String mdType = mdRef.getMdtype();
         if (mdType != null) {
           if (!tmp.contains(mdType)) {
             final StringBuilder message = new StringBuilder();
@@ -648,9 +654,9 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
    * also: IANA media types
    */
   private ReporterDetails validateCSIP26(final MetsValidatorState metsValidatorState) {
-    for (MdSecType mdSecType : dmdSec) {
-      final MdSecType.MdRef mdRef = mdSecType.getMdRef();
-      final String mimetype = mdRef.getMIMETYPE();
+    for (MdSec mdSecType : dmdSec) {
+      final MdSec mdRef = mdSecType.getMdRef();
+      final String mimetype = mdRef.getMimetype();
       if (mimetype != null) {
         if (!IanaMediaTypes.getIanaMediaTypesList().contains(mimetype)) {
           final StringBuilder message = new StringBuilder();
@@ -674,12 +680,12 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
    */
   private ReporterDetails validateCSIP27(final StructureValidatorState structureValidatorState,
     final MetsValidatorState metsValidatorState) throws IOException {
-    for (MdSecType mdSec : dmdSec) {
-      final MdSecType.MdRef mdRef = mdSec.getMdRef();
+    for (MdSec mdSec : dmdSec) {
+      final MdSec mdRef = mdSec.getMdRef();
       final String href = mdRef.getHref();
       if (href != null) {
         final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), ENCODING_UTF_8);
-        final Long size = mdRef.getSIZE();
+        final Long size = mdRef.getSize();
         if (size != null) {
           final StringBuilder message = new StringBuilder();
           if (structureValidatorState.isZipFileFlag()) {
@@ -745,9 +751,9 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
    */
   private ReporterDetails validateCSIP28(final MetsValidatorState metsValidatorState) {
     final ReporterDetails details = new ReporterDetails();
-    for (MdSecType mdSec : dmdSec) {
-      final MdSecType.MdRef mdRef = mdSec.getMdRef();
-      if (mdRef.getCREATED() == null) {
+    for (MdSec mdSec : dmdSec) {
+      final MdSec mdRef = mdSec.getMdRef();
+      if (mdRef.getCreated() == null) {
         details.setValid(false);
         details.addIssue(Message.createErrorMessage("mets/dmdSec/mdRef/@CREATED in %1$s can't be null",
           metsValidatorState.getMetsName(), metsValidatorState.isRootMets()));
@@ -765,12 +771,12 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
     for (CHECKSUMTYPE check : CHECKSUMTYPE.values()) {
       tmp.add(check.toString());
     }
-    for (MdSecType mdSec : dmdSec) {
-      final MdSecType.MdRef mdRef = mdSec.getMdRef();
-      final String checksumType = mdRef.getCHECKSUMTYPE();
+    for (MdSec mdSec : dmdSec) {
+      final MdSec mdRef = mdSec.getMdRef();
+      final String checksumType = mdRef.getChecksumtype();
       if (checksumType != null) {
         if (tmp.contains(checksumType)) {
-          final String checksum = mdRef.getCHECKSUM();
+          final String checksum = mdRef.getChecksum();
           if (checksum != null) {
             final String href = mdRef.getHref();
             if (href != null) {
@@ -851,9 +857,9 @@ public class DescriptiveMetadataComponentValidator extends MetsValidatorImpl {
     for (CHECKSUMTYPE check : CHECKSUMTYPE.values()) {
       tmp.add(check.toString());
     }
-    for (MdSecType mdSec : dmdSec) {
-      final MdSecType.MdRef mdRef = mdSec.getMdRef();
-      final String checksumType = mdRef.getCHECKSUMTYPE();
+    for (MdSec mdSec : dmdSec) {
+      final MdSec mdRef = mdSec.getMdRef();
+      final String checksumType = mdRef.getChecksumtype();
       if (checksumType != null) {
         if (!tmp.contains(checksumType)) {
           final StringBuilder message = new StringBuilder();

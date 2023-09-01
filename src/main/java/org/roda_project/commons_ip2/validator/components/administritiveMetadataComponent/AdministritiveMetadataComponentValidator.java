@@ -19,6 +19,8 @@ import org.roda_project.commons_ip2.utils.IanaMediaTypes;
 import org.roda_project.commons_ip2.validator.common.ControlledVocabularyParser;
 import org.roda_project.commons_ip2.validator.common.MetsParser;
 import org.roda_project.commons_ip2.validator.components.MetsValidatorImpl;
+import org.roda_project.commons_ip2.validator.components.metsRootComponent.Handler;
+import org.roda_project.commons_ip2.validator.components.metsRootComponent.METSfile;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.handlers.MetsHandler;
@@ -56,6 +58,7 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
    */
   private List<String> dmdSecStatus;
 
+  METSfile metsFile = METSfile.getInstance();
   /**
    * Initialize all objects needed to validation of this component.
    *
@@ -75,6 +78,8 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
   public Map<String, ReporterDetails> validate(final StructureValidatorState structureValidatorState,
     final MetsValidatorState metsValidatorState) throws IOException {
     final Map<String, ReporterDetails> results = new HashMap<>();
+    metsFile.setAmdSecs(Handler.getAmdSec(metsValidatorState.getSipPath(), metsValidatorState.getMetsPath()));
+
     amdSec = metsValidatorState.getMets().getAmdSec();
     ReporterDetails csip;
     /* CSIP31 */
@@ -331,7 +336,7 @@ public class AdministritiveMetadataComponentValidator extends MetsValidatorImpl 
     if (structureValidatorState.isZipFileFlag()) {
       final String regex;
       if (metsValidatorState.isRootMets()) {
-        final String objectId = metsValidatorState.getMets().getOBJID();
+        final String objectId = metsFile.getObjID();
         if (objectId != null) {
           regex = objectId + "/metadata/.*";
         } else {
