@@ -12,25 +12,36 @@ import java.util.Map;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.roda_project.commons_ip2.validator.components.aipFileSectionComponent.AipFileSectionComponent;
 import org.roda_project.commons_ip2.validator.common.InstatiateMets;
 import org.roda_project.commons_ip2.validator.components.MetsValidator;
-import org.roda_project.commons_ip2.validator.components.administritiveMetadataComponent.AdministritiveMetadataComponentValidator;
-import org.roda_project.commons_ip2.validator.components.descriptiveMetadataComponent.DescriptiveMetadataComponentValidator;
-import org.roda_project.commons_ip2.validator.components.fileComponent.StructureComponentValidator;
-import org.roda_project.commons_ip2.validator.components.fileSectionComponent.FileSectionComponentValidator;
-import org.roda_project.commons_ip2.validator.components.metsRootComponent.MetsComponentValidator;
-import org.roda_project.commons_ip2.validator.components.metsRootComponent.MetsHeaderComponentValidator;
-import org.roda_project.commons_ip2.validator.components.structuralMapComponent.StructuralMapComponentValidator;
+import org.roda_project.commons_ip2.validator.components.StructureValidatorImpl;
+import org.roda_project.commons_ip2.validator.components.administritiveMetadataComponent.AdministritiveMetadataComponentValidator204;
+import org.roda_project.commons_ip2.validator.components.administritiveMetadataComponent.AdministritiveMetadataComponentValidator210;
+import org.roda_project.commons_ip2.validator.components.aipFileSectionComponent.AipFileSectionComponent204;
+import org.roda_project.commons_ip2.validator.components.aipFileSectionComponent.AipFileSectionComponent210;
+import org.roda_project.commons_ip2.validator.components.descriptiveMetadataComponent.DescriptiveMetadataComponentValidator204;
+import org.roda_project.commons_ip2.validator.components.descriptiveMetadataComponent.DescriptiveMetadataComponentValidator210;
+import org.roda_project.commons_ip2.validator.components.fileComponent.StructureComponentValidator204;
+import org.roda_project.commons_ip2.validator.components.fileSectionComponent.FileSectionComponentValidator204;
+import org.roda_project.commons_ip2.validator.components.fileSectionComponent.FileSectionComponentValidator210;
+import org.roda_project.commons_ip2.validator.components.metsRootComponent.metsHeaderValidator.MetsHeaderComponentValidator204;
+import org.roda_project.commons_ip2.validator.components.metsRootComponent.metsHeaderValidator.MetsHeaderComponentValidator210;
+import org.roda_project.commons_ip2.validator.components.metsRootComponent.metsValidator.MetsComponentValidator204;
+import org.roda_project.commons_ip2.validator.components.metsRootComponent.metsValidator.MetsComponentValidator210;
+import org.roda_project.commons_ip2.validator.components.sipFileSectionComponent.SipFileSectionComponent204;
+import org.roda_project.commons_ip2.validator.components.sipFileSectionComponent.SipFileSectionComponent210;
+import org.roda_project.commons_ip2.validator.components.sipMetsRootComponent.sipMetsComponent.SipMetsComponent204;
+import org.roda_project.commons_ip2.validator.components.sipMetsRootComponent.sipMetsComponent.SipMetsComponent210;
+import org.roda_project.commons_ip2.validator.components.sipMetsRootComponent.sipMetsHdrComponent.SipMetsHdrComponent204;
+import org.roda_project.commons_ip2.validator.components.sipMetsRootComponent.sipMetsHdrComponent.SipMetsHdrComponent210;
+import org.roda_project.commons_ip2.validator.components.structuralMapComponent.StructuralMapComponentValidator204;
+import org.roda_project.commons_ip2.validator.components.structuralMapComponent.StructuralMapComponentValidator210;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
-import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
 import org.roda_project.commons_ip2.validator.model.pyip.IpType;
+import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReportOutputJSONPyIP;
-import org.roda_project.commons_ip2.validator.components.sipFileSectionComponent.SipFileSectionComponent;
-import org.roda_project.commons_ip2.validator.components.sipMetsRootComponent.SipMetsComponent;
-import org.roda_project.commons_ip2.validator.components.sipMetsRootComponent.SipMetsHdrComponent;
 import org.roda_project.commons_ip2.validator.state.MetsValidatorState;
 import org.roda_project.commons_ip2.validator.state.StructureValidatorState;
 import org.roda_project.commons_ip2.validator.utils.ResultsUtils;
@@ -40,22 +51,38 @@ import org.xml.sax.SAXParseException;
 /** {@author João Gomes <jgomes@keep.pt>}. */
 public class EARKPyIPValidator {
 
-  /** IP path. */
+  /**
+   * IP path.
+   */
   private final Path earksipPath;
 
-  /** {@link ValidationReportOutputJSONPyIP}. */
+  /**
+   * {@link ValidationReportOutputJSONPyIP}.
+   */
   private final ValidationReportOutputJSONPyIP validationReportOutputJSONPyIP;
-  /** {@link StructureComponentValidator}. */
-  private final StructureComponentValidator structureComponent;
-  /** the contextual structural state {@link StructureValidatorState}. */
+  /**
+   * {@link StructureValidatorImpl}.
+   */
+  private final StructureValidatorImpl structureComponent;
+  /**
+   * the contextual structural state {@link StructureValidatorState}.
+   */
   private final StructureValidatorState structureValidatorState;
-  /** List of CSIP components to validate. */
+  /**
+   * List of CSIP components to validate.
+   */
   private final List<MetsValidator> csipComponents = new ArrayList<>();
-  /** List of SIP components to validate. */
+  /**
+   * List of SIP components to validate.
+   */
   private final List<MetsValidator> sipComponents = new ArrayList<>();
-  /** List of AIP components to validate. */
+  /**
+   * List of AIP components to validate.
+   */
   private final List<MetsValidator> aipComponents = new ArrayList<>();
-  /** The contextual mets state {@link MetsValidatorState}. */
+  /**
+   * The contextual mets state {@link MetsValidatorState}.
+   */
   private final MetsValidatorState metsValidatorState;
 
   /**
@@ -70,7 +97,7 @@ public class EARKPyIPValidator {
    * @throws SAXException
    *           if some error occurs
    */
-  public EARKPyIPValidator(final ValidationReportOutputJSONPyIP validationReportOutputJSONPyIP)
+  public EARKPyIPValidator(final ValidationReportOutputJSONPyIP validationReportOutputJSONPyIP, String version)
     throws IOException, ParserConfigurationException, SAXException {
 
     this.earksipPath = validationReportOutputJSONPyIP.getSipPath().toAbsolutePath().normalize();
@@ -79,9 +106,9 @@ public class EARKPyIPValidator {
 
     this.structureValidatorState = new StructureValidatorState(
       validationReportOutputJSONPyIP.getSipPath().toAbsolutePath().normalize());
-    this.structureComponent = new StructureComponentValidator();
+    this.structureComponent = new StructureComponentValidator204();
     this.metsValidatorState = new MetsValidatorState();
-    setupComponents();
+    setupComponents(version);
   }
 
   /**
@@ -94,19 +121,13 @@ public class EARKPyIPValidator {
    * @throws SAXException
    *           if some error occur.
    */
-  private void setupComponents() throws IOException, ParserConfigurationException, SAXException {
-    this.csipComponents.add(new MetsComponentValidator());
-    this.csipComponents.add(new MetsHeaderComponentValidator());
-    this.csipComponents.add(new DescriptiveMetadataComponentValidator());
-    this.csipComponents.add(new AdministritiveMetadataComponentValidator());
-    this.csipComponents.add(new FileSectionComponentValidator());
-    this.csipComponents.add(new StructuralMapComponentValidator());
+  private void setupComponents(String version) throws IOException, ParserConfigurationException, SAXException {
 
-    this.sipComponents.add(new SipMetsComponent());
-    this.sipComponents.add(new SipMetsHdrComponent());
-    this.sipComponents.add(new SipFileSectionComponent());
+    // method aux para povoar o array consoante a versão
 
-    this.aipComponents.add(new AipFileSectionComponent());
+    this.csipComponents.addAll(getComponentsForVersion(version, "csipComponents"));
+    this.sipComponents.addAll(getComponentsForVersion(version, "sipComponents"));
+    this.aipComponents.addAll(getComponentsForVersion(version, "aipComponents"));
   }
 
   /**
@@ -325,16 +346,29 @@ public class EARKPyIPValidator {
   private void validateSIPComponents() throws IOException {
     aipComponents.clear();
     for (MetsValidator component : sipComponents) {
-      if (component instanceof SipFileSectionComponent) {
-        ((SipFileSectionComponent) component).setIsToValidate(ResultsUtils.isResultValid(
+      if (component instanceof SipFileSectionComponent204) {
+        ((SipFileSectionComponent204) component).setIsToValidate(ResultsUtils.isResultValid(
           validationReportOutputJSONPyIP.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID));
       }
-      if (component instanceof SipMetsHdrComponent) {
-        ((SipMetsHdrComponent) component).setIsToValidateMetsHdr(ResultsUtils.isResultValid(
+      if (component instanceof SipFileSectionComponent210) {
+        ((SipFileSectionComponent210) component).setIsToValidate(ResultsUtils.isResultValid(
+          validationReportOutputJSONPyIP.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID));
+      }
+      if (component instanceof SipMetsHdrComponent204) {
+        ((SipMetsHdrComponent204) component).setIsToValidateMetsHdr(ResultsUtils.isResultValid(
           validationReportOutputJSONPyIP.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID));
         if (validationReportOutputJSONPyIP.getResults()
           .get(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID) != null) {
-          ((SipMetsHdrComponent) component).setIsToValidateAgents(ResultsUtils.isResultValid(
+          ((SipMetsHdrComponent204) component).setIsToValidateAgents(ResultsUtils.isResultValid(
+            validationReportOutputJSONPyIP.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID));
+        }
+      }
+      if (component instanceof SipMetsHdrComponent210) {
+        ((SipMetsHdrComponent210) component).setIsToValidateMetsHdr(ResultsUtils.isResultValid(
+          validationReportOutputJSONPyIP.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID));
+        if (validationReportOutputJSONPyIP.getResults()
+          .get(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID) != null) {
+          ((SipMetsHdrComponent210) component).setIsToValidateAgents(ResultsUtils.isResultValid(
             validationReportOutputJSONPyIP.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID));
         }
       }
@@ -354,13 +388,54 @@ public class EARKPyIPValidator {
   private void validateAIPComponets() throws IOException {
     sipComponents.clear();
     for (MetsValidator component : aipComponents) {
-      if (component instanceof AipFileSectionComponent) {
-        ((AipFileSectionComponent) component).setIsToValidate(ResultsUtils.isResultValid(
+      if (component instanceof AipFileSectionComponent204) {
+        ((AipFileSectionComponent204) component).setIsToValidate(ResultsUtils.isResultValid(
+          validationReportOutputJSONPyIP.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID));
+      }
+      if (component instanceof AipFileSectionComponent210) {
+        ((AipFileSectionComponent210) component).setIsToValidate(ResultsUtils.isResultValid(
           validationReportOutputJSONPyIP.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID));
       }
       final Map<String, ReporterDetails> aipComponentResults = component.validate(structureValidatorState,
         metsValidatorState);
       ResultsUtils.mergeResults(validationReportOutputJSONPyIP.getResults(), aipComponentResults);
     }
+  }
+
+  private List<MetsValidator> getComponentsForVersion(String version, String type)
+    throws IOException, ParserConfigurationException, SAXException {
+    List<MetsValidator> values = new ArrayList<>();
+    if (version.equals("2.0.4")) {
+      if (type.equals("csipComponents")) {
+        values.add(new MetsComponentValidator204());
+        values.add(new MetsHeaderComponentValidator204());
+        values.add(new DescriptiveMetadataComponentValidator204());
+        values.add(new AdministritiveMetadataComponentValidator204());
+        values.add(new FileSectionComponentValidator204());
+        values.add(new StructuralMapComponentValidator204());
+      } else if (type.equals("sipComponents")) {
+        values.add(new SipMetsComponent204());
+        values.add(new SipMetsHdrComponent204());
+        values.add(new SipFileSectionComponent204());
+      } else {
+        values.add(new AipFileSectionComponent204());
+      }
+    } else {
+      if (type.equals("csipComponents")) {
+        values.add(new MetsComponentValidator210());
+        values.add(new MetsHeaderComponentValidator210());
+        values.add(new DescriptiveMetadataComponentValidator210());
+        values.add(new AdministritiveMetadataComponentValidator210());
+        values.add(new FileSectionComponentValidator210());
+        values.add(new StructuralMapComponentValidator210());
+      } else if (type.equals("sipComponents")) {
+        values.add(new SipMetsComponent210());
+        values.add(new SipMetsHdrComponent210());
+        values.add(new SipFileSectionComponent210());
+      } else {
+        values.add(new AipFileSectionComponent210());
+      }
+    }
+    return values;
   }
 }

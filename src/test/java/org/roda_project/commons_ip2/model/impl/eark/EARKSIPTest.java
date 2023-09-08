@@ -104,8 +104,8 @@ public class EARKSIPTest {
     }
     OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(reportPath.toFile()));
     ValidationReportOutputJson reportOutputJson = new ValidationReportOutputJson(zipSIP, outputStream);
-    EARKSIPValidator earksipValidator = new EARKSIPValidator(reportOutputJson);
-    boolean validate = earksipValidator.validate();
+    EARKSIPValidator earksipValidator = new EARKSIPValidator(reportOutputJson, "2.1.0");
+    boolean validate = earksipValidator.validate("2.1.0");
     LOGGER.info("Done parsing (and validating) full E-ARK SIP");
     Assert.assertTrue(validate);
   }

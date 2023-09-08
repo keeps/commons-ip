@@ -16,7 +16,7 @@ import org.roda_project.commons_ip2.validator.utils.Message;
 import org.roda_project.commons_ip2.validator.utils.ResultsUtils;
 
 /** {@author João Gomes <jgomes@keep.pt>}. */
-public class AipFileSectionComponent extends MetsValidatorImpl {
+public class AipFileSectionComponent210 extends MetsValidatorImpl {
   /**
    * The module of specification.
    */
@@ -29,13 +29,13 @@ public class AipFileSectionComponent extends MetsValidatorImpl {
   /**
    * the empty constructor.
    */
-  public AipFileSectionComponent() {
+  public AipFileSectionComponent210() {
     moduleName = Constants.AIP_MODULE_NAME_2;
   }
 
   /**
    * Set the flag isToValidate.
-   * 
+   *
    * @param isToValidate
    *          the flag.
    */

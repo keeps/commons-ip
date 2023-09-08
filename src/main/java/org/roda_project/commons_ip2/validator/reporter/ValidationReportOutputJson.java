@@ -119,7 +119,7 @@ public class ValidationReportOutputJson {
    * @throws IOException
    *           if some I/O error occurs
    */
-  public void init() throws IOException {
+  public void init(String version) throws IOException {
     this.success = 0;
     this.errors = 0;
     this.warnings = 0;
@@ -138,9 +138,9 @@ public class ValidationReportOutputJson {
     jsonGenerator.writeStartArray();
     // header -> specifications -> CSIP
     jsonGenerator.writeStartObject();
-    jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID, Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+    jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID, Constants.VALIDATION_REPORT_CSIP_VERSION + version);
     jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_KEY_URL,
-      Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_CSIP);
+      Constants.VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_CSIP + version);
     jsonGenerator.writeEndObject();
     if (ipType != null) {
       if (Constants.ID_TYPE_SIP.equals(ipType)) {

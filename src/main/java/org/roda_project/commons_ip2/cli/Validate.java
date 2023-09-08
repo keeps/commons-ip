@@ -8,6 +8,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.roda_project.commons_ip2.cli.model.ExitCodes;
 import org.roda_project.commons_ip2.cli.model.enums.ReportType;
 import org.roda_project.commons_ip2.cli.model.exception.CLIException;
@@ -18,11 +20,9 @@ import org.roda_project.commons_ip2.validator.EARKSIPValidator;
 import org.roda_project.commons_ip2.validator.observer.ProgressValidationLoggerObserver;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReportOutputJSONPyIP;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReportOutputJson;
-
 import org.xml.sax.SAXException;
-import picocli.CommandLine;
 
-import javax.xml.parsers.ParserConfigurationException;
+import picocli.CommandLine;
 
 /**
  * @author Miguel Guimarães <mguimaraes@keep.pt>
@@ -38,7 +38,7 @@ public class Validate implements Callable<Integer> {
 
   @CommandLine.Option(names = {"-o",
     "--output-report-dir"}, paramLabel = "<path>", description = "Path to save the validation report. If not set a report will be generated in the same folder as the IP package.")
-  String reportPathDir;
+  String reportPathDir = System.getProperty("user.dir");
 
   @CommandLine.Option(names = {"-r",
     "--reporter-type"}, paramLabel = "<type>", description = "Report type (possible values: ${COMPLETION-CANDIDATES})")
@@ -47,6 +47,9 @@ public class Validate implements Callable<Integer> {
   @CommandLine.Option(names = {"-v",
     "--verbose"}, description = "Verbose command line output with all validation steps")
   boolean verbose;
+
+  @CommandLine.Option(names = {"-cv", "--commons-version"}, description = "Commons IP version")
+  String version = "2.1.0";
 
   @Override
   public Integer call() throws ValidationException, CLIException {
@@ -75,16 +78,16 @@ public class Validate implements Callable<Integer> {
         final OutputStream outputStream = ValidateCommandUtils.createReportOutputStream(reportPath);
         if (outputStream != null) {
           final ValidationReportOutputJson jsonReporter = new ValidationReportOutputJson(sipPath, outputStream);
-          final EARKSIPValidator earksipValidator = new EARKSIPValidator(jsonReporter);
+          final EARKSIPValidator earksipValidator = new EARKSIPValidator(jsonReporter, version);
           if (verbose) {
             earksipValidator.addObserver(new ProgressValidationLoggerObserver());
           }
-          earksipValidator.validate();
+          earksipValidator.validate(version);
         }
       }
       case PYIP -> {
         final ValidationReportOutputJSONPyIP jsonReporter = new ValidationReportOutputJSONPyIP(reportPath, sipPath);
-        final EARKPyIPValidator earkPyIPValidator = new EARKPyIPValidator(jsonReporter);
+        final EARKPyIPValidator earkPyIPValidator = new EARKPyIPValidator(jsonReporter, version);
         if (verbose) {
           earkPyIPValidator.addObserver(new ProgressValidationLoggerObserver());
         }

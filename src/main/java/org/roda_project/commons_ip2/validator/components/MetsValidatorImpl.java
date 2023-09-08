@@ -23,14 +23,14 @@ public abstract class MetsValidatorImpl implements MetsValidator {
     this.observers.remove(observer);
   }
 
-  protected void notifyObserversValidationStarted(final String moduleName, final String id) {
+  public void notifyObserversValidationStarted(final String moduleName, final String id) {
     for (ValidationObserver observer : observers) {
       observer.notifyStartValidationModule(moduleName, id);
       observer.notifyStartStep(id);
     }
   }
 
-  protected void notifyObserversFinishModule(final String moduleName) {
+  public void notifyObserversFinishModule(final String moduleName) {
     for (ValidationObserver observer : observers) {
       observer.notifyFinishModule(moduleName);
     }
