@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.roda_project.commons_ip2.mets_v1_12.beans.AmdSecType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.DivType;
@@ -15,410 +14,19 @@ import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MetsType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.StructMapType;
 import org.roda_project.commons_ip2.validator.common.MetsParser;
-import org.roda_project.commons_ip2.validator.components.MetsValidatorImpl;
 import org.roda_project.commons_ip2.validator.constants.Constants;
-import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.handlers.MetsHandler;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.state.MetsValidatorState;
 import org.roda_project.commons_ip2.validator.state.StructureValidatorState;
 import org.roda_project.commons_ip2.validator.utils.Message;
-import org.roda_project.commons_ip2.validator.utils.ResultsUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-/** {@author João Gomes <jgomes@keep.pt>}. */
-public class StructuralMapComponentValidator extends MetsValidatorImpl {
-  /**
-   * {@link Logger}.
-   */
-  private static final Logger LOGGER = LoggerFactory.getLogger(StructuralMapComponentValidator.class);
+/**
+ * @author Carlos Afonso <cafonso@keep.pt>
+ */
+public abstract class StructMapValidator {
 
-  /**
-   * The module name {@link String}.
-   */
-  private final String moduleName;
-
-  /**
-   * Empty constructor of the component.
-   */
-  public StructuralMapComponentValidator() {
-    moduleName = Constants.CSIP_MODULE_NAME_6;
-  }
-
-  @Override
-  public Map<String, ReporterDetails> validate(final StructureValidatorState structureValidatorState,
-    final MetsValidatorState metsValidatorState) throws IOException {
-    ReporterDetails csip;
-    final Map<String, ReporterDetails> results = new HashMap<>();
-
-    /* CSIP80 */
-    notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID);
-    ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID,
-      validateCSIP80(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-    if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP80_ID)) {
-
-      /* CSIP81 */
-      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID);
-      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID,
-        validateCSIP81(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-      /* CSIP82 */
-      notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID);
-      ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID,
-        validateCSIP82(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-      if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID)) {
-        /* CSIP83 */
-        notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID);
-        ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID,
-          validateCSIP83(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-        /* CSIP84 */
-        notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID);
-        ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID,
-          validateCSIP84(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-        if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID)) {
-          /* CSIP85 */
-          notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID);
-          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,
-            validateCSIP85(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-          /* CSIP86 */
-          notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID);
-          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,
-            validateCSIP86(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-          /* CSIP88 */
-          notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID);
-          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,
-            validateCSIP88(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-          if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID)) {
-            /* CSIP89 */
-            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              Message.createErrorMessage("Skipped in %1$s because is validated later in CSIP106",
-                metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-              true, true);
-            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID, csip);
-
-            /* CSIP90 */
-            notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP90_ID);
-            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP90_ID,
-              new ReporterDetails().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-            /* CSIP91 */
-            notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP91_ID);
-            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP91_ID,
-              validateCSIP91(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-            /* CSIP92 */
-            notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP92_ID);
-            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP92_ID,
-              validateCSIP92(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-          } else {
-            final String message = Message.createErrorMessage(
-              "SKIPPED in %1$s because mets/structMap[@LABEL='CSIP']" + "/div/div[@LABEL='Metadata'] isn't valid",
-              metsValidatorState.getMetsName(), metsValidatorState.isRootMets());
-
-            ResultsUtils.addResults(results,
-              new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
-              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID,
-              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP90_ID,
-              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP91_ID,
-              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP92_ID);
-          }
-
-          /* CSIP93 */
-          notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP93_ID);
-          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP93_ID,
-            validateCSIP93(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-          if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP93_ID)) {
-            /* CSIP94 */
-            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              Message.createErrorMessage("Skipped in %1$s because is validated later in CSIP106",
-                metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-              true, true);
-            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID, csip);
-
-            /* CSIP95 */
-            notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP95_ID);
-            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP95_ID,
-              new ReporterDetails().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-            /* CSIP96 */
-            notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP96_ID);
-            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP96_ID,
-              validateCSIP96(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-            /* CSIP116 */
-            notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP116_ID);
-            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP116_ID,
-              validateCSIP116(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-          } else {
-            final String message = Message.createErrorMessage(
-              "SKIPPED in %1$s because mets/structMap[@LABEL='CSIP']" + "/div/div[@LABEL='Documentation'] isn't valid",
-              metsValidatorState.getMetsName(), metsValidatorState.isRootMets());
-
-            ResultsUtils.addResults(results,
-              new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
-              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID,
-              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP95_ID,
-              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP96_ID,
-              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP116_ID);
-          }
-
-          /* CSIP97 */
-          notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP97_ID);
-          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP97_ID,
-            validateCSIP97(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-          if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP97_ID)) {
-            /* CSIP98 */
-            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              Message.createErrorMessage("Skipped in %1$s because is validated later in CSIP106",
-                metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-              true, true);
-            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID, csip);
-
-            /* CSIP99 */
-            notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP99_ID);
-            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP99_ID,
-              new ReporterDetails().setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-            /* CSIP100 */
-            notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP100_ID);
-            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP100_ID,
-              validateCSIP100(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-            /* CSIP118 */
-            notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP118_ID);
-            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP118_ID,
-              validateCSIP118(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-          } else {
-            final String message = Message.createErrorMessage(
-              "SKIPPED in %1$s because mets/structMap[@LABEL='CSIP']" + "/div/div[@LABEL='Schemas'] isn't valid",
-              metsValidatorState.getMetsName(), metsValidatorState.isRootMets());
-
-            ResultsUtils.addResults(results,
-              new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
-              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID,
-              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP99_ID,
-              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP100_ID,
-              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP118_ID);
-          }
-
-          /* CSIP101 */
-          notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP101_ID);
-          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP101_ID,
-            validateCSIP101(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-          if (ResultsUtils.isResultValid(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP101_ID)) {
-            /* CSIP102 */
-            csip = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-              Message.createErrorMessage("Skipped in %1$s because is validated later in CSIP106",
-                metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-              true, true);
-            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID, csip);
-
-            /* CSIP103 */
-            notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP103_ID);
-            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP103_ID,
-              validateCSIP103(structureValidatorState, metsValidatorState)
-                .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-            /* CSIP104 */
-            notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP104_ID);
-            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP104_ID,
-              validateCSIP104(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-            /* CSIP119 */
-            notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP119_ID);
-            ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP119_ID,
-              validateCSIP119(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-          } else {
-            final String message = Message.createErrorMessage(
-              "SKIPPED in %1$s because mets/structMap[@LABEL='CSIP']"
-                + "/div/div[@LABEL='Representations'] isn't valid",
-              metsValidatorState.getMetsName(), metsValidatorState.isRootMets());
-
-            ResultsUtils.addResults(results,
-              new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
-              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID,
-              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP103_ID,
-              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP104_ID,
-              ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP119_ID);
-          }
-
-          /* CSIP105 */
-          notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP105_ID);
-          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP105_ID,
-            validateCSIP105(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-          /* CSIP106 */
-          notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID);
-          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID,
-            validateCSIP106(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-          /* CSIP107 */
-          notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP107_ID);
-          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP107_ID,
-            validateCSIP107(structureValidatorState, metsValidatorState)
-              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-          /* CSIP108 */
-          notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP108_ID);
-          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP108_ID,
-            validateCSIP108(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-          /* CSIP109 */
-          notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP109_ID);
-          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP109_ID,
-            validateCSIP109(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-          /* CSIP110 */
-          notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP110_ID);
-          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP110_ID,
-            validateCSIP110(structureValidatorState, metsValidatorState)
-              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-          /* CSIP111 */
-          notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP111_ID);
-          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP111_ID,
-            validateCSIP111(structureValidatorState, metsValidatorState)
-              .setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-          /* CSIP112 */
-          notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP112_ID);
-          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP112_ID,
-            validateCSIP112(metsValidatorState).setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION));
-
-        } else {
-          final String message = Message.createErrorMessage(
-            "SKIPPED in %1$s because mets/structMap[@LABEL='CSIP']/div isn't valid", metsValidatorState.getMetsName(),
-            metsValidatorState.isRootMets());
-
-          ResultsUtils.addResults(results,
-            new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP90_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP91_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP92_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP93_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP95_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP96_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP116_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP97_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP99_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP100_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP101_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP103_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP104_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP119_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP105_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP107_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP108_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP109_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP110_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP111_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP112_ID);
-        }
-      } else {
-        final String message = Message.createErrorMessage(
-          "SKIPPED in %1$s because mets/structMap[@LABEL='CSIP'] isn't valid", metsValidatorState.getMetsName(),
-          metsValidatorState.isRootMets());
-
-        ResultsUtils.addResults(results,
-          new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP90_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP91_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP92_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP93_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP95_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP96_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP116_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP97_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP99_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP100_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP101_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP103_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP104_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP119_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP105_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP107_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP108_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP109_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP110_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP111_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP112_ID);
-      }
-    } else {
-      final String message = Message.createErrorMessage("SKIPPED in %1$s because mets/structMap doesn't exist",
-        metsValidatorState.getMetsName(), metsValidatorState.isRootMets());
-
-      ResultsUtils.addResults(results,
-        new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, true, true),
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP81_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP82_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP90_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP91_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP92_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP93_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP94_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP95_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP96_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP116_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP97_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP98_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP99_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP100_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP101_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP102_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP103_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP104_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP119_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP105_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP106_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP107_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP108_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP109_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP110_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP111_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP112_ID);
-    }
-    notifyObserversFinishModule(moduleName);
-    return results;
-  }
+  protected abstract String getCSIPVersion();
 
   /*
    * mets/structMap The structural map <structMap> element is the only mandatory
@@ -427,7 +35,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * <structMap> element used exactly as described here. Institutions can add
    * their own additional custom structural maps as separate <structMap> sections.
    */
-  private ReporterDetails validateCSIP80(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP80(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     if (structMap == null) {
       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
@@ -458,7 +66,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * mets/structMap[@TYPE='PHYSICAL'] The mets/structMap/@TYPE attribute must take
    * the value “PHYSICAL” from the vocabulary. See also: Structural map typing
    */
-  private ReporterDetails validateCSIP81(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP81(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     if (structMap != null) {
       for (StructMapType struct : structMap) {
@@ -488,7 +96,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * mets/structMap[@LABEL='CSIP'] The mets/structMap/@LABEL attribute value is
    * set to “CSIP” from the vocabulary. See also: Structural map label
    */
-  private ReporterDetails validateCSIP82(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP82(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     if (structMap != null) {
       int numberOfCsipLabels = 0;
@@ -520,7 +128,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * description (structMap) used for internal package references. It must be
    * unique within the package.
    */
-  private ReporterDetails validateCSIP83(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP83(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     if (structMap != null) {
       for (StructMapType struct : structMap) {
@@ -550,7 +158,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * mets/structMap[@LABEL='CSIP']/div The structural map comprises a single
    * division.
    */
-  private ReporterDetails validateCSIP84(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP84(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     if (structMap != null) {
       for (StructMapType struct : structMap) {
@@ -572,7 +180,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * mets/structMap[@LABEL='CSIP']/div/@ID Mandatory, xml:id identifier must be
    * unique within the package.
    */
-  private ReporterDetails validateCSIP85(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP85(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     if (structMap != null) {
       for (StructMapType struct : structMap) {
@@ -606,7 +214,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * division <div> element’s @LABEL attribute value must be identical to the
    * package identifier, i.e. the same value as the mets/@OBJID attribute.
    */
-  private ReporterDetails validateCSIP86(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP86(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     final String objid = metsValidatorState.getMets().getOBJID();
     if (structMap != null) {
@@ -641,7 +249,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * consists of only administrative and/or descriptive metadata this is the only
    * sub division that occurs.
    */
-  private ReporterDetails validateCSIP88(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP88(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     final List<MdSecType> dmdSec = metsValidatorState.getMets().getDmdSec();
     final List<AmdSecType> amdSec = metsValidatorState.getMets().getAmdSec();
@@ -679,18 +287,17 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
             }
           }
           if (counter == 0) {
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                Message.createErrorMessage(
-                  "You have metadata files, must add mets/structMap[@LABEL='CSIP']"
-                    + "/div/div[@LABEL='Metadata'] in %1$s",
-                  metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-                false, false);
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+              Message.createErrorMessage(
+                "You have metadata files, must add mets/structMap[@LABEL='CSIP']"
+                  + "/div/div[@LABEL='Metadata'] in %1$s",
+                metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+              false, false);
           }
           if (counter > 1) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
               Message.createErrorMessage(
-                "You have more than one mets/structMap[@LABEL='CSIP']"
-                  + "/div/div[@LABEL='Metadata'] in %1$s",
+                "You have more than one mets/structMap[@LABEL='CSIP']" + "/div/div[@LABEL='Metadata'] in %1$s",
                 metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
               false, false);
           }
@@ -705,7 +312,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@ID Mandatory,
    * xml:id identifier must be unique within the package.
    */
-  private ReporterDetails validateCSIP89(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP89(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     if (structMap != null) {
       for (StructMapType struct : structMap) {
@@ -747,7 +354,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * division <div> element’s @LABEL attribute value must be “Metadata”. See also:
    * File group names
    */
-  private ReporterDetails validateCSIP90(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP90(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     boolean found = false;
     if (structMap != null) {
@@ -779,7 +386,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * identifiers. All of the <amdSec> identifiers are listed in a single @ADMID
    * using spaces as delimiters.
    */
-  private ReporterDetails validateCSIP91(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP91(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     final List<AmdSecType> amdSec = metsValidatorState.getMets().getAmdSec();
     final List<String> amdSecIDs = new ArrayList<>();
@@ -833,7 +440,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * <dmdSec> identifier is listed in a single @DMDID attribute using spaces as
    * delimiters.
    */
-  private ReporterDetails validateCSIP92(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP92(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     final List<MdSecType> dmdSec = metsValidatorState.getMets().getDmdSec();
     final List<String> dmdSecIDs = new ArrayList<>();
@@ -877,7 +484,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * documentation referenced in the file section file groups is described in the
    * structural map with one sub division.
    */
-  private ReporterDetails validateCSIP93(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP93(final MetsValidatorState metsValidatorState) {
     boolean found = false;
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     final MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
@@ -925,7 +532,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Documentation']/@ID Mandatory,
    * xml:id identifier must be unique within the package.
    */
-  private ReporterDetails validateCSIP94(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP94(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     if (structMap != null) {
       for (StructMapType struct : structMap) {
@@ -968,7 +575,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * “Documentation” from the vocabulary as the value for the @LABEL attribute.
    * See also: File group names
    */
-  private ReporterDetails validateCSIP95(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP95(final MetsValidatorState metsValidatorState) {
     boolean found = false;
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     if (structMap != null) {
@@ -1003,7 +610,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * the relevant file group identifiers. There MUST be one file group reference
    * per <fptr> element.
    */
-  private ReporterDetails validateCSIP96(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP96(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     final MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
     final List<MetsType.FileSec.FileGrp> fileGrps;
@@ -1055,7 +662,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * requirements CSIP60 which describes the “Documentation” file group and CSIP65
    * which describes the file group identifier.
    */
-  private ReporterDetails validateCSIP116(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP116(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     final MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
     final List<MetsType.FileSec.FileGrp> fileGrps;
@@ -1109,7 +716,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * referenced in the file section file groups are described in the structural
    * map within a single sub-division.
    */
-  private ReporterDetails validateCSIP97(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP97(final MetsValidatorState metsValidatorState) {
     boolean found = false;
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     final MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
@@ -1156,7 +763,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']/@ID Mandatory, xml:id
    * identifier must be unique within the package.
    */
-  private ReporterDetails validateCSIP98(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP98(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     if (structMap != null) {
       for (StructMapType struct : structMap) {
@@ -1198,7 +805,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * <div> element’s @LABEL attribute has the value “Schemas” from the vocabulary.
    * See also: File group names
    */
-  private ReporterDetails validateCSIP99(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP99(final MetsValidatorState metsValidatorState) {
     boolean found = false;
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     if (structMap != null) {
@@ -1232,7 +839,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * containing schemas described in the package are referenced via the relevant
    * file group identifiers. One file group reference per fptr-element
    */
-  private ReporterDetails validateCSIP100(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP100(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     final MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
     final List<MetsType.FileSec.FileGrp> fileGrps;
@@ -1284,7 +891,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * requirements CSIP113 which describes the “Schema” file group and CSIP65 which
    * describes the file group identifier.
    */
-  private ReporterDetails validateCSIP118(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP118(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     final MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
     final List<MetsType.FileSec.FileGrp> fileGrps;
@@ -1339,7 +946,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * group with @USE attribute value “Representations” is described in the
    * structural map as a single sub division.
    */
-  private ReporterDetails validateCSIP101(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP101(final MetsValidatorState metsValidatorState) {
     boolean found = false;
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     final MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
@@ -1386,7 +993,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations']/@ID
    * Mandatory, xml:id identifier must be unique within the package.
    */
-  private ReporterDetails validateCSIP102(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP102(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     if (structMap != null) {
       for (StructMapType struct : structMap) {
@@ -1428,7 +1035,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * content division <div> element must have the @LABEL attribute value
    * “Representations”, taken from the vocabulary. See also: File group names
    */
-  private ReporterDetails validateCSIP103(final StructureValidatorState structureValidatorState,
+  protected ReporterDetails validateCSIP103(final StructureValidatorState structureValidatorState,
     final MetsValidatorState metsValidatorState) throws IOException {
     boolean found = false;
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
@@ -1473,7 +1080,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * groups containing content described in the package are referenced via the
    * relevant file group identifiers. One file group reference per fptr-element.
    */
-  private ReporterDetails validateCSIP104(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP104(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     final MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
     final List<MetsType.FileSec.FileGrp> fileGrps;
@@ -1530,7 +1137,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * to the requirements CSIP114 which describes the “Representations” file group
    * and CSIP65 which describes the file group identifier.
    */
-  private ReporterDetails validateCSIP119(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP119(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     final MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
     final List<MetsType.FileSec.FileGrp> fileGrps;
@@ -1586,7 +1193,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * representation div references the representation level METS.xml document,
    * documenting the structure of the package and its constituent representations.
    */
-  private ReporterDetails validateCSIP105(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP105(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     if (!structMap.isEmpty()) {
       if (metsValidatorState.isRootMets()) {
@@ -1616,7 +1223,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * mets/structMap[@LABEL='CSIP']/div/div/@ID Mandatory, xml:id identifier must
    * be unique within the package.
    */
-  private ReporterDetails validateCSIP106(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP106(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     if (structMap != null) {
       for (StructMapType struct : structMap) {
@@ -1654,7 +1261,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * be used as the requirement named “File group identifier” (CSIP64) See also:
    * File group names Preciso teste
    */
-  private ReporterDetails validateCSIP107(final StructureValidatorState structureValidatorState,
+  protected ReporterDetails validateCSIP107(final StructureValidatorState structureValidatorState,
     final MetsValidatorState metsValidatorState) throws IOException {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     final StringBuilder message = new StringBuilder();
@@ -1716,7 +1323,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * the “Representations” file group and CSIP65 which describes the file group
    * identifier.
    */
-  private ReporterDetails validateCSIP108(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP108(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     final MetsType.FileSec fileSec = metsValidatorState.getMets().getFileSec();
     if (structMap != null) {
@@ -1769,7 +1376,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * representation includes one occurrence of the METS pointer <mptr> element,
    * pointing to the appropriate representation METS file.
    */
-  private ReporterDetails validateCSIP109(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP109(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     if (structMap != null) {
       for (StructMapType struct : structMap) {
@@ -1800,7 +1407,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * mets/structMap/div/div/mptr/@xlink:href The actual location of the resource.
    * We recommend recording a URL type filepath within this attribute.
    */
-  private ReporterDetails validateCSIP110(final StructureValidatorState structureValidatorState,
+  protected ReporterDetails validateCSIP110(final StructureValidatorState structureValidatorState,
     final MetsValidatorState metsValidatorState) throws IOException {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     final StringBuilder message = new StringBuilder();
@@ -1864,7 +1471,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * mets/structMap/div/div/mptr[@xlink:type='simple'] Attribute used with the
    * value “simple”. Value list is maintained by the xlink standard.
    */
-  private ReporterDetails validateCSIP111(final StructureValidatorState structureValidatorState,
+  protected ReporterDetails validateCSIP111(final StructureValidatorState structureValidatorState,
     final MetsValidatorState metsValidatorState) throws IOException {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     final HashMap<String, String> structMapTypes = new HashMap<>();
@@ -1932,7 +1539,7 @@ public class StructuralMapComponentValidator extends MetsValidatorImpl {
    * mets/structMap/div/div/mptr[@LOCTYPE='URL'] The locator type is always used
    * with the value “URL” from the vocabulary in the attribute.
    */
-  private ReporterDetails validateCSIP112(final MetsValidatorState metsValidatorState) {
+  protected ReporterDetails validateCSIP112(final MetsValidatorState metsValidatorState) {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     if (structMap != null) {
       for (StructMapType struct : structMap) {
