@@ -91,9 +91,9 @@ public class ValidatorTest {
     }
     OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(reportPath.toFile()));
     ValidationReportOutputJson reportOutputJson = new ValidationReportOutputJson(earkSIPath,outputStream);
-    EARKSIPValidator earksipValidator = new EARKSIPValidator(reportOutputJson);
+    EARKSIPValidator earksipValidator = new EARKSIPValidator(reportOutputJson, "2.1.0");
 
-    boolean validate = earksipValidator.validate();
+    boolean validate = earksipValidator.validate("2.1.0");
     LOGGER.info("Done validate - Full-EARK-SIP");
 
     Assert.assertFalse(validate);

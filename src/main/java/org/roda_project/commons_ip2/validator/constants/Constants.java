@@ -1,5 +1,7 @@
 package org.roda_project.commons_ip2.validator.constants;
 
+import java.util.List;
+
 /** {@author João Gomes <jgomes@keep.pt>}. */
 public final class Constants {
 
@@ -146,6 +148,8 @@ public final class Constants {
    */
   public static final String VALIDATION_REPORT_HEADER_CSIP_VERSION = "CSIP-2.0.4";
 
+  public static final String VALIDATION_REPORT_CSIP_VERSION = "CSIP-";
+
   /**
    * Constant validation report value to the key "header".
    */
@@ -166,6 +170,9 @@ public final class Constants {
    */
   public static final String VALIDATION_REPORT_SPECIFICATION_KEY_PATH = "path";
 
+  public static final String HTTPS_DILCIS_EU_XML_METS_CSIPEXTENSION_METS = "https://"
+    + "dilcis.eu/XML/METS/CSIPExtensionMETS";
+
   /**
    * Constant validation report value to the key "url".
    */
@@ -175,7 +182,7 @@ public final class Constants {
    * Constant validation report value to the key "url".
    */
   public static final String VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_CSIP = VALIDATION_REPORT_HEADER_URL_DILCIS
-    + "E-ARK-CSIP/releases/tag/v2.0.4";
+    + "E-ARK-CSIP/releases/tag/v";
   /**
    * Constant validation report value to the key "url".
    */
@@ -385,6 +392,8 @@ public final class Constants {
    * Constant Module Name "Structural metadata - Digital objects".
    */
   public static final String AIP_MODULE_NAME_2 = " Structural metadata - Digital objects";
+  public static final String UTF_8 = "UTF-8" ;
+  public static final String METS_OBJECTID_CAN_T_BE_NULL = "mets/@OBJECTID can't be null";
 
   private Constants() {
   }
