@@ -220,7 +220,7 @@ public abstract class StructMapValidator {
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         final DivType div = struct.getDiv();
-        if (div != null && div.getLABEL().equals("CSIP")) {
+        if (div != null && struct.getLABEL().equals("CSIP")) {
           final String label = div.getLABEL();
           if (label == null) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
@@ -1199,7 +1199,7 @@ public abstract class StructMapValidator {
       if (metsValidatorState.isRootMets()) {
         for (StructMapType struct : structMap) {
           final DivType firstDiv = struct.getDiv();
-          if (firstDiv != null && firstDiv.getLABEL().equals("CSIP")) {
+          if (firstDiv != null && struct.getLABEL().equals("CSIP")) {
             final List<DivType> divs = firstDiv.getDiv();
             for (DivType div : divs) {
               if (div.getLABEL().matches("Representations/.*/") && div.getMptr().isEmpty()) {
@@ -1268,7 +1268,7 @@ public abstract class StructMapValidator {
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         final DivType div = struct.getDiv();
-        if (div != null && div.getLABEL().equals("CSIP")) {
+        if (div != null && struct.getLABEL().equals("CSIP")) {
           final List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
             final String label = d.getLABEL();
@@ -1329,7 +1329,7 @@ public abstract class StructMapValidator {
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         final DivType div = struct.getDiv();
-        if (div != null && div.getLABEL().equals("CSIP")) {
+        if (div != null && struct.getLABEL().equals("CSIP")) {
           final List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
             if (d.getLABEL() != null && d.getLABEL().matches("Representations/.*")) {
@@ -1381,7 +1381,7 @@ public abstract class StructMapValidator {
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         final DivType div = struct.getDiv();
-        if (div != null && div.getLABEL().equals("CSIP")) {
+        if (div != null && struct.getLABEL().equals("CSIP")) {
           final List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
             if (d.getLABEL() != null && d.getLABEL().matches("Representations/.*")) {
@@ -1414,7 +1414,7 @@ public abstract class StructMapValidator {
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         final DivType div = struct.getDiv();
-        if (div != null && div.getLABEL().equals("CSIP")) {
+        if (div != null && struct.getLABEL().equals("CSIP")) {
           final List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
             if (d.getLABEL().matches("Representations/.*")) {
@@ -1503,7 +1503,7 @@ public abstract class StructMapValidator {
     if (!structMap.isEmpty()) {
       for (StructMapType struct : structMap) {
         final DivType div = struct.getDiv();
-        if (div != null && div.getLABEL().equals("CSIP")) {
+        if (div != null && struct.getLABEL().equals("CSIP")) {
           final List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
             if (d.getLABEL() != null && d.getLABEL().matches("Representations/")) {
@@ -1544,7 +1544,7 @@ public abstract class StructMapValidator {
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         final DivType div = struct.getDiv();
-        if (div != null && div.getLABEL().equals("CSIP")) {
+        if (div != null && struct.getLABEL().equals("CSIP")) {
           final List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
             if (d.getLABEL() != null && d.getLABEL().matches("Representations/")) {
