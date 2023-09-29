@@ -412,7 +412,7 @@ public abstract class StructMapValidator {
               final List<Object> admids = d.getADMID();
               if (admids != null && !admids.isEmpty()) {
                 for (Object o : admids) {
-                  final String admid = ((MdSecType) o).getID();
+                  final String admid = ((AmdSecType) o).getID();
                   if (!amdSecIDs.contains(admid)) {
                     final StringBuilder message = new StringBuilder();
                     message.append("mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@ADMID (").append(admid)
