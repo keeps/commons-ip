@@ -279,6 +279,7 @@ public class EARKSIPValidator {
       metsValidatorState.setIsRootMets(true);
 
       metsValidatorState.setMets(metsRoot.instatiateMetsFile());
+      metsValidatorState.setIpType(metsValidatorState.getMets().getMetsHdr().getOAISPACKAGETYPE());
       validateComponents();
     } catch (IOException | JAXBException | SAXException e) {
       final String message = createExceptionMessage(e,
