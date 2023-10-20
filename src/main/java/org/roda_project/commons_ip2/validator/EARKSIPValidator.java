@@ -67,6 +67,8 @@ public class EARKSIPValidator {
   /** The contextual mets state {@link MetsValidatorState}. */
   private final MetsValidatorState metsValidatorState;
 
+  private final String version;
+
   /**
    * Initializes Validation Objects.
    *
@@ -85,6 +87,8 @@ public class EARKSIPValidator {
     this.earksipPath = reportOutputJson.getSipPath().toAbsolutePath().normalize();
 
     this.validationReportOutputJson = reportOutputJson;
+
+    this.version = version;
 
     this.structureValidatorState = new StructureValidatorState(
       reportOutputJson.getSipPath().toAbsolutePath().normalize());
@@ -167,9 +171,9 @@ public class EARKSIPValidator {
 
       if (!validationReportOutputJson.getResults()
         .containsKey(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID)) {
-        final ReporterDetails csipStr0 = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, "", true,
-          false);
-        csipStr0.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+        final ReporterDetails csipStr0 = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION + version,
+          "", true, false);
+        csipStr0.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION + version);
         validationReportOutputJson.getResults().put(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID,
           csipStr0);
       }
