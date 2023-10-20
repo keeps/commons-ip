@@ -298,14 +298,20 @@ public class EARKUtils {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
-      String tempSchema = schemas.get(0).getFileName();
-      if (!override) {
-        if (tempSchema.equals(IPConstants.SCHEMA_EARK_CSIP_FILENAME)
-          || tempSchema.equals(IPConstants.SCHEMA_EARK_SIP_FILENAME)
-          || tempSchema.equals(IPConstants.SCHEMA_METS_FILENAME_WITH_VERSION)
-          || tempSchema.equals(IPConstants.SCHEMA_XLINK_FILENAME)) {
-          schemas.remove(0);
-          tempSchema = "";
+
+      String tempSchema = "";
+      if (schemas.size() != 0) {
+
+        tempSchema = schemas.get(0).getFileName();
+
+        if (!override) {
+          if (tempSchema.equals(IPConstants.SCHEMA_EARK_CSIP_FILENAME)
+            || tempSchema.equals(IPConstants.SCHEMA_EARK_SIP_FILENAME)
+            || tempSchema.equals(IPConstants.SCHEMA_METS_FILENAME_WITH_VERSION)
+            || tempSchema.equals(IPConstants.SCHEMA_XLINK_FILENAME)) {
+            schemas.remove(0);
+            tempSchema = "";
+          }
         }
       }
 
@@ -891,6 +897,5 @@ public class EARKUtils {
     final Path basePath) {
     return processFile(ip, metsWrapper.getSubmissionsDiv(), IPConstants.SUBMISSION, basePath);
   }
-
 
 }
