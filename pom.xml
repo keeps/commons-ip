@@ -221,10 +221,10 @@
                                 <configuration>
                                     <rules>
                                         <banDuplicatePomDependencyVersions/>
-                                        <requireMavenVersion>
+                                        <!--requireMavenVersion>
                                             <version>[3.9,)</version>
                                             <message>Invalid Maven version. It should be 3.9.X</message>
-                                        </requireMavenVersion>
+                                        </requireMavenVersion-->
                                         <requireJavaVersion>
                                             <version>17</version>
                                         </requireJavaVersion>
