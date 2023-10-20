@@ -146,19 +146,19 @@ public final class Constants {
   /**
    * Constant validation report value to the key "header".
    */
-  public static final String VALIDATION_REPORT_HEADER_CSIP_VERSION = "CSIP-2.0.4";
+  public static final String VALIDATION_REPORT_HEADER_CSIP_VERSION = "CSIP-";
 
   public static final String VALIDATION_REPORT_CSIP_VERSION = "CSIP-";
 
   /**
    * Constant validation report value to the key "header".
    */
-  public static final String VALIDATION_REPORT_HEADER_SIP_VERSION = "SIP-2.0.4";
+  public static final String VALIDATION_REPORT_HEADER_SIP_VERSION = "SIP-";
 
   /**
    * Constant validation report value to the key "header".
    */
-  public static final String VALIDATION_REPORT_HEADER_AIP_VERSION = "AIP-2.0.4";
+  public static final String VALIDATION_REPORT_HEADER_AIP_VERSION = "AIP-";
 
   /**
    * Constant validation report key "url".
@@ -187,12 +187,12 @@ public final class Constants {
    * Constant validation report value to the key "url".
    */
   public static final String VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_SIP = VALIDATION_REPORT_HEADER_URL_DILCIS
-    + "E-ARK-SIP/releases/tag/v2.0.4";
+    + "E-ARK-SIP/releases/tag/v";
   /**
    * Constant validation report value to the key "url".
    */
   public static final String VALIDATION_REPORT_HEADER_SPECIFICATIONS_URL_AIP = VALIDATION_REPORT_HEADER_URL_DILCIS
-    + "E-ARK-AIP/releases/tag/v2.0.4";
+    + "E-ARK-AIP/releases/tag/v";
 
   /* Report Validation */
   /**
