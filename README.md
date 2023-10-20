@@ -43,11 +43,11 @@ valid EARK2 SIP.
 To validate a SIP have to use the following options:
 
 * **validate**, [REQUIRED] this option is for the CLI to know that is to perform the validation of a SIP.
-* **-i,** [REQUIRED] Path(s) to the SIP(s) archive file or folder(s).
-* **-cv,** [OPTIONAL] Commons IP version (Default: 2.1.0).
-* **-o,** [OPTIONAL]  Path to the Directory where you want to save the validation report.
-* **-r,** [OPTIONAL] The type of report (Valid Option eark or default)
-* **-v,** [OPTIONAL] Verbose option (Will print all validation steps)
+* **-i,** or **--inputs** [REQUIRED] Path(s) to the SIP(s) archive file or folder(s).
+* **--specification-version,** [OPTIONAL] E-ARK CSIP version (Default: 2.1.0).
+* **-o,** or **--output-report-dir** [OPTIONAL]  Path to the Directory where you want to save the validation report.
+* **-r,** or **--reporter-type** [OPTIONAL] The type of report (possible values: commons-ip, pyip)
+* **-v,** or **--verbose** [OPTIONAL] Verbose option (Will print all validation steps)
 * **-h,** [OPTIONAL] Display this help and exit.
 
 To create a EARK-2 SIP have to use the following options:
@@ -62,14 +62,14 @@ To create a EARK-2 SIP have to use the following options:
 * **-T** or **--target-only**, [OPTIONAL] Adds only the files for the representations.
 * **-v** or **--version**, [OPTIONAL] E-ARK SIP specification version (Default: 2.1.0)
 * **--submitter-name**, [OPTIONAL] The name of the submitter agent.
-* **--submiter-id**, [OPTIONAL] The identification code (ID) of the submitter agent.
+* **--submitter-id**, [OPTIONAL] The identification code (ID) of the submitter agent.
 * **--sip-id**, [OPTIONAL] ID of the SIP.
+* * **--override-schema**, [OPTIONAL] Overrides default schema.
 
 This is the descriptive metadata section:
 * **--metadata-file** [REQUIRED] Path to descriptive metadata file.
 * **--metadata-type**, [REQUIRED] Descriptive metadata type.
 * **--metadata-schema**, [OPTIONAL] Path to descriptive metadata schema file.
-* **--override-schema**, [OPTIONAL] Overrides default schema
 * **--metadata-version**, [OPTIONAL] Descriptive metadata version.
 
 **NOTE:** if does not give the metadata version, the tool try to obtain this values from the file
