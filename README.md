@@ -1,7 +1,7 @@
 # E-ARK IP validation and manipulation tool and library
 
 This project provides a command-line interface and Java library to validate and manipulate OAIS Information Packages of
-different formats: E-ARK (version 1 & 2 in alpha stage), BagIt, Hungarian type 4 SIP.
+different formats: E-ARK (version 1, 2.0.4, 2.1.0), BagIt, Hungarian type 4 SIP.
 
 The E-ARK Information Packages are maintained by the Digital Information LifeCycle Interoperability Standards Board (
 DILCIS Board). DILCIS Board is an international group of experts committed to maintain and sustain maintain a set of
@@ -25,7 +25,7 @@ For more information about the E-ARK Information Packages specifications, please
 
 ### Requirements
 
-* Java (>= 1.8)
+* Java (>= 17)
 
 Download the [latest release](https://github.com/keeps/commons-ip/releases/latest) to use as a tool or check below how
 to use it as a Java Library.
@@ -43,45 +43,51 @@ valid EARK2 SIP.
 To validate a SIP have to use the following options:
 
 * **validate**, [REQUIRED] this option is for the CLI to know that is to perform the validation of a SIP.
-* **-i**, [REQU,,,IRED] Path(s) to the SIP(s) archive file or folder(s).
+* **-i,** [REQUIRED] Path(s) to the SIP(s) archive file or folder(s).
+* **-cv,** [OPTIONAL] Commons IP version (Default: 2.1.0).
 * **-o,** [OPTIONAL]  Path to the Directory where you want to save the validation report.
 * **-r,** [OPTIONAL] The type of report (Valid Option eark or default)
 * **-v,** [OPTIONAL] Verbose option (Will print all validation steps)
+* **-h,** [OPTIONAL] Display this help and exit.
 
 To create a EARK-2 SIP have to use the following options:
 
 * **create**, [REQUIRED] this option is for the CLI to know that is to perform the creation of a EARK-2 SIP.
-* **-m** or **-metadata** [OPTIONAL] Path to a metadata file; [OPTIONAL] the type of the metadata; [OPTIONAL] the version of the metadata
-* **-ms** or **metadata-schema**, [OPTIONAL] Path to the metadata schema file.
 
-**NOTE:** if does not give the metadata type and the metadata version, the tool try to obtain this values from the file
-name in the following formats (file: **ead.xml** -> result: metadata type: **EAD**; file: **ead_2002.xml** -> result:
-metadata type: **EAD**, metadata version: **2002**)
-
-* **-r** or **-representation** [OPTIONAL] Path(s) folders or files to add in representation separated by commas; [OPTIONAL] Type of the representation; [OPTIONAL] ID of representation
-* **-sid** or **--sip-id**, [OPTIONAL] ID of the SIP.
 * **-doc** or **--documentation**, [OPTIONAL] Path(s) to folders or files to add in documentation of SIP.
 * **-p** or **--path**, [OPTIONAL] Path to save the SIP.
 * **-a** or **--ancestors**, [OPTIONAL] ID(s) of the ancestors of the SIP.
-* **-san** or **--submitter-agent-name**, [OPTIONAL] The name of the submitter agent.
-* **-aid** or **--submiter-agent-id**, [OPTIONAL] THE identification code (ID) of the submitter agent.
+* **-C** or **--checksum**, [OPTIONAL] Checksum algorithm (Default: SHA-256).
+* **-d** or **--documentation**, [OPTIONAL] Path(s) to documentation file(s).
+* **-T** or **--target-only**, [OPTIONAL] Adds only the files for the representations.
+* **-v** or **--version**, [OPTIONAL] E-ARK SIP specification version (Default: 2.1.0)
+* **--submitter-name**, [OPTIONAL] The name of the submitter agent.
+* **--submiter-id**, [OPTIONAL] The identification code (ID) of the submitter agent.
+* **--sip-id**, [OPTIONAL] ID of the SIP.
+
+This is the descriptive metadata section:
+* **--metadata-file** [REQUIRED] Path to descriptive metadata file.
+* **--metadata-type**, [REQUIRED] Descriptive metadata type.
+* **--metadata-schema**, [OPTIONAL] Path to descriptive metadata schema file.
+* **--override-schema**, [OPTIONAL] Overrides default schema
+* **--metadata-version**, [OPTIONAL] Descriptive metadata version.
+
+**NOTE:** if does not give the metadata version, the tool try to obtain this values from the file
+name in the following formats (file: **ead_2002.xml** -> result: metadata version: **2002**)
+
+This is the representation section:
+* **--representation-data**, [REQUIRED] Path to representation file.
+* **--representation-id**, [OPTIONAL] Representation identifier. If not set a default value of rep<number> will be used.
+* **--representation-type**, [OPTIONAL] Representation type
 
 Examples:
 
 ### Full create SIP command with long options:
 
 ```
-java -jar commons-ip-cli-2.X.Y.jar create --metadata "metadata.xml;ead;2002" --metadata-schema ead2002.xsd \
---representation "dataFile1.pdf,dataFolder1,dataFile2.png;Mixed;representation1" \
---sip-id sip1 --ancestors sip2 sip3 --documentation documentation1 documentationFolder -p folder2 --path folder2 --submitter-agent-name agent1 --submitter-agent-id 123
-```
-
-### Full create SIP command with short options:
-
-```
-java -jar commons-ip-cli-2.X.Y.jar create -m "metadata.xml;ead;2002" -ms ead2002.xsd \
--r "dataFile1.pdf,dataFolder1,dataFile2.png;Mixed;representation1" \
--sid sip1 -a sip2 sip3 -doc documentation1 documentationFolder -p folder2 -sn agent1 -aid 123
+java -jar commons-ip-cli-2.X.Y.jar create --metadata-file metadata.xml --metadata-type ead --metadata-schema ead2002.xsd \
+--representation-data "dataFile1.pdf,dataFolder1,dataFile2.png,Mixed,representation1" \
+--sip-id sip1 --ancestors sip2,sip3 --documentation documentation1,documentationFolder --path folder2 --submitter-name agent1 --submitter-id 123
 ```
 
 ```
