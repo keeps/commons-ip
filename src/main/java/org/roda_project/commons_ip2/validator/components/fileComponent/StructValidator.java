@@ -151,16 +151,23 @@ public abstract class StructValidator {
    */
   protected ReporterDetails validateCSIPSTR6(final StructureValidatorState structureValidatorState) throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
-      if (!structureValidatorState.getZipManager().checkIfExistsFolderInside(structureValidatorState.getIpPath(),
-        "metadata/preservation")) {
-        return new ReporterDetails(getCSIPVersion(),
-          "If preservation metadata are available should include inside metadata/preservation", false, false);
+      if (structureValidatorState.getZipManager().checkIfExistsFolderInside(structureValidatorState.getIpPath(),
+        "*/preservation")) {
+        if (!structureValidatorState.getZipManager().checkIfExistsFolderInside(structureValidatorState.getIpPath(),
+          "metadata/preservation")) {
+          return new ReporterDetails(getCSIPVersion(),
+            "If preservation metadata are available should include inside metadata/preservation", false, false);
+        }
       }
+
     } else {
       if (!structureValidatorState.getFolderManager().checkIfExistsFolderInside(structureValidatorState.getIpPath(),
         "metadata", "preservation")) {
-        return new ReporterDetails(getCSIPVersion(),
-          "If preservation metadata are available should include inside metadata/preservation", false, false);
+        if (structureValidatorState.getFolderManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
+          "preservation")) {
+          return new ReporterDetails(getCSIPVersion(),
+            "If preservation metadata are available should include inside metadata/preservation", false, false);
+        }
       }
     }
     return new ReporterDetails();
@@ -277,7 +284,7 @@ public abstract class StructValidator {
       } else {
         return new ReporterDetails(getCSIPVersion(),
           "The representations folder SHOULD include a " + "sub-folder for each individual representation.", false,
-          false);
+          true);
       }
     } else {
       representationsFoldersNames = structureValidatorState.getFolderManager()
@@ -292,7 +299,7 @@ public abstract class StructValidator {
       } else {
         return new ReporterDetails(getCSIPVersion(),
           "The representations folder SHOULD include a " + "sub-folder for each individual representation.", false,
-          false);
+          true);
       }
     }
     return new ReporterDetails();
@@ -311,13 +318,24 @@ public abstract class StructValidator {
   protected ReporterDetails validateCSIPSTR11(final StructureValidatorState structureValidatorState)
     throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
-      if (!structureValidatorState.getZipManager()
+      if (!structureValidatorState.getZipManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
+        "representations")) {
+        return new ReporterDetails(getCSIPVersion(), "The representation folder SHOULD include a sub-folder named "
+          + "data which MAY include all data constituting the representation", false, true);
+      }
+      else if (!structureValidatorState.getZipManager()
         .checkIfExistsFolderInsideRepresentation(structureValidatorState.getIpPath(), "data")) {
         return new ReporterDetails(getCSIPVersion(), "The representation folder SHOULD include a sub-folder named "
           + "data which MAY include all data constituting the representation", false, false);
       }
+
     } else {
       if (!structureValidatorState.getFolderManager()
+        .checkIfExistsFolderInRoot(structureValidatorState.getIpPath(), "representations")) {
+        return new ReporterDetails(getCSIPVersion(), "The representation folder SHOULD include a sub-folder named data "
+          + "which MAY include all data constituting the representation", false, true);
+      }
+      else if (!structureValidatorState.getFolderManager()
         .checkIfExistsFolderInsideRepresentation(structureValidatorState.getIpPath(), "data")) {
         return new ReporterDetails(getCSIPVersion(), "The representation folder SHOULD include a sub-folder named data "
           + "which MAY include all data constituting the representation", false, false);
@@ -369,13 +387,23 @@ public abstract class StructValidator {
   protected ReporterDetails validateCSIPSTR13(final StructureValidatorState structureValidatorState)
     throws IOException {
     if (structureValidatorState.isZipFileFlag()) {
-      if (!structureValidatorState.getZipManager()
+      if (!structureValidatorState.getZipManager().checkIfExistsFolderInRoot(structureValidatorState.getIpPath(),
+        "representations")) {
+        return new ReporterDetails(getCSIPVersion(), "The representation folder SHOULD include a sub-folder named "
+          + "metadata which MAY include all metadata about the specific representation.", false, true);
+      }
+      else if (!structureValidatorState.getZipManager()
         .checkIfExistsFolderInsideRepresentation(structureValidatorState.getIpPath(), "metadata")) {
         return new ReporterDetails(getCSIPVersion(), "The representation folder SHOULD include a sub-folder named "
           + "metadata which MAY include all metadata about the specific representation.", false, false);
       }
     } else {
       if (!structureValidatorState.getFolderManager()
+        .checkIfExistsFolderInRoot(structureValidatorState.getIpPath(), "representations")) {
+        return new ReporterDetails(getCSIPVersion(), "The representation folder SHOULD include a sub-folder named "
+          + "metadata which MAY include all metadata about the specific representation.", false, true);
+      }
+      else if (!structureValidatorState.getFolderManager()
         .checkIfExistsFolderInsideRepresentation(structureValidatorState.getIpPath(), "metadata")) {
         return new ReporterDetails(getCSIPVersion(), "The representation folder SHOULD include a sub-folder named "
           + "metadata which MAY include all metadata about the specific representation.", false, false);
