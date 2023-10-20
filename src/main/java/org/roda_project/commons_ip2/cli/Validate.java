@@ -48,7 +48,7 @@ public class Validate implements Callable<Integer> {
     "--verbose"}, description = "Verbose command line output with all validation steps")
   boolean verbose;
 
-  @CommandLine.Option(names = {"-cv", "--commons-version"}, description = "Commons IP version")
+  @CommandLine.Option(names = {"--specification-version"}, description = "E-ARK CSIP version")
   String version = "2.1.0";
 
   @Override
