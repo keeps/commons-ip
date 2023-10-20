@@ -1,24 +1,24 @@
 package org.roda_project.commons_ip2.cli.utils;
 
-import org.roda_project.commons_ip.utils.IPException;
-import org.roda_project.commons_ip2.cli.model.exception.SIPBuilderException;
-import org.roda_project.commons_ip2.cli.model.args.MetadataGroup;
-import org.roda_project.commons_ip2.cli.model.args.RepresentationGroup;
-import org.roda_project.commons_ip2.cli.model.enums.CSIPVersion;
-import org.roda_project.commons_ip2.cli.model.enums.Checksum;
-import org.roda_project.commons_ip2.model.IPContentInformationType;
-import org.roda_project.commons_ip2.model.IPContentType;
-import org.roda_project.commons_ip2.model.SIP;
-import org.roda_project.commons_ip2.model.impl.eark.EARKSIP;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.roda_project.commons_ip.utils.IPException;
+import org.roda_project.commons_ip2.cli.model.args.MetadataGroup;
+import org.roda_project.commons_ip2.cli.model.args.RepresentationGroup;
+import org.roda_project.commons_ip2.cli.model.enums.CSIPVersion;
+import org.roda_project.commons_ip2.cli.model.enums.Checksum;
+import org.roda_project.commons_ip2.cli.model.exception.SIPBuilderException;
+import org.roda_project.commons_ip2.model.IPContentInformationType;
+import org.roda_project.commons_ip2.model.IPContentType;
+import org.roda_project.commons_ip2.model.SIP;
+import org.roda_project.commons_ip2.model.impl.eark.EARKSIP;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Miguel Guimarães <mguimaraes@keep.pt>
@@ -39,6 +39,7 @@ public class SIPBuilder {
   private List<String> documentation = new ArrayList<>();
 
   private String softwareVersion;
+  private Boolean overrideSchema;
 
   public SIPBuilder() {
     // Empty Constructor
@@ -46,6 +47,11 @@ public class SIPBuilder {
 
   public SIPBuilder setMetadataArgs(List<MetadataGroup> metadataArgs) {
     this.metadataArgs = metadataArgs;
+    return this;
+  }
+
+  public SIPBuilder setOverride(Boolean override) {
+    this.overrideSchema = override;
     return this;
   }
 
@@ -120,6 +126,10 @@ public class SIPBuilder {
 
     if (checksum != null) {
       sip.setChecksum(checksum.toString());
+    }
+
+    if (overrideSchema) {
+      sip.setOverride();
     }
 
     try {
