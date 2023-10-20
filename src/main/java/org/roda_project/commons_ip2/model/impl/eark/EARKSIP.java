@@ -208,7 +208,7 @@ public class EARKSIP extends SIP {
     try {
       Map<String, ZipEntryInfo> zipEntries = getZipEntries();
       //default metadata need to be added before creating the mets in order to add them in the mets file
-      earkUtils.addDefaultSchemas(LOGGER, getSchemas(), buildDir);
+      earkUtils.addDefaultSchemas(LOGGER, getSchemas(), buildDir, getOverride());
 
       boolean isMetadataOther = (this.getOtherMetadata() != null && !this.getOtherMetadata().isEmpty());
       boolean isMetadata = ((this.getDescriptiveMetadata() != null && !this.getDescriptiveMetadata().isEmpty())

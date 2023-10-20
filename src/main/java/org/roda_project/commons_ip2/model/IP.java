@@ -55,6 +55,7 @@ public abstract class IP implements IPInterface {
   private ValidationReport validationReport;
 
   private String checksumAlgorithm;
+  private boolean override;
 
   public IP() {
     this.setId(Utils.generateRandomAndPrefixedUUID());
@@ -104,6 +105,13 @@ public abstract class IP implements IPInterface {
     this.checksumAlgorithm = checksum;
   }
 
+  public void setOverride() {
+    this.override = true;
+  }
+
+  public Boolean getOverride() {
+    return override;
+  }
   public String getChecksum() {
     return this.checksumAlgorithm;
   }

@@ -292,24 +292,40 @@ public class EARKUtils {
     }
   }
 
-  protected void addDefaultSchemas(Logger logger, List<IPFileInterface> schemas, Path buildDir)
+  protected void addDefaultSchemas(Logger logger, List<IPFileInterface> schemas, Path buildDir, Boolean override)
     throws InterruptedException {
     try {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
+      String tempSchema = schemas.get(0).getFileName();
+      if (!override) {
+        if (tempSchema.equals(IPConstants.SCHEMA_EARK_CSIP_FILENAME)
+          || tempSchema.equals(IPConstants.SCHEMA_EARK_SIP_FILENAME)
+          || tempSchema.equals(IPConstants.SCHEMA_METS_FILENAME_WITH_VERSION)
+          || tempSchema.equals(IPConstants.SCHEMA_XLINK_FILENAME)) {
+          schemas.remove(0);
+          tempSchema = "";
+        }
+      }
+
       Path earkCsipSchema = Utils.copyResourceFromClasspathToDir(EARKSIP.class, buildDir,
         IPConstants.SCHEMA_EARK_CSIP_FILENAME, IPConstants.SCHEMA_EARK_CSIP_RELATIVE_PATH_FROM_RESOURCES);
-      schemas.add(new IPFile(earkCsipSchema, IPConstants.SCHEMA_EARK_CSIP_FILENAME));
+      if (!tempSchema.equals(IPConstants.SCHEMA_EARK_CSIP_FILENAME))
+        schemas.add(new IPFile(earkCsipSchema, IPConstants.SCHEMA_EARK_CSIP_FILENAME));
       Path earkSipSchema = Utils.copyResourceFromClasspathToDir(EARKSIP.class, buildDir,
         IPConstants.SCHEMA_EARK_SIP_FILENAME, IPConstants.SCHEMA_EARK_SIP_RELATIVE_PATH_FROM_RESOURCES);
-      schemas.add(new IPFile(earkSipSchema, IPConstants.SCHEMA_EARK_SIP_FILENAME));
+      if (!tempSchema.equals(IPConstants.SCHEMA_EARK_SIP_FILENAME))
+        schemas.add(new IPFile(earkSipSchema, IPConstants.SCHEMA_EARK_SIP_FILENAME));
       Path metsSchema = Utils.copyResourceFromClasspathToDir(EARKSIP.class, buildDir,
         IPConstants.SCHEMA_METS_FILENAME_WITH_VERSION, IPConstants.SCHEMA_METS_RELATIVE_PATH_FROM_RESOURCES);
-      schemas.add(new IPFile(metsSchema, IPConstants.SCHEMA_METS_FILENAME_WITH_VERSION));
+      if (!tempSchema.equals(IPConstants.SCHEMA_METS_FILENAME_WITH_VERSION))
+        schemas.add(new IPFile(metsSchema, IPConstants.SCHEMA_METS_FILENAME_WITH_VERSION));
       Path xlinkSchema = Utils.copyResourceFromClasspathToDir(EARKSIP.class, buildDir,
         IPConstants.SCHEMA_XLINK_FILENAME, IPConstants.SCHEMA_XLINK_RELATIVE_PATH_FROM_RESOURCES);
-      schemas.add(new IPFile(xlinkSchema, IPConstants.SCHEMA_XLINK_FILENAME));
+      if (!tempSchema.equals(IPConstants.SCHEMA_XLINK_FILENAME))
+        schemas.add(new IPFile(xlinkSchema, IPConstants.SCHEMA_XLINK_FILENAME));
+
     } catch (IOException e) {
       logger.error("Error while trying to add default schemas", e);
     }
@@ -875,5 +891,6 @@ public class EARKUtils {
     final Path basePath) {
     return processFile(ip, metsWrapper.getSubmissionsDiv(), IPConstants.SUBMISSION, basePath);
   }
+
 
 }

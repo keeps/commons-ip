@@ -1,22 +1,23 @@
 package org.roda_project.commons_ip2.cli;
 
+import static org.roda_project.commons_ip2.cli.model.ExitCodes.EXIT_CODE_OK;
+
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import org.roda_project.commons_ip2.cli.model.exception.CLIException;
-import org.roda_project.commons_ip2.cli.model.exception.InvalidPathException;
-import org.roda_project.commons_ip2.cli.model.exception.SIPBuilderException;
 import org.roda_project.commons_ip2.cli.model.args.MetadataGroup;
 import org.roda_project.commons_ip2.cli.model.args.RepresentationGroup;
 import org.roda_project.commons_ip2.cli.model.enums.CSIPVersion;
 import org.roda_project.commons_ip2.cli.model.enums.Checksum;
-import org.roda_project.commons_ip2.cli.utils.CLI.CreateCommandUtils;
+import org.roda_project.commons_ip2.cli.model.exception.CLIException;
+import org.roda_project.commons_ip2.cli.model.exception.InvalidPathException;
+import org.roda_project.commons_ip2.cli.model.exception.SIPBuilderException;
 import org.roda_project.commons_ip2.cli.utils.SIPBuilder;
-import picocli.CommandLine;
+import org.roda_project.commons_ip2.cli.utils.CLI.CreateCommandUtils;
 
-import static org.roda_project.commons_ip2.cli.model.ExitCodes.EXIT_CODE_OK;
+import picocli.CommandLine;
 
 /**
  * @author Miguel Guimarães <mguimaraes@keep.pt>
@@ -33,8 +34,12 @@ public class Create implements Callable<Integer> {
   @CommandLine.Option(names = {"-h", "--help"}, usageHelp = true, description = "display this help and exit")
   boolean help;
 
+
   @CommandLine.Option(names = {"-T", "--target-only"}, description = "Adds only the files for the representations")
   boolean targetOnly;
+
+  @CommandLine.Option(names = {"--override-schema"}, description = "Overrides default schema")
+  boolean overrideSchema;
 
   @CommandLine.Option(names = {"-v",
     "--version"}, description = "E-ARK SIP specification version (possible values: ${COMPLETION-CANDIDATES})")
@@ -86,7 +91,7 @@ public class Create implements Callable<Integer> {
       throw new CLIException("At least one section must be present, metadata or representation");
     }
 
-    final Path sipPath = new SIPBuilder().setMetadataArgs(metadataListArgs)
+    final Path sipPath = new SIPBuilder().setMetadataArgs(metadataListArgs).setOverride(overrideSchema)
       .setRepresentationArgs(representationListArgs).setTargetOnly(targetOnly).setSipId(sipId).setAncestors(ancestors)
       .setDocumentation(documentation).setSoftwareVersion(getClass().getPackage().getImplementationVersion())
       .setPath(path).setSubmitterAgentId(submitterAgentId).setSubmitterAgentName(submitterAgentName)
