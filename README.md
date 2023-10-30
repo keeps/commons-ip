@@ -429,6 +429,10 @@ For more information or commercial support, contact [KEEP SOLUTIONS](http://www.
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request :D
 
+### License and Intellectual Property
+
+All contributions to this project are licensed on LGPL v3, which includes an explicit grant of patent rights, meaning that the developers who created or contributed to the code relinquish their patent rights with regard to any subsequent reuse of the software.
+
 ## Credits
 
 - Hélder Silva (KEEP SOLUTIONS)
