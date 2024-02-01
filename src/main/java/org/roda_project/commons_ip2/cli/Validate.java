@@ -15,11 +15,14 @@ import org.roda_project.commons_ip2.cli.model.enums.ReportType;
 import org.roda_project.commons_ip2.cli.model.exception.CLIException;
 import org.roda_project.commons_ip2.cli.model.exception.ValidationException;
 import org.roda_project.commons_ip2.cli.utils.CLI.ValidateCommandUtils;
+import org.roda_project.commons_ip2.utils.LogSystem;
 import org.roda_project.commons_ip2.validator.EARKPyIPValidator;
 import org.roda_project.commons_ip2.validator.EARKSIPValidator;
 import org.roda_project.commons_ip2.validator.observer.ProgressValidationLoggerObserver;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReportOutputJSONPyIP;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReportOutputJson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import picocli.CommandLine;
@@ -29,6 +32,9 @@ import picocli.CommandLine;
  */
 @CommandLine.Command(name = "validate", showDefaultValues = true, description = "Validates E-ARK IP packages against the specification")
 public class Validate implements Callable<Integer> {
+  private static final Logger LOGGER = LoggerFactory.getLogger(Validate.class);
+  @CommandLine.Spec
+  CommandLine.Model.CommandSpec spec;
   @CommandLine.Option(names = {"-h", "--help"}, usageHelp = true, description = "display this help and exit")
   boolean help;
 
@@ -72,7 +78,11 @@ public class Validate implements Callable<Integer> {
     final Path sipPath = Paths.get(sip);
 
     Path reportPath = ValidateCommandUtils.obtainReportPath(sipPath, reportPathDir);
+    CommandLine cmd = spec.commandLine();
+    String commandLineString = String.join(" ", cmd.getParseResult().originalArgs());
 
+    LogSystem.logOperatingSystemInfo();
+    LOGGER.debug("command executed: " + commandLineString);
     switch (reportType) {
       case COMMONS_IP -> {
         final OutputStream outputStream = ValidateCommandUtils.createReportOutputStream(reportPath);
@@ -95,5 +105,7 @@ public class Validate implements Callable<Integer> {
       }
       default -> throw new CLIException("Unexpected value: " + reportType);
     }
+    new CommandLine(this).getOut().printf("E-ARK SIP validation report at '%s'%n",
+      reportPath.normalize().toAbsolutePath());
   }
 }
