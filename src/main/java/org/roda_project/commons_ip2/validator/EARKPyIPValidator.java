@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.roda_project.commons_ip2.validator.common.InstatiateMets;
@@ -47,6 +46,8 @@ import org.roda_project.commons_ip2.validator.state.StructureValidatorState;
 import org.roda_project.commons_ip2.validator.utils.ResultsUtils;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
+
+import jakarta.xml.bind.JAXBException;
 
 /** {@author João Gomes <jgomes@keep.pt>}. */
 public class EARKPyIPValidator {

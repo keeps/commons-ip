@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.xml.datatype.XMLGregorianCalendar;
-
 import org.roda_project.commons_ip.model.AIP;
 import org.roda_project.commons_ip.model.IP;
 import org.roda_project.commons_ip.model.IPAgent;
@@ -27,6 +25,8 @@ import org.roda_project.commons_ip.model.ValidationReport;
 import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
+
+import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  * AIP decorator (wrapper).
