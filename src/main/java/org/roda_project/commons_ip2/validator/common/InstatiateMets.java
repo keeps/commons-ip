@@ -3,9 +3,6 @@ package org.roda_project.commons_ip2.validator.common;
 import java.io.InputStream;
 
 import javax.xml.XMLConstants;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -16,6 +13,10 @@ import org.roda_project.commons_ip2.model.IPConstants;
 import org.roda_project.commons_ip2.utils.METSUtils;
 import org.roda_project.commons_ip2.utils.ResourceResolver;
 import org.xml.sax.SAXException;
+
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 
 /** {@author João Gomes <jgomes@keep.pt>}. */
 public class InstatiateMets {

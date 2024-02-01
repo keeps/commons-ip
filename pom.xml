@@ -200,6 +200,64 @@
                             <format>json</format>
                         </configuration>
                     </plugin>
+                    <plugin>
+                        <groupId>org.jvnet.jaxb</groupId>
+                        <artifactId>jaxb-maven-plugin</artifactId>
+                        <version>4.0.0</version>
+                        <executions>
+                            <execution>
+                                <id>generate-JAXB-METSv1</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <schemaDirectory>src/main/resources/schemas</schemaDirectory>
+                                    <schemaIncludes>
+                                        <include>mets1_11.xsd</include>
+                                    </schemaIncludes>
+                                    <cleanPackageDirectories>true</cleanPackageDirectories>
+                                    <generatePackage>org.roda_project.commons_ip.mets_v1_11.beans</generatePackage>
+                                    <generateDirectory>${project.build.directory}/generated-sources/xjc1</generateDirectory>
+                                    <bindingIncludes>
+                                        <include>mets1_11.xjb</include>
+                                    </bindingIncludes>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>generate-JAXB</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <schemaDirectory>src/main/resources/schemas2</schemaDirectory>
+                                    <schemaIncludes>
+                                        <include>mets1_12.xsd</include>
+                                    </schemaIncludes>
+                                    <cleanPackageDirectories>true</cleanPackageDirectories>
+                                    <generatePackage>org.roda_project.commons_ip2.mets_v1_12.beans</generatePackage>
+                                    <generateDirectory>${project.build.directory}/generated-sources/xjc2</generateDirectory>
+                                    <bindingIncludes>
+                                        <include>mets1_12.xjb</include>
+                                    </bindingIncludes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <extension>true</extension>
+                            <args>
+                                <arg>-Xsimplify</arg>
+                            </args>
+                            <plugins>
+                                <plugin>
+                                    <groupId>org.jvnet.jaxb</groupId>
+                                    <artifactId>jaxb-plugins</artifactId>
+                                    <version>3.0.0</version>
+                                </plugin>
+                            </plugins>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -294,6 +352,64 @@
                             <format>json</format>
                         </configuration>
                     </plugin>
+                    <plugin>
+                        <groupId>org.jvnet.jaxb</groupId>
+                        <artifactId>jaxb-maven-plugin</artifactId>
+                        <version>4.0.0</version>
+                        <executions>
+                            <execution>
+                                <id>generate-JAXB-METSv1</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <schemaDirectory>src/main/resources/schemas</schemaDirectory>
+                                    <schemaIncludes>
+                                        <include>mets1_11.xsd</include>
+                                    </schemaIncludes>
+                                    <cleanPackageDirectories>true</cleanPackageDirectories>
+                                    <generatePackage>org.roda_project.commons_ip.mets_v1_11.beans</generatePackage>
+                                    <generateDirectory>${project.build.directory}/generated-sources/xjc1</generateDirectory>
+                                    <bindingIncludes>
+                                        <include>mets1_11.xjb</include>
+                                    </bindingIncludes>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>generate-JAXB</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <schemaDirectory>src/main/resources/schemas2</schemaDirectory>
+                                    <schemaIncludes>
+                                        <include>mets1_12.xsd</include>
+                                    </schemaIncludes>
+                                    <cleanPackageDirectories>true</cleanPackageDirectories>
+                                    <generatePackage>org.roda_project.commons_ip2.mets_v1_12.beans</generatePackage>
+                                    <generateDirectory>${project.build.directory}/generated-sources/xjc2</generateDirectory>
+                                    <bindingIncludes>
+                                        <include>mets1_12.xjb</include>
+                                    </bindingIncludes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <extension>true</extension>
+                            <args>
+                                <arg>-Xsimplify</arg>
+                            </args>
+                            <plugins>
+                                <plugin>
+                                    <groupId>org.jvnet.jaxb</groupId>
+                                    <artifactId>jaxb-plugins</artifactId>
+                                    <version>3.0.0</version>
+                                </plugin>
+                            </plugins>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -365,9 +481,9 @@
 
         <!-- Java11 dependencies -->
         <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.3.1</version>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>4.0.1</version>
         </dependency>
         <dependency>
             <groupId>javax.activation</groupId>
@@ -377,7 +493,7 @@
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
-            <version>2.3.8</version>
+            <version>4.0.4</version>
         </dependency>
 
         <!-- PyIP dependencies -->

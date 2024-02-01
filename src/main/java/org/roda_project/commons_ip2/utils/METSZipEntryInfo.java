@@ -18,8 +18,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.xml.bind.JAXBException;
-
 import org.roda_project.commons_ip.utils.FileZipEntryInfo;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
@@ -27,6 +25,8 @@ import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
 import org.roda_project.commons_ip2.model.IPConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.xml.bind.JAXBException;
 
 public class METSZipEntryInfo extends FileZipEntryInfo {
   private static final Logger LOGGER = LoggerFactory.getLogger(METSZipEntryInfo.class);
