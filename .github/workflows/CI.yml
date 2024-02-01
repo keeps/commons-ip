@@ -5,7 +5,7 @@ on:
       - "**"
 
 jobs:
-  release:
+  continuous-integration:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,6 +26,6 @@ jobs:
       - name: Test
         run: mvn --batch-mode test
       - name: Build lib
-        run: mvn --batch-mode clean package
+        run: mvn --batch-mode clean package -DskipTests
       - name: Build CLI
-        run: mvn --batch-mode clean package -Pcli
+        run: mvn --batch-mode clean package -Pcli -DskipTests
