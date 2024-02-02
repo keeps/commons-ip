@@ -18,7 +18,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.xml.bind.DatatypeConverter;
+import jakarta.xml.bind.DatatypeConverter;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
@@ -59,6 +59,64 @@ public class EARKAIP extends AIPWrap {
    */
   public EARKAIP(final AIP aip) {
     super(aip);
+  }
+
+  public static AIP parse(final Path source) throws ParseException {
+    try {
+      if (Files.isDirectory(source)) {
+        return parseEARKAIPFromPath(source);
+      } else {
+        return parse(source, Files.createTempDirectory("unzipped"));
+      }
+    } catch (final IOException e) {
+      throw new ParseException("Error creating temporary directory for E-ARK AIP parse", e);
+    }
+  }
+
+  public static AIP parse(Path source, Path destinationDirectory) throws ParseException {
+    return parseEARKAIP(source, destinationDirectory);
+  }
+
+  private static AIP parseEARKAIP(final Path source, final Path destinationDirectory) throws ParseException {
+    Path aipPath = ZIPUtils.extractIPIfInZipFormat(source, destinationDirectory);
+    return parseEARKAIPFromPath(aipPath);
+  }
+
+  private static AIP parseEARKAIPFromPath(final Path aipPath) throws ParseException {
+    try {
+      final AIP aip = new EARKAIP(new BasicAIP());
+      aip.setBasePath(aipPath);
+      final MetsWrapper metsWrapper = EARKUtils.processMainMets(aip, aipPath);
+
+      if (aip.isValid()) {
+
+        final StructMapType structMap = EARKUtils.getEARKStructMap(metsWrapper, aip, true);
+
+        if (structMap != null) {
+          EARKUtils.preProcessStructMap(metsWrapper, structMap);
+
+          EARKUtils.processDescriptiveMetadata(metsWrapper, aip, LOGGER, null, aip.getBasePath());
+
+          EARKUtils.processOtherMetadata(metsWrapper, aip, LOGGER, null, aip.getBasePath());
+
+          EARKUtils.processPreservationMetadata(metsWrapper, aip, LOGGER, null, aip.getBasePath());
+
+          EARKUtils.processRepresentations(metsWrapper, aip, LOGGER);
+
+          EARKUtils.processSchemasMetadata(metsWrapper, aip, aip.getBasePath());
+
+          EARKUtils.processDocumentationMetadata(metsWrapper, aip, aip.getBasePath());
+
+          EARKUtils.processSubmissionMetadata(metsWrapper, aip, aip.getBasePath());
+
+          EARKUtils.processAncestors(metsWrapper, aip);
+        }
+      }
+
+      return aip;
+    } catch (final IPException e) {
+      throw new ParseException("Error parsing E-ARK AIP", e);
+    }
   }
 
   @Override
@@ -123,22 +181,6 @@ public class EARKAIP extends AIPWrap {
     } finally {
       ModelUtils.deleteBuildDir(buildDir);
     }
-  }
-
-  public static AIP parse(final Path source) throws ParseException {
-    try {
-      if (Files.isDirectory(source)) {
-        return parseEARKAIPFromPath(source);
-      } else {
-        return parse(source, Files.createTempDirectory("unzipped"));
-      }
-    } catch (final IOException e) {
-      throw new ParseException("Error creating temporary directory for E-ARK AIP parse", e);
-    }
-  }
-
-  public static AIP parse(Path source, Path destinationDirectory) throws ParseException {
-    return parseEARKAIP(source, destinationDirectory);
   }
 
   private Path getDirPath(final Path targetPath, final String name, final boolean deleteExisting) throws IPException {
@@ -226,48 +268,6 @@ public class EARKAIP extends AIPWrap {
       METSMdRefZipEntryInfo f = (METSMdRefZipEntryInfo) zipEntryInfo;
       f.getMetsMdRef().setCHECKSUM(checksum);
       f.getMetsMdRef().setCHECKSUMTYPE(checksumType);
-    }
-  }
-
-  private static AIP parseEARKAIP(final Path source, final Path destinationDirectory) throws ParseException {
-    Path aipPath = ZIPUtils.extractIPIfInZipFormat(source, destinationDirectory);
-    return parseEARKAIPFromPath(aipPath);
-  }
-
-  private static AIP parseEARKAIPFromPath(final Path aipPath) throws ParseException {
-    try {
-      final AIP aip = new EARKAIP(new BasicAIP());
-      aip.setBasePath(aipPath);
-      final MetsWrapper metsWrapper = EARKUtils.processMainMets(aip, aipPath);
-
-      if (aip.isValid()) {
-
-        final StructMapType structMap = EARKUtils.getEARKStructMap(metsWrapper, aip, true);
-
-        if (structMap != null) {
-          EARKUtils.preProcessStructMap(metsWrapper, structMap);
-
-          EARKUtils.processDescriptiveMetadata(metsWrapper, aip, LOGGER, null, aip.getBasePath());
-
-          EARKUtils.processOtherMetadata(metsWrapper, aip, LOGGER, null, aip.getBasePath());
-
-          EARKUtils.processPreservationMetadata(metsWrapper, aip, LOGGER, null, aip.getBasePath());
-
-          EARKUtils.processRepresentations(metsWrapper, aip, LOGGER);
-
-          EARKUtils.processSchemasMetadata(metsWrapper, aip, aip.getBasePath());
-
-          EARKUtils.processDocumentationMetadata(metsWrapper, aip, aip.getBasePath());
-
-          EARKUtils.processSubmissionMetadata(metsWrapper, aip, aip.getBasePath());
-
-          EARKUtils.processAncestors(metsWrapper, aip);
-        }
-      }
-
-      return aip;
-    } catch (final IPException e) {
-      throw new ParseException("Error parsing E-ARK AIP", e);
     }
   }
 

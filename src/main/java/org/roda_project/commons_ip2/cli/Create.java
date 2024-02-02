@@ -16,6 +16,9 @@ import org.roda_project.commons_ip2.cli.model.exception.InvalidPathException;
 import org.roda_project.commons_ip2.cli.model.exception.SIPBuilderException;
 import org.roda_project.commons_ip2.cli.utils.SIPBuilder;
 import org.roda_project.commons_ip2.cli.utils.CLI.CreateCommandUtils;
+import org.roda_project.commons_ip2.utils.LogSystem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import picocli.CommandLine;
 
@@ -24,7 +27,9 @@ import picocli.CommandLine;
  */
 @CommandLine.Command(name = "create", description = "Creates E-ARK SIP packages%n", showDefaultValues = true)
 public class Create implements Callable<Integer> {
-
+  private static final Logger LOGGER = LoggerFactory.getLogger(LogSystem.class);
+  @CommandLine.Spec
+  CommandLine.Model.CommandSpec spec;
   @CommandLine.ArgGroup(exclusive = false, multiplicity = "0..*", heading = "This is the descriptive metadata section:%n")
   List<MetadataGroup> metadataListArgs = new ArrayList<>();
 
@@ -33,7 +38,6 @@ public class Create implements Callable<Integer> {
 
   @CommandLine.Option(names = {"-h", "--help"}, usageHelp = true, description = "display this help and exit")
   boolean help;
-
 
   @CommandLine.Option(names = {"-T", "--target-only"}, description = "Adds only the files for the representations")
   boolean targetOnly;
@@ -62,7 +66,7 @@ public class Create implements Callable<Integer> {
   List<String> ancestors;
 
   @CommandLine.Option(names = {"-C",
-    "--checksum"}, paramLabel = "<algorithm>",description = "Checksum algorithms (possible values: ${COMPLETION-CANDIDATES})")
+    "--checksum"}, paramLabel = "<algorithm>", description = "Checksum algorithms (possible values: ${COMPLETION-CANDIDATES})")
   Checksum checksum = Checksum.SHA256;
 
   @CommandLine.Option(names = {"-d",
@@ -90,6 +94,11 @@ public class Create implements Callable<Integer> {
     if (metadataListArgs.isEmpty() && representationListArgs.isEmpty()) {
       throw new CLIException("At least one section must be present, metadata or representation");
     }
+
+    CommandLine cmd = spec.commandLine();
+    String commandLineString = String.join(" ", cmd.getParseResult().originalArgs());
+    LogSystem.logOperatingSystemInfo();
+    LOGGER.debug("command executed: " + commandLineString);
 
     final Path sipPath = new SIPBuilder().setMetadataArgs(metadataListArgs).setOverride(overrideSchema)
       .setRepresentationArgs(representationListArgs).setTargetOnly(targetOnly).setSipId(sipId).setAncestors(ancestors)

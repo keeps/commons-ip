@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+	<appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>DEBUG</level>
+		</filter>
+		<file>${commonsIp.home:-.}/commons-ip.log.txt</file>
+		<append>true</append>
 		<encoder>
-			<pattern>%d [%thread] %-5level %logger{36} - %msg%n</pattern>
+			<pattern>%d [%thread] %-5level \(%logger{5}\) %msg%n%exception{full}</pattern>
 		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>commons-ip-%d{yyyy-MM-dd}.%i.log.txt</fileNamePattern>
+			<!-- each file should be at most 35MB, keep 50 days worth of history, but at most 350MB -->
+			<maxFileSize>35MB</maxFileSize>
+			<maxHistory>50</maxHistory>
+			<totalSizeCap>20GB</totalSizeCap>
+		</rollingPolicy>
 	</appender>
 
 	<!-- 
@@ -47,5 +60,9 @@
 
 	<root level="INFO">
 		<appender-ref ref="STDOUT" />
+		<appender-ref ref="LOGFILE" />
+	</root>
+	<root level="DEBUG">
+		<appender-ref ref="LOGFILE" />
 	</root>
 </configuration>

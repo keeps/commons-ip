@@ -1,7 +1,5 @@
 package org.roda_project.commons_ip2.validator.constants;
 
-import java.util.List;
-
 /** {@author João Gomes <jgomes@keep.pt>}. */
 public final class Constants {
 
@@ -392,8 +390,13 @@ public final class Constants {
    * Constant Module Name "Structural metadata - Digital objects".
    */
   public static final String AIP_MODULE_NAME_2 = " Structural metadata - Digital objects";
-  public static final String UTF_8 = "UTF-8" ;
+  public static final String PROPERTY_KEY_HOME = "commonsIp.home";
+  public static final String UTF_8 = "UTF-8";
   public static final String METS_OBJECTID_CAN_T_BE_NULL = "mets/@OBJECTID can't be null";
+  
+  public static final String ISSUES_LINK = "https://github.com/keeps/commons-ip/issues";
+
+  public static final String LOGGER_FILE = "commons-ip.log.txt";
 
   private Constants() {
   }

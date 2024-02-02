@@ -18,10 +18,6 @@ import java.nio.file.Path;
 import java.util.Map;
 
 import javax.xml.XMLConstants;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
@@ -39,6 +35,11 @@ import org.roda_project.commons_ip.model.MetsWrapper;
 import org.roda_project.commons_ip.utils.METSEnums.LocType;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
+
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
 
 public final class METSUtils {
 
@@ -184,9 +185,9 @@ public final class METSUtils {
    * 
    * <p>
    * 20170511 hsilva: a global variable called
-   * {@link IPConstants.METS_ENCODE_AND_DECODE_HREF} is used to enable/disable
-   * the effective decode (done this way to avoid lots of changes in the methods
-   * that use this method)
+   * {@link IPConstants.METS_ENCODE_AND_DECODE_HREF} is used to enable/disable the
+   * effective decode (done this way to avoid lots of changes in the methods that
+   * use this method)
    * </p>
    */
   public static String decodeHref(String value) {
@@ -205,10 +206,10 @@ public final class METSUtils {
    *
    * <p>
    * 20170511 hsilva: a global variable called
-   * {@link IPConstants.METS_ENCODE_AND_DECODE_HREF} is used to enable/disable
-   * the effective encode (done this way to avoid lots of changes in the methods
-   * that use this method). This method is not multi-thread safe when using
-   * different SIP formats.
+   * {@link IPConstants.METS_ENCODE_AND_DECODE_HREF} is used to enable/disable the
+   * effective encode (done this way to avoid lots of changes in the methods that
+   * use this method). This method is not multi-thread safe when using different
+   * SIP formats.
    * </p>
    */
   public static String encodeHref(String value) {

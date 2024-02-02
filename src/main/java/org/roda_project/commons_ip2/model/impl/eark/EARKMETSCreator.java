@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -51,6 +50,8 @@ import org.roda_project.commons_ip2.utils.ValidationUtils;
 import org.roda_project.commons_ip2.utils.ZIPUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.xml.bind.JAXBException;
 
 public abstract class EARKMETSCreator {
   private static final Logger LOGGER = LoggerFactory.getLogger(EARKMETSCreator.class);

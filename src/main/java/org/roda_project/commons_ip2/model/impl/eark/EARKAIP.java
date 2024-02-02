@@ -11,7 +11,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.xml.bind.DatatypeConverter;
+import jakarta.xml.bind.DatatypeConverter;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
@@ -113,6 +113,7 @@ public class EARKAIP extends AIPWrap {
 
       return aip;
     } catch (final IPException e) {
+      LOGGER.debug("Error parsing E-ARK AIP", e);
       throw new ParseException("Error parsing E-ARK AIP", e);
     }
   }

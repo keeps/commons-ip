@@ -4,7 +4,7 @@ package org.roda_project.commons_ip2.cli.model.enums;
  * @author Miguel Guimarães <mguimaraes@keep.pt>
  */
 public enum ReportType {
-  COMMONS_IP("commons-ip"), PYIP("pyip");
+  COMMONS_IP("commons-ip"), PYIP("eark-validator");
 
   private final String type;
 
