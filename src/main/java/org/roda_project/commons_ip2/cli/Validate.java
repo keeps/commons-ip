@@ -82,7 +82,7 @@ public class Validate implements Callable<Integer> {
     String commandLineString = String.join(" ", cmd.getParseResult().originalArgs());
 
     LogSystem.logOperatingSystemInfo();
-    LOGGER.debug("command executed: " + commandLineString);
+    LOGGER.debug("command executed: {}", commandLineString);
     switch (reportType) {
       case COMMONS_IP -> {
         final OutputStream outputStream = ValidateCommandUtils.createReportOutputStream(reportPath);
