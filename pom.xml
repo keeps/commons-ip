@@ -60,6 +60,14 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <excludes>
+                            <exclude>logback.xml</exclude>
+                        </excludes>
+                    </resource>
+                </resources>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -79,7 +87,7 @@
                                             <message>Invalid Maven version. It should be 3.9.X</message>
                                         </requireMavenVersion-->
                                         <requireJavaVersion>
-                                            <version>17</version>
+                                            <version>${java_version}</version>
                                         </requireJavaVersion>
                                     </rules>
                                 </configuration>
@@ -218,7 +226,8 @@
                                     </schemaIncludes>
                                     <cleanPackageDirectories>true</cleanPackageDirectories>
                                     <generatePackage>org.roda_project.commons_ip.mets_v1_11.beans</generatePackage>
-                                    <generateDirectory>${project.build.directory}/generated-sources/xjc1</generateDirectory>
+                                    <generateDirectory>${project.build.directory}/generated-sources/xjc1
+                                    </generateDirectory>
                                     <bindingIncludes>
                                         <include>mets1_11.xjb</include>
                                     </bindingIncludes>
@@ -237,7 +246,8 @@
                                     </schemaIncludes>
                                     <cleanPackageDirectories>true</cleanPackageDirectories>
                                     <generatePackage>org.roda_project.commons_ip2.mets_v1_12.beans</generatePackage>
-                                    <generateDirectory>${project.build.directory}/generated-sources/xjc2</generateDirectory>
+                                    <generateDirectory>${project.build.directory}/generated-sources/xjc2
+                                    </generateDirectory>
                                     <bindingIncludes>
                                         <include>mets1_12.xjb</include>
                                     </bindingIncludes>
@@ -301,8 +311,9 @@
                         </configuration>
                     </plugin>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-assembly-plugin</artifactId>
-                        <version>3.4.2</version>
+                        <version>3.6.0</version>
                         <executions>
                             <execution>
                                 <id>make-assembly</id>
@@ -370,7 +381,8 @@
                                     </schemaIncludes>
                                     <cleanPackageDirectories>true</cleanPackageDirectories>
                                     <generatePackage>org.roda_project.commons_ip.mets_v1_11.beans</generatePackage>
-                                    <generateDirectory>${project.build.directory}/generated-sources/xjc1</generateDirectory>
+                                    <generateDirectory>${project.build.directory}/generated-sources/xjc1
+                                    </generateDirectory>
                                     <bindingIncludes>
                                         <include>mets1_11.xjb</include>
                                     </bindingIncludes>
@@ -389,7 +401,8 @@
                                     </schemaIncludes>
                                     <cleanPackageDirectories>true</cleanPackageDirectories>
                                     <generatePackage>org.roda_project.commons_ip2.mets_v1_12.beans</generatePackage>
-                                    <generateDirectory>${project.build.directory}/generated-sources/xjc2</generateDirectory>
+                                    <generateDirectory>${project.build.directory}/generated-sources/xjc2
+                                    </generateDirectory>
                                     <bindingIncludes>
                                         <include>mets1_12.xjb</include>
                                     </bindingIncludes>
