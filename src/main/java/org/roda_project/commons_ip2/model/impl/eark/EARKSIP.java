@@ -68,7 +68,7 @@ public class EARKSIP extends SIP {
    *          will be used as OBJID in METS (/mets[@OBJID])
    */
   public EARKSIP(String sipId, IPContentType contentType, IPContentInformationType contentInformationType) {
-    new EARKSIP(sipId, contentType, contentInformationType, DEFAULT_SIP_VERSION);
+    this(sipId, contentType, contentInformationType, DEFAULT_SIP_VERSION);
   }
 
   public EARKSIP(String sipId, IPContentType contentType, IPContentInformationType contentInformationType, String version) {
