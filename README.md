@@ -369,9 +369,9 @@ following **mimetypes:**
 
 #### Update Extended list of IANA Media Types
 
-*To add/remove new values to the list add a new line with the IANA Media Type in **scripts/ExtendedIANAMediaTypes.txt**
+* To add/remove new values to the list add a new line with the IANA Media Type in **scripts/ExtendedIANAMediaTypes.txt**
 
-*Run the script again
+* Run the script again
 
 ## Commercial support
 
