@@ -1,5 +1,5 @@
-title: E-ARK IP manipulation java library
-description: Library to generate SIP, AIP or DIP in E-ARK formats
+title: Commons-IP
+description: Command-line tool and Java library to create and validate E-ARK packages
 google_analytics: 
 show_downloads: true
 theme: jekyll-theme-cayman
