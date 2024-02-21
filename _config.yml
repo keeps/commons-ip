@@ -1,5 +1,5 @@
 theme: jekyll-theme-cayman
-title: "E-ARK IP manipulation java library"
-description: "API to manipulate Information Packages of different formats: E-ARK, BagIt, Hungarian type 4 SIP."
+title: "Commons-IP"
+description: "Command-line tool and Java library to create and validate Information Packages of different formats: E-ARK, BagIt, Hungarian type 4 SIP."
 show_downloads: true
 google_analytics: UA-101512240-1
