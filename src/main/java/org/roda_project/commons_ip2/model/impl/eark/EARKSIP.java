@@ -142,6 +142,7 @@ public class EARKSIP extends SIP {
     return build(destinationDirectory, null);
   }
 
+
   /**
    * Builds a SIP.
    *
@@ -241,6 +242,7 @@ public class EARKSIP extends SIP {
     }
   }
 
+
   private Path getZipPath(Path destinationDirectory, String fileNameWithoutExtension) throws IPException {
     Path zipPath;
     if (fileNameWithoutExtension != null) {
@@ -277,5 +279,6 @@ public class EARKSIP extends SIP {
   public Set<String> getExtraChecksumAlgorithms() {
     return Collections.emptySet();
   }
+
 
 }

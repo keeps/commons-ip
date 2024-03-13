@@ -26,7 +26,7 @@ public class IPContentType implements Serializable {
     AUDIO_ON_TANGIBLE_MEDIUM("Audio – On Tangible Medium (digital or analog)"),
     AUDIO_MEDIA_INDEPENDENT("Audio – Media-independent (digital)"),
     MOTION_PICTURES("Motion Pictures – Digital and Physical Media"), VIDEO("Video – File-based and Physical Media"),
-    SOFTWARE("Software"), DATASETS("Datasets"), GEOSPATIAL_DATA("Geospatial Data"), DATABASES("Databases"),
+    SOFTWARE("Software"), DATASETS("Datasets"), DATASET("Dataset"), GEOSPATIAL_DATA("Geospatial Data"), DATABASES("Databases"),
     WEBSITES("Websites"), COLLECTION("Collection"), EVENT("Event"), INTERACTIVE_RESOURCE("Interactive resource"),
     PHYSICAL_OBJECT("Physical object"), SERVICE("Service"), MIXED("Mixed"), OTHER("Other");
 
@@ -131,4 +131,8 @@ public class IPContentType implements Serializable {
   public static IPContentType getMIXED() {
     return new IPContentType(IPContentTypeEnum.MIXED);
   }
+  public static IPContentType getDataset() {
+    return new IPContentType(IPContentTypeEnum.DATASET);
+  }
+
 }

@@ -67,6 +67,10 @@
             <Definition>Data encoded in a defined structure.</Definition>
         </Entry>
         <Entry>
+            <Term lang="en">Dataset</Term>
+            <Definition>Data encoded in a defined structure.</Definition>
+        </Entry>
+        <Entry>
             <Term lang="en">Geospatial Data</Term>
             <Definition></Definition>
         </Entry>
