@@ -45,7 +45,8 @@ public class InstatiateMets {
    *           if some parse error occurs.
    */
   public Mets instatiateMetsFile() throws JAXBException, SAXException {
-    final JAXBContext jaxbContext = JAXBContext.newInstance(Mets.class);
+    org.glassfish.jaxb.runtime.v2.JAXBContextFactory contextFactory = new org.glassfish.jaxb.runtime.v2.JAXBContextFactory();
+    JAXBContext jaxbContext = contextFactory.createContext(new Class[]{Mets.class}, null);
     final Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
     final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
     factory.setResourceResolver(new ResourceResolver());
