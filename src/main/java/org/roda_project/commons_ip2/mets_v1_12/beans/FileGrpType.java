@@ -7,12 +7,6 @@
 
 package org.roda_project.commons_ip2.mets_v1_12.beans;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.namespace.QName;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAnyAttribute;
@@ -25,16 +19,23 @@ import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.namespace.QName;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * fileGrpType: Complex Type for File Groups
- * 				The file group is used to cluster all of the digital files composing a digital library object in a hierarchical arrangement (fileGrp is recursively defined to enable the creation of the hierarchy).  Any file group may contain zero or more file elements.  File elements in turn can contain one or more FLocat elements (a pointer to a file containing content for this object) and/or a FContent element (the contents of the file, in either XML or  Base64 encoding).
- * 				
- * 
+ * The file group is used to cluster all of the digital files composing a digital library object in a hierarchical arrangement (fileGrp is recursively defined to enable the creation of the hierarchy).  Any file group may contain zero or more file elements.  File elements in turn can contain one or more FLocat elements (a pointer to a file containing content for this object) and/or a FContent element (the contents of the file, in either XML or  Base64 encoding).
+ *
+ *
  * <p>Java class for fileGrpType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>{@code
  * <complexType name="fileGrpType">
  *   <complexContent>
@@ -52,8 +53,6 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   </complexContent>
  * </complexType>
  * }</pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "fileGrpType", propOrder = {
@@ -65,206 +64,186 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 })
 public class FileGrpType {
 
-    protected List<FileGrpType> fileGrp;
-    protected List<FileType> file;
-    @XmlAttribute(name = "ID")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlID
-    @XmlSchemaType(name = "ID")
-    protected String id;
-    @XmlAttribute(name = "VERSDATE")
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar versdate;
-    @XmlAttribute(name = "ADMID")
-    @XmlIDREF
-    @XmlSchemaType(name = "IDREFS")
-    protected List<Object> admid;
-    @XmlAttribute(name = "USE")
-    protected String use;
-    @XmlAnyAttribute
-    private Map<QName, String> otherAttributes = new HashMap<>();
+  protected List<FileGrpType> fileGrp;
+  protected List<FileType> file;
+  @XmlAttribute(name = "ID")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlID
+  @XmlSchemaType(name = "ID")
+  protected String id;
+  @XmlAttribute(name = "VERSDATE")
+  @XmlSchemaType(name = "dateTime")
+  protected XMLGregorianCalendar versdate;
+  @XmlAttribute(name = "ADMID")
+  @XmlIDREF
+  @XmlSchemaType(name = "IDREFS")
+  protected List<Object> admid;
+  @XmlAttribute(name = "USE")
+  protected String use;
+  @XmlAnyAttribute
+  private final Map<QName, String> otherAttributes = new HashMap<>();
 
-    /**
-     * Gets the value of the fileGrp property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the Jakarta XML Binding object.
-     * This is why there is not a {@code set} method for the fileGrp property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getFileGrp().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link FileGrpType }
-     * 
-     * 
-     * @return
-     *     The value of the fileGrp property.
-     */
-    public List<FileGrpType> getFileGrp() {
-        if (fileGrp == null) {
-            fileGrp = new ArrayList<>();
-        }
-        return this.fileGrp;
+  /**
+   * Gets the value of the fileGrp property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the Jakarta XML Binding object.
+   * This is why there is not a {@code set} method for the fileGrp property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getFileGrp().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link FileGrpType }
+   *
+   * @return The value of the fileGrp property.
+   */
+  public List<FileGrpType> getFileGrp() {
+    if (fileGrp == null) {
+      fileGrp = new ArrayList<>();
     }
+    return this.fileGrp;
+  }
 
-    /**
-     * Gets the value of the file property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the Jakarta XML Binding object.
-     * This is why there is not a {@code set} method for the file property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getFile().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link FileType }
-     * 
-     * 
-     * @return
-     *     The value of the file property.
-     */
-    public List<FileType> getFile() {
-        if (file == null) {
-            file = new ArrayList<>();
-        }
-        return this.file;
+  /**
+   * Gets the value of the file property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the Jakarta XML Binding object.
+   * This is why there is not a {@code set} method for the file property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getFile().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link FileType }
+   *
+   * @return The value of the file property.
+   */
+  public List<FileType> getFile() {
+    if (file == null) {
+      file = new ArrayList<>();
     }
+    return this.file;
+  }
 
-    /**
-     * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getID() {
-        return id;
-    }
+  /**
+   * Gets the value of the id property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getID() {
+    return id;
+  }
 
-    /**
-     * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setID(String value) {
-        this.id = value;
-    }
+  /**
+   * Sets the value of the id property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setID(String value) {
+    this.id = value;
+  }
 
-    /**
-     * Gets the value of the versdate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link XMLGregorianCalendar }
-     *     
-     */
-    public XMLGregorianCalendar getVERSDATE() {
-        return versdate;
-    }
+  /**
+   * Gets the value of the versdate property.
+   *
+   * @return possible object is
+   * {@link XMLGregorianCalendar }
+   */
+  public XMLGregorianCalendar getVERSDATE() {
+    return versdate;
+  }
 
-    /**
-     * Sets the value of the versdate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link XMLGregorianCalendar }
-     *     
-     */
-    public void setVERSDATE(XMLGregorianCalendar value) {
-        this.versdate = value;
-    }
+  /**
+   * Sets the value of the versdate property.
+   *
+   * @param value allowed object is
+   *              {@link XMLGregorianCalendar }
+   */
+  public void setVERSDATE(XMLGregorianCalendar value) {
+    this.versdate = value;
+  }
 
-    /**
-     * Gets the value of the admid property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the Jakarta XML Binding object.
-     * This is why there is not a {@code set} method for the admid property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getADMID().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Object }
-     * 
-     * 
-     * @return
-     *     The value of the admid property.
-     */
-    public List<Object> getADMID() {
-        if (admid == null) {
-            admid = new ArrayList<>();
-        }
-        return this.admid;
+  /**
+   * Gets the value of the admid property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the Jakarta XML Binding object.
+   * This is why there is not a {@code set} method for the admid property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getADMID().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link Object }
+   *
+   * @return The value of the admid property.
+   */
+  public List<Object> getADMID() {
+    if (admid == null) {
+      admid = new ArrayList<>();
     }
+    return this.admid;
+  }
 
-    /**
-     * Gets the value of the use property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getUSE() {
-        return use;
-    }
+  /**
+   * Gets the value of the use property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getUSE() {
+    return use;
+  }
 
-    /**
-     * Sets the value of the use property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setUSE(String value) {
-        this.use = value;
-    }
+  /**
+   * Sets the value of the use property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setUSE(String value) {
+    this.use = value;
+  }
 
-    /**
-     * Gets a map that contains attributes that aren't bound to any typed property on this class.
-     * 
-     * <p>
-     * the map is keyed by the name of the attribute and 
-     * the value is the string value of the attribute.
-     * 
-     * the map returned by this method is live, and you can add new attribute
-     * by updating the map directly. Because of this design, there's no setter.
-     * 
-     * 
-     * @return
-     *     always non-null
-     */
-    public Map<QName, String> getOtherAttributes() {
-        return otherAttributes;
-    }
+  /**
+   * Gets a map that contains attributes that aren't bound to any typed property on this class.
+   *
+   * <p>
+   * the map is keyed by the name of the attribute and
+   * the value is the string value of the attribute.
+   * <p>
+   * the map returned by this method is live, and you can add new attribute
+   * by updating the map directly. Because of this design, there's no setter.
+   *
+   * @return always non-null
+   */
+  public Map<QName, String> getOtherAttributes() {
+    return otherAttributes;
+  }
 
 }

@@ -19,13 +19,13 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * objectType: complexType for interfaceDef and mechanism elements
- * 				The mechanism and behavior elements point to external objects--an interface definition object or an executable code object respectively--which together constitute a behavior that can be applied to one or more <div> elements in a <structMap>.
- * 			
- * 
+ * The mechanism and behavior elements point to external objects--an interface definition object or an executable code object respectively--which together constitute a behavior that can be applied to one or more <div> elements in a <structMap>.
+ *
+ *
  * <p>Java class for objectType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>{@code
  * <complexType name="objectType">
  *   <complexContent>
@@ -38,306 +38,260 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   </complexContent>
  * </complexType>
  * }</pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "objectType")
 public class ObjectType {
 
-    @XmlAttribute(name = "ID")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlID
-    @XmlSchemaType(name = "ID")
-    protected String id;
-    @XmlAttribute(name = "LABEL")
-    protected String label;
-    @XmlAttribute(name = "LOCTYPE", required = true)
-    protected String loctype;
-    @XmlAttribute(name = "OTHERLOCTYPE")
-    protected String otherloctype;
-    @XmlAttribute(name = "type", namespace = "http://www.w3.org/1999/xlink")
-    protected String type;
-    @XmlAttribute(name = "href", namespace = "http://www.w3.org/1999/xlink")
-    @XmlSchemaType(name = "anyURI")
-    protected String href;
-    @XmlAttribute(name = "role", namespace = "http://www.w3.org/1999/xlink")
-    protected String role;
-    @XmlAttribute(name = "arcrole", namespace = "http://www.w3.org/1999/xlink")
-    protected String arcrole;
-    @XmlAttribute(name = "title", namespace = "http://www.w3.org/1999/xlink")
-    protected String title;
-    @XmlAttribute(name = "show", namespace = "http://www.w3.org/1999/xlink")
-    protected String show;
-    @XmlAttribute(name = "actuate", namespace = "http://www.w3.org/1999/xlink")
-    protected String actuate;
+  @XmlAttribute(name = "ID")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlID
+  @XmlSchemaType(name = "ID")
+  protected String id;
+  @XmlAttribute(name = "LABEL")
+  protected String label;
+  @XmlAttribute(name = "LOCTYPE", required = true)
+  protected String loctype;
+  @XmlAttribute(name = "OTHERLOCTYPE")
+  protected String otherloctype;
+  @XmlAttribute(name = "type", namespace = "http://www.w3.org/1999/xlink")
+  protected String type;
+  @XmlAttribute(name = "href", namespace = "http://www.w3.org/1999/xlink")
+  @XmlSchemaType(name = "anyURI")
+  protected String href;
+  @XmlAttribute(name = "role", namespace = "http://www.w3.org/1999/xlink")
+  protected String role;
+  @XmlAttribute(name = "arcrole", namespace = "http://www.w3.org/1999/xlink")
+  protected String arcrole;
+  @XmlAttribute(name = "title", namespace = "http://www.w3.org/1999/xlink")
+  protected String title;
+  @XmlAttribute(name = "show", namespace = "http://www.w3.org/1999/xlink")
+  protected String show;
+  @XmlAttribute(name = "actuate", namespace = "http://www.w3.org/1999/xlink")
+  protected String actuate;
 
-    /**
-     * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getID() {
-        return id;
-    }
+  /**
+   * Gets the value of the id property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getID() {
+    return id;
+  }
 
-    /**
-     * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setID(String value) {
-        this.id = value;
-    }
+  /**
+   * Sets the value of the id property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setID(String value) {
+    this.id = value;
+  }
 
-    /**
-     * Gets the value of the label property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getLABEL() {
-        return label;
-    }
+  /**
+   * Gets the value of the label property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getLABEL() {
+    return label;
+  }
 
-    /**
-     * Sets the value of the label property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLABEL(String value) {
-        this.label = value;
-    }
+  /**
+   * Sets the value of the label property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setLABEL(String value) {
+    this.label = value;
+  }
 
-    /**
-     * Gets the value of the loctype property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getLOCTYPE() {
-        return loctype;
-    }
+  /**
+   * Gets the value of the loctype property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getLOCTYPE() {
+    return loctype;
+  }
 
-    /**
-     * Sets the value of the loctype property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLOCTYPE(String value) {
-        this.loctype = value;
-    }
+  /**
+   * Sets the value of the loctype property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setLOCTYPE(String value) {
+    this.loctype = value;
+  }
 
-    /**
-     * Gets the value of the otherloctype property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getOTHERLOCTYPE() {
-        return otherloctype;
-    }
+  /**
+   * Gets the value of the otherloctype property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getOTHERLOCTYPE() {
+    return otherloctype;
+  }
 
-    /**
-     * Sets the value of the otherloctype property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setOTHERLOCTYPE(String value) {
-        this.otherloctype = value;
-    }
+  /**
+   * Sets the value of the otherloctype property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setOTHERLOCTYPE(String value) {
+    this.otherloctype = value;
+  }
 
-    /**
-     * Gets the value of the type property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getType() {
-        if (type == null) {
-            return "simple";
-        } else {
-            return type;
-        }
+  /**
+   * Gets the value of the type property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getType() {
+    if (type == null) {
+      return "simple";
+    } else {
+      return type;
     }
+  }
 
-    /**
-     * Sets the value of the type property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setType(String value) {
-        this.type = value;
-    }
+  /**
+   * Sets the value of the type property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setType(String value) {
+    this.type = value;
+  }
 
-    /**
-     * Gets the value of the href property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getHref() {
-        return href;
-    }
+  /**
+   * Gets the value of the href property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getHref() {
+    return href;
+  }
 
-    /**
-     * Sets the value of the href property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setHref(String value) {
-        this.href = value;
-    }
+  /**
+   * Sets the value of the href property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setHref(String value) {
+    this.href = value;
+  }
 
-    /**
-     * Gets the value of the role property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getRole() {
-        return role;
-    }
+  /**
+   * Gets the value of the role property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getRole() {
+    return role;
+  }
 
-    /**
-     * Sets the value of the role property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setRole(String value) {
-        this.role = value;
-    }
+  /**
+   * Sets the value of the role property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setRole(String value) {
+    this.role = value;
+  }
 
-    /**
-     * Gets the value of the arcrole property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getArcrole() {
-        return arcrole;
-    }
+  /**
+   * Gets the value of the arcrole property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getArcrole() {
+    return arcrole;
+  }
 
-    /**
-     * Sets the value of the arcrole property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setArcrole(String value) {
-        this.arcrole = value;
-    }
+  /**
+   * Sets the value of the arcrole property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setArcrole(String value) {
+    this.arcrole = value;
+  }
 
-    /**
-     * Gets the value of the title property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getTitle() {
-        return title;
-    }
+  /**
+   * Gets the value of the title property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getTitle() {
+    return title;
+  }
 
-    /**
-     * Sets the value of the title property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTitle(String value) {
-        this.title = value;
-    }
+  /**
+   * Sets the value of the title property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setTitle(String value) {
+    this.title = value;
+  }
 
-    /**
-     * Gets the value of the show property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getShow() {
-        return show;
-    }
+  /**
+   * Gets the value of the show property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getShow() {
+    return show;
+  }
 
-    /**
-     * Sets the value of the show property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setShow(String value) {
-        this.show = value;
-    }
+  /**
+   * Sets the value of the show property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setShow(String value) {
+    this.show = value;
+  }
 
-    /**
-     * Gets the value of the actuate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getActuate() {
-        return actuate;
-    }
+  /**
+   * Gets the value of the actuate property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getActuate() {
+    return actuate;
+  }
 
-    /**
-     * Sets the value of the actuate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setActuate(String value) {
-        this.actuate = value;
-    }
+  /**
+   * Sets the value of the actuate property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setActuate(String value) {
+    this.actuate = value;
+  }
 
 }

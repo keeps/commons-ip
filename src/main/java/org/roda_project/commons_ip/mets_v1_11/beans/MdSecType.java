@@ -7,12 +7,6 @@
 
 package org.roda_project.commons_ip.mets_v1_11.beans;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.namespace.QName;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAnyAttribute;
@@ -26,16 +20,23 @@ import jakarta.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.w3c.dom.Element;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.namespace.QName;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * mdSecType: Complex Type for Metadata Sections
- * 			A generic framework for pointing to/including metadata within a METS document, a la Warwick Framework.
- * 			
- * 
+ * A generic framework for pointing to/including metadata within a METS document, a la Warwick Framework.
+ *
+ *
  * <p>Java class for mdSecType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>{@code
  * <complexType name="mdSecType">
  *   <complexContent>
@@ -93,8 +94,6 @@ import org.w3c.dom.Element;
  *   </complexContent>
  * </complexType>
  * }</pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "mdSecType", propOrder = {
@@ -102,1198 +101,1036 @@ import org.w3c.dom.Element;
 })
 public class MdSecType {
 
-    protected MdSecType.MdRef mdRef;
-    protected MdSecType.MdWrap mdWrap;
-    @XmlAttribute(name = "ID", required = true)
+  protected MdSecType.MdRef mdRef;
+  protected MdSecType.MdWrap mdWrap;
+  @XmlAttribute(name = "ID", required = true)
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlID
+  @XmlSchemaType(name = "ID")
+  protected String id;
+  @XmlAttribute(name = "GROUPID")
+  protected String groupid;
+  @XmlAttribute(name = "ADMID")
+  @XmlIDREF
+  @XmlSchemaType(name = "IDREFS")
+  protected List<Object> admid;
+  @XmlAttribute(name = "CREATED")
+  @XmlSchemaType(name = "dateTime")
+  protected XMLGregorianCalendar created;
+  @XmlAttribute(name = "STATUS")
+  protected String status;
+  @XmlAnyAttribute
+  private final Map<QName, String> otherAttributes = new HashMap<>();
+
+  /**
+   * Gets the value of the mdRef property.
+   *
+   * @return possible object is
+   * {@link MdSecType.MdRef }
+   */
+  public MdSecType.MdRef getMdRef() {
+    return mdRef;
+  }
+
+  /**
+   * Sets the value of the mdRef property.
+   *
+   * @param value allowed object is
+   *              {@link MdSecType.MdRef }
+   */
+  public void setMdRef(MdSecType.MdRef value) {
+    this.mdRef = value;
+  }
+
+  /**
+   * Gets the value of the mdWrap property.
+   *
+   * @return possible object is
+   * {@link MdSecType.MdWrap }
+   */
+  public MdSecType.MdWrap getMdWrap() {
+    return mdWrap;
+  }
+
+  /**
+   * Sets the value of the mdWrap property.
+   *
+   * @param value allowed object is
+   *              {@link MdSecType.MdWrap }
+   */
+  public void setMdWrap(MdSecType.MdWrap value) {
+    this.mdWrap = value;
+  }
+
+  /**
+   * Gets the value of the id property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getID() {
+    return id;
+  }
+
+  /**
+   * Sets the value of the id property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setID(String value) {
+    this.id = value;
+  }
+
+  /**
+   * Gets the value of the groupid property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getGROUPID() {
+    return groupid;
+  }
+
+  /**
+   * Sets the value of the groupid property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setGROUPID(String value) {
+    this.groupid = value;
+  }
+
+  /**
+   * Gets the value of the admid property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the Jakarta XML Binding object.
+   * This is why there is not a {@code set} method for the admid property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getADMID().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link Object }
+   *
+   * @return The value of the admid property.
+   */
+  public List<Object> getADMID() {
+    if (admid == null) {
+      admid = new ArrayList<>();
+    }
+    return this.admid;
+  }
+
+  /**
+   * Gets the value of the created property.
+   *
+   * @return possible object is
+   * {@link XMLGregorianCalendar }
+   */
+  public XMLGregorianCalendar getCREATED() {
+    return created;
+  }
+
+  /**
+   * Sets the value of the created property.
+   *
+   * @param value allowed object is
+   *              {@link XMLGregorianCalendar }
+   */
+  public void setCREATED(XMLGregorianCalendar value) {
+    this.created = value;
+  }
+
+  /**
+   * Gets the value of the status property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getSTATUS() {
+    return status;
+  }
+
+  /**
+   * Sets the value of the status property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setSTATUS(String value) {
+    this.status = value;
+  }
+
+  /**
+   * Gets a map that contains attributes that aren't bound to any typed property on this class.
+   *
+   * <p>
+   * the map is keyed by the name of the attribute and
+   * the value is the string value of the attribute.
+   * <p>
+   * the map returned by this method is live, and you can add new attribute
+   * by updating the map directly. Because of this design, there's no setter.
+   *
+   * @return always non-null
+   */
+  public Map<QName, String> getOtherAttributes() {
+    return otherAttributes;
+  }
+
+
+  /**
+   * <p>Java class for anonymous complex type.
+   *
+   * <p>The following schema fragment specifies the expected content contained within this class.
+   *
+   * <pre>{@code
+   * <complexType>
+   *   <complexContent>
+   *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+   *       <attGroup ref="{http://www.loc.gov/METS/}LOCATION"/>
+   *       <attGroup ref="{http://www.loc.gov/METS/}METADATA"/>
+   *       <attGroup ref="{http://www.loc.gov/METS/}FILECORE"/>
+   *       <attGroup ref="{http://www.w3.org/1999/xlink}simpleLink"/>
+   *       <attribute name="ID" type="{http://www.w3.org/2001/XMLSchema}ID" />
+   *       <attribute name="LABEL" type="{http://www.w3.org/2001/XMLSchema}string" />
+   *       <attribute name="XPTR" type="{http://www.w3.org/2001/XMLSchema}string" />
+   *     </restriction>
+   *   </complexContent>
+   * </complexType>
+   * }</pre>
+   */
+  @XmlAccessorType(XmlAccessType.FIELD)
+  @XmlType(name = "")
+  public static class MdRef {
+
+    @XmlAttribute(name = "ID")
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlID
     @XmlSchemaType(name = "ID")
     protected String id;
-    @XmlAttribute(name = "GROUPID")
-    protected String groupid;
-    @XmlAttribute(name = "ADMID")
-    @XmlIDREF
-    @XmlSchemaType(name = "IDREFS")
-    protected List<Object> admid;
+    @XmlAttribute(name = "LABEL")
+    protected String label;
+    @XmlAttribute(name = "XPTR")
+    protected String xptr;
+    @XmlAttribute(name = "LOCTYPE", required = true)
+    protected String loctype;
+    @XmlAttribute(name = "OTHERLOCTYPE")
+    protected String otherloctype;
+    @XmlAttribute(name = "MDTYPE", required = true)
+    protected String mdtype;
+    @XmlAttribute(name = "OTHERMDTYPE")
+    protected String othermdtype;
+    @XmlAttribute(name = "MDTYPEVERSION")
+    protected String mdtypeversion;
+    @XmlAttribute(name = "MIMETYPE")
+    protected String mimetype;
+    @XmlAttribute(name = "SIZE")
+    protected Long size;
     @XmlAttribute(name = "CREATED")
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar created;
-    @XmlAttribute(name = "STATUS")
-    protected String status;
-    @XmlAnyAttribute
-    private Map<QName, String> otherAttributes = new HashMap<>();
-
-    /**
-     * Gets the value of the mdRef property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link MdSecType.MdRef }
-     *     
-     */
-    public MdSecType.MdRef getMdRef() {
-        return mdRef;
-    }
-
-    /**
-     * Sets the value of the mdRef property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link MdSecType.MdRef }
-     *     
-     */
-    public void setMdRef(MdSecType.MdRef value) {
-        this.mdRef = value;
-    }
-
-    /**
-     * Gets the value of the mdWrap property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link MdSecType.MdWrap }
-     *     
-     */
-    public MdSecType.MdWrap getMdWrap() {
-        return mdWrap;
-    }
-
-    /**
-     * Sets the value of the mdWrap property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link MdSecType.MdWrap }
-     *     
-     */
-    public void setMdWrap(MdSecType.MdWrap value) {
-        this.mdWrap = value;
-    }
+    @XmlAttribute(name = "CHECKSUM")
+    protected String checksum;
+    @XmlAttribute(name = "CHECKSUMTYPE")
+    protected String checksumtype;
+    @XmlAttribute(name = "type", namespace = "http://www.w3.org/1999/xlink")
+    protected String type;
+    @XmlAttribute(name = "href", namespace = "http://www.w3.org/1999/xlink")
+    @XmlSchemaType(name = "anyURI")
+    protected String href;
+    @XmlAttribute(name = "role", namespace = "http://www.w3.org/1999/xlink")
+    protected String role;
+    @XmlAttribute(name = "arcrole", namespace = "http://www.w3.org/1999/xlink")
+    protected String arcrole;
+    @XmlAttribute(name = "title", namespace = "http://www.w3.org/1999/xlink")
+    protected String title;
+    @XmlAttribute(name = "show", namespace = "http://www.w3.org/1999/xlink")
+    protected String show;
+    @XmlAttribute(name = "actuate", namespace = "http://www.w3.org/1999/xlink")
+    protected String actuate;
 
     /**
      * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getID() {
-        return id;
+      return id;
     }
 
     /**
      * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setID(String value) {
-        this.id = value;
+      this.id = value;
     }
 
     /**
-     * Gets the value of the groupid property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * Gets the value of the label property.
+     *
+     * @return possible object is
+     * {@link String }
      */
-    public String getGROUPID() {
-        return groupid;
+    public String getLABEL() {
+      return label;
     }
 
     /**
-     * Sets the value of the groupid property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * Sets the value of the label property.
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
-    public void setGROUPID(String value) {
-        this.groupid = value;
+    public void setLABEL(String value) {
+      this.label = value;
     }
 
     /**
-     * Gets the value of the admid property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the Jakarta XML Binding object.
-     * This is why there is not a {@code set} method for the admid property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getADMID().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Object }
-     * 
-     * 
-     * @return
-     *     The value of the admid property.
+     * Gets the value of the xptr property.
+     *
+     * @return possible object is
+     * {@link String }
      */
-    public List<Object> getADMID() {
-        if (admid == null) {
-            admid = new ArrayList<>();
-        }
-        return this.admid;
+    public String getXPTR() {
+      return xptr;
+    }
+
+    /**
+     * Sets the value of the xptr property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setXPTR(String value) {
+      this.xptr = value;
+    }
+
+    /**
+     * Gets the value of the loctype property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getLOCTYPE() {
+      return loctype;
+    }
+
+    /**
+     * Sets the value of the loctype property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setLOCTYPE(String value) {
+      this.loctype = value;
+    }
+
+    /**
+     * Gets the value of the otherloctype property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getOTHERLOCTYPE() {
+      return otherloctype;
+    }
+
+    /**
+     * Sets the value of the otherloctype property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setOTHERLOCTYPE(String value) {
+      this.otherloctype = value;
+    }
+
+    /**
+     * Gets the value of the mdtype property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getMDTYPE() {
+      return mdtype;
+    }
+
+    /**
+     * Sets the value of the mdtype property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setMDTYPE(String value) {
+      this.mdtype = value;
+    }
+
+    /**
+     * Gets the value of the othermdtype property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getOTHERMDTYPE() {
+      return othermdtype;
+    }
+
+    /**
+     * Sets the value of the othermdtype property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setOTHERMDTYPE(String value) {
+      this.othermdtype = value;
+    }
+
+    /**
+     * Gets the value of the mdtypeversion property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getMDTYPEVERSION() {
+      return mdtypeversion;
+    }
+
+    /**
+     * Sets the value of the mdtypeversion property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setMDTYPEVERSION(String value) {
+      this.mdtypeversion = value;
+    }
+
+    /**
+     * Gets the value of the mimetype property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getMIMETYPE() {
+      return mimetype;
+    }
+
+    /**
+     * Sets the value of the mimetype property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setMIMETYPE(String value) {
+      this.mimetype = value;
+    }
+
+    /**
+     * Gets the value of the size property.
+     *
+     * @return possible object is
+     * {@link Long }
+     */
+    public Long getSIZE() {
+      return size;
+    }
+
+    /**
+     * Sets the value of the size property.
+     *
+     * @param value allowed object is
+     *              {@link Long }
+     */
+    public void setSIZE(Long value) {
+      this.size = value;
     }
 
     /**
      * Gets the value of the created property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     * {@link XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getCREATED() {
-        return created;
+      return created;
     }
 
     /**
      * Sets the value of the created property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link XMLGregorianCalendar }
      */
     public void setCREATED(XMLGregorianCalendar value) {
-        this.created = value;
+      this.created = value;
     }
 
     /**
-     * Gets the value of the status property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * Gets the value of the checksum property.
+     *
+     * @return possible object is
+     * {@link String }
      */
-    public String getSTATUS() {
-        return status;
+    public String getCHECKSUM() {
+      return checksum;
     }
 
     /**
-     * Sets the value of the status property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * Sets the value of the checksum property.
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
-    public void setSTATUS(String value) {
-        this.status = value;
+    public void setCHECKSUM(String value) {
+      this.checksum = value;
     }
 
     /**
-     * Gets a map that contains attributes that aren't bound to any typed property on this class.
-     * 
-     * <p>
-     * the map is keyed by the name of the attribute and 
-     * the value is the string value of the attribute.
-     * 
-     * the map returned by this method is live, and you can add new attribute
-     * by updating the map directly. Because of this design, there's no setter.
-     * 
-     * 
-     * @return
-     *     always non-null
+     * Gets the value of the checksumtype property.
+     *
+     * @return possible object is
+     * {@link String }
      */
-    public Map<QName, String> getOtherAttributes() {
-        return otherAttributes;
+    public String getCHECKSUMTYPE() {
+      return checksumtype;
+    }
+
+    /**
+     * Sets the value of the checksumtype property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setCHECKSUMTYPE(String value) {
+      this.checksumtype = value;
+    }
+
+    /**
+     * Gets the value of the type property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getType() {
+      if (type == null) {
+        return "simple";
+      } else {
+        return type;
+      }
+    }
+
+    /**
+     * Sets the value of the type property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setType(String value) {
+      this.type = value;
+    }
+
+    /**
+     * Gets the value of the href property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getHref() {
+      return href;
+    }
+
+    /**
+     * Sets the value of the href property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setHref(String value) {
+      this.href = value;
+    }
+
+    /**
+     * Gets the value of the role property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getRole() {
+      return role;
+    }
+
+    /**
+     * Sets the value of the role property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setRole(String value) {
+      this.role = value;
+    }
+
+    /**
+     * Gets the value of the arcrole property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getArcrole() {
+      return arcrole;
+    }
+
+    /**
+     * Sets the value of the arcrole property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setArcrole(String value) {
+      this.arcrole = value;
+    }
+
+    /**
+     * Gets the value of the title property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getTitle() {
+      return title;
+    }
+
+    /**
+     * Sets the value of the title property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setTitle(String value) {
+      this.title = value;
+    }
+
+    /**
+     * Gets the value of the show property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getShow() {
+      return show;
+    }
+
+    /**
+     * Sets the value of the show property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setShow(String value) {
+      this.show = value;
+    }
+
+    /**
+     * Gets the value of the actuate property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getActuate() {
+      return actuate;
+    }
+
+    /**
+     * Sets the value of the actuate property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setActuate(String value) {
+      this.actuate = value;
+    }
+
+  }
+
+
+  /**
+   * <p>Java class for anonymous complex type.
+   *
+   * <p>The following schema fragment specifies the expected content contained within this class.
+   *
+   * <pre>{@code
+   * <complexType>
+   *   <complexContent>
+   *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+   *       <choice>
+   *         <element name="binData" type="{http://www.w3.org/2001/XMLSchema}base64Binary" minOccurs="0"/>
+   *         <element name="xmlData" minOccurs="0">
+   *           <complexType>
+   *             <complexContent>
+   *               <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+   *                 <sequence>
+   *                   <any processContents='lax' maxOccurs="unbounded"/>
+   *                 </sequence>
+   *               </restriction>
+   *             </complexContent>
+   *           </complexType>
+   *         </element>
+   *       </choice>
+   *       <attGroup ref="{http://www.loc.gov/METS/}METADATA"/>
+   *       <attGroup ref="{http://www.loc.gov/METS/}FILECORE"/>
+   *       <attribute name="ID" type="{http://www.w3.org/2001/XMLSchema}ID" />
+   *       <attribute name="LABEL" type="{http://www.w3.org/2001/XMLSchema}string" />
+   *     </restriction>
+   *   </complexContent>
+   * </complexType>
+   * }</pre>
+   */
+  @XmlAccessorType(XmlAccessType.FIELD)
+  @XmlType(name = "", propOrder = {
+      "binData",
+      "xmlData"
+  })
+  public static class MdWrap {
+
+    protected byte[] binData;
+    protected MdSecType.MdWrap.XmlData xmlData;
+    @XmlAttribute(name = "ID")
+    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+    @XmlID
+    @XmlSchemaType(name = "ID")
+    protected String id;
+    @XmlAttribute(name = "LABEL")
+    protected String label;
+    @XmlAttribute(name = "MDTYPE", required = true)
+    protected String mdtype;
+    @XmlAttribute(name = "OTHERMDTYPE")
+    protected String othermdtype;
+    @XmlAttribute(name = "MDTYPEVERSION")
+    protected String mdtypeversion;
+    @XmlAttribute(name = "MIMETYPE")
+    protected String mimetype;
+    @XmlAttribute(name = "SIZE")
+    protected Long size;
+    @XmlAttribute(name = "CREATED")
+    @XmlSchemaType(name = "dateTime")
+    protected XMLGregorianCalendar created;
+    @XmlAttribute(name = "CHECKSUM")
+    protected String checksum;
+    @XmlAttribute(name = "CHECKSUMTYPE")
+    protected String checksumtype;
+
+    /**
+     * Gets the value of the binData property.
+     *
+     * @return possible object is
+     * byte[]
+     */
+    public byte[] getBinData() {
+      return binData;
+    }
+
+    /**
+     * Sets the value of the binData property.
+     *
+     * @param value allowed object is
+     *              byte[]
+     */
+    public void setBinData(byte[] value) {
+      this.binData = value;
+    }
+
+    /**
+     * Gets the value of the xmlData property.
+     *
+     * @return possible object is
+     * {@link MdSecType.MdWrap.XmlData }
+     */
+    public MdSecType.MdWrap.XmlData getXmlData() {
+      return xmlData;
+    }
+
+    /**
+     * Sets the value of the xmlData property.
+     *
+     * @param value allowed object is
+     *              {@link MdSecType.MdWrap.XmlData }
+     */
+    public void setXmlData(MdSecType.MdWrap.XmlData value) {
+      this.xmlData = value;
+    }
+
+    /**
+     * Gets the value of the id property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getID() {
+      return id;
+    }
+
+    /**
+     * Sets the value of the id property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setID(String value) {
+      this.id = value;
+    }
+
+    /**
+     * Gets the value of the label property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getLABEL() {
+      return label;
+    }
+
+    /**
+     * Sets the value of the label property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setLABEL(String value) {
+      this.label = value;
+    }
+
+    /**
+     * Gets the value of the mdtype property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getMDTYPE() {
+      return mdtype;
+    }
+
+    /**
+     * Sets the value of the mdtype property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setMDTYPE(String value) {
+      this.mdtype = value;
+    }
+
+    /**
+     * Gets the value of the othermdtype property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getOTHERMDTYPE() {
+      return othermdtype;
+    }
+
+    /**
+     * Sets the value of the othermdtype property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setOTHERMDTYPE(String value) {
+      this.othermdtype = value;
+    }
+
+    /**
+     * Gets the value of the mdtypeversion property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getMDTYPEVERSION() {
+      return mdtypeversion;
+    }
+
+    /**
+     * Sets the value of the mdtypeversion property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setMDTYPEVERSION(String value) {
+      this.mdtypeversion = value;
+    }
+
+    /**
+     * Gets the value of the mimetype property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getMIMETYPE() {
+      return mimetype;
+    }
+
+    /**
+     * Sets the value of the mimetype property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setMIMETYPE(String value) {
+      this.mimetype = value;
+    }
+
+    /**
+     * Gets the value of the size property.
+     *
+     * @return possible object is
+     * {@link Long }
+     */
+    public Long getSIZE() {
+      return size;
+    }
+
+    /**
+     * Sets the value of the size property.
+     *
+     * @param value allowed object is
+     *              {@link Long }
+     */
+    public void setSIZE(Long value) {
+      this.size = value;
+    }
+
+    /**
+     * Gets the value of the created property.
+     *
+     * @return possible object is
+     * {@link XMLGregorianCalendar }
+     */
+    public XMLGregorianCalendar getCREATED() {
+      return created;
+    }
+
+    /**
+     * Sets the value of the created property.
+     *
+     * @param value allowed object is
+     *              {@link XMLGregorianCalendar }
+     */
+    public void setCREATED(XMLGregorianCalendar value) {
+      this.created = value;
+    }
+
+    /**
+     * Gets the value of the checksum property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getCHECKSUM() {
+      return checksum;
+    }
+
+    /**
+     * Sets the value of the checksum property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setCHECKSUM(String value) {
+      this.checksum = value;
+    }
+
+    /**
+     * Gets the value of the checksumtype property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getCHECKSUMTYPE() {
+      return checksumtype;
+    }
+
+    /**
+     * Sets the value of the checksumtype property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setCHECKSUMTYPE(String value) {
+      this.checksumtype = value;
     }
 
 
     /**
      * <p>Java class for anonymous complex type.
-     * 
+     *
      * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
+     *
      * <pre>{@code
      * <complexType>
      *   <complexContent>
      *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-     *       <attGroup ref="{http://www.loc.gov/METS/}LOCATION"/>
-     *       <attGroup ref="{http://www.loc.gov/METS/}METADATA"/>
-     *       <attGroup ref="{http://www.loc.gov/METS/}FILECORE"/>
-     *       <attGroup ref="{http://www.w3.org/1999/xlink}simpleLink"/>
-     *       <attribute name="ID" type="{http://www.w3.org/2001/XMLSchema}ID" />
-     *       <attribute name="LABEL" type="{http://www.w3.org/2001/XMLSchema}string" />
-     *       <attribute name="XPTR" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *       <sequence>
+     *         <any processContents='lax' maxOccurs="unbounded"/>
+     *       </sequence>
      *     </restriction>
      *   </complexContent>
      * </complexType>
      * }</pre>
-     * 
-     * 
-     */
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "")
-    public static class MdRef {
-
-        @XmlAttribute(name = "ID")
-        @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-        @XmlID
-        @XmlSchemaType(name = "ID")
-        protected String id;
-        @XmlAttribute(name = "LABEL")
-        protected String label;
-        @XmlAttribute(name = "XPTR")
-        protected String xptr;
-        @XmlAttribute(name = "LOCTYPE", required = true)
-        protected String loctype;
-        @XmlAttribute(name = "OTHERLOCTYPE")
-        protected String otherloctype;
-        @XmlAttribute(name = "MDTYPE", required = true)
-        protected String mdtype;
-        @XmlAttribute(name = "OTHERMDTYPE")
-        protected String othermdtype;
-        @XmlAttribute(name = "MDTYPEVERSION")
-        protected String mdtypeversion;
-        @XmlAttribute(name = "MIMETYPE")
-        protected String mimetype;
-        @XmlAttribute(name = "SIZE")
-        protected Long size;
-        @XmlAttribute(name = "CREATED")
-        @XmlSchemaType(name = "dateTime")
-        protected XMLGregorianCalendar created;
-        @XmlAttribute(name = "CHECKSUM")
-        protected String checksum;
-        @XmlAttribute(name = "CHECKSUMTYPE")
-        protected String checksumtype;
-        @XmlAttribute(name = "type", namespace = "http://www.w3.org/1999/xlink")
-        protected String type;
-        @XmlAttribute(name = "href", namespace = "http://www.w3.org/1999/xlink")
-        @XmlSchemaType(name = "anyURI")
-        protected String href;
-        @XmlAttribute(name = "role", namespace = "http://www.w3.org/1999/xlink")
-        protected String role;
-        @XmlAttribute(name = "arcrole", namespace = "http://www.w3.org/1999/xlink")
-        protected String arcrole;
-        @XmlAttribute(name = "title", namespace = "http://www.w3.org/1999/xlink")
-        protected String title;
-        @XmlAttribute(name = "show", namespace = "http://www.w3.org/1999/xlink")
-        protected String show;
-        @XmlAttribute(name = "actuate", namespace = "http://www.w3.org/1999/xlink")
-        protected String actuate;
-
-        /**
-         * Gets the value of the id property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getID() {
-            return id;
-        }
-
-        /**
-         * Sets the value of the id property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setID(String value) {
-            this.id = value;
-        }
-
-        /**
-         * Gets the value of the label property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getLABEL() {
-            return label;
-        }
-
-        /**
-         * Sets the value of the label property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setLABEL(String value) {
-            this.label = value;
-        }
-
-        /**
-         * Gets the value of the xptr property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getXPTR() {
-            return xptr;
-        }
-
-        /**
-         * Sets the value of the xptr property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setXPTR(String value) {
-            this.xptr = value;
-        }
-
-        /**
-         * Gets the value of the loctype property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getLOCTYPE() {
-            return loctype;
-        }
-
-        /**
-         * Sets the value of the loctype property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setLOCTYPE(String value) {
-            this.loctype = value;
-        }
-
-        /**
-         * Gets the value of the otherloctype property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getOTHERLOCTYPE() {
-            return otherloctype;
-        }
-
-        /**
-         * Sets the value of the otherloctype property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setOTHERLOCTYPE(String value) {
-            this.otherloctype = value;
-        }
-
-        /**
-         * Gets the value of the mdtype property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getMDTYPE() {
-            return mdtype;
-        }
-
-        /**
-         * Sets the value of the mdtype property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setMDTYPE(String value) {
-            this.mdtype = value;
-        }
-
-        /**
-         * Gets the value of the othermdtype property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getOTHERMDTYPE() {
-            return othermdtype;
-        }
-
-        /**
-         * Sets the value of the othermdtype property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setOTHERMDTYPE(String value) {
-            this.othermdtype = value;
-        }
-
-        /**
-         * Gets the value of the mdtypeversion property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getMDTYPEVERSION() {
-            return mdtypeversion;
-        }
-
-        /**
-         * Sets the value of the mdtypeversion property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setMDTYPEVERSION(String value) {
-            this.mdtypeversion = value;
-        }
-
-        /**
-         * Gets the value of the mimetype property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getMIMETYPE() {
-            return mimetype;
-        }
-
-        /**
-         * Sets the value of the mimetype property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setMIMETYPE(String value) {
-            this.mimetype = value;
-        }
-
-        /**
-         * Gets the value of the size property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link Long }
-         *     
-         */
-        public Long getSIZE() {
-            return size;
-        }
-
-        /**
-         * Sets the value of the size property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link Long }
-         *     
-         */
-        public void setSIZE(Long value) {
-            this.size = value;
-        }
-
-        /**
-         * Gets the value of the created property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link XMLGregorianCalendar }
-         *     
-         */
-        public XMLGregorianCalendar getCREATED() {
-            return created;
-        }
-
-        /**
-         * Sets the value of the created property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link XMLGregorianCalendar }
-         *     
-         */
-        public void setCREATED(XMLGregorianCalendar value) {
-            this.created = value;
-        }
-
-        /**
-         * Gets the value of the checksum property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getCHECKSUM() {
-            return checksum;
-        }
-
-        /**
-         * Sets the value of the checksum property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setCHECKSUM(String value) {
-            this.checksum = value;
-        }
-
-        /**
-         * Gets the value of the checksumtype property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getCHECKSUMTYPE() {
-            return checksumtype;
-        }
-
-        /**
-         * Sets the value of the checksumtype property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setCHECKSUMTYPE(String value) {
-            this.checksumtype = value;
-        }
-
-        /**
-         * Gets the value of the type property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getType() {
-            if (type == null) {
-                return "simple";
-            } else {
-                return type;
-            }
-        }
-
-        /**
-         * Sets the value of the type property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setType(String value) {
-            this.type = value;
-        }
-
-        /**
-         * Gets the value of the href property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getHref() {
-            return href;
-        }
-
-        /**
-         * Sets the value of the href property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setHref(String value) {
-            this.href = value;
-        }
-
-        /**
-         * Gets the value of the role property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getRole() {
-            return role;
-        }
-
-        /**
-         * Sets the value of the role property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setRole(String value) {
-            this.role = value;
-        }
-
-        /**
-         * Gets the value of the arcrole property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getArcrole() {
-            return arcrole;
-        }
-
-        /**
-         * Sets the value of the arcrole property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setArcrole(String value) {
-            this.arcrole = value;
-        }
-
-        /**
-         * Gets the value of the title property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getTitle() {
-            return title;
-        }
-
-        /**
-         * Sets the value of the title property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setTitle(String value) {
-            this.title = value;
-        }
-
-        /**
-         * Gets the value of the show property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getShow() {
-            return show;
-        }
-
-        /**
-         * Sets the value of the show property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setShow(String value) {
-            this.show = value;
-        }
-
-        /**
-         * Gets the value of the actuate property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getActuate() {
-            return actuate;
-        }
-
-        /**
-         * Sets the value of the actuate property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setActuate(String value) {
-            this.actuate = value;
-        }
-
-    }
-
-
-    /**
-     * <p>Java class for anonymous complex type.
-     * 
-     * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
-     * <pre>{@code
-     * <complexType>
-     *   <complexContent>
-     *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-     *       <choice>
-     *         <element name="binData" type="{http://www.w3.org/2001/XMLSchema}base64Binary" minOccurs="0"/>
-     *         <element name="xmlData" minOccurs="0">
-     *           <complexType>
-     *             <complexContent>
-     *               <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-     *                 <sequence>
-     *                   <any processContents='lax' maxOccurs="unbounded"/>
-     *                 </sequence>
-     *               </restriction>
-     *             </complexContent>
-     *           </complexType>
-     *         </element>
-     *       </choice>
-     *       <attGroup ref="{http://www.loc.gov/METS/}METADATA"/>
-     *       <attGroup ref="{http://www.loc.gov/METS/}FILECORE"/>
-     *       <attribute name="ID" type="{http://www.w3.org/2001/XMLSchema}ID" />
-     *       <attribute name="LABEL" type="{http://www.w3.org/2001/XMLSchema}string" />
-     *     </restriction>
-     *   </complexContent>
-     * </complexType>
-     * }</pre>
-     * 
-     * 
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "binData",
-        "xmlData"
+        "any"
     })
-    public static class MdWrap {
+    public static class XmlData {
 
-        protected byte[] binData;
-        protected MdSecType.MdWrap.XmlData xmlData;
-        @XmlAttribute(name = "ID")
-        @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-        @XmlID
-        @XmlSchemaType(name = "ID")
-        protected String id;
-        @XmlAttribute(name = "LABEL")
-        protected String label;
-        @XmlAttribute(name = "MDTYPE", required = true)
-        protected String mdtype;
-        @XmlAttribute(name = "OTHERMDTYPE")
-        protected String othermdtype;
-        @XmlAttribute(name = "MDTYPEVERSION")
-        protected String mdtypeversion;
-        @XmlAttribute(name = "MIMETYPE")
-        protected String mimetype;
-        @XmlAttribute(name = "SIZE")
-        protected Long size;
-        @XmlAttribute(name = "CREATED")
-        @XmlSchemaType(name = "dateTime")
-        protected XMLGregorianCalendar created;
-        @XmlAttribute(name = "CHECKSUM")
-        protected String checksum;
-        @XmlAttribute(name = "CHECKSUMTYPE")
-        protected String checksumtype;
+      @XmlAnyElement(lax = true)
+      protected List<Object> any;
 
-        /**
-         * Gets the value of the binData property.
-         * 
-         * @return
-         *     possible object is
-         *     byte[]
-         */
-        public byte[] getBinData() {
-            return binData;
+      /**
+       * Gets the value of the any property.
+       *
+       * <p>
+       * This accessor method returns a reference to the live list,
+       * not a snapshot. Therefore any modification you make to the
+       * returned list will be present inside the Jakarta XML Binding object.
+       * This is why there is not a {@code set} method for the any property.
+       *
+       * <p>
+       * For example, to add a new item, do as follows:
+       * <pre>
+       *    getAny().add(newItem);
+       * </pre>
+       *
+       *
+       * <p>
+       * Objects of the following type(s) are allowed in the list
+       * {@link Object }
+       * {@link Element }
+       *
+       * @return The value of the any property.
+       */
+      public List<Object> getAny() {
+        if (any == null) {
+          any = new ArrayList<>();
         }
-
-        /**
-         * Sets the value of the binData property.
-         * 
-         * @param value
-         *     allowed object is
-         *     byte[]
-         */
-        public void setBinData(byte[] value) {
-            this.binData = value;
-        }
-
-        /**
-         * Gets the value of the xmlData property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link MdSecType.MdWrap.XmlData }
-         *     
-         */
-        public MdSecType.MdWrap.XmlData getXmlData() {
-            return xmlData;
-        }
-
-        /**
-         * Sets the value of the xmlData property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link MdSecType.MdWrap.XmlData }
-         *     
-         */
-        public void setXmlData(MdSecType.MdWrap.XmlData value) {
-            this.xmlData = value;
-        }
-
-        /**
-         * Gets the value of the id property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getID() {
-            return id;
-        }
-
-        /**
-         * Sets the value of the id property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setID(String value) {
-            this.id = value;
-        }
-
-        /**
-         * Gets the value of the label property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getLABEL() {
-            return label;
-        }
-
-        /**
-         * Sets the value of the label property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setLABEL(String value) {
-            this.label = value;
-        }
-
-        /**
-         * Gets the value of the mdtype property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getMDTYPE() {
-            return mdtype;
-        }
-
-        /**
-         * Sets the value of the mdtype property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setMDTYPE(String value) {
-            this.mdtype = value;
-        }
-
-        /**
-         * Gets the value of the othermdtype property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getOTHERMDTYPE() {
-            return othermdtype;
-        }
-
-        /**
-         * Sets the value of the othermdtype property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setOTHERMDTYPE(String value) {
-            this.othermdtype = value;
-        }
-
-        /**
-         * Gets the value of the mdtypeversion property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getMDTYPEVERSION() {
-            return mdtypeversion;
-        }
-
-        /**
-         * Sets the value of the mdtypeversion property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setMDTYPEVERSION(String value) {
-            this.mdtypeversion = value;
-        }
-
-        /**
-         * Gets the value of the mimetype property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getMIMETYPE() {
-            return mimetype;
-        }
-
-        /**
-         * Sets the value of the mimetype property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setMIMETYPE(String value) {
-            this.mimetype = value;
-        }
-
-        /**
-         * Gets the value of the size property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link Long }
-         *     
-         */
-        public Long getSIZE() {
-            return size;
-        }
-
-        /**
-         * Sets the value of the size property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link Long }
-         *     
-         */
-        public void setSIZE(Long value) {
-            this.size = value;
-        }
-
-        /**
-         * Gets the value of the created property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link XMLGregorianCalendar }
-         *     
-         */
-        public XMLGregorianCalendar getCREATED() {
-            return created;
-        }
-
-        /**
-         * Sets the value of the created property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link XMLGregorianCalendar }
-         *     
-         */
-        public void setCREATED(XMLGregorianCalendar value) {
-            this.created = value;
-        }
-
-        /**
-         * Gets the value of the checksum property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getCHECKSUM() {
-            return checksum;
-        }
-
-        /**
-         * Sets the value of the checksum property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setCHECKSUM(String value) {
-            this.checksum = value;
-        }
-
-        /**
-         * Gets the value of the checksumtype property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getCHECKSUMTYPE() {
-            return checksumtype;
-        }
-
-        /**
-         * Sets the value of the checksumtype property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setCHECKSUMTYPE(String value) {
-            this.checksumtype = value;
-        }
-
-
-        /**
-         * <p>Java class for anonymous complex type.
-         * 
-         * <p>The following schema fragment specifies the expected content contained within this class.
-         * 
-         * <pre>{@code
-         * <complexType>
-         *   <complexContent>
-         *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-         *       <sequence>
-         *         <any processContents='lax' maxOccurs="unbounded"/>
-         *       </sequence>
-         *     </restriction>
-         *   </complexContent>
-         * </complexType>
-         * }</pre>
-         * 
-         * 
-         */
-        @XmlAccessorType(XmlAccessType.FIELD)
-        @XmlType(name = "", propOrder = {
-            "any"
-        })
-        public static class XmlData {
-
-            @XmlAnyElement(lax = true)
-            protected List<Object> any;
-
-            /**
-             * Gets the value of the any property.
-             * 
-             * <p>
-             * This accessor method returns a reference to the live list,
-             * not a snapshot. Therefore any modification you make to the
-             * returned list will be present inside the Jakarta XML Binding object.
-             * This is why there is not a {@code set} method for the any property.
-             * 
-             * <p>
-             * For example, to add a new item, do as follows:
-             * <pre>
-             *    getAny().add(newItem);
-             * </pre>
-             * 
-             * 
-             * <p>
-             * Objects of the following type(s) are allowed in the list
-             * {@link Object }
-             * {@link Element }
-             * 
-             * 
-             * @return
-             *     The value of the any property.
-             */
-            public List<Object> getAny() {
-                if (any == null) {
-                    any = new ArrayList<>();
-                }
-                return this.any;
-            }
-
-        }
+        return this.any;
+      }
 
     }
+
+  }
 
 }
