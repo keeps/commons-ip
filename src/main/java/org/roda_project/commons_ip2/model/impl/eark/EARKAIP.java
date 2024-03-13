@@ -208,7 +208,7 @@ public class EARKAIP extends AIPWrap {
         if (Thread.interrupted()) {
           throw new InterruptedException();
         }
-
+        zipEntryInfo.setChecksum(IPConstants.CHECKSUM_ALGORITHM);
         zipEntryInfo.prepareEntryforZipping();
         LOGGER.debug("Writing file {}", zipEntryInfo.getFilePath());
         final Path outputPath = Paths.get(path.toString(), zipEntryInfo.getName());
