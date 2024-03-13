@@ -128,7 +128,9 @@ public final class ZIPUtils {
         throw new InterruptedException();
       }
 
+      file.setChecksum(sip.getChecksum());
       file.prepareEntryforZipping();
+
 
       LOGGER.debug("Zipping file {}", file.getFilePath());
       ZipEntry entry;
