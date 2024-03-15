@@ -69,7 +69,7 @@ public class METSZipEntryInfo extends FileZipEntryInfo {
       if (!rootMETS && fileType != null) {
         METSUtils.setFileBasicInformation(LOGGER, getFilePath(), fileType);
 
-        String checksumType = IPConstants.CHECKSUM_ALGORITHM;
+        String checksumType = this.getChecksum();
         Set<String> checksumAlgorithms = new HashSet<>();
         checksumAlgorithms.add(checksumType);
         try (InputStream inputStream = Files.newInputStream(getFilePath())) {

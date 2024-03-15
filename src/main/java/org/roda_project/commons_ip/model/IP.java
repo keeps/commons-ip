@@ -48,6 +48,7 @@ public abstract class IP implements IPInterface {
   private List<IPFile> documentation;
 
   private Map<String, ZipEntryInfo> zipEntries;
+  private String checksumAlgorithm;
 
   private ValidationReport validationReport;
 
@@ -61,6 +62,7 @@ public abstract class IP implements IPInterface {
     this.ancestors = new ArrayList<>();
 
     this.description = "";
+    this.checksumAlgorithm = "SHA-256";
 
     this.descriptiveMetadata = new ArrayList<>();
     this.preservationMetadata = new ArrayList<>();
@@ -92,6 +94,13 @@ public abstract class IP implements IPInterface {
     this.ids = Arrays.asList(id);
     return this;
   }
+  public void setChecksum(final String checksum) {
+    this.checksumAlgorithm = checksum;
+  }
+  public String getChecksum() {
+    return this.checksumAlgorithm;
+  }
+
 
   @Override
   public String getId() {

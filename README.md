@@ -318,18 +318,18 @@ Namely:
   namespaces were added. Following is the before & then the after:
 
 ```
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.loc.gov/METS/", elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@jakarta.xml.bind.annotation.XmlSchema(namespace = "http://www.loc.gov/METS/", elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED)
 ```
 
 and the after
 
 ```
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.loc.gov/METS/", elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED, xmlns = {
-  @javax.xml.bind.annotation.XmlNs(prefix = "", namespaceURI = "http://www.loc.gov/METS/"),
-  @javax.xml.bind.annotation.XmlNs(prefix = "xsi", namespaceURI = "http://www.w3.org/2001/XMLSchema-instance"),
-  @javax.xml.bind.annotation.XmlNs(prefix = "csip", namespaceURI = "https://DILCIS.eu/XML/METS/CSIPExtensionMETS"),
-  @javax.xml.bind.annotation.XmlNs(prefix = "sip", namespaceURI = "https://DILCIS.eu/XML/METS/SIPExtensionMETS"),
-  @javax.xml.bind.annotation.XmlNs(prefix = "xlink", namespaceURI = "http://www.w3.org/1999/xlink")})
+@jakarta.xml.bind.annotation.XmlSchema(namespace = "http://www.loc.gov/METS/", elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED, xmlns = {
+  @jakarta.xml.bind.annotation.XmlNs(prefix = "", namespaceURI = "http://www.loc.gov/METS/"),
+  @jakarta.xml.bind.annotation.XmlNs(prefix = "xsi", namespaceURI = "http://www.w3.org/2001/XMLSchema-instance"),
+  @jakarta.xml.bind.annotation.XmlNs(prefix = "csip", namespaceURI = "https://DILCIS.eu/XML/METS/CSIPExtensionMETS"),
+  @jakarta.xml.bind.annotation.XmlNs(prefix = "sip", namespaceURI = "https://DILCIS.eu/XML/METS/SIPExtensionMETS"),
+  @jakarta.xml.bind.annotation.XmlNs(prefix = "xlink", namespaceURI = "http://www.w3.org/1999/xlink")})
 ```
 
 ### IANA Media Types
