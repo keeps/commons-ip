@@ -18,7 +18,7 @@ import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
 import org.roda_project.commons_ip2.model.AIP;
-import org.roda_project.commons_ip2.model.IP;
+import org.roda_project.commons_ip2.model.IPInterface;
 import org.roda_project.commons_ip2.model.IPAgent;
 import org.roda_project.commons_ip2.model.IPContentInformationType;
 import org.roda_project.commons_ip2.model.IPContentType;
@@ -57,7 +57,7 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public IP setId(final String id) {
+  public IPInterface setId(final String id) {
     return aip.setId(id);
   }
 
@@ -67,7 +67,7 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public IP setIds(final List<String> ids) {
+  public IPInterface setIds(final List<String> ids) {
     return aip.setIds(ids);
   }
 
@@ -77,7 +77,7 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public IP setProfile(final String profile) {
+  public IPInterface setProfile(final String profile) {
     return aip.setProfile(profile);
   }
 
@@ -87,7 +87,7 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public IP setType(final IPEnums.IPType type) {
+  public IPInterface setType(final IPEnums.IPType type) {
     return aip.setType(type);
   }
 
@@ -107,7 +107,7 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public IP setContentType(final IPContentType contentType) {
+  public IPInterface setContentType(final IPContentType contentType) {
     return aip.setContentType(contentType);
   }
 
@@ -117,7 +117,7 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public IP setContentInformationType(IPContentInformationType contentInformationType) {
+  public IPInterface setContentInformationType(IPContentInformationType contentInformationType) {
     return aip.setContentInformationType(contentInformationType);
   }
 
@@ -127,7 +127,7 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public IP setStatus(final IPEnums.IPStatus status) {
+  public IPInterface setStatus(final IPEnums.IPStatus status) {
     return aip.setStatus(status);
   }
 
@@ -137,7 +137,7 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public IP setCreateDate(final XMLGregorianCalendar date) {
+  public IPInterface setCreateDate(final XMLGregorianCalendar date) {
     return aip.setCreateDate(date);
   }
 
@@ -147,7 +147,7 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public IP setModificationDate(final XMLGregorianCalendar date) {
+  public IPInterface setModificationDate(final XMLGregorianCalendar date) {
     return aip.setModificationDate(date);
   }
 
@@ -162,12 +162,12 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public IP setAncestors(final List<String> ancestors) {
+  public IPInterface setAncestors(final List<String> ancestors) {
     return aip.setAncestors(ancestors);
   }
 
   @Override
-  public IP setBasePath(final Path basePath) {
+  public IPInterface setBasePath(final Path basePath) {
     return aip.setBasePath(basePath);
   }
 
@@ -177,7 +177,7 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public IP setDescription(final String description) {
+  public IPInterface setDescription(final String description) {
     return aip.setDescription(description);
   }
 
@@ -187,32 +187,32 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public IP addAgent(final IPAgent aipAgent) {
+  public IPInterface addAgent(final IPAgent aipAgent) {
     return aip.addAgent(aipAgent);
   }
 
   @Override
-  public IP addPreservationMetadata(final IPMetadata metadata) throws IPException {
+  public IPInterface addPreservationMetadata(final IPMetadata metadata) throws IPException {
     return aip.addPreservationMetadata(metadata);
   }
 
   @Override
-  public IP addOtherMetadata(final IPMetadata metadata) throws IPException {
+  public IPInterface addOtherMetadata(final IPMetadata metadata) throws IPException {
     return aip.addOtherMetadata(metadata);
   }
 
   @Override
-  public IP addDescriptiveMetadata(final IPDescriptiveMetadata metadata) throws IPException {
+  public IPInterface addDescriptiveMetadata(final IPDescriptiveMetadata metadata) throws IPException {
     return aip.addDescriptiveMetadata(metadata);
   }
 
   @Override
-  public IP addRepresentation(final IPRepresentation aipRepresentation) throws IPException {
+  public IPInterface addRepresentation(final IPRepresentation aipRepresentation) throws IPException {
     return aip.addRepresentation(aipRepresentation);
   }
 
   @Override
-  public IP addSchema(final IPFileInterface schema) {
+  public IPInterface addSchema(final IPFileInterface schema) {
     return aip.addSchema(schema);
   }
 
@@ -222,45 +222,45 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public IP addDocumentation(final IPFileInterface documentationPath) {
+  public IPInterface addDocumentation(final IPFileInterface documentationPath) {
     return aip.addDocumentation(documentationPath);
   }
 
   @Override
-  public IP addAgentToRepresentation(final String representationID, final IPAgent agent) throws IPException {
+  public IPInterface addAgentToRepresentation(final String representationID, final IPAgent agent) throws IPException {
     return aip.addAgentToRepresentation(representationID, agent);
   }
 
   @Override
-  public IP addDescriptiveMetadataToRepresentation(final String representationID,
+  public IPInterface addDescriptiveMetadataToRepresentation(final String representationID,
     final IPDescriptiveMetadata descriptiveMetadata) throws IPException {
     return aip.addDescriptiveMetadataToRepresentation(representationID, descriptiveMetadata);
   }
 
   @Override
-  public IP addPreservationMetadataToRepresentation(final String representationID,
+  public IPInterface addPreservationMetadataToRepresentation(final String representationID,
     final IPMetadata preservationMetadata) throws IPException {
     return aip.addPreservationMetadataToRepresentation(representationID, preservationMetadata);
   }
 
   @Override
-  public IP addOtherMetadataToRepresentation(final String representationID, final IPMetadata otherMetadata)
+  public IPInterface addOtherMetadataToRepresentation(final String representationID, final IPMetadata otherMetadata)
     throws IPException {
     return aip.addOtherMetadataToRepresentation(representationID, otherMetadata);
   }
 
   @Override
-  public IP addFileToRepresentation(final String representationID, final IPFileInterface file) throws IPException {
+  public IPInterface addFileToRepresentation(final String representationID, final IPFileInterface file) throws IPException {
     return aip.addFileToRepresentation(representationID, file);
   }
 
   @Override
-  public IP addSchemaToRepresentation(final String representationID, final IPFileInterface schema) throws IPException {
+  public IPInterface addSchemaToRepresentation(final String representationID, final IPFileInterface schema) throws IPException {
     return aip.addSchemaToRepresentation(representationID, schema);
   }
 
   @Override
-  public IP addDocumentationToRepresentation(final String representationID, final IPFileInterface documentation)
+  public IPInterface addDocumentationToRepresentation(final String representationID, final IPFileInterface documentation)
     throws IPException {
     return aip.addDocumentationToRepresentation(representationID, documentation);
   }
