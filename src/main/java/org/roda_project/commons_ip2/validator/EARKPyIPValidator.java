@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.roda_project.commons_ip2.cli.model.exception.UnmarshallerException;
 import org.roda_project.commons_ip2.validator.common.InstatiateMets;
 import org.roda_project.commons_ip2.validator.components.MetsValidator;
 import org.roda_project.commons_ip2.validator.components.StructureValidatorImpl;
@@ -192,7 +193,7 @@ public class EARKPyIPValidator {
         validationReportOutputJSONPyIP.getResults().put(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID,
           csipStr0);
       }
-    } catch (IOException | JAXBException | SAXException e) {
+    } catch (IOException | UnmarshallerException e) {
       final StringBuilder message = new StringBuilder();
 
       Throwable cause = e;
@@ -259,10 +260,10 @@ public class EARKPyIPValidator {
    *           If some error occurs
    */
   private void validateSubMets(final Map<String, InputStream> subMets, final boolean isZip)
-    throws IOException, JAXBException, SAXException {
+    throws IOException, UnmarshallerException {
     for (Map.Entry<String, InputStream> entry : subMets.entrySet()) {
       final InstatiateMets instatiateMets = new InstatiateMets(entry.getValue());
-      metsValidatorState.setMets(instatiateMets.instatiateMetsFile());
+      metsValidatorState.setMets(instatiateMets.instatiateMetsFile(entry.getKey()));
       metsValidatorState.setIpType(metsValidatorState.getMets().getMetsHdr().getOAISPACKAGETYPE());
       setupMetsValidatorState(entry.getKey(), isZip, false);
       validateComponents();
@@ -274,12 +275,10 @@ public class EARKPyIPValidator {
    *
    * @throws IOException
    *           If some I/O error occurs
-   * @throws JAXBException
-   *           If some error occurs
-   * @throws SAXException
+   * @throws UnmarshallerException
    *           If some error occurs
    */
-  private void validateRootMets() throws IOException, JAXBException, SAXException {
+  private void validateRootMets() throws IOException, UnmarshallerException {
     final InputStream metsRootStream;
     final String ipPath;
     if (structureValidatorState.isZipFileFlag()) {
@@ -294,7 +293,7 @@ public class EARKPyIPValidator {
     metsValidatorState.setMetsPath(earksipPath.toString());
     metsValidatorState.setMetsName(ipPath);
     metsValidatorState.setIsRootMets(true);
-    metsValidatorState.setMets(metsRoot.instatiateMetsFile());
+    metsValidatorState.setMets(metsRoot.instatiateMetsFile(Constants.METS_FILE));
     validateComponents();
   }
 

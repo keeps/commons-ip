@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.roda_project.commons_ip2.cli.model.exception.UnmarshallerException;
 import org.roda_project.commons_ip2.validator.common.InstatiateMets;
 import org.roda_project.commons_ip2.validator.components.MetsValidator;
 import org.roda_project.commons_ip2.validator.components.StructureValidatorImpl;
@@ -45,8 +46,6 @@ import org.roda_project.commons_ip2.validator.state.StructureValidatorState;
 import org.roda_project.commons_ip2.validator.utils.ResultsUtils;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-
-import jakarta.xml.bind.JAXBException;
 
 /** {@author João Gomes <jgomes@keep.pt>}. */
 public class EARKSIPValidator {
@@ -214,11 +213,11 @@ public class EARKSIPValidator {
 
       final InstatiateMets instatiateMets = new InstatiateMets(entry.getValue());
       try {
-        metsValidatorState.setMets(instatiateMets.instatiateMetsFile());
+        metsValidatorState.setMets(instatiateMets.instatiateMetsFile(entry.getKey()));
         metsValidatorState.setIpType(metsValidatorState.getMets().getMetsHdr().getOAISPACKAGETYPE());
         setupMetsValidatorState(entry.getKey(), isZip, false);
         validateComponents();
-      } catch (IOException | JAXBException | SAXException e) {
+      } catch (IOException | UnmarshallerException e) {
         final String message = createExceptionMessage(e, entry.getKey());
         final ReporterDetails csipStr0 = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message,
           false, false);
@@ -242,7 +241,10 @@ public class EARKSIPValidator {
     final StringBuilder message = new StringBuilder();
 
     Throwable cause = e;
-    if (e.getMessage() != null) {
+
+    if (e instanceof UnmarshallerException) {
+      message.append(e.getMessage());
+    } else if (e.getMessage() != null) {
       message.append(Constants.OPEN_SQUARE_BRACKET).append(e.getClass().getSimpleName())
         .append(Constants.CLOSE_SQUARE_BRACKET).append(Constants.EMPTY_SPACE).append(e.getMessage());
     }
@@ -283,15 +285,15 @@ public class EARKSIPValidator {
       metsValidatorState.setMetsName(ipPath);
       metsValidatorState.setIsRootMets(true);
 
-      metsValidatorState.setMets(metsRoot.instatiateMetsFile());
+      metsValidatorState.setMets(metsRoot.instatiateMetsFile(Constants.METS_FILE));
       metsValidatorState.setIpType(metsValidatorState.getMets().getMetsHdr().getOAISPACKAGETYPE());
       validateComponents();
-    } catch (IOException | JAXBException | SAXException e) {
+    } catch (IOException | UnmarshallerException e) {
       final String message = createExceptionMessage(e,
         earksipPath.toString() + Constants.SEPARATOR + Constants.METS_FILE);
       final ReporterDetails csipStr0 = new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message,
         false, false);
-      csipStr0.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION);
+      csipStr0.setSpecification(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION + version);
       ResultsUtils.addResult(validationReportOutputJson.getResults(),
         ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP0_ID, csipStr0);
     }
