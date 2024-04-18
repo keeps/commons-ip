@@ -46,7 +46,7 @@ To validate a SIP have to use the following options:
 * **-i,** or **--inputs** [REQUIRED] Path(s) to the SIP(s) archive file or folder(s).
 * **--specification-version,** [OPTIONAL] E-ARK CSIP version (Default: 2.1.0).
 * **-o,** or **--output-report-dir** [OPTIONAL]  Path to the Directory where you want to save the validation report.
-* **-r,** or **--reporter-type** [OPTIONAL] The type of report (possible values: commons-ip, pyip)
+* **-r,** or **--reporter-type** [OPTIONAL] The type of report (possible values: commons-ip, eark-validator)
 * **-v,** or **--verbose** [OPTIONAL] Verbose option (Will print all validation steps)
 * **-h,** [OPTIONAL] Display this help and exit.
 
