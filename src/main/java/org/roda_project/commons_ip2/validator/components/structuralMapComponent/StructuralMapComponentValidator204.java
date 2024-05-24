@@ -91,10 +91,6 @@ public class StructuralMapComponentValidator204 extends MetsValidatorImpl {
           ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,
             generator.validateCSIP85(metsValidatorState).setSpecification(generator.getCSIPVersion()));
 
-          /* CSIP86 */
-          notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID);
-          ResultsUtils.addResult(results, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,
-            generator.validateCSIP86(metsValidatorState).setSpecification(generator.getCSIPVersion()));
 
           /* CSIP88 */
           notifyObserversValidationStarted(moduleName, ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID);
@@ -313,7 +309,6 @@ public class StructuralMapComponentValidator204 extends MetsValidatorImpl {
           ResultsUtils.addResults(results,
             new ReporterDetails(generator.getCSIPVersion(), message, true, true),
             ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,
-            ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,
             ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,
             ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID,
             ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP90_ID,
@@ -352,7 +347,6 @@ public class StructuralMapComponentValidator204 extends MetsValidatorImpl {
           ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID,
           ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID,
           ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,
-          ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,
           ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,
           ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID,
           ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP90_ID,
@@ -392,7 +386,6 @@ public class StructuralMapComponentValidator204 extends MetsValidatorImpl {
         ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP83_ID,
         ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP84_ID,
         ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP85_ID,
-        ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP86_ID,
         ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP88_ID,
         ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP89_ID,
         ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP90_ID,
