@@ -1,0 +1,156 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Generated schema for Root",
+    "type": "object",
+    "properties": {
+      "header": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "specifications": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "url"
+              ]
+            }
+          },
+          "version_commons_ip": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "specifications",
+          "version_commons_ip",
+          "date",
+          "path"
+        ]
+      },
+      "validation": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "specification": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "cardinality": {
+              "type": "string"
+            },
+            "level": {
+              "type": "string"
+            },
+            "testing": {
+              "type": "object",
+              "properties": {
+                "outcome": {
+                  "type": "string"
+                },
+                "issues": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "warnings": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "notes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "outcome",
+                "issues",
+                "warnings",
+                "notes"
+              ]
+            }
+          },
+          "required": [
+            "specification",
+            "id",
+            "name",
+            "location",
+            "description",
+            "cardinality",
+            "level",
+            "testing"
+          ]
+        }
+      },
+      "summary": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "number"
+          },
+          "warnings": {
+            "type": "number"
+          },
+          "errors": {
+            "type": "number"
+          },
+          "skipped": {
+            "type": "number"
+          },
+          "notes": {
+            "type": "number"
+          },
+          "result": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "success",
+          "warnings",
+          "errors",
+          "skipped",
+          "notes",
+          "result"
+        ]
+      }
+    },
+    "required": [
+      "header",
+      "validation",
+      "summary"
+    ]
+  }
