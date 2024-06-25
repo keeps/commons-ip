@@ -8,13 +8,13 @@
 package org.roda_project.commons_ip2.model.impl.eark;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.channels.ClosedByInterruptException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
+import java.io.FileOutputStream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip.model.ParseException;
@@ -28,10 +28,11 @@ import org.roda_project.commons_ip2.model.IPContentType;
 import org.roda_project.commons_ip2.model.MetsWrapper;
 import org.roda_project.commons_ip2.model.SIP;
 import org.roda_project.commons_ip2.model.impl.ModelUtils;
-import org.roda_project.commons_ip2.utils.METSUtils;
-import org.roda_project.commons_ip2.utils.ZIPUtils;
+import org.roda_project.commons_ip2.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.roda_project.commons_ip2.utils.ZIPUtils.calculateChecksums;
 
 public class EARKSIP extends SIP {
   private static final Logger LOGGER = LoggerFactory.getLogger(EARKSIP.class);
@@ -98,14 +99,22 @@ public class EARKSIP extends SIP {
     }
   }
 
+  public SIP parseUnzipped(Path source) throws ParseException {
+    return parseAndValidateEARKSIP(source);
+  }
+
   private SIP parseEARKSIP(final Path source, final Path destinationDirectory) throws ParseException {
+    Path sipPath = ZIPUtils.extractIPIfInZipFormat(source, destinationDirectory);
+    return parseAndValidateEARKSIP(sipPath);
+  }
+
+  private SIP parseAndValidateEARKSIP(Path sipPath) throws ParseException {
     try {
       IPConstants.METS_ENCODE_AND_DECODE_HREF = true;
       SIP sip = new EARKSIP();
 
       EARKUtils earkUtils = new EARKUtils(metsCreator);
 
-      Path sipPath = ZIPUtils.extractIPIfInZipFormat(source, destinationDirectory);
       sip.setBasePath(sipPath);
 
       MetsWrapper metsWrapper = earkUtils.processMainMets(sip, sipPath);
@@ -138,8 +147,13 @@ public class EARKSIP extends SIP {
    * _________________________________________________________________________
    */
   @Override
-  public Path build(Path destinationDirectory) throws IPException, InterruptedException {
+  public Path build(Path destinationDirectory) throws IPException, InterruptedException, IOException {
     return build(destinationDirectory, null);
+  }
+
+  @Override
+  public Path build(boolean zipIt, Path destinationDirectory) throws IPException, InterruptedException, IOException {
+    return build(destinationDirectory, null, false, IPEnums.SipType.EARK2, zipIt);
   }
 
   /**
@@ -158,26 +172,26 @@ public class EARKSIP extends SIP {
    */
   @Override
   public Path build(final Path destinationDirectory, final boolean onlyManifest)
-    throws IPException, InterruptedException {
+    throws IPException, InterruptedException, IOException {
     return build(destinationDirectory, null);
   }
 
   @Override
   public Path build(Path destinationDirectory, String fileNameWithoutExtension)
-    throws IPException, InterruptedException {
-    return build(destinationDirectory, fileNameWithoutExtension, false, IPEnums.SipType.EARK2);
+    throws IPException, InterruptedException, IOException {
+    return build(destinationDirectory, fileNameWithoutExtension, false, IPEnums.SipType.EARK2, true);
   }
 
   @Override
   public Path build(Path destinationDirectory, String fileNameWithoutExtension, IPEnums.SipType sipType)
-    throws IPException, InterruptedException {
-    return build(destinationDirectory, fileNameWithoutExtension, false, sipType);
+    throws IPException, InterruptedException, IOException {
+    return build(destinationDirectory, fileNameWithoutExtension, false, sipType, true);
   }
 
   @Override
   public Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest)
-    throws IPException, InterruptedException {
-    return build(destinationDirectory, fileNameWithoutExtension, false, IPEnums.SipType.EARK2);
+    throws IPException, InterruptedException, IOException {
+    return build(destinationDirectory, fileNameWithoutExtension, false, IPEnums.SipType.EARK2, true);
   }
 
   /**
@@ -198,13 +212,14 @@ public class EARKSIP extends SIP {
    */
   @Override
   public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest,
-    IPEnums.SipType sipType) throws IPException, InterruptedException {
+                    IPEnums.SipType sipType, boolean zipIt) throws IPException, InterruptedException, IOException {
     IPConstants.METS_ENCODE_AND_DECODE_HREF = true;
     Path buildDir = ModelUtils.createBuildDir(SIP_TEMP_DIR);
 
     EARKUtils earkUtils = new EARKUtils(metsCreator);
 
-    Path zipPath = getZipPath(destinationDirectory, fileNameWithoutExtension);
+    Path outputPath = zipIt ? getZipPath(destinationDirectory, fileNameWithoutExtension) : destinationDirectory;
+
     try {
       Map<String, ZipEntryInfo> zipEntries = getZipEntries();
       //default metadata need to be added before creating the mets in order to add them in the mets file
@@ -231,10 +246,17 @@ public class EARKSIP extends SIP {
       earkUtils.addDocumentationToZipAndMETS(zipEntries, mainMETSWrapper, getDocumentation(), null);
       METSUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, buildDir);
 
-      createZipFile(zipEntries, zipPath);
-      return zipPath;
+      if(zipIt){
+        createZipFile(zipEntries, outputPath);
+      }
+      else{
+        createUnzippedStructure(zipEntries, outputPath, this, true);
+        outputPath = outputPath.resolve(this.getId());
+      }
+
+      return outputPath;
     } catch (InterruptedException e) {
-      ModelUtils.cleanUpUponInterrupt(LOGGER, zipPath);
+      ModelUtils.cleanUpUponInterrupt(LOGGER, outputPath);
       throw e;
     } finally {
       ModelUtils.deleteBuildDir(buildDir);
@@ -270,6 +292,65 @@ public class EARKSIP extends SIP {
       throw new IPException("Error generating E-ARK SIP ZIP file. Reason: " + e.getMessage(), e);
     } finally {
       notifySipBuildPackagingEnded();
+    }
+  }
+
+  public static void createUnzippedStructure(Map<String, ZipEntryInfo> files, Path outputPath, SIP sip, boolean createSipIdFolder)
+          throws IOException, InterruptedException, IPException {
+    if (Files.exists(outputPath)) {
+      Files.deleteIfExists(outputPath);
+    }
+    Files.createDirectories(outputPath);
+
+    Set<String> nonMetsChecksumAlgorithms = new TreeSet<>();
+    nonMetsChecksumAlgorithms.add(sip.getChecksumAlgorithm());
+    Set<String> metsChecksumAlgorithms = new TreeSet<>();
+    metsChecksumAlgorithms.addAll(nonMetsChecksumAlgorithms);
+    metsChecksumAlgorithms.addAll(sip.getExtraChecksumAlgorithms());
+
+    int i = 0;
+    for (ZipEntryInfo file : files.values()) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
+
+      // Setting checksum algorithm here, similar to original logic
+      file.setChecksum(sip.getChecksumAlgorithm());
+      file.prepareEntryforZipping();
+
+      LOGGER.debug("Creating file {}", file.getFilePath());
+      Path filePath = outputPath.resolve(createSipIdFolder? sip.getId() + "/" + file.getName() : file.getName());
+      Files.createDirectories(filePath.getParent());
+      try (InputStream inputStream = Files.newInputStream(file.getFilePath())) {
+        Map<String, String> checksums;
+        if (file instanceof METSZipEntryInfo) {
+          checksums = calculateChecksums(Optional.of(new FileOutputStream(filePath.toFile())), inputStream, metsChecksumAlgorithms);
+          METSZipEntryInfo metsEntry = (METSZipEntryInfo) file;
+          metsEntry.setChecksums(checksums);
+          metsEntry.setSize(metsEntry.getFilePath().toFile().length());
+        } else {
+          checksums = calculateChecksums(Optional.of(new FileOutputStream(filePath.toFile())), inputStream, nonMetsChecksumAlgorithms);
+        }
+
+        LOGGER.debug("Done creating file");
+        String checksum = checksums.get(sip.getChecksumAlgorithm());
+        String checksumType = sip.getChecksumAlgorithm();
+        file.setChecksum(checksum);
+        file.setChecksumAlgorithm(checksumType);
+        if (file instanceof METSFileTypeZipEntryInfo) {
+          METSFileTypeZipEntryInfo f = (METSFileTypeZipEntryInfo) file;
+          f.getMetsFileType().setCHECKSUM(checksum);
+          f.getMetsFileType().setCHECKSUMTYPE(checksumType);
+        } else if (file instanceof METSMdRefZipEntryInfo) {
+          METSMdRefZipEntryInfo f = (METSMdRefZipEntryInfo) file;
+          f.getMetsMdRef().setCHECKSUM(checksum);
+          f.getMetsMdRef().setCHECKSUMTYPE(checksumType);
+        }
+      } catch (NoSuchAlgorithmException e) {
+        LOGGER.error("Error while creating files", e);
+      }
+      i++;
+      sip.notifySipBuildPackagingCurrentStatus(i);
     }
   }
 

@@ -10,7 +10,7 @@ import java.util.concurrent.Callable;
 import org.roda_project.commons_ip2.cli.model.args.MetadataGroup;
 import org.roda_project.commons_ip2.cli.model.args.RepresentationGroup;
 import org.roda_project.commons_ip2.cli.model.enums.CSIPVersion;
-import org.roda_project.commons_ip2.cli.model.enums.Checksum;
+import org.roda_project.commons_ip2.cli.model.enums.ChecksumAlgorithm;
 import org.roda_project.commons_ip2.cli.model.exception.CLIException;
 import org.roda_project.commons_ip2.cli.model.exception.InvalidPathException;
 import org.roda_project.commons_ip2.cli.model.exception.SIPBuilderException;
@@ -67,7 +67,7 @@ public class Create implements Callable<Integer> {
 
   @CommandLine.Option(names = {"-C",
     "--checksum"}, paramLabel = "<algorithm>", description = "Checksum algorithms (possible values: ${COMPLETION-CANDIDATES})")
-  Checksum checksum = Checksum.SHA256;
+  ChecksumAlgorithm checksumAlgorithm = ChecksumAlgorithm.SHA256;
 
   @CommandLine.Option(names = {"-d",
     "--documentation"}, description = "Path(s) to documentation file(s)", split = ",", paramLabel = "<path>", showDefaultValue = CommandLine.Help.Visibility.NEVER)
@@ -104,7 +104,7 @@ public class Create implements Callable<Integer> {
       .setRepresentationArgs(representationListArgs).setTargetOnly(targetOnly).setSipId(sipId).setAncestors(ancestors)
       .setDocumentation(documentation).setSoftwareVersion(getClass().getPackage().getImplementationVersion())
       .setPath(path).setSubmitterAgentId(submitterAgentId).setSubmitterAgentName(submitterAgentName)
-      .setChecksum(checksum).setVersion(version).build();
+      .setChecksumAlgorithm(checksumAlgorithm).setVersion(version).build();
 
     new CommandLine(this).getOut().printf("E-ARK SIP created at '%s'%n", sipPath.normalize().toAbsolutePath());
 

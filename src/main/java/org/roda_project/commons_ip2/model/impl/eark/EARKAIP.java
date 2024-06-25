@@ -120,19 +120,19 @@ public class EARKAIP extends AIPWrap {
 
   @Override
   public Path build(final Path destinationDirectory) throws IPException, InterruptedException {
-    return build(destinationDirectory, null);
+    return this.build(destinationDirectory, null);
   }
 
   @Override
   public Path build(final Path destinationDirectory, final boolean onlyManifest)
     throws IPException, InterruptedException {
-    return build(destinationDirectory, null, onlyManifest);
+    return this.build(destinationDirectory, null, onlyManifest);
   }
 
   @Override
   public Path build(final Path destinationDirectory, final String fileNameWithoutExtension)
     throws IPException, InterruptedException {
-    return build(destinationDirectory, fileNameWithoutExtension, false);
+    return this.build(destinationDirectory, fileNameWithoutExtension, false);
   }
 
   @Override
@@ -255,8 +255,7 @@ public class EARKAIP extends AIPWrap {
     }
   }
 
-  private void setChecksum(final ZipEntryInfo zipEntryInfo, final String checksum, final String checksumType)
-    throws IOException, NoSuchAlgorithmException {
+  private void setChecksum(final ZipEntryInfo zipEntryInfo, final String checksum, final String checksumType) {
     zipEntryInfo.setChecksum(checksum);
     zipEntryInfo.setChecksumAlgorithm(checksumType);
     if (zipEntryInfo instanceof METSFileTypeZipEntryInfo) {

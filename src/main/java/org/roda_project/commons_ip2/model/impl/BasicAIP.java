@@ -7,12 +7,14 @@
  */
 package org.roda_project.commons_ip2.model.impl;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.IPEnums.IPType;
 import org.roda_project.commons_ip.utils.IPException;
@@ -111,6 +113,11 @@ public class BasicAIP extends IP implements AIP {
   }
 
   @Override
+  public Path build(boolean zipIt, Path destinationDirectory) throws IPException, InterruptedException, IOException {
+    throw new NotImplementedException("Not implemented");
+  }
+
+  @Override
   public Path build(final Path destinationDirectory, final boolean onlyManifest)
     throws IPException, InterruptedException {
     throw new IPException("Not implemented");
@@ -130,7 +137,7 @@ public class BasicAIP extends IP implements AIP {
 
   @Override
   public Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest,
-    IPEnums.SipType sipType) throws IPException, InterruptedException {
+                    IPEnums.SipType sipType, boolean zipIt) throws IPException, InterruptedException, IOException {
     throw new IPException("Not implemented");
   }
 

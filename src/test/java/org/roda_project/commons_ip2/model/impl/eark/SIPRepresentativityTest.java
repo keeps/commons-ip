@@ -46,13 +46,13 @@ public class SIPRepresentativityTest {
   }
 
   @Test
-  public void buildEARKSip2withFolders() throws IPException, InterruptedException {
+  public void buildEARKSip2withFolders() throws IPException, InterruptedException, IOException {
     LOGGER.info("Creating EARK SIP 2");
     Path zipSIPS = createEARKSip2withFolders();
     LOGGER.info("Done creating full E-ARK SIP-S");
   }
 
-  private Path createEARKSip2withFolders() throws IPException, InterruptedException {
+  private Path createEARKSip2withFolders() throws IPException, InterruptedException, IOException {
     // 1) instantiate E-ARK SIP object
     SIP sip = new EARKSIP("SIP_1", IPContentType.getMIXED(), IPContentInformationType.getMIXED(), "2.1.0");
     sip.addCreatorSoftwareAgent("RODA Commons IP", "2.0.0");

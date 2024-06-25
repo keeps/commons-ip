@@ -101,8 +101,8 @@ public abstract class IP implements IPInterface {
     return this;
   }
 
-  public void setChecksum(final String checksum) {
-    this.checksumAlgorithm = checksum;
+  public void setChecksumAlgorithm(final String checksumAlgorithm) {
+    this.checksumAlgorithm = checksumAlgorithm;
   }
 
   public void setOverride() {
@@ -112,7 +112,7 @@ public abstract class IP implements IPInterface {
   public Boolean getOverride() {
     return override;
   }
-  public String getChecksum() {
+  public String getChecksumAlgorithm() {
     return this.checksumAlgorithm;
   }
 

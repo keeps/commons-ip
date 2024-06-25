@@ -7,10 +7,7 @@
  */
 package org.roda_project.commons_ip2.utils;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,7 +15,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -117,7 +113,7 @@ public final class ZIPUtils {
     }
 
     Set<String> nonMetsChecksumAlgorithms = new TreeSet<>();
-    nonMetsChecksumAlgorithms.add(sip.getChecksum());
+    nonMetsChecksumAlgorithms.add(sip.getChecksumAlgorithm());
     Set<String> metsChecksumAlgorithms = new TreeSet<>();
     metsChecksumAlgorithms.addAll(nonMetsChecksumAlgorithms);
     metsChecksumAlgorithms.addAll(sip.getExtraChecksumAlgorithms());
@@ -128,7 +124,8 @@ public final class ZIPUtils {
         throw new InterruptedException();
       }
 
-      file.setChecksum(sip.getChecksum());
+      // Why are we setting checksum algorithm here, and not file.setChecksumAlgorithm() (tried but test faults) ?
+      file.setChecksum(sip.getChecksumAlgorithm());
       file.prepareEntryforZipping();
 
 
@@ -154,8 +151,8 @@ public final class ZIPUtils {
         }
 
         LOGGER.debug("Done zipping file");
-        String checksum = checksums.get(sip.getChecksum());
-        String checksumType = sip.getChecksum();
+        String checksum = checksums.get(sip.getChecksumAlgorithm());
+        String checksumType = sip.getChecksumAlgorithm();
         file.setChecksum(checksum);
         file.setChecksumAlgorithm(checksumType);
         if (file instanceof METSFileTypeZipEntryInfo) {
@@ -180,33 +177,35 @@ public final class ZIPUtils {
     out.close();
   }
 
-  public static Map<String, String> calculateChecksums(Optional<ZipOutputStream> zos, InputStream inputStream,
-    Set<String> checksumAlgorithms) throws NoSuchAlgorithmException, IOException {
+  public static <T extends OutputStream & java.io.Closeable> Map<String, String> calculateChecksums(
+          Optional<T> outputStream, InputStream inputStream, Set<String> checksumAlgorithms)
+          throws NoSuchAlgorithmException, IOException {
+
     byte[] buffer = new byte[4096];
     Map<String, String> values = new HashMap<>();
 
-    // instantiate different checksum algorithms
+    // Instantiate different checksum algorithms
     Map<String, MessageDigest> algorithms = new HashMap<>();
     for (String alg : checksumAlgorithms) {
       algorithms.put(alg, MessageDigest.getInstance(alg));
     }
 
-    // calculate value for each one of the algorithms
+    // Calculate value for each one of the algorithms
     int numRead;
     do {
       numRead = inputStream.read(buffer);
       if (numRead > 0) {
-        for (Entry<String, MessageDigest> alg : algorithms.entrySet()) {
+        for (Map.Entry<String, MessageDigest> alg : algorithms.entrySet()) {
           alg.getValue().update(buffer, 0, numRead);
         }
 
-        if (zos.isPresent()) {
-          zos.get().write(buffer, 0, numRead);
+        if (outputStream.isPresent()) {
+          outputStream.get().write(buffer, 0, numRead);
         }
       }
-    } while (numRead != -1);
+    } while (numRead!= -1);
 
-    // generate hex versions of the digests
+    // Generate hex versions of the digests
     algorithms.forEach((alg, dig) -> values.put(alg, DatatypeConverter.printHexBinary(dig.digest())));
 
     return values;
