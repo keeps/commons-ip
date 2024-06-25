@@ -102,7 +102,7 @@ public abstract class SIP extends IP {
     throw new ParseException("One must implement static method parse in a concrete class");
   }
 
-  public SIP parseUnzipped(Path source, boolean unzipped) throws ParseException {
+  public SIP parseUnzipped(Path source) throws ParseException {
     throw new ParseException("One must implement static method parse in a concrete class");
   }
 }
