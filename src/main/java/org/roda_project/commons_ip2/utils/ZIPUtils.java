@@ -88,7 +88,10 @@ public final class ZIPUtils {
 
   public static Map<String, ZipEntryInfo> addFileTypeFileToZip(Map<String, ZipEntryInfo> zipEntries, Path filePath,
     String zipPath, FileType fileType) throws IPException {
-    zipEntries.put(zipPath, new METSFileTypeZipEntryInfo(zipPath, filePath, fileType));
+    METSFileTypeZipEntryInfo fileInput = new METSFileTypeZipEntryInfo(zipPath, filePath, fileType);
+    fileInput.setChecksum("dummyChecksum");
+    fileInput.setChecksumAlgorithm("MD5");
+    zipEntries.put(zipPath, fileInput);
     return zipEntries;
   }
 
@@ -125,7 +128,7 @@ public final class ZIPUtils {
       }
 
       // Why are we setting checksum algorithm here, and not file.setChecksumAlgorithm() (tried but test faults) ?
-      file.setChecksum(sip.getChecksumAlgorithm());
+      file.setChecksumAlgorithm(sip.getChecksumAlgorithm());
       file.prepareEntryforZipping();
 
 

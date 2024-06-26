@@ -7,15 +7,13 @@
  */
 package org.roda_project.commons_ip2.model.impl.eark;
 
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,6 +57,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
+import static org.roda_project.commons_ip.model.IPConstants.CHECKSUM_MD5_ALGORITHM;
+
 /**
  * Unit tests for EARK Information Packages (SIP, AIP and DIP)
  */
@@ -83,32 +83,37 @@ public class EARKSIPTest {
 
   @Test
   public void test_buildParseAndValidateEARKSIP() throws IPException, ParseException, IOException, ParserConfigurationException, NoSuchAlgorithmException, InterruptedException, SAXException {
-    buildParseAndValidateEARKSIP(true);
+    buildParseAndValidateEARKSIP(true, false);
   }
 
   @Test
   public void test_buildParseAndValidateEARKSIP_NoneZip() throws IPException, ParseException, IOException, ParserConfigurationException, NoSuchAlgorithmException, InterruptedException, SAXException {
-    buildParseAndValidateEARKSIP(false);
+    buildParseAndValidateEARKSIP(false, false);
   }
 
   @Test
-  public void buildAndParseEARKSIP() throws IPException, ParseException, InterruptedException, IOException {
-    Path zipSIP = createFullEARKSIP(true, false);
+  public void test_buildParseAndValidateEARKSIP_NoneZip_WithExistingChecksum() throws IPException, ParseException, IOException, ParserConfigurationException, NoSuchAlgorithmException, InterruptedException, SAXException {
+    buildParseAndValidateEARKSIP(false, true);
+  }
+
+  @Test
+  public void buildAndParseEARKSIP() throws IPException, ParseException, InterruptedException, IOException, NoSuchAlgorithmException {
+    Path zipSIP = createFullEARKSIP(true, false, false);
     parseAndValidateFullEARKSIP(zipSIP, true);
   }
 
   @Test
   public void buildEARKSIPShallow()
-    throws IPException, InterruptedException, DatatypeConfigurationException, ParseException, URISyntaxException, IOException {
+          throws IPException, InterruptedException, DatatypeConfigurationException, ParseException, URISyntaxException, IOException, NoSuchAlgorithmException {
 
-    createFullEARKSIPS();
+    createFullEARKSIPS(false);
     // TODO: parseAndValidateFullEARKSIPS(zipSIPS); ?
   }
 
-  private void buildParseAndValidateEARKSIP(boolean zipIt) throws IPException, ParseException, InterruptedException, IOException,
+  private void buildParseAndValidateEARKSIP(boolean zipIt, boolean hasPregeneratedChecksums) throws IPException, ParseException, InterruptedException, IOException,
           ParserConfigurationException, SAXException, NoSuchAlgorithmException {
 
-    Path sipPath = createFullEARKSIP(zipIt, true);
+    Path sipPath = createFullEARKSIP(zipIt, true, hasPregeneratedChecksums);
 
     parseAndValidateFullEARKSIP(sipPath, zipIt);
 
@@ -129,30 +134,33 @@ public class EARKSIPTest {
     Assert.assertTrue(validate);
   }
 
-  private Path createFullEARKSIPS()
-    throws IPException, InterruptedException, DatatypeConfigurationException, URISyntaxException, IOException {
+  private Path createFullEARKSIPS(boolean hasPregeneratedChecksums)
+          throws IPException, InterruptedException, DatatypeConfigurationException, URISyntaxException, IOException, NoSuchAlgorithmException {
     // 1) instantiate E-ARK SIP object
     SIP sip = new EARKSIP("SIP_S_1", IPContentType.getMIXED(), IPContentInformationType.getMIXED(), "2.1.0");
+    sip.setChecksumAlgorithm(CHECKSUM_MD5_ALGORITHM);
+    sip.setHasPregeneratedChecksums(hasPregeneratedChecksums);
+
     sip.addCreatorSoftwareAgent("RODA Commons IP", "2.0.0");
 
     // 1.1) set optional human-readable description
     sip.setDescription("A full E-ARK SIP-S");
 
     // 1.2) add descriptive metadata (SIP level)
-    addDescriptiveMetadata(sip, "src/test/resources/eark", "metadata_descriptive_dc.xml");
+    addDescriptiveMetadata(sip, "src/test/resources/eark", "metadata_descriptive_dc.xml", hasPregeneratedChecksums);
 
     // 1.3) add preservation metadata (SIP level)
-    addPreservationMetadata(sip,"src/test/resources/eark", "metadata_preservation_premis.xml");
+    addPreservationMetadata(sip,"src/test/resources/eark", "metadata_preservation_premis.xml", hasPregeneratedChecksums);
 
     // 1.4) add other metadata (SIP level)
-    addOtherMetadata(sip,"src/test/resources/eark", "metadata_other.txt", "metadata_other_renamed.txt");
-    addOtherMetadata(sip,"src/test/resources/eark", "metadata_other.txt","metadata_other_renamed2.txt");
+    addOtherMetadata(sip,"src/test/resources/eark", "metadata_other.txt", "metadata_other_renamed.txt", hasPregeneratedChecksums);
+    addOtherMetadata(sip,"src/test/resources/eark", "metadata_other.txt","metadata_other_renamed2.txt", hasPregeneratedChecksums);
 
     // 1.5) add xml schema (SIP level)
-    addSchema(sip,"src/test/resources/eark", "schema.xsd");
+    addSchema(sip,"src/test/resources/eark", "schema.xsd", hasPregeneratedChecksums);
 
     // 1.6) add documentation (SIP level)
-    addDocumentation(sip,"src/test/resources/eark", "documentation.pdf");
+    addDocumentation(sip,"src/test/resources/eark", "documentation.pdf", hasPregeneratedChecksums);
 
     // 1.7) set optional RODA related information about ancestors
     sip.setAncestors(Arrays.asList("b6f24059-8973-4582-932d-eb0b2cb48f28"));
@@ -253,31 +261,34 @@ public class EARKSIPTest {
       earkSIP.getValidationReport().isValid());
   }
 
-  private Path createFullEARKSIP(boolean zipIt, boolean isTestCompilation) throws IPException, InterruptedException, IOException {
+  private Path createFullEARKSIP(boolean zipIt, boolean isTestCompilation, boolean hasPregeneratedChecksums) throws IPException, InterruptedException, IOException, NoSuchAlgorithmException {
     LOGGER.info("Creating full E-ARK SIP");
 
     // 1) instantiate E-ARK SIP object
     SIP sip = new EARKSIP("SIP_" + UUID.randomUUID(), IPContentType.getMIXED(), IPContentInformationType.getMIXED(), "2.1.0");
     sip.addCreatorSoftwareAgent("RODA Commons IP", "2.0.0");
+    sip.setShouldOutputInZip(zipIt);
+    sip.setChecksumAlgorithm(CHECKSUM_MD5_ALGORITHM);
+    sip.setHasPregeneratedChecksums(hasPregeneratedChecksums);
 
     // 1.1) set optional human-readable description
     sip.setDescription("A full E-ARK SIP");
 
     // 1.2) add descriptive metadata (SIP level)
-    addDescriptiveMetadata(sip,"src/test/resources/eark", "metadata_descriptive_dc.xml");
+    addDescriptiveMetadata(sip,"src/test/resources/eark", "metadata_descriptive_dc.xml", hasPregeneratedChecksums);
 
     // 1.3) add preservation metadata (SIP level)
-    addPreservationMetadata(sip, "src/test/resources/eark", "metadata_preservation_premis.xml");
+    addPreservationMetadata(sip, "src/test/resources/eark", "metadata_preservation_premis.xml", hasPregeneratedChecksums);
 
     // 1.4) add other metadata (SIP level)
-    addOtherMetadata(sip, "src/test/resources/eark", "metadata_other.txt", "metadata_other_renamed.txt");
-    addOtherMetadata(sip, "src/test/resources/eark", "metadata_other.txt","metadata_other_renamed2.txt");
+    addOtherMetadata(sip, "src/test/resources/eark", "metadata_other.txt", "metadata_other_renamed.txt", hasPregeneratedChecksums);
+    addOtherMetadata(sip, "src/test/resources/eark", "metadata_other.txt","metadata_other_renamed2.txt", hasPregeneratedChecksums);
 
     // 1.5) add xml schema (SIP level)
-    addSchema(sip,"src/test/resources/eark", "schema.xsd");
+    addSchema(sip,"src/test/resources/eark", "schema.xsd", hasPregeneratedChecksums);
 
     // 1.6) add documentation (SIP level)
-    addDocumentation(sip, "src/test/resources/eark", "documentation.pdf");
+    addDocumentation(sip, "src/test/resources/eark", "documentation.pdf", hasPregeneratedChecksums);
 
     // 1.7) set optional RODA related information about ancestors
     sip.setAncestors(Arrays.asList("b6f24059-8973-4582-932d-eb0b2cb48f28"));
@@ -300,21 +311,21 @@ public class EARKSIPTest {
     sip.addRepresentation(representation1);
 
     // 1.9.1) add a file to the representation
-    addRepresentation("src/test/resources/eark", "documentation.pdf", "data_.pdf", representation1, null);
+    addRepresentation("src/test/resources/eark", "documentation.pdf", "data_.pdf", representation1, null, hasPregeneratedChecksums);
 
     // SIDE TEST: encoding
     if (!Utils.systemIsWindows()) {
-      addRepresentation("src/test/resources/eark", "documentation.pdf", "enc1_\u0001\u001F.pdf", representation1, null);
+      addRepresentation("src/test/resources/eark", "documentation.pdf", "enc1_\u0001\u001F.pdf", representation1, null, hasPregeneratedChecksums);
     }
 
-    addRepresentation("src/test/resources/eark", "documentation.pdf", "enc2_\u0080\u0081\u0090\u00FF.pdf", representation1, null);
-    addRepresentation("src/test/resources/eark", "documentation.pdf", Utils.systemIsWindows() ? "enc3_;@=&.pdf" : "enc3_;?:@=&.pdf", representation1, null);
-    addRepresentation("src/test/resources/eark", "documentation.pdf", Utils.systemIsWindows() ? "enc4_#%{}\\^~[ ]`.pdf" : "enc4_\"<>#%{}|\\^~[ ]`.pdf", representation1, null);
-    addRepresentation("src/test/resources/eark", "documentation.pdf", Utils.systemIsWindows() ? "enc4_#+%{}\\^~[ ]`.pdf" : "enc4_\"<>+#%{}|\\^~[ ]`.pdf", representation1, null);
+    addRepresentation("src/test/resources/eark", "documentation.pdf", "enc2_\u0080\u0081\u0090\u00FF.pdf", representation1, null, hasPregeneratedChecksums);
+    addRepresentation("src/test/resources/eark", "documentation.pdf", Utils.systemIsWindows() ? "enc3_;@=&.pdf" : "enc3_;?:@=&.pdf", representation1, null, hasPregeneratedChecksums);
+    addRepresentation("src/test/resources/eark", "documentation.pdf", Utils.systemIsWindows() ? "enc4_#%{}\\^~[ ]`.pdf" : "enc4_\"<>#%{}|\\^~[ ]`.pdf", representation1, null, hasPregeneratedChecksums);
+    addRepresentation("src/test/resources/eark", "documentation.pdf", Utils.systemIsWindows() ? "enc4_#+%{}\\^~[ ]`.pdf" : "enc4_\"<>+#%{}|\\^~[ ]`.pdf", representation1, null, hasPregeneratedChecksums);
 
     // 1.9.2) add a file to the representation and put it inside a folder
     // called 'abc' which has a folder inside called 'def'
-    addRepresentation("src/test/resources/eark", "documentation.pdf", Utils.systemIsWindows() ? "enc4_#+%{}\\^~[ ]`.pdf" : "enc4_\"<>+#%{}|\\^~[ ]`.pdf", representation1, Arrays.asList("abc", "def"));
+    addRepresentation("src/test/resources/eark", "documentation.pdf", Utils.systemIsWindows() ? "enc4_#+%{}\\^~[ ]`.pdf" : "enc4_\"<>+#%{}|\\^~[ ]`.pdf", representation1, Arrays.asList("abc", "def"), hasPregeneratedChecksums);
 
     // 1.10) add a representation & define its status
     IPRepresentation representation2 = new IPRepresentation("representation 2");
@@ -322,20 +333,24 @@ public class EARKSIPTest {
     sip.addRepresentation(representation2);
 
     // 1.10.1) add a file to the representation
-    addRepresentation("src/test/resources/eark", "documentation.pdf", "data3.pdf", representation2, null);
+    addRepresentation("src/test/resources/eark", "documentation.pdf", "data3.pdf", representation2, null, hasPregeneratedChecksums);
 
     // 2) build SIP, providing an output directory
-    Path outputPath = sip.build(zipIt, tempFolder);
+    Path outputPath = sip.build(tempFolder);
 
     LOGGER.info("Done creating full E-ARK SIP");
     return outputPath;
   }
 
-  private static void addRepresentation(String originalFilePath, String originalFilename, String filenameRename, IPRepresentation ipRepresentation, List<String> relativeFolders) throws IPException, IOException {
+  private static void addRepresentation(String originalFilePath, String originalFilename, String filenameRename, IPRepresentation ipRepresentation, List<String> relativeFolders, boolean hasPregeneratedChecksums) throws IPException, IOException, NoSuchAlgorithmException {
     Path representationFilePath = Paths.get(originalFilePath).resolve(originalFilename);
 
     IPFile representationFile = new IPFile(representationFilePath);
     representationFile.setRenameTo(filenameRename);
+
+    if(hasPregeneratedChecksums){
+      generateAndSetChecksum(representationFile, representationFilePath);
+    }
 
     if(relativeFolders != null && !relativeFolders.isEmpty()){
       representationFile.setRelativeFolders(relativeFolders);
@@ -344,40 +359,96 @@ public class EARKSIPTest {
     ipRepresentation.addFile(representationFile);
   }
 
-  private static void addDocumentation(SIP sip, String filePath, String originalFileName) {
+  private static void addDocumentation(SIP sip, String filePath, String originalFileName, boolean hasPregeneratedChecksums) throws NoSuchAlgorithmException, IOException {
     Path documentationFilePath = Paths.get(filePath).resolve(originalFileName);
-    sip.addDocumentation(new IPFile(documentationFilePath));
+    IPFile documentationFile = new IPFile(documentationFilePath);
+    if(hasPregeneratedChecksums){
+      generateAndSetChecksum(documentationFile, documentationFilePath);
+    }
+
+    sip.addDocumentation(documentationFile);
   }
 
-  private static void addSchema(SIP sip, String filePath, String originalFileName) {
+  private static void addSchema(SIP sip, String filePath, String originalFileName, boolean hasPregeneratedChecksums) throws NoSuchAlgorithmException, IOException {
     Path schemaFilePath = Paths.get(filePath).resolve(originalFileName);
-    sip.addSchema(new IPFile(schemaFilePath));
+    IPFile schemaFile = new IPFile(schemaFilePath);
+    if(hasPregeneratedChecksums){
+      generateAndSetChecksum(schemaFile, schemaFilePath);
+    }
+
+    sip.addSchema(schemaFile);
   }
 
-  private static void addOtherMetadata(SIP sip, String originalFilePath, String originalFilename, String filenameRename) throws IPException {
+  private static void addOtherMetadata(SIP sip, String originalFilePath, String originalFilename, String filenameRename, boolean hasPregeneratedChecksums) throws IPException, NoSuchAlgorithmException, IOException {
     Path otherMetadataPath = Paths.get(originalFilePath).resolve(originalFilename);
-
     IPFile metadataOtherFile = new IPFile(otherMetadataPath);
+    if(hasPregeneratedChecksums){
+      generateAndSetChecksum(metadataOtherFile, otherMetadataPath);
+    }
+
     metadataOtherFile.setRenameTo(filenameRename);
     IPMetadata metadataOther = new IPMetadata(metadataOtherFile);
     sip.addOtherMetadata(metadataOther);
   }
 
-  private static void addPreservationMetadata(SIP sip, String originalFilePath, String originalFileName) throws IPException{
+  private static void addPreservationMetadata(SIP sip, String originalFilePath, String originalFileName, boolean hasPregeneratedChecksums) throws IPException, NoSuchAlgorithmException, IOException {
     Path premisFilePath = Paths.get(originalFilePath).resolve(originalFileName);
+    IPFile ipFile = new IPFile(premisFilePath);
+    if(hasPregeneratedChecksums){
+      generateAndSetChecksum(ipFile, premisFilePath);
+    }
 
     IPMetadata metadataPreservation = new IPMetadata(
-      new IPFile(premisFilePath))
-        .setMetadataType(MetadataTypeEnum.PREMIS);
+      ipFile
+    ).setMetadataType(MetadataTypeEnum.PREMIS);
+
     sip.addPreservationMetadata(metadataPreservation);
   }
 
-  private static void addDescriptiveMetadata(SIP sip, String originalFilePath, String originalFileName) throws IPException {
+  private static void addDescriptiveMetadata(SIP sip, String originalFilePath, String originalFileName, boolean hasPregeneratedChecksums) throws IPException, NoSuchAlgorithmException, IOException {
     Path descriptiveFilePath = Paths.get(originalFilePath).resolve(originalFileName);
 
+    IPFile ipFile = new IPFile(descriptiveFilePath);
+    if(hasPregeneratedChecksums){
+      generateAndSetChecksum(ipFile, descriptiveFilePath);
+    }
+
     IPDescriptiveMetadata metadataDescriptiveDC = new IPDescriptiveMetadata(
-      new IPFile(descriptiveFilePath),
+      ipFile,
       new MetadataType(MetadataTypeEnum.DC), null);
     sip.addDescriptiveMetadata(metadataDescriptiveDC);
+  }
+
+  private static IPFile generateAndSetChecksum(IPFile ipFile, Path filePath) throws NoSuchAlgorithmException, IOException {
+    String checksum = generateChecksum(filePath, CHECKSUM_MD5_ALGORITHM, 1024);
+    ipFile.setChecksum(checksum);
+    ipFile.setChecksumAlgorithm(CHECKSUM_MD5_ALGORITHM);
+
+    return ipFile;
+  }
+
+  public static String generateChecksum(Path filePath, String digestAlgorithm, Integer bufferSize) throws NoSuchAlgorithmException, IOException {
+
+    MessageDigest md = MessageDigest.getInstance(digestAlgorithm);
+    try (FileInputStream fis = new FileInputStream(filePath.toFile())) {
+      byte[] buffer = new byte[bufferSize];
+      int bytesRead;
+      while ((bytesRead = fis.read(buffer)) != -1) {
+        md.update(buffer, 0, bytesRead);
+      }
+    }
+    catch (IOException e) {
+      throw e;
+    }
+
+    return bytesToHex(md.digest());
+  }
+
+  private static String bytesToHex(byte[] bytes) {
+    StringBuilder sb = new StringBuilder();
+    for (byte b : bytes) {
+      sb.append(String.format("%02x", b));
+    }
+    return sb.toString();
   }
 }

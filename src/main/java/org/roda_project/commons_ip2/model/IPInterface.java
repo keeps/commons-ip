@@ -131,8 +131,6 @@ public interface IPInterface {
    */
   Path build(Path destinationDirectory) throws IPException, InterruptedException, IOException;
 
-  Path build(boolean zipIt, Path destinationDirectory) throws IPException, InterruptedException, IOException;
-
   Path build(Path destinationDirectory, boolean onlyManifest) throws IPException, InterruptedException, IOException;
 
   Path build(Path destinationDirectory, String fileNameWithoutExtension) throws IPException, InterruptedException, IOException;
@@ -140,10 +138,10 @@ public interface IPInterface {
   Path build(Path destinationDirectory, String fileNameWithoutExtension, IPEnums.SipType sipType)
     throws IPException, InterruptedException, IOException;
 
-  Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest)
-    throws IPException, InterruptedException, IOException;
+  Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest,
+                    IPEnums.SipType sipType) throws IPException, InterruptedException, IOException;
 
-  Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest, IPEnums.SipType sipType, boolean zipIt)
+  Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest)
     throws IPException, InterruptedException, IOException;
 
   static IPInterface parse(Path source) throws ParseException {

@@ -115,7 +115,7 @@ public final class ZIPUtils {
     }
 
     Set<String> nonMetsChecksumAlgorithms = new TreeSet<>();
-    nonMetsChecksumAlgorithms.add(sip.getChecksum());
+    nonMetsChecksumAlgorithms.add(sip.getChecksumAlgorithm());
     Set<String> metsChecksumAlgorithms = new TreeSet<>();
     metsChecksumAlgorithms.addAll(nonMetsChecksumAlgorithms);
     metsChecksumAlgorithms.addAll(sip.getExtraChecksumAlgorithms());
@@ -126,7 +126,7 @@ public final class ZIPUtils {
         throw new InterruptedException();
       }
 
-      file.setChecksum(sip.getChecksum());
+      file.setChecksum(sip.getChecksumAlgorithm());
       file.prepareEntryforZipping();
 
       LOGGER.debug("Zipping file {}", file.getFilePath());
@@ -151,8 +151,8 @@ public final class ZIPUtils {
         }
 
         LOGGER.debug("Done zipping file");
-        String checksum = checksums.get(sip.getChecksum());
-        String checksumType = sip.getChecksum();
+        String checksum = checksums.get(sip.getChecksumAlgorithm());
+        String checksumType = sip.getChecksumAlgorithm();
         file.setChecksum(checksum);
         file.setChecksumAlgorithm(checksumType);
         if (file instanceof METSFileTypeZipEntryInfo) {

@@ -94,10 +94,10 @@ public abstract class IP implements IPInterface {
     this.ids = Arrays.asList(id);
     return this;
   }
-  public void setChecksum(final String checksum) {
-    this.checksumAlgorithm = checksum;
+  public void setChecksumAlgorithm(final String checksumAlgorithm) {
+    this.checksumAlgorithm = checksumAlgorithm;
   }
-  public String getChecksum() {
+  public String getChecksumAlgorithm() {
     return this.checksumAlgorithm;
   }
 

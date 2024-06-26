@@ -113,11 +113,6 @@ public class BasicAIP extends IP implements AIP {
   }
 
   @Override
-  public Path build(boolean zipIt, Path destinationDirectory) throws IPException, InterruptedException, IOException {
-    throw new NotImplementedException("Not implemented");
-  }
-
-  @Override
   public Path build(final Path destinationDirectory, final boolean onlyManifest)
     throws IPException, InterruptedException {
     throw new IPException("Not implemented");
@@ -137,7 +132,7 @@ public class BasicAIP extends IP implements AIP {
 
   @Override
   public Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest,
-                    IPEnums.SipType sipType, boolean zipIt) throws IPException, InterruptedException, IOException {
+                    IPEnums.SipType sipType) throws IPException, InterruptedException, IOException {
     throw new IPException("Not implemented");
   }
 

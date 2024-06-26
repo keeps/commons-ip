@@ -261,6 +261,8 @@ public class EARKUtils {
         String schemaFilePath = IPConstants.SCHEMAS_FOLDER + ModelUtils.getFoldersFromList(schema.getRelativeFolders())
           + schema.getFileName();
         FileType fileType = metsGenerator.addSchemaFileToMETS(metsWrapper, schemaFilePath, schema.getPath());
+        fileType.setCHECKSUM(schema.getChecksum());
+        fileType.setCHECKSUMTYPE(schema.getChecksumAlgorithm());
 
         if (representationId != null) {
           schemaFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR

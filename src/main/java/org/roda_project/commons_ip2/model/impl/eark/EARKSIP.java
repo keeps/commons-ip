@@ -151,11 +151,6 @@ public class EARKSIP extends SIP {
     return build(destinationDirectory, null);
   }
 
-  @Override
-  public Path build(boolean zipIt, Path destinationDirectory) throws IPException, InterruptedException, IOException {
-    return build(destinationDirectory, null, false, IPEnums.SipType.EARK2, zipIt);
-  }
-
   /**
    * Builds a SIP.
    *
@@ -179,20 +174,42 @@ public class EARKSIP extends SIP {
   @Override
   public Path build(Path destinationDirectory, String fileNameWithoutExtension)
     throws IPException, InterruptedException, IOException {
-    return build(destinationDirectory, fileNameWithoutExtension, false, IPEnums.SipType.EARK2, true);
+    return build(destinationDirectory, fileNameWithoutExtension, false, IPEnums.SipType.EARK2);
   }
 
   @Override
   public Path build(Path destinationDirectory, String fileNameWithoutExtension, IPEnums.SipType sipType)
     throws IPException, InterruptedException, IOException {
-    return build(destinationDirectory, fileNameWithoutExtension, false, sipType, true);
+    return build(destinationDirectory, fileNameWithoutExtension, false, sipType);
   }
 
   @Override
   public Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest)
     throws IPException, InterruptedException, IOException {
-    return build(destinationDirectory, fileNameWithoutExtension, false, IPEnums.SipType.EARK2, true);
+    return build(destinationDirectory, fileNameWithoutExtension, false, IPEnums.SipType.EARK2);
   }
+
+  private boolean hasOtherMetadata() {
+    return this.getOtherMetadata() != null && !this.getOtherMetadata().isEmpty();
+  }
+
+  private boolean hasMetadata() {
+    return (this.getDescriptiveMetadata() != null && !this.getDescriptiveMetadata().isEmpty())
+            || (this.getPreservationMetadata() != null && !this.getPreservationMetadata().isEmpty());
+  }
+
+  private boolean hasDocumentation() {
+    return this.getDocumentation() != null && !this.getDocumentation().isEmpty();
+  }
+
+  private boolean hasSchemas() {
+    return this.getSchemas() != null && !this.getSchemas().isEmpty();
+  }
+
+  private boolean hasRepresentations() {
+    return this.getRepresentations() != null && !this.getRepresentations().isEmpty();
+  }
+
 
   /**
    * Builds a SIP.
@@ -212,30 +229,38 @@ public class EARKSIP extends SIP {
    */
   @Override
   public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest,
-                    IPEnums.SipType sipType, boolean zipIt) throws IPException, InterruptedException, IOException {
+                    IPEnums.SipType sipType) throws IPException, InterruptedException, IOException {
     IPConstants.METS_ENCODE_AND_DECODE_HREF = true;
     Path buildDir = ModelUtils.createBuildDir(SIP_TEMP_DIR);
 
     EARKUtils earkUtils = new EARKUtils(metsCreator);
 
-    Path outputPath = zipIt ? getZipPath(destinationDirectory, fileNameWithoutExtension) : destinationDirectory;
+    Path outputPath = getShouldOutputInZip() ? getZipPath(destinationDirectory, fileNameWithoutExtension) : destinationDirectory;
 
     try {
       Map<String, ZipEntryInfo> zipEntries = getZipEntries();
       //default metadata need to be added before creating the mets in order to add them in the mets file
       earkUtils.addDefaultSchemas(LOGGER, getSchemas(), buildDir, getOverride());
 
-      boolean isMetadataOther = (this.getOtherMetadata() != null && !this.getOtherMetadata().isEmpty());
-      boolean isMetadata = ((this.getDescriptiveMetadata() != null && !this.getDescriptiveMetadata().isEmpty())
-        || (this.getPreservationMetadata() != null && !this.getPreservationMetadata().isEmpty()));
-      boolean isDocumentation = (this.getDocumentation() != null && !this.getDocumentation().isEmpty());
-      boolean isSchemas = (this.getSchemas() != null && !this.getSchemas().isEmpty());
-      boolean isRepresentations = (this.getRepresentations() != null && !this.getRepresentations().isEmpty());
-
-      MetsWrapper mainMETSWrapper = metsCreator.generateMETS(StringUtils.join(this.getIds(), " "),
-        this.getDescription(), this.getProfile(), true, Optional.ofNullable(this.getAncestors()), null,
-        this.getHeader(), this.getType(), this.getContentType(), this.getContentInformationType(), isMetadata,
-        isMetadataOther, isSchemas, isDocumentation, false, isRepresentations, false);
+      MetsWrapper mainMETSWrapper = metsCreator.generateMETS(
+              StringUtils.join(getIds(), " "),
+              getDescription(),
+              getProfile(),
+              true,
+              Optional.ofNullable(getAncestors()),
+              null,
+              getHeader(),
+              getType(),
+              getContentType(),
+              getContentInformationType(),
+              hasMetadata(),
+              hasOtherMetadata(),
+              hasSchemas(),
+              hasDocumentation(),
+              false,
+              hasRepresentations(),
+              false
+      );
 
       earkUtils.addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
       earkUtils.addPreservationMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getPreservationMetadata(), null);
@@ -246,11 +271,11 @@ public class EARKSIP extends SIP {
       earkUtils.addDocumentationToZipAndMETS(zipEntries, mainMETSWrapper, getDocumentation(), null);
       METSUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, buildDir);
 
-      if(zipIt){
-        createZipFile(zipEntries, outputPath);
+      if(getShouldOutputInZip()){
+        finalizeAndZip(zipEntries, outputPath);
       }
       else{
-        createUnzippedStructure(zipEntries, outputPath, this, true);
+        finalize(zipEntries, outputPath, true);
         outputPath = outputPath.resolve(this.getId());
       }
 
@@ -281,7 +306,7 @@ public class EARKSIP extends SIP {
     return zipPath;
   }
 
-  private void createZipFile(Map<String, ZipEntryInfo> zipEntries, Path zipPath)
+  private void finalizeAndZip(Map<String, ZipEntryInfo> zipEntries, Path zipPath)
     throws IPException, InterruptedException {
     try {
       notifySipBuildPackagingStarted(zipEntries.size());
@@ -295,7 +320,7 @@ public class EARKSIP extends SIP {
     }
   }
 
-  public static void createUnzippedStructure(Map<String, ZipEntryInfo> files, Path outputPath, SIP sip, boolean createSipIdFolder)
+  public void finalize(Map<String, ZipEntryInfo> files, Path outputPath, boolean createSipIdFolder)
           throws IOException, InterruptedException, IPException {
     if (Files.exists(outputPath)) {
       Files.deleteIfExists(outputPath);
@@ -303,10 +328,11 @@ public class EARKSIP extends SIP {
     Files.createDirectories(outputPath);
 
     Set<String> nonMetsChecksumAlgorithms = new TreeSet<>();
-    nonMetsChecksumAlgorithms.add(sip.getChecksumAlgorithm());
+    nonMetsChecksumAlgorithms.add(getChecksumAlgorithm());
+
     Set<String> metsChecksumAlgorithms = new TreeSet<>();
     metsChecksumAlgorithms.addAll(nonMetsChecksumAlgorithms);
-    metsChecksumAlgorithms.addAll(sip.getExtraChecksumAlgorithms());
+    metsChecksumAlgorithms.addAll(getExtraChecksumAlgorithms());
 
     int i = 0;
     for (ZipEntryInfo file : files.values()) {
@@ -315,42 +341,42 @@ public class EARKSIP extends SIP {
       }
 
       // Setting checksum algorithm here, similar to original logic
-      file.setChecksum(sip.getChecksumAlgorithm());
+      file.setChecksumAlgorithm(getChecksumAlgorithm());
       file.prepareEntryforZipping();
 
       LOGGER.debug("Creating file {}", file.getFilePath());
-      Path filePath = outputPath.resolve(createSipIdFolder? sip.getId() + "/" + file.getName() : file.getName());
-      Files.createDirectories(filePath.getParent());
+      Path outputFilePath = outputPath.resolve(createSipIdFolder? getId() + "/" + file.getName() : file.getName());
+      Files.createDirectories(outputFilePath.getParent());
       try (InputStream inputStream = Files.newInputStream(file.getFilePath())) {
         Map<String, String> checksums;
         if (file instanceof METSZipEntryInfo) {
-          checksums = calculateChecksums(Optional.of(new FileOutputStream(filePath.toFile())), inputStream, metsChecksumAlgorithms);
+          checksums = calculateChecksums(Optional.of(new FileOutputStream(outputFilePath.toFile())), inputStream, metsChecksumAlgorithms);
           METSZipEntryInfo metsEntry = (METSZipEntryInfo) file;
           metsEntry.setChecksums(checksums);
           metsEntry.setSize(metsEntry.getFilePath().toFile().length());
         } else {
-          checksums = calculateChecksums(Optional.of(new FileOutputStream(filePath.toFile())), inputStream, nonMetsChecksumAlgorithms);
+          checksums = calculateChecksums(Optional.of(new FileOutputStream(outputFilePath.toFile())), inputStream, nonMetsChecksumAlgorithms);
         }
 
         LOGGER.debug("Done creating file");
-        String checksum = checksums.get(sip.getChecksumAlgorithm());
-        String checksumType = sip.getChecksumAlgorithm();
+        String checksum = checksums.get(getChecksumAlgorithm());
+        String checksumType = getChecksumAlgorithm();
         file.setChecksum(checksum);
         file.setChecksumAlgorithm(checksumType);
         if (file instanceof METSFileTypeZipEntryInfo) {
-          METSFileTypeZipEntryInfo f = (METSFileTypeZipEntryInfo) file;
-          f.getMetsFileType().setCHECKSUM(checksum);
-          f.getMetsFileType().setCHECKSUMTYPE(checksumType);
+          METSFileTypeZipEntryInfo metsFileTypeZipEntryInfo = (METSFileTypeZipEntryInfo) file;
+          metsFileTypeZipEntryInfo.getMetsFileType().setCHECKSUM(checksum);
+          metsFileTypeZipEntryInfo.getMetsFileType().setCHECKSUMTYPE(checksumType);
         } else if (file instanceof METSMdRefZipEntryInfo) {
-          METSMdRefZipEntryInfo f = (METSMdRefZipEntryInfo) file;
-          f.getMetsMdRef().setCHECKSUM(checksum);
-          f.getMetsMdRef().setCHECKSUMTYPE(checksumType);
+          METSMdRefZipEntryInfo metsMdRefZipEntryInfo = (METSMdRefZipEntryInfo) file;
+          metsMdRefZipEntryInfo.getMetsMdRef().setCHECKSUM(checksum);
+          metsMdRefZipEntryInfo.getMetsMdRef().setCHECKSUMTYPE(checksumType);
         }
       } catch (NoSuchAlgorithmException e) {
         LOGGER.error("Error while creating files", e);
       }
       i++;
-      sip.notifySipBuildPackagingCurrentStatus(i);
+      notifySipBuildPackagingCurrentStatus(i);
     }
   }
 
