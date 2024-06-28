@@ -21,7 +21,7 @@ public enum StructStatus {
   /**
    * {@link String}.
    */
-  private String value;
+  private final String value;
 
   StructStatus(final String value) {
     this.value = value;

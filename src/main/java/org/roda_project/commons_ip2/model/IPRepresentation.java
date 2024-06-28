@@ -27,13 +27,13 @@ public class IPRepresentation {
   private IPContentInformationType contentInformationType;
   private RepresentationStatus status;
   private String description;
-  private List<IPAgent> agents;
-  private List<IPDescriptiveMetadata> descriptiveMetadata;
-  private List<IPMetadata> preservationMetadata;
-  private List<IPMetadata> otherMetadata;
-  private List<IPFileInterface> data;
-  private List<IPFileInterface> schemas;
-  private List<IPFileInterface> documentation;
+  private final List<IPAgent> agents;
+  private final List<IPDescriptiveMetadata> descriptiveMetadata;
+  private final List<IPMetadata> preservationMetadata;
+  private final List<IPMetadata> otherMetadata;
+  private final List<IPFileInterface> data;
+  private final List<IPFileInterface> schemas;
+  private final List<IPFileInterface> documentation;
 
   public IPRepresentation() {
     this.representationID = Utils.generateRandomAndPrefixedUUID();

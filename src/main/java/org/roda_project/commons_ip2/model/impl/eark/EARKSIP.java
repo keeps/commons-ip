@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.nio.channels.ClosedByInterruptException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.io.FileOutputStream;
@@ -32,7 +33,7 @@ import org.roda_project.commons_ip2.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.roda_project.commons_ip2.utils.ZIPUtils.calculateChecksums;
+import static org.roda_project.commons_ip2.utils.ZIPUtils.writeToOutputAndCalculateChecksum;
 
 public class EARKSIP extends SIP {
   private static final Logger LOGGER = LoggerFactory.getLogger(EARKSIP.class);
@@ -42,7 +43,7 @@ public class EARKSIP extends SIP {
 
   private static final String DEFAULT_SIP_VERSION = "2.1.0";
 
-  private EARKMETSCreator metsCreator;
+  private final EARKMETSCreator metsCreator;
 
   public EARKSIP() {
     super();
@@ -340,22 +341,37 @@ public class EARKSIP extends SIP {
         throw new InterruptedException();
       }
 
-      // Setting checksum algorithm here, similar to original logic
-      file.setChecksumAlgorithm(getChecksumAlgorithm());
+      // When HasPregenerated checksum, some files will have algorithm set and some won't, if missing, we do SIP default checksum
+      if(!getHasPregeneratedChecksums() || file.getChecksumAlgorithm() == null || file.getChecksumAlgorithm().isEmpty()){
+        file.setChecksumAlgorithm(getChecksumAlgorithm());
+      }
       file.prepareEntryforZipping();
 
       LOGGER.debug("Creating file {}", file.getFilePath());
       Path outputFilePath = outputPath.resolve(createSipIdFolder? getId() + "/" + file.getName() : file.getName());
       Files.createDirectories(outputFilePath.getParent());
       try (InputStream inputStream = Files.newInputStream(file.getFilePath())) {
-        Map<String, String> checksums;
-        if (file instanceof METSZipEntryInfo) {
-          checksums = calculateChecksums(Optional.of(new FileOutputStream(outputFilePath.toFile())), inputStream, metsChecksumAlgorithms);
-          METSZipEntryInfo metsEntry = (METSZipEntryInfo) file;
-          metsEntry.setChecksums(checksums);
+        Map<String, String> checksums = new HashMap<>();
+
+        if (file instanceof METSZipEntryInfo metsEntry) {
+          if(getHasPregeneratedChecksums() && file.getChecksum() != null && !file.getChecksum().isEmpty()){
+            LOGGER.info(file.getFilePath() + " already has checksum, skipping checksum calculation");
+            Files.copy(file.getFilePath(), outputFilePath);
+            checksums.put(file.getChecksumAlgorithm(), file.getChecksum());
+          }
+          else{
+            checksums = writeToOutputAndCalculateChecksum(Optional.of(new FileOutputStream(outputFilePath.toFile())), inputStream, metsChecksumAlgorithms);
+          }
+
+            metsEntry.setChecksums(checksums);
           metsEntry.setSize(metsEntry.getFilePath().toFile().length());
-        } else {
-          checksums = calculateChecksums(Optional.of(new FileOutputStream(outputFilePath.toFile())), inputStream, nonMetsChecksumAlgorithms);
+        } else if(getHasPregeneratedChecksums() && file.getChecksum() != null && !file.getChecksum().isEmpty()) {
+          LOGGER.info(file.getFilePath() + " already has checksum, skipping checksum calculation");
+          Files.copy(file.getFilePath(), outputFilePath);
+          checksums.put(file.getChecksumAlgorithm(), file.getChecksum());
+        }
+        else{
+          checksums = writeToOutputAndCalculateChecksum(Optional.of(new FileOutputStream(outputFilePath.toFile())), inputStream, nonMetsChecksumAlgorithms);
         }
 
         LOGGER.debug("Done creating file");
@@ -363,13 +379,11 @@ public class EARKSIP extends SIP {
         String checksumType = getChecksumAlgorithm();
         file.setChecksum(checksum);
         file.setChecksumAlgorithm(checksumType);
-        if (file instanceof METSFileTypeZipEntryInfo) {
-          METSFileTypeZipEntryInfo metsFileTypeZipEntryInfo = (METSFileTypeZipEntryInfo) file;
-          metsFileTypeZipEntryInfo.getMetsFileType().setCHECKSUM(checksum);
+        if (file instanceof METSFileTypeZipEntryInfo metsFileTypeZipEntryInfo) {
+            metsFileTypeZipEntryInfo.getMetsFileType().setCHECKSUM(checksum);
           metsFileTypeZipEntryInfo.getMetsFileType().setCHECKSUMTYPE(checksumType);
-        } else if (file instanceof METSMdRefZipEntryInfo) {
-          METSMdRefZipEntryInfo metsMdRefZipEntryInfo = (METSMdRefZipEntryInfo) file;
-          metsMdRefZipEntryInfo.getMetsMdRef().setCHECKSUM(checksum);
+        } else if (file instanceof METSMdRefZipEntryInfo metsMdRefZipEntryInfo) {
+            metsMdRefZipEntryInfo.getMetsMdRef().setCHECKSUM(checksum);
           metsMdRefZipEntryInfo.getMetsMdRef().setCHECKSUMTYPE(checksumType);
         }
       } catch (NoSuchAlgorithmException e) {

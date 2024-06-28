@@ -22,7 +22,7 @@ public enum MetadataStatus {
   /**
    * {@link String}.
    */
-  private String value;
+  private final String value;
 
   MetadataStatus(final String value) {
     this.value = value;

@@ -35,10 +35,9 @@ public abstract class SipMetsValidator {
     final String profile = metsValidatorState.getMets().getPROFILE();
     if (profile != null) {
       if (!profile.equals(IPConstants.SIP_SPEC_PROFILE)) {
-        final StringBuilder message = new StringBuilder();
-        message.append("mets/@PROFILE value isn't ").append(IPConstants.SIP_SPEC_PROFILE).append(" %1$s");
+          String message = "mets/@PROFILE value isn't " + IPConstants.SIP_SPEC_PROFILE + " %1$s";
         return new ReporterDetails(getSIPVersion(), Message.createErrorMessage(
-          message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
       }
     } else {
       return new ReporterDetails(getSIPVersion(),

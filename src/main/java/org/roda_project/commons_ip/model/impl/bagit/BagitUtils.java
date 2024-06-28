@@ -48,10 +48,10 @@ import org.slf4j.LoggerFactory;
 public final class BagitUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(BagitUtils.class);
   private static final String BAGIT = "key-value";
-  protected static final String BAGIT_FILE_NAME = "bagit";
-  protected static final String BAGIT_INFO_FILE_NAME = "bag-info";
-  protected static final String BAGIT_MANIFEST_FILE_NAME = "manifest-";
-  protected static final String BAGIT_TAG_MANIFEST_FILE_NAME = "tagmanifest-";
+  static final String BAGIT_FILE_NAME = "bagit";
+  static final String BAGIT_INFO_FILE_NAME = "bag-info";
+  static final String BAGIT_MANIFEST_FILE_NAME = "manifest-";
+  static final String BAGIT_TAG_MANIFEST_FILE_NAME = "tagmanifest-";
   private static final String BAGIT_FILE_EXTENSION = ".txt";
 
   private BagitUtils() {
@@ -124,8 +124,8 @@ public final class BagitUtils {
     return outter.outputString(doc);
   }
 
-  protected static void addRepresentationToZipAndBagit(IPInterface ip, List<IPRepresentation> representations,
-    Map<String, ZipEntryInfo> zipEntries, Path buildDir) {
+  static void addRepresentationToZipAndBagit(IPInterface ip, List<IPRepresentation> representations,
+                                             Map<String, ZipEntryInfo> zipEntries, Path buildDir) {
     if (representations != null && !representations.isEmpty()) {
       if (ip instanceof SIP) {
         ((SIP) ip).notifySipBuildRepresentationsProcessingStarted(representations.size());
@@ -144,7 +144,7 @@ public final class BagitUtils {
             try {
               Files.createDirectories(destination.getParent());
               try (InputStream input = Files.newInputStream(file.getPath());
-                OutputStream output = Files.newOutputStream(destination);) {
+                OutputStream output = Files.newOutputStream(destination)) {
                 IOUtils.copyLarge(input, output);
                 String dataFilePath = IPConstants.DATA_FOLDER
                   + buildDir.relativize(representationPath).resolve(file.getFileName());
@@ -167,7 +167,7 @@ public final class BagitUtils {
     }
   }
 
-  protected static void addBagFileToZip(Map<String, ZipEntryInfo> zipEntries, Path buildDir, String target) {
+  static void addBagFileToZip(Map<String, ZipEntryInfo> zipEntries, Path buildDir, String target) {
     Path targetFile = buildDir.resolve(target + BAGIT_FILE_EXTENSION);
     if (Files.exists(targetFile)) {
       zipEntries.put(targetFile.toString(), new FileZipEntryInfo(targetFile.getFileName().toString(), targetFile));
@@ -176,7 +176,7 @@ public final class BagitUtils {
     }
   }
 
-  protected static Path extractBagitIPIfInZipFormat(final Path source, Path destinationDirectory)
+  static Path extractBagitIPIfInZipFormat(final Path source, Path destinationDirectory)
     throws ParseException {
     Path bagitFolderPath = destinationDirectory;
     if (!Files.isDirectory(source)) {

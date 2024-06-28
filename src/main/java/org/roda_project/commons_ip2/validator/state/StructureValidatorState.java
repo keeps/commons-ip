@@ -10,11 +10,11 @@ public class StructureValidatorState {
   /**
    * {@link ZipManager}.
    */
-  private ZipManager zipManager;
+  private final ZipManager zipManager;
   /**
    * {@link FolderManager}.
    */
-  private FolderManager folderManager;
+  private final FolderManager folderManager;
   /**
    * Flag if is zip file or is a directory.
    */
@@ -22,7 +22,7 @@ public class StructureValidatorState {
   /**
    * The IP path.
    */
-  private Path ipPath;
+  private final Path ipPath;
 
   /**
    * Initialize all objects of structure Component.

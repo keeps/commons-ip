@@ -21,7 +21,7 @@ public enum PackageState {
   /**
    * The {@link String}.
    */
-  private String value;
+  private final String value;
 
   PackageState(final String value) {
     this.value = value;

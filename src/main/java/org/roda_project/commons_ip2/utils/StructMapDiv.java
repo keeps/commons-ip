@@ -10,7 +10,7 @@ public class StructMapDiv {
   /**
    * Label of Div.
    */
-  private String label;
+  private final String label;
   /**
    * {@link String} with the key to FileGrps {@link HashMap}.
    *

@@ -88,9 +88,8 @@ public abstract class MetsValidator {
         false, false);
     } else {
       if (!contentCategory.contains(type)) {
-        final StringBuilder message = new StringBuilder();
-        message.append("Value ").append(type).append(" is not valid in %1$s.");
-        return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(message.toString(),
+          String message = "Value " + type + " is not valid in %1$s.";
+        return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(message,
           metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
       }
     }
@@ -136,10 +135,9 @@ public abstract class MetsValidator {
     final String contentInformationType = metsValidatorState.getMets().getCONTENTINFORMATIONTYPE();
     if (contentInformationType != null) {
       if (!contentInformationTypesList.contains(contentInformationType)) {
-        final StringBuilder message = new StringBuilder();
-        message.append("Value ").append(contentInformationType)
-          .append(" in %1$s for mets/@csip:CONTENTINFORMATIONTYPE is not valid.");
-        return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(message.toString(),
+          String message = "Value " + contentInformationType +
+                  " in %1$s for mets/@csip:CONTENTINFORMATIONTYPE is not valid.";
+        return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(message,
           metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
       }
     } else {

@@ -50,7 +50,7 @@ public final class HungarianUtils {
     // do nothing
   }
 
-  protected static void addMetadataToMETS(MetsWrapper metsWrapper, List<IPDescriptiveMetadata> descriptiveMetadata)
+  static void addMetadataToMETS(MetsWrapper metsWrapper, List<IPDescriptiveMetadata> descriptiveMetadata)
     throws IPException, InterruptedException {
     if (descriptiveMetadata != null && !descriptiveMetadata.isEmpty()) {
       HungarianMETSUtils.addDescriptiveMetadataSections(metsWrapper);
@@ -69,8 +69,8 @@ public final class HungarianUtils {
     }
   }
 
-  protected static void addRepresentationsToZipAndMETS(IPInterface ip, List<IPRepresentation> representations,
-    Map<String, ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper, String folderTemplate)
+  static void addRepresentationsToZipAndMETS(IPInterface ip, List<IPRepresentation> representations,
+                                             Map<String, ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper, String folderTemplate)
     throws IPException, InterruptedException {
     // representations
     if (representations != null && !representations.isEmpty()) {
@@ -93,8 +93,8 @@ public final class HungarianUtils {
     }
   }
 
-  protected static void addRepresentationDataFilesToZipAndMETS(IPInterface ip, Map<String, ZipEntryInfo> zipEntries,
-    MetsWrapper mainMETSWrapper, IPRepresentation representation, String folderTemplate)
+  private static void addRepresentationDataFilesToZipAndMETS(IPInterface ip, Map<String, ZipEntryInfo> zipEntries,
+                                                             MetsWrapper mainMETSWrapper, IPRepresentation representation, String folderTemplate)
     throws IPException, InterruptedException {
     if (representation.getData() != null && !representation.getData().isEmpty()) {
       if (ip instanceof SIP) {
@@ -199,8 +199,8 @@ public final class HungarianUtils {
     return divs;
   }
 
-  protected static void addDocumentationToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-    List<IPFile> documentation) throws IPException, InterruptedException {
+  static void addDocumentationToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
+                                           List<IPFile> documentation) throws IPException, InterruptedException {
     if (documentation != null && !documentation.isEmpty()) {
       for (IPFile doc : documentation) {
         if (Thread.interrupted()) {
@@ -219,8 +219,8 @@ public final class HungarianUtils {
     }
   }
 
-  protected static void addMainMETSToZip(Map<String, ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper,
-    Path buildDir) throws IPException {
+  static void addMainMETSToZip(Map<String, ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper,
+                               Path buildDir) throws IPException {
     METSUtils.addMainMETSToZip(zipEntries, mainMETSWrapper, IPConstants.HUNGARIAN_METADATA_FILE, buildDir);
   }
 

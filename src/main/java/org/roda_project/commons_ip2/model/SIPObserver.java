@@ -9,20 +9,20 @@ package org.roda_project.commons_ip2.model;
 
 public interface SIPObserver {
 
-  public void sipBuildRepresentationsProcessingStarted(int totalNumberOfRepresentations);
+  void sipBuildRepresentationsProcessingStarted(int totalNumberOfRepresentations);
 
-  public void sipBuildRepresentationProcessingStarted(int totalNumberOfFiles);
+  void sipBuildRepresentationProcessingStarted(int totalNumberOfFiles);
 
-  public void sipBuildRepresentationProcessingCurrentStatus(int numberOfFilesAlreadyProcessed);
+  void sipBuildRepresentationProcessingCurrentStatus(int numberOfFilesAlreadyProcessed);
 
-  public void sipBuildRepresentationProcessingEnded();
+  void sipBuildRepresentationProcessingEnded();
 
-  public void sipBuildRepresentationsProcessingEnded();
+  void sipBuildRepresentationsProcessingEnded();
 
-  public void sipBuildPackagingStarted(int totalNumberOfFiles);
+  void sipBuildPackagingStarted(int totalNumberOfFiles);
 
-  public void sipBuildPackagingCurrentStatus(int numberOfFilesAlreadyProcessed);
+  void sipBuildPackagingCurrentStatus(int numberOfFilesAlreadyProcessed);
 
-  public void sipBuildPackagingEnded();
+  void sipBuildPackagingEnded();
 
 }

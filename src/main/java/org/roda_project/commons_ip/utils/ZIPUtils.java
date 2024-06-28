@@ -139,12 +139,11 @@ public final class ZIPUtils {
 
       zos.putNextEntry(entry);
 
-      try (InputStream inputStream = Files.newInputStream(file.getFilePath());) {
+      try (InputStream inputStream = Files.newInputStream(file.getFilePath())) {
         Map<String, String> checksums;
-        if (file instanceof METSZipEntryInfo) {
+        if (file instanceof METSZipEntryInfo metsEntry) {
           checksums = calculateChecksums(Optional.of(zos), inputStream, metsChecksumAlgorithms);
-          METSZipEntryInfo metsEntry = (METSZipEntryInfo) file;
-          metsEntry.setChecksums(checksums);
+            metsEntry.setChecksums(checksums);
           metsEntry.setSize(metsEntry.getFilePath().toFile().length());
         } else {
           checksums = calculateChecksums(Optional.of(zos), inputStream, nonMetsChecksumAlgorithms);
@@ -155,13 +154,11 @@ public final class ZIPUtils {
         String checksumType = sip.getChecksumAlgorithm();
         file.setChecksum(checksum);
         file.setChecksumAlgorithm(checksumType);
-        if (file instanceof METSFileTypeZipEntryInfo) {
-          METSFileTypeZipEntryInfo f = (METSFileTypeZipEntryInfo) file;
-          f.getMetsFileType().setCHECKSUM(checksum);
+        if (file instanceof METSFileTypeZipEntryInfo f) {
+            f.getMetsFileType().setCHECKSUM(checksum);
           f.getMetsFileType().setCHECKSUMTYPE(checksumType);
-        } else if (file instanceof METSMdRefZipEntryInfo) {
-          METSMdRefZipEntryInfo f = (METSMdRefZipEntryInfo) file;
-          f.getMetsMdRef().setCHECKSUM(checksum);
+        } else if (file instanceof METSMdRefZipEntryInfo f) {
+            f.getMetsMdRef().setCHECKSUM(checksum);
           f.getMetsMdRef().setCHECKSUMTYPE(checksumType);
         }
       } catch (NoSuchAlgorithmException e) {

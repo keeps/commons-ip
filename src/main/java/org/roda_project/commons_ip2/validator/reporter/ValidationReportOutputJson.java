@@ -31,7 +31,7 @@ public class ValidationReportOutputJson {
   /**
    * the {@link OutputStream}.
    */
-  private OutputStream outputStream;
+  private final OutputStream outputStream;
   /**
    * the {@link JsonGenerator}.
    */
@@ -61,7 +61,7 @@ public class ValidationReportOutputJson {
   /**
    * {@link Map} with the results.
    */
-  private Map<String, ReporterDetails> results = new TreeMap<>(new RequirementsComparator());
+  private final Map<String, ReporterDetails> results = new TreeMap<>(new RequirementsComparator());
   /**
    * {@link String}.
    */
@@ -219,9 +219,7 @@ public class ValidationReportOutputJson {
       jsonGenerator.writeEndObject();
       jsonGenerator.writeEndObject();
     } catch (final IOException e) {
-      final StringBuilder message = new StringBuilder();
-      message.append("Could not write specification ").append(specification).append("result in file");
-      LOGGER.error(message.toString(), e);
+        LOGGER.error("Could not write specification " + specification + "result in file", e);
     }
   }
 

@@ -139,14 +139,13 @@ public class Manifest {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder();
-    sb.append("class Manifest {\n");
 
-    sb.append("    source: ").append(toIndentedString(source)).append(Constants.END_OF_LINE);
-    sb.append("    summary: ").append(toIndentedString(summary)).append(Constants.END_OF_LINE);
-    sb.append("    entries: ").append(toIndentedString(entries)).append(Constants.END_OF_LINE);
-    sb.append("}");
-    return sb.toString();
+      String sb = "class Manifest {\n" +
+              "    source: " + toIndentedString(source) + Constants.END_OF_LINE +
+              "    summary: " + toIndentedString(summary) + Constants.END_OF_LINE +
+              "    entries: " + toIndentedString(entries) + Constants.END_OF_LINE +
+              "}";
+    return sb;
   }
 
   /**

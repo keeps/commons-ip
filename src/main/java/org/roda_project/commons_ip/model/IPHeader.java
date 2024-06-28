@@ -22,7 +22,7 @@ public class IPHeader implements Serializable {
   private transient Optional<XMLGregorianCalendar> modificationDate;
   private IPEnums.IPStatus status;
   private List<IPAgent> agents;
-  private List<IPAltRecordID> altRecordIDs;
+  private final List<IPAltRecordID> altRecordIDs;
 
   public IPHeader() {
     this.createDate = Utils.getCurrentTime();

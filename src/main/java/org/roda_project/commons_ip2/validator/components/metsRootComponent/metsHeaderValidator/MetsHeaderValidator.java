@@ -60,11 +60,10 @@ public abstract class MetsHeaderValidator {
         metsValidatorState.getMetsName(), metsValidatorState.isRootMets()));
     } else {
       if (!oaisPackageTypes.contains(oaisPackageType)) {
-        final StringBuilder message = new StringBuilder();
-        message.append("Value ").append(oaisPackageType)
-          .append("in %1$s for mets/metsHdr/@csip:OAISPACKAGETYPE isn't valid");
+          String message = "Value " + oaisPackageType +
+                  "in %1$s for mets/metsHdr/@csip:OAISPACKAGETYPE isn't valid";
         details.setValid(false);
-        details.addIssue(Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+        details.addIssue(Message.createErrorMessage(message, metsValidatorState.getMetsName(),
           metsValidatorState.isRootMets()));
       }
     }
@@ -305,11 +304,10 @@ public abstract class MetsHeaderValidator {
                 false, false);
             } else {
               if (!note.getNOTETYPE().equals("SOFTWARE VERSION")) {
-                final StringBuilder message = new StringBuilder();
-                message.append("Value ").append(note.getNOTETYPE())
-                  .append(" in %1$s for mets/metsHdr/agent/note[@csip:NOTETYPE=’SOFTWARE VERSION’] "
-                    + "isn't valid, the value must be SOFTWARE VERSION");
-                return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(message.toString(),
+                  String message = "Value " + note.getNOTETYPE() +
+                          " in %1$s for mets/metsHdr/agent/note[@csip:NOTETYPE=’SOFTWARE VERSION’] "
+                          + "isn't valid, the value must be SOFTWARE VERSION";
+                return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(message,
                   metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
               }
             }

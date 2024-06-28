@@ -90,13 +90,12 @@ public class IpManifest {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder();
-    sb.append("class IpManifest {\n");
 
-    sb.append("    uid: ").append(toIndentedString(uid)).append(Constants.END_OF_LINE);
-    sb.append("    manifest: ").append(toIndentedString(manifest)).append(Constants.END_OF_LINE);
-    sb.append("}");
-    return sb.toString();
+      String sb = "class IpManifest {\n" +
+              "    uid: " + toIndentedString(uid) + Constants.END_OF_LINE +
+              "    manifest: " + toIndentedString(manifest) + Constants.END_OF_LINE +
+              "}";
+    return sb;
   }
 
   /**

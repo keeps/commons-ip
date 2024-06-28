@@ -30,16 +30,16 @@ public class IPContentType implements Serializable {
     WEBSITES("Websites"), COLLECTION("Collection"), EVENT("Event"), INTERACTIVE_RESOURCE("Interactive resource"),
     PHYSICAL_OBJECT("Physical object"), SERVICE("Service"), MIXED("Mixed"), OTHER("Other");
 
-    protected static final Map<String, IPContentTypeEnum> typeToEnum = new HashMap<>();
+    private static final Map<String, IPContentTypeEnum> typeToEnum = new HashMap<>();
     static {
       for (IPContentTypeEnum ipContentTypeEnum : IPContentTypeEnum.values()) {
         typeToEnum.put(ipContentTypeEnum.getType(), ipContentTypeEnum);
       }
     }
 
-    private String type;
+    private final String type;
 
-    private IPContentTypeEnum(String type) {
+    IPContentTypeEnum(String type) {
       this.type = type;
     }
 

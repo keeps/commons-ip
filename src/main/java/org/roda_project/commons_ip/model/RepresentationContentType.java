@@ -15,7 +15,7 @@ public class RepresentationContentType implements Serializable {
   private static final long serialVersionUID = -5292855152678206771L;
 
   public enum RepresentationContentTypeEnum {
-    MOREQ, SIARD, SIARD2, SMURF, SMURFERMS, SMURFSFSB, SIARDDK, GeoVectorGML, GeoRasterGeotiff, OTHER, MIXED;
+    MOREQ, SIARD, SIARD2, SMURF, SMURFERMS, SMURFSFSB, SIARDDK, GeoVectorGML, GeoRasterGeotiff, OTHER, MIXED
   }
 
   private RepresentationContentTypeEnum type;
@@ -85,10 +85,9 @@ public class RepresentationContentType implements Serializable {
       return true;
     if (obj == null)
       return false;
-    if (!(obj instanceof RepresentationContentType))
+    if (!(obj instanceof RepresentationContentType other))
       return false;
-    RepresentationContentType other = (RepresentationContentType) obj;
-    return this.type == other.getType() && this.otherType.equals(other.getOtherType());
+      return this.type == other.getType() && this.otherType.equals(other.getOtherType());
   }
 
   public static RepresentationContentType getMIXED() {

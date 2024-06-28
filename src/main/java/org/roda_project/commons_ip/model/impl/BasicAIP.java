@@ -43,7 +43,7 @@ public class BasicAIP extends IP implements AIP {
   /**
    * List of submission files.
    */
-  private List<IPFile> submissions;
+  private final List<IPFile> submissions;
 
   /**
    * Constructor.

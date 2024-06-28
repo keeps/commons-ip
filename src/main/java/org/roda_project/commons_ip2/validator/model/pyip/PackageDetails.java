@@ -106,13 +106,12 @@ public class PackageDetails {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder();
-    sb.append("class PackageDetails {\n");
 
-    sb.append("    name: ").append(toIndentedString(name)).append(Constants.END_OF_LINE);
-    sb.append("    checksums: ").append(toIndentedString(checksums)).append(Constants.END_OF_LINE);
-    sb.append("}");
-    return sb.toString();
+      String sb = "class PackageDetails {\n" +
+              "    name: " + toIndentedString(name) + Constants.END_OF_LINE +
+              "    checksums: " + toIndentedString(checksums) + Constants.END_OF_LINE +
+              "}";
+    return sb;
   }
 
   /**

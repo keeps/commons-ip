@@ -90,13 +90,12 @@ public class ManifestSummary {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder();
-    sb.append("class ManifestSummary {\n");
 
-    sb.append("    fileCount: ").append(toIndentedString(fileCount)).append(Constants.END_OF_LINE);
-    sb.append("    totalSize: ").append(toIndentedString(totalSize)).append(Constants.END_OF_LINE);
-    sb.append("}");
-    return sb.toString();
+      String sb = "class ManifestSummary {\n" +
+              "    fileCount: " + toIndentedString(fileCount) + Constants.END_OF_LINE +
+              "    totalSize: " + toIndentedString(totalSize) + Constants.END_OF_LINE +
+              "}";
+    return sb;
   }
 
   /**

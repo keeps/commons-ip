@@ -8,14 +8,7 @@
 package org.roda_project.commons_ip2.model;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -50,7 +43,7 @@ public abstract class IP implements IPInterface {
   private List<IPFileInterface> schemas;
   private List<IPFileInterface> documentation;
 
-  private Map<String, ZipEntryInfo> zipEntries;
+  private final Map<String, ZipEntryInfo> zipEntries;
 
   private ValidationReport validationReport;
 
@@ -97,7 +90,7 @@ public abstract class IP implements IPInterface {
 
   @Override
   public IP setId(final String id) {
-    this.ids = Arrays.asList(id);
+    this.ids = Collections.singletonList(id);
     return this;
   }
 

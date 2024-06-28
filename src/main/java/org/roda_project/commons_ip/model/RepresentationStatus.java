@@ -15,7 +15,7 @@ public class RepresentationStatus implements Serializable {
   private static final long serialVersionUID = 886952889995803542L;
 
   public enum RepresentationStatusEnum {
-    ORIGINAL, OTHER;
+    ORIGINAL, OTHER
   }
 
   private RepresentationStatusEnum status;
@@ -87,11 +87,10 @@ public class RepresentationStatus implements Serializable {
     if (obj == null) {
       return false;
     }
-    if (!(obj instanceof RepresentationStatus)) {
+    if (!(obj instanceof RepresentationStatus other)) {
       return false;
     }
-    RepresentationStatus other = (RepresentationStatus) obj;
-    return this.status == other.getStatus() && this.otherStatus.equals(other.getOtherStatus());
+      return this.status == other.getStatus() && this.otherStatus.equals(other.getOtherStatus());
   }
 
   public static RepresentationStatus getORIGINAL() {

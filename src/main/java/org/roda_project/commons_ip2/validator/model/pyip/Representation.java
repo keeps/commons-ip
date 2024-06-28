@@ -57,12 +57,11 @@ public class Representation {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder();
-    sb.append("class Representation {\n");
 
-    sb.append("    name: ").append(toIndentedString(name)).append(Constants.END_OF_LINE);
-    sb.append("}");
-    return sb.toString();
+      String sb = "class Representation {\n" +
+              "    name: " + toIndentedString(name) + Constants.END_OF_LINE +
+              "}";
+    return sb;
   }
 
   /**

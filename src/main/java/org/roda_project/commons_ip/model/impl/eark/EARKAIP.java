@@ -260,13 +260,11 @@ public class EARKAIP extends AIPWrap {
     throws IOException, NoSuchAlgorithmException {
     zipEntryInfo.setChecksum(checksum);
     zipEntryInfo.setChecksumAlgorithm(checksumType);
-    if (zipEntryInfo instanceof METSFileTypeZipEntryInfo) {
-      METSFileTypeZipEntryInfo f = (METSFileTypeZipEntryInfo) zipEntryInfo;
-      f.getMetsFileType().setCHECKSUM(checksum);
+    if (zipEntryInfo instanceof METSFileTypeZipEntryInfo f) {
+        f.getMetsFileType().setCHECKSUM(checksum);
       f.getMetsFileType().setCHECKSUMTYPE(checksumType);
-    } else if (zipEntryInfo instanceof METSMdRefZipEntryInfo) {
-      METSMdRefZipEntryInfo f = (METSMdRefZipEntryInfo) zipEntryInfo;
-      f.getMetsMdRef().setCHECKSUM(checksum);
+    } else if (zipEntryInfo instanceof METSMdRefZipEntryInfo f) {
+        f.getMetsMdRef().setCHECKSUM(checksum);
       f.getMetsMdRef().setCHECKSUMTYPE(checksumType);
     }
   }
