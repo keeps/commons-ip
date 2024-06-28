@@ -7,6 +7,7 @@
  */
 package org.roda_project.commons_ip2.model;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -128,20 +129,20 @@ public interface IPInterface {
    *          directory where the SIP will be placed into
    * @throws InterruptedException
    */
-  Path build(Path destinationDirectory) throws IPException, InterruptedException;
+  Path build(Path destinationDirectory) throws IPException, InterruptedException, IOException;
 
-  Path build(Path destinationDirectory, boolean onlyManifest) throws IPException, InterruptedException;
+  Path build(Path destinationDirectory, boolean onlyManifest) throws IPException, InterruptedException, IOException;
 
-  Path build(Path destinationDirectory, String fileNameWithoutExtension) throws IPException, InterruptedException;
+  Path build(Path destinationDirectory, String fileNameWithoutExtension) throws IPException, InterruptedException, IOException;
 
   Path build(Path destinationDirectory, String fileNameWithoutExtension, IPEnums.SipType sipType)
-    throws IPException, InterruptedException;
+    throws IPException, InterruptedException, IOException;
+
+  Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest,
+                    IPEnums.SipType sipType) throws IPException, InterruptedException, IOException;
 
   Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest)
-    throws IPException, InterruptedException;
-
-  Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest, IPEnums.SipType sipType)
-    throws IPException, InterruptedException;
+    throws IPException, InterruptedException, IOException;
 
   static IPInterface parse(Path source) throws ParseException {
     throw new ParseException("One must implement static method parse in a concrete class");

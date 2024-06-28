@@ -14,7 +14,7 @@ public class MetsValidatorState {
   /**
    * {@link ArrayList} with the internal ids.
    */
-  private ArrayList<String> metsInternalIds = new ArrayList<>();
+  private final ArrayList<String> metsInternalIds = new ArrayList<>();
   /**
    * Mets name.
    */

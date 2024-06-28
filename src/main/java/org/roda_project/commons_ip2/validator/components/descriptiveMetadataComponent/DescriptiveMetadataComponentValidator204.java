@@ -51,7 +51,7 @@ public class DescriptiveMetadataComponentValidator204 extends MetsValidatorImpl 
   /**
    * {@link List}.
    */
-  private List<String> dmdSecStatus;
+  private final List<String> dmdSecStatus;
   /**
    * {@link Map}.
    */

@@ -14,4 +14,7 @@ public interface IPFileInterface extends Serializable {
   String getFileName();
 
   Path getPath();
+
+  String getChecksum();
+  String getChecksumAlgorithm();
 }

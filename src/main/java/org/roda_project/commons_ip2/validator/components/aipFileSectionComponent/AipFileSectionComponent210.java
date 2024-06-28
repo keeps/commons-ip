@@ -117,11 +117,10 @@ public class AipFileSectionComponent210 extends MetsValidatorImpl {
         for (FileType file : files) {
           final String id = file.getID();
           if (!id.startsWith("ID")) {
-            final StringBuilder message = new StringBuilder();
-            message.append("The mets/fileSec/fileGrp/file/@ID must start with ID in ").append(id)
-              .append("does not start with ID");
+              String message = "The mets/fileSec/fileGrp/file/@ID must start with ID in " + id +
+                      "does not start with ID";
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_AIP_VERSION, Message.createErrorMessage(
-              message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                    message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
           }
         }
       }

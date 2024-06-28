@@ -10,6 +10,7 @@ package org.roda_project.commons_ip.utils;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.roda_project.commons_ip.mets_v1_11.beans.DivType;
 import org.roda_project.commons_ip.mets_v1_11.beans.FileType;
@@ -45,7 +46,7 @@ public final class ValidationUtils {
     validation.setLevel(LEVEL.INFO);
     validation.setMessage(message);
     validation.setRelatedItem(
-      relatedFilePath == null ? (new ArrayList<Path>()) : Arrays.asList(ipPath.relativize(relatedFilePath)));
+      relatedFilePath == null ? (new ArrayList<Path>()) : List.of(ipPath.relativize(relatedFilePath)));
     report.getValidationEntries().add(validation);
     return report;
   }
@@ -88,7 +89,7 @@ public final class ValidationUtils {
     entry.setLevel(level);
     entry.setMessage(message);
     entry.setRelatedItem(
-      relatedFilePath == null ? (new ArrayList<Path>()) : Arrays.asList(ipPath.relativize(relatedFilePath)));
+      relatedFilePath == null ? (new ArrayList<Path>()) : List.of(ipPath.relativize(relatedFilePath)));
     report.addEntry(entry);
     return report;
   }

@@ -128,14 +128,13 @@ public class ManifestEntry {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder();
-    sb.append("class ManifestEntry {\n");
 
-    sb.append("    path: ").append(toIndentedString(path)).append(Constants.END_OF_LINE);
-    sb.append("    size: ").append(toIndentedString(size)).append(Constants.END_OF_LINE);
-    sb.append("    checksums: ").append(toIndentedString(checksums)).append(Constants.END_OF_LINE);
-    sb.append("}");
-    return sb.toString();
+      String sb = "class ManifestEntry {\n" +
+              "    path: " + toIndentedString(path) + Constants.END_OF_LINE +
+              "    size: " + toIndentedString(size) + Constants.END_OF_LINE +
+              "    checksums: " + toIndentedString(checksums) + Constants.END_OF_LINE +
+              "}";
+    return sb;
   }
 
   /**

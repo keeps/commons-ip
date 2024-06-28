@@ -90,14 +90,13 @@ public class Upload {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class Upload {\n");
 
-    sb.append("    uid: ").append(toIndentedString(uid)).append("\n");
-    sb.append("    state: ").append(toIndentedString(state)).append("\n");
-    sb.append("    details: ").append(toIndentedString(details)).append("\n");
-    sb.append("}");
-    return sb.toString();
+      String sb = "class Upload {\n" +
+              "    uid: " + toIndentedString(uid) + "\n" +
+              "    state: " + toIndentedString(state) + "\n" +
+              "    details: " + toIndentedString(details) + "\n" +
+              "}";
+    return sb;
   }
 
   /**

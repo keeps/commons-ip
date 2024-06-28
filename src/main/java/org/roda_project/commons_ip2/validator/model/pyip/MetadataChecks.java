@@ -106,13 +106,12 @@ public class MetadataChecks {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder();
-    sb.append("class MetadataChecks {\n");
 
-    sb.append("    status: ").append(toIndentedString(status)).append(Constants.END_OF_LINE);
-    sb.append("    messages: ").append(toIndentedString(messages)).append(Constants.END_OF_LINE);
-    sb.append("}");
-    return sb.toString();
+      String sb = "class MetadataChecks {\n" +
+              "    status: " + toIndentedString(status) + Constants.END_OF_LINE +
+              "    messages: " + toIndentedString(messages) + Constants.END_OF_LINE +
+              "}";
+    return sb;
   }
 
   /**

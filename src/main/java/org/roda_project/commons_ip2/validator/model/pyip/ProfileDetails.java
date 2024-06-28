@@ -89,14 +89,13 @@ public class ProfileDetails {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class ProfileDetails {\n");
 
-    sb.append("    type: ").append(toIndentedString(type)).append("\n");
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    version: ").append(toIndentedString(version)).append("\n");
-    sb.append("}");
-    return sb.toString();
+      String sb = "class ProfileDetails {\n" +
+              "    type: " + toIndentedString(type) + "\n" +
+              "    name: " + toIndentedString(name) + "\n" +
+              "    version: " + toIndentedString(version) + "\n" +
+              "}";
+    return sb;
   }
 
   /**

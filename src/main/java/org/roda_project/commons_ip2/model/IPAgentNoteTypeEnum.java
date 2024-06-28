@@ -20,9 +20,9 @@ public enum IPAgentNoteTypeEnum {
     }
   }
 
-  private String type;
+  private final String type;
 
-  private IPAgentNoteTypeEnum(String type) {
+  IPAgentNoteTypeEnum(String type) {
     this.type = type;
   }
 

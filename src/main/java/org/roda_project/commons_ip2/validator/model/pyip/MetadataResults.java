@@ -90,13 +90,12 @@ public class MetadataResults {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder();
-    sb.append("class MetadataResults {\n");
 
-    sb.append("    schemaResults: ").append(toIndentedString(schemaResults)).append(Constants.END_OF_LINE);
-    sb.append("    schematronResults: ").append(toIndentedString(schematronResults)).append(Constants.END_OF_LINE);
-    sb.append("}");
-    return sb.toString();
+      String sb = "class MetadataResults {\n" +
+              "    schemaResults: " + toIndentedString(schemaResults) + Constants.END_OF_LINE +
+              "    schematronResults: " + toIndentedString(schematronResults) + Constants.END_OF_LINE +
+              "}";
+    return sb;
   }
 
   /**

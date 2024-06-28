@@ -33,7 +33,7 @@ public class AdministritiveMetadataComponentValidator204 extends MetsValidatorIm
   /**
    * The {@link List} of {@link String}.
    */
-  private List<String> dmdSecStatus;
+  private final List<String> dmdSecStatus;
 
   /**
    * Initialize all objects needed to validation of this component.

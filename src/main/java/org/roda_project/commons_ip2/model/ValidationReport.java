@@ -16,8 +16,8 @@ import org.apache.commons.lang3.StringUtils;
 
 public class ValidationReport {
   private boolean valid;
-  private List<ValidationEntry> entries;
-  private Date date;
+  private final List<ValidationEntry> entries;
+  private final Date date;
 
   public ValidationReport() {
     valid = true;
@@ -179,24 +179,22 @@ public class ValidationReport {
   }
 
   private String getDefaultCss() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("<style>").append(IPConstants.SYSTEM_LINE_SEP);
-    sb.append(
-      ".valid {border-bottom: 1px solid black; border-left: 2px solid black;; margin-bottom: 10px; padding: 5px;}")
-      .append(IPConstants.SYSTEM_LINE_SEP);
-    sb.append(".entry {display: block; margin-bottom: 10px;}").append(IPConstants.SYSTEM_LINE_SEP);
-    sb.append(".entry div, .valid div {padding-left: 5px; padding-right: 5px;}").append(IPConstants.SYSTEM_LINE_SEP);
-    sb.append(".level_info {border-bottom: 1px solid blue; border-left: 2px solid blue;}")
-      .append(IPConstants.SYSTEM_LINE_SEP);
-    sb.append(".level_warning {border-bottom: 1px solid orange; border-left: 2px solid orange;}")
-      .append(IPConstants.SYSTEM_LINE_SEP);
-    sb.append(".level_error {border-bottom: 1px solid red; border-left: 2px solid red;}")
-      .append(IPConstants.SYSTEM_LINE_SEP);
-    sb.append(".entry .label, .valid .label {font-weight: bold;}").append(IPConstants.SYSTEM_LINE_SEP);
-    sb.append(".entry .label, .entry .value, .valid .label, .valid .value {display: inline; }")
-      .append(IPConstants.SYSTEM_LINE_SEP);
-    sb.append("</style>");
-    return sb.toString();
+      String sb = "<style>" + IPConstants.SYSTEM_LINE_SEP +
+              ".valid {border-bottom: 1px solid black; border-left: 2px solid black;; margin-bottom: 10px; padding: 5px;}" +
+              IPConstants.SYSTEM_LINE_SEP +
+              ".entry {display: block; margin-bottom: 10px;}" + IPConstants.SYSTEM_LINE_SEP +
+              ".entry div, .valid div {padding-left: 5px; padding-right: 5px;}" + IPConstants.SYSTEM_LINE_SEP +
+              ".level_info {border-bottom: 1px solid blue; border-left: 2px solid blue;}" +
+              IPConstants.SYSTEM_LINE_SEP +
+              ".level_warning {border-bottom: 1px solid orange; border-left: 2px solid orange;}" +
+              IPConstants.SYSTEM_LINE_SEP +
+              ".level_error {border-bottom: 1px solid red; border-left: 2px solid red;}" +
+              IPConstants.SYSTEM_LINE_SEP +
+              ".entry .label, .valid .label {font-weight: bold;}" + IPConstants.SYSTEM_LINE_SEP +
+              ".entry .label, .entry .value, .valid .label, .valid .value {display: inline; }" +
+              IPConstants.SYSTEM_LINE_SEP +
+              "</style>";
+    return sb;
   }
 
 }

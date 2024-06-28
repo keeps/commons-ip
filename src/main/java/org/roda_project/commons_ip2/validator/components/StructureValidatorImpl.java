@@ -10,7 +10,7 @@ public abstract class StructureValidatorImpl implements StructureValidator {
   /**
    * {@link List} of {@link ValidationObserver}.
    */
-  private List<ValidationObserver> observers = new ArrayList<>();
+  private final List<ValidationObserver> observers = new ArrayList<>();
 
   @Override
   public void addObserver(final ValidationObserver observer) {

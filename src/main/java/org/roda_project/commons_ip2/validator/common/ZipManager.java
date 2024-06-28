@@ -519,10 +519,9 @@ public class ZipManager {
 
   private String getRepresentationName(String entry) {
     String[] representations = entry.split("/");
-    StringBuilder representationName = new StringBuilder();
-    representationName.append(representations[0]).append("/").append(representations[1]).append("/")
-      .append(representations[2]);
-    return representationName.toString();
+      String representationName = representations[0] + "/" + representations[1] + "/" +
+              representations[2];
+    return representationName;
   }
 
   public boolean checkIfExistsFolderRepresentation(Path ipPath, String folder, String representation)

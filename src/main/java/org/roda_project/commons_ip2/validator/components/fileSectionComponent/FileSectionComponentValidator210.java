@@ -28,7 +28,7 @@ public class FileSectionComponentValidator210 extends MetsValidatorImpl {
   /**
    * {@link List} of content information type.
    */
-  private List<String> contentInformationType;
+  private final List<String> contentInformationType;
 
   /**
    * Initializes Validation component.

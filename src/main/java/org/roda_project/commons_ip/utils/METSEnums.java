@@ -16,7 +16,7 @@ public class METSEnums {
     ARK("ARK"), URN("URN"), URL("URL"), PURL("PURL"), HANDLE("HANDLE"), DOI("DOI"), OTHER("OTHER");
     private final String stringValue;
 
-    private LocType(final String s) {
+    LocType(final String s) {
       stringValue = s;
     }
 
@@ -30,7 +30,7 @@ public class METSEnums {
     INDIVIDUAL("INDIVIDUAL"), ORGANIZATION("ORGANIZATION"), OTHER("OTHER");
     private final String stringValue;
 
-    private CreatorType(final String s) {
+    CreatorType(final String s) {
       stringValue = s;
     }
 

@@ -25,7 +25,7 @@ public class ResourceResolver implements LSResourceResolver {
   private static final Logger LOGGER = LoggerFactory.getLogger(ResourceResolver.class.getName());
 
   // systemId > path in the resources (classpath)
-  private static Map<String, String> internalResources = new HashMap<>();
+  private static final Map<String, String> internalResources = new HashMap<>();
   static {
     internalResources.put(IPConstants.SCHEMA_XLINK_URL, IPConstants.SCHEMA_XLINK_FILENAME);
     internalResources.put(IPConstants.SCHEMA_METS_FILENAME_WITH_VERSION,

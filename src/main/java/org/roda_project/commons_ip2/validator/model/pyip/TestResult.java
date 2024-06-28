@@ -111,15 +111,14 @@ public class TestResult {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class TestResult {\n");
 
-    sb.append("    ruleId: ").append(toIndentedString(ruleId)).append("\n");
-    sb.append("    location: ").append(toIndentedString(location)).append("\n");
-    sb.append("    message: ").append(toIndentedString(message)).append("\n");
-    sb.append("    severity: ").append(toIndentedString(severity)).append("\n");
-    sb.append("}");
-    return sb.toString();
+      String sb = "class TestResult {\n" +
+              "    ruleId: " + toIndentedString(ruleId) + "\n" +
+              "    location: " + toIndentedString(location) + "\n" +
+              "    message: " + toIndentedString(message) + "\n" +
+              "    severity: " + toIndentedString(severity) + "\n" +
+              "}";
+    return sb;
   }
 
   /**

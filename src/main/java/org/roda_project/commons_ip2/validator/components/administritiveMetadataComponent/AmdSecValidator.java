@@ -3,6 +3,7 @@ package org.roda_project.commons_ip2.validator.components.administritiveMetadata
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -88,7 +89,7 @@ public abstract class AmdSecValidator {
             for (MdSecType md : allMdSecTypes) {
               final MdSecType.MdRef mdRef = md.getMdRef();
               if (mdRef != null && mdRef.getHref() != null) {
-                final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+                final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), StandardCharsets.UTF_8);
                 if (metsValidatorState.isRootMets()) {
                   if (metadataFiles.containsKey(metsValidatorState.getMets().getOBJID() + "/" + hrefDecoded)) {
                     metadataFiles.replace(metsValidatorState.getMets().getOBJID() + "/" + hrefDecoded, true);
@@ -105,7 +106,7 @@ public abstract class AmdSecValidator {
             for (MdSecType md : metsValidatorState.getMets().getDmdSec()) {
               final MdSecType.MdRef mdRef = md.getMdRef();
               if (mdRef != null && mdRef.getHref() != null) {
-                final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+                final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), StandardCharsets.UTF_8);
                 if (metsValidatorState.isRootMets()) {
                   if (metadataFiles.containsKey(metsValidatorState.getMets().getOBJID() + "/" + hrefDecoded)) {
                     metadataFiles.replace(metsValidatorState.getMets().getOBJID() + "/" + hrefDecoded, true);
@@ -168,7 +169,7 @@ public abstract class AmdSecValidator {
             for (MdSecType md : amd.getDigiprovMD()) {
               final MdSecType.MdRef mdRef = md.getMdRef();
               if (mdRef != null) {
-                final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+                final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), StandardCharsets.UTF_8);
                 if (hrefDecoded != null) {
                   final String path = Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded).toString();
                   if (metadataFiles.containsKey(path)) {
@@ -182,7 +183,7 @@ public abstract class AmdSecValidator {
             for (MdSecType md : metsValidatorState.getMets().getDmdSec()) {
               final MdSecType.MdRef mdRef = md.getMdRef();
               if (mdRef != null) {
-                final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+                final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), StandardCharsets.UTF_8);
                 if (hrefDecoded != null) {
                   final String path = Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded).toString();
                   if (metadataFiles.containsKey(path)) {
@@ -249,11 +250,10 @@ public abstract class AmdSecValidator {
         if (!metsValidatorState.checkMetsInternalId(md.getID())) {
           metsValidatorState.addMetsInternalId(md.getID());
         } else {
-          final StringBuilder message = new StringBuilder();
-          message.append("Value ").append(md.getID())
-            .append(" in %1$s for mets/amdSec/digiprovMD/@ID isn't unique in the package");
+            String message = "Value " + md.getID() +
+                    " in %1$s for mets/amdSec/digiprovMD/@ID isn't unique in the package";
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-            message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                  message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
         }
       }
     }
@@ -271,10 +271,8 @@ public abstract class AmdSecValidator {
       for (MdSecType md : digiprov) {
         final String status = md.getSTATUS();
         if (!dmdSecStatus.contains(status)) {
-          final StringBuilder message = new StringBuilder();
-          message.append("Value ").append(status).append(" in %1$s for mets/amdSec/digiprovMD/@STATUS isn't valid");
-          return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-            message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+            return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+                    "Value " + status + " in %1$s for mets/amdSec/digiprovMD/@STATUS isn't valid", metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
         }
       }
     }
@@ -416,7 +414,7 @@ public abstract class AmdSecValidator {
         final MdSecType.MdRef mdRef = md.getMdRef();
         final StringBuilder message = new StringBuilder();
         if (mdRef != null && mdRef.getHref() != null) {
-          final String href = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+          final String href = URLDecoder.decode(mdRef.getHref(), StandardCharsets.UTF_8);
           if (structureValidatorState.isZipFileFlag()) {
             final StringBuilder path = new StringBuilder();
             if (metsValidatorState.isRootMets()) {
@@ -433,7 +431,7 @@ public abstract class AmdSecValidator {
             }
             if (!structureValidatorState.getZipManager().checkPathExists(structureValidatorState.getIpPath(),
               path.toString())) {
-              message.append("mets/amdSec/digiprovMD/mdRef/@xlink:href (").append(path.toString())
+              message.append("mets/amdSec/digiprovMD/mdRef/@xlink:href (").append(path)
                 .append(") doesn't exists (%1$s)");
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
                 message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
@@ -475,11 +473,10 @@ public abstract class AmdSecValidator {
               false, false);
           } else {
             if (!tmp.contains(mdType)) {
-              final StringBuilder message = new StringBuilder();
-              message.append("Value ").append(mdType)
-                .append(" for mets/amdSec/digiprovMD/mdRef/@MDTYPE value in %1$s isn't valid");
+                String message = "Value " + mdType +
+                        " for mets/amdSec/digiprovMD/mdRef/@MDTYPE value in %1$s isn't valid";
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-                message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                      message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
             }
           }
         }
@@ -500,11 +497,10 @@ public abstract class AmdSecValidator {
         final String mimeType = mdRef.getMIMETYPE();
         if (mimeType != null) {
           if (!IanaMediaTypes.getIanaMediaTypesList().contains(mimeType)) {
-            final StringBuilder message = new StringBuilder();
-            message.append("Value ").append(mimeType)
-              .append(" in %1$s for mets/amdSec/digiprovMD/mdRef/@MIMETYPE isn't valid");
+              String message = "Value " + mimeType +
+                      " in %1$s for mets/amdSec/digiprovMD/mdRef/@MIMETYPE isn't valid";
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-              message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                    message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
           }
         } else {
           return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
@@ -527,7 +523,7 @@ public abstract class AmdSecValidator {
       for (MdSecType md : digiprov) {
         final MdSecType.MdRef mdRef = md.getMdRef();
         if (mdRef != null && mdRef.getHref() != null) {
-          final String href = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+          final String href = URLDecoder.decode(mdRef.getHref(), StandardCharsets.UTF_8);
           final Long size = mdRef.getSIZE();
           if (size == null) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
@@ -641,7 +637,7 @@ public abstract class AmdSecValidator {
                   metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
                 false, false);
             } else {
-              final String href = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+              final String href = URLDecoder.decode(mdRef.getHref(), StandardCharsets.UTF_8);
               final StringBuilder message = new StringBuilder();
               if (structureValidatorState.isZipFileFlag()) {
                 final StringBuilder file = new StringBuilder();
@@ -709,11 +705,10 @@ public abstract class AmdSecValidator {
             false, false);
         } else {
           if (!tmp.contains(checksumType)) {
-            final StringBuilder message = new StringBuilder();
-            message.append("Value ").append(checksumType)
-              .append(" for mets/amdSec/digiprovMD/mdRef/@CHECKSUMTYPE value in %1$s isn't valid");
+              String message = "Value " + checksumType +
+                      " for mets/amdSec/digiprovMD/mdRef/@CHECKSUMTYPE value in %1$s isn't valid";
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-              message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                    message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
           }
         }
       }
@@ -760,11 +755,10 @@ public abstract class AmdSecValidator {
       if (rigthsMD != null && !rigthsMD.isEmpty()) {
         for (MdSecType rmd : rigthsMD) {
           if (metsValidatorState.checkMetsInternalId(rmd.getID())) {
-            final StringBuilder message = new StringBuilder();
-            message.append("Value ").append(rmd.getID())
-              .append(" in %1$s for mets/amdSec/rightsMD/@ID isn't unique in the package");
+              String message = "Value " + rmd.getID() +
+                      " in %1$s for mets/amdSec/rightsMD/@ID isn't unique in the package";
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-              message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                    message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
           } else {
             metsValidatorState.addMetsInternalId(rmd.getID());
           }
@@ -797,10 +791,9 @@ public abstract class AmdSecValidator {
               false, false);
           } else {
             if (!dmdSecStatus.contains(status)) {
-              final StringBuilder message = new StringBuilder();
-              message.append("Value ").append(status)
-                .append(" in %1$s for mets/amdSec/rightsMD/@STATUS value isn't valid");
-              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message.toString(), false,
+                String message = "Value " + status +
+                        " in %1$s for mets/amdSec/rightsMD/@STATUS value isn't valid";
+              return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, message, false,
                 false);
             }
           }
@@ -950,7 +943,7 @@ public abstract class AmdSecValidator {
         for (MdSecType rmd : rigthsMD) {
           final MdSecType.MdRef mdRef = rmd.getMdRef();
           if (mdRef != null && mdRef.getHref() != null) {
-            final String href = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+            final String href = URLDecoder.decode(mdRef.getHref(), StandardCharsets.UTF_8);
             final StringBuilder message = new StringBuilder();
             if (structureValidatorState.isZipFileFlag()) {
               final StringBuilder filePath = new StringBuilder();
@@ -1006,11 +999,10 @@ public abstract class AmdSecValidator {
                 false, false);
             } else {
               if (!tmp.contains(mdType)) {
-                final StringBuilder message = new StringBuilder();
-                message.append("Value ").append(mdType)
-                  .append(" in %1$s for mets/amdSec/rightsMD/mdRef/@MDTYPE value isn't valid");
+                  String message = "Value " + mdType +
+                          " in %1$s for mets/amdSec/rightsMD/mdRef/@MDTYPE value isn't valid";
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-                  message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                        message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
               }
             }
           }
@@ -1039,11 +1031,10 @@ public abstract class AmdSecValidator {
                 false, false);
             } else {
               if (!IanaMediaTypes.getIanaMediaTypesList().contains(mimeType)) {
-                final StringBuilder message = new StringBuilder();
-                message.append("Value ").append(mimeType)
-                  .append(" in %1$s for mets/amdSec/rightsMD/mdRef/@MIMETYPE value isn't valid");
+                  String message = "Value " + mimeType +
+                          " in %1$s for mets/amdSec/rightsMD/mdRef/@MIMETYPE value isn't valid";
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-                  message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                        message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
               }
             }
           }
@@ -1064,7 +1055,7 @@ public abstract class AmdSecValidator {
         for (MdSecType rmd : rigthsMD) {
           final MdSecType.MdRef mdRef = rmd.getMdRef();
           if (mdRef != null && mdRef.getHref() != null) {
-            final String href = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+            final String href = URLDecoder.decode(mdRef.getHref(), StandardCharsets.UTF_8);
             final Long size = mdRef.getSIZE();
             if (size == null) {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
@@ -1164,11 +1155,10 @@ public abstract class AmdSecValidator {
               false, false);
           } else {
             if (!tmp.contains(checksumType)) {
-              final StringBuilder message = new StringBuilder();
-              message.append("Value ").append(checksumType)
-                .append(" for mets/amdSec/rightsMD/mdRef/@CHECKSUMTYPE value in %1$s isn't valid");
+                String message = "Value " + checksumType +
+                        " for mets/amdSec/rightsMD/mdRef/@CHECKSUMTYPE value in %1$s isn't valid";
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-                message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                      message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
             } else {
               final String checksum = mdRef.getCHECKSUM();
               if (checksum == null) {
@@ -1177,7 +1167,7 @@ public abstract class AmdSecValidator {
                     metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
                   false, false);
               } else {
-                final String href = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+                final String href = URLDecoder.decode(mdRef.getHref(), StandardCharsets.UTF_8);
                 final StringBuilder message = new StringBuilder();
                 if (structureValidatorState.isZipFileFlag()) {
                   final StringBuilder filePath = new StringBuilder();
@@ -1241,10 +1231,9 @@ public abstract class AmdSecValidator {
               false, false);
           } else {
             if (!tmp.contains(checksumType)) {
-              final StringBuilder message = new StringBuilder();
-              message.append("Value ").append(checksumType)
-                .append(" in %1$s for mets/amdSec/rightsMD/mdRef/@CHECKSUMTYPE isn't valid");
-              return new ReporterDetails(getVersion(), Message.createErrorMessage(message.toString(),
+                String message = "Value " + checksumType +
+                        " in %1$s for mets/amdSec/rightsMD/mdRef/@CHECKSUMTYPE isn't valid";
+              return new ReporterDetails(getVersion(), Message.createErrorMessage(message,
                 metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
             }
           }

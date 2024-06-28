@@ -112,15 +112,14 @@ public class ValidationReport {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class ValidationReport {\n");
 
-    sb.append("    uid: ").append(toIndentedString(uid)).append("\n");
-    sb.append("    _package: ").append(toIndentedString(_package)).append("\n");
-    sb.append("    structure: ").append(toIndentedString(structure)).append("\n");
-    sb.append("    metadata: ").append(toIndentedString(metadata)).append("\n");
-    sb.append("}");
-    return sb.toString();
+      String sb = "class ValidationReport {\n" +
+              "    uid: " + toIndentedString(uid) + "\n" +
+              "    _package: " + toIndentedString(_package) + "\n" +
+              "    structure: " + toIndentedString(structure) + "\n" +
+              "    metadata: " + toIndentedString(metadata) + "\n" +
+              "}";
+    return sb;
   }
 
   /**

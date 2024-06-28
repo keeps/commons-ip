@@ -193,9 +193,8 @@ public class HungarianSIP extends SIP {
 
     try (PrintWriter writer = new PrintWriter(txtPath.toFile())) {
       ZipEntryInfo zipEntryInfo = zipEntries.get(IPConstants.HUNGARIAN_METADATA_FILE);
-      if (zipEntryInfo != null && zipEntryInfo instanceof METSZipEntryInfo) {
-        METSZipEntryInfo metsEntry = (METSZipEntryInfo) zipEntryInfo;
-        Map<String, String> checksums = metsEntry.getChecksums();
+      if (zipEntryInfo != null && zipEntryInfo instanceof METSZipEntryInfo metsEntry) {
+          Map<String, String> checksums = metsEntry.getChecksums();
         long size = metsEntry.getSize();
         final String separator = ": ";
 

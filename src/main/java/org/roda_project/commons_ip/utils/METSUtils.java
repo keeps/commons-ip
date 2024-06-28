@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
@@ -168,7 +169,7 @@ public final class METSUtils {
       fileType.setSIZE(Files.size(file));
       logger.debug("Done setting file size");
     } catch (IOException e) {
-      throw new IPException("Error getting file size (" + file.toString() + ")", e);
+      throw new IPException("Error getting file size (" + file + ")", e);
     }
   }
 
@@ -193,8 +194,8 @@ public final class METSUtils {
   public static String decodeHref(String value) {
     if (IPConstants.METS_ENCODE_AND_DECODE_HREF) {
       try {
-        value = URLDecoder.decode(value, "UTF-8");
-      } catch (NullPointerException | UnsupportedEncodingException e) {
+        value = URLDecoder.decode(value, StandardCharsets.UTF_8);
+      } catch (NullPointerException e) {
         // do nothing
       }
     }
@@ -238,8 +239,8 @@ public final class METSUtils {
   private static String encodeUnsafeChar(char ch) {
     String ret = String.valueOf(ch);
     try {
-      ret = URLEncoder.encode(ret, "UTF-8");
-    } catch (NullPointerException | UnsupportedEncodingException e) {
+      ret = URLEncoder.encode(ret, StandardCharsets.UTF_8);
+    } catch (NullPointerException e) {
       // do nothing & return original value
     }
     return ret;

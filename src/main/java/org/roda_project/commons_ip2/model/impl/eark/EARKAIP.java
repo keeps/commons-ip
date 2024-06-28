@@ -120,19 +120,19 @@ public class EARKAIP extends AIPWrap {
 
   @Override
   public Path build(final Path destinationDirectory) throws IPException, InterruptedException {
-    return build(destinationDirectory, null);
+    return this.build(destinationDirectory, null);
   }
 
   @Override
   public Path build(final Path destinationDirectory, final boolean onlyManifest)
     throws IPException, InterruptedException {
-    return build(destinationDirectory, null, onlyManifest);
+    return this.build(destinationDirectory, null, onlyManifest);
   }
 
   @Override
   public Path build(final Path destinationDirectory, final String fileNameWithoutExtension)
     throws IPException, InterruptedException {
-    return build(destinationDirectory, fileNameWithoutExtension, false);
+    return this.build(destinationDirectory, fileNameWithoutExtension, false);
   }
 
   @Override
@@ -255,17 +255,14 @@ public class EARKAIP extends AIPWrap {
     }
   }
 
-  private void setChecksum(final ZipEntryInfo zipEntryInfo, final String checksum, final String checksumType)
-    throws IOException, NoSuchAlgorithmException {
+  private void setChecksum(final ZipEntryInfo zipEntryInfo, final String checksum, final String checksumType) {
     zipEntryInfo.setChecksum(checksum);
     zipEntryInfo.setChecksumAlgorithm(checksumType);
-    if (zipEntryInfo instanceof METSFileTypeZipEntryInfo) {
-      METSFileTypeZipEntryInfo f = (METSFileTypeZipEntryInfo) zipEntryInfo;
-      f.getMetsFileType().setCHECKSUM(checksum);
+    if (zipEntryInfo instanceof METSFileTypeZipEntryInfo f) {
+        f.getMetsFileType().setCHECKSUM(checksum);
       f.getMetsFileType().setCHECKSUMTYPE(checksumType);
-    } else if (zipEntryInfo instanceof METSMdRefZipEntryInfo) {
-      METSMdRefZipEntryInfo f = (METSMdRefZipEntryInfo) zipEntryInfo;
-      f.getMetsMdRef().setCHECKSUM(checksum);
+    } else if (zipEntryInfo instanceof METSMdRefZipEntryInfo f) {
+        f.getMetsMdRef().setCHECKSUM(checksum);
       f.getMetsMdRef().setCHECKSUMTYPE(checksumType);
     }
   }

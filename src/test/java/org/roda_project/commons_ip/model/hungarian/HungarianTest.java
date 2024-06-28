@@ -81,7 +81,7 @@ public class HungarianTest {
     Path zipPath = tempFolder.resolve(SIP_ID + ".zip");
     Path txtPath = tempFolder.resolve(SIP_ID + ".txt");
 
-    Assert.assertEquals(true, Files.exists(zipPath) && Files.exists(txtPath));
+      Assert.assertTrue(Files.exists(zipPath) && Files.exists(txtPath));
     Assert.assertEquals(Files.lines(txtPath).count(), 6);
 
     try (ZipFile zipFile = new ZipFile(zipPath.toFile())) {

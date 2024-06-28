@@ -13,7 +13,7 @@ public class Tree<T> {
   /**
    * root of the node {@link T}.
    */
-  private T root;
+  private final T root;
 
   public Tree<T> getParent() {
     return parent;
@@ -26,7 +26,7 @@ public class Tree<T> {
   /**
    * children nodes {@link ArrayList}.
    */
-  private ArrayList<Tree<T>> childs;
+  private final ArrayList<Tree<T>> childs;
 
   /**
    * Constructor of new Tree.

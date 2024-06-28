@@ -102,4 +102,29 @@ public abstract class SIP extends IP {
     throw new ParseException("One must implement static method parse in a concrete class");
   }
 
+  public SIP parse(Path source, boolean isZipped) throws ParseException {
+    throw new ParseException("One must implement static method parse in a concrete class");
+  }
+
+  private boolean shouldOutputInZip = true;
+  private boolean hasPregeneratedChecksums = false;
+
+  public void setShouldOutputInZip(boolean value) {
+    shouldOutputInZip = value;
+  }
+
+  public void setHasPregeneratedChecksums(boolean hasPregeneratedChecksums) {
+    if(getChecksumAlgorithm().isEmpty()){
+        throw new IllegalArgumentException("Checksum algorithm must be provided when setting hasPregeneratedChecksums to true");
+    }
+    this.hasPregeneratedChecksums = hasPregeneratedChecksums;
+  }
+
+  public boolean getShouldOutputInZip(){
+    return shouldOutputInZip;
+  }
+
+  public boolean getHasPregeneratedChecksums(){
+    return hasPregeneratedChecksums;
+  }
 }

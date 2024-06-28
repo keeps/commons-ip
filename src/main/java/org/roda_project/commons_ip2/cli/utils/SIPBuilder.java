@@ -11,7 +11,7 @@ import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip2.cli.model.args.MetadataGroup;
 import org.roda_project.commons_ip2.cli.model.args.RepresentationGroup;
 import org.roda_project.commons_ip2.cli.model.enums.CSIPVersion;
-import org.roda_project.commons_ip2.cli.model.enums.Checksum;
+import org.roda_project.commons_ip2.cli.model.enums.ChecksumAlgorithm;
 import org.roda_project.commons_ip2.cli.model.exception.SIPBuilderException;
 import org.roda_project.commons_ip2.model.IPContentInformationType;
 import org.roda_project.commons_ip2.model.IPContentType;
@@ -35,7 +35,7 @@ public class SIPBuilder {
   private String submitterAgentId;
   private String sipId;
   private List<String> ancestors;
-  private Checksum checksum = Checksum.SHA256;
+  private ChecksumAlgorithm checksumAlgorithm = ChecksumAlgorithm.SHA256;
   private List<String> documentation = new ArrayList<>();
 
   private String softwareVersion;
@@ -95,8 +95,8 @@ public class SIPBuilder {
     return this;
   }
 
-  public SIPBuilder setChecksum(Checksum checksum) {
-    this.checksum = checksum;
+  public SIPBuilder setChecksumAlgorithm(ChecksumAlgorithm checksumAlgorithm) {
+    this.checksumAlgorithm = checksumAlgorithm;
     return this;
   }
 
@@ -124,8 +124,8 @@ public class SIPBuilder {
     sip.addSubmitterAgent(submitterAgentName, submitterAgentId);
     sip.setDescription("SIP created by commons-ip CLI");
 
-    if (checksum != null) {
-      sip.setChecksum(checksum.toString());
+    if (checksumAlgorithm != null) {
+      sip.setChecksumAlgorithm(checksumAlgorithm.toString());
     }
 
     if (overrideSchema) {
@@ -169,6 +169,9 @@ public class SIPBuilder {
     try {
       return sip.build(buildPath);
     } catch (IPException e) {
+      LOGGER.debug("Unable to create the E-ARK SIP", e);
+      throw new SIPBuilderException("Unable to create the E-ARK SIP");
+    } catch (IOException e) {
       LOGGER.debug("Unable to create the E-ARK SIP", e);
       throw new SIPBuilderException("Unable to create the E-ARK SIP");
     }

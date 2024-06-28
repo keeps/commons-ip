@@ -8,14 +8,7 @@
 package org.roda_project.commons_ip.model;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -47,7 +40,7 @@ public abstract class IP implements IPInterface {
   private List<IPFile> schemas;
   private List<IPFile> documentation;
 
-  private Map<String, ZipEntryInfo> zipEntries;
+  private final Map<String, ZipEntryInfo> zipEntries;
   private String checksumAlgorithm;
 
   private ValidationReport validationReport;
@@ -91,13 +84,13 @@ public abstract class IP implements IPInterface {
 
   @Override
   public IP setId(String id) {
-    this.ids = Arrays.asList(id);
+    this.ids = Collections.singletonList(id);
     return this;
   }
-  public void setChecksum(final String checksum) {
-    this.checksumAlgorithm = checksum;
+  public void setChecksumAlgorithm(final String checksumAlgorithm) {
+    this.checksumAlgorithm = checksumAlgorithm;
   }
-  public String getChecksum() {
+  public String getChecksumAlgorithm() {
     return this.checksumAlgorithm;
   }
 

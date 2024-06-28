@@ -159,7 +159,7 @@ public class BagitSIP extends SIP {
       BagitUtils.addRepresentationToZipAndBagit(this, getRepresentations(), zipEntries, buildDir);
 
       // Create Bag
-      BagCreator.bagInPlace(buildDir, Arrays.asList(StandardSupportedAlgorithms.SHA256), false, metadata);
+      BagCreator.bagInPlace(buildDir, List.of(StandardSupportedAlgorithms.SHA256), false, metadata);
 
       // Add bag files to zip
       BagitUtils.addBagFileToZip(zipEntries, buildDir, BagitUtils.BAGIT_FILE_NAME);
@@ -250,7 +250,7 @@ public class BagitSIP extends SIP {
         String value = nameValue.getValue();
 
         if (IPConstants.BAGIT_PARENT.equals(key)) {
-          sip.setAncestors(Arrays.asList(value));
+          sip.setAncestors(Collections.singletonList(value));
         } else {
           if (IPConstants.BAGIT_ID.equals(key)) {
             sip.setId(value);

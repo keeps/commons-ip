@@ -101,14 +101,13 @@ public class InformationPackage {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder();
-    sb.append("class InformationPackage {\n");
 
-    sb.append("    details: ").append(toIndentedString(details)).append(Constants.END_OF_LINE);
-    sb.append("    profile: ").append(toIndentedString(profile)).append(Constants.END_OF_LINE);
-    sb.append("    representations: ").append(toIndentedString(representations)).append(Constants.END_OF_LINE);
-    sb.append("}");
-    return sb.toString();
+      String sb = "class InformationPackage {\n" +
+              "    details: " + toIndentedString(details) + Constants.END_OF_LINE +
+              "    profile: " + toIndentedString(profile) + Constants.END_OF_LINE +
+              "    representations: " + toIndentedString(representations) + Constants.END_OF_LINE +
+              "}";
+    return sb;
   }
 
   /**

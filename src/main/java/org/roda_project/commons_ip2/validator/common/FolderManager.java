@@ -37,9 +37,10 @@ public class FolderManager {
     boolean found = false;
     folder = path.toFile();
     for (File f : folder.listFiles()) {
-      if (f.getName().equals("METS.xml")) {
-        found = true;
-      }
+        if (f.getName().equals("METS.xml")) {
+            found = true;
+            break;
+        }
     }
     return found;
   }

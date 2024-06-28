@@ -23,7 +23,7 @@ public enum IpType {
   /**
    * the value of IpType.
    */
-  private String value;
+  private final String value;
 
   IpType(final String value) {
     this.value = value;

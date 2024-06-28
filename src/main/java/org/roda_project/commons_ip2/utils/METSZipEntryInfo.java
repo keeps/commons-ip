@@ -22,7 +22,6 @@ import org.roda_project.commons_ip.utils.FileZipEntryInfo;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
-import org.roda_project.commons_ip2.model.IPConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,11 +30,11 @@ import jakarta.xml.bind.JAXBException;
 public class METSZipEntryInfo extends FileZipEntryInfo {
   private static final Logger LOGGER = LoggerFactory.getLogger(METSZipEntryInfo.class);
 
-  private Mets mets;
-  private boolean rootMETS;
+  private final Mets mets;
+  private final boolean rootMETS;
   private Map<String, String> checksums;
   private long size;
-  private FileType fileType;
+  private final FileType fileType;
 
   public METSZipEntryInfo(String name, Path filePath, Mets mets, boolean rootMETS, FileType fileType) {
     super(name, filePath);
@@ -69,11 +68,11 @@ public class METSZipEntryInfo extends FileZipEntryInfo {
       if (!rootMETS && fileType != null) {
         METSUtils.setFileBasicInformation(LOGGER, getFilePath(), fileType);
 
-        String checksumType = this.getChecksum();
+        String checksumType = this.getChecksumAlgorithm();
         Set<String> checksumAlgorithms = new HashSet<>();
         checksumAlgorithms.add(checksumType);
         try (InputStream inputStream = Files.newInputStream(getFilePath())) {
-          Map<String, String> checksums = ZIPUtils.calculateChecksums(Optional.empty(), inputStream,
+          Map<String, String> checksums = ZIPUtils.writeToOutputAndCalculateChecksum(Optional.empty(), inputStream,
             checksumAlgorithms);
           String checksum = checksums.get(checksumType);
           fileType.setCHECKSUM(checksum);

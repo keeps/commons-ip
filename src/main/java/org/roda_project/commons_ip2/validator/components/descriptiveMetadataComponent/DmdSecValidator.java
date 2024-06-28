@@ -20,6 +20,7 @@ import org.roda_project.commons_ip2.validator.utils.MetadataType;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -88,7 +89,7 @@ public abstract class DmdSecValidator {
           for (MdSecType md : dmdSec) {
             final MdSecType.MdRef mdRef = md.getMdRef();
             if (mdRef != null && mdRef.getHref() != null) {
-              final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+              final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), StandardCharsets.UTF_8);
               if (metsValidatorState.isRootMets()) {
                 if (metadataFiles.containsKey(mets.getOBJID() + Constants.SEPARATOR + hrefDecoded)) {
                   metadataFiles.replace(mets.getOBJID() + Constants.SEPARATOR + hrefDecoded, true);
@@ -112,7 +113,7 @@ public abstract class DmdSecValidator {
               for (MdSecType md : allMdSecTypes) {
                 final MdSecType.MdRef mdRef = md.getMdRef();
                 if (mdRef != null && mdRef.getHref() != null) {
-                  final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+                  final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), StandardCharsets.UTF_8);
                   if (metsValidatorState.isRootMets()) {
                     if (metadataFiles.containsKey(mets.getOBJID() + Constants.SEPARATOR + hrefDecoded)) {
                       metadataFiles.replace(mets.getOBJID() + Constants.SEPARATOR + hrefDecoded, true);
@@ -174,7 +175,7 @@ public abstract class DmdSecValidator {
           for (MdSecType md : dmdSec) {
             final MdSecType.MdRef mdRef = md.getMdRef();
             if (mdRef != null) {
-              final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+              final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), StandardCharsets.UTF_8);
               if (hrefDecoded != null) {
                 final String path = Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded).toString();
                 if (metadataFiles.containsKey(path)) {
@@ -188,7 +189,7 @@ public abstract class DmdSecValidator {
               for (MdSecType md : amd.getDigiprovMD()) {
                 final MdSecType.MdRef mdRef = md.getMdRef();
                 if (mdRef != null) {
-                  final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+                  final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), StandardCharsets.UTF_8);
                   if (hrefDecoded != null) {
                     final String path = Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded).toString();
                     if (metadataFiles.containsKey(path)) {
@@ -226,11 +227,10 @@ public abstract class DmdSecValidator {
         if (!metsValidatorState.checkMetsInternalId(mdSec.getID())) {
           metsValidatorState.addMetsInternalId(mdSec.getID());
         } else {
-          final StringBuilder message = new StringBuilder();
-          message.append("Value ").append(mdSec.getID())
-            .append(" in %1$s for mets/dmdSec/@ID isn't unique in the package");
+            String message = "Value " + mdSec.getID() +
+                    " in %1$s for mets/dmdSec/@ID isn't unique in the package";
           return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(
-            message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                  message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
         }
       }
     } else {
@@ -279,10 +279,9 @@ public abstract class DmdSecValidator {
           "The mets/dmdSec/@STATUS is missing.", true, false);
       }
       else if (!dmdSecStatus.contains(status)) {
-        final StringBuilder message = new StringBuilder();
-        message.append("Value ").append(status).append(" in %1$s for mets/dmdSec/@STATUS isn't valid");
+          String message = "Value " + status + " in %1$s for mets/dmdSec/@STATUS isn't valid";
         details.setValid(false);
-        details.addIssue(Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+        details.addIssue(Message.createErrorMessage(message, metsValidatorState.getMetsName(),
           metsValidatorState.isRootMets()));
       }
     }
@@ -414,7 +413,7 @@ public abstract class DmdSecValidator {
       final MdSecType.MdRef mdRef = mdSec.getMdRef();
       final String href = mdRef.getHref();
       if (href != null) {
-        final String hrefDecoded = URLDecoder.decode(href, Constants.UTF_8);
+        final String hrefDecoded = URLDecoder.decode(href, StandardCharsets.UTF_8);
         if (structureValidatorState.isZipFileFlag()) {
           final StringBuilder path = new StringBuilder();
           if (metsValidatorState.isRootMets()) {
@@ -479,11 +478,10 @@ public abstract class DmdSecValidator {
         final String mdType = mdRef.getMDTYPE();
         if (mdType != null) {
           if (!tmp.contains(mdType)) {
-            final StringBuilder message = new StringBuilder();
-            message.append("Value ").append(mdType)
-              .append(" in %1$s for mets/dmdSec/mdRef/@MDTYPE isn't a valid value");
+              String message = "Value " + mdType +
+                      " in %1$s for mets/dmdSec/mdRef/@MDTYPE isn't a valid value";
             details.setValid(false);
-            details.addIssue(Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+            details.addIssue(Message.createErrorMessage(message, metsValidatorState.getMetsName(),
               metsValidatorState.isRootMets()));
           }
         } else {
@@ -506,11 +504,10 @@ public abstract class DmdSecValidator {
       final String mimetype = mdRef.getMIMETYPE();
       if (mimetype != null) {
         if (!IanaMediaTypes.getIanaMediaTypesList().contains(mimetype)) {
-          final StringBuilder message = new StringBuilder();
-          message.append("Value ").append(mimetype)
-            .append(" in %1$s for mets/dmdSec/mdRef/@MIMETYPE value isn't valid");
+            String message = "Value " + mimetype +
+                    " in %1$s for mets/dmdSec/mdRef/@MIMETYPE value isn't valid";
           return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(
-            message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                  message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
         }
       } else {
         return new ReporterDetails(getCSIPVersion(),
@@ -531,7 +528,7 @@ public abstract class DmdSecValidator {
       final MdSecType.MdRef mdRef = mdSec.getMdRef();
       final String href = mdRef.getHref();
       if (href != null) {
-        final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+        final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), StandardCharsets.UTF_8);
         final Long size = mdRef.getSIZE();
         if (size != null) {
           final StringBuilder message = new StringBuilder();
@@ -571,7 +568,7 @@ public abstract class DmdSecValidator {
               if (!structureValidatorState.getFolderManager()
                 .verifySize(Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded), size)) {
                 message.append("mets/dmdSec/mdRef/@SIZE ").append(size).append(" in %1$s and size of file (")
-                  .append(structureValidatorState.getIpPath().resolve(hrefDecoded).toString()).append(") isn't equal");
+                  .append(structureValidatorState.getIpPath().resolve(hrefDecoded)).append(") isn't equal");
                 return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(
                   message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
               }
@@ -627,7 +624,7 @@ public abstract class DmdSecValidator {
           if (checksum != null) {
             final String href = mdRef.getHref();
             if (href != null) {
-              final String file = URLDecoder.decode(href, Constants.UTF_8);
+              final String file = URLDecoder.decode(href, StandardCharsets.UTF_8);
               final StringBuilder filePath = new StringBuilder();
               final StringBuilder message = new StringBuilder();
               if (structureValidatorState.isZipFileFlag()) {
@@ -678,11 +675,10 @@ public abstract class DmdSecValidator {
               false, false);
           }
         } else {
-          final StringBuilder errorMessage = new StringBuilder();
-          errorMessage.append("Value ").append(checksumType)
-            .append(" in %1$s for mets/dmdSec/mdRef/@CHECKSUMTYPE isn't valid");
+            String errorMessage = "Value " + checksumType +
+                    " in %1$s for mets/dmdSec/mdRef/@CHECKSUMTYPE isn't valid";
           return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(
-            errorMessage.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                  errorMessage, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
         }
       } else {
         return new ReporterDetails(getCSIPVersion(),
@@ -709,11 +705,10 @@ public abstract class DmdSecValidator {
       final String checksumType = mdRef.getCHECKSUMTYPE();
       if (checksumType != null) {
         if (!tmp.contains(checksumType)) {
-          final StringBuilder message = new StringBuilder();
-          message.append("Value ").append(checksumType)
-            .append(" in %1$s for mets/dmdSec/mdRef/@CHECKSUMTYPE isn't valid");
+            String message = "Value " + checksumType +
+                    " in %1$s for mets/dmdSec/mdRef/@CHECKSUMTYPE isn't valid";
           return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(
-            message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                  message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
         }
       } else {
         return new ReporterDetails(getCSIPVersion(),

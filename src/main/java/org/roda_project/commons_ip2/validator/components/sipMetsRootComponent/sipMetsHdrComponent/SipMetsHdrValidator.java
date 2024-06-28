@@ -24,10 +24,9 @@ public abstract class SipMetsHdrValidator {
     final List<String> recordsStatus) {
     final String recordStatus = metsHdr.getRECORDSTATUS();
     if (recordStatus != null && !recordsStatus.contains(recordStatus)) {
-      final StringBuilder message = new StringBuilder();
-      message.append("Value ").append(recordStatus).append("for metsHdr/@RECORDSTATUS value isn't valid in %1$s");
+        String message = "Value " + recordStatus + "for metsHdr/@RECORDSTATUS value isn't valid in %1$s";
       return new ReporterDetails(getSIPVersion(), Message.createErrorMessage(
-        message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+              message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
     }
     return new ReporterDetails();
   }
@@ -115,9 +114,10 @@ public abstract class SipMetsHdrValidator {
     if (altRecordIDS != null && !altRecordIDS.isEmpty()) {
       for (MetsType.MetsHdr.AltRecordID altRecordID : altRecordIDS) {
         final String type = altRecordID.getTYPE();
-        if ("PREVIOUSSUBMISSIONAGREEMENT".equals(type)) {
-          found = true;
-        }
+          if ("PREVIOUSSUBMISSIONAGREEMENT".equals(type)) {
+              found = true;
+              break;
+          }
       }
       if (!found) {
         return new ReporterDetails(getSIPVersion(),
@@ -178,9 +178,10 @@ public abstract class SipMetsHdrValidator {
     if (altRecordIDS != null && !altRecordIDS.isEmpty()) {
       for (MetsType.MetsHdr.AltRecordID altRecordID : altRecordIDS) {
         final String type = altRecordID.getTYPE();
-        if ("PREVIOUSSUBMISSIONAGREEMENT".equals(type)) {
-          found = true;
-        }
+          if ("PREVIOUSSUBMISSIONAGREEMENT".equals(type)) {
+              found = true;
+              break;
+          }
       }
       if (!found) {
         return new ReporterDetails(getSIPVersion(),
@@ -297,12 +298,11 @@ public abstract class SipMetsHdrValidator {
           if ("ARCHIVIST".equals(role)) {
             final String type = agent.getTYPE();
             if (!"ORGANIZATION".equals(type) && !type.equals("INDIVIDUAL")) {
-              final StringBuilder message = new StringBuilder();
-              message.append("Value ").append(type)
-                .append(" in %1$s for metsHdr/agent/@TYPE when metsHdr/agent/@ROLE is "
-                  + "ARCHIVIST isn't valid, must be ORGANIZATION or INDIVIDUAL ");
+                String message = "Value " + type +
+                        " in %1$s for metsHdr/agent/@TYPE when metsHdr/agent/@ROLE is "
+                        + "ARCHIVIST isn't valid, must be ORGANIZATION or INDIVIDUAL ";
               return new ReporterDetails(getSIPVersion(), Message.createErrorMessage(
-                message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                      message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
             }
           }
         } else {
@@ -543,12 +543,11 @@ public abstract class SipMetsHdrValidator {
           if ("CREATOR".equals(role) && (agent.getTYPE() != null && !"OTHER".equals(agent.getTYPE()))) {
             final String type = agent.getTYPE();
             if (!"ORGANIZATION".equals(type) && !"INDIVIDUAL".equals(type)) {
-              final StringBuilder message = new StringBuilder();
-              message.append("Value ").append(type)
-                .append(" in %1$s for metsHdr/agent/@TYPE when the metsHdr/agent/@ROLE "
-                  + "is OTHER isn't valid, must be ORGANIZATION or INDIVIDUAL");
+                String message = "Value " + type +
+                        " in %1$s for metsHdr/agent/@TYPE when the metsHdr/agent/@ROLE "
+                        + "is OTHER isn't valid, must be ORGANIZATION or INDIVIDUAL";
               return new ReporterDetails(getSIPVersion(), Message.createErrorMessage(
-                message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                      message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
             }
           }
         } else {
@@ -773,13 +772,12 @@ public abstract class SipMetsHdrValidator {
           if (role.equals("CREATOR") && (agent.getOTHERTYPE() != null && !agent.getOTHERTYPE().equals("SOFTWARE"))) {
             final String type = agent.getTYPE();
             if (!type.equals("INDIVIDUAL")) {
-              final StringBuilder message = new StringBuilder();
-              message.append("Value ").append(type)
-                .append(" in %1$s for metsHdr/agent/@TYPE isn't valid, when the metsHdr/agent/@ROLE "
-                  + "is CREATOR and  metsHdr/agent/@OTHERTYPE isn't "
-                  + "SOFTWARE metsHdr/agent/@TYPE must be INDIVIDUAL");
+                String message = "Value " + type +
+                        " in %1$s for metsHdr/agent/@TYPE isn't valid, when the metsHdr/agent/@ROLE "
+                        + "is CREATOR and  metsHdr/agent/@OTHERTYPE isn't "
+                        + "SOFTWARE metsHdr/agent/@TYPE must be INDIVIDUAL";
               return new ReporterDetails(getSIPVersion(), Message.createErrorMessage(
-                message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                      message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
             }
           }
         } else {
@@ -965,11 +963,10 @@ public abstract class SipMetsHdrValidator {
           if (role.equals("PRESERVATION")) {
             final String type = agent.getTYPE();
             if (!type.equals("ORGANIZATION")) {
-              final StringBuilder message = new StringBuilder();
-              message.append("Value ").append(type).append(" in %1$s for metsHdr/agent/@TYPE isn't valid, When the "
-                + "metsHdr/agent/@ROLE is PRESERVATION  " + "metsHdr/agent/@TYPE must be ORGANIZATION");
+                String message = "Value " + type + " in %1$s for metsHdr/agent/@TYPE isn't valid, When the "
+                        + "metsHdr/agent/@ROLE is PRESERVATION  " + "metsHdr/agent/@TYPE must be ORGANIZATION";
               return new ReporterDetails(getSIPVersion(), Message.createErrorMessage(
-                message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                      message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
             }
           }
         } else {

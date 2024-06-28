@@ -21,7 +21,7 @@ public enum Severity {
   /**
    * {@link String}.
    */
-  private String value;
+  private final String value;
 
   Severity(final String value) {
     this.value = value;

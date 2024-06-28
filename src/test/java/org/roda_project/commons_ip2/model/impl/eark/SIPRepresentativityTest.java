@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -46,13 +47,13 @@ public class SIPRepresentativityTest {
   }
 
   @Test
-  public void buildEARKSip2withFolders() throws IPException, InterruptedException {
+  public void buildEARKSip2withFolders() throws IPException, InterruptedException, IOException {
     LOGGER.info("Creating EARK SIP 2");
     Path zipSIPS = createEARKSip2withFolders();
     LOGGER.info("Done creating full E-ARK SIP-S");
   }
 
-  private Path createEARKSip2withFolders() throws IPException, InterruptedException {
+  private Path createEARKSip2withFolders() throws IPException, InterruptedException, IOException {
     // 1) instantiate E-ARK SIP object
     SIP sip = new EARKSIP("SIP_1", IPContentType.getMIXED(), IPContentInformationType.getMIXED(), "2.1.0");
     sip.addCreatorSoftwareAgent("RODA Commons IP", "2.0.0");
@@ -91,7 +92,7 @@ public class SIPRepresentativityTest {
     sip.addDocumentation(new IPFile(Paths.get("src/test/resources/eark/documentation.pdf")));
 
     // 1.7) set optional RODA related information about ancestors
-    sip.setAncestors(Arrays.asList("b6f24059-8973-4582-932d-eb0b2cb48f28"));
+    sip.setAncestors(List.of("b6f24059-8973-4582-932d-eb0b2cb48f28"));
 
     // 1.8) add an agent (SIP level)
     IPAgent agent = new IPAgent("Agent Name", "OTHER", "OTHER ROLE", METSEnums.CreatorType.INDIVIDUAL, "OTHER TYPE", "",

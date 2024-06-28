@@ -15,7 +15,7 @@ public class IPContentType implements Serializable {
   private static final long serialVersionUID = 1191075605637022551L;
 
   public enum IPContentTypeEnum {
-    SFSB, RDB, ERMS, GEODATA, MIXED, OTHER;
+    SFSB, RDB, ERMS, GEODATA, MIXED, OTHER
   }
 
   private IPContentTypeEnum type;

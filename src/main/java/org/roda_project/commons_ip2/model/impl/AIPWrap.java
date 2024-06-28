@@ -7,6 +7,7 @@
  */
 package org.roda_project.commons_ip2.model.impl;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
@@ -326,38 +328,37 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public Path build(final Path destinationDirectory) throws IPException, InterruptedException {
+  public Path build(final Path destinationDirectory) throws IPException, InterruptedException, IOException {
     return aip.build(destinationDirectory);
   }
 
   @Override
   public Path build(final Path destinationDirectory, final boolean onlyManifest)
-    throws IPException, InterruptedException {
+    throws IPException, InterruptedException, IOException {
     return aip.build(destinationDirectory, onlyManifest);
   }
 
   @Override
   public Path build(final Path destinationDirectory, final String fileNameWithoutExtension)
-    throws IPException, InterruptedException {
+    throws IPException, InterruptedException, IOException {
     return aip.build(destinationDirectory, fileNameWithoutExtension);
   }
 
   @Override
   public Path build(Path destinationDirectory, String fileNameWithoutExtension, IPEnums.SipType sipType)
-    throws IPException, InterruptedException {
+    throws IPException, InterruptedException, IOException {
     return aip.build(destinationDirectory, fileNameWithoutExtension);
   }
 
   @Override
   public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
-    throws IPException, InterruptedException {
+    throws IPException, InterruptedException, IOException {
     return aip.build(destinationDirectory, fileNameWithoutExtension, onlyManifest);
   }
 
   @Override
   public Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest,
-    IPEnums.SipType sipType) throws IPException, InterruptedException {
+                    IPEnums.SipType sipType) throws IPException, InterruptedException, IOException {
     return aip.build(destinationDirectory, fileNameWithoutExtension, onlyManifest);
   }
-
 }

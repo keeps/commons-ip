@@ -4,6 +4,7 @@ import java.net.URI;
 import java.nio.file.Path;
 import java.util.List;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
 
 /**
@@ -102,5 +103,15 @@ public class IPFileShallow implements IPFileInterface {
   @Override
   public Path getPath() {
     throw new UnsupportedOperationException("IPFileShallow does not support this method");
+  }
+
+  @Override
+  public String getChecksum() {
+    throw new NotImplementedException("IPFileShallow does not support this method");
+  }
+
+  @Override
+  public String getChecksumAlgorithm() {
+    throw new NotImplementedException("IPFileShallow does not support this method");
   }
 }

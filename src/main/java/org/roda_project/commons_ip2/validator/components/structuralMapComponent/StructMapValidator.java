@@ -3,6 +3,7 @@ package org.roda_project.commons_ip2.validator.components.structuralMapComponent
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -140,11 +141,10 @@ public abstract class StructMapValidator {
             false, false);
         } else {
           if (metsValidatorState.checkMetsInternalId(id)) {
-            final StringBuilder message = new StringBuilder();
-            message.append("Value ").append(id)
-              .append(" in %1$s for mets/structMap[@LABEL='CSIP']/@ID isn't unique in the package");
+              String message = "Value " + id +
+                      " in %1$s for mets/structMap[@LABEL='CSIP']/@ID isn't unique in the package";
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-              message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                    message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
           } else {
             metsValidatorState.addMetsInternalId(id);
           }
@@ -194,11 +194,10 @@ public abstract class StructMapValidator {
               false, false);
           } else {
             if (metsValidatorState.checkMetsInternalId(id)) {
-              final StringBuilder message = new StringBuilder();
-              message.append("Value ").append(id)
-                .append(" %1$s for mets/structMap[@LABEL='CSIP']/div/@ID " + "isn't unique in the package");
+                String message = "Value " + id +
+                        " %1$s for mets/structMap[@LABEL='CSIP']/div/@ID " + "isn't unique in the package";
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-                message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                      message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
             } else {
               metsValidatorState.addMetsInternalId(id);
             }
@@ -256,9 +255,10 @@ public abstract class StructMapValidator {
     boolean isMetadata = false;
     if ((dmdSec != null && !dmdSec.isEmpty())) {
       for (MdSecType mdSecType : dmdSec) {
-        if (mdSecType.getMdRef() != null) {
-          isMetadata = true;
-        }
+          if (mdSecType.getMdRef() != null) {
+              isMetadata = true;
+              break;
+          }
       }
       if (!isMetadata && (amdSec != null && !amdSec.isEmpty())) {
         for (AmdSecType amdSecType : amdSec) {
@@ -330,11 +330,10 @@ public abstract class StructMapValidator {
                   false, false);
               } else {
                 if (metsValidatorState.checkMetsInternalId(id)) {
-                  final StringBuilder message = new StringBuilder();
-                  message.append("Value ").append(id).append(" in %1$s for mets/structMap[@LABEL='CSIP']"
-                    + "/div/div[@LABEL='Metadata']/@ID isn't unique in the package");
+                    String message = "Value " + id + " in %1$s for mets/structMap[@LABEL='CSIP']"
+                            + "/div/div[@LABEL='Metadata']/@ID isn't unique in the package";
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                    Message.createErrorMessage(message, metsValidatorState.getMetsName(),
                       metsValidatorState.isRootMets()),
                     false, false);
                 } else {
@@ -363,9 +362,10 @@ public abstract class StructMapValidator {
         if (div != null) {
           final List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL() != null && d.getLABEL().equals("Metadata")) {
-              found = true;
-            }
+              if (d.getLABEL() != null && d.getLABEL().equals("Metadata")) {
+                  found = true;
+                  break;
+              }
           }
           if (!found) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
@@ -419,11 +419,10 @@ public abstract class StructMapValidator {
                     admid = ((MdSecType) o).getID();
                   }
                   if (!amdSecIDs.contains(admid)) {
-                    final StringBuilder message = new StringBuilder();
-                    message.append("mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@ADMID (").append(admid)
-                      .append(") doesn't match with any mets/amdSec/digiprovMD/@ID in %1$s");
+                      String message = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@ADMID (" + admid +
+                              ") doesn't match with any mets/amdSec/digiprovMD/@ID in %1$s";
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                      Message.createErrorMessage(message, metsValidatorState.getMetsName(),
                         metsValidatorState.isRootMets()),
                       false, false);
                   }
@@ -466,11 +465,10 @@ public abstract class StructMapValidator {
                 for (Object o : dmdids) {
                   final String dmid = ((MdSecType) o).getID();
                   if (!dmdSecIDs.contains(dmid)) {
-                    final StringBuilder message = new StringBuilder();
-                    message.append("mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@DMDID (").append(dmid)
-                      .append(") not match with any mets/dmdSec/mdRef/@ID in %1$s");
+                      String message = "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Metadata']/@DMDID (" + dmid +
+                              ") not match with any mets/dmdSec/mdRef/@ID in %1$s";
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                      Message.createErrorMessage(message, metsValidatorState.getMetsName(),
                         metsValidatorState.isRootMets()),
                       false, false);
                   }
@@ -555,11 +553,10 @@ public abstract class StructMapValidator {
                   false, false);
               } else {
                 if (metsValidatorState.checkMetsInternalId(id)) {
-                  final StringBuilder message = new StringBuilder();
-                  message.append("Value ").append(id).append(" in %1$s for mets/structMap[@LABEL='CSIP']/div"
-                    + "/div[@LABEL='Documentation']/@ID isn't unique in the package");
+                    String message = "Value " + id + " in %1$s for mets/structMap[@LABEL='CSIP']/div"
+                            + "/div[@LABEL='Documentation']/@ID isn't unique in the package";
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                    Message.createErrorMessage(message, metsValidatorState.getMetsName(),
                       metsValidatorState.isRootMets()),
                     false, false);
                 } else {
@@ -697,12 +694,11 @@ public abstract class StructMapValidator {
                     }
                   }
                   if (!found) {
-                    final StringBuilder message = new StringBuilder();
-                    message.append("Value ").append(fileid)
-                      .append(" in %1$s for mets/structMap[@LABEL='CSIP']/div" + "/div[@LABEL='Documentation']"
-                        + "/fptr/@FILEID doesn't match with " + "any mets/fileSec/fileGrp/@ID  ");
+                      String message = "Value " + fileid +
+                              " in %1$s for mets/structMap[@LABEL='CSIP']/div" + "/div[@LABEL='Documentation']"
+                              + "/fptr/@FILEID doesn't match with " + "any mets/fileSec/fileGrp/@ID  ";
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                      Message.createErrorMessage(message, metsValidatorState.getMetsName(),
                         metsValidatorState.isRootMets()),
                       false, false);
                   }
@@ -786,11 +782,10 @@ public abstract class StructMapValidator {
                   false, false);
               } else {
                 if (metsValidatorState.checkMetsInternalId(id)) {
-                  final StringBuilder message = new StringBuilder();
-                  message.append("Value ").append(id).append(" in %1$s for mets/structMap[@LABEL='CSIP']/div"
-                    + "/div[@LABEL='Schemas']/@ID isn't unique in the package");
+                    String message = "Value " + id + " in %1$s for mets/structMap[@LABEL='CSIP']/div"
+                            + "/div[@LABEL='Schemas']/@ID isn't unique in the package";
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                    Message.createErrorMessage(message, metsValidatorState.getMetsName(),
                       metsValidatorState.isRootMets()),
                     false, false);
                 } else {
@@ -926,12 +921,11 @@ public abstract class StructMapValidator {
                     }
                   }
                   if (!found) {
-                    final StringBuilder message = new StringBuilder();
-                    message.append("Value ").append(fileid)
-                      .append(" In %1$s for mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']"
-                        + "/fptr/@FILEID doesn't match with any mets/fileSec/fileGrp/@ID ");
+                      String message = "Value " + fileid +
+                              " In %1$s for mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']"
+                              + "/fptr/@FILEID doesn't match with any mets/fileSec/fileGrp/@ID ";
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                      Message.createErrorMessage(message, metsValidatorState.getMetsName(),
                         metsValidatorState.isRootMets()),
                       false, false);
                   }
@@ -1016,11 +1010,10 @@ public abstract class StructMapValidator {
                   false, false);
               } else {
                 if (metsValidatorState.checkMetsInternalId(id)) {
-                  final StringBuilder message = new StringBuilder();
-                  message.append("Value ").append(id).append(" in %1$s for mets/structMap[@LABEL='CSIP']/div"
-                    + "/div[@LABEL='Representations']/@ID isn't unique in the package");
+                    String message = "Value " + id + " in %1$s for mets/structMap[@LABEL='CSIP']/div"
+                            + "/div[@LABEL='Representations']/@ID isn't unique in the package";
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                    Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                    Message.createErrorMessage(message, metsValidatorState.getMetsName(),
                       metsValidatorState.isRootMets()),
                     false, false);
                 } else {
@@ -1172,12 +1165,10 @@ public abstract class StructMapValidator {
                     }
                   }
                   if (!found) {
-                    final StringBuilder message = new StringBuilder();
-                    message
-                      .append("mets/structMap[@LABEL='CSIP']/div/div" + "[@LABEL='Representations']/fptr/@FILEID (")
-                      .append(fileid).append(") doesn't match with any mets/fileSec/fileGrp/@ID in %1$s");
+                      String message = "mets/structMap[@LABEL='CSIP']/div/div" + "[@LABEL='Representations']/fptr/@FILEID (" +
+                              fileid + ") doesn't match with any mets/fileSec/fileGrp/@ID in %1$s";
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                      Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                      Message.createErrorMessage(message, metsValidatorState.getMetsName(),
                         metsValidatorState.isRootMets()),
                       false, false);
                   }
@@ -1243,11 +1234,10 @@ public abstract class StructMapValidator {
                 false, false);
             } else {
               if (metsValidatorState.checkMetsInternalId(id)) {
-                final StringBuilder message = new StringBuilder();
-                message.append("Value ").append(id)
-                  .append(" in %1$s for mets/structMap[@LABEL='CSIP']" + "/div/div/@ID isn't unique in the package");
+                  String message = "Value " + id +
+                          " in %1$s for mets/structMap[@LABEL='CSIP']" + "/div/div/@ID isn't unique in the package";
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
-                  message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+                        message, metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
               } else {
                 metsValidatorState.addMetsInternalId(id);
               }
@@ -1346,16 +1336,16 @@ public abstract class StructMapValidator {
                     final List<MetsType.FileSec.FileGrp> fileGrps = fileSec.getFileGrp();
                     boolean found = false;
                     for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
-                      if (title.equals(fileGrp.getID())) {
-                        found = true;
-                      }
+                        if (title.equals(fileGrp.getID())) {
+                            found = true;
+                            break;
+                        }
                     }
                     if (!found) {
-                      final StringBuilder message = new StringBuilder();
-                      message.append("mets/structMap[@LABEL='CSIP']/div/div/mptr/@xlink:title in %1$s (").append(title)
-                        .append(") does not correspond a file group ID");
+                        String message = "mets/structMap[@LABEL='CSIP']/div/div/mptr/@xlink:title in %1$s (" + title +
+                                ") does not correspond a file group ID";
                       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
-                        Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                        Message.createErrorMessage(message, metsValidatorState.getMetsName(),
                           metsValidatorState.isRootMets()),
                         false, false);
                     }
@@ -1426,7 +1416,7 @@ public abstract class StructMapValidator {
               final List<DivType.Mptr> mptrs = d.getMptr();
               if (!mptrs.isEmpty()) {
                 for (DivType.Mptr mptr : mptrs) {
-                  final String href = URLDecoder.decode(mptr.getHref(), "UTF-8");
+                  final String href = URLDecoder.decode(mptr.getHref(), StandardCharsets.UTF_8);
                   if (structureValidatorState.isZipFileFlag()) {
                     final StringBuilder filePath = new StringBuilder();
                     if (metsValidatorState.isRootMets()) {

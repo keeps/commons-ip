@@ -21,8 +21,8 @@ public class IPFile implements IPFileInterface {
   private String pathString;
   private String renameTo;
   private List<String> relativeFolders;
-  private String checksum = "";
-  private String checksumAlgorithm = "";
+  private String checksum;
+  private String checksumAlgorithm;
   private List<String> relatedTags;
 
   public IPFile() {

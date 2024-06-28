@@ -91,13 +91,12 @@ public class Checksum {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder();
-    sb.append("class Checksum {\n");
 
-    sb.append("    algorithm: ").append(toIndentedString(algorithm)).append(Constants.END_OF_LINE);
-    sb.append("    value: ").append(toIndentedString(value)).append(Constants.END_OF_LINE);
-    sb.append("}");
-    return sb.toString();
+      String sb = "class Checksum {\n" +
+              "    algorithm: " + toIndentedString(algorithm) + Constants.END_OF_LINE +
+              "    value: " + toIndentedString(value) + Constants.END_OF_LINE +
+              "}";
+    return sb;
   }
 
   /**

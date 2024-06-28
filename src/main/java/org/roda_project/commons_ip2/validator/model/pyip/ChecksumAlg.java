@@ -25,7 +25,7 @@ public enum ChecksumAlg {
   /**
    * Value of checksum.
    */
-  private String value;
+  private final String value;
 
   ChecksumAlg(final String value) {
     this.value = value;

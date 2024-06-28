@@ -103,7 +103,7 @@ public class EARKTest {
     sip.addDocumentation(new IPFile(Paths.get("src/test/resources/eark/documentation.pdf")));
 
     // 1.7) set optional RODA related information about ancestors
-    sip.setAncestors(Arrays.asList("b6f24059-8973-4582-932d-eb0b2cb48f28"));
+    sip.setAncestors(List.of("b6f24059-8973-4582-932d-eb0b2cb48f28"));
 
     // 1.8) add an agent (SIP level)
     IPAgent agent = new IPAgent("Agent Name", "OTHER", "OTHER ROLE", CreatorType.INDIVIDUAL, "OTHER TYPE");

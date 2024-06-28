@@ -7,10 +7,7 @@
  */
 package org.roda_project.commons_ip2.utils;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,7 +15,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -37,6 +33,7 @@ import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType.MdRef;
 import org.roda_project.commons_ip2.mets_v1_12.beans.Mets;
 import org.roda_project.commons_ip2.model.IPConstants;
+import org.roda_project.commons_ip2.model.IPFileInterface;
 import org.roda_project.commons_ip2.model.SIP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,8 +51,6 @@ public final class ZIPUtils {
    * @param destinationDirectory
    *          this path is only used if unzipping the SIP, otherwise source will
    *          be used
-   * @param ipFileExtension
-   *          file extension (e.g. .zip)
    */
   public static Path extractIPIfInZipFormat(final Path source, Path destinationDirectory) throws ParseException {
     Path ipFolderPath = destinationDirectory;
@@ -84,15 +79,24 @@ public final class ZIPUtils {
     return ipFolderPath;
   }
 
-  public static Map<String, ZipEntryInfo> addMdRefFileToZip(Map<String, ZipEntryInfo> zipEntries, Path filePath,
+  public static Map<String, ZipEntryInfo> addMdRefFileToZip(Map<String, ZipEntryInfo> zipEntries, IPFileInterface file,
     String zipPath, MdRef mdRef) throws IPException {
-    zipEntries.put(zipPath, new METSMdRefZipEntryInfo(zipPath, filePath, mdRef));
+
+    METSMdRefZipEntryInfo fileInput = new METSMdRefZipEntryInfo(zipPath, file.getPath(), mdRef);
+    fileInput.setChecksum(file.getChecksum());
+    fileInput.setChecksumAlgorithm(file.getChecksumAlgorithm());
+
+    zipEntries.put(zipPath, fileInput);
+
     return zipEntries;
   }
 
-  public static Map<String, ZipEntryInfo> addFileTypeFileToZip(Map<String, ZipEntryInfo> zipEntries, Path filePath,
+  public static Map<String, ZipEntryInfo> addFileTypeFileToZip(Map<String, ZipEntryInfo> zipEntries, IPFileInterface file,
     String zipPath, FileType fileType) throws IPException {
-    zipEntries.put(zipPath, new METSFileTypeZipEntryInfo(zipPath, filePath, fileType));
+    METSFileTypeZipEntryInfo fileInput = new METSFileTypeZipEntryInfo(zipPath, file.getPath(), fileType);
+    fileInput.setChecksum(file.getChecksum());
+    fileInput.setChecksumAlgorithm(file.getChecksumAlgorithm());
+    zipEntries.put(zipPath, fileInput);
     return zipEntries;
   }
 
@@ -117,7 +121,8 @@ public final class ZIPUtils {
     }
 
     Set<String> nonMetsChecksumAlgorithms = new TreeSet<>();
-    nonMetsChecksumAlgorithms.add(sip.getChecksum());
+    nonMetsChecksumAlgorithms.add(sip.getChecksumAlgorithm());
+
     Set<String> metsChecksumAlgorithms = new TreeSet<>();
     metsChecksumAlgorithms.addAll(nonMetsChecksumAlgorithms);
     metsChecksumAlgorithms.addAll(sip.getExtraChecksumAlgorithms());
@@ -128,7 +133,11 @@ public final class ZIPUtils {
         throw new InterruptedException();
       }
 
-      file.setChecksum(sip.getChecksum());
+      // TODO: Consolidate this logic with the one in EARKSIP.java finalize()
+      if(!sip.getHasPregeneratedChecksums() || file.getChecksumAlgorithm() == null || file.getChecksumAlgorithm().isEmpty()){
+        file.setChecksumAlgorithm(sip.getChecksumAlgorithm());
+      }
+      file.setChecksumAlgorithm(sip.getChecksumAlgorithm());
       file.prepareEntryforZipping();
 
 
@@ -142,29 +151,39 @@ public final class ZIPUtils {
 
       zos.putNextEntry(entry);
 
-      try (InputStream inputStream = Files.newInputStream(file.getFilePath());) {
-        Map<String, String> checksums;
-        if (file instanceof METSZipEntryInfo) {
-          checksums = calculateChecksums(Optional.of(zos), inputStream, metsChecksumAlgorithms);
-          METSZipEntryInfo metsEntry = (METSZipEntryInfo) file;
+      try (InputStream inputStream = Files.newInputStream(file.getFilePath())) {
+        Map<String, String> checksums = new HashMap<>();
+        if (file instanceof METSZipEntryInfo metsEntry) {
+          if(sip.getHasPregeneratedChecksums() && file.getChecksum() != null && !file.getChecksum().isEmpty()){
+            LOGGER.info(file.getFilePath() + " already has checksum, skipping checksum calculation");
+            writeToOutputStream(Optional.of(zos), inputStream);
+            checksums.put(file.getChecksumAlgorithm(), file.getChecksum());
+          }else{
+            checksums = writeToOutputAndCalculateChecksum(Optional.of(zos), inputStream, metsChecksumAlgorithms);
+          }
+
           metsEntry.setChecksums(checksums);
           metsEntry.setSize(metsEntry.getFilePath().toFile().length());
-        } else {
-          checksums = calculateChecksums(Optional.of(zos), inputStream, nonMetsChecksumAlgorithms);
+        }
+        else if(sip.getHasPregeneratedChecksums() && file.getChecksum() != null && !file.getChecksum().isEmpty()) {
+          LOGGER.info(file.getFilePath() + " already has checksum, skipping checksum calculation");
+          writeToOutputStream(Optional.of(zos), inputStream);
+          checksums.put(file.getChecksumAlgorithm(), file.getChecksum());
+        }
+        else {
+          checksums = writeToOutputAndCalculateChecksum(Optional.of(zos), inputStream, nonMetsChecksumAlgorithms);
         }
 
         LOGGER.debug("Done zipping file");
-        String checksum = checksums.get(sip.getChecksum());
-        String checksumType = sip.getChecksum();
+        String checksum = checksums.get(sip.getChecksumAlgorithm());
+        String checksumType = sip.getChecksumAlgorithm();
         file.setChecksum(checksum);
         file.setChecksumAlgorithm(checksumType);
-        if (file instanceof METSFileTypeZipEntryInfo) {
-          METSFileTypeZipEntryInfo f = (METSFileTypeZipEntryInfo) file;
-          f.getMetsFileType().setCHECKSUM(checksum);
+        if (file instanceof METSFileTypeZipEntryInfo f) {
+            f.getMetsFileType().setCHECKSUM(checksum);
           f.getMetsFileType().setCHECKSUMTYPE(checksumType);
-        } else if (file instanceof METSMdRefZipEntryInfo) {
-          METSMdRefZipEntryInfo f = (METSMdRefZipEntryInfo) file;
-          f.getMetsMdRef().setCHECKSUM(checksum);
+        } else if (file instanceof METSMdRefZipEntryInfo f) {
+            f.getMetsMdRef().setCHECKSUM(checksum);
           f.getMetsMdRef().setCHECKSUMTYPE(checksumType);
         }
       } catch (NoSuchAlgorithmException e) {
@@ -180,36 +199,56 @@ public final class ZIPUtils {
     out.close();
   }
 
-  public static Map<String, String> calculateChecksums(Optional<ZipOutputStream> zos, InputStream inputStream,
-    Set<String> checksumAlgorithms) throws NoSuchAlgorithmException, IOException {
+  public static <T extends OutputStream & java.io.Closeable> Map<String, String> writeToOutputAndCalculateChecksum(
+          Optional<T> outputStream, InputStream inputStream, Set<String> checksumAlgorithms)
+          throws NoSuchAlgorithmException, IOException {
+
     byte[] buffer = new byte[4096];
     Map<String, String> values = new HashMap<>();
 
-    // instantiate different checksum algorithms
+    // Instantiate different checksum algorithms
     Map<String, MessageDigest> algorithms = new HashMap<>();
     for (String alg : checksumAlgorithms) {
       algorithms.put(alg, MessageDigest.getInstance(alg));
     }
 
-    // calculate value for each one of the algorithms
+    // Calculate value for each one of the algorithms
     int numRead;
     do {
       numRead = inputStream.read(buffer);
       if (numRead > 0) {
-        for (Entry<String, MessageDigest> alg : algorithms.entrySet()) {
+        for (Map.Entry<String, MessageDigest> alg : algorithms.entrySet()) {
           alg.getValue().update(buffer, 0, numRead);
         }
 
-        if (zos.isPresent()) {
-          zos.get().write(buffer, 0, numRead);
+        if (outputStream.isPresent()) {
+          outputStream.get().write(buffer, 0, numRead);
         }
       }
-    } while (numRead != -1);
+    } while (numRead!= -1);
 
-    // generate hex versions of the digests
+    // Generate hex versions of the digests
     algorithms.forEach((alg, dig) -> values.put(alg, DatatypeConverter.printHexBinary(dig.digest())));
 
     return values;
+  }
+
+  public static <T extends OutputStream & java.io.Closeable> void writeToOutputStream(
+          Optional<T> outputStream, InputStream inputStream)
+          throws NoSuchAlgorithmException, IOException {
+
+    byte[] buffer = new byte[4096];
+
+    // Calculate value for each one of the algorithms
+    int numRead;
+    do {
+      numRead = inputStream.read(buffer);
+      if (numRead > 0) {
+        if (outputStream.isPresent()) {
+          outputStream.get().write(buffer, 0, numRead);
+        }
+      }
+    } while (numRead!= -1);
   }
 
   public static void unzip(Path zip, final Path dest) throws IOException {
