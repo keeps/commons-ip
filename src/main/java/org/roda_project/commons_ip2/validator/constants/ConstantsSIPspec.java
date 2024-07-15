@@ -61,7 +61,7 @@ public final class ConstantsSIPspec {
    * Constant specification description for id "SIP2".
    */
   public static final String VALIDATION_REPORT_SPECIFICATION_SIP2_DESCRIPTION = "The value is set to "
-    + "“https://earksip.dilcis.eu/profile/E-ARK-SIP.xml”.";
+    + "“https://earksip.dilcis.eu/profile/E-ARK-SIP-v2-2-0.xml”.";
 
   /**
    * Constant specification cardinality for id "SIP2".
@@ -244,7 +244,7 @@ public final class ConstantsSIPspec {
   /**
    * Constant specification cardinality for id "SIP7".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_SIP7_CARDINALITY = "1..1";
+  public static final String VALIDATION_REPORT_SPECIFICATION_SIP7_CARDINALITY = "0..1";
 
   /**
    * Constant specification level for id "SIP7".
@@ -416,12 +416,12 @@ public final class ConstantsSIPspec {
   /**
    * Constant specification cardinality for id "SIP12".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_SIP12_CARDINALITY = "0..*";
+  public static final String VALIDATION_REPORT_SPECIFICATION_SIP12_CARDINALITY = "1..1";
 
   /**
    * Constant specification level for id "SIP12".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_SIP12_LEVEL = "MAY";
+  public static final String VALIDATION_REPORT_SPECIFICATION_SIP12_LEVEL = "MUST";
 
   /* SIP13 */
 
@@ -510,8 +510,8 @@ public final class ConstantsSIPspec {
   /**
    * Constant specification description for id "SIP15".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_SIP15_DESCRIPTION = "The name of the "
-    + "organisation or person" + " submitting the package to the archive";
+  public static final String VALIDATION_REPORT_SPECIFICATION_SIP15_DESCRIPTION = "A wrapper element that enables to " +
+    "encode the name of the organisation or person submitting the package to the archive.";
 
   /**
    * Constant specification cardinality for id "SIP15".
@@ -619,7 +619,7 @@ public final class ConstantsSIPspec {
   /**
    * Constant specification level for id "SIP18".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_SIP18_LEVEL = "MAY";
+  public static final String VALIDATION_REPORT_SPECIFICATION_SIP18_LEVEL = "MUST";
 
   /* SIP19 */
 
@@ -641,8 +641,8 @@ public final class ConstantsSIPspec {
   /**
    * Constant specification description for id "SIP19".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_SIP19_DESCRIPTION = "The submitting agent "
-    + "has a note providing a " + "unique identification code for the archival creator.";
+  public static final String VALIDATION_REPORT_SPECIFICATION_SIP19_DESCRIPTION = "The submitting agent has a note " +
+    "providing a unique identification code for the submitter.";
 
   /**
    * Constant specification cardinality for id "SIP19".
@@ -707,7 +707,8 @@ public final class ConstantsSIPspec {
   /**
    * Constant specification description for id "SIP21".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_SIP21_DESCRIPTION = "Contact person for the submission.";
+  public static final String VALIDATION_REPORT_SPECIFICATION_SIP21_DESCRIPTION = "A wrapper element that enables " +
+    "to encode the name of the contact person for the submission.";
 
   /**
    * Constant specification cardinality for id "SIP21".
@@ -869,8 +870,8 @@ public final class ConstantsSIPspec {
   /**
    * Constant specification description for id "SIP26".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_SIP26_DESCRIPTION = "The organisation or person "
-    + "that preserves the package";
+  public static final String VALIDATION_REPORT_SPECIFICATION_SIP26_DESCRIPTION = "A wrapper element that enables to" +
+    " encode the name of the organisation or person that preserves the package.";
 
   /**
    * Constant specification cardinality for id "SIP26".
@@ -979,7 +980,7 @@ public final class ConstantsSIPspec {
   /**
    * Constant specification level for id "SIP29".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_SIP29_LEVEL = "MAY";
+  public static final String VALIDATION_REPORT_SPECIFICATION_SIP29_LEVEL = "MUST";
 
   /* SIP30 */
   /**

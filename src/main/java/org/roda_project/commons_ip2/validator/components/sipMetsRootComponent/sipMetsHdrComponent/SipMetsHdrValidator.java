@@ -138,21 +138,13 @@ public abstract class SipMetsHdrValidator {
    */
   protected ReporterDetails validateSIP7(final MetsValidatorState metsValidatorState, final MetsType.MetsHdr metsHdr) {
     final List<MetsType.MetsHdr.AltRecordID> altRecordIDS = metsHdr.getAltRecordID();
-    boolean found = false;
     int count = 0;
     if (altRecordIDS != null && !altRecordIDS.isEmpty()) {
       for (MetsType.MetsHdr.AltRecordID altRecordID : altRecordIDS) {
         final String type = altRecordID.getTYPE();
         if ("REFERENCECODE".equals(type)) {
-          found = true;
           count++;
         }
-      }
-      if (!found) {
-        return new ReporterDetails(getSIPVersion(),
-          Message.createErrorMessage("metsHdr/altRecordID with the @TYPE “REFERENCECODE” not found in %1$s",
-            metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
-          false, false);
       }
       if (count > 1) {
         return new ReporterDetails(getSIPVersion(),
