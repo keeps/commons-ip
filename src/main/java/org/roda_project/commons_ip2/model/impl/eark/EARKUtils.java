@@ -38,6 +38,7 @@ import org.roda_project.commons_ip2.mets_v1_12.beans.MetsType.MetsHdr.Agent;
 import org.roda_project.commons_ip2.mets_v1_12.beans.StructMapType;
 import org.roda_project.commons_ip2.model.AIP;
 import org.roda_project.commons_ip2.model.IPConstants;
+import org.roda_project.commons_ip2.model.IPContentInformationType;
 import org.roda_project.commons_ip2.model.IPContentType;
 import org.roda_project.commons_ip2.model.IPDescriptiveMetadata;
 import org.roda_project.commons_ip2.model.IPFile;
@@ -163,11 +164,11 @@ public class EARKUtils {
         final IPHeader header = new IPHeader(IPEnums.IPStatus.NEW).setAgents(representation.getAgents());
         final MetsWrapper representationMETSWrapper;
 
-        if (IPEnums.SipType.ERMS.equals(sipType)) {
+        if (IPEnums.SipType.SIARD.equals(sipType)) {
           representationMETSWrapper = metsGenerator.generateMETS(representationId, representation.getDescription(),
-            ip.getProfile(), false, Optional.empty(), null, header,
+            "https://citssiard.dilcis.eu/profile/E-ARK-SIARDREPRESENTATION.xml", false, Optional.empty(), null, header,
             mainMETSWrapper.getMets().getMetsHdr().getOAISPACKAGETYPE(), representation.getContentType(),
-            representation.getContentInformationType(), isRepresentationMetadata, isRepresentationMetadataOther,
+            new IPContentInformationType("citssiard_v1_0"), isRepresentationMetadata, isRepresentationMetadataOther,
             isRepresentationSchemas, isRepresentationDocumentation, false, false, isRepresentationsData);
         } else if (!IPEnums.SipType.EARK2S.equals(sipType)) {
           representationMETSWrapper = metsGenerator.generateMETS(representationId, representation.getDescription(),
@@ -185,8 +186,8 @@ public class EARKUtils {
         representationMETSWrapper.getMainDiv().setTYPE(representation.getStatus().asString());
 
         // representation data
-        if (IPEnums.SipType.ERMS.equals(sipType)) {
-          addRepresentationDataFilesToZipErmsAndMETS(ip, zipEntries, representationMETSWrapper, representation,
+        if (IPEnums.SipType.SIARD.equals(sipType)) {
+          addRepresentationDataFilesToZipSiardAndMETS(ip, zipEntries, representationMETSWrapper, representation,
             representationId);
         } else {
           addRepresentationDataFilesToZipAndMETS(ip, zipEntries, representationMETSWrapper, representation,
@@ -213,7 +214,7 @@ public class EARKUtils {
           representationId);
 
         // add representation METS to Zip file and to main METS file
-        if (IPEnums.SipType.ERMS.equals(sipType)) {
+        if (IPEnums.SipType.SIARD.equals(sipType)) {
           metsGenerator.addRepresentationMETSToZipAndToMainMETS(zipEntries, mainMETSWrapper, representationId,
             representationMETSWrapper,
             IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR + IPConstants.DATA
@@ -235,7 +236,7 @@ public class EARKUtils {
 
   }
 
-  private void addRepresentationDataFilesToZipErmsAndMETS(IPInterface ip, Map<String, ZipEntryInfo> zipEntries,
+  private void addRepresentationDataFilesToZipSiardAndMETS(IPInterface ip, Map<String, ZipEntryInfo> zipEntries,
     MetsWrapper representationMETSWrapper, IPRepresentation representation, String representationId)
     throws InterruptedException, IPException {
     if (representation.getData() != null && !representation.getData().isEmpty()) {
