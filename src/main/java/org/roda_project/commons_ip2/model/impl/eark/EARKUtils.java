@@ -63,6 +63,8 @@ import org.xml.sax.SAXException;
 
 import jakarta.xml.bind.JAXBException;
 
+import javax.xml.namespace.QName;
+
 public class EARKUtils {
 
   private EARKMETSCreator metsGenerator;
@@ -165,10 +167,11 @@ public class EARKUtils {
         final MetsWrapper representationMETSWrapper;
 
         if (IPEnums.SipType.SIARD.equals(sipType)) {
-          representationMETSWrapper = metsGenerator.generateMETS(representationId, representation.getDescription(),
-            "https://citssiard.dilcis.eu/profile/E-ARK-SIARDREPRESENTATION.xml", false, Optional.empty(), null, header,
+          representation.setContentInformationType(representation.getContentInformationType());
+          representationMETSWrapper = metsGenerator.generateMetsSiard(representationId, representation.getDescription(),
+            "https://citssiard.dilcis.eu/profile/E-ARK-SIARD-REPRESENTATION.xml", false, Optional.empty(), null, header,
             mainMETSWrapper.getMets().getMetsHdr().getOAISPACKAGETYPE(), representation.getContentType(),
-            new IPContentInformationType("citssiard_v1_0"), isRepresentationMetadata, isRepresentationMetadataOther,
+            representation.getContentInformationType(), isRepresentationMetadata, isRepresentationMetadataOther,
             isRepresentationSchemas, isRepresentationDocumentation, false, false, isRepresentationsData);
         } else if (!IPEnums.SipType.EARK2S.equals(sipType)) {
           representationMETSWrapper = metsGenerator.generateMETS(representationId, representation.getDescription(),
@@ -215,7 +218,7 @@ public class EARKUtils {
 
         // add representation METS to Zip file and to main METS file
         if (IPEnums.SipType.SIARD.equals(sipType)) {
-          metsGenerator.addRepresentationMETSToZipAndToMainMETS(zipEntries, mainMETSWrapper, representationId,
+          metsGenerator.addRepresentationSiardMETSToZipAndToMainMETS(zipEntries, mainMETSWrapper, representationId,
             representationMETSWrapper,
             IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR + IPConstants.DATA
               + IPConstants.ZIP_PATH_SEPARATOR + IPConstants.METS_FILE,
@@ -252,7 +255,9 @@ public class EARKUtils {
         if (file instanceof IPFile) {
           String dataFilePath = ModelUtils.getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
           FileType fileType = metsGenerator.addDataFileToMETS(representationMETSWrapper, dataFilePath, file.getPath());
-
+          if (representation.getContentInformationType().getOtherType() != null) {
+            fileType.getOtherAttributes().put(QName.valueOf("csip:OTHERCONTENTINFORMATIONTYPE"), representation.getContentInformationType().getOtherType());
+          }
           dataFilePath = IPConstants.DATA_FOLDER + dataFilePath;
           dataFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
             + dataFilePath;
