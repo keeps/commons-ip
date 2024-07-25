@@ -21,6 +21,7 @@ import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.state.MetsValidatorState;
 import org.roda_project.commons_ip2.validator.state.StructureValidatorState;
 import org.roda_project.commons_ip2.validator.utils.CHECKSUMTYPE;
+import org.roda_project.commons_ip2.validator.utils.DecoderUtils;
 import org.roda_project.commons_ip2.validator.utils.Message;
 import org.roda_project.commons_ip2.validator.utils.MetadataType;
 
@@ -88,7 +89,8 @@ public abstract class AmdSecValidator {
             for (MdSecType md : allMdSecTypes) {
               final MdSecType.MdRef mdRef = md.getMdRef();
               if (mdRef != null && mdRef.getHref() != null) {
-                final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+                final String hrefDecoded = URLDecoder.decode(DecoderUtils.normalizePath(mdRef.getHref()),
+                  Constants.UTF_8);
                 if (metsValidatorState.isRootMets()) {
                   if (metadataFiles.containsKey(metsValidatorState.getMets().getOBJID() + "/" + hrefDecoded)) {
                     metadataFiles.replace(metsValidatorState.getMets().getOBJID() + "/" + hrefDecoded, true);
@@ -105,7 +107,8 @@ public abstract class AmdSecValidator {
             for (MdSecType md : metsValidatorState.getMets().getDmdSec()) {
               final MdSecType.MdRef mdRef = md.getMdRef();
               if (mdRef != null && mdRef.getHref() != null) {
-                final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+                final String hrefDecoded = URLDecoder.decode(DecoderUtils.normalizePath(mdRef.getHref()),
+                  Constants.UTF_8);
                 if (metsValidatorState.isRootMets()) {
                   if (metadataFiles.containsKey(metsValidatorState.getMets().getOBJID() + "/" + hrefDecoded)) {
                     metadataFiles.replace(metsValidatorState.getMets().getOBJID() + "/" + hrefDecoded, true);
@@ -168,7 +171,8 @@ public abstract class AmdSecValidator {
             for (MdSecType md : amd.getDigiprovMD()) {
               final MdSecType.MdRef mdRef = md.getMdRef();
               if (mdRef != null) {
-                final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+                final String hrefDecoded = URLDecoder.decode(DecoderUtils.normalizePath(mdRef.getHref()),
+                  Constants.UTF_8);
                 if (hrefDecoded != null) {
                   final String path = Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded).toString();
                   if (metadataFiles.containsKey(path)) {
@@ -182,7 +186,8 @@ public abstract class AmdSecValidator {
             for (MdSecType md : metsValidatorState.getMets().getDmdSec()) {
               final MdSecType.MdRef mdRef = md.getMdRef();
               if (mdRef != null) {
-                final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+                final String hrefDecoded = URLDecoder.decode(DecoderUtils.normalizePath(mdRef.getHref()),
+                  Constants.UTF_8);
                 if (hrefDecoded != null) {
                   final String path = Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded).toString();
                   if (metadataFiles.containsKey(path)) {
@@ -416,7 +421,7 @@ public abstract class AmdSecValidator {
         final MdSecType.MdRef mdRef = md.getMdRef();
         final StringBuilder message = new StringBuilder();
         if (mdRef != null && mdRef.getHref() != null) {
-          final String href = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+          final String href = URLDecoder.decode(DecoderUtils.normalizePath(mdRef.getHref()), Constants.UTF_8);
           if (structureValidatorState.isZipFileFlag()) {
             final StringBuilder path = new StringBuilder();
             if (metsValidatorState.isRootMets()) {
@@ -527,7 +532,7 @@ public abstract class AmdSecValidator {
       for (MdSecType md : digiprov) {
         final MdSecType.MdRef mdRef = md.getMdRef();
         if (mdRef != null && mdRef.getHref() != null) {
-          final String href = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+          final String href = URLDecoder.decode(DecoderUtils.normalizePath(mdRef.getHref()), Constants.UTF_8);
           final Long size = mdRef.getSIZE();
           if (size == null) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
@@ -641,7 +646,7 @@ public abstract class AmdSecValidator {
                   metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
                 false, false);
             } else {
-              final String href = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+              final String href = URLDecoder.decode(DecoderUtils.normalizePath(mdRef.getHref()), Constants.UTF_8);
               final StringBuilder message = new StringBuilder();
               if (structureValidatorState.isZipFileFlag()) {
                 final StringBuilder file = new StringBuilder();
@@ -950,7 +955,7 @@ public abstract class AmdSecValidator {
         for (MdSecType rmd : rigthsMD) {
           final MdSecType.MdRef mdRef = rmd.getMdRef();
           if (mdRef != null && mdRef.getHref() != null) {
-            final String href = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+            final String href = URLDecoder.decode(DecoderUtils.normalizePath(mdRef.getHref()), Constants.UTF_8);
             final StringBuilder message = new StringBuilder();
             if (structureValidatorState.isZipFileFlag()) {
               final StringBuilder filePath = new StringBuilder();
@@ -1064,7 +1069,7 @@ public abstract class AmdSecValidator {
         for (MdSecType rmd : rigthsMD) {
           final MdSecType.MdRef mdRef = rmd.getMdRef();
           if (mdRef != null && mdRef.getHref() != null) {
-            final String href = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+            final String href = URLDecoder.decode(DecoderUtils.normalizePath(mdRef.getHref()), Constants.UTF_8);
             final Long size = mdRef.getSIZE();
             if (size == null) {
               return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
@@ -1177,7 +1182,7 @@ public abstract class AmdSecValidator {
                     metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
                   false, false);
               } else {
-                final String href = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+                final String href = URLDecoder.decode(DecoderUtils.normalizePath(mdRef.getHref()), Constants.UTF_8);
                 final StringBuilder message = new StringBuilder();
                 if (structureValidatorState.isZipFileFlag()) {
                   final StringBuilder filePath = new StringBuilder();
