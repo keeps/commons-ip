@@ -19,6 +19,7 @@ import org.roda_project.commons_ip2.validator.handlers.MetsHandler;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.state.MetsValidatorState;
 import org.roda_project.commons_ip2.validator.state.StructureValidatorState;
+import org.roda_project.commons_ip2.validator.utils.DecoderUtils;
 import org.roda_project.commons_ip2.validator.utils.Message;
 
 /**
@@ -1426,7 +1427,7 @@ public abstract class StructMapValidator {
               final List<DivType.Mptr> mptrs = d.getMptr();
               if (!mptrs.isEmpty()) {
                 for (DivType.Mptr mptr : mptrs) {
-                  final String href = URLDecoder.decode(mptr.getHref(), "UTF-8");
+                  final String href = URLDecoder.decode(DecoderUtils.normalizePath(mptr.getHref()), "UTF-8");
                   if (structureValidatorState.isZipFileFlag()) {
                     final StringBuilder filePath = new StringBuilder();
                     if (metsValidatorState.isRootMets()) {

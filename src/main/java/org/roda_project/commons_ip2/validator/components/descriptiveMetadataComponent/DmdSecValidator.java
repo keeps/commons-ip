@@ -1,5 +1,17 @@
 package org.roda_project.commons_ip2.validator.components.descriptiveMetadataComponent;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLDecoder;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip2.mets_v1_12.beans.AmdSecType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType;
@@ -14,19 +26,9 @@ import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.state.MetsValidatorState;
 import org.roda_project.commons_ip2.validator.state.StructureValidatorState;
 import org.roda_project.commons_ip2.validator.utils.CHECKSUMTYPE;
+import org.roda_project.commons_ip2.validator.utils.DecoderUtils;
 import org.roda_project.commons_ip2.validator.utils.Message;
 import org.roda_project.commons_ip2.validator.utils.MetadataType;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URLDecoder;
-import java.nio.file.Paths;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author Carlos Afonso <cafonso@keep.pt>
@@ -88,7 +90,10 @@ public abstract class DmdSecValidator {
           for (MdSecType md : dmdSec) {
             final MdSecType.MdRef mdRef = md.getMdRef();
             if (mdRef != null && mdRef.getHref() != null) {
-              final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+
+              String hrefDecoded = URLDecoder.decode(DecoderUtils.normalizePath(mdRef.getHref()), Constants.UTF_8);
+              Path path = Paths.get(hrefDecoded);
+              hrefDecoded = path.normalize().toString();
               if (metsValidatorState.isRootMets()) {
                 if (metadataFiles.containsKey(mets.getOBJID() + Constants.SEPARATOR + hrefDecoded)) {
                   metadataFiles.replace(mets.getOBJID() + Constants.SEPARATOR + hrefDecoded, true);
@@ -112,7 +117,8 @@ public abstract class DmdSecValidator {
               for (MdSecType md : allMdSecTypes) {
                 final MdSecType.MdRef mdRef = md.getMdRef();
                 if (mdRef != null && mdRef.getHref() != null) {
-                  final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+                  final String hrefDecoded = URLDecoder.decode(DecoderUtils.normalizePath(mdRef.getHref()),
+                    Constants.UTF_8);
                   if (metsValidatorState.isRootMets()) {
                     if (metadataFiles.containsKey(mets.getOBJID() + Constants.SEPARATOR + hrefDecoded)) {
                       metadataFiles.replace(mets.getOBJID() + Constants.SEPARATOR + hrefDecoded, true);
@@ -174,7 +180,8 @@ public abstract class DmdSecValidator {
           for (MdSecType md : dmdSec) {
             final MdSecType.MdRef mdRef = md.getMdRef();
             if (mdRef != null) {
-              final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+              final String hrefDecoded = URLDecoder.decode(DecoderUtils.normalizePath(mdRef.getHref()),
+                Constants.UTF_8);
               if (hrefDecoded != null) {
                 final String path = Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded).toString();
                 if (metadataFiles.containsKey(path)) {
@@ -188,7 +195,8 @@ public abstract class DmdSecValidator {
               for (MdSecType md : amd.getDigiprovMD()) {
                 final MdSecType.MdRef mdRef = md.getMdRef();
                 if (mdRef != null) {
-                  final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+                  final String hrefDecoded = URLDecoder.decode(DecoderUtils.normalizePath(mdRef.getHref()),
+                    Constants.UTF_8);
                   if (hrefDecoded != null) {
                     final String path = Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded).toString();
                     if (metadataFiles.containsKey(path)) {
@@ -414,7 +422,7 @@ public abstract class DmdSecValidator {
       final MdSecType.MdRef mdRef = mdSec.getMdRef();
       final String href = mdRef.getHref();
       if (href != null) {
-        final String hrefDecoded = URLDecoder.decode(href, Constants.UTF_8);
+        final String hrefDecoded = URLDecoder.decode(DecoderUtils.normalizePath(href), Constants.UTF_8);
         if (structureValidatorState.isZipFileFlag()) {
           final StringBuilder path = new StringBuilder();
           if (metsValidatorState.isRootMets()) {
@@ -531,7 +539,7 @@ public abstract class DmdSecValidator {
       final MdSecType.MdRef mdRef = mdSec.getMdRef();
       final String href = mdRef.getHref();
       if (href != null) {
-        final String hrefDecoded = URLDecoder.decode(mdRef.getHref(), Constants.UTF_8);
+        final String hrefDecoded = URLDecoder.decode(DecoderUtils.normalizePath(mdRef.getHref()), Constants.UTF_8);
         final Long size = mdRef.getSIZE();
         if (size != null) {
           final StringBuilder message = new StringBuilder();
@@ -627,7 +635,7 @@ public abstract class DmdSecValidator {
           if (checksum != null) {
             final String href = mdRef.getHref();
             if (href != null) {
-              final String file = URLDecoder.decode(href, Constants.UTF_8);
+              final String file = URLDecoder.decode(DecoderUtils.normalizePath(href), Constants.UTF_8);
               final StringBuilder filePath = new StringBuilder();
               final StringBuilder message = new StringBuilder();
               if (structureValidatorState.isZipFileFlag()) {
