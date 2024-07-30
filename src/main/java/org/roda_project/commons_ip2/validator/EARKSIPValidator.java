@@ -164,7 +164,7 @@ public class EARKSIPValidator {
         subMets = structureValidatorState.getFolderManager().getSubMets(earksipPath);
       }
 
-      if (subMets.size() > 0) {
+      if (!subMets.isEmpty()) {
         validateSubMets(subMets, structureValidatorState.isZipFileFlag());
       }
       validateRootMets();
