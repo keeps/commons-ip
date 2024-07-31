@@ -1,10 +1,10 @@
 # E-ARK IP validation and manipulation tool and library
 
 This project provides a command-line interface and Java library to validate and manipulate OAIS Information Packages of
-different formats: E-ARK (version 1, 2.0.4, 2.1.0), BagIt, Hungarian type 4 SIP.
+different formats: E-ARK (version 1, 2.0.4, 2.1.0), BagIt, and Hungarian type 4 SIP.
 
 The E-ARK Information Packages are maintained by the Digital Information LifeCycle Interoperability Standards Board (
-DILCIS Board). DILCIS Board is an international group of experts committed to maintain and sustain maintain a set of
+DILCIS Board). DILCIS Board is an international group of experts committed to maintaining and sustaining a set of
 interoperability specifications which allow for the transfer, long-term preservation, and reuse of digital information
 regardless of the origin or type of the information.
 
@@ -36,13 +36,13 @@ You can use the commons-ip as a command-line tool or a Java library.
 
 ### Use as a command-line tool
 
-To use commons-ip command-line tool, need to download
+To use the commons-ip command-line tool, need to download
 the [latest release](https://github.com/keeps/commons-ip/releases/latest). This tool can validate a SIP or create a
 valid EARK2 SIP.
 
-To validate a SIP have to use the following options:
+To validate an SIP have to use the following options:
 
-* **validate**, [REQUIRED] this option is for the CLI to know that is to perform the validation of a SIP.
+* **validate**, [REQUIRED] This option is for the CLI to know that is to perform the validation of a SIP.
 * **-i,** or **--inputs** [REQUIRED] Path(s) to the SIP(s) archive file or folder(s).
 * **--specification-version,** [OPTIONAL] E-ARK CSIP version (Default: 2.1.0).
 * **-o,** or **--output-report-dir** [OPTIONAL]  Path to the Directory where you want to save the validation report.
@@ -50,11 +50,11 @@ To validate a SIP have to use the following options:
 * **-v,** or **--verbose** [OPTIONAL] Verbose option (Will print all validation steps)
 * **-h,** [OPTIONAL] Display this help and exit.
 
-To create a EARK-2 SIP have to use the following options:
+To create an EARK-2 SIP have to use the following options:
 
-* **create**, [REQUIRED] this option is for the CLI to know that is to perform the creation of a EARK-2 SIP.
+* **create**, [REQUIRED] This option is for the CLI to know that is to perform the creation of an EARK-2 SIP.
 
-* **-doc** or **--documentation**, [OPTIONAL] Path(s) to folders or files to add in documentation of SIP.
+* **-doc** or **--documentation**, [OPTIONAL] Path(s) to folders or files to add in the documentation of SIP.
 * **-p** or **--path**, [OPTIONAL] Path to save the SIP.
 * **-a** or **--ancestors**, [OPTIONAL] ID(s) of the ancestors of the SIP.
 * **-C** or **--checksum**, [OPTIONAL] Checksum algorithm (Default: SHA-256).
@@ -65,6 +65,7 @@ To create a EARK-2 SIP have to use the following options:
 * **--submitter-id**, [OPTIONAL] The identification code (ID) of the submitter agent.
 * **--sip-id**, [OPTIONAL] ID of the SIP.
 * * **--override-schema**, [OPTIONAL] Overrides default schema.
+* * **-s** or **--strategy**, [OPTIONAL] Write strategy to be used (Default: Zip)
 
 This is the descriptive metadata section:
 * **--metadata-file** [REQUIRED] Path to descriptive metadata file.
@@ -72,7 +73,7 @@ This is the descriptive metadata section:
 * **--metadata-schema**, [OPTIONAL] Path to descriptive metadata schema file.
 * **--metadata-version**, [OPTIONAL] Descriptive metadata version.
 
-**NOTE:** if does not give the metadata version, the tool try to obtain this values from the file
+**NOTE:** If does not give the metadata version, the tool tries to obtain these values from the file
 name in the following formats (file: **ead_2002.xml** -> result: metadata version: **2002**)
 
 This is the representation section:
