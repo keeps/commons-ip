@@ -25,7 +25,7 @@ public class METSFileTypeZipEntryInfo extends FileZipEntryInfo {
   }
 
   @Override
-  public void prepareEntryforZipping() {
+  public void prepareEntryForZipping() {
     // do nothing
   }
 

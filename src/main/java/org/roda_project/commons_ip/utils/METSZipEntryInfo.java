@@ -53,7 +53,7 @@ public class METSZipEntryInfo extends FileZipEntryInfo {
   }
 
   @Override
-  public void prepareEntryforZipping() throws IPException {
+  public void prepareEntryForZipping() throws IPException {
     try {
       METSUtils.marshallMETS(mets, getFilePath(), rootMETS);
     } catch (JAXBException | IOException e) {

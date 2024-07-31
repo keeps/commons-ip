@@ -121,6 +121,8 @@ public final class IPConstants {
   public static final String SCHEMA_EARK_SIP_RELATIVE_PATH_FROM_RESOURCES = METS_PATH_SEPARATOR + SCHEMAS + "2"
     + METS_PATH_SEPARATOR + SCHEMA_EARK_SIP_FILENAME;
 
+  public static final String SIP_FILE_EXTENSION = ".zip";
+
   /** Private empty constructor */
   private IPConstants() {
     // do nothing

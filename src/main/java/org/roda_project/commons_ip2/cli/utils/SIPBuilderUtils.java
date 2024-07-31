@@ -14,12 +14,16 @@ import java.util.stream.Stream;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip2.cli.model.args.MetadataGroup;
 import org.roda_project.commons_ip2.cli.model.args.RepresentationGroup;
+import org.roda_project.commons_ip2.cli.model.enums.WriteStrategyEnum;
 import org.roda_project.commons_ip2.model.IPContentType;
 import org.roda_project.commons_ip2.model.IPDescriptiveMetadata;
 import org.roda_project.commons_ip2.model.IPFile;
 import org.roda_project.commons_ip2.model.IPRepresentation;
 import org.roda_project.commons_ip2.model.MetadataType;
 import org.roda_project.commons_ip2.model.SIP;
+import org.roda_project.commons_ip2.model.impl.eark.out.writers.factory.FolderWriteStrategyFactory;
+import org.roda_project.commons_ip2.model.impl.eark.out.writers.factory.ZipWriteStrategyFactory;
+import org.roda_project.commons_ip2.model.impl.eark.out.writers.strategy.WriteStrategy;
 import org.roda_project.commons_ip2.utils.Utils;
 
 /**
@@ -191,6 +195,22 @@ public class SIPBuilderUtils {
       filesInDirectory = walk.filter(Files::isRegularFile).toList();
     }
     return filesInDirectory;
+  }
+
+  public static WriteStrategy getWriteStrategy(WriteStrategyEnum writeStrategyEnum, Path buildPath) {
+    switch (writeStrategyEnum) {
+      case ZIP -> {
+        ZipWriteStrategyFactory zipWriteStrategyFactory = new ZipWriteStrategyFactory();
+        return zipWriteStrategyFactory.create(buildPath);
+      }
+      case FOLDER -> {
+        FolderWriteStrategyFactory folderWriteStrategyFactory = new FolderWriteStrategyFactory();
+        return folderWriteStrategyFactory.create(buildPath);
+      }
+      default -> {
+        return null;
+      }
+    }
   }
 
   private SIPBuilderUtils() {

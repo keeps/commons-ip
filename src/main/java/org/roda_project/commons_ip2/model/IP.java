@@ -112,6 +112,7 @@ public abstract class IP implements IPInterface {
   public Boolean getOverride() {
     return override;
   }
+
   public String getChecksum() {
     return this.checksumAlgorithm;
   }

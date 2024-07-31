@@ -36,7 +36,7 @@ public class FileZipEntryInfo implements ZipEntryInfo {
   }
 
   @Override
-  public void prepareEntryforZipping() throws IPException {
+  public void prepareEntryForZipping() throws IPException {
     // do nothing
   }
 

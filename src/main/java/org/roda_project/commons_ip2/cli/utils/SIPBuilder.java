@@ -11,12 +11,14 @@ import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip2.cli.model.args.MetadataGroup;
 import org.roda_project.commons_ip2.cli.model.args.RepresentationGroup;
 import org.roda_project.commons_ip2.cli.model.enums.CSIPVersion;
-import org.roda_project.commons_ip2.cli.model.enums.Checksum;
+import org.roda_project.commons_ip2.cli.model.enums.ChecksumAlgorithm;
+import org.roda_project.commons_ip2.cli.model.enums.WriteStrategyEnum;
 import org.roda_project.commons_ip2.cli.model.exception.SIPBuilderException;
 import org.roda_project.commons_ip2.model.IPContentInformationType;
 import org.roda_project.commons_ip2.model.IPContentType;
 import org.roda_project.commons_ip2.model.SIP;
 import org.roda_project.commons_ip2.model.impl.eark.EARKSIP;
+import org.roda_project.commons_ip2.model.impl.eark.out.writers.strategy.WriteStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,11 +37,13 @@ public class SIPBuilder {
   private String submitterAgentId;
   private String sipId;
   private List<String> ancestors;
-  private Checksum checksum = Checksum.SHA256;
+  private ChecksumAlgorithm checksumAlgorithm = ChecksumAlgorithm.SHA256;
   private List<String> documentation = new ArrayList<>();
 
   private String softwareVersion;
-  private Boolean overrideSchema;
+  private boolean overrideSchema;
+
+  private WriteStrategyEnum writeStrategyEnum;
 
   public SIPBuilder() {
     // Empty Constructor
@@ -95,8 +99,8 @@ public class SIPBuilder {
     return this;
   }
 
-  public SIPBuilder setChecksum(Checksum checksum) {
-    this.checksum = checksum;
+  public SIPBuilder setChecksum(ChecksumAlgorithm checksumAlgorithm) {
+    this.checksumAlgorithm = checksumAlgorithm;
     return this;
   }
 
@@ -107,6 +111,11 @@ public class SIPBuilder {
 
   public SIPBuilder setSoftwareVersion(String softwareVersion) {
     this.softwareVersion = softwareVersion;
+    return this;
+  }
+
+  public SIPBuilder setWriteStrategy(WriteStrategyEnum writeStrategyEnum) {
+    this.writeStrategyEnum = writeStrategyEnum;
     return this;
   }
 
@@ -124,8 +133,8 @@ public class SIPBuilder {
     sip.addSubmitterAgent(submitterAgentName, submitterAgentId);
     sip.setDescription("SIP created by commons-ip CLI");
 
-    if (checksum != null) {
-      sip.setChecksum(checksum.toString());
+    if (checksumAlgorithm != null) {
+      sip.setChecksum(checksumAlgorithm.toString());
     }
 
     if (overrideSchema) {
@@ -167,7 +176,8 @@ public class SIPBuilder {
     }
 
     try {
-      return sip.build(buildPath);
+      WriteStrategy writeStrategy = SIPBuilderUtils.getWriteStrategy(writeStrategyEnum, buildPath);
+      return sip.build(writeStrategy);
     } catch (IPException e) {
       LOGGER.debug("Unable to create the E-ARK SIP", e);
       throw new SIPBuilderException("Unable to create the E-ARK SIP");

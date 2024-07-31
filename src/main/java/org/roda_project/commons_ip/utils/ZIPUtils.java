@@ -127,7 +127,7 @@ public final class ZIPUtils {
       }
 
       file.setChecksum(sip.getChecksum());
-      file.prepareEntryforZipping();
+      file.prepareEntryForZipping();
 
       LOGGER.debug("Zipping file {}", file.getFilePath());
       ZipEntry entry;

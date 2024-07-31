@@ -11,8 +11,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.Optional;
 
-import jakarta.xml.bind.DatatypeConverter;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +25,7 @@ import org.roda_project.commons_ip2.model.MetsWrapper;
 import org.roda_project.commons_ip2.model.impl.AIPWrap;
 import org.roda_project.commons_ip2.model.impl.BasicAIP;
 import org.roda_project.commons_ip2.model.impl.ModelUtils;
+import org.roda_project.commons_ip2.model.impl.eark.out.writers.strategy.WriteStrategy;
 import org.roda_project.commons_ip2.utils.METSFileTypeZipEntryInfo;
 import org.roda_project.commons_ip2.utils.METSMdRefZipEntryInfo;
 import org.roda_project.commons_ip2.utils.METSUtils;
@@ -34,6 +33,8 @@ import org.roda_project.commons_ip2.utils.METSZipEntryInfo;
 import org.roda_project.commons_ip2.utils.ZIPUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.xml.bind.DatatypeConverter;
 
 /**
  * @author João Gomes <jgomes@keep.pt>
@@ -119,24 +120,24 @@ public class EARKAIP extends AIPWrap {
   }
 
   @Override
-  public Path build(final Path destinationDirectory) throws IPException, InterruptedException {
-    return build(destinationDirectory, null);
+  public Path build(WriteStrategy writeStrategy) throws IPException, InterruptedException {
+    return build(writeStrategy, null);
   }
 
   @Override
-  public Path build(final Path destinationDirectory, final boolean onlyManifest)
+  public Path build(WriteStrategy writeStrategy, final boolean onlyManifest)
     throws IPException, InterruptedException {
-    return build(destinationDirectory, null, onlyManifest);
+    return build(writeStrategy, null, onlyManifest);
   }
 
   @Override
-  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension)
+  public Path build(WriteStrategy writeStrategy, final String fileNameWithoutExtension)
     throws IPException, InterruptedException {
-    return build(destinationDirectory, fileNameWithoutExtension, false);
+    return build(writeStrategy, fileNameWithoutExtension, false);
   }
 
   @Override
-  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
+  public Path build(WriteStrategy writeStrategy, final String fileNameWithoutExtension, final boolean onlyManifest)
     throws IPException, InterruptedException {
     final Path buildDir = ModelUtils.createBuildDir(TEMP_DIR);
     Path zipPath = null;
@@ -145,7 +146,7 @@ public class EARKAIP extends AIPWrap {
 
     try {
       final Map<String, ZipEntryInfo> zipEntries = getZipEntries();
-      zipPath = getDirPath(destinationDirectory, fileNameWithoutExtension, false);
+      zipPath = getDirPath(writeStrategy.getDestinationPath(), fileNameWithoutExtension, false);
 
       boolean isMetadataOther = (this.getOtherMetadata() != null && !this.getOtherMetadata().isEmpty());
       boolean isMetadata = ((this.getDescriptiveMetadata() != null && !this.getDescriptiveMetadata().isEmpty())
@@ -209,7 +210,7 @@ public class EARKAIP extends AIPWrap {
           throw new InterruptedException();
         }
         zipEntryInfo.setChecksum(IPConstants.CHECKSUM_ALGORITHM);
-        zipEntryInfo.prepareEntryforZipping();
+        zipEntryInfo.prepareEntryForZipping();
         LOGGER.debug("Writing file {}", zipEntryInfo.getFilePath());
         final Path outputPath = Paths.get(path.toString(), zipEntryInfo.getName());
         writeFileToPath(zipEntryInfo, outputPath, onlyMets);
@@ -259,15 +260,12 @@ public class EARKAIP extends AIPWrap {
     throws IOException, NoSuchAlgorithmException {
     zipEntryInfo.setChecksum(checksum);
     zipEntryInfo.setChecksumAlgorithm(checksumType);
-    if (zipEntryInfo instanceof METSFileTypeZipEntryInfo) {
-      METSFileTypeZipEntryInfo f = (METSFileTypeZipEntryInfo) zipEntryInfo;
+    if (zipEntryInfo instanceof METSFileTypeZipEntryInfo f) {
       f.getMetsFileType().setCHECKSUM(checksum);
       f.getMetsFileType().setCHECKSUMTYPE(checksumType);
-    } else if (zipEntryInfo instanceof METSMdRefZipEntryInfo) {
-      METSMdRefZipEntryInfo f = (METSMdRefZipEntryInfo) zipEntryInfo;
+    } else if (zipEntryInfo instanceof METSMdRefZipEntryInfo f) {
       f.getMetsMdRef().setCHECKSUM(checksum);
       f.getMetsMdRef().setCHECKSUMTYPE(checksumType);
     }
   }
-
 }

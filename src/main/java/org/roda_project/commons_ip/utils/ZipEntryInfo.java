@@ -15,7 +15,7 @@ public interface ZipEntryInfo {
 
   Path getFilePath();
 
-  void prepareEntryforZipping() throws IPException;
+  void prepareEntryForZipping() throws IPException;
 
   String getChecksum();
 

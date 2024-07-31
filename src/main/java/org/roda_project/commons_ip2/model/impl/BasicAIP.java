@@ -20,6 +20,7 @@ import org.roda_project.commons_ip2.model.AIP;
 import org.roda_project.commons_ip2.model.IP;
 import org.roda_project.commons_ip2.model.IPContentType;
 import org.roda_project.commons_ip2.model.IPFileInterface;
+import org.roda_project.commons_ip2.model.impl.eark.out.writers.strategy.WriteStrategy;
 
 /**
  * AIP basic implementation. This implementation just holds values in memory. It
@@ -106,36 +107,36 @@ public class BasicAIP extends IP implements AIP {
   }
 
   @Override
-  public Path build(final Path destinationDirectory) throws IPException, InterruptedException {
+  public Path build(WriteStrategy writeStrategy) throws IPException, InterruptedException {
     throw new IPException("Not implemented");
   }
 
   @Override
-  public Path build(final Path destinationDirectory, final boolean onlyManifest)
+  public Path build(WriteStrategy writeStrategy, final boolean onlyManifest)
     throws IPException, InterruptedException {
     throw new IPException("Not implemented");
   }
 
   @Override
-  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension)
+  public Path build(WriteStrategy writeStrategy, final String fileNameWithoutExtension)
     throws IPException, InterruptedException {
     throw new IPException("Not implemented");
   }
 
   @Override
-  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
+  public Path build(WriteStrategy writeStrategy, final String fileNameWithoutExtension, final boolean onlyManifest)
     throws IPException, InterruptedException {
     throw new IPException("Not implemented");
   }
 
   @Override
-  public Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest,
+  public Path build(WriteStrategy writeStrategy, String fileNameWithoutExtension, boolean onlyManifest,
     IPEnums.SipType sipType) throws IPException, InterruptedException {
     throw new IPException("Not implemented");
   }
 
   @Override
-  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, IPEnums.SipType sipType)
+  public Path build(WriteStrategy writeStrategy, final String fileNameWithoutExtension, IPEnums.SipType sipType)
     throws IPException, InterruptedException {
     throw new IPException("Not implemented");
   }

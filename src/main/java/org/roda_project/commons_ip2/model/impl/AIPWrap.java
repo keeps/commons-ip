@@ -28,6 +28,7 @@ import org.roda_project.commons_ip2.model.IPHeader;
 import org.roda_project.commons_ip2.model.IPMetadata;
 import org.roda_project.commons_ip2.model.IPRepresentation;
 import org.roda_project.commons_ip2.model.ValidationReport;
+import org.roda_project.commons_ip2.model.impl.eark.out.writers.strategy.WriteStrategy;
 
 /**
  * AIP decorator (wrapper).
@@ -326,38 +327,37 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public Path build(final Path destinationDirectory) throws IPException, InterruptedException {
-    return aip.build(destinationDirectory);
+  public Path build(WriteStrategy writeStrategy) throws IPException, InterruptedException {
+    return aip.build(writeStrategy);
   }
 
   @Override
-  public Path build(final Path destinationDirectory, final boolean onlyManifest)
+  public Path build(WriteStrategy writeStrategy, final boolean onlyManifest)
     throws IPException, InterruptedException {
-    return aip.build(destinationDirectory, onlyManifest);
+    return aip.build(writeStrategy, onlyManifest);
   }
 
   @Override
-  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension)
+  public Path build(WriteStrategy writeStrategy, final String fileNameWithoutExtension)
     throws IPException, InterruptedException {
-    return aip.build(destinationDirectory, fileNameWithoutExtension);
+    return aip.build(writeStrategy, fileNameWithoutExtension);
   }
 
   @Override
-  public Path build(Path destinationDirectory, String fileNameWithoutExtension, IPEnums.SipType sipType)
+  public Path build(WriteStrategy writeStrategy, String fileNameWithoutExtension, IPEnums.SipType sipType)
     throws IPException, InterruptedException {
-    return aip.build(destinationDirectory, fileNameWithoutExtension);
+    return aip.build(writeStrategy, fileNameWithoutExtension);
   }
 
   @Override
-  public Path build(final Path destinationDirectory, final String fileNameWithoutExtension, final boolean onlyManifest)
+  public Path build(WriteStrategy writeStrategy, final String fileNameWithoutExtension, final boolean onlyManifest)
     throws IPException, InterruptedException {
-    return aip.build(destinationDirectory, fileNameWithoutExtension, onlyManifest);
+    return aip.build(writeStrategy, fileNameWithoutExtension, onlyManifest);
   }
 
   @Override
-  public Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest,
+  public Path build(WriteStrategy writeStrategy, String fileNameWithoutExtension, boolean onlyManifest,
     IPEnums.SipType sipType) throws IPException, InterruptedException {
-    return aip.build(destinationDirectory, fileNameWithoutExtension, onlyManifest);
+    return aip.build(writeStrategy, fileNameWithoutExtension, onlyManifest);
   }
-
 }

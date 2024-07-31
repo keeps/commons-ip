@@ -33,6 +33,8 @@ import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.METSEnums.CreatorType;
+import org.roda_project.commons_ip2.cli.model.enums.WriteStrategyEnum;
+import org.roda_project.commons_ip2.cli.utils.SIPBuilderUtils;
 import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
 import org.roda_project.commons_ip2.model.IPAgent;
 import org.roda_project.commons_ip2.model.IPAgentNoteTypeEnum;
@@ -50,6 +52,8 @@ import org.roda_project.commons_ip2.model.MetadataType.MetadataTypeEnum;
 import org.roda_project.commons_ip2.model.RepresentationStatus;
 import org.roda_project.commons_ip2.model.SIP;
 import org.roda_project.commons_ip2.model.ValidationEntry.LEVEL;
+import org.roda_project.commons_ip2.model.impl.eark.out.writers.factory.WriteStrategyFactory;
+import org.roda_project.commons_ip2.model.impl.eark.out.writers.strategy.WriteStrategy;
 import org.roda_project.commons_ip2.utils.Utils;
 import org.roda_project.commons_ip2.validator.EARKSIPValidator;
 import org.roda_project.commons_ip2.validator.constants.Constants;
@@ -241,7 +245,8 @@ public class EARKSIPTest {
     representation1.addFile(representationFile4);
 
     // 2) build SIP, providing an output directory
-    Path zipSIP = sip.build(tempFolder, "okok", IPEnums.SipType.EARK2S);
+    WriteStrategy writeStrategy = SIPBuilderUtils.getWriteStrategy(WriteStrategyEnum.ZIP, tempFolder);
+    Path zipSIP = sip.build(writeStrategy, "okok", IPEnums.SipType.EARK2S);
 
     return zipSIP;
   }
@@ -345,7 +350,8 @@ public class EARKSIPTest {
     representation2.addFile(representationFile3);
 
     // 2) build SIP, providing an output directory
-    Path zipSIP = sip.build(tempFolder);
+    WriteStrategy writeStrategy = SIPBuilderUtils.getWriteStrategy(WriteStrategyEnum.ZIP, tempFolder);
+    Path zipSIP = sip.build(writeStrategy);
 
     return zipSIP;
   }
@@ -496,7 +502,8 @@ public class EARKSIPTest {
     representation2.addFile(representationFile3);
 
     // 2) build SIP, providing an output directory
-    Path zipSIP = sip.build(tempFolder);
+    WriteStrategy writeStrategy = SIPBuilderUtils.getWriteStrategy(WriteStrategyEnum.ZIP, tempFolder);
+    Path zipSIP = sip.build(writeStrategy);
 
     return zipSIP;
   }
