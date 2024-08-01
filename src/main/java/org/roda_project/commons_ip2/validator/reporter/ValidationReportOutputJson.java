@@ -208,7 +208,7 @@ public class ValidationReportOutputJson {
       jsonGenerator.writeStartObject();
       jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_SPECIFICATION, specification);
       jsonGenerator.writeStringField(Constants.VALIDATION_REPORT_KEY_ID, id);
-      writeSpecificationDetails(id);
+      writeSpecificationDetails(id, specification);
       jsonGenerator.writeFieldName(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING);
       jsonGenerator.writeStartObject();
       jsonGenerator.writeObjectField(Constants.VALIDATION_REPORT_SPECIFICATION_KEY_TESTING_OUTCOME, status);
@@ -314,32 +314,63 @@ public class ValidationReportOutputJson {
     }
   }
 
-  private void writeSpecificationDetails(final String id) throws IOException {
+  private void writeSpecificationDetails(final String id, final String specification) throws IOException {
     String name = null;
     String location = null;
     String description = null;
     String cardinality = null;
     String level = null;
     if (id.startsWith("CSIP")) {
-      name = ConstantsCSIPspec.getSpecificationName(id);
-      location = ConstantsCSIPspec.getSpecificationLocation(id);
-      description = ConstantsCSIPspec.getSpecificationDescription(id);
-      cardinality = ConstantsCSIPspec.getSpecificationCardinality(id);
-      level = ConstantsCSIPspec.getSpecificationLevel(id);
+      if (specification.equals("CSIP-2.2.0")) {
+        name = org.roda_project.commons_ip2.validator.constants220.ConstantsCSIPspec.getSpecificationName(id);
+        location = org.roda_project.commons_ip2.validator.constants220.ConstantsCSIPspec.getSpecificationLocation(id);
+        description = org.roda_project.commons_ip2.validator.constants220.ConstantsCSIPspec
+          .getSpecificationDescription(id);
+        cardinality = org.roda_project.commons_ip2.validator.constants220.ConstantsCSIPspec
+          .getSpecificationCardinality(id);
+        level = org.roda_project.commons_ip2.validator.constants220.ConstantsCSIPspec.getSpecificationLevel(id);
+      } else {
+        name = ConstantsCSIPspec.getSpecificationName(id);
+        location = ConstantsCSIPspec.getSpecificationLocation(id);
+        description = ConstantsCSIPspec.getSpecificationDescription(id);
+        cardinality = ConstantsCSIPspec.getSpecificationCardinality(id);
+        level = ConstantsCSIPspec.getSpecificationLevel(id);
+      }
     } else {
       if (id.startsWith("SIP")) {
-        name = ConstantsSIPspec.getSpecificationName(id);
-        location = ConstantsSIPspec.getSpecificationLocation(id);
-        description = ConstantsSIPspec.getSpecificationDescription(id);
-        cardinality = ConstantsSIPspec.getSpecificationCardinality(id);
-        level = ConstantsSIPspec.getSpecificationLevel(id);
+        if (specification.equals("SIP-2.2.0")) {
+          name = org.roda_project.commons_ip2.validator.constants220.ConstantsSIPspec.getSpecificationName(id);
+          location = org.roda_project.commons_ip2.validator.constants220.ConstantsSIPspec.getSpecificationLocation(id);
+          description = org.roda_project.commons_ip2.validator.constants220.ConstantsSIPspec
+            .getSpecificationDescription(id);
+          cardinality = org.roda_project.commons_ip2.validator.constants220.ConstantsSIPspec
+            .getSpecificationCardinality(id);
+          level = org.roda_project.commons_ip2.validator.constants220.ConstantsSIPspec.getSpecificationLevel(id);
+        } else {
+          name = ConstantsSIPspec.getSpecificationName(id);
+          location = ConstantsSIPspec.getSpecificationLocation(id);
+          description = ConstantsSIPspec.getSpecificationDescription(id);
+          cardinality = ConstantsSIPspec.getSpecificationCardinality(id);
+          level = ConstantsSIPspec.getSpecificationLevel(id);
+        }
       } else {
         if (id.startsWith("AIP")) {
-          name = ConstantsAIPspec.getSpecificationName(id);
-          location = ConstantsAIPspec.getSpecificationLocation(id);
-          description = ConstantsAIPspec.getSpecificationDescription(id);
-          cardinality = ConstantsAIPspec.getSpecificationCardinality(id);
-          level = ConstantsAIPspec.getSpecificationLevel(id);
+          if (specification.equals("AIP-2.2.0")) {
+            name = org.roda_project.commons_ip2.validator.constants220.ConstantsAIPspec.getSpecificationName(id);
+            location = org.roda_project.commons_ip2.validator.constants220.ConstantsAIPspec
+              .getSpecificationLocation(id);
+            description = org.roda_project.commons_ip2.validator.constants220.ConstantsAIPspec
+              .getSpecificationDescription(id);
+            cardinality = org.roda_project.commons_ip2.validator.constants220.ConstantsAIPspec
+              .getSpecificationCardinality(id);
+            level = org.roda_project.commons_ip2.validator.constants220.ConstantsAIPspec.getSpecificationLevel(id);
+          } else {
+            name = ConstantsAIPspec.getSpecificationName(id);
+            location = ConstantsAIPspec.getSpecificationLocation(id);
+            description = ConstantsAIPspec.getSpecificationDescription(id);
+            cardinality = ConstantsAIPspec.getSpecificationCardinality(id);
+            level = ConstantsAIPspec.getSpecificationLevel(id);
+          }
         }
       }
     }

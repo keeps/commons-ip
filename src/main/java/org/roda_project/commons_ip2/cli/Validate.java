@@ -55,7 +55,7 @@ public class Validate implements Callable<Integer> {
   boolean verbose;
 
   @CommandLine.Option(names = {"--specification-version"}, description = "E-ARK CSIP version")
-  String version = "2.1.0";
+  String version = "2.2.0";
 
   @Override
   public Integer call() throws ValidationException, CLIException {

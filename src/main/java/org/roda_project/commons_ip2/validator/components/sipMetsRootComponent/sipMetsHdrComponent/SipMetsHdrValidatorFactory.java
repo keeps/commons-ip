@@ -1,9 +1,5 @@
 package org.roda_project.commons_ip2.validator.components.sipMetsRootComponent.sipMetsHdrComponent;
 
-import org.roda_project.commons_ip2.validator.components.sipMetsRootComponent.sipMetsComponent.SipMetsValidator;
-import org.roda_project.commons_ip2.validator.components.sipMetsRootComponent.sipMetsComponent.SipMetsValidator204;
-import org.roda_project.commons_ip2.validator.components.sipMetsRootComponent.sipMetsComponent.SipMetsValidator210;
-
 /**
  * @author Carlos Afonso <cafonso@keep.pt>
  */
@@ -16,6 +12,9 @@ public class SipMetsHdrValidatorFactory {
     if (version.equals("2.0.4")) {
       return new SipMetsHdrValidator204();
     }
-    return new SipMetsHdrValidator210();
+    else if (version.equals("2.1.0")) {
+      return new SipMetsHdrValidator210();
+    }
+    return new SipMetsHdrValidator220();
   }
 }

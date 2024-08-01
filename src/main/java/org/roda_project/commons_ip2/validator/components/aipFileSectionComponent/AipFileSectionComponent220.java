@@ -1,19 +1,21 @@
 package org.roda_project.commons_ip2.validator.components.aipFileSectionComponent;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.roda_project.commons_ip2.validator.components.MetsValidatorImpl;
-import org.roda_project.commons_ip2.validator.constants.Constants;
-import org.roda_project.commons_ip2.validator.constants.ConstantsAIPspec;
+import org.roda_project.commons_ip2.validator.constants220.Constants;
+import org.roda_project.commons_ip2.validator.constants220.ConstantsAIPspec;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.state.MetsValidatorState;
 import org.roda_project.commons_ip2.validator.state.StructureValidatorState;
 import org.roda_project.commons_ip2.validator.utils.Message;
 import org.roda_project.commons_ip2.validator.utils.ResultsUtils;
 
-/** {@author João Gomes <jgomes@keep.pt>}. */
-public class AipFileSectionComponent210 extends MetsValidatorImpl {
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author Carlos Afonso <cafonso@keep.pt>
+ */
+public class AipFileSectionComponent220 extends MetsValidatorImpl {
   /**
    * The module of specification.
    */
@@ -26,7 +28,7 @@ public class AipFileSectionComponent210 extends MetsValidatorImpl {
   /**
    * the empty constructor.
    */
-  public AipFileSectionComponent210() {
+  public AipFileSectionComponent220() {
     moduleName = Constants.AIP_MODULE_NAME_2;
   }
 
@@ -42,11 +44,11 @@ public class AipFileSectionComponent210 extends MetsValidatorImpl {
 
   @Override
   public Map<String, ReporterDetails> validate(final StructureValidatorState structureValidatorState,
-    final MetsValidatorState metsValidatorState) {
+                                               final MetsValidatorState metsValidatorState) {
     final Map<String, ReporterDetails> results = new HashMap<>();
 
     AipFileValidatorFactory aipFileValidatorFactory = new AipFileValidatorFactory();
-    AipFileValidator generator = aipFileValidatorFactory.getGenerator("2.1.0");
+    AipFileValidator generator = aipFileValidatorFactory.getGenerator("2.2.0");
 
     if (isToValidate) {
       /* AIP9 */

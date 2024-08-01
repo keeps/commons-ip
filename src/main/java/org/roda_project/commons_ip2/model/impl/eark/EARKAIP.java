@@ -53,6 +53,12 @@ public class EARKAIP extends AIPWrap {
    */
   public EARKAIP(final AIP aip, String version) {
     super(aip);
+    if (version.equals("2.2.0")) {
+      setProfile(IPConstants.AIP_SPEC_PROFILE.replace(".xml", "-v" + version.replace(".", "-") + ".xml"));
+    }
+    else {
+      setProfile(IPConstants.AIP_SPEC_PROFILE);
+    }
     METSGeneratorFactory factory = new METSGeneratorFactory();
     metsCreator = factory.getGenerator(version);
   }

@@ -19,6 +19,9 @@ public class AmdSecValidatorFactory {
     if (version.equals("2.0.4")) {
       return new AmdSecValidator204();
     }
-    return new AmdSecValidator210();
+    else if (version.equals("2.1.0")) {
+      return new AmdSecValidator210();
+    }
+    return new AmdSecValidator220();
   }
 }

@@ -16,26 +16,37 @@ import org.roda_project.commons_ip2.validator.components.MetsValidator;
 import org.roda_project.commons_ip2.validator.components.StructureValidatorImpl;
 import org.roda_project.commons_ip2.validator.components.administritiveMetadataComponent.AdministritiveMetadataComponentValidator204;
 import org.roda_project.commons_ip2.validator.components.administritiveMetadataComponent.AdministritiveMetadataComponentValidator210;
+import org.roda_project.commons_ip2.validator.components.administritiveMetadataComponent.AdministritiveMetadataComponentValidator220;
 import org.roda_project.commons_ip2.validator.components.aipFileSectionComponent.AipFileSectionComponent204;
 import org.roda_project.commons_ip2.validator.components.aipFileSectionComponent.AipFileSectionComponent210;
+import org.roda_project.commons_ip2.validator.components.aipFileSectionComponent.AipFileSectionComponent220;
 import org.roda_project.commons_ip2.validator.components.descriptiveMetadataComponent.DescriptiveMetadataComponentValidator204;
 import org.roda_project.commons_ip2.validator.components.descriptiveMetadataComponent.DescriptiveMetadataComponentValidator210;
+import org.roda_project.commons_ip2.validator.components.descriptiveMetadataComponent.DescriptiveMetadataComponentValidator220;
 import org.roda_project.commons_ip2.validator.components.fileComponent.StructureComponentValidator204;
 import org.roda_project.commons_ip2.validator.components.fileComponent.StructureComponentValidator210;
+import org.roda_project.commons_ip2.validator.components.fileComponent.StructureComponentValidator220;
 import org.roda_project.commons_ip2.validator.components.fileSectionComponent.FileSectionComponentValidator204;
 import org.roda_project.commons_ip2.validator.components.fileSectionComponent.FileSectionComponentValidator210;
+import org.roda_project.commons_ip2.validator.components.fileSectionComponent.FileSectionComponentValidator220;
 import org.roda_project.commons_ip2.validator.components.metsRootComponent.metsHeaderValidator.MetsHeaderComponentValidator204;
 import org.roda_project.commons_ip2.validator.components.metsRootComponent.metsHeaderValidator.MetsHeaderComponentValidator210;
+import org.roda_project.commons_ip2.validator.components.metsRootComponent.metsHeaderValidator.MetsHeaderComponentValidator220;
 import org.roda_project.commons_ip2.validator.components.metsRootComponent.metsValidator.MetsComponentValidator204;
 import org.roda_project.commons_ip2.validator.components.metsRootComponent.metsValidator.MetsComponentValidator210;
+import org.roda_project.commons_ip2.validator.components.metsRootComponent.metsValidator.MetsComponentValidator220;
 import org.roda_project.commons_ip2.validator.components.sipFileSectionComponent.SipFileSectionComponent204;
 import org.roda_project.commons_ip2.validator.components.sipFileSectionComponent.SipFileSectionComponent210;
+import org.roda_project.commons_ip2.validator.components.sipFileSectionComponent.SipFileSectionComponent220;
 import org.roda_project.commons_ip2.validator.components.sipMetsRootComponent.sipMetsComponent.SipMetsComponent204;
 import org.roda_project.commons_ip2.validator.components.sipMetsRootComponent.sipMetsComponent.SipMetsComponent210;
+import org.roda_project.commons_ip2.validator.components.sipMetsRootComponent.sipMetsComponent.SipMetsComponent220;
 import org.roda_project.commons_ip2.validator.components.sipMetsRootComponent.sipMetsHdrComponent.SipMetsHdrComponent204;
 import org.roda_project.commons_ip2.validator.components.sipMetsRootComponent.sipMetsHdrComponent.SipMetsHdrComponent210;
+import org.roda_project.commons_ip2.validator.components.sipMetsRootComponent.sipMetsHdrComponent.SipMetsHdrComponent220;
 import org.roda_project.commons_ip2.validator.components.structuralMapComponent.StructuralMapComponentValidator204;
 import org.roda_project.commons_ip2.validator.components.structuralMapComponent.StructuralMapComponentValidator210;
+import org.roda_project.commons_ip2.validator.components.structuralMapComponent.StructuralMapComponentValidator220;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.constants.ConstantsCSIPspec;
 import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
@@ -94,8 +105,11 @@ public class EARKSIPValidator {
       reportOutputJson.getSipPath().toAbsolutePath().normalize());
     if (version.equals("2.1.0")) {
       this.structureComponent = new StructureComponentValidator210();
-    } else {
+    } else if (version.equals("2.0.4")) {
       this.structureComponent = new StructureComponentValidator204();
+    }
+    else {
+      this.structureComponent = new StructureComponentValidator220();
     }
     this.metsValidatorState = new MetsValidatorState();
     setupComponents(version);
@@ -363,6 +377,10 @@ public class EARKSIPValidator {
         ((SipFileSectionComponent210) component).setIsToValidate(ResultsUtils.isResultValid(
           validationReportOutputJson.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID));
       }
+      if (component instanceof SipFileSectionComponent220 component1) {
+        ((SipFileSectionComponent220) component).setIsToValidate(ResultsUtils.isResultValid(
+          validationReportOutputJson.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID));
+      }
       if (component instanceof SipMetsHdrComponent204) {
         ((SipMetsHdrComponent204) component).setIsToValidateMetsHdr(ResultsUtils.isResultValid(
           validationReportOutputJson.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID));
@@ -378,6 +396,15 @@ public class EARKSIPValidator {
         if (validationReportOutputJson.getResults()
           .get(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID) != null) {
           ((SipMetsHdrComponent210) component).setIsToValidateAgents(ResultsUtils.isResultValid(
+            validationReportOutputJson.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID));
+        }
+      }
+      if (component instanceof SipMetsHdrComponent220) {
+        ((SipMetsHdrComponent220) component).setIsToValidateMetsHdr(ResultsUtils.isResultValid(
+          validationReportOutputJson.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP117_ID));
+        if (validationReportOutputJson.getResults()
+          .get(ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID) != null) {
+          ((SipMetsHdrComponent220) component).setIsToValidateAgents(ResultsUtils.isResultValid(
             validationReportOutputJson.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP10_ID));
         }
       }
@@ -403,6 +430,10 @@ public class EARKSIPValidator {
       }
       if (component instanceof AipFileSectionComponent210) {
         ((AipFileSectionComponent210) component).setIsToValidate(ResultsUtils.isResultValid(
+          validationReportOutputJson.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID));
+      }
+      if (component instanceof AipFileSectionComponent220) {
+        ((AipFileSectionComponent220) component).setIsToValidate(ResultsUtils.isResultValid(
           validationReportOutputJson.getResults(), ConstantsCSIPspec.VALIDATION_REPORT_SPECIFICATION_CSIP58_ID));
       }
       final Map<String, ReporterDetails> aipComponentResults = component.validate(structureValidatorState,
@@ -448,7 +479,7 @@ public class EARKSIPValidator {
       } else {
         values.add(new AipFileSectionComponent204());
       }
-    } else {
+    } else if (version.equals("2.1.0")) {
       if (type.equals("csipComponents")) {
         values.add(new MetsComponentValidator210());
         values.add(new MetsHeaderComponentValidator210());
@@ -462,6 +493,21 @@ public class EARKSIPValidator {
         values.add(new SipFileSectionComponent210());
       } else {
         values.add(new AipFileSectionComponent210());
+      }
+    } else {
+      if (type.equals("csipComponents")) {
+        values.add(new MetsComponentValidator220());
+        values.add(new MetsHeaderComponentValidator220());
+        values.add(new DescriptiveMetadataComponentValidator220());
+        values.add(new AdministritiveMetadataComponentValidator220());
+        values.add(new FileSectionComponentValidator220());
+        values.add(new StructuralMapComponentValidator220());
+      } else if (type.equals("sipComponents")) {
+        values.add(new SipMetsComponent220());
+        values.add(new SipMetsHdrComponent220());
+        values.add(new SipFileSectionComponent220());
+      } else {
+        values.add(new AipFileSectionComponent220());
       }
     }
     return values;

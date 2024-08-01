@@ -16,6 +16,9 @@ public class StructMapValidatorFactory {
     if (version.equals("2.0.4")) {
       return new StructMapValidator204();
     }
-    return new StructMapValidator210();
+    else if (version.equals("2.1.0")) {
+      return new StructMapValidator210();
+    }
+    return new StructMapValidator220();
   }
 }
