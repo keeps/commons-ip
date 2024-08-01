@@ -77,6 +77,9 @@ public final class IPConstants {
   // SIP Specification
   public static final String SIP_SPEC_PROFILE = "https://earksip.dilcis.eu/profile/E-ARK-SIP.xml";
 
+  // AIP Specification
+  public static final String AIP_SPEC_PROFILE = "https://earkaip.dilcis.eu/profile/E-ARK-AIP.xml";
+
   // RODA
   public static final String RODA_STRUCTURAL_MAP = "RODA structural map";
   public static final String RODA_DIV_LABEL = "RODA";

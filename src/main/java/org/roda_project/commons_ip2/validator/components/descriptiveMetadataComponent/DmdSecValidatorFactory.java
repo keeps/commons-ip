@@ -1,9 +1,5 @@
 package org.roda_project.commons_ip2.validator.components.descriptiveMetadataComponent;
 
-import org.roda_project.commons_ip2.validator.components.administritiveMetadataComponent.AmdSecValidator;
-import org.roda_project.commons_ip2.validator.components.administritiveMetadataComponent.AmdSecValidator204;
-import org.roda_project.commons_ip2.validator.components.administritiveMetadataComponent.AmdSecValidator210;
-
 /**
  * @author Carlos Afonso <cafonso@keep.pt>
  */
@@ -17,6 +13,9 @@ public class DmdSecValidatorFactory {
     if (version.equals("2.0.4")) {
       return new DmdSecValidator204();
     }
-    return new DmdSecValidator210();
+    else if (version.equals("2.2.0")) {
+      return new DmdSecValidator220();
+    }
+    return new DmdSecValidator220();
   }
 }

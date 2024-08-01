@@ -1,4 +1,4 @@
-package org.roda_project.commons_ip2.validator.constants;
+package org.roda_project.commons_ip2.validator.constants220;
 
 /** {@author João Gomes <jgomes@keep.pt>}. */
 public final class ConstantsCSIPspec {
@@ -623,16 +623,8 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification description for id "CSIP1".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP1_DESCRIPTION = "The mets/@OBJID attribute "
-    + "is mandatory, " + "its value is a string identifier for "
-    + "the METS document. For the package METS document, this should be the "
-    + "name/ID of the package, i.e. the name of the package root folder. For a "
-    + "representation level METS document this value records the name/ID of the "
-    + "representation, i.e. the name of the top-level representation folder.";
-
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP1_220_DESCRIPTION = "The mets/@OBJID attribute is " +
-    "mandatory, its value is a string identifier for the METS document. "
-    + "For the package METS document following CSIPSTR2, "
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP1_DESCRIPTION = "The mets/@OBJID attribute is mandatory, "
+    + "its value is a string identifier for the METS document. " + "For the package METS document following CSIPSTR2, "
     + "this should be the name/ID of the package, i.e. the name of the "
     + "package root folder. For a representation level METS document this "
     + "value records the name/ID of the representation following CSIPSTR10, "
@@ -641,6 +633,7 @@ public final class ConstantsCSIPspec {
     + "transform into a folder name due to limitations in the used file system. "
     + "If there are illegal characters present there are different character mapping "
     + "techniques to use to transform the mets/@OBJID into a valid folder name.";
+
 
   /**
    * Constant specification cardinality for id "CSIP1".
@@ -711,8 +704,10 @@ public final class ConstantsCSIPspec {
    * Constant specification description for id "CSIP3".
    */
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP3_DESCRIPTION = "When the mets/@TYPE attribute "
-    + "has the value “OTHER” the " + "mets/@csip:OTHERTYPE attribute MUST be used to declare the content "
-    + "category of the package/representation.";
+    + "has the value “OTHER” the mets/@csip:OTHERTYPE attribute MUST be used to declare "
+    + "the content category of the package/representation. The value can "
+    + "either be “OTHER” or any other string that are not present in the "
+    + "vocabulary used in the mets/@TYPE attribute.";
 
   /**
    * Constant specification cardinality for id "CSIP3".
@@ -744,12 +739,12 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification description for id "CSIP4".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP4_DESCRIPTION = "Used to declare the "
-    + "Content Information " + "Type Specification used when "
-    + "creating the package. Legal values are defined in a fixed vocabulary. The "
-    + "attribute is mandatory for representation level METS documents. The "
-    + "vocabulary will evolve under the care of the DILCIS Board as additional "
-    + "Content Information Type Specifications are developed.";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP4_DESCRIPTION = "Used to declare the Content " +
+    "Information Type Specification used when creating the package. " +
+    "Legal values are defined in a fixed vocabulary. The attribute " +
+    "is mandatory for representation level METS documents. The " +
+    "vocabulary will evolve under the care of the DILCIS Board " +
+    "as additional Content Information Type Specifications are developed.";
 
   /**
    * Constant specification cardinality for id "CSIP4".
@@ -983,9 +978,13 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification description for id "CSIP10".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP10_DESCRIPTION = "A mandatory agent element records "
-    + "the software used to create the package. " + "Other uses of agents may be described in any local "
-    + "implementations that extend the profile.";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP10_DESCRIPTION = "A mandatory agent element records " +
+    "the software used to create the package. Other uses " +
+    "of agents may be described in any local implementations " +
+    "that extend the profile. It is possible according to METS " +
+    "to use more note elements but in this implementation " +
+    "for this agent describing the software used it is one " +
+    "mandatory note for describing the version of the software.";
 
   /**
    * Constant specification cardinality for id "CSIP10".
@@ -1256,10 +1255,9 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification description for id "CSIP18".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP18_DESCRIPTION = "An xml:id identifier for the "
-    + "descriptive metadata section ( <dmdSec> ) "
-    + "used for internal package references. It must be unique within the package.";
-
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP18_DESCRIPTION = "An xml:id identifier for the " +
+    "descriptive metadata section (<dmdSec>) used for internal " +
+    "references within the XML-document. It must be unique within the XML-document.";
   /**
    * Constant specification cardinality for id "CSIP18".
    */
@@ -1523,8 +1521,9 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification description for id "CSIP26".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP26_DESCRIPTION = "The IANA mime type of "
-    + "the referenced file.";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP26_DESCRIPTION = "The mime type of the referenced file.\n" +
+    "It is a strong recommendation to use a qualified list like the IANA Media Type list.\n" +
+    "Another list can be used following a documented agreement between the sender and the receiver.";
 
   /**
    * Constant specification cardinality for id "CSIP26".
@@ -1763,9 +1762,9 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification description for id "CSIP33".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP33_DESCRIPTION = "An xml:id identifier "
-    + "for the digital provenance metadata section "
-    + "mets/amdSec/digiprovMD used for internal package references. It must " + "be unique within the package.";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP33_DESCRIPTION = "An xml:id identifier for the " +
+    "digital provenance metadata section mets/amdSec/digiprovMD " +
+    "used for internal references within the XML-document. It must be unique within the XML-document.";
 
   /**
    * Constant specification cardinality for id "CSIP33".
@@ -1797,8 +1796,8 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification description for id "CSIP34".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP34_DESCRIPTION = "Indicates the status of "
-    + "the package using a fixed vocabulary.";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP34_DESCRIPTION = "Indicates the status of the " +
+    "package using a fixed vocabulary.";
 
   /**
    * Constant specification cardinality for id "CSIP34".
@@ -2000,8 +1999,10 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification description for id "CSIP40".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP40_DESCRIPTION = "The IANA mime type "
-    + "for the referenced file.";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP40_DESCRIPTION = "The mime type of the referenced" +
+    " file.\n" + "It is a strong recommendation to use a qualified " +
+    "list like the IANA Media Type list.\n" +
+    "Another list can be used following a documented agreement between the sender and the receiver.";
 
   /**
    * Constant specification cardinality for id "CSIP40".
@@ -2205,9 +2206,9 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification description for id "CSIP46".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP46_DESCRIPTION = "An xml:id identifier for the "
-    + "rights metadata section ( <rightsMD> ) "
-    + "used for internal package references. It must be unique within the package.";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP46_DESCRIPTION = "An xml:id identifier for the " +
+    "rights metadata section (<rightsMD>) used for internal " +
+    "references within the XML-document. It must be unique within the XML-document.";
 
   /**
    * Constant specification cardinality for id "CSIP46".
@@ -2439,8 +2440,9 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification description for id "CSIP53".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP53_DESCRIPTION = "The IANA mime "
-    + "type for the referenced file.";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP53_DESCRIPTION = "The mime type of the " +
+    "referenced file.\n" + "It is a strong recommendation to use a qualified list like the IANA Media Type list.\n" +
+    "Another list can be used following a documented agreement between the sender and the receiver.";
 
   /**
    * Constant specification cardinality for id "CSIP53".
@@ -2643,8 +2645,9 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification description for id "CSIP59".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP59_DESCRIPTION = "An xml:id identifier for "
-    + "the file section used for internal package references. " + "It must be unique within the package.";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP59_DESCRIPTION = "An xml:id identifier for the " +
+    "file section used for internal references within the XML-document. " +
+    "It must be unique within the XML-document.";
 
   /**
    * Constant specification cardinality for id "CSIP59".
@@ -2713,7 +2716,7 @@ public final class ConstantsCSIPspec {
    */
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP113_DESCRIPTION = "All XML schemas used "
     + "in the information package should be referenced from "
-    + "one or more file groups with mets/fileSec/fileGrp/@USE attribute value ";
+    + "one or more file groups with mets/fileSec/fileGrp/@USE attribute value “Schemas”.";
 
   /**
    * Constant specification cardinality for id "CSIP113".
@@ -2746,10 +2749,13 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification description for id "CSIP114".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP114_DESCRIPTION = "A pointer to the METS document "
-    + "describing the representation or pointers to "
-    + "the content being transferred must be present in one or more file groups "
-    + "with mets/fileSec/fileGrp/@USE attribute value “Representations”.See " + "also: File group names";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP114_DESCRIPTION = "A pointer to the METS document " +
+    "describing the representation or pointers to " +
+    "the content being transferred must be present in one " +
+    "or more file groups with mets/fileSec/fileGrp/@USE " +
+    "attribute value starting with “Representations” followed " +
+    "by the path to the folder where the representation level " +
+    "METS document is placed. For example “Representation/submission” and “Representation/ingest”.";
 
   /**
    * Constant specification cardinality for id "CSIP114".
@@ -2922,8 +2928,9 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification description for id "CSIP65".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP65_DESCRIPTION = "An xml:id identifier "
-    + "for the file group used for internal package references. " + "It must be unique within the package.";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP65_DESCRIPTION = "An xml:id identifier for " +
+    "the file group used for internal references within " +
+    "the XML-document. It must be unique within the XML-document.";
 
   /**
    * Constant specification cardinality for id "CSIP65".
@@ -2987,7 +2994,7 @@ public final class ConstantsCSIPspec {
    * Constant specification description for id "CSIP67".
    */
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP67_DESCRIPTION = "A unique xml:id identifier "
-    + "for this file across the package.";
+    + "for this file within the XML-document.";
 
   /**
    * Constant specification cardinality for id "CSIP67".
@@ -3012,23 +3019,24 @@ public final class ConstantsCSIPspec {
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP68_NAME = "File mimetype";
 
   /**
-   * Constant specification location for id "CSIP60".
+   * Constant specification location for id "CSIP68".
    */
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP68_LOCATION = "mets/fileSec/fileGrp/file/@MIMETYPE";
 
   /**
-   * Constant specification description for id "CSIP60".
+   * Constant specification description for id "CSIP68".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP68_DESCRIPTION = "The IANA mime type "
-    + "for the referenced file.";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP68_DESCRIPTION = "The mime type of the referenced " +
+    "file.\n" + "It is a strong recommendation to use a qualified list like the IANA Media Type list.\n" +
+    "Another list can be used following a documented agreement between the sender and the receiver.";
 
   /**
-   * Constant specification cardinality for id "CSIP60".
+   * Constant specification cardinality for id "CSIP68".
    */
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP68_CARDINALITY = "1..1";
 
   /**
-   * Constant specification level for id "CSIP60".
+   * Constant specification level for id "CSIP68".
    */
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP68_LEVEL = "MUST";
 
@@ -3492,8 +3500,9 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification description for id "CSIP82".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP82_DESCRIPTION = "The mets/structMap/@LABEL "
-    + "attribute value is set to “CSIP” from the " + "vocabulary.";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP82_DESCRIPTION = "The mets/structMap/@LABEL " +
+    "attribute value is set to “CSIP” from the vocabulary.\n" +
+    "This requirement identifies the CSIP compliant structural map <structMap> element.";
 
   /**
    * Constant specification cardinality for id "CSIP82".
@@ -3525,9 +3534,9 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification description for id "CSIP83".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP83_DESCRIPTION = "An xml:id identifier "
-    + "for the structural description (structMap) used for "
-    + "internal package references. It must be unique within the package.";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP83_DESCRIPTION = "An xml:id identifier for " +
+    "the structural description (structMap) used for " +
+    "internal references within the XML-document. It must be unique within the XML-document.";
 
   /**
    * Constant specification cardinality for id "CSIP83".
@@ -3593,7 +3602,7 @@ public final class ConstantsCSIPspec {
    * Constant specification description for id "CSIP85".
    */
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP85_DESCRIPTION = "Mandatory, xml:id "
-    + "identifier must be unique within the package.";
+    + "identifier must be unique within the XML-document.";
 
   /**
    * Constant specification cardinality for id "CSIP85".
@@ -3605,41 +3614,6 @@ public final class ConstantsCSIPspec {
    */
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP85_LEVEL = "MUST";
 
-  /* CSIP86 */
-
-  /**
-   * Constant specification id "CSIP86".
-   */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP86_ID = "CSIP86";
-
-  /**
-   * Constant specification name for id "CSIP86".
-   */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP86_NAME = "Main structural division label";
-
-  /**
-   * Constant specification location for id "CSIP86".
-   */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP86_LOCATION = "mets/structMap[@LABEL=’CSIP’]"
-    + "/div/@LABEL";
-
-  /**
-   * Constant specification description for id "CSIP86".
-   */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP86_DESCRIPTION = "The package’s top-level "
-    + "structural division <div> " + "element’s @LABEL "
-    + "attribute value must be identical to the package identifier, i.e. the same "
-    + "value as the mets/@OBJID attribute.";
-
-  /**
-   * Constant specification cardinality for id "CSIP86".
-   */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP86_CARDINALITY = "1..1";
-
-  /**
-   * Constant specification level for id "CSIP86".
-   */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP86_LEVEL = "MUST";
 
   /* CSIP88 */
   /**
@@ -3699,7 +3673,7 @@ public final class ConstantsCSIPspec {
    * Constant specification description for id "CSIP89".
    */
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP89_DESCRIPTION = "Mandatory, xml:id identifier "
-    + "must be unique within the package.";
+    + "must be unique within the XML-document.";
 
   /**
    * Constant specification cardinality for id "CSIP89".
@@ -3875,7 +3849,7 @@ public final class ConstantsCSIPspec {
    * Constant specification description for id "CSIP94".
    */
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP94_DESCRIPTION = "Mandatory, xml:id identifier "
-    + "must be unique within the package.";
+    + "must be unique within the XML-document.";
 
   /**
    * Constant specification cardinality for id "CSIP94".
@@ -3945,7 +3919,7 @@ public final class ConstantsCSIPspec {
    */
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP96_DESCRIPTION = "All file groups containing "
     + "documentation described in the package are " + "referenced via the relevant file group identifiers. "
-    + "There MUST be one file group reference per <fptr> element.";
+    + "There SHOULD be one file group reference per <fptr> element.";
 
   /**
    * Constant specification cardinality for id "CSIP96".
@@ -3955,7 +3929,7 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification level for id "CSIP96".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP96_LEVEL = "MUST";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP96_LEVEL = "SHOULD";
 
   /* CSIP116 */
 
@@ -4049,7 +4023,7 @@ public final class ConstantsCSIPspec {
    * Constant specification description for id "CSIP98".
    */
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP98_DESCRIPTION = "Mandatory, xml:id identifier "
-    + "must be unique within the package.";
+    + "must be unique within the XML-document.";
 
   /**
    * Constant specification cardinality for id "CSIP98".
@@ -4128,7 +4102,7 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification level for id "CSIP100".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP100_LEVEL = "MUST";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP100_LEVEL = "SHOULD";
 
   /* CSIP118 */
 
@@ -4223,7 +4197,7 @@ public final class ConstantsCSIPspec {
    * Constant specification description for id "CSIP102".
    */
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP102_DESCRIPTION = "Mandatory, xml:id "
-    + "identifier must be unique within the package.";
+    + "identifier must be unique within the XML-document.";
 
   /**
    * Constant specification cardinality for id "CSIP102".
@@ -4302,7 +4276,7 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification level for id "CSIP104".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP104_LEVEL = "MUST";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP104_LEVEL = "SHOULD";
 
   /* CSIP119 */
 
@@ -4397,7 +4371,7 @@ public final class ConstantsCSIPspec {
    * Constant specification description for id "CSIP106".
    */
   public static final String VALIDATION_REPORT_SPECIFICATION_CSIP106_DESCRIPTION = "Mandatory, xml:id "
-    + "identifier must be unique within the package.";
+    + "identifier must be unique within the XML-document.";
 
   /**
    * Constant specification cardinality for id "CSIP106".
@@ -4430,10 +4404,12 @@ public final class ConstantsCSIPspec {
   /**
    * Constant specification description for id "CSIP107".
    */
-  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP107_DESCRIPTION = "The package’s representation "
-    + "division <div> element @LABEL attribute value must be " + "the path to the representation level METS document. "
-    + "This requirement gives the same value to be used as the requirement "
-    + "named “File group identifier” (CSIP64) ";
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP107_DESCRIPTION = "The package’s representation " +
+    "division <div> element @LABEL attribute value must be the path to the " +
+    "representation level METS document starting with the value “Representations” " +
+    "followed by the main folder name for example “Representations/submission” and “Representations/ingest”.\n" +
+    "This requirement gives the same value to be used as the requirement " +
+    "named “Description of the use of the file group” (CSIP64)";
 
   /**
    * Constant specification cardinality for id "CSIP107".
@@ -4946,9 +4922,6 @@ public final class ConstantsCSIPspec {
     if (VALIDATION_REPORT_SPECIFICATION_CSIP85_ID.equals(id)) {
       return VALIDATION_REPORT_SPECIFICATION_CSIP85_NAME;
     }
-    if (VALIDATION_REPORT_SPECIFICATION_CSIP86_ID.equals(id)) {
-      return VALIDATION_REPORT_SPECIFICATION_CSIP86_NAME;
-    }
     if (VALIDATION_REPORT_SPECIFICATION_CSIP88_ID.equals(id)) {
       return VALIDATION_REPORT_SPECIFICATION_CSIP88_NAME;
     }
@@ -5358,9 +5331,6 @@ public final class ConstantsCSIPspec {
     }
     if (VALIDATION_REPORT_SPECIFICATION_CSIP85_ID.equals(id)) {
       return VALIDATION_REPORT_SPECIFICATION_CSIP85_LOCATION;
-    }
-    if (VALIDATION_REPORT_SPECIFICATION_CSIP86_ID.equals(id)) {
-      return VALIDATION_REPORT_SPECIFICATION_CSIP86_LOCATION;
     }
     if (VALIDATION_REPORT_SPECIFICATION_CSIP88_ID.equals(id)) {
       return VALIDATION_REPORT_SPECIFICATION_CSIP88_LOCATION;
@@ -5772,9 +5742,6 @@ public final class ConstantsCSIPspec {
     if (VALIDATION_REPORT_SPECIFICATION_CSIP85_ID.equals(id)) {
       return VALIDATION_REPORT_SPECIFICATION_CSIP85_DESCRIPTION;
     }
-    if (VALIDATION_REPORT_SPECIFICATION_CSIP86_ID.equals(id)) {
-      return VALIDATION_REPORT_SPECIFICATION_CSIP86_DESCRIPTION;
-    }
     if (VALIDATION_REPORT_SPECIFICATION_CSIP88_ID.equals(id)) {
       return VALIDATION_REPORT_SPECIFICATION_CSIP88_DESCRIPTION;
     }
@@ -6185,9 +6152,6 @@ public final class ConstantsCSIPspec {
     if (VALIDATION_REPORT_SPECIFICATION_CSIP85_ID.equals(id)) {
       return VALIDATION_REPORT_SPECIFICATION_CSIP85_CARDINALITY;
     }
-    if (VALIDATION_REPORT_SPECIFICATION_CSIP86_ID.equals(id)) {
-      return VALIDATION_REPORT_SPECIFICATION_CSIP86_CARDINALITY;
-    }
     if (VALIDATION_REPORT_SPECIFICATION_CSIP88_ID.equals(id)) {
       return VALIDATION_REPORT_SPECIFICATION_CSIP88_CARDINALITY;
     }
@@ -6597,9 +6561,6 @@ public final class ConstantsCSIPspec {
     }
     if (VALIDATION_REPORT_SPECIFICATION_CSIP85_ID.equals(id)) {
       return VALIDATION_REPORT_SPECIFICATION_CSIP85_LEVEL;
-    }
-    if (VALIDATION_REPORT_SPECIFICATION_CSIP86_ID.equals(id)) {
-      return VALIDATION_REPORT_SPECIFICATION_CSIP86_LEVEL;
     }
     if (VALIDATION_REPORT_SPECIFICATION_CSIP88_ID.equals(id)) {
       return VALIDATION_REPORT_SPECIFICATION_CSIP88_LEVEL;

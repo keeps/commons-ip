@@ -2,7 +2,6 @@ package org.roda_project.commons_ip2.validator.components.aipFileSectionComponen
 
 import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MetsType;
-import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.state.MetsValidatorState;
 import org.roda_project.commons_ip2.validator.utils.Message;

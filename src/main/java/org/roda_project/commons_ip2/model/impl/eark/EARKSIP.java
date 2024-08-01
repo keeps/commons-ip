@@ -48,7 +48,6 @@ public class EARKSIP extends SIP {
   public EARKSIP() {
     super();
     setProfile(IPConstants.SIP_SPEC_PROFILE);
-
     METSGeneratorFactory factory = new METSGeneratorFactory();
     metsCreator = factory.getGenerator(DEFAULT_SIP_VERSION);
   }
@@ -75,8 +74,12 @@ public class EARKSIP extends SIP {
 
   public EARKSIP(String sipId, IPContentType contentType, IPContentInformationType contentInformationType, String version) {
     super(sipId, contentType,contentInformationType);
-    setProfile(IPConstants.SIP_SPEC_PROFILE);
-
+    if (version.equals("2.2.0") || version.equals("2.1.0")) {
+      setProfile(IPConstants.SIP_SPEC_PROFILE.replace(".xml", "-v" + version.replace(".", "-") + ".xml"));
+    }
+    else {
+      setProfile(IPConstants.SIP_SPEC_PROFILE);
+    }
     METSGeneratorFactory factory = new METSGeneratorFactory();
     metsCreator = factory.getGenerator(version);
   }

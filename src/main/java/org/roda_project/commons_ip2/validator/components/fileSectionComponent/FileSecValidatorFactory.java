@@ -13,7 +13,10 @@ public class FileSecValidatorFactory {
     if (version.equals("2.0.4")) {
       return new FileSecValidator204();
     }
-    return new FileSecValidator210();
+    else if (version.equals("2.1.0")) {
+      return new FileSecValidator210();
+    }
+    return new FileSecValidator220();
   }
 
 }

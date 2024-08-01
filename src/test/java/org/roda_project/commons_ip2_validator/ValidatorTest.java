@@ -98,6 +98,39 @@ public class ValidatorTest {
 
     Assert.assertFalse(validate);
   }
+
+  /* Full SIP 2.2.0 */
+  @Test
+  public void validateFullSipZIP220()
+    throws IOException, URISyntaxException, ParserConfigurationException, SAXException, NoSuchAlgorithmException {
+    LOGGER.info("Validate - Full-EARK-SIP");
+
+    URI resource = getClass().getResource("/").toURI();
+    Path earkSIPath =  Paths.get(resource).resolve("validation").resolve("Full-EARK-SIP.zip");
+    Path reportPath = Files.createTempDirectory("reports").resolve("Full-EARK-SIP.json");
+    if (!reportPath.toFile().exists()) {
+      try {
+        Files.createFile(reportPath);
+      } catch (IOException e) {
+        reportPath = Files.createTempFile(Constants.VALIDATION_REPORT_PREFIX, ".json");
+      }
+    } else {
+      Files.deleteIfExists(reportPath);
+      try {
+        Files.createFile(reportPath);
+      } catch (IOException e) {
+        reportPath = Files.createTempFile(Constants.VALIDATION_REPORT_PREFIX, ".json");
+      }
+    }
+    OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(reportPath.toFile()));
+    ValidationReportOutputJson reportOutputJson = new ValidationReportOutputJson(earkSIPath,outputStream);
+    EARKSIPValidator earksipValidator = new EARKSIPValidator(reportOutputJson, "2.2.0");
+
+    boolean validate = earksipValidator.validate("2.2.0");
+    LOGGER.info("Done validate - Full-EARK-SIP");
+
+    Assert.assertFalse(validate);
+  }
   //
   // /* Simple SIP */
   // @Test

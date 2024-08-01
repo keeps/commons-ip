@@ -16,6 +16,9 @@ public class SipMetsValidatorFactory {
     if (version.equals("2.0.4")) {
       return new SipMetsValidator204();
     }
-    return new SipMetsValidator210();
+    else if (version.equals("2.1.0")) {
+      return new SipMetsValidator210();
+    }
+    return new SipMetsValidator220();
   }
 }

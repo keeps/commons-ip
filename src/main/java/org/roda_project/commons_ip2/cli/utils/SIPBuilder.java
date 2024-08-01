@@ -31,7 +31,7 @@ public class SIPBuilder {
   private List<MetadataGroup> metadataArgs = new ArrayList<>();
   private List<RepresentationGroup> representationArgs = new ArrayList<>();
   private boolean targetOnly;
-  private CSIPVersion version = CSIPVersion.V210;
+  private CSIPVersion version = CSIPVersion.V220;
   private String path;
   private String submitterAgentName;
   private String submitterAgentId;

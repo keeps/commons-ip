@@ -16,6 +16,9 @@ public class SipFileValidatorFactory {
     if (version.equals("2.0.4")) {
       return new SipFileValidator204();
     }
-    return new SipFileValidator210();
+    else if (version.equals("2.1.0")) {
+      return new SipFileValidator210();
+    }
+    return new SipFileValidator220();
   }
 }

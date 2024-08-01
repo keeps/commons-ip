@@ -17,7 +17,10 @@ public class StructValidatorFactory {
     if (version.equals("2.0.4")) {
       return new StructValidator204();
     }
-    return new StructValidator210();
+    else if (version.equals("2.1.0")) {
+      return new StructValidator210();
+    }
+    return new StructValidator220();
   }
 
 }
