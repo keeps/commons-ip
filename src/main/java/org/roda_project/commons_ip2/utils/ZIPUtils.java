@@ -58,27 +58,29 @@ public final class ZIPUtils {
    *          file extension (e.g. .zip)
    */
   public static Path extractIPIfInZipFormat(final Path source, Path destinationDirectory) throws ParseException {
-    Path ipFolderPath = destinationDirectory;
-    if (!Files.isDirectory(source)) {
-      try {
-        ZIPUtils.unzip(source, destinationDirectory);
+    if (Files.isDirectory(source)) {
+      return source;
+    }
 
-        // 20161111 hsilva: see if the IP extracted has a folder which contains
-        // the content of the IP (for being compliant with previous way of
-        // creating SIP in ZIP format, this test/adjustment is needed)
-        if (Files.exists(destinationDirectory) && !Files.exists(destinationDirectory.resolve(IPConstants.METS_FILE))) {
-          try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(destinationDirectory)) {
-            for (Path path : directoryStream) {
-              if (Files.isDirectory(path) && Files.exists(path.resolve(IPConstants.METS_FILE))) {
-                ipFolderPath = path;
-                break;
-              }
+    Path ipFolderPath = destinationDirectory;
+    try {
+      ZIPUtils.unzip(source, destinationDirectory);
+
+      // 20161111 hsilva: see if the IP extracted has a folder which contains
+      // the content of the IP (for being compliant with previous way of
+      // creating SIP in ZIP format, this test/adjustment is needed)
+      if (Files.exists(destinationDirectory) && !Files.exists(destinationDirectory.resolve(IPConstants.METS_FILE))) {
+        try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(destinationDirectory)) {
+          for (Path path : directoryStream) {
+            if (Files.isDirectory(path) && Files.exists(path.resolve(IPConstants.METS_FILE))) {
+              ipFolderPath = path;
+              break;
             }
           }
         }
-      } catch (IOException e) {
-        throw new ParseException("Error unzipping file", e);
       }
+    } catch (IOException e) {
+      throw new ParseException("Error unzipping file", e);
     }
 
     return ipFolderPath;
