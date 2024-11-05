@@ -8,7 +8,10 @@ import java.nio.file.Paths;
 public class DecoderUtils {
 
   public static String normalizePath(String href) {
-    return Paths.get(href).normalize().toString();
+
+    return Paths.get(href).normalize() // Removes unnecessary elements (like "." or "..")
+      .toString().replace("\\", "/"); // Assure it returns in unix-style format
+
   }
 
 }
