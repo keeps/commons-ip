@@ -48,6 +48,12 @@ public class FolderWriteStrategy implements WriteStrategy {
     return dirPath;
   }
 
+  @Override
+  public Path write(Map<String, ZipEntryInfo> entries, SIP sip, String fileNameWithoutExtension, String fallbackName,
+    boolean createSipIdFolder, boolean deleteExisting) throws IPException, InterruptedException {
+    throw new UnsupportedOperationException("Method not implemented");
+  }
+
   private void writeToPath(final Map<String, ZipEntryInfo> entries, final Path path, String checksumAlgorithm)
     throws IPException, InterruptedException {
     try {

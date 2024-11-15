@@ -17,5 +17,8 @@ public interface WriteStrategy {
   Path write(Map<String, ZipEntryInfo> entries, SIP sip, String fileNameWithoutExtension, String fallbackName,
     boolean deleteExisting) throws IPException, InterruptedException;
 
+  Path write(Map<String, ZipEntryInfo> entries, SIP sip, String fileNameWithoutExtension, String fallbackName,
+             boolean createSipIdFolder, boolean deleteExisting) throws IPException, InterruptedException;
+
   Path getDestinationPath();
 }

@@ -28,10 +28,16 @@ public class ZipWriteStrategy implements WriteStrategy {
   @Override
   public Path write(Map<String, ZipEntryInfo> entries, SIP sip, String fileNameWithoutExtension, String fallbackName,
                     boolean deleteExisting) throws IPException, InterruptedException {
+    return write(entries, sip, fileNameWithoutExtension, fallbackName, true, deleteExisting);
+  }
+
+  @Override
+  public Path write(Map<String, ZipEntryInfo> entries, SIP sip, String fileNameWithoutExtension, String fallbackName,
+    boolean createSipIdFolder, boolean deleteExisting) throws IPException, InterruptedException {
     Path zipPath = getZipPath(destinationPath, fileNameWithoutExtension, fallbackName);
 
     try {
-      ZIPUtils.zip(entries, Files.newOutputStream(zipPath), sip, true, true);
+      ZIPUtils.zip(entries, Files.newOutputStream(zipPath), sip, createSipIdFolder, true);
     } catch (ClosedByInterruptException e) {
       throw new InterruptedException();
     } catch (IOException e) {
