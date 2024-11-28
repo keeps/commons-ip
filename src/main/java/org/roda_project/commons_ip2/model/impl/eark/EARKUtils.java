@@ -162,7 +162,14 @@ public class EARKUtils {
         final boolean isRepresentationsData = (representation.getData() != null && !representation.getData().isEmpty());
         final IPHeader header = new IPHeader(IPEnums.IPStatus.NEW).setAgents(representation.getAgents());
         final MetsWrapper representationMETSWrapper;
-        if (!IPEnums.SipType.EARK2S.equals(sipType)) {
+
+        if (IPEnums.SipType.ERMS.equals(sipType)) {
+          representationMETSWrapper = metsGenerator.generateMETS(representationId, representation.getDescription(),
+            ip.getProfile(), false, Optional.empty(), null, header,
+            mainMETSWrapper.getMets().getMetsHdr().getOAISPACKAGETYPE(), representation.getContentType(),
+            representation.getContentInformationType(), isRepresentationMetadata, isRepresentationMetadataOther,
+            isRepresentationSchemas, isRepresentationDocumentation, false, false, isRepresentationsData);
+        } else if (!IPEnums.SipType.EARK2S.equals(sipType)) {
           representationMETSWrapper = metsGenerator.generateMETS(representationId, representation.getDescription(),
             ip.getProfile(), false, Optional.empty(), null, header,
             mainMETSWrapper.getMets().getMetsHdr().getOAISPACKAGETYPE(), representation.getContentType(),
@@ -178,8 +185,13 @@ public class EARKUtils {
         representationMETSWrapper.getMainDiv().setTYPE(representation.getStatus().asString());
 
         // representation data
-        addRepresentationDataFilesToZipAndMETS(ip, zipEntries, representationMETSWrapper, representation,
-          representationId);
+        if (IPEnums.SipType.ERMS.equals(sipType)) {
+          addRepresentationDataFilesToZipErmsAndMETS(ip, zipEntries, representationMETSWrapper, representation,
+            representationId);
+        } else {
+          addRepresentationDataFilesToZipAndMETS(ip, zipEntries, representationMETSWrapper, representation,
+            representationId);
+        }
 
         // representation descriptive metadata
         addDescriptiveMetadataToZipAndMETS(zipEntries, representationMETSWrapper,
@@ -201,15 +213,60 @@ public class EARKUtils {
           representationId);
 
         // add representation METS to Zip file and to main METS file
-        metsGenerator.addRepresentationMETSToZipAndToMainMETS(zipEntries, mainMETSWrapper, representationId,
-          representationMETSWrapper, IPConstants.REPRESENTATIONS_FOLDER + representationId
-            + IPConstants.ZIP_PATH_SEPARATOR + IPConstants.METS_FILE,
-          buildDir);
+        if (IPEnums.SipType.ERMS.equals(sipType)) {
+          metsGenerator.addRepresentationMETSToZipAndToMainMETS(zipEntries, mainMETSWrapper, representationId,
+            representationMETSWrapper,
+            IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR + IPConstants.DATA
+              + IPConstants.ZIP_PATH_SEPARATOR + IPConstants.METS_FILE,
+            buildDir);
+        } else {
+          metsGenerator.addRepresentationMETSToZipAndToMainMETS(zipEntries, mainMETSWrapper, representationId,
+            representationMETSWrapper, IPConstants.REPRESENTATIONS_FOLDER + representationId
+              + IPConstants.ZIP_PATH_SEPARATOR + IPConstants.METS_FILE,
+            buildDir);
+        }
 
         metsGenerator.cleanFileGrpStructure();
       }
       if (ip instanceof SIP) {
         ((SIP) ip).notifySipBuildRepresentationsProcessingEnded();
+      }
+    }
+
+  }
+
+  private void addRepresentationDataFilesToZipErmsAndMETS(IPInterface ip, Map<String, ZipEntryInfo> zipEntries,
+    MetsWrapper representationMETSWrapper, IPRepresentation representation, String representationId)
+    throws InterruptedException, IPException {
+    if (representation.getData() != null && !representation.getData().isEmpty()) {
+      if (ip instanceof SIP sip) {
+        sip.notifySipBuildRepresentationProcessingStarted(representation.getData().size());
+      }
+      int i = 0;
+      for (IPFileInterface file : representation.getData()) {
+        if (Thread.interrupted()) {
+          throw new InterruptedException();
+        }
+
+        if (file instanceof IPFile) {
+          String dataFilePath = ModelUtils.getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
+          FileType fileType = metsGenerator.addDataFileToMETS(representationMETSWrapper, dataFilePath, file.getPath());
+
+          dataFilePath = IPConstants.DATA_FOLDER + dataFilePath;
+          dataFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
+            + dataFilePath;
+          ZIPUtils.addFileTypeFileToZip(zipEntries, file.getPath(), dataFilePath, fileType);
+        } else if (file instanceof IPFileShallow shallow && (shallow.getFileLocation() != null)) {
+          metsGenerator.addDataFileToMETS(representationMETSWrapper, shallow);
+        }
+
+        i++;
+        if (ip instanceof SIP sip) {
+          sip.notifySipBuildRepresentationProcessingCurrentStatus(i);
+        }
+      }
+      if (ip instanceof SIP sip) {
+        sip.notifySipBuildRepresentationProcessingEnded();
       }
     }
   }

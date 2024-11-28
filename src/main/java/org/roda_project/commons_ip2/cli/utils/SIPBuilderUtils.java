@@ -91,6 +91,15 @@ public class SIPBuilderUtils {
     }
   }
 
+  public static void addRepresentationGroupsToErmsSIP(SIP sip, final List<RepresentationGroup> representationGroups,
+    boolean targetOnly) throws IPException {
+    if (representationGroups != null) {
+      for (RepresentationGroup representationGroup : representationGroups) {
+        addRepresentationToSIP(sip, representationGroup, targetOnly);
+      }
+    }
+  }
+
   private static void addFileToRepresentation(final IPRepresentation representation, final boolean targetOnly,
     final Path dataPath, final List<String> relativePath) {
     if (Files.isDirectory(dataPath)) {

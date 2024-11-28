@@ -59,6 +59,21 @@ public class FolderManager {
     return new FileInputStream(metsPath);
   }
 
+  public InputStream getErmsInputStream(final Path path) throws FileNotFoundException {
+    folder = path.toFile();
+    String ermsPath = null;
+    for (File f : folder.listFiles()) {
+      if (f.getName().endsWith("erms.xml")) {
+        ermsPath = f.getPath();
+      }
+    }
+    if (ermsPath == null) {
+      LOGGER.debug("ERMS.xml not Found");
+      throw new FileNotFoundException("ERMS.xml not Found");
+    }
+    return new FileInputStream(ermsPath);
+  }
+
   public String getSipRootFolderName(final Path path) {
     final String[] tmp = path.toString().split("/");
     return tmp[tmp.length - 1];

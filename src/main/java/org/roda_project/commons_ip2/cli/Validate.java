@@ -11,7 +11,7 @@ import java.util.concurrent.Callable;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.roda_project.commons_ip2.cli.model.ExitCodes;
-import org.roda_project.commons_ip2.cli.model.enums.ReportType;
+import org.roda_project.commons_ip2.cli.model.enums.ReportTypeEnums;
 import org.roda_project.commons_ip2.cli.model.exception.CLIException;
 import org.roda_project.commons_ip2.cli.model.exception.ValidationException;
 import org.roda_project.commons_ip2.cli.utils.CLI.ValidateCommandUtils;
@@ -26,6 +26,9 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import picocli.CommandLine;
+
+import static org.roda_project.commons_ip2.cli.model.enums.ReportTypeEnums.ReportType.COMMONS_IP;
+import static org.roda_project.commons_ip2.cli.model.enums.ReportTypeEnums.ReportType.PYIP;
 
 /**
  * @author Miguel Guimarães <mguimaraes@keep.pt>
@@ -48,7 +51,7 @@ public class Validate implements Callable<Integer> {
 
   @CommandLine.Option(names = {"-r",
     "--reporter-type"}, paramLabel = "<type>", description = "Report type (possible values: ${COMPLETION-CANDIDATES})")
-  ReportType reportType = ReportType.COMMONS_IP;
+  ReportTypeEnums.ReportType reportType = COMMONS_IP;
 
   @CommandLine.Option(names = {"-v",
     "--verbose"}, description = "Verbose command line output with all validation steps")
@@ -72,7 +75,7 @@ public class Validate implements Callable<Integer> {
     return ExitCodes.EXIT_CODE_OK;
   }
 
-  private void handleSipValidation(final String sip, final String reportPathDir, final ReportType reportType,
+  private void handleSipValidation(final String sip, final String reportPathDir, final ReportTypeEnums.ReportType reportType,
     final boolean verbose)
     throws IOException, ParserConfigurationException, SAXException, CLIException, NoSuchAlgorithmException {
     final Path sipPath = Paths.get(sip);
@@ -83,27 +86,25 @@ public class Validate implements Callable<Integer> {
 
     LogSystem.logOperatingSystemInfo();
     LOGGER.debug("command executed: {}", commandLineString);
-    switch (reportType) {
-      case COMMONS_IP -> {
-        final OutputStream outputStream = ValidateCommandUtils.createReportOutputStream(reportPath);
-        if (outputStream != null) {
-          final ValidationReportOutputJson jsonReporter = new ValidationReportOutputJson(sipPath, outputStream);
-          final EARKSIPValidator earksipValidator = new EARKSIPValidator(jsonReporter, version);
-          if (verbose) {
-            earksipValidator.addObserver(new ProgressValidationLoggerObserver());
-          }
-          earksipValidator.validate(version);
-        }
-      }
-      case PYIP -> {
-        final ValidationReportOutputJSONPyIP jsonReporter = new ValidationReportOutputJSONPyIP(reportPath, sipPath);
-        final EARKPyIPValidator earkPyIPValidator = new EARKPyIPValidator(jsonReporter, version);
+    if (reportType.equals(COMMONS_IP)) {
+      final OutputStream outputStream = ValidateCommandUtils.createReportOutputStream(reportPath);
+      if (outputStream != null) {
+        final ValidationReportOutputJson jsonReporter = new ValidationReportOutputJson(sipPath, outputStream);
+        final EARKSIPValidator earksipValidator = new EARKSIPValidator(jsonReporter, version);
         if (verbose) {
-          earkPyIPValidator.addObserver(new ProgressValidationLoggerObserver());
+          earksipValidator.addObserver(new ProgressValidationLoggerObserver());
         }
-        earkPyIPValidator.validate();
+        earksipValidator.validate(version);
       }
-      default -> throw new CLIException("Unexpected value: " + reportType);
+    } else if (reportType.equals(PYIP)) {
+      final ValidationReportOutputJSONPyIP jsonReporter = new ValidationReportOutputJSONPyIP(reportPath, sipPath);
+      final EARKPyIPValidator earkPyIPValidator = new EARKPyIPValidator(jsonReporter, version);
+      if (verbose) {
+        earkPyIPValidator.addObserver(new ProgressValidationLoggerObserver());
+      }
+      earkPyIPValidator.validate();
+    } else {
+      throw new CLIException("Unexpected value: " + reportType);
     }
     new CommandLine(this).getOut().printf("E-ARK SIP validation report at '%s'%n",
       reportPath.normalize().toAbsolutePath());
