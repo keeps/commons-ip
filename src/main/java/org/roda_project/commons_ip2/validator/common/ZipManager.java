@@ -79,6 +79,38 @@ public class ZipManager {
     return zipFile.getInputStream(zipArchiveEntry);
   }
 
+  /**
+   * Get ERMS file in IP {@link InputStream}.
+   *
+   * @param path
+   *          {@link Path} to the IP
+   * @return {@link InputStream} to the file.
+   * @throws IOException
+   *           if some I/O error occurs
+   */
+  public InputStream getErmsInputStream(Path path) throws IOException {
+    if (zipFile == null) {
+      zipFile = new ZipFile(path.toFile());
+    }
+
+    Enumeration entries = zipFile.entries();
+    String entry = null;
+    while (entries.hasMoreElements()) {
+      ZipEntry entr = (ZipEntry) entries.nextElement();
+      if (entr.getName().endsWith("erms.xml")) {
+        if (entr.getName().split("/").length == 4) {
+          entry = entr.getName();
+        }
+      }
+    }
+    if (entry == null) {
+      LOGGER.debug("ERMS.xml not Found");
+      throw new IOException("ERMS.xml not Found");
+    }
+    ZipEntry zipArchiveEntry = zipFile.getEntry(entry);
+    return zipFile.getInputStream(zipArchiveEntry);
+  }
+
   public Enumeration getEntries() {
     return zipFile.entries();
   }
