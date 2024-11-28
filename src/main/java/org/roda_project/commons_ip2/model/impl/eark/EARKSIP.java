@@ -147,6 +147,20 @@ public class EARKSIP extends SIP {
     return build(writeStrategy, false);
   }
 
+  /**
+   * Builds a SIP.
+   *
+   * @param destinationDirectory
+   *          the {@link Path} where the SIP should be build.
+   * @param onlyManifest
+   *          build only the manifest file? (<strong>this parameter is
+   *          ignored</strong>).
+   * @return the {@link Path}.
+   * @throws IPException
+   *           if some error occurs.
+   * @throws InterruptedException
+   *           if some error occurs.
+   */
   @Override
   public Path build(WriteStrategy writeStrategy, final boolean onlyManifest)
     throws IPException, InterruptedException {
@@ -212,7 +226,6 @@ public class EARKSIP extends SIP {
       throw e;
     } finally {
       ModelUtils.deleteBuildDir(buildDir);
-      notifySipBuildPackagingEnded();
     }
   }
 
