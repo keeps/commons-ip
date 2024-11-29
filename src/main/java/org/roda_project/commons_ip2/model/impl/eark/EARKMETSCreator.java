@@ -11,6 +11,7 @@ import java.util.Optional;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.namespace.QName;
 
 import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip.utils.IPEnums;
@@ -56,6 +57,54 @@ import jakarta.xml.bind.JAXBException;
 public abstract class EARKMETSCreator {
   private static final Logger LOGGER = LoggerFactory.getLogger(EARKMETSCreator.class);
   private final Map<String, MetsType.FileSec.FileGrp> dataFileGrp = new HashMap<>();
+
+  public MetsWrapper generateMetsSiard(final String id, final String label, final String profile, final boolean mainMets,
+                                  final Optional<List<String>> ancestors, final Path metsPath, final IPHeader ipHeader, final String type,
+                                  final IPContentType contentType, final IPContentInformationType contentInformationType, final boolean isMetadata,
+                                  final boolean isMetadataOther, final boolean isSchemas, final boolean isDocumentation, final boolean isSubmission,
+                                  final boolean isRepresentations, final boolean isRepresentationsData) throws IPException {
+    final Mets mets = new Mets();
+    final MetsWrapper metsWrapper = new MetsWrapper(mets, metsPath);
+
+    // basic attributes
+    addBasicAttributesToMets(mets, id, label, profile, contentType, contentInformationType);
+    // header
+
+    addHeaderToMets(mets, ipHeader, type);
+
+    // administrative section
+    addAmdSecToMets(mets);
+
+    // file section
+
+    final MetsType.FileSec fileSec = createFileSec();
+
+    // Add data file grp
+    addDataFileGrpToMets(metsWrapper, fileSec, mainMets, isRepresentationsData);
+
+    // Add schemas, documentation, submission to main div
+    addCommonFileGrpToMets(metsWrapper, fileSec, isSchemas, isSubmission, isDocumentation, type);
+
+    if ((mainMets && isRepresentations) || !fileSec.getFileGrp().isEmpty()) {
+      mets.setFileSec(fileSec);
+    }
+
+    // E-ARK struct map
+    final StructMapType structMap = createStructMap();
+
+    final DivType mainDiv = addCommonDivsToMainDiv(metsWrapper, id, isMetadata, isMetadataOther, isSchemas,
+      isDocumentation, isSubmission, type);
+
+    // data div
+    addDataDivToMets(metsWrapper, mainDiv, mainMets, isRepresentationsData);
+
+    structMap.setDiv(mainDiv);
+    mets.getStructMap().add(structMap);
+
+    addAncestorsToMets(mets, ancestors);
+
+    return metsWrapper;
+  }
 
   public MetsWrapper generateMETS(final String id, final String label, final String profile, final boolean mainMets,
     final Optional<List<String>> ancestors, final Path metsPath, final IPHeader ipHeader, final String type,
@@ -240,6 +289,47 @@ public abstract class EARKMETSCreator {
       final FileType.FLocat fileLocation = METSUtils.createFileLocation(representationMetsPath);
       fileType.getFLocat().add(fileLocation);
       fileGrp.getFile().add(fileType);
+      mainMETSWrapper.getMets().getFileSec().getFileGrp().add(fileGrp);
+
+      // set mets pointer
+      final DivType representationDiv = createRepresentationDivForStructMap(representationId, mptr);
+      mptr.setTitle(fileGrp.getID());
+      mainMETSWrapper.getMainDiv().getDiv().add(representationDiv);
+    } catch (JAXBException | IOException e) {
+      throw new IPException("Error saving representation METS", e);
+    }
+  }
+
+  public void addRepresentationSiardMETSToZipAndToMainMETS(final Map<String, ZipEntryInfo> zipEntries,
+    final MetsWrapper mainMETSWrapper, final String representationId, final MetsWrapper representationMETSWrapper,
+    final String representationMetsPath, final Path buildDir) throws IPException, InterruptedException {
+    try {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
+
+      // create mets pointer
+      final DivType.Mptr mptr = new DivType.Mptr();
+      mptr.setLOCTYPE(METSEnums.LocType.URL.toString());
+      mptr.setType(IPConstants.METS_TYPE_SIMPLE);
+      mptr.setHref(METSUtils.encodeHref(representationMetsPath));
+
+
+      // create file
+      final FileType fileType = new FileType();
+      fileType.setID(Utils.generateRandomAndPrefixedFileID());
+
+      addMETSToZip(zipEntries, representationMETSWrapper, representationMetsPath, buildDir, false, fileType);
+
+      // add to file group and then to file section
+      final MetsType.FileSec.FileGrp fileGrp = createFileGroup(
+        IPConstants.REPRESENTATIONS_WITH_FIRST_LETTER_CAPITAL + "/" + representationId);
+      final FileType.FLocat fileLocation = METSUtils.createFileLocation(representationMetsPath);
+      fileType.getFLocat().add(fileLocation);
+      fileGrp.getFile().add(fileType);
+      fileGrp.getOtherAttributes().put(QName.valueOf("csip:CONTENTINFORMATIONTYPE"), "citssiard_v1_0");
+      fileGrp.getOtherAttributes().put(QName.valueOf("csip:OTHERCONTENTINFORMATIONTYPE"), mainMETSWrapper.getMets().getOTHERCONTENTINFORMATIONTYPE());
+
       mainMETSWrapper.getMets().getFileSec().getFileGrp().add(fileGrp);
 
       // set mets pointer
