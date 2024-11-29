@@ -62,6 +62,8 @@ import org.xml.sax.SAXException;
 
 import jakarta.xml.bind.JAXBException;
 
+import javax.xml.namespace.QName;
+
 public class EARKUtils {
 
   private EARKMETSCreator metsGenerator;
@@ -169,7 +171,16 @@ public class EARKUtils {
             mainMETSWrapper.getMets().getMetsHdr().getOAISPACKAGETYPE(), representation.getContentType(),
             representation.getContentInformationType(), isRepresentationMetadata, isRepresentationMetadataOther,
             isRepresentationSchemas, isRepresentationDocumentation, false, false, isRepresentationsData);
-        } else if (!IPEnums.SipType.EARK2S.equals(sipType)) {
+        } else if (IPEnums.SipType.SIARD.equals(sipType)) {
+          representation.setContentInformationType(representation.getContentInformationType());
+          representationMETSWrapper = metsGenerator.generateMetsSiard(representationId, representation.getDescription(),
+            "https://citssiard.dilcis.eu/profile/E-ARK-SIARD-REPRESENTATION.xml", false, Optional.empty(), null, header,
+            mainMETSWrapper.getMets().getMetsHdr().getOAISPACKAGETYPE(), representation.getContentType(),
+            representation.getContentInformationType(), isRepresentationMetadata, isRepresentationMetadataOther,
+            isRepresentationSchemas, isRepresentationDocumentation, false, false, isRepresentationsData);
+        }
+
+        else if (!IPEnums.SipType.EARK2S.equals(sipType)) {
           representationMETSWrapper = metsGenerator.generateMETS(representationId, representation.getDescription(),
             ip.getProfile(), false, Optional.empty(), null, header,
             mainMETSWrapper.getMets().getMetsHdr().getOAISPACKAGETYPE(), representation.getContentType(),
@@ -187,6 +198,9 @@ public class EARKUtils {
         // representation data
         if (IPEnums.SipType.ERMS.equals(sipType)) {
           addRepresentationDataFilesToZipErmsAndMETS(ip, zipEntries, representationMETSWrapper, representation,
+            representationId);
+        } else if (IPEnums.SipType.SIARD.equals(sipType)) {
+          addRepresentationDataFilesToZipSiardAndMETS(ip, zipEntries, representationMETSWrapper, representation,
             representationId);
         } else {
           addRepresentationDataFilesToZipAndMETS(ip, zipEntries, representationMETSWrapper, representation,
@@ -219,6 +233,13 @@ public class EARKUtils {
             IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR + IPConstants.DATA
               + IPConstants.ZIP_PATH_SEPARATOR + IPConstants.METS_FILE,
             buildDir);
+        } else if (IPEnums.SipType.SIARD.equals(sipType)) {
+          metsGenerator.addRepresentationSiardMETSToZipAndToMainMETS(zipEntries, mainMETSWrapper, representationId,
+            representationMETSWrapper,
+            IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR + IPConstants.DATA
+              + IPConstants.ZIP_PATH_SEPARATOR + IPConstants.METS_FILE,
+            buildDir);
+
         } else {
           metsGenerator.addRepresentationMETSToZipAndToMainMETS(zipEntries, mainMETSWrapper, representationId,
             representationMETSWrapper, IPConstants.REPRESENTATIONS_FOLDER + representationId
@@ -252,6 +273,46 @@ public class EARKUtils {
           String dataFilePath = ModelUtils.getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
           FileType fileType = metsGenerator.addDataFileToMETS(representationMETSWrapper, dataFilePath, file.getPath());
 
+          dataFilePath = IPConstants.DATA_FOLDER + dataFilePath;
+          dataFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
+            + dataFilePath;
+          ZIPUtils.addFileTypeFileToZip(zipEntries, file.getPath(), dataFilePath, fileType);
+        } else if (file instanceof IPFileShallow shallow && (shallow.getFileLocation() != null)) {
+          metsGenerator.addDataFileToMETS(representationMETSWrapper, shallow);
+        }
+
+        i++;
+        if (ip instanceof SIP sip) {
+          sip.notifySipBuildRepresentationProcessingCurrentStatus(i);
+        }
+      }
+      if (ip instanceof SIP sip) {
+        sip.notifySipBuildRepresentationProcessingEnded();
+      }
+    }
+
+  }
+
+  private void addRepresentationDataFilesToZipSiardAndMETS(IPInterface ip, Map<String, ZipEntryInfo> zipEntries,
+    MetsWrapper representationMETSWrapper, IPRepresentation representation, String representationId)
+    throws InterruptedException, IPException {
+    if (representation.getData() != null && !representation.getData().isEmpty()) {
+      if (ip instanceof SIP sip) {
+        sip.notifySipBuildRepresentationProcessingStarted(representation.getData().size());
+      }
+      int i = 0;
+      for (IPFileInterface file : representation.getData()) {
+        if (Thread.interrupted()) {
+          throw new InterruptedException();
+        }
+
+        if (file instanceof IPFile) {
+          String dataFilePath = ModelUtils.getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
+          FileType fileType = metsGenerator.addDataFileToMETS(representationMETSWrapper, dataFilePath, file.getPath());
+          if (representation.getContentInformationType().getOtherType() != null) {
+            fileType.getOtherAttributes().put(QName.valueOf("csip:OTHERCONTENTINFORMATIONTYPE"),
+              representation.getContentInformationType().getOtherType());
+          }
           dataFilePath = IPConstants.DATA_FOLDER + dataFilePath;
           dataFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
             + dataFilePath;
