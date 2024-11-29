@@ -135,4 +135,8 @@ public class IPContentType implements Serializable {
     return new IPContentType(IPContentTypeEnum.DATASET);
   }
 
+  public static IPContentType getDatabase() {
+    return new IPContentType(IPContentTypeEnum.DATABASES);
+  }
+
 }

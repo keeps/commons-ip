@@ -204,12 +204,19 @@ public class EARKSIP extends SIP {
       boolean isDocumentation = (this.getDocumentation() != null && !this.getDocumentation().isEmpty());
       boolean isSchemas = (this.getSchemas() != null && !this.getSchemas().isEmpty());
       boolean isRepresentations = (this.getRepresentations() != null && !this.getRepresentations().isEmpty());
+      MetsWrapper mainMETSWrapper;
 
-      MetsWrapper mainMETSWrapper = metsCreator.generateMETS(StringUtils.join(this.getIds(), " "),
-        this.getDescription(), this.getProfile(), true, Optional.ofNullable(this.getAncestors()), null,
-        this.getHeader(), this.getType(), this.getContentType(), this.getContentInformationType(), isMetadata,
-        isMetadataOther, isSchemas, isDocumentation, false, isRepresentations, false);
-
+      if (this.getType().equals("SIARD")) {
+        mainMETSWrapper = metsCreator.generateMetsSiard(StringUtils.join(this.getIds(), " "), this.getDescription(),
+          this.getProfile(), true, Optional.ofNullable(this.getAncestors()), null, this.getHeader(), this.getType(),
+          this.getContentType(), this.getContentInformationType(), isMetadata, isMetadataOther, isSchemas,
+          isDocumentation, false, isRepresentations, false);
+      } else {
+        mainMETSWrapper = metsCreator.generateMETS(StringUtils.join(this.getIds(), " "), this.getDescription(),
+          this.getProfile(), true, Optional.ofNullable(this.getAncestors()), null, this.getHeader(), this.getType(),
+          this.getContentType(), this.getContentInformationType(), isMetadata, isMetadataOther, isSchemas,
+          isDocumentation, false, isRepresentations, false);
+      }
       earkUtils.addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
       earkUtils.addPreservationMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getPreservationMetadata(), null);
       earkUtils.addOtherMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getOtherMetadata(), null);
