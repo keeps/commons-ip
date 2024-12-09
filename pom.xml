@@ -334,6 +334,10 @@
                             <version>4.7.6</version>
                         </path>
                     </annotationProcessorPaths>
+                    <compilerArgs>
+                        <arg>-Aproject=${project.groupId}/${project.artifactId}</arg>
+                        <arg>-Averbose=true</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
           <plugin>
