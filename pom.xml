@@ -51,6 +51,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java_version>17</java_version>
         <version.jackson>2.17.1</version.jackson>
+        <mainClass>org.roda_project.commons_ip2.cli.Main</mainClass>
+        <imageName>commons-ip2</imageName>
     </properties>
 
     <profiles>
@@ -340,6 +342,38 @@
                     </compilerArgs>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>java-agent</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>java</executable>
+                            <workingDirectory>${project.build.directory}</workingDirectory>
+                            <arguments>
+                                <argument>-classpath</argument>
+                                <classpath/>
+                                <argument>${mainClass}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>native</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${project.build.directory}/${imageName}</executable>
+                            <workingDirectory>${project.build.directory}</workingDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
           <plugin>
             <groupId>org.graalvm.buildtools</groupId>
             <artifactId>native-maven-plugin</artifactId>
@@ -362,7 +396,11 @@
               </execution>
             </executions>
             <configuration>
-              <mainClass>org.roda_project.commons_ip2.cli.Main</mainClass>
+              <mainClass>${mainClass}</mainClass>
+              <fallback>false</fallback>
+              <agent>
+                  <enabled>true</enabled>
+              </agent>
             </configuration>
           </plugin>
         </plugins>
