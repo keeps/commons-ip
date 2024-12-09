@@ -316,6 +316,54 @@
                 </plugins>
             </build>
         </profile>
+         <profile>
+      <id>native</id>
+      <build>
+        <plugins>
+          <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>${java_version}</source>
+                    <target>${java_version}</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>info.picocli</groupId>
+                            <artifactId>picocli-codegen</artifactId>
+                            <version>4.7.6</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+          <plugin>
+            <groupId>org.graalvm.buildtools</groupId>
+            <artifactId>native-maven-plugin</artifactId>
+            <version>0.10.4</version>
+            <extensions>true</extensions>
+            <executions>
+              <execution>
+                <id>build-native</id>
+                <goals>
+                  <goal>compile-no-fork</goal>
+                </goals>
+                <phase>package</phase>
+              </execution>
+              <execution>
+                <id>test-native</id>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <phase>test</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <mainClass>org.roda_project.commons_ip2.cli.Main</mainClass>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
     </profiles>
 
     <dependencies>
