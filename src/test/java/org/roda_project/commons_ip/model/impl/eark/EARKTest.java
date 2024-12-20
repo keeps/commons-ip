@@ -14,11 +14,12 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.Is;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.roda_project.commons_ip.model.IPAgent;
 import org.roda_project.commons_ip.model.IPContentType;
 import org.roda_project.commons_ip.model.IPDescriptiveMetadata;
@@ -47,12 +48,12 @@ public class EARKTest {
 
   private static Path tempFolder;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() throws IOException {
     tempFolder = Files.createTempDirectory("temp");
   }
 
-  @AfterClass
+  @AfterAll
   public static void cleanup() throws Exception {
     Utils.deletePath(tempFolder);
   }
@@ -172,16 +173,16 @@ public class EARKTest {
     // general assessment
     earkSIP.getValidationReport().getValidationEntries().stream().filter(e -> e.getLevel() == LEVEL.ERROR)
       .forEach(e -> LOGGER.error("Validation report entry: {}", e));
-    Assert.assertTrue(earkSIP.getValidationReport().isValid());
+    Assertions.assertTrue(earkSIP.getValidationReport().isValid());
 
     // assess # of representations
     List<IPRepresentation> representations = earkSIP.getRepresentations();
-    Assert.assertThat(representations.size(), Is.is(2));
+    MatcherAssert.assertThat(representations.size(), Is.is(2));
 
     // assess representations status
-    Assert.assertThat(representations.get(0).getStatus().asString(),
+    MatcherAssert.assertThat(representations.get(0).getStatus().asString(),
       Is.is(RepresentationStatus.getORIGINAL().asString()));
-    Assert.assertThat(representations.get(1).getStatus().asString(), Is.is(REPRESENTATION_STATUS_NORMALIZED));
+    MatcherAssert.assertThat(representations.get(1).getStatus().asString(), Is.is(REPRESENTATION_STATUS_NORMALIZED));
 
     LOGGER.info("SIP with id '{}' parsed with success (valid? {})!", earkSIP.getId(),
       earkSIP.getValidationReport().isValid());

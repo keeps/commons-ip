@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.roda-project</groupId>
     <artifactId>commons-ip2</artifactId>
@@ -49,7 +49,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java_version>17</java_version>
+        <java_version>21</java_version>
         <version.jackson>2.17.1</version.jackson>
         <mainClass>org.roda_project.commons_ip2.cli.Main</mainClass>
         <imageName>commons-ip2</imageName>
@@ -83,7 +83,7 @@
                                 </goals>
                                 <configuration>
                                     <rules>
-                                        <banDuplicatePomDependencyVersions/>
+                                        <banDuplicatePomDependencyVersions />
                                         <!--requireMavenVersion>
                                             <version>[3.9,)</version>
                                             <message>Invalid Maven version. It should be 3.9.X</message>
@@ -138,13 +138,17 @@
                                                 </limit>
                                             </limits>
                                             <excludes>
-                                                <!-- 20180814 hsilva: will not test model entities per se -->
+                                                <!-- 20180814 hsilva: will not test model entities
+                                                per se -->
                                                 <exclude>org.roda_project.commons_ip2.model.*</exclude>
                                                 <!-- 20180814 hsilva: will not test xml beans per se -->
-                                                <exclude>org.roda_project.commons_ip2.mets_v1_11.beans.*</exclude>
-                                                <!-- 20180814 hsilva: will not test this as it is here for future
+                                                <exclude>
+                                                    org.roda_project.commons_ip2.mets_v1_11.beans.*</exclude>
+                                                <!-- 20180814 hsilva: will not test this as it is
+                                                here for future
                                                     memory -->
-                                                <exclude>org.roda_project.commons_ip2.command_line.Main</exclude>
+                                                <exclude>
+                                                    org.roda_project.commons_ip2.command_line.Main</exclude>
                                                 <!-- 20180814 hsilva: will not test utils per se -->
                                                 <exclude>org.roda_project.commons_ip2.utils.*</exclude>
                                             </excludes>
@@ -240,13 +244,13 @@
                                 </goals>
                                 <configuration>
                                     <rules>
-                                        <banDuplicatePomDependencyVersions/>
+                                        <banDuplicatePomDependencyVersions />
                                         <!--requireMavenVersion>
                                             <version>[3.9,)</version>
                                             <message>Invalid Maven version. It should be 3.9.X</message>
                                         </requireMavenVersion-->
                                         <requireJavaVersion>
-                                            <version>17</version>
+                                            <version>21</version>
                                         </requireJavaVersion>
                                     </rules>
                                 </configuration>
@@ -318,94 +322,111 @@
                 </plugins>
             </build>
         </profile>
-         <profile>
-      <id>native</id>
-      <build>
-        <plugins>
-          <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
-                <configuration>
-                    <source>${java_version}</source>
-                    <target>${java_version}</target>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>info.picocli</groupId>
-                            <artifactId>picocli-codegen</artifactId>
-                            <version>4.7.6</version>
-                        </path>
-                    </annotationProcessorPaths>
-                    <compilerArgs>
-                        <arg>-Aproject=${project.groupId}/${project.artifactId}</arg>
-                        <arg>-Averbose=true</arg>
-                    </compilerArgs>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.1.1</version>
-                <executions>
-                    <execution>
-                        <id>java-agent</id>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
+        <profile>
+            <id>native</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.11.0</version>
                         <configuration>
-                            <executable>java</executable>
-                            <workingDirectory>${project.build.directory}</workingDirectory>
-                            <arguments>
-                                <argument>-classpath</argument>
-                                <classpath/>
-                                <argument>${mainClass}</argument>
-                            </arguments>
+                            <source>${java_version}</source>
+                            <target>${java_version}</target>
+                            <annotationProcessorPaths>
+                                <path>
+                                    <groupId>info.picocli</groupId>
+                                    <artifactId>picocli-codegen</artifactId>
+                                    <version>4.7.6</version>
+                                </path>
+                            </annotationProcessorPaths>
+                            <compilerArgs>
+                                <arg>-Aproject=${project.groupId}/${project.artifactId}</arg>
+                                <arg>-Averbose=true</arg>
+                            </compilerArgs>
                         </configuration>
-                    </execution>
-                    <execution>
-                        <id>native</id>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>3.5.2</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.junit.platform</groupId>
+                                <artifactId>junit-platform-launcher</artifactId>
+                                <version>1.11.4</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.junit.jupiter</groupId>
+                                <artifactId>junit-jupiter-engine</artifactId>
+                                <version>5.11.4</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>3.1.1</version>
+                        <executions>
+                            <execution>
+                                <id>java-agent</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>java</executable>
+                                    <workingDirectory>${project.build.directory}</workingDirectory>
+                                    <arguments>
+                                        <argument>-classpath</argument>
+                                        <classpath />
+                                        <argument>${mainClass}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>native</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>${project.build.directory}/${imageName}</executable>
+                                    <workingDirectory>${project.build.directory}</workingDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.graalvm.buildtools</groupId>
+                        <artifactId>native-maven-plugin</artifactId>
+                        <version>0.10.4</version>
+                        <extensions>true</extensions>
+                        <executions>
+                            <execution>
+                                <id>build-native</id>
+                                <goals>
+                                    <goal>compile-no-fork</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                            <execution>
+                                <id>test-native</id>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <phase>test</phase>
+                            </execution>
+                        </executions>
                         <configuration>
-                            <executable>${project.build.directory}/${imageName}</executable>
-                            <workingDirectory>${project.build.directory}</workingDirectory>
+                            <mainClass>${mainClass}</mainClass>
+                            <fallback>false</fallback>
+                            <agent>
+                                <enabled>true</enabled>
+                            </agent>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-          <plugin>
-            <groupId>org.graalvm.buildtools</groupId>
-            <artifactId>native-maven-plugin</artifactId>
-            <version>0.10.4</version>
-            <extensions>true</extensions>
-            <executions>
-              <execution>
-                <id>build-native</id>
-                <goals>
-                  <goal>compile-no-fork</goal>
-                </goals>
-                <phase>package</phase>
-              </execution>
-              <execution>
-                <id>test-native</id>
-                <goals>
-                  <goal>test</goal>
-                </goals>
-                <phase>test</phase>
-              </execution>
-            </executions>
-            <configuration>
-              <mainClass>${mainClass}</mainClass>
-              <fallback>false</fallback>
-              <agent>
-                  <enabled>true</enabled>
-              </agent>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
     <dependencies>
@@ -415,9 +436,27 @@
             <version>1.5.6</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.11.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.11.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-commons</artifactId>
+            <version>1.11.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <version>3.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>

@@ -1,9 +1,15 @@
 package org.roda_project.commons_ip2.model.impl.eark;
 
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip2.model.IPFileInterface;
@@ -11,12 +17,6 @@ import org.roda_project.commons_ip2.model.SIP;
 import org.roda_project.commons_ip2.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
 
 /**
  * {@author João Gomes <jgomes@keep.pt>}.
@@ -27,12 +27,12 @@ public class ParseEARK2STest {
 
   private static Path tempFolder;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() throws IOException {
     tempFolder = Files.createTempDirectory("temp");
   }
 
-  @AfterClass
+  @AfterAll
   public static void cleanup() throws Exception {
     Utils.deletePath(tempFolder);
   }
@@ -46,7 +46,7 @@ public class ParseEARK2STest {
     SIP earkSIP = earksip.parse(zipSIPS, tempFolder);
 
     List<IPFileInterface> files = earkSIP.getRepresentations().get(0).getData();
-    Assert.assertEquals(4, files.size());
+    Assertions.assertEquals(4, files.size());
     LOGGER.info("Done creating full E-ARK SIP-S");
   }
 }

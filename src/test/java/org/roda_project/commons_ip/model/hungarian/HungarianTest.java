@@ -25,10 +25,10 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.roda_project.commons_ip.model.IPConstants;
 import org.roda_project.commons_ip.model.IPContentType;
 import org.roda_project.commons_ip.model.IPDescriptiveMetadata;
@@ -56,12 +56,12 @@ public class HungarianTest {
   private static final String SIP_ID = "SIP_1";
   private static Path tempFolder;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() throws IOException {
     tempFolder = Files.createTempDirectory("temp");
   }
 
-  @AfterClass
+  @AfterAll
   public static void cleanup() throws Exception {
     Utils.deletePath(tempFolder);
   }
@@ -81,8 +81,8 @@ public class HungarianTest {
     Path zipPath = tempFolder.resolve(SIP_ID + ".zip");
     Path txtPath = tempFolder.resolve(SIP_ID + ".txt");
 
-    Assert.assertEquals(true, Files.exists(zipPath) && Files.exists(txtPath));
-    Assert.assertEquals(Files.lines(txtPath).count(), 6);
+    Assertions.assertEquals(true, Files.exists(zipPath) && Files.exists(txtPath));
+    Assertions.assertEquals(Files.lines(txtPath).count(), 6);
 
     try (ZipFile zipFile = new ZipFile(zipPath.toFile())) {
       Enumeration<? extends ZipEntry> entries = zipFile.entries();
@@ -105,16 +105,16 @@ public class HungarianTest {
             XPathExpression versionExpression = xpath.compile("//mdWrap/@MDTYPEVERSION");
             String mdVersion = (String) versionExpression.evaluate(metsContent, XPathConstants.STRING);
 
-            Assert.assertEquals(mdType, MetadataTypeEnum.EAD.toString());
-            Assert.assertEquals(mdVersion, "2002");
+            Assertions.assertEquals(mdType, MetadataTypeEnum.EAD.toString());
+            Assertions.assertEquals(mdVersion, "2002");
           }
         } else if (entry.getName().contains("documentation.pdf")) {
           documentationPdfCounter++;
         }
       }
 
-      Assert.assertEquals(metadataFileCounter, 1);
-      Assert.assertEquals(documentationPdfCounter, 2);
+      Assertions.assertEquals(metadataFileCounter, 1);
+      Assertions.assertEquals(documentationPdfCounter, 2);
     }
   }
 

@@ -24,11 +24,12 @@ import java.util.List;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.Is;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.IPException;
@@ -52,7 +53,6 @@ import org.roda_project.commons_ip2.model.MetadataType.MetadataTypeEnum;
 import org.roda_project.commons_ip2.model.RepresentationStatus;
 import org.roda_project.commons_ip2.model.SIP;
 import org.roda_project.commons_ip2.model.ValidationEntry.LEVEL;
-import org.roda_project.commons_ip2.model.impl.eark.out.writers.factory.WriteStrategyFactory;
 import org.roda_project.commons_ip2.model.impl.eark.out.writers.strategy.WriteStrategy;
 import org.roda_project.commons_ip2.utils.Utils;
 import org.roda_project.commons_ip2.validator.EARKSIPValidator;
@@ -72,12 +72,12 @@ public class EARKSIPTest {
 
   private static Path tempFolder;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() throws IOException {
     tempFolder = Files.createTempDirectory("temp");
   }
 
-  @AfterClass
+  @AfterAll
   public static void cleanup() throws Exception {
     Utils.deletePath(tempFolder);
   }
@@ -111,7 +111,7 @@ public class EARKSIPTest {
     EARKSIPValidator earksipValidator = new EARKSIPValidator(reportOutputJson, "2.1.0");
     boolean validate = earksipValidator.validate("2.1.0");
     LOGGER.info("Done parsing (and validating) full E-ARK SIP");
-    Assert.assertTrue(validate);
+    Assertions.assertTrue(validate);
   }
 
   @Test
@@ -143,7 +143,7 @@ public class EARKSIPTest {
     EARKSIPValidator earksipValidator = new EARKSIPValidator(reportOutputJson, "2.2.0");
     boolean validate = earksipValidator.validate("2.2.0");
     LOGGER.info("Done parsing (and validating) full E-ARK SIP");
-    Assert.assertTrue(validate);
+    Assertions.assertTrue(validate);
   }
 
   @Test
@@ -615,14 +615,14 @@ public class EARKSIPTest {
     // general assessment
     earkSIP.getValidationReport().getValidationEntries().stream().filter(e -> e.getLevel() == LEVEL.ERROR)
       .forEach(e -> LOGGER.error("Validation report entry: {}", e));
-    Assert.assertTrue(earkSIP.getValidationReport().isValid());
+    Assertions.assertTrue(earkSIP.getValidationReport().isValid());
 
     // assess # of representations
     List<IPRepresentation> representations = earkSIP.getRepresentations();
-    Assert.assertThat(representations.size(), Is.is(1));
+    MatcherAssert.assertThat(representations.size(), Is.is(1));
 
     // assess representations status
-    Assert.assertThat(representations.get(0).getStatus().asString(),
+    MatcherAssert.assertThat(representations.get(0).getStatus().asString(),
       Is.is(RepresentationStatus.getORIGINAL().asString()));
 
     LOGGER.info("SIP with id '{}' parsed with success (valid? {})!", earkSIP.getId(),
@@ -639,16 +639,16 @@ public class EARKSIPTest {
     // general assessment
     earkSIP.getValidationReport().getValidationEntries().stream().filter(e -> e.getLevel() == LEVEL.ERROR)
       .forEach(e -> LOGGER.error("Validation report entry: {}", e));
-    Assert.assertTrue(earkSIP.getValidationReport().isValid());
+    Assertions.assertTrue(earkSIP.getValidationReport().isValid());
 
     // assess # of representations
     List<IPRepresentation> representations = earkSIP.getRepresentations();
-    Assert.assertThat(representations.size(), Is.is(2));
+    MatcherAssert.assertThat(representations.size(), Is.is(2));
 
     // assess representations status
-    Assert.assertThat(representations.get(0).getStatus().asString(),
+    MatcherAssert.assertThat(representations.get(0).getStatus().asString(),
       Is.is(RepresentationStatus.getORIGINAL().asString()));
-    Assert.assertThat(representations.get(1).getStatus().asString(), Is.is(REPRESENTATION_STATUS_NORMALIZED));
+    MatcherAssert.assertThat(representations.get(1).getStatus().asString(), Is.is(REPRESENTATION_STATUS_NORMALIZED));
 
     LOGGER.info("SIP with id '{}' parsed with success (valid? {})!", earkSIP.getId(),
       earkSIP.getValidationReport().isValid());

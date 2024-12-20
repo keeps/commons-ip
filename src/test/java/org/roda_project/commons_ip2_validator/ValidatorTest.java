@@ -13,15 +13,13 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.roda_project.commons_ip2.utils.Utils;
 import org.roda_project.commons_ip2.validator.EARKSIPValidator;
 import org.roda_project.commons_ip2.validator.constants.Constants;
-import org.roda_project.commons_ip2.validator.observer.ProgressValidationLoggerObserver;
-import org.roda_project.commons_ip2.validator.observer.ValidationObserver;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReportOutputJson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,12 +33,12 @@ public class ValidatorTest {
 
   private static Path tempFolder;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() throws IOException {
     tempFolder = Files.createTempDirectory("temp");
   }
 
-  @AfterClass
+  @AfterAll
   public static void cleanup() throws Exception {
     Utils.deletePath(tempFolder);
   }
@@ -63,7 +61,7 @@ public class ValidatorTest {
   // boolean validate = earksipValidator.validate();
   // LOGGER.info("Done validate - Simple-EARK-SIP");
   //
-  // Assert.assertFalse(validate);
+  // Assertions.assertFalse(validate);
   // }
 
   /* Full SIP */
@@ -96,7 +94,7 @@ public class ValidatorTest {
     boolean validate = earksipValidator.validate("2.1.0");
     LOGGER.info("Done validate - Full-EARK-SIP");
 
-    Assert.assertFalse(validate);
+    Assertions.assertFalse(validate);
   }
 
   /* Full SIP 2.2.0 */
@@ -129,7 +127,7 @@ public class ValidatorTest {
     boolean validate = earksipValidator.validate("2.2.0");
     LOGGER.info("Done validate - Full-EARK-SIP");
 
-    Assert.assertFalse(validate);
+    Assertions.assertFalse(validate);
   }
   //
   // /* Simple SIP */
@@ -150,7 +148,7 @@ public class ValidatorTest {
   // boolean validate = earksipValidator.validate();
   // LOGGER.info("Done validate - Simple-EARK-SIP");
   //
-  // Assert.assertFalse(validate);
+  // Assertions.assertFalse(validate);
   // }
   //
   // /* Full SIP */
@@ -170,6 +168,6 @@ public class ValidatorTest {
   // boolean validate = earksipValidator.validate();
   // LOGGER.info("Done validate - Full-EARK-SIP");
   //
-  // Assert.assertFalse(validate);
+  // Assertions.assertFalse(validate);
   // }
 }

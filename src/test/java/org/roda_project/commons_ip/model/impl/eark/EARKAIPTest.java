@@ -10,19 +10,27 @@ package org.roda_project.commons_ip.model.impl.eark;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Collections;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.junit.platform.commons.support.ReflectionSupport;
 import org.roda_project.commons_ip.model.AIP;
 import org.roda_project.commons_ip.model.IPConstants;
 import org.roda_project.commons_ip.model.IPRepresentation;
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.model.impl.BasicAIP;
 import org.roda_project.commons_ip.utils.IPException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Test class for {@link EARKAIP}.
@@ -31,53 +39,61 @@ import org.roda_project.commons_ip.utils.IPException;
  */
 public class EARKAIPTest {
 
-  @Test
-  public void writesAIPToDir()
-    throws IOException, URISyntaxException, ParseException, InterruptedException, IPException {
-    URI resource = getClass().getResource("/").toURI();
-    final Path inputPath = Paths.get(resource).resolve("aip").resolve("eark")
-      .resolve("IDec234adb-fe77-4a60-bdac-c41c21fd68ed");
+  private static final Logger LOGGER = LoggerFactory.getLogger(EARKAIPTest.class);
 
+  private void copyResourceDirectoryToTemp(String resourceDir, Path tempDir) {
+        ReflectionSupport.findAllResourcesInPackage(resourceDir, r -> true).forEach(r -> {
+          System.out.println(r.getName());
+          Files.createDirectories(tempDir, null);
+        });  
+  }
+
+  @Test
+  public void writesAIPToDir(@TempDir Path inputPath)
+    throws IOException, URISyntaxException, ParseException, InterruptedException, IPException {
+    
+    copyResourceDirectoryToTemp("/aip/eark/IDec234adb-fe77-4a60-bdac-c41c21fd68ed", inputPath);
+    
     AIP aip = EARKAIP.parse(inputPath);
-    Assert.assertTrue(aip.isValid());
+    Assertions.assertTrue(aip.isValid());
 
     Path outputPath = Files.createTempDirectory("aip-output");
 
     Path aipPath = aip.build(outputPath);
 
-    Assert.assertTrue(Files.isDirectory(aipPath));
-    Assert.assertTrue(Files.isRegularFile(aipPath.resolve("METS.xml")));
+    Assertions.assertTrue(Files.isDirectory(aipPath));
+    Assertions.assertTrue(Files.isRegularFile(aipPath.resolve("METS.xml")));
 
-    Assert.assertEquals(2, aip.getRepresentations().size());
+    Assertions.assertEquals(2, aip.getRepresentations().size());
     if (aip.getRepresentations().size() == 1) {
-      Assert.assertTrue(Files.isDirectory(aipPath.resolve(IPConstants.REPRESENTATIONS)));
+      Assertions.assertTrue(Files.isDirectory(aipPath.resolve(IPConstants.REPRESENTATIONS)));
 
       IPRepresentation rep1 = aip.getRepresentations().get(0);
       Path rep1Path = aipPath.resolve(IPConstants.REPRESENTATIONS).resolve(rep1.getRepresentationID());
-      Assert.assertTrue(Files.isRegularFile(rep1Path.resolve("METS.xml")));
-      Assert.assertTrue(Files.isDirectory(rep1Path.resolve(IPConstants.METADATA)));
-      Assert.assertTrue(Files.isDirectory(rep1Path.resolve(IPConstants.SCHEMAS)));
-      Assert.assertTrue(Files.isDirectory(rep1Path.resolve(IPConstants.DOCUMENTATION)));
+      Assertions.assertTrue(Files.isRegularFile(rep1Path.resolve("METS.xml")));
+      Assertions.assertTrue(Files.isDirectory(rep1Path.resolve(IPConstants.METADATA)));
+      Assertions.assertTrue(Files.isDirectory(rep1Path.resolve(IPConstants.SCHEMAS)));
+      Assertions.assertTrue(Files.isDirectory(rep1Path.resolve(IPConstants.DOCUMENTATION)));
       Path rep1DataPath = rep1Path.resolve(IPConstants.DATA);
-      Assert.assertTrue(Files.isDirectory(rep1DataPath));
-      Assert.assertTrue(Files.isRegularFile(rep1DataPath.resolve("sakila-data.sql")));
-      Assert.assertTrue(Files.isRegularFile(rep1DataPath.resolve("sakila-schema.sql")));
+      Assertions.assertTrue(Files.isDirectory(rep1DataPath));
+      Assertions.assertTrue(Files.isRegularFile(rep1DataPath.resolve("sakila-data.sql")));
+      Assertions.assertTrue(Files.isRegularFile(rep1DataPath.resolve("sakila-schema.sql")));
 
       IPRepresentation rep2 = aip.getRepresentations().get(1);
       Path rep2Path = aipPath.resolve(IPConstants.REPRESENTATIONS).resolve(rep2.getRepresentationID());
-      Assert.assertTrue(Files.isRegularFile(rep2Path.resolve("METS.xml")));
-      Assert.assertTrue(Files.isDirectory(rep2Path.resolve(IPConstants.METADATA)));
-      Assert.assertTrue(Files.isDirectory(rep2Path.resolve(IPConstants.SCHEMAS)));
-      Assert.assertTrue(Files.isDirectory(rep2Path.resolve(IPConstants.DOCUMENTATION)));
+      Assertions.assertTrue(Files.isRegularFile(rep2Path.resolve("METS.xml")));
+      Assertions.assertTrue(Files.isDirectory(rep2Path.resolve(IPConstants.METADATA)));
+      Assertions.assertTrue(Files.isDirectory(rep2Path.resolve(IPConstants.SCHEMAS)));
+      Assertions.assertTrue(Files.isDirectory(rep2Path.resolve(IPConstants.DOCUMENTATION)));
       Path rep2DataPath = rep2Path.resolve(IPConstants.DATA);
-      Assert.assertTrue(Files.isDirectory(rep2DataPath));
-      Assert.assertTrue(Files.isRegularFile(rep2DataPath.resolve("sakila.siard2")));
+      Assertions.assertTrue(Files.isDirectory(rep2DataPath));
+      Assertions.assertTrue(Files.isRegularFile(rep2DataPath.resolve("sakila.siard2")));
     }
 
-    Assert.assertTrue(Files.isDirectory(aipPath.resolve(IPConstants.METADATA)));
-    Assert.assertTrue(Files.isDirectory(aipPath.resolve(IPConstants.SCHEMAS)));
-    Assert.assertTrue(Files.isDirectory(aipPath.resolve(IPConstants.DOCUMENTATION)));
-    Assert.assertTrue(Files.isDirectory(aipPath.resolve(IPConstants.SUBMISSION)));
+    Assertions.assertTrue(Files.isDirectory(aipPath.resolve(IPConstants.METADATA)));
+    Assertions.assertTrue(Files.isDirectory(aipPath.resolve(IPConstants.SCHEMAS)));
+    Assertions.assertTrue(Files.isDirectory(aipPath.resolve(IPConstants.DOCUMENTATION)));
+    Assertions.assertTrue(Files.isDirectory(aipPath.resolve(IPConstants.SUBMISSION)));
 
     FileUtils.deleteDirectory(outputPath.toFile());
   }
@@ -93,24 +109,24 @@ public class EARKAIPTest {
 
     Path aipPath = new EARKAIP(aip).build(outputPath, true);
 
-    Assert.assertTrue(Files.isDirectory(aipPath));
-    Assert.assertTrue(Files.isRegularFile(aipPath.resolve("METS.xml")));
+    Assertions.assertTrue(Files.isDirectory(aipPath));
+    Assertions.assertTrue(Files.isRegularFile(aipPath.resolve("METS.xml")));
 
-    Assert.assertEquals(2, aip.getRepresentations().size());
+    Assertions.assertEquals(2, aip.getRepresentations().size());
     if (aip.getRepresentations().size() == 2) {
-      Assert.assertTrue(Files.isDirectory(aipPath.resolve(IPConstants.REPRESENTATIONS)));
+      Assertions.assertTrue(Files.isDirectory(aipPath.resolve(IPConstants.REPRESENTATIONS)));
       IPRepresentation rep = aip.getRepresentations().get(0);
       Path repPath = aipPath.resolve(IPConstants.REPRESENTATIONS).resolve(rep.getRepresentationID());
-      Assert.assertTrue(Files.isRegularFile(repPath.resolve("METS.xml")));
-      Assert.assertFalse(Files.isDirectory(repPath.resolve(IPConstants.METADATA)));
-      Assert.assertFalse(Files.isDirectory(repPath.resolve(IPConstants.SCHEMAS)));
-      Assert.assertFalse(Files.isDirectory(repPath.resolve(IPConstants.DOCUMENTATION)));
+      Assertions.assertTrue(Files.isRegularFile(repPath.resolve("METS.xml")));
+      Assertions.assertFalse(Files.isDirectory(repPath.resolve(IPConstants.METADATA)));
+      Assertions.assertFalse(Files.isDirectory(repPath.resolve(IPConstants.SCHEMAS)));
+      Assertions.assertFalse(Files.isDirectory(repPath.resolve(IPConstants.DOCUMENTATION)));
     }
 
-    Assert.assertFalse(Files.isDirectory(aipPath.resolve(IPConstants.METADATA)));
-    Assert.assertFalse(Files.isDirectory(aipPath.resolve(IPConstants.SCHEMAS)));
-    Assert.assertFalse(Files.isDirectory(aipPath.resolve(IPConstants.DOCUMENTATION)));
-    Assert.assertFalse(Files.isDirectory(aipPath.resolve(IPConstants.SUBMISSION)));
+    Assertions.assertFalse(Files.isDirectory(aipPath.resolve(IPConstants.METADATA)));
+    Assertions.assertFalse(Files.isDirectory(aipPath.resolve(IPConstants.SCHEMAS)));
+    Assertions.assertFalse(Files.isDirectory(aipPath.resolve(IPConstants.DOCUMENTATION)));
+    Assertions.assertFalse(Files.isDirectory(aipPath.resolve(IPConstants.SUBMISSION)));
 
     FileUtils.deleteDirectory(outputPath.toFile());
   }
