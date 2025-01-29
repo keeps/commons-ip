@@ -13,6 +13,7 @@ import org.roda_project.commons_ip2.mets_v1_12.beans.DivType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MetsType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.StructMapType;
+import org.roda_project.commons_ip2.model.IPConstants;
 import org.roda_project.commons_ip2.validator.common.MetsParser;
 import org.roda_project.commons_ip2.validator.constants.Constants;
 import org.roda_project.commons_ip2.validator.handlers.MetsHandler;
@@ -1283,7 +1284,12 @@ public abstract class StructMapValidator {
                 final StringBuilder path = new StringBuilder();
                 if (metsValidatorState.isRootMets()) {
                   if (metsValidatorState.getMets().getOBJID() != null) {
-                    path.append(metsValidatorState.getMets().getOBJID()).append("/").append(label.toLowerCase());
+                    if (label.startsWith(IPConstants.REPRESENTATIONS_WITH_FIRST_LETTER_CAPITAL)) {
+                      path.append(metsValidatorState.getMets().getOBJID()).append("/")
+                        .append(label.substring(0, 1).toLowerCase()).append(label.substring(1));
+                    } else {
+                      path.append(metsValidatorState.getMets().getOBJID()).append("/").append(label.toLowerCase());
+                    }
                   } else {
                     return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                       Message.createErrorMessage("mets/OBJECTID in %1$s can't be null",
@@ -1291,7 +1297,12 @@ public abstract class StructMapValidator {
                       false, false);
                   }
                 } else {
-                  path.append(metsValidatorState.getMetsPath()).append(label.toLowerCase());
+                  if (label.startsWith(IPConstants.REPRESENTATIONS_WITH_FIRST_LETTER_CAPITAL)) {
+                    path.append(metsValidatorState.getMetsPath()).append(label.substring(0, 1).toLowerCase())
+                      .append(label.substring(1));
+                  } else {
+                    path.append(metsValidatorState.getMetsPath()).append(label.toLowerCase());
+                  }
                 }
                 if (!structureValidatorState.getZipManager().checkDirectory(structureValidatorState.getIpPath(),
                   path.toString())) {
@@ -1303,8 +1314,14 @@ public abstract class StructMapValidator {
                     false, false);
                 }
               } else {
+                String normalizedLable;
+                if (label.startsWith(IPConstants.REPRESENTATIONS_WITH_FIRST_LETTER_CAPITAL)) {
+                  normalizedLable = label.substring(0, 1).toLowerCase() + label.substring(1);
+                } else {
+                  normalizedLable = label.toLowerCase();
+                }
                 if (!structureValidatorState.getFolderManager()
-                  .checkDirectory(Paths.get(metsValidatorState.getMetsPath()).resolve(label.toLowerCase()))) {
+                  .checkDirectory(Paths.get(metsValidatorState.getMetsPath()).resolve(normalizedLable))) {
                   message.append("mets/structMap[@LABEL='CSIP']/div/div/@LABEL in %1$s ( ").append(label).append(" )")
                     .append("does not lead to a directory ( ")
                     .append(Paths.get(metsValidatorState.getMetsPath()).resolve(label.toLowerCase())).append(" )");
