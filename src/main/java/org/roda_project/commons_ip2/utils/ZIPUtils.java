@@ -225,7 +225,11 @@ public final class ZIPUtils {
         if (Utils.systemIsWindows()) {
           entryName = entryName.replaceAll("/", "\\\\");
         }
-        Path newFile = dest.resolve(entryName);
+        Path newFile = dest.resolve(entryName).normalize();
+
+        if (!newFile.startsWith(dest.normalize())) {
+          throw new IOException("Bad zip entry: " + entryName);
+        }
 
         if (zipEntry.isDirectory()) {
           Files.createDirectories(newFile);
