@@ -225,6 +225,10 @@ public final class ZIPUtils {
         }
         Path newFile = dest.resolve(entryName).normalize();
 
+        if (!newFile.startsWith(dest.normalize())) {
+          throw new IOException("Bad zip entry: " + entryName);
+        }
+
         if (zipEntry.isDirectory()) {
           Files.createDirectories(newFile);
         } else {
