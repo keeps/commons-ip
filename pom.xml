@@ -354,7 +354,7 @@
             <!-- needed for commons-configuration2 -->
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-            <version>1.10.0</version>
+            <version>1.10.1</version>
         </dependency>
         <dependency>
             <groupId>org.jdom</groupId>
