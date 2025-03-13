@@ -195,7 +195,7 @@ Note: in Windows, each property and value pair must be enclosed in `"`, example 
 <dependency>
   <groupId>org.roda-community</groupId>
   <artifactId>commons-ip2</artifactId>
-  <version>2.8.3</version>
+  <version>2.9.3</version>
 </dependency>
   ```
 
