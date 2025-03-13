@@ -38,17 +38,25 @@
 
     <developers>
         <developer>
-            <id>hsilva</id>
-            <name>Helder Silva</name>
-            <email>hsilva@keep.pt</email>
+            <id>lfaria</id>
+            <name>Luis Faria</name>
+            <email>lfaria@keep.pt</email>
             <organization>KEEP SOLUTIONS</organization>
             <organizationUrl>https://www.keep.pt</organizationUrl>
             <timezone>0</timezone>
         </developer>
         <developer>
-            <id>jgomes</id>
-            <name>João Gomes</name>
-            <email>jgomes@keep.pt</email>
+            <id>hmiguim</id>
+            <name>Miguel Guimarães</name>
+            <email>mguimaraes@keep.pt</email>
+            <organization>KEEP SOLUTIONS</organization>
+            <organizationUrl>https://www.keep.pt</organizationUrl>
+            <timezone>0</timezone>
+        </developer>
+        <developer>
+            <id>carlosjepard</id>
+            <name>Carlos Afonso</name>
+            <email>cafonso@keep.pt</email>
             <organization>KEEP SOLUTIONS</organization>
             <organizationUrl>https://www.keep.pt</organizationUrl>
             <timezone>0</timezone>
