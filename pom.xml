@@ -7,10 +7,18 @@
     <artifactId>commons-ip2</artifactId>
     <packaging>jar</packaging>
     <version>2.9.0-SNAPSHOT</version>
-    <name>RODA Commons IP - Library to manipulate Information Packages of different formats: RODA,
-        E-ARK, BagIt,
-        Hungarian SIP 4, etc.
-    </name>
+    <name>Commons IP</name>
+    <description>Library to validate and manipulate E-ARK Information Packages, so to create or process E-ARK SIP and AIP and also validate them against official specifications.</description>
+    <url>https://keeps.github.io/commons-ip/</url>
+
+    <licenses>
+        <license>
+            <name>LGPL-3.0</name>
+            <url>https://www.gnu.org/licenses/lgpl-3.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>GNU Lesser General Public License, version 3</comments>
+        </license>
+    </licenses>
 
     <scm>
         <url>https://github.com/keeps/commons-ip</url>
