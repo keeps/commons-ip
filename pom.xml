@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.roda-project</groupId>
+    <groupId>org.roda-community</groupId>
     <artifactId>commons-ip2</artifactId>
     <packaging>jar</packaging>
     <version>2.9.0-SNAPSHOT</version>
@@ -81,7 +81,7 @@
                                 </goals>
                                 <configuration>
                                     <rules>
-                                        <banDuplicatePomDependencyVersions/>
+                                        <banDuplicatePomDependencyVersions />
                                         <!--requireMavenVersion>
                                             <version>[3.9,)</version>
                                             <message>Invalid Maven version. It should be 3.9.X</message>
@@ -136,13 +136,17 @@
                                                 </limit>
                                             </limits>
                                             <excludes>
-                                                <!-- 20180814 hsilva: will not test model entities per se -->
+                                                <!-- 20180814 hsilva: will not test model entities
+                                                per se -->
                                                 <exclude>org.roda_project.commons_ip2.model.*</exclude>
                                                 <!-- 20180814 hsilva: will not test xml beans per se -->
-                                                <exclude>org.roda_project.commons_ip2.mets_v1_11.beans.*</exclude>
-                                                <!-- 20180814 hsilva: will not test this as it is here for future
+                                                <exclude>
+                                                    org.roda_project.commons_ip2.mets_v1_11.beans.*</exclude>
+                                                <!-- 20180814 hsilva: will not test this as it is
+                                                here for future
                                                     memory -->
-                                                <exclude>org.roda_project.commons_ip2.command_line.Main</exclude>
+                                                <exclude>
+                                                    org.roda_project.commons_ip2.command_line.Main</exclude>
                                                 <!-- 20180814 hsilva: will not test utils per se -->
                                                 <exclude>org.roda_project.commons_ip2.utils.*</exclude>
                                             </excludes>
@@ -238,7 +242,7 @@
                                 </goals>
                                 <configuration>
                                     <rules>
-                                        <banDuplicatePomDependencyVersions/>
+                                        <banDuplicatePomDependencyVersions />
                                         <!--requireMavenVersion>
                                             <version>[3.9,)</version>
                                             <message>Invalid Maven version. It should be 3.9.X</message>
@@ -311,6 +315,74 @@
                                 ${project.build.directory}/classes/version.json
                             </generateGitPropertiesFilename>
                             <format>json</format>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.7.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.3.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.11.2</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadoc</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <stylesheet>java</stylesheet>
+                            <doclint>none</doclint>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.7</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
                         </configuration>
                     </plugin>
                 </plugins>

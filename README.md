@@ -193,13 +193,13 @@ Note: in Windows, each property and value pair must be enclosed in `"`, example 
 
   ```xml
 <dependency>
-  <groupId>org.roda-project</groupId>
+  <groupId>org.roda-community</groupId>
   <artifactId>commons-ip2</artifactId>
-  <version>2.6.0</version>
+  <version>2.8.3</version>
 </dependency>
   ```
 
-* Not using Maven, use the GitHub packages to (download the dependency)[https://github.com/keeps/commons-ip/packages].
+* Not using Maven? Use the GitHub packages to (download the dependency)[https://github.com/keeps/commons-ip/packages].
 
 #### Write some code
 
