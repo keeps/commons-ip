@@ -44,6 +44,9 @@ public abstract class IP implements IPInterface {
 
   private List<IPDescriptiveMetadata> descriptiveMetadata;
   private List<IPMetadata> preservationMetadata;
+  private List<IPMetadata> technicalMetadata;
+  private List<IPMetadata> sourceMetadata;
+  private List<IPMetadata> rightsMetadata;
   private List<IPMetadata> otherMetadata;
   private List<String> representationIds;
   private Map<String, IPRepresentation> representations;
@@ -72,6 +75,9 @@ public abstract class IP implements IPInterface {
 
     this.descriptiveMetadata = new ArrayList<>();
     this.preservationMetadata = new ArrayList<>();
+    this.technicalMetadata = new ArrayList<>();
+    this.sourceMetadata = new ArrayList<>();
+    this.rightsMetadata = new ArrayList<>();
     this.otherMetadata = new ArrayList<>();
     this.representationIds = new ArrayList<>();
     this.representations = new HashMap<>();
@@ -256,6 +262,24 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
+  public IP addTechnicalMetadata(final IPMetadata sipMetadata) throws IPException {
+    technicalMetadata.add(sipMetadata);
+    return this;
+  }
+
+  @Override
+  public IP addSourceMetadata(final IPMetadata sipMetadata) throws IPException {
+    sourceMetadata.add(sipMetadata);
+    return this;
+  }
+  
+  @Override
+  public IP addRightsMetadata(final IPMetadata sipMetadata) throws IPException {
+    rightsMetadata.add(sipMetadata);
+    return this;
+  }
+  
+  @Override
   public IP addOtherMetadata(final IPMetadata sipMetadata) throws IPException {
     otherMetadata.add(sipMetadata);
     return this;
@@ -321,6 +345,16 @@ public abstract class IP implements IPInterface {
   }
 
   @Override
+  public IP addRightsMetadataToRepresentation(final String representationID, final IPMetadata rightsMetadata)
+    throws IPException {
+    checkIfRepresentationExists(representationID);
+    final IPRepresentation rep = representations.get(representationID);
+    rep.addRightsMetadata(rightsMetadata);
+    representations.put(representationID, rep);
+    return this;
+  }
+
+  @Override
   public IP addOtherMetadataToRepresentation(final String representationID, final IPMetadata otherMetadata)
     throws IPException {
     checkIfRepresentationExists(representationID);
@@ -371,6 +405,21 @@ public abstract class IP implements IPInterface {
   @Override
   public List<IPMetadata> getPreservationMetadata() {
     return preservationMetadata;
+  }
+
+  @Override
+  public List<IPMetadata> getTechnicalMetadata() {
+    return technicalMetadata;
+  }
+
+  @Override
+  public List<IPMetadata> getSourceMetadata() {
+    return sourceMetadata;
+  }
+
+  @Override
+  public List<IPMetadata> getRightsMetadata() {
+    return rightsMetadata;
   }
 
   @Override
