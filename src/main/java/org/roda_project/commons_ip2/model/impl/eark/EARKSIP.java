@@ -124,6 +124,9 @@ public class EARKSIP extends SIP {
           earkUtils.processDescriptiveMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
           earkUtils.processOtherMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
           earkUtils.processPreservationMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
+          earkUtils.processTechnicalMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
+          earkUtils.processSourceMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
+          earkUtils.processRightsMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
           earkUtils.processRepresentations(metsWrapper, sip, LOGGER);
           earkUtils.processSchemasMetadata(metsWrapper, sip, sip.getBasePath());
           earkUtils.processDocumentationMetadata(metsWrapper, sip, sip.getBasePath());
@@ -200,7 +203,10 @@ public class EARKSIP extends SIP {
 
       boolean isMetadataOther = (this.getOtherMetadata() != null && !this.getOtherMetadata().isEmpty());
       boolean isMetadata = ((this.getDescriptiveMetadata() != null && !this.getDescriptiveMetadata().isEmpty())
-        || (this.getPreservationMetadata() != null && !this.getPreservationMetadata().isEmpty()));
+        || (this.getPreservationMetadata() != null && !this.getPreservationMetadata().isEmpty())
+        || (this.getTechnicalMetadata() != null && !this.getTechnicalMetadata().isEmpty())
+        || (this.getSourceMetadata() != null && !this.getSourceMetadata().isEmpty())
+        || (this.getRightsMetadata() != null && !this.getRightsMetadata().isEmpty()));
       boolean isDocumentation = (this.getDocumentation() != null && !this.getDocumentation().isEmpty());
       boolean isSchemas = (this.getSchemas() != null && !this.getSchemas().isEmpty());
       boolean isRepresentations = (this.getRepresentations() != null && !this.getRepresentations().isEmpty());
@@ -219,6 +225,9 @@ public class EARKSIP extends SIP {
       }
       earkUtils.addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
       earkUtils.addPreservationMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getPreservationMetadata(), null);
+      earkUtils.addTechnicalMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getTechnicalMetadata(), null);
+      earkUtils.addSourceMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getSourceMetadata(), null);
+      earkUtils.addRightsMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getRightsMetadata(), null);
       earkUtils.addOtherMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getOtherMetadata(), null);
       earkUtils.addRepresentationsToZipAndMETS(this, getRepresentations(), zipEntries, mainMETSWrapper, buildDir,
         sipType);

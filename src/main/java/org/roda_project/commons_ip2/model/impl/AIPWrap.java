@@ -198,6 +198,21 @@ public class AIPWrap implements AIP {
   }
 
   @Override
+  public IPInterface addTechnicalMetadata(final IPMetadata metadata) throws IPException {
+    return aip.addTechnicalMetadata(metadata);
+  }
+
+  @Override
+  public IPInterface addSourceMetadata(final IPMetadata metadata) throws IPException {
+    return aip.addSourceMetadata(metadata);
+  }
+  
+  @Override
+  public IPInterface addRightsMetadata(final IPMetadata metadata) throws IPException {
+    return aip.addRightsMetadata(metadata);
+  }
+
+  @Override
   public IPInterface addOtherMetadata(final IPMetadata metadata) throws IPException {
     return aip.addOtherMetadata(metadata);
   }
@@ -243,6 +258,12 @@ public class AIPWrap implements AIP {
     final IPMetadata preservationMetadata) throws IPException {
     return aip.addPreservationMetadataToRepresentation(representationID, preservationMetadata);
   }
+  
+  @Override
+  public IPInterface addRightsMetadataToRepresentation(final String representationID,
+    final IPMetadata rightsMetadata) throws IPException {
+    return aip.addRightsMetadataToRepresentation(representationID, rightsMetadata);
+  }
 
   @Override
   public IPInterface addOtherMetadataToRepresentation(final String representationID, final IPMetadata otherMetadata)
@@ -279,6 +300,21 @@ public class AIPWrap implements AIP {
   @Override
   public List<IPMetadata> getPreservationMetadata() {
     return aip.getPreservationMetadata();
+  }
+
+  @Override
+  public List<IPMetadata> getTechnicalMetadata() {
+    return aip.getTechnicalMetadata();
+  }
+
+  @Override
+  public List<IPMetadata> getSourceMetadata() {
+    return aip.getSourceMetadata();
+  }
+  
+  @Override
+  public List<IPMetadata> getRightsMetadata() {
+    return aip.getRightsMetadata();
   }
 
   @Override
