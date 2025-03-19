@@ -9,14 +9,11 @@ package org.roda_project.commons_ip2.model;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip2.utils.Utils;
 
 public class IPRepresentation {
@@ -40,8 +37,6 @@ public class IPRepresentation {
   private List<IPFileInterface> data;
   private List<IPFileInterface> schemas;
   private List<IPFileInterface> documentation;
-  private List<String> extraDirectories;
-  private Map<String, List<IPFileInterface>> extraDirectoryFiles;
 
   public IPRepresentation() {
     this.representationID = Utils.generateRandomAndPrefixedUUID();
@@ -61,8 +56,6 @@ public class IPRepresentation {
     this.data = new ArrayList<>();
     this.schemas = new ArrayList<>();
     this.documentation = new ArrayList<>();
-    this.extraDirectories = new ArrayList<>();
-    this.extraDirectoryFiles = new HashMap<>();
   }
 
   public IPRepresentation(String representationID) {
