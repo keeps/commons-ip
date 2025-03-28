@@ -199,7 +199,7 @@ Note: in Windows, each property and value pair must be enclosed in `"`, example 
 </dependency>
   ```
 
-* Not using Maven? Use the GitHub packages to (download the dependency)[https://github.com/keeps/commons-ip/packages].
+* Not using Maven? Use the GitHub packages to [download the dependency](https://github.com/keeps/commons-ip/packages).
 
 #### Write some code
 
