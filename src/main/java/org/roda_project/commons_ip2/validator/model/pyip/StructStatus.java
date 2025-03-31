@@ -12,16 +12,16 @@ public enum StructStatus {
   /**
    * Enum for value NotWellFormed.
    */
-  NOTWELLFORMED("NotWellFormed"),
+  NOTWELLFORMED("Not Well Formed"),
   /**
    * Enum for value WellFormed.
    */
-  WELLFORMED("WellFormed");
+  WELLFORMED("Well Formed");
 
   /**
    * {@link String}.
    */
-  private String value;
+  private final String value;
 
   StructStatus(final String value) {
     this.value = value;

@@ -7,6 +7,7 @@
  */
 package org.roda_project.commons_ip2.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +15,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 public class IPContentType implements Serializable {
+  @Serial
   private static final long serialVersionUID = 1191075605637022551L;
 
   public enum IPContentTypeEnum {
@@ -37,7 +39,7 @@ public class IPContentType implements Serializable {
       }
     }
 
-    private String type;
+    private final String type;
 
     private IPContentTypeEnum(String type) {
       this.type = type;
