@@ -123,10 +123,10 @@ public class EARKSIP extends SIP {
           earkUtils.preProcessStructMap(metsWrapper, structMap);
           earkUtils.processDescriptiveMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
           earkUtils.processOtherMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
-          earkUtils.processPreservationMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
-          earkUtils.processTechnicalMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
-          earkUtils.processSourceMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
-          earkUtils.processRightsMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
+          earkUtils.processPreservationMetadata(metsWrapper, sip, null, sip.getBasePath());
+          earkUtils.processTechnicalMetadata(metsWrapper, sip, null, sip.getBasePath());
+          earkUtils.processSourceMetadata(metsWrapper, sip, null, sip.getBasePath());
+          earkUtils.processRightsMetadata(metsWrapper, sip, null, sip.getBasePath());
           earkUtils.processRepresentations(metsWrapper, sip, LOGGER);
           earkUtils.processSchemasMetadata(metsWrapper, sip, sip.getBasePath());
           earkUtils.processDocumentationMetadata(metsWrapper, sip, sip.getBasePath());

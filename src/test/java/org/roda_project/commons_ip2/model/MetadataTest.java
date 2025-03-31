@@ -158,10 +158,6 @@ public class MetadataTest {
   public void testMetadataStatus() {
     // Test MetadataStatus enum and parse methods
     
-    // Test direct enum values
-    assertEquals(MetadataStatus.CURRENT, MetadataStatus.CURRENT);
-    assertEquals(MetadataStatus.SUPERSEDED, MetadataStatus.SUPERSEDED);
-    
     // Test parse with valid value
     assertEquals(MetadataStatus.CURRENT, MetadataStatus.parse("CURRENT"));
     assertEquals(MetadataStatus.SUPERSEDED, MetadataStatus.parse("SUPERSEDED"));

@@ -58,24 +58,42 @@ import org.roda_project.commons_ip2.validator.utils.ResultsUtils;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-/** {@author João Gomes <jgomes@keep.pt>}. */
+/**
+ * {@author João Gomes <jgomes@keep.pt>}.
+ */
 public class EARKSIPValidator {
-  /** IP path. */
+  /**
+   * IP path.
+   */
   private final Path earksipPath;
 
-  /** {@link ValidationReportOutputJson}. */
+  /**
+   * {@link ValidationReportOutputJson}.
+   */
   private final ValidationReportOutputJson validationReportOutputJson;
-  /** {@link StructureValidatorImpl}. */
+  /**
+   * {@link StructureValidatorImpl}.
+   */
   private final StructureValidatorImpl structureComponent;
-  /** the contextual structural state {@link StructureValidatorState}. */
+  /**
+   * the contextual structural state {@link StructureValidatorState}.
+   */
   private final StructureValidatorState structureValidatorState;
-  /** List of CSIP components to validate. */
+  /**
+   * List of CSIP components to validate.
+   */
   private final List<MetsValidator> csipComponents = new ArrayList<>();
-  /** List of SIP components to validate. */
+  /**
+   * List of SIP components to validate.
+   */
   private final List<MetsValidator> sipComponents = new ArrayList<>();
-  /** List of AIP components to validate. */
+  /**
+   * List of AIP components to validate.
+   */
   private final List<MetsValidator> aipComponents = new ArrayList<>();
-  /** The contextual mets state {@link MetsValidatorState}. */
+  /**
+   * The contextual mets state {@link MetsValidatorState}.
+   */
   private final MetsValidatorState metsValidatorState;
 
   private final String version;
@@ -107,8 +125,7 @@ public class EARKSIPValidator {
       this.structureComponent = new StructureComponentValidator210();
     } else if (version.equals("2.0.4")) {
       this.structureComponent = new StructureComponentValidator204();
-    }
-    else {
+    } else {
       this.structureComponent = new StructureComponentValidator220();
     }
     this.metsValidatorState = new MetsValidatorState();
@@ -280,7 +297,9 @@ public class EARKSIPValidator {
     return message.toString();
   }
 
-  /** Validates METS file in root of Information Package. */
+  /**
+   * Validates METS file in root of Information Package.
+   */
   private void validateRootMets() {
     final InputStream metsRootStream;
     final String ipPath;
@@ -339,7 +358,9 @@ public class EARKSIPValidator {
     }
   }
 
-  /** Notify all observers. */
+  /**
+   * Notify all observers.
+   */
   public void notifyIndicatorsObservers() {
     structureComponent.notifyIndicators(this.validationReportOutputJson.getErrors(),
       this.validationReportOutputJson.getSuccess(), this.validationReportOutputJson.getWarnings(),

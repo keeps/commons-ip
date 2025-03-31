@@ -104,7 +104,7 @@ public class EARKAIP extends AIPWrap {
 
           metsUtils.processOtherMetadata(metsWrapper, aip, LOGGER, null, aip.getBasePath());
 
-          metsUtils.processPreservationMetadata(metsWrapper, aip, LOGGER, null, aip.getBasePath());
+          metsUtils.processPreservationMetadata(metsWrapper, aip, null, aip.getBasePath());
 
           metsUtils.processRepresentations(metsWrapper, aip, LOGGER);
 
