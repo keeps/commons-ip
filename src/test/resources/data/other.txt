@@ -1,1 +1,1 @@
-Sample other metadata content for testing.
+This is a placeholder for other metadata upon SIP creation.

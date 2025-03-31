@@ -1,1 +1,1 @@
-Sample preservation metadata content for testing.
+This is a placeholder for preservation metadata upon SIP creation.

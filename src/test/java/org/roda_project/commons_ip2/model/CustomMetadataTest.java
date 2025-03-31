@@ -8,31 +8,43 @@
 package org.roda_project.commons_ip2.model;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.roda_project.commons_ip.utils.IPEnums;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip2.cli.model.enums.WriteStrategyEnum;
 import org.roda_project.commons_ip2.cli.utils.SIPBuilderUtils;
 import org.roda_project.commons_ip2.model.impl.eark.EARKSIP;
 import org.roda_project.commons_ip2.model.impl.eark.out.writers.strategy.WriteStrategy;
-import org.roda_project.commons_ip2.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Tests for custom metadata types in SIP packages.
+ */
 public class CustomMetadataTest {
+  /**
+   * Logger for this class.
+   */
   private static final Logger LOGGER = LoggerFactory.getLogger(CustomMetadataTest.class);
+  
+  /**
+   * Output folder for test SIPs.
+   */
   private static Path outputFolder;
 
+  /**
+   * Setup test environment by creating output directory.
+   * 
+   * @throws Exception if directory creation fails
+   */
   @BeforeClass
   public static void setup() throws Exception {
     // Create a relative output directory in the target folder
@@ -43,6 +55,11 @@ public class CustomMetadataTest {
     LOGGER.info("Test output will be saved to: {}", outputFolder.toAbsolutePath());
   }
 
+  /**
+   * Cleanup test environment after tests complete.
+   * 
+   * @throws Exception if cleanup fails
+   */
   @AfterClass
   public static void cleanup() throws Exception {
     // Skip deletion to allow examining the files
@@ -50,47 +67,54 @@ public class CustomMetadataTest {
     LOGGER.info("Test output files are available at: {}", outputFolder);
   }
 
+  /**
+   * Test basic custom metadata types using the OTHER type with setOtherType.
+   * 
+   * @throws IPException if SIP creation fails
+   * @throws InterruptedException if process is interrupted
+   */
   @Test
   public void testCustomMetadataTypes() throws IPException, InterruptedException {
     // Create a simple SIP
-    SIP sip = new EARKSIP("CUSTOM_MD_SIP", IPContentType.getMIXED(), IPContentInformationType.getMIXED(), "2.1.0");
+    final SIP sip = new EARKSIP("CUSTOM_MD_SIP", IPContentType.getMIXED(), 
+        IPContentInformationType.getMIXED(), "2.1.0");
     sip.setDescription("SIP with custom metadata types");
     
     // Create custom metadata types
-    MetadataType customType1 = new MetadataType(MetadataType.MetadataTypeEnum.OTHER).setOtherType("TEST1");
-    MetadataType customType2 = new MetadataType(MetadataType.MetadataTypeEnum.OTHER).setOtherType("TEST2");
+    final MetadataType customType1 = new MetadataType(MetadataType.MetadataTypeEnum.OTHER).setOtherType("TEST1");
+    final MetadataType customType2 = new MetadataType(MetadataType.MetadataTypeEnum.OTHER).setOtherType("TEST2");
     
     // Create metadata files using classpath resources
-    IPFile descriptiveFile = new IPFile(Paths.get("src", "test", "resources", "data", "descriptive.txt"));
-    IPFile preservationFile = new IPFile(Paths.get("src", "test", "resources", "data", "preservation.txt"));
+    final IPFile descriptiveFile = new IPFile(Paths.get("src", "test", "resources", "data", "descriptive.txt"));
+    final IPFile preservationFile = new IPFile(Paths.get("src", "test", "resources", "data", "preservation.txt"));
     
     // Add descriptive metadata with custom type at package level
-    IPDescriptiveMetadata descriptiveMetadata = new IPDescriptiveMetadata(descriptiveFile, customType1, "1.0");
+    final IPDescriptiveMetadata descriptiveMetadata = new IPDescriptiveMetadata(descriptiveFile, customType1, "1.0");
     sip.addDescriptiveMetadata(descriptiveMetadata);
     
     // Create a representation
-    IPRepresentation representation = new IPRepresentation("representation-1");
+    final IPRepresentation representation = new IPRepresentation("representation-1");
     sip.addRepresentation(representation);
     
     // Add preservation metadata with custom type at representation level
-    IPMetadata preservationMetadata = new IPMetadata(preservationFile, customType2);
+    final IPMetadata preservationMetadata = new IPMetadata(preservationFile, customType2);
     sip.addPreservationMetadataToRepresentation("representation-1", preservationMetadata);
     
     // Build the SIP with a fixed output location
-    WriteStrategy writeStrategy = SIPBuilderUtils.getWriteStrategy(WriteStrategyEnum.ZIP, outputFolder);
-    Path sipPath = sip.build(writeStrategy);
+    final WriteStrategy writeStrategy = SIPBuilderUtils.getWriteStrategy(WriteStrategyEnum.ZIP, outputFolder);
+    final Path sipPath = sip.build(writeStrategy);
     
     // Verify the SIP was created
     assertTrue(Files.exists(sipPath));
     
     // Verify the metadata
-    List<IPDescriptiveMetadata> descriptiveMetadataList = sip.getDescriptiveMetadata();
+    final List<IPDescriptiveMetadata> descriptiveMetadataList = sip.getDescriptiveMetadata();
     assertEquals(1, descriptiveMetadataList.size());
     assertEquals("TEST1", descriptiveMetadataList.get(0).getMetadataType().asString());
     
-    List<IPRepresentation> representations = sip.getRepresentations();
+    final List<IPRepresentation> representations = sip.getRepresentations();
     assertEquals(1, representations.size());
-    List<IPMetadata> repPreservationMetadata = representations.get(0).getPreservationMetadata();
+    final List<IPMetadata> repPreservationMetadata = representations.get(0).getPreservationMetadata();
     assertEquals(1, repPreservationMetadata.size());
     assertEquals("TEST2", repPreservationMetadata.get(0).getMetadataType().asString());
     
@@ -99,37 +123,51 @@ public class CustomMetadataTest {
     LOGGER.info("SIP with custom metadata types created successfully");
     LOGGER.info("Output ZIP file: {}", sipPath);
     LOGGER.info("SIP structure:");
-    LOGGER.info("- Package level descriptive metadata with type: {}", descriptiveMetadataList.get(0).getMetadataType().asString());
+    LOGGER.info("- Package level descriptive metadata with type: {}", 
+        descriptiveMetadataList.get(0).getMetadataType().asString());
     LOGGER.info("- Representation '{}' preservation metadata with type: {}", 
         representations.get(0).getRepresentationID(), 
         repPreservationMetadata.get(0).getMetadataType().asString());
     LOGGER.info("==============================================");
   }
   
+  /**
+   * Test all metadata types with custom type values using the OTHER enum.
+   * 
+   * @throws IPException if SIP creation fails
+   * @throws InterruptedException if process is interrupted
+   */
   @Test
   public void testAllMetadataTypes() throws IPException, InterruptedException {
     // Create a simple SIP
-    SIP sip = new EARKSIP("ALL_METADATA_TYPES_SIP", IPContentType.getMIXED(), IPContentInformationType.getMIXED(), "2.1.0");
+    final SIP sip = new EARKSIP("ALL_METADATA_TYPES_SIP", IPContentType.getMIXED(), 
+        IPContentInformationType.getMIXED(), "2.1.0");
     sip.setDescription("SIP with all metadata types");
     
     // Create custom metadata types for each category
-    MetadataType descriptiveType = new MetadataType(MetadataType.MetadataTypeEnum.OTHER).setOtherType("CUSTOM_DESC");
-    MetadataType preservationType = new MetadataType(MetadataType.MetadataTypeEnum.OTHER).setOtherType("CUSTOM_PRES");
-    MetadataType technicalType = new MetadataType(MetadataType.MetadataTypeEnum.OTHER).setOtherType("CUSTOM_TECH");
-    MetadataType sourceType = new MetadataType(MetadataType.MetadataTypeEnum.OTHER).setOtherType("CUSTOM_SRC");
-    MetadataType rightsType = new MetadataType(MetadataType.MetadataTypeEnum.OTHER).setOtherType("CUSTOM_RIGHTS");
-    MetadataType otherType = new MetadataType(MetadataType.MetadataTypeEnum.OTHER).setOtherType("CUSTOM_OTHER");
+    final MetadataType descriptiveType = new MetadataType(MetadataType.MetadataTypeEnum.OTHER)
+        .setOtherType("CUSTOM_DESC");
+    final MetadataType preservationType = new MetadataType(MetadataType.MetadataTypeEnum.OTHER)
+        .setOtherType("CUSTOM_PRES");
+    final MetadataType technicalType = new MetadataType(MetadataType.MetadataTypeEnum.OTHER)
+        .setOtherType("CUSTOM_TECH");
+    final MetadataType sourceType = new MetadataType(MetadataType.MetadataTypeEnum.OTHER)
+        .setOtherType("CUSTOM_SRC");
+    final MetadataType rightsType = new MetadataType(MetadataType.MetadataTypeEnum.OTHER)
+        .setOtherType("CUSTOM_RIGHTS");
+    final MetadataType otherType = new MetadataType(MetadataType.MetadataTypeEnum.OTHER)
+        .setOtherType("CUSTOM_OTHER");
     
     // Create metadata files using relative paths
-    IPFile descriptiveFile = new IPFile(Paths.get("src", "test", "resources", "data", "descriptive.txt"));
-    IPFile preservationFile = new IPFile(Paths.get("src", "test", "resources", "data", "preservation.txt"));
-    IPFile technicalFile = new IPFile(Paths.get("src", "test", "resources", "data", "technical.txt"));
-    IPFile sourceFile = new IPFile(Paths.get("src", "test", "resources", "data", "source.txt"));
-    IPFile rightsFile = new IPFile(Paths.get("src", "test", "resources", "data", "rights.txt"));
-    IPFile otherFile = new IPFile(Paths.get("src", "test", "resources", "data", "other.txt"));
+    final IPFile descriptiveFile = new IPFile(Paths.get("src", "test", "resources", "data", "descriptive.txt"));
+    final IPFile preservationFile = new IPFile(Paths.get("src", "test", "resources", "data", "preservation.txt"));
+    final IPFile technicalFile = new IPFile(Paths.get("src", "test", "resources", "data", "technical.txt"));
+    final IPFile sourceFile = new IPFile(Paths.get("src", "test", "resources", "data", "source.txt"));
+    final IPFile rightsFile = new IPFile(Paths.get("src", "test", "resources", "data", "rights.txt"));
+    final IPFile otherFile = new IPFile(Paths.get("src", "test", "resources", "data", "other.txt"));
     
     // Create a representation and add it to the SIP
-    IPRepresentation representation = new IPRepresentation("representation-1");
+    final IPRepresentation representation = new IPRepresentation("representation-1");
     
     // Add technical and source metadata directly to the representation object
     representation.addTechnicalMetadata(new IPMetadata(technicalFile, technicalType));
@@ -139,7 +177,8 @@ public class CustomMetadataTest {
     sip.addRepresentation(representation);
     
     // Add preservation, rights and other metadata to the representation through the SIP
-    sip.addPreservationMetadataToRepresentation("representation-1", new IPMetadata(preservationFile, preservationType));
+    sip.addPreservationMetadataToRepresentation("representation-1", 
+        new IPMetadata(preservationFile, preservationType));
     sip.addRightsMetadataToRepresentation("representation-1", new IPMetadata(rightsFile, rightsType));
     sip.addOtherMetadataToRepresentation("representation-1", new IPMetadata(otherFile, otherType));
     
@@ -149,46 +188,46 @@ public class CustomMetadataTest {
     sip.addRightsMetadata(new IPMetadata(rightsFile, rightsType));
     
     // Build the SIP with a fixed output location
-    WriteStrategy writeStrategy = SIPBuilderUtils.getWriteStrategy(WriteStrategyEnum.ZIP, outputFolder);
-    Path sipPath = sip.build(writeStrategy);
+    final WriteStrategy writeStrategy = SIPBuilderUtils.getWriteStrategy(WriteStrategyEnum.ZIP, outputFolder);
+    final Path sipPath = sip.build(writeStrategy);
     
     // Verify the SIP was created
     assertTrue(Files.exists(sipPath));
     
     // Verify all metadata
-    List<IPDescriptiveMetadata> descriptiveMetadataList = sip.getDescriptiveMetadata();
+    final List<IPDescriptiveMetadata> descriptiveMetadataList = sip.getDescriptiveMetadata();
     assertEquals(1, descriptiveMetadataList.size());
     assertEquals("CUSTOM_DESC", descriptiveMetadataList.get(0).getMetadataType().asString());
     
-    List<IPMetadata> packagePreservationMetadata = sip.getPreservationMetadata();
+    final List<IPMetadata> packagePreservationMetadata = sip.getPreservationMetadata();
     assertEquals(1, packagePreservationMetadata.size());
     assertEquals("CUSTOM_PRES", packagePreservationMetadata.get(0).getMetadataType().asString());
     
-    List<IPMetadata> packageRightsMetadata = sip.getRightsMetadata();
+    final List<IPMetadata> packageRightsMetadata = sip.getRightsMetadata();
     assertEquals(1, packageRightsMetadata.size());
     assertEquals("CUSTOM_RIGHTS", packageRightsMetadata.get(0).getMetadataType().asString());
     
-    List<IPRepresentation> representations = sip.getRepresentations();
+    final List<IPRepresentation> representations = sip.getRepresentations();
     assertEquals(1, representations.size());
-    IPRepresentation rep = representations.get(0);
+    final IPRepresentation rep = representations.get(0);
     
-    List<IPMetadata> preservationMetadata = rep.getPreservationMetadata();
+    final List<IPMetadata> preservationMetadata = rep.getPreservationMetadata();
     assertEquals(1, preservationMetadata.size());
     assertEquals("CUSTOM_PRES", preservationMetadata.get(0).getMetadataType().asString());
     
-    List<IPMetadata> technicalMetadata = rep.getTechnicalMetadata();
+    final List<IPMetadata> technicalMetadata = rep.getTechnicalMetadata();
     assertEquals(1, technicalMetadata.size());
     assertEquals("CUSTOM_TECH", technicalMetadata.get(0).getMetadataType().asString());
     
-    List<IPMetadata> sourceMetadata = rep.getSourceMetadata();
+    final List<IPMetadata> sourceMetadata = rep.getSourceMetadata();
     assertEquals(1, sourceMetadata.size());
     assertEquals("CUSTOM_SRC", sourceMetadata.get(0).getMetadataType().asString());
     
-    List<IPMetadata> rightsMetadata = rep.getRightsMetadata();
+    final List<IPMetadata> rightsMetadata = rep.getRightsMetadata();
     assertEquals(1, rightsMetadata.size());
     assertEquals("CUSTOM_RIGHTS", rightsMetadata.get(0).getMetadataType().asString());
     
-    List<IPMetadata> otherMetadata = rep.getOtherMetadata();
+    final List<IPMetadata> otherMetadata = rep.getOtherMetadata();
     assertEquals(1, otherMetadata.size());
     assertEquals("CUSTOM_OTHER", otherMetadata.get(0).getMetadataType().asString());
     
@@ -210,38 +249,50 @@ public class CustomMetadataTest {
     LOGGER.info("==============================================");
   }
   
+  /**
+   * Test a mix of standard and custom metadata types in the same SIP.
+   * 
+   * @throws IPException if SIP creation fails
+   * @throws InterruptedException if process is interrupted
+   */
   @Test
   public void testMixedMetadataTypes() throws IPException, InterruptedException {
     // Create a simple SIP
-    SIP sip = new EARKSIP("MIXED_METADATA_TYPES_SIP", IPContentType.getMIXED(), IPContentInformationType.getMIXED(), "2.1.0");
+    final SIP sip = new EARKSIP("MIXED_METADATA_TYPES_SIP", IPContentType.getMIXED(), 
+        IPContentInformationType.getMIXED(), "2.1.0");
     sip.setDescription("SIP with a mix of standard and custom metadata types");
     
     // Create custom metadata types (using the consistent enum with setter approach)
-    MetadataType customDescriptiveType = new MetadataType(MetadataType.MetadataTypeEnum.OTHER).setOtherType("CUSTOM_DESC");
-    MetadataType customPreservationType = new MetadataType(MetadataType.MetadataTypeEnum.OTHER).setOtherType("CUSTOM_PRES");
-    MetadataType customTechnicalType = new MetadataType(MetadataType.MetadataTypeEnum.OTHER).setOtherType("CUSTOM_TECH");
-    MetadataType customSourceType = new MetadataType(MetadataType.MetadataTypeEnum.OTHER).setOtherType("CUSTOM_SRC");
-    MetadataType customRightsType = new MetadataType(MetadataType.MetadataTypeEnum.OTHER).setOtherType("CUSTOM_RIGHTS");
+    final MetadataType customDescriptiveType = new MetadataType(MetadataType.MetadataTypeEnum.OTHER)
+        .setOtherType("CUSTOM_DESC");
+    final MetadataType customPreservationType = new MetadataType(MetadataType.MetadataTypeEnum.OTHER)
+        .setOtherType("CUSTOM_PRES");
+    final MetadataType customTechnicalType = new MetadataType(MetadataType.MetadataTypeEnum.OTHER)
+        .setOtherType("CUSTOM_TECH");
+    final MetadataType customSourceType = new MetadataType(MetadataType.MetadataTypeEnum.OTHER)
+        .setOtherType("CUSTOM_SRC");
+    final MetadataType customRightsType = new MetadataType(MetadataType.MetadataTypeEnum.OTHER)
+        .setOtherType("CUSTOM_RIGHTS");
     
     // Create standard metadata types
-    MetadataType dcType = new MetadataType(MetadataType.MetadataTypeEnum.DC);
-    MetadataType premisType = new MetadataType(MetadataType.MetadataTypeEnum.PREMIS);
-    MetadataType nisoImgType = new MetadataType(MetadataType.MetadataTypeEnum.NISOIMG);
-    MetadataType modsType = new MetadataType(MetadataType.MetadataTypeEnum.MODS);
-    MetadataType metsRightsType = new MetadataType(MetadataType.MetadataTypeEnum.METSRIGHTS);
+    final MetadataType dcType = new MetadataType(MetadataType.MetadataTypeEnum.DC);
+    final MetadataType premisType = new MetadataType(MetadataType.MetadataTypeEnum.PREMIS);
+    final MetadataType nisoImgType = new MetadataType(MetadataType.MetadataTypeEnum.NISOIMG);
+    final MetadataType modsType = new MetadataType(MetadataType.MetadataTypeEnum.MODS);
+    final MetadataType metsRightsType = new MetadataType(MetadataType.MetadataTypeEnum.METSRIGHTS);
     
     // Create metadata files for each type using relative paths
-    IPFile descriptiveFile = new IPFile(Paths.get("src", "test", "resources", "data", "descriptive.txt"));
-    IPFile dcFile = new IPFile(Paths.get("src", "test", "resources", "data", "dc.xml"));
-    IPFile preservationFile = new IPFile(Paths.get("src", "test", "resources", "data", "preservation.txt"));
-    IPFile premisFile = new IPFile(Paths.get("src", "test", "resources", "data", "premis.xml"));
-    IPFile technicalFile = new IPFile(Paths.get("src", "test", "resources", "data", "technical.txt"));
-    IPFile sourceFile = new IPFile(Paths.get("src", "test", "resources", "data", "source.txt"));
-    IPFile rightsFile = new IPFile(Paths.get("src", "test", "resources", "data", "rights.txt"));
-    IPFile otherFile = new IPFile(Paths.get("src", "test", "resources", "data", "other.txt"));
+    final IPFile descriptiveFile = new IPFile(Paths.get("src", "test", "resources", "data", "descriptive.txt"));
+    final IPFile dcFile = new IPFile(Paths.get("src", "test", "resources", "data", "dc.xml"));
+    final IPFile preservationFile = new IPFile(Paths.get("src", "test", "resources", "data", "preservation.txt"));
+    final IPFile premisFile = new IPFile(Paths.get("src", "test", "resources", "data", "premis.xml"));
+    final IPFile technicalFile = new IPFile(Paths.get("src", "test", "resources", "data", "technical.txt"));
+    final IPFile sourceFile = new IPFile(Paths.get("src", "test", "resources", "data", "source.txt"));
+    final IPFile rightsFile = new IPFile(Paths.get("src", "test", "resources", "data", "rights.txt"));
+    final IPFile otherFile = new IPFile(Paths.get("src", "test", "resources", "data", "other.txt"));
     
     // Create a representation
-    IPRepresentation representation = new IPRepresentation("representation-1");
+    final IPRepresentation representation = new IPRepresentation("representation-1");
     
     // Add standard metadata to representation
     representation.addTechnicalMetadata(new IPMetadata(technicalFile, nisoImgType));
@@ -251,13 +302,15 @@ public class CustomMetadataTest {
     sip.addRepresentation(representation);
     
     // Add custom metadata to representation
-    sip.addPreservationMetadataToRepresentation("representation-1", new IPMetadata(preservationFile, customPreservationType));
+    sip.addPreservationMetadataToRepresentation("representation-1", 
+        new IPMetadata(preservationFile, customPreservationType));
     sip.addRightsMetadataToRepresentation("representation-1", new IPMetadata(rightsFile, metsRightsType));
     sip.addOtherMetadataToRepresentation("representation-1", 
-        new IPMetadata(otherFile, new MetadataType(MetadataType.MetadataTypeEnum.OTHER).setOtherType("CUSTOM_OTHER")));
+        new IPMetadata(otherFile, new MetadataType(MetadataType.MetadataTypeEnum.OTHER)
+            .setOtherType("CUSTOM_OTHER")));
     
     // Create another representation with mixed types
-    IPRepresentation representation2 = new IPRepresentation("representation-2");
+    final IPRepresentation representation2 = new IPRepresentation("representation-2");
     sip.addRepresentation(representation2);
     
     // Add custom and standard metadata to second representation
@@ -274,64 +327,64 @@ public class CustomMetadataTest {
     sip.addRightsMetadata(new IPMetadata(rightsFile, metsRightsType));
     
     // Build the SIP with a fixed output location
-    WriteStrategy writeStrategy = SIPBuilderUtils.getWriteStrategy(WriteStrategyEnum.ZIP, outputFolder);
-    Path sipPath = sip.build(writeStrategy);
+    final WriteStrategy writeStrategy = SIPBuilderUtils.getWriteStrategy(WriteStrategyEnum.ZIP, outputFolder);
+    final Path sipPath = sip.build(writeStrategy);
     
     // Verify the SIP was created
     assertTrue(Files.exists(sipPath));
     
     // Verify the metadata
-    List<IPDescriptiveMetadata> descriptiveMetadataList = sip.getDescriptiveMetadata();
+    final List<IPDescriptiveMetadata> descriptiveMetadataList = sip.getDescriptiveMetadata();
     assertEquals(2, descriptiveMetadataList.size());
     assertEquals("CUSTOM_DESC", descriptiveMetadataList.get(0).getMetadataType().asString());
     assertEquals("DC", descriptiveMetadataList.get(1).getMetadataType().asString());
     
-    List<IPMetadata> packagePreservationMetadata = sip.getPreservationMetadata();
+    final List<IPMetadata> packagePreservationMetadata = sip.getPreservationMetadata();
     assertEquals(2, packagePreservationMetadata.size());
     assertEquals("CUSTOM_PRES", packagePreservationMetadata.get(0).getMetadataType().asString());
     assertEquals("PREMIS", packagePreservationMetadata.get(1).getMetadataType().asString());
     
-    List<IPMetadata> packageRightsMetadata = sip.getRightsMetadata();
+    final List<IPMetadata> packageRightsMetadata = sip.getRightsMetadata();
     assertEquals(1, packageRightsMetadata.size());
     assertEquals("METSRIGHTS", packageRightsMetadata.get(0).getMetadataType().asString());
     
     // Verify representation 1 metadata
-    List<IPRepresentation> representations = sip.getRepresentations();
+    final List<IPRepresentation> representations = sip.getRepresentations();
     assertEquals(2, representations.size());
-    IPRepresentation rep1 = representations.get(0);
+    final IPRepresentation rep1 = representations.get(0);
     
-    List<IPMetadata> rep1PreservationMetadata = rep1.getPreservationMetadata();
+    final List<IPMetadata> rep1PreservationMetadata = rep1.getPreservationMetadata();
     assertEquals(1, rep1PreservationMetadata.size());
     assertEquals("CUSTOM_PRES", rep1PreservationMetadata.get(0).getMetadataType().asString());
     
-    List<IPMetadata> rep1TechnicalMetadata = rep1.getTechnicalMetadata();
+    final List<IPMetadata> rep1TechnicalMetadata = rep1.getTechnicalMetadata();
     assertEquals(1, rep1TechnicalMetadata.size());
     assertEquals("NISOIMG", rep1TechnicalMetadata.get(0).getMetadataType().asString());
     
-    List<IPMetadata> rep1SourceMetadata = rep1.getSourceMetadata();
+    final List<IPMetadata> rep1SourceMetadata = rep1.getSourceMetadata();
     assertEquals(1, rep1SourceMetadata.size());
     assertEquals("MODS", rep1SourceMetadata.get(0).getMetadataType().asString());
     
-    List<IPMetadata> rep1RightsMetadata = rep1.getRightsMetadata();
+    final List<IPMetadata> rep1RightsMetadata = rep1.getRightsMetadata();
     assertEquals(1, rep1RightsMetadata.size());
     assertEquals("METSRIGHTS", rep1RightsMetadata.get(0).getMetadataType().asString());
     
     // Verify representation 2 metadata
-    IPRepresentation rep2 = representations.get(1);
+    final IPRepresentation rep2 = representations.get(1);
     
-    List<IPMetadata> rep2PreservationMetadata = rep2.getPreservationMetadata();
+    final List<IPMetadata> rep2PreservationMetadata = rep2.getPreservationMetadata();
     assertEquals(1, rep2PreservationMetadata.size());
     assertEquals("PREMIS", rep2PreservationMetadata.get(0).getMetadataType().asString());
     
-    List<IPMetadata> rep2TechnicalMetadata = rep2.getTechnicalMetadata();
+    final List<IPMetadata> rep2TechnicalMetadata = rep2.getTechnicalMetadata();
     assertEquals(1, rep2TechnicalMetadata.size());
     assertEquals("CUSTOM_TECH", rep2TechnicalMetadata.get(0).getMetadataType().asString());
     
-    List<IPMetadata> rep2SourceMetadata = rep2.getSourceMetadata();
+    final List<IPMetadata> rep2SourceMetadata = rep2.getSourceMetadata();
     assertEquals(1, rep2SourceMetadata.size());
     assertEquals("CUSTOM_SRC", rep2SourceMetadata.get(0).getMetadataType().asString());
     
-    List<IPMetadata> rep2RightsMetadata = rep2.getRightsMetadata();
+    final List<IPMetadata> rep2RightsMetadata = rep2.getRightsMetadata();
     assertEquals(1, rep2RightsMetadata.size());
     assertEquals("CUSTOM_RIGHTS", rep2RightsMetadata.get(0).getMetadataType().asString());
     
