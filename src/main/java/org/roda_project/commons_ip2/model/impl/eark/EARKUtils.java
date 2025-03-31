@@ -288,6 +288,10 @@ public class EARKUtils {
         // representation source metadata
         addSourceMetadataToZipAndMETS(zipEntries, representationMETSWrapper,
           representation.getSourceMetadata(), representationId);
+          
+        // representation rights metadata
+        addRightsMetadataToZipAndMETS(zipEntries, representationMETSWrapper,
+          representation.getRightsMetadata(), representationId);
 
         // representation other metadata
         addOtherMetadataToZipAndMETS(zipEntries, representationMETSWrapper, representation.getOtherMetadata(),
