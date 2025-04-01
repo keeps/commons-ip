@@ -442,7 +442,10 @@ public abstract class EARKMETSCreator {
     digiprovMD.setSTATUS(preservationMetadata.getMetadataStatus().toString());
     digiprovMD.setID(Utils.generateRandomAndPrefixedUUID());
     final MdSecType.MdRef mdRef = createMdRef(preservationMetadata.getId(), preservationMetadataPath);
-    mdRef.setMDTYPE(preservationMetadata.getMetadataType().asString());
+    mdRef.setMDTYPE(preservationMetadata.getMetadataType().getType().getType());
+    if (StringUtils.isNotBlank(preservationMetadata.getMetadataType().getOtherType())) {
+      mdRef.setOTHERMDTYPE(preservationMetadata.getMetadataType().getOtherType());
+    }
 
     // set mimetype, date creation, etc.
     METSUtils.setFileBasicInformation(preservationMetadata.getMetadata().getPath(), mdRef);
@@ -462,7 +465,7 @@ public abstract class EARKMETSCreator {
     techMD.setSTATUS(technicalMetadata.getMetadataStatus().toString());
     techMD.setID(Utils.generateRandomAndPrefixedUUID());
     final MdSecType.MdRef mdRef = createMdRef(technicalMetadata.getId(), technicalMetadataPath);
-    mdRef.setMDTYPE(technicalMetadata.getMetadataType().asString());
+    mdRef.setMDTYPE(technicalMetadata.getMetadataType().getType().getType());
     if (StringUtils.isNotBlank(technicalMetadata.getMetadataType().getOtherType())) {
       mdRef.setOTHERMDTYPE(technicalMetadata.getMetadataType().getOtherType());
     }
@@ -487,7 +490,7 @@ public abstract class EARKMETSCreator {
     sourceMD.setSTATUS(sourceMetadata.getMetadataStatus().toString());
     sourceMD.setID(Utils.generateRandomAndPrefixedUUID());
     final MdSecType.MdRef mdRef = createMdRef(sourceMetadata.getId(), sourceMetadataPath);
-    mdRef.setMDTYPE(sourceMetadata.getMetadataType().asString());
+    mdRef.setMDTYPE(sourceMetadata.getMetadataType().getType().getType());
     if (StringUtils.isNotBlank(sourceMetadata.getMetadataType().getOtherType())) {
       mdRef.setOTHERMDTYPE(sourceMetadata.getMetadataType().getOtherType());
     }
@@ -512,7 +515,7 @@ public abstract class EARKMETSCreator {
     rightsMD.setSTATUS(rightsMetadata.getMetadataStatus().toString());
     rightsMD.setID(Utils.generateRandomAndPrefixedUUID());
     final MdSecType.MdRef mdRef = createMdRef(rightsMetadata.getId(), rightsMetadataPath);
-    mdRef.setMDTYPE(rightsMetadata.getMetadataType().asString());
+    mdRef.setMDTYPE(rightsMetadata.getMetadataType().getType().getType());
     if (StringUtils.isNotBlank(rightsMetadata.getMetadataType().getOtherType())) {
       mdRef.setOTHERMDTYPE(rightsMetadata.getMetadataType().getOtherType());
     }
