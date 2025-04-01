@@ -23,7 +23,7 @@ public class ParseEARKSIPTest {
     Assert.assertEquals(0, sip.getSourceMetadata().size());
     Assert.assertEquals(1, sip.getRepresentations().size());
 
-    IPRepresentation first = sip.getRepresentations().getFirst();
+    IPRepresentation first = sip.getRepresentations().get(0);
     Assert.assertEquals(1, first.getData().size());
     Assert.assertEquals(0, first.getOtherMetadata().size());
     Assert.assertEquals(1, first.getTechnicalMetadata().size());
