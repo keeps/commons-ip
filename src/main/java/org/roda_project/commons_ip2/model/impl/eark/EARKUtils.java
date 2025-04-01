@@ -17,6 +17,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip.model.ParseException;
@@ -25,6 +27,7 @@ import org.roda_project.commons_ip.utils.IPEnums.IPStatus;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.ValidationConstants;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
+import org.roda_project.commons_ip2.mets_v1_12.beans.AmdSecType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.DivType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.DivType.Fptr;
 import org.roda_project.commons_ip2.mets_v1_12.beans.DivType.Mptr;
@@ -137,7 +140,7 @@ public class EARKUtils {
       }
     }
   }
-  
+
   protected void addTechnicalMetadataToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
     List<IPMetadata> technicalMetadata, String representationId) throws IPException, InterruptedException {
     if (technicalMetadata != null && !technicalMetadata.isEmpty()) {
@@ -152,8 +155,8 @@ public class EARKUtils {
         MdRef mdRef = metsGenerator.addTechnicalMetadataToMETS(metsWrapper, tm, technicalMetadataPath);
 
         if (representationId != null) {
-          technicalMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId
-            + IPConstants.ZIP_PATH_SEPARATOR + technicalMetadataPath;
+          technicalMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
+            + technicalMetadataPath;
         }
         ZIPUtils.addMdRefFileToZip(zipEntries, file.getPath(), technicalMetadataPath, mdRef);
       }
@@ -181,7 +184,7 @@ public class EARKUtils {
       }
     }
   }
-  
+
   protected void addRightsMetadataToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
     List<IPMetadata> rightsMetadata, String representationId) throws IPException, InterruptedException {
     if (rightsMetadata != null && !rightsMetadata.isEmpty()) {
@@ -280,11 +283,11 @@ public class EARKUtils {
         // representation preservation metadata
         addPreservationMetadataToZipAndMETS(zipEntries, representationMETSWrapper,
           representation.getPreservationMetadata(), representationId);
-          
+
         // representation technical metadata
-        addTechnicalMetadataToZipAndMETS(zipEntries, representationMETSWrapper,
-          representation.getTechnicalMetadata(), representationId);
-        
+        addTechnicalMetadataToZipAndMETS(zipEntries, representationMETSWrapper, representation.getTechnicalMetadata(),
+          representationId);
+
         // representation source metadata
         addSourceMetadataToZipAndMETS(zipEntries, representationMETSWrapper,
           representation.getSourceMetadata(), representationId);
@@ -686,20 +689,16 @@ public class EARKUtils {
               processDescriptiveMetadata(representationMetsWrapper, ip, logger, representation, representationBasePath);
 
               // process preservation metadata
-              processPreservationMetadata(representationMetsWrapper, ip, logger, representation,
-                representationBasePath);
-                
+              processPreservationMetadata(representationMetsWrapper, ip, representation, representationBasePath);
+
               // process technical metadata
-              processTechnicalMetadata(representationMetsWrapper, ip, logger, representation,
-                representationBasePath);
-                
+              processTechnicalMetadata(representationMetsWrapper, ip, representation, representationBasePath);
+
               // process source metadata
-              processSourceMetadata(representationMetsWrapper, ip, logger, representation,
-                representationBasePath);
-                
+              processSourceMetadata(representationMetsWrapper, ip, representation, representationBasePath);
+
               // process rights metadata
-              processRightsMetadata(representationMetsWrapper, ip, logger, representation,
-                representationBasePath);
+              processRightsMetadata(representationMetsWrapper, ip, representation, representationBasePath);
 
               // process other metadata
               processOtherMetadata(representationMetsWrapper, ip, logger, representation, representationBasePath);
@@ -774,8 +773,55 @@ public class EARKUtils {
 
   protected void processDescriptiveMetadata(MetsWrapper metsWrapper, IPInterface ip, Logger logger,
     IPRepresentation representation, Path basePath) throws IPException {
+    String metadataType = IPConstants.DESCRIPTIVE;
+    List<MdSecType> dmdSec = metsWrapper.getMets().getDmdSec();
+    for (MdSecType mdSecType : dmdSec) {
+      MdRef mdRef = mdSecType.getMdRef();
+      if (mdRef != null) {
+        String href = Utils.extractedRelativePathFromHref(mdRef);
+        Path filePath = basePath.resolve(href);
+        if (Files.exists(filePath)) {
+          List<String> fileRelativeFolders = Utils
+            .getFileRelativeFolders(basePath.resolve(IPConstants.METADATA).resolve(metadataType), filePath);
 
-    processMetadata(ip, logger, representation, metsWrapper.getMetadataDiv(), IPConstants.DESCRIPTIVE, basePath);
+          Optional<IPFileInterface> metadataFile = validateMetadataFile(ip, filePath, mdRef, fileRelativeFolders);
+          if (metadataFile.isPresent()) {
+            ValidationUtils.addInfo(ip.getValidationReport(),
+              ValidationConstants.getMetadataFileFoundWithMatchingChecksumString(metadataType), ip.getBasePath(),
+              filePath);
+
+            MetadataType dmdType = new MetadataType(mdRef.getMDTYPE().toUpperCase());
+            String dmdVersion = null;
+            try {
+              dmdVersion = mdRef.getMDTYPEVERSION();
+              if (StringUtils.isNotBlank(mdRef.getOTHERMDTYPE())) {
+                dmdType.setOtherType(mdRef.getOTHERMDTYPE());
+              }
+              logger.debug("Metadata type valid: {}", dmdType);
+            } catch (NullPointerException | IllegalArgumentException e) {
+              // do nothing and use already defined values for metadataType &
+              // metadataVersion
+              logger.debug("Setting metadata type to {}", dmdType);
+              ValidationUtils.addEntry(ip.getValidationReport(), ValidationConstants.UNKNOWN_DESCRIPTIVE_METADATA_TYPE,
+                ValidationEntry.LEVEL.WARN, "Setting metadata type to " + dmdType, ip.getBasePath(), filePath);
+            }
+
+            IPDescriptiveMetadata descriptiveMetadata = new IPDescriptiveMetadata(mdRef.getID(), metadataFile.get(),
+              dmdType, dmdVersion);
+            descriptiveMetadata.setCreateDate(mdRef.getCREATED());
+            if (representation == null) {
+              ip.addDescriptiveMetadata(descriptiveMetadata);
+            } else {
+              representation.addDescriptiveMetadata(descriptiveMetadata);
+            }
+          }
+        } else {
+          ValidationUtils.addIssue(ip.getValidationReport(),
+            ValidationConstants.getMetadataFileNotFoundString(metadataType), ValidationEntry.LEVEL.ERROR,
+            ip.getBasePath(), filePath);
+        }
+      }
+    }
   }
 
   protected void processOtherMetadata(MetsWrapper metsWrapper, IPInterface ip, Logger logger,
@@ -784,28 +830,126 @@ public class EARKUtils {
     processMetadata(ip, logger, representation, metsWrapper.getOtherMetadataDiv(), IPConstants.OTHER, basePath);
   }
 
-  protected void processPreservationMetadata(MetsWrapper metsWrapper, IPInterface ip, Logger logger,
-    IPRepresentation representation, Path basePath) throws IPException {
+  protected void processPreservationMetadata(MetsWrapper metsWrapper, IPInterface ip, IPRepresentation representation,
+    Path basePath) throws IPException {
+    String metadataType = IPConstants.PRESERVATION;
+    for (AmdSecType amdSecType : metsWrapper.getMets().getAmdSec()) {
+      for (MdSecType mdSecType : amdSecType.getDigiprovMD()) {
+        MdRef mdRef = mdSecType.getMdRef();
 
-    processMetadata(ip, logger, representation, metsWrapper.getMetadataDiv(), IPConstants.PRESERVATION, basePath);
+        processMdRef(mdRef, metadataType, ip, representation, basePath);
+      }
+    }
   }
-  
-  protected void processTechnicalMetadata(MetsWrapper metsWrapper, IPInterface ip, Logger logger,
-    IPRepresentation representation, Path basePath) throws IPException {
 
-    processMetadata(ip, logger, representation, metsWrapper.getMetadataDiv(), IPConstants.TECHNICAL, basePath);
+  protected void processTechnicalMetadata(MetsWrapper metsWrapper, IPInterface ip, IPRepresentation representation,
+    Path basePath) throws IPException {
+    String metadataType = IPConstants.TECHNICAL;
+    for (AmdSecType amdSecType : metsWrapper.getMets().getAmdSec()) {
+      for (MdSecType mdSecType : amdSecType.getTechMD()) {
+        MdRef mdRef = mdSecType.getMdRef();
+
+        processMdRef(mdRef, metadataType, ip, representation, basePath);
+      }
+    }
   }
-  
-  protected void processSourceMetadata(MetsWrapper metsWrapper, IPInterface ip, Logger logger,
-    IPRepresentation representation, Path basePath) throws IPException {
 
-    processMetadata(ip, logger, representation, metsWrapper.getMetadataDiv(), IPConstants.SOURCE, basePath);
+  protected void processSourceMetadata(MetsWrapper metsWrapper, IPInterface ip, IPRepresentation representation,
+    Path basePath) throws IPException {
+
+    String metadataType = IPConstants.SOURCE;
+    for (AmdSecType amdSecType : metsWrapper.getMets().getAmdSec()) {
+      for (MdSecType mdSecType : amdSecType.getSourceMD()) {
+        MdRef mdRef = mdSecType.getMdRef();
+
+        processMdRef(mdRef, metadataType, ip, representation, basePath);
+      }
+    }
   }
-  
-  protected void processRightsMetadata(MetsWrapper metsWrapper, IPInterface ip, Logger logger,
-    IPRepresentation representation, Path basePath) throws IPException {
 
-    processMetadata(ip, logger, representation, metsWrapper.getMetadataDiv(), IPConstants.RIGHTS, basePath);
+  protected void processRightsMetadata(MetsWrapper metsWrapper, IPInterface ip, IPRepresentation representation,
+    Path basePath) throws IPException {
+    String metadataType = IPConstants.RIGHTS;
+    for (AmdSecType amdSecType : metsWrapper.getMets().getAmdSec()) {
+      for (MdSecType mdSecType : amdSecType.getRightsMD()) {
+        MdRef mdRef = mdSecType.getMdRef();
+
+        processMdRef(mdRef, metadataType, ip, representation, basePath);
+      }
+    }
+  }
+
+  private void processMdRef(MdRef mdRef, String metadataType, IPInterface ip, IPRepresentation representation,
+    Path basePath) throws IPException {
+    if (mdRef != null) {
+      String href = Utils.extractedRelativePathFromHref(mdRef);
+      Path filePath = basePath.resolve(href);
+      if (Files.exists(filePath)) {
+        List<String> fileRelativeFolders = Utils
+          .getFileRelativeFolders(basePath.resolve(IPConstants.METADATA).resolve(metadataType), filePath);
+
+        Optional<IPFileInterface> metadataFile = validateMetadataFile(ip, filePath, mdRef, fileRelativeFolders);
+        if (metadataFile.isPresent()) {
+          ValidationUtils.addInfo(ip.getValidationReport(),
+            ValidationConstants.getMetadataFileFoundWithMatchingChecksumString(metadataType), ip.getBasePath(),
+            filePath);
+          IPMetadata ipMetadata = new IPMetadata(metadataFile.get());
+          ipMetadata.setCreateDate(mdRef.getCREATED());
+          ipMetadata.setMetadataType(MetadataType.MetadataTypeEnum.valueOf(mdRef.getMDTYPE()));
+          ipMetadata.setId(mdRef.getID());
+          addMetadata(ip, representation, ipMetadata, metadataType);
+        }
+      } else {
+        ValidationUtils.addIssue(ip.getValidationReport(),
+          ValidationConstants.getMetadataFileNotFoundString(metadataType), ValidationEntry.LEVEL.ERROR,
+          ip.getBasePath(), filePath);
+      }
+    }
+  }
+
+  private void addMetadata(IPInterface ip, IPRepresentation representation, IPMetadata metadata, String metadataType)
+    throws IPException {
+    if (representation == null) {
+      switch (metadataType) {
+        case IPConstants.PRESERVATION:
+          ip.addPreservationMetadata(metadata);
+          break;
+        case IPConstants.RIGHTS:
+          ip.addRightsMetadata(metadata);
+          break;
+        case IPConstants.TECHNICAL:
+          ip.addTechnicalMetadata(metadata);
+          break;
+        case IPConstants.SOURCE:
+          ip.addSourceMetadata(metadata);
+          break;
+        case IPConstants.OTHER:
+          ip.addOtherMetadata(metadata);
+          break;
+        default:
+          throw new IPException("Unknown metadata type: " + metadataType);
+      }
+    } else {
+      switch (metadataType) {
+        case IPConstants.PRESERVATION:
+          representation.addPreservationMetadata(metadata);
+          break;
+        case IPConstants.RIGHTS:
+          representation.addRightsMetadata(metadata);
+          break;
+        case IPConstants.TECHNICAL:
+          representation.addTechnicalMetadata(metadata);
+          break;
+        case IPConstants.SOURCE:
+          representation.addSourceMetadata(metadata);
+          break;
+        case IPConstants.OTHER:
+          representation.addOtherMetadata(metadata);
+          break;
+        default:
+          throw new IPException("Unknown metadata type: " + metadataType);
+      }
+    }
   }
 
   protected void processMetadata(IPInterface ip, Logger logger, IPRepresentation representation, DivType div,
@@ -814,8 +958,8 @@ public class EARKUtils {
       List<Object> objects = null;
       if (IPConstants.DESCRIPTIVE.equals(metadataType) || IPConstants.OTHER.equals(metadataType)) {
         objects = div.getDMDID();
-      } else if (IPConstants.PRESERVATION.equals(metadataType) || IPConstants.RIGHTS.equals(metadataType) 
-          || IPConstants.TECHNICAL.equals(metadataType) || IPConstants.SOURCE.equals(metadataType)) {
+      } else if (IPConstants.PRESERVATION.equals(metadataType) || IPConstants.RIGHTS.equals(metadataType)
+        || IPConstants.TECHNICAL.equals(metadataType) || IPConstants.SOURCE.equals(metadataType)) {
         objects = div.getADMID();
       }
 
