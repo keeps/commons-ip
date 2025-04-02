@@ -97,7 +97,7 @@
                                 </goals>
                                 <configuration>
                                     <rules>
-                                        <banDuplicatePomDependencyVersions />
+                                        <banDuplicatePomDependencyVersions/>
                                         <!--requireMavenVersion>
                                             <version>[3.9,)</version>
                                             <message>Invalid Maven version. It should be 3.9.X</message>
@@ -258,7 +258,7 @@
                                 </goals>
                                 <configuration>
                                     <rules>
-                                        <banDuplicatePomDependencyVersions />
+                                        <banDuplicatePomDependencyVersions/>
                                         <!--requireMavenVersion>
                                             <version>[3.9,)</version>
                                             <message>Invalid Maven version. It should be 3.9.X</message>
@@ -419,7 +419,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.5.16</version>
+            <version>1.5.17</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
