@@ -66,7 +66,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java_version>17</java_version>
-        <version.jackson>2.18.2</version.jackson>
+        <version.jackson>2.18.3</version.jackson>
     </properties>
 
     <profiles>
@@ -97,7 +97,7 @@
                                 </goals>
                                 <configuration>
                                     <rules>
-                                        <banDuplicatePomDependencyVersions />
+                                        <banDuplicatePomDependencyVersions/>
                                         <!--requireMavenVersion>
                                             <version>[3.9,)</version>
                                             <message>Invalid Maven version. It should be 3.9.X</message>
@@ -258,7 +258,7 @@
                                 </goals>
                                 <configuration>
                                     <rules>
-                                        <banDuplicatePomDependencyVersions />
+                                        <banDuplicatePomDependencyVersions/>
                                         <!--requireMavenVersion>
                                             <version>[3.9,)</version>
                                             <message>Invalid Maven version. It should be 3.9.X</message>
