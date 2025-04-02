@@ -1,4 +1,4 @@
-package org.roda_project.commons_ip2.model.impl.eark;
+package org.roda_project.commons_ip2.model.eark;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -8,6 +8,7 @@ import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip2.model.IPFileInterface;
 import org.roda_project.commons_ip2.model.SIP;
+import org.roda_project.commons_ip2.model.impl.eark.EARKSIP;
 import org.roda_project.commons_ip2.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

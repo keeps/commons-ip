@@ -1,10 +1,9 @@
-package org.roda_project.commons_ip2.model.impl.eark;
+package org.roda_project.commons_ip2.model.eark;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.AfterClass;
@@ -24,6 +23,7 @@ import org.roda_project.commons_ip2.model.IPMetadata;
 import org.roda_project.commons_ip2.model.IPRepresentation;
 import org.roda_project.commons_ip2.model.MetadataType;
 import org.roda_project.commons_ip2.model.SIP;
+import org.roda_project.commons_ip2.model.impl.eark.EARKSIP;
 import org.roda_project.commons_ip2.model.impl.eark.out.writers.strategy.WriteStrategy;
 import org.roda_project.commons_ip2.utils.RepresentationUtils;
 import org.roda_project.commons_ip2.utils.Utils;

@@ -5,7 +5,7 @@
  *
  * https://github.com/keeps/commons-ip
  */
-package org.roda_project.commons_ip2.model.impl.eark;
+package org.roda_project.commons_ip2.model.eark;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
@@ -52,7 +52,7 @@ import org.roda_project.commons_ip2.model.MetadataType.MetadataTypeEnum;
 import org.roda_project.commons_ip2.model.RepresentationStatus;
 import org.roda_project.commons_ip2.model.SIP;
 import org.roda_project.commons_ip2.model.ValidationEntry.LEVEL;
-import org.roda_project.commons_ip2.model.impl.eark.out.writers.factory.WriteStrategyFactory;
+import org.roda_project.commons_ip2.model.impl.eark.EARKSIP;
 import org.roda_project.commons_ip2.model.impl.eark.out.writers.strategy.WriteStrategy;
 import org.roda_project.commons_ip2.utils.Utils;
 import org.roda_project.commons_ip2.validator.EARKSIPValidator;
