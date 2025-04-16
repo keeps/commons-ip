@@ -6,7 +6,7 @@
     <groupId>org.roda-community</groupId>
     <artifactId>commons-ip2</artifactId>
     <packaging>jar</packaging>
-    <version>2.10.0-SNAPSHOT</version>
+    <version>2.11.0-SNAPSHOT</version>
     <name>Commons IP</name>
     <description>Library to validate and manipulate E-ARK Information Packages, so to create or process E-ARK SIP and AIP and also validate them against official specifications.</description>
     <url>https://keeps.github.io/commons-ip/</url>
