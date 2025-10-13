@@ -28,7 +28,17 @@ public class IPContentType implements Serializable {
     MOTION_PICTURES("Motion Pictures – Digital and Physical Media"), VIDEO("Video – File-based and Physical Media"),
     SOFTWARE("Software"), DATASETS("Datasets"), DATASET("Dataset"), GEOSPATIAL_DATA("Geospatial Data"), DATABASES("Databases"),
     WEBSITES("Websites"), COLLECTION("Collection"), EVENT("Event"), INTERACTIVE_RESOURCE("Interactive resource"),
-    PHYSICAL_OBJECT("Physical object"), SERVICE("Service"), MIXED("Mixed"), OTHER("Other");
+    PHYSICAL_OBJECT("Physical object"), SERVICE("Service"), 
+    MUSICAL_SCORES_PRINT("Musical Scores - Print"), MUSICAL_SCORES_DIGITAL("Musical Scores - Digital"),
+    SOFTWARE_AND_VIDEO_GAMES("Software and Video Games"), EMAIL("Email"),
+    GEOSPATIAL_INFORMATION_SYSTEM("Geographic Information System (GIS) - Vector Data"),
+    GIS_RASTER_AND_GEOREFERENCED_IMAGES("GIS Raster and Georeferenced Images"),
+    GIS_VECTOR_AND_RASTER_COMBINED("GIS Vector and Raster Combined"),
+    NON_GIS_CARTOGRAPHIC("Non-GIS Cartographic"), COMPUTER_AIDED_DESIGN_2D_3D("2D and 3D Computer Aided Design"),
+    DESIGN_PRINT("Design (schematics, architectural drawings) - Print"),
+    SCANNED_3D_OBJECTS("Scanned 3D Objects (output from photogrammetry scanning)"),
+    WEB_ARCHIVES("Web Archives"), IMAGE("Image"), MOVING_MAGE("Moving image"), SOUND("Sound"), STILL_IMAGE("Still image"),
+    TEXT("Text"), MIXED("Mixed"), OTHER("Other");
 
     protected static final Map<String, IPContentTypeEnum> typeToEnum = new HashMap<>();
     static {
