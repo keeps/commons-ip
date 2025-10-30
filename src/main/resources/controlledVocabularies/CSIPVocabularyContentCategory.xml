@@ -9,106 +9,241 @@
         <Entry>
             <Term lang="en">Textual works – Print</Term>
             <Definition>Books, musical compositions, etc.</Definition>
+            <Source>LoC value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Textual works – Digital</Term>
             <Definition>Electronic books, etc.</Definition>
+            <Source>LoC value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Textual works – Electronic Serials</Term>
-            <Definition></Definition>
+            <Definition>A journal, etc.</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Addition of description</RevisionInformation>
+            <Source>LoC value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Digital Musical Composition (score-based representations)</Term>
             <Definition></Definition>
+            <RevisionInformation RevisionDate="2024-05-17">This value is from an old version of the LoC list</RevisionInformation>
+            <Source>LoC value list</Source>
+        </Entry>
+        <Entry>
+            <Term lang="en">Musical Scores - Print</Term>
+            <Definition>A printed version of a musical score</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Value added from the LoC value list</RevisionInformation>
+            <Source>LoC value list</Source>
+        </Entry>
+        <Entry>
+            <Term lang="en">Musical Scores - Digital</Term>
+            <Definition>A digital version of a musical score</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Value added from the LoC value list</RevisionInformation>
+            <Source>LoC value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Photographs – Print</Term>
-            <Definition></Definition>
+            <Definition>A printed version of the photograph</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Addition of description</RevisionInformation>
+            <Source>LoC value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Photographs – Digital</Term>
-            <Definition></Definition>
+            <Definition>A digital version of the photograph</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Addition of description</RevisionInformation>
+            <Source>LoC value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Other Graphic Images – Print</Term>
-            <Definition>Posters, architectural drawings, postcards, maps, fine prints, etc.</Definition>
+            <Definition>A printed version of a Posters, architectural drawings, postcards, maps, fine prints, etc.</Definition>
+            <Source>LoC value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Other Graphic Images – Digital</Term>
-            <Definition></Definition>
+            <Definition>A digital version of a Posters, architectural drawings, postcards, maps, fine prints, etc.</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Addition of description</RevisionInformation>
+            <Source>LoC value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Microforms</Term>
-            <Definition></Definition>
+            <Definition>A print in the form of a roll microfilm</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Addition of description</RevisionInformation>
+            <Source>LoC value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Audio – On Tangible Medium (digital or analog)</Term>
-            <Definition></Definition>
+            <Definition>Audio on a media</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Addition of description</RevisionInformation>
+            <Source>LoC value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Audio – Media-independent (digital)</Term>
-            <Definition></Definition>
+            <Definition>A digital audio version</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Addition of description</RevisionInformation>
+            <Source>LoC value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Motion Pictures – Digital and Physical Media</Term>
             <Definition>Theatrically released films</Definition>
+            <Source>LoC value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Video – File-based and Physical Media</Term>
-            <Definition></Definition>
+            <Definition>Final production version with the original production resolution and frame rate (i.e. 1080p24; 720p60, etc.) and file-based format that was delivered to the content distributor</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Addition of description</RevisionInformation>
+            <Source>LoC value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Software</Term>
             <Definition>Software, electronic gaming and learning</Definition>
+            <Source>Dublin Core value list</Source>            
+        </Entry>
+        <Entry>
+            <Term lang="en">Software and Video Games</Term>
+            <Definition>This category includes software and games for desktop and mobile/handheld systems and video gaming consoles. Note: Games for gaming consoles often require submission of the proprietary platform as well (e.g., game console) or a virtual or emulated version of the proprietary platform that runs on a commonly available operating system.</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Value added from the LoC value list</RevisionInformation>
+            <Source>LoC value list</Source>
+        </Entry>
+        <Entry>
+            <Term lang="en">Email</Term>
+            <Definition>Email</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Value added from the LoC value list</RevisionInformation>
+            <Source>LoC value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Datasets</Term>
             <Definition>Data encoded in a defined structure.</Definition>
-        </Entry>
-        <Entry>
-            <Term lang="en">Dataset</Term>
-            <Definition>Data encoded in a defined structure.</Definition>
+            <Source>Dublin Core value list and LoC value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Geospatial Data</Term>
             <Definition></Definition>
+            <RevisionInformation RevisionDate="2024-05-17">This value is from an old version of the LoC list</RevisionInformation>
+            <Source>LoC value list</Source>
+        </Entry>
+        <Entry>
+            <Term lang="en">Geographic Information System (GIS) - Vector Data</Term>
+            <Definition>Most complete data (all layers, appendices), even if proprietary, with a preference for preserving the native format and projection of the data</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Value added from the LoC value list</RevisionInformation>
+            <Source>LoC value list</Source>
+        </Entry>
+        <Entry>
+            <Term lang="en">GIS Raster and Georeferenced Images</Term>
+            <Definition>GIS in raster form</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Value added from the LoC value list</RevisionInformation>
+            <Source>LoC value list</Source>
+        </Entry>
+        <Entry>
+            <Term lang="en">GIS Vector and Raster Combined</Term>
+            <Definition>GIS in a combination of vector and raster form</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Value added from the LoC value list</RevisionInformation>
+            <Source>LoC value list</Source>
+        </Entry>
+        <Entry>
+            <Term lang="en">Non-GIS Cartographic</Term>
+            <Definition>Maps and other cartographic materials produced outside of Geographic Information Systems, or which have been published and disseminated primarily as image or textual works. </Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Value added from the LoC value list</RevisionInformation>
+            <Source>LoC value list</Source>
+        </Entry>
+        <Entry>
+            <Term lang="en">2D and 3D Computer Aided Design</Term>
+            <Definition>2D and 3D designs</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Value added from the LoC value list</RevisionInformation>
+            <Source>LoC value list</Source>
+        </Entry>
+        <Entry>
+            <Term lang="en">Design (schematics, architectural drawings) - Print</Term>
+            <Definition>Printed designs</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Value added from the LoC value list</RevisionInformation>
+            <Source>LoC value list</Source>
+        </Entry>
+        <Entry>
+            <Term lang="en">Scanned 3D Objects (output from photogrammetry scanning)</Term>
+            <Definition>Scanned 3D objects</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Value added from the LoC value list</RevisionInformation>
+            <Source>LoC value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Databases</Term>
-            <Definition></Definition>
+            <Definition>A complete set of the content contained within the database</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Addition of description</RevisionInformation>
+            <Source>LoC value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Websites</Term>
             <Definition>Archived web content.</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">This value is from an old version of the LoC value list list</RevisionInformation>
+            <Source>LoC value list</Source>
+        </Entry>
+        <Entry>
+            <Term lang="en">Web Archives</Term>
+            <Definition>Archived web content.</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Value added from the LoC value list</RevisionInformation>
+            <Source>LoC value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Collection</Term>
             <Definition>An aggregation of resources.</Definition>
+            <Source>Dublin Core value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Event</Term>
             <Definition>A non-persistent, time-based occurrence, e.g. exhibition, webcast, etc..</Definition>
+            <Source>Dublin Core value list</Source>
+        </Entry>
+        <Entry>
+            <Term lang="en">Image</Term>
+            <Definition>A visual representation other than text.</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Value added from DublinCore value list</RevisionInformation>
+            <Source>Dublin Core value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Interactive resource</Term>
             <Definition>A resource requiring interaction from the user to be understood, executed, or experienced.</Definition>
+            <Source>Dublin Core value list</Source>
+        </Entry>
+        <Entry>
+            <Term lang="en">Moving image</Term>
+            <Definition>A series of visual representations imparting an impression of motion when shown in succession.</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Value added from DublinCore value list</RevisionInformation>
+            <Source>Dublin Core value list</Source>
+        </Entry>
+        <Entry>
+            <Term lang="en">Sound</Term>
+            <Definition>A resource primarily intended to be heard.</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Value added from DublinCore value list</RevisionInformation>
+            <Source>Dublin Core value list</Source>
+        </Entry>
+        <Entry>
+            <Term lang="en">Still image</Term>
+            <Definition>A static visual representation.</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Value added from DublinCore value list</RevisionInformation>
+            <Source>Dublin Core value list</Source>
+        </Entry>
+        <Entry>
+            <Term lang="en">Text</Term>
+            <Definition>A resource consisting primarily of words for reading.</Definition>
+            <RevisionInformation RevisionDate="2024-05-17">Value added from DublinCore value list</RevisionInformation>
+            <Source>Dublin Core value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Physical object</Term>
             <Definition>An inanimate, three-dimensional object or substance.</Definition>
+            <Source>Dublin Core value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Service</Term>
             <Definition>A system that provides one or more functions.</Definition>
+            <Source>Dublin Core value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Mixed</Term>
             <Definition>The package contains a mix of content types</Definition>
+            <Source>E-ARK value list</Source>
         </Entry>
         <Entry>
             <Term lang="en">Other</Term>
             <Definition>A term other than present in the vocabulary is used</Definition>
+            <Source>E-ARK value list</Source>
         </Entry>
     </Vocabulary>
 </Vocabularies>
