@@ -79,7 +79,8 @@ name in the following formats (file: **ead_2002.xml** -> result: metadata versio
 This is the representation section:
 * **--representation-data**, [REQUIRED] Path to representation file.
 * **--representation-id**, [OPTIONAL] Representation identifier. If not set a default value of rep<number> will be used.
-* **--representation-type**, [OPTIONAL] Representation type
+* **--representation-content-type**, [OPTIONAL] Representation content type
+* **--representation-content-information-type**, [OPTIONAL] Representation content information type
 
 Examples:
 
