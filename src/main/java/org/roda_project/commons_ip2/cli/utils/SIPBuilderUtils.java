@@ -21,6 +21,7 @@ import org.roda_project.commons_ip2.model.IPDescriptiveMetadata;
 import org.roda_project.commons_ip2.model.IPFile;
 import org.roda_project.commons_ip2.model.IPRepresentation;
 import org.roda_project.commons_ip2.model.MetadataType;
+import org.roda_project.commons_ip2.model.RepresentationStatus;
 import org.roda_project.commons_ip2.model.SIP;
 import org.roda_project.commons_ip2.model.impl.eark.out.writers.factory.FolderWriteStrategyFactory;
 import org.roda_project.commons_ip2.model.impl.eark.out.writers.factory.ZipWriteStrategyFactory;
@@ -96,6 +97,12 @@ public class SIPBuilderUtils {
       final Path dataPath = Paths.get(representationData);
       addFileToRepresentation(representation, targetOnly, dataPath, new ArrayList<>());
     }
+
+    if (representationGroup.getRepresentation().getRepresentationStatus() == null) {
+      representation.setStatus(RepresentationStatus.getORIGINAL());
+    } else {
+        representation.setStatus(new RepresentationStatus(representationGroup.getRepresentation().getRepresentationStatus()));
+    }
   }
 
   public static void addRepresentationGroupsToErmsSIP(SIP sip, final List<RepresentationGroup> representationGroups,
@@ -148,6 +155,17 @@ public class SIPBuilderUtils {
       }
     }
     return new IPContentInformationType(contentInformationType);
+  }
+
+  public static RepresentationStatus getRepresentationStatus(final String representationStatus) {
+    final RepresentationStatus.RepresentationStatusEnum[] representationStatusEnums = RepresentationStatus.RepresentationStatusEnum
+      .values();
+    for (RepresentationStatus.RepresentationStatusEnum representationStatusEnum : representationStatusEnums) {
+      if (representationStatus.equalsIgnoreCase(representationStatusEnum.toString())) {
+        return new RepresentationStatus(representationStatusEnum);
+      }
+    }
+    return new RepresentationStatus(representationStatus);
   }
 
   public static void addMetadataGroupsToSIP(SIP sip, final List<MetadataGroup> metadataGroups) throws IPException {

@@ -17,6 +17,8 @@ public class Representation {
     String representationContentInformationType;
     @CommandLine.Option(names = "--representation-id", paramLabel = "<id>", description = "Representation identifier. If not set a default value of rep<number> will be used")
     String representationId;
+    @CommandLine.Option(names = "--representation-status", paramLabel = "<status>", description = "Representation status", defaultValue = "ORIGINAL")
+    String representationStatus;
 
     public List<String> getRepresentationData() {
         return representationData;
@@ -32,5 +34,9 @@ public class Representation {
 
     public String getRepresentationId() {
         return representationId;
+    }
+
+    public String getRepresentationStatus() {
+        return representationStatus;
     }
 }
