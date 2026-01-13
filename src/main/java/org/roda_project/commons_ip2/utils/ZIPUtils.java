@@ -93,6 +93,27 @@ public final class ZIPUtils {
     return zipEntries;
   }
 
+  /**
+   * Add a metadata file to the zip entries with an optional pre-calculated checksum.
+   * When a pre-calculated checksum is provided and matches the SIP's checksum algorithm,
+   * the checksum will not be recalculated during zip creation.
+   *
+   * @param zipEntries the map of zip entries
+   * @param filePath the file path
+   * @param zipPath the path within the zip
+   * @param mdRef the METS MdRef
+   * @param preCalculatedChecksum the pre-calculated checksum (may be null or empty)
+   * @param checksumAlgorithm the algorithm used for the pre-calculated checksum (may be null or empty)
+   * @return the updated map of zip entries
+   */
+  public static Map<String, ZipEntryInfo> addMdRefFileToZip(final Map<String, ZipEntryInfo> zipEntries,
+    final Path filePath, final String zipPath, final MdRef mdRef, final String preCalculatedChecksum,
+    final String checksumAlgorithm) throws IPException {
+    zipEntries.put(zipPath, new METSMdRefZipEntryInfo(zipPath, filePath, mdRef,
+      preCalculatedChecksum, checksumAlgorithm));
+    return zipEntries;
+  }
+
   public static Map<String, ZipEntryInfo> addFileTypeFileToZip(Map<String, ZipEntryInfo> zipEntries, Path filePath,
     String zipPath, FileType fileType) throws IPException {
     zipEntries.put(zipPath, new METSFileTypeZipEntryInfo(zipPath, filePath, fileType));

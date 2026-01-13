@@ -90,7 +90,8 @@ public class EARKUtils {
           descriptiveFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
             + descriptiveFilePath;
         }
-        ZIPUtils.addMdRefFileToZip(zipEntries, file.getPath(), descriptiveFilePath, mdRef);
+        ZIPUtils.addMdRefFileToZip(zipEntries, file.getPath(), descriptiveFilePath, mdRef,
+          file.getChecksum(), file.getChecksumAlgorithm());
       }
     }
   }
@@ -112,7 +113,8 @@ public class EARKUtils {
           preservationMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId
             + IPConstants.ZIP_PATH_SEPARATOR + preservationMetadataPath;
         }
-        ZIPUtils.addMdRefFileToZip(zipEntries, file.getPath(), preservationMetadataPath, mdRef);
+        ZIPUtils.addMdRefFileToZip(zipEntries, file.getPath(), preservationMetadataPath, mdRef,
+          file.getChecksum(), file.getChecksumAlgorithm());
       }
     }
   }
@@ -134,7 +136,8 @@ public class EARKUtils {
           otherMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
             + otherMetadataPath;
         }
-        ZIPUtils.addMdRefFileToZip(zipEntries, file.getPath(), otherMetadataPath, mdRef);
+        ZIPUtils.addMdRefFileToZip(zipEntries, file.getPath(), otherMetadataPath, mdRef,
+          file.getChecksum(), file.getChecksumAlgorithm());
       }
     }
   }
@@ -156,7 +159,8 @@ public class EARKUtils {
           technicalMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
             + technicalMetadataPath;
         }
-        ZIPUtils.addMdRefFileToZip(zipEntries, file.getPath(), technicalMetadataPath, mdRef);
+        ZIPUtils.addMdRefFileToZip(zipEntries, file.getPath(), technicalMetadataPath, mdRef,
+          file.getChecksum(), file.getChecksumAlgorithm());
       }
     }
   }
@@ -178,7 +182,8 @@ public class EARKUtils {
           sourceMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
             + sourceMetadataPath;
         }
-        ZIPUtils.addMdRefFileToZip(zipEntries, file.getPath(), sourceMetadataPath, mdRef);
+        ZIPUtils.addMdRefFileToZip(zipEntries, file.getPath(), sourceMetadataPath, mdRef,
+          file.getChecksum(), file.getChecksumAlgorithm());
       }
     }
   }
@@ -200,7 +205,8 @@ public class EARKUtils {
           rightsMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
             + rightsMetadataPath;
         }
-        ZIPUtils.addMdRefFileToZip(zipEntries, file.getPath(), rightsMetadataPath, mdRef);
+        ZIPUtils.addMdRefFileToZip(zipEntries, file.getPath(), rightsMetadataPath, mdRef,
+          file.getChecksum(), file.getChecksumAlgorithm());
       }
     }
   }
