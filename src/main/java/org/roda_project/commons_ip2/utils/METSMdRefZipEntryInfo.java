@@ -12,14 +12,35 @@ import java.nio.file.Path;
 import org.roda_project.commons_ip.utils.FileZipEntryInfo;
 import org.roda_project.commons_ip2.mets_v1_12.beans.MdSecType.MdRef;
 
+/** Zip entry info for METS MdRef elements. */
 public class METSMdRefZipEntryInfo extends FileZipEntryInfo {
+  /** The METS MdRef element. */
   private MdRef metsMdRef;
 
-  public METSMdRefZipEntryInfo(String name, Path filePath) {
+  /**
+   * Constructor.
+   *
+   * @param name
+   *          the zip entry name
+   * @param filePath
+   *          the file path
+   */
+  public METSMdRefZipEntryInfo(final String name, final Path filePath) {
     super(name, filePath);
   }
 
-  public METSMdRefZipEntryInfo(String name, Path filePath, MdRef metsMdRef) {
+  /**
+   * Constructor with MdRef.
+   *
+   * @param name
+   *          the zip entry name
+   * @param filePath
+   *          the file path
+   * @param metsMdRef
+   *          the METS MdRef
+   */
+  public METSMdRefZipEntryInfo(final String name, final Path filePath,
+      final MdRef metsMdRef) {
     super(name, filePath);
     this.setMetsMdRef(metsMdRef);
   }
@@ -27,14 +48,20 @@ public class METSMdRefZipEntryInfo extends FileZipEntryInfo {
   /**
    * Constructor with pre-calculated checksum support.
    *
-   * @param name the zip entry name
-   * @param filePath the file path
-   * @param metsMdRef the METS MdRef
-   * @param preCalculatedChecksum the pre-calculated checksum (may be null or empty)
-   * @param checksumAlgorithm the algorithm used for the pre-calculated checksum (may be null or empty)
+   * @param name
+   *          the zip entry name
+   * @param filePath
+   *          the file path
+   * @param metsMdRef
+   *          the METS MdRef
+   * @param preCalculatedChecksum
+   *          the pre-calculated checksum (may be null or empty)
+   * @param checksumAlgorithm
+   *          the algorithm used for the pre-calculated checksum
    */
-  public METSMdRefZipEntryInfo(String name, Path filePath, final MdRef metsMdRef,
-      String preCalculatedChecksum, String checksumAlgorithm) {
+  public METSMdRefZipEntryInfo(final String name, final Path filePath,
+      final MdRef metsMdRef, final String preCalculatedChecksum,
+      final String checksumAlgorithm) {
     super(name, filePath);
     this.setMetsMdRef(metsMdRef);
     if (preCalculatedChecksum != null && !preCalculatedChecksum.isEmpty()) {
@@ -48,11 +75,22 @@ public class METSMdRefZipEntryInfo extends FileZipEntryInfo {
     // do nothing
   }
 
-  public MdRef getMetsMdRef() {
+  /**
+   * Gets the METS MdRef.
+   *
+   * @return the METS MdRef
+   */
+  public final MdRef getMetsMdRef() {
     return metsMdRef;
   }
 
-  public void setMetsMdRef(MdRef metsMdRef) {
+  /**
+   * Sets the METS MdRef.
+   *
+   * @param metsMdRef
+   *          the METS MdRef to set
+   */
+  public final void setMetsMdRef(final MdRef metsMdRef) {
     this.metsMdRef = metsMdRef;
   }
 
