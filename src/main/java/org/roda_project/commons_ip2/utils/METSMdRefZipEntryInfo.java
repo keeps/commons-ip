@@ -33,7 +33,7 @@ public class METSMdRefZipEntryInfo extends FileZipEntryInfo {
    * @param preCalculatedChecksum the pre-calculated checksum (may be null or empty)
    * @param checksumAlgorithm the algorithm used for the pre-calculated checksum (may be null or empty)
    */
-  public METSMdRefZipEntryInfo(String name, Path filePath, MdRef metsMdRef,
+  public METSMdRefZipEntryInfo(String name, Path filePath, final MdRef metsMdRef,
       String preCalculatedChecksum, String checksumAlgorithm) {
     super(name, filePath);
     this.setMetsMdRef(metsMdRef);
