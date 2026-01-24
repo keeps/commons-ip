@@ -41,6 +41,7 @@ import org.roda_project.commons_ip2.mets_v1_12.beans.MetsType.MetsHdr.Agent;
 import org.roda_project.commons_ip2.mets_v1_12.beans.StructMapType;
 import org.roda_project.commons_ip2.model.AIP;
 import org.roda_project.commons_ip2.model.IPConstants;
+import org.roda_project.commons_ip2.model.IPContentInformationType;
 import org.roda_project.commons_ip2.model.IPContentType;
 import org.roda_project.commons_ip2.model.IPDescriptiveMetadata;
 import org.roda_project.commons_ip2.model.IPFile;
@@ -564,6 +565,7 @@ public class EARKUtils {
         ip.setModificationDate(mainMets.getMetsHdr().getLASTMODDATE());
         ip.setStatus(IPStatus.parse(mainMets.getMetsHdr().getRECORDSTATUS()));
         setIPContentType(mainMets, ip);
+        setIPContentInformationType(mainMets, ip);
         addAgentsToMETS(mainMets, ip, null);
 
         ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.MAIN_METS_IS_VALID, ipPath, mainMETSFile);
@@ -600,9 +602,44 @@ public class EARKUtils {
       throw new ParseException("METS 'OAISPACKAGETYPE' attribute does not contain a valid package type");
     }
 
-    String type = "".equals(mets.getOTHERCONTENTINFORMATIONTYPE()) ? mets.getCONTENTINFORMATIONTYPE()
-      : mets.getOTHERCONTENTINFORMATIONTYPE();
-    ip.setContentType(new IPContentType(type));
+    IPContentType ipContentType = getContentType(mets);
+    ip.setContentType(ipContentType);
+  }
+
+  private IPContentType getContentType(Mets mets) throws ParseException {
+    String contentType = mets.getTYPE();
+    if (StringUtils.isBlank(contentType)) {
+      throw new ParseException("METS 'TYPE' attribute does not contain any value");
+    }
+    if ("OTHER".equalsIgnoreCase(contentType)) {
+      if (StringUtils.isBlank(mets.getOTHERTYPE())) {
+        throw new ParseException("METS 'OTHERTYPE' attribute does not contain any value");
+      }
+      contentType = mets.getOTHERTYPE();
+    }
+    return new IPContentType(contentType);
+  }
+
+  protected void setIPContentInformationType(Mets mets, IPInterface ip) throws ParseException {
+    IPContentInformationType ipContentInformationType = getIpContentInformationType(mets);
+    if (ipContentInformationType == null) {
+      return;
+    }
+    ip.setContentInformationType(ipContentInformationType);
+  }
+
+  private IPContentInformationType getIpContentInformationType(Mets mets) throws ParseException {
+    String contentInformationType = mets.getCONTENTINFORMATIONTYPE();
+    if (StringUtils.isBlank(contentInformationType)) {
+      return null;
+    }
+    if ("OTHER".equalsIgnoreCase(contentInformationType)) {
+      if (StringUtils.isBlank(mets.getOTHERCONTENTINFORMATIONTYPE())) {
+        throw new ParseException("METS 'OTHERCONTENTINFORMATIONTYPE' attribute does not contain any value");
+      }
+      contentInformationType = mets.getOTHERCONTENTINFORMATIONTYPE();
+    }
+    return new IPContentInformationType(contentInformationType);
   }
 
   protected void addAgentsToMETS(Mets mets, IPInterface ip, IPRepresentation representation) {
@@ -626,6 +663,7 @@ public class EARKUtils {
       try {
         representationMets = METSUtils.instantiateMETSFromFile(representationMetsFile);
         setRepresentationContentType(representationMets, representation);
+        setRepresentationContentInformationType(representationMets, representation);
         ValidationUtils.addInfo(ip.getValidationReport(), ValidationConstants.REPRESENTATION_METS_IS_VALID,
           ip.getBasePath(), representationMetsFile);
       } catch (JAXBException | ParseException | SAXException | IOException e) {
@@ -640,18 +678,18 @@ public class EARKUtils {
     return new MetsWrapper(representationMets, representationMetsFile);
   }
 
-  // FIXME review this
+
   protected void setRepresentationContentType(Mets mets, IPRepresentation representation) throws ParseException {
-    String contentType = mets.getCONTENTINFORMATIONTYPE();
-    if (StringUtils.isBlank(contentType)) {
-      throw new ParseException("METS 'CONTENTINFORMATIONTYPE' attribute does not contain any value");
-    }
+    IPContentType ipContentType = getContentType(mets);
+    representation.setContentType(ipContentType);
+  }
 
-    if (!"".equals(mets.getOTHERCONTENTINFORMATIONTYPE())) {
-      contentType = mets.getOTHERCONTENTINFORMATIONTYPE();
+  protected void setRepresentationContentInformationType(Mets mets, IPRepresentation representation) throws ParseException {
+    IPContentInformationType ipContentInformationType = getIpContentInformationType(mets);
+    if (ipContentInformationType == null) {
+      return;
     }
-
-    representation.setContentType(new IPContentType(contentType));
+    representation.setContentInformationType(ipContentInformationType);
   }
 
   protected IPInterface processRepresentations(MetsWrapper metsWrapper, IPInterface ip, Logger logger)
