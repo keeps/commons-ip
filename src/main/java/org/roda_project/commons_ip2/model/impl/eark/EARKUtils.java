@@ -8,7 +8,6 @@
 
 package org.roda_project.commons_ip2.model.impl.eark;
 
-import jakarta.xml.bind.JAXBException;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
@@ -19,7 +18,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 import javax.xml.namespace.QName;
+
 import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip.model.ParseException;
 import org.roda_project.commons_ip.utils.IPEnums;
@@ -64,28 +65,41 @@ import org.roda_project.commons_ip2.utils.ZIPUtils;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
+import jakarta.xml.bind.JAXBException;
+
+/**
+ * E-ARK common utility methods.
+ */
 public class EARKUtils {
 
+  /** METS generator used by utilities. */
   private final EARKMETSCreator metsGenerator;
+  /** Marker for OTHER values in METS attributes. */
   private static final String OTHER = "OTHER";
 
-  public EARKUtils(EARKMETSCreator metsGenerator) {
+  /**
+   * Creates a new utility helper bound to a METS generator.
+   *
+   * @param metsGenerator
+   *          generator used to build METS content
+   */
+  public EARKUtils(final EARKMETSCreator metsGenerator) {
     this.metsGenerator = metsGenerator;
   }
 
-  protected void addDescriptiveMetadataToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-                                                    List<IPDescriptiveMetadata> descriptiveMetadata, String representationId)
-      throws IPException, InterruptedException {
+  protected void addDescriptiveMetadataToZipAndMETS(final Map<String, ZipEntryInfo> zipEntries,
+      final MetsWrapper metsWrapper, final List<IPDescriptiveMetadata> descriptiveMetadata,
+      final String representationId) throws IPException, InterruptedException {
     if (descriptiveMetadata != null && !descriptiveMetadata.isEmpty()) {
-      for (IPDescriptiveMetadata dm : descriptiveMetadata) {
+      for (final IPDescriptiveMetadata dm : descriptiveMetadata) {
         if (Thread.interrupted()) {
           throw new InterruptedException();
         }
-        IPFileInterface file = dm.getMetadata();
+        final IPFileInterface file = dm.getMetadata();
 
         String descriptiveFilePath = IPConstants.DESCRIPTIVE_FOLDER
             + ModelUtils.getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
-        MdRef mdRef = metsGenerator.addDescriptiveMetadataToMETS(metsWrapper, dm, descriptiveFilePath);
+        final MdRef mdRef = metsGenerator.addDescriptiveMetadataToMETS(metsWrapper, dm, descriptiveFilePath);
 
         if (representationId != null) {
           descriptiveFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
@@ -96,18 +110,19 @@ public class EARKUtils {
     }
   }
 
-  protected void addPreservationMetadataToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-                                                     List<IPMetadata> preservationMetadata, String representationId) throws IPException, InterruptedException {
+  protected void addPreservationMetadataToZipAndMETS(final Map<String, ZipEntryInfo> zipEntries,
+      final MetsWrapper metsWrapper, final List<IPMetadata> preservationMetadata, final String representationId)
+      throws IPException, InterruptedException {
     if (preservationMetadata != null && !preservationMetadata.isEmpty()) {
-      for (IPMetadata pm : preservationMetadata) {
+      for (final IPMetadata pm : preservationMetadata) {
         if (Thread.interrupted()) {
           throw new InterruptedException();
         }
-        IPFileInterface file = pm.getMetadata();
+        final IPFileInterface file = pm.getMetadata();
 
         String preservationMetadataPath = IPConstants.PRESERVATION_FOLDER
             + ModelUtils.getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
-        MdRef mdRef = metsGenerator.addPreservationMetadataToMETS(metsWrapper, pm, preservationMetadataPath);
+        final MdRef mdRef = metsGenerator.addPreservationMetadataToMETS(metsWrapper, pm, preservationMetadataPath);
 
         if (representationId != null) {
           preservationMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId
@@ -118,40 +133,42 @@ public class EARKUtils {
     }
   }
 
-  protected void addOtherMetadataToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-                                              List<IPMetadata> otherMetadata, String representationId) throws IPException, InterruptedException {
+  protected void addOtherMetadataToZipAndMETS(final Map<String, ZipEntryInfo> zipEntries,
+      final MetsWrapper metsWrapper, final List<IPMetadata> otherMetadata, final String representationId)
+      throws IPException, InterruptedException {
     if (otherMetadata != null && !otherMetadata.isEmpty()) {
-      for (IPMetadata om : otherMetadata) {
+      for (final IPMetadata om : otherMetadata) {
         if (Thread.interrupted()) {
           throw new InterruptedException();
         }
-        IPFileInterface file = om.getMetadata();
+        final IPFileInterface file = om.getMetadata();
 
-        String otherMetadataPath = IPConstants.OTHER_FOLDER + ModelUtils.getFoldersFromList(file.getRelativeFolders())
-            + file.getFileName();
-        MdRef mdRef = metsGenerator.addOtherMetadataToMETS(metsWrapper, om, otherMetadataPath);
+        String otherMetadataPath = IPConstants.OTHER_FOLDER
+            + ModelUtils.getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
+        final MdRef mdRef = metsGenerator.addOtherMetadataToMETS(metsWrapper, om, otherMetadataPath);
 
         if (representationId != null) {
-          otherMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
-              + otherMetadataPath;
+          otherMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId
+              + IPConstants.ZIP_PATH_SEPARATOR + otherMetadataPath;
         }
         ZIPUtils.addMdRefFileToZip(zipEntries, file.getPath(), otherMetadataPath, mdRef);
       }
     }
   }
 
-  protected void addTechnicalMetadataToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-                                                  List<IPMetadata> technicalMetadata, String representationId) throws IPException, InterruptedException {
+  protected void addTechnicalMetadataToZipAndMETS(final Map<String, ZipEntryInfo> zipEntries,
+      final MetsWrapper metsWrapper, final List<IPMetadata> technicalMetadata, final String representationId)
+      throws IPException, InterruptedException {
     if (technicalMetadata != null && !technicalMetadata.isEmpty()) {
-      for (IPMetadata tm : technicalMetadata) {
+      for (final IPMetadata tm : technicalMetadata) {
         if (Thread.interrupted()) {
           throw new InterruptedException();
         }
-        IPFileInterface file = tm.getMetadata();
+        final IPFileInterface file = tm.getMetadata();
 
         String technicalMetadataPath = IPConstants.TECHNICAL_FOLDER
             + ModelUtils.getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
-        MdRef mdRef = metsGenerator.addTechnicalMetadataToMETS(metsWrapper, tm, technicalMetadataPath);
+        final MdRef mdRef = metsGenerator.addTechnicalMetadataToMETS(metsWrapper, tm, technicalMetadataPath);
 
         if (representationId != null) {
           technicalMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
@@ -162,77 +179,83 @@ public class EARKUtils {
     }
   }
 
-  protected void addSourceMetadataToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-                                               List<IPMetadata> sourceMetadata, String representationId) throws IPException, InterruptedException {
+  protected void addSourceMetadataToZipAndMETS(final Map<String, ZipEntryInfo> zipEntries,
+      final MetsWrapper metsWrapper, final List<IPMetadata> sourceMetadata, final String representationId)
+      throws IPException, InterruptedException {
     if (sourceMetadata != null && !sourceMetadata.isEmpty()) {
-      for (IPMetadata sm : sourceMetadata) {
+      for (final IPMetadata sm : sourceMetadata) {
         if (Thread.interrupted()) {
           throw new InterruptedException();
         }
-        IPFileInterface file = sm.getMetadata();
+        final IPFileInterface file = sm.getMetadata();
 
-        String sourceMetadataPath = IPConstants.SOURCE_FOLDER + ModelUtils.getFoldersFromList(file.getRelativeFolders())
-            + file.getFileName();
-        MdRef mdRef = metsGenerator.addSourceMetadataToMETS(metsWrapper, sm, sourceMetadataPath);
+        String sourceMetadataPath = IPConstants.SOURCE_FOLDER
+            + ModelUtils.getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
+        final MdRef mdRef = metsGenerator.addSourceMetadataToMETS(metsWrapper, sm, sourceMetadataPath);
 
         if (representationId != null) {
-          sourceMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
-              + sourceMetadataPath;
+          sourceMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId
+              + IPConstants.ZIP_PATH_SEPARATOR + sourceMetadataPath;
         }
         ZIPUtils.addMdRefFileToZip(zipEntries, file.getPath(), sourceMetadataPath, mdRef);
       }
     }
   }
 
-  protected void addRightsMetadataToZipAndMETS(Map<String, ZipEntryInfo> zipEntries, MetsWrapper metsWrapper,
-                                               List<IPMetadata> rightsMetadata, String representationId) throws IPException, InterruptedException {
+  protected void addRightsMetadataToZipAndMETS(final Map<String, ZipEntryInfo> zipEntries,
+      final MetsWrapper metsWrapper, final List<IPMetadata> rightsMetadata, final String representationId)
+      throws IPException, InterruptedException {
     if (rightsMetadata != null && !rightsMetadata.isEmpty()) {
-      for (IPMetadata rm : rightsMetadata) {
+      for (final IPMetadata rm : rightsMetadata) {
         if (Thread.interrupted()) {
           throw new InterruptedException();
         }
-        IPFileInterface file = rm.getMetadata();
+        final IPFileInterface file = rm.getMetadata();
 
-        String rightsMetadataPath = IPConstants.RIGHTS_FOLDER + ModelUtils.getFoldersFromList(file.getRelativeFolders())
-            + file.getFileName();
-        MdRef mdRef = metsGenerator.addRightsMetadataToMETS(metsWrapper, rm, rightsMetadataPath);
+        String rightsMetadataPath = IPConstants.RIGHTS_FOLDER
+            + ModelUtils.getFoldersFromList(file.getRelativeFolders()) + file.getFileName();
+        final MdRef mdRef = metsGenerator.addRightsMetadataToMETS(metsWrapper, rm, rightsMetadataPath);
 
         if (representationId != null) {
-          rightsMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
-              + rightsMetadataPath;
+          rightsMetadataPath = IPConstants.REPRESENTATIONS_FOLDER + representationId
+              + IPConstants.ZIP_PATH_SEPARATOR + rightsMetadataPath;
         }
         ZIPUtils.addMdRefFileToZip(zipEntries, file.getPath(), rightsMetadataPath, mdRef);
       }
     }
   }
 
-  protected void addRepresentationsToZipAndMETS(IPInterface ip, List<IPRepresentation> representations,
-                                                Map<String, ZipEntryInfo> zipEntries, MetsWrapper mainMETSWrapper, Path buildDir, IPEnums.SipType sipType)
+  protected void addRepresentationsToZipAndMETS(final IPInterface ip,
+      final List<IPRepresentation> representations, final Map<String, ZipEntryInfo> zipEntries,
+      final MetsWrapper mainMETSWrapper, final Path buildDir, final IPEnums.SipType sipType)
       throws IPException, InterruptedException {
     // representations
     if (representations != null && !representations.isEmpty()) {
       if (ip instanceof SIP) {
         ((SIP) ip).notifySipBuildRepresentationsProcessingStarted(representations.size());
       }
-      for (IPRepresentation representation : representations) {
+      for (final IPRepresentation representation : representations) {
         if (Thread.interrupted()) {
           throw new InterruptedException();
         }
-        String representationId = representation.getObjectID();
+        final String representationId = representation.getObjectID();
         // 20160407 hsilva: not being used by Common Specification v0.13
-        final boolean isRepresentationMetadataOther = (representation.getOtherMetadata() != null
-            && !representation.getOtherMetadata().isEmpty());
-        final boolean isRepresentationMetadata = ((representation.getDescriptiveMetadata() != null
+        final boolean isRepresentationMetadataOther = representation.getOtherMetadata() != null
+            && !representation.getOtherMetadata().isEmpty();
+        final boolean isRepresentationMetadata = (representation.getDescriptiveMetadata() != null
             && !representation.getDescriptiveMetadata().isEmpty())
-            || (representation.getPreservationMetadata() != null && !representation.getPreservationMetadata().isEmpty()));
-        final boolean isRepresentationDocumentation = (representation.getDocumentation() != null
-            && !representation.getDocumentation().isEmpty());
-        final boolean isRepresentationSchemas = (representation.getSchemas() != null
-            && !representation.getSchemas().isEmpty());
-        final boolean isRepresentationsData = (representation.getData() != null && !representation.getData().isEmpty());
+            || (representation.getPreservationMetadata() != null
+                && !representation.getPreservationMetadata().isEmpty());
+        final boolean isRepresentationDocumentation = representation.getDocumentation() != null
+            && !representation.getDocumentation().isEmpty();
+        final boolean isRepresentationSchemas = representation.getSchemas() != null
+            && !representation.getSchemas().isEmpty();
+        final boolean isRepresentationsData = representation.getData() != null
+            && !representation.getData().isEmpty();
         final IPHeader header = new IPHeader(IPEnums.IPStatus.NEW).setAgents(representation.getAgents());
         final MetsWrapper representationMETSWrapper;
 
+        final String siardProfile = "https://citssiard.dilcis.eu/profile/E-ARK-SIARD-REPRESENTATION.xml";
         if (IPEnums.SipType.ERMS.equals(sipType)) {
           representationMETSWrapper = metsGenerator.generateMETS(representationId, representation.getDescription(),
               ip.getProfile(), false, Optional.empty(), null, header,
@@ -242,7 +265,7 @@ public class EARKUtils {
         } else if (IPEnums.SipType.SIARD.equals(sipType)) {
           representation.setContentInformationType(representation.getContentInformationType());
           representationMETSWrapper = metsGenerator.generateMetsSiard(representationId, representation.getDescription(),
-              "https://citssiard.dilcis.eu/profile/E-ARK-SIARD-REPRESENTATION.xml", false, Optional.empty(), null, header,
+              siardProfile, false, Optional.empty(), null, header,
               mainMETSWrapper.getMets().getMetsHdr().getOAISPACKAGETYPE(), representation.getContentType(),
               representation.getContentInformationType(), isRepresentationMetadata, isRepresentationMetadataOther,
               isRepresentationSchemas, isRepresentationDocumentation, false, false, isRepresentationsData);
