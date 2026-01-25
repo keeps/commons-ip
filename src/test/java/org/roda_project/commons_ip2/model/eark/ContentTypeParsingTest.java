@@ -12,15 +12,25 @@ import org.roda_project.commons_ip2.model.SIP;
  */
 public class ContentTypeParsingTest {
 
+  /** OAIS package type value for SIP. */
   private static final String SIP_TYPE = "SIP";
+  /** SIP version used for generator selection. */
   private static final String SIP_VERSION = "2.1.0";
+  /** Example non-OTHER content type. */
   private static final String TYPE_TEXT = "Text";
+  /** Example OTHER content type value. */
   private static final String TYPE_OTHER = "Other";
+  /** Uppercase OTHER marker used in METS attributes. */
   private static final String TYPE_OTHER_UPPER = "OTHER";
+  /** Example OTHERTYPE value. */
   private static final String OTHER_TYPE_VALUE = "Moving images - on tangible media";
+  /** Example content information type. */
   private static final String CONTENT_INFO_TYPE = "ERMS";
+  /** Example OTHERCONTENTINFORMATIONTYPE value. */
   private static final String OTHER_CONTENT_INFO_VALUE = "Test of other CITS";
+  /** Assertion message for expected ParseException. */
   private static final String EXPECTED_PARSE_EXCEPTION = "Expected ParseException";
+  /** Default content information type string. */
   private static final String MIXED = "MIXED";
 
   /**
