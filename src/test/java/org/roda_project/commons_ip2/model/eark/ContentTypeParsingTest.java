@@ -9,8 +9,9 @@ import org.roda_project.commons_ip2.model.SIP;
 
 public class ContentTypeParsingTest {
 
+
   @Test
-  public void parseContentTypeUsesTypeWhenNotOther() throws ParseException {
+  public void contentTypeUsesType() throws ParseException {
     Mets mets = new Mets();
     MetsType.MetsHdr metsHdr = new MetsType.MetsHdr();
     metsHdr.setOAISPACKAGETYPE("SIP");
@@ -28,7 +29,7 @@ public class ContentTypeParsingTest {
   }
 
   @Test
-  public void parseContentTypeUsesOtherTypeWhenTypeIsOther() throws ParseException {
+  public void contentTypeUsesOtherType() throws ParseException {
     Mets mets = new Mets();
     MetsType.MetsHdr metsHdr = new MetsType.MetsHdr();
     metsHdr.setOAISPACKAGETYPE("SIP");
@@ -46,9 +47,11 @@ public class ContentTypeParsingTest {
   }
 
   @Test
-  public void parseContentInformationTypeUsesTypeWhenNotOther() throws ParseException {
+  public void contentInfoUsesType() throws ParseException {
+    final String CONTENT_INFORMATION_TYPE = "ERMS";
+
     Mets mets = new Mets();
-    mets.setCONTENTINFORMATIONTYPE("GeoData");
+    mets.setCONTENTINFORMATIONTYPE(CONTENT_INFORMATION_TYPE);
     mets.setOTHERCONTENTINFORMATIONTYPE("Test of other CITS");
 
     EARKUtils utils = new EARKUtils(new METSGeneratorFactory().getGenerator("2.1.0"));
@@ -56,25 +59,27 @@ public class ContentTypeParsingTest {
 
     utils.setIPContentInformationType(mets, sip);
 
-    Assert.assertEquals("GeoData", sip.getContentInformationType().asString());
+    Assert.assertEquals(CONTENT_INFORMATION_TYPE, sip.getContentInformationType().asString());
   }
 
   @Test
-  public void parseContentInformationTypeUsesOtherWhenTypeIsOther() throws ParseException {
+  public void contentInfoUsesOtherType() throws ParseException {
+    final String OTHER_CONTENT_INFORMATION_TYPE = "Test of other CITS";
+
     Mets mets = new Mets();
     mets.setCONTENTINFORMATIONTYPE("OTHER");
-    mets.setOTHERCONTENTINFORMATIONTYPE("Test of other CITS");
+    mets.setOTHERCONTENTINFORMATIONTYPE(OTHER_CONTENT_INFORMATION_TYPE);
 
     EARKUtils utils = new EARKUtils(new METSGeneratorFactory().getGenerator("2.1.0"));
     SIP sip = new EARKSIP();
 
     utils.setIPContentInformationType(mets, sip);
 
-    Assert.assertEquals("Test of other CITS", sip.getContentInformationType().asString());
+    Assert.assertEquals(OTHER_CONTENT_INFORMATION_TYPE, sip.getContentInformationType().asString());
   }
 
   @Test
-  public void parseContentTypeOtherWithoutOtherTypeThrows() {
+  public void contentTypeOtherRequiresOtherType() {
     Mets mets = new Mets();
     MetsType.MetsHdr metsHdr = new MetsType.MetsHdr();
     metsHdr.setOAISPACKAGETYPE("SIP");
@@ -95,7 +100,7 @@ public class ContentTypeParsingTest {
   }
 
   @Test
-  public void parseContentInformationTypeOtherWithoutOtherTypeThrows() {
+  public void contentInfoOtherRequiresOtherType() {
     Mets mets = new Mets();
     mets.setCONTENTINFORMATIONTYPE("OTHER");
     mets.setOTHERCONTENTINFORMATIONTYPE("");
@@ -112,7 +117,7 @@ public class ContentTypeParsingTest {
   }
 
   @Test
-  public void parseContentInformationTypeBlankLeavesDefault() throws ParseException {
+  public void contentInfoBlankKeepsDefault() throws ParseException {
     Mets mets = new Mets();
     mets.setCONTENTINFORMATIONTYPE("");
 
