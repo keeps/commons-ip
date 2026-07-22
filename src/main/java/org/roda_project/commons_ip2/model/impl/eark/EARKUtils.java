@@ -647,7 +647,7 @@ public class EARKUtils {
       throw new ParseException("METS 'CONTENTINFORMATIONTYPE' attribute does not contain any value");
     }
 
-    if (!"".equals(mets.getOTHERCONTENTINFORMATIONTYPE())) {
+    if (StringUtils.isNotBlank(mets.getOTHERCONTENTINFORMATIONTYPE())) {
       contentType = mets.getOTHERCONTENTINFORMATIONTYPE();
     }
 
