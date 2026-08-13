@@ -533,6 +533,10 @@ public abstract class StructValidator {
    * @return if the IP is a ZIP file
    */
   protected boolean isZipFile(Path ipPath, byte[] zipMagicNumber, String moduleName) {
+    if (Files.isDirectory(ipPath)) {
+      return false;
+    }
+
     boolean isZip = true;
 
     byte[] buffer = new byte[zipMagicNumber.length];
