@@ -103,4 +103,22 @@ public class IPFileShallow implements IPFileInterface {
   public Path getPath() {
     throw new UnsupportedOperationException("IPFileShallow does not support this method");
   }
+
+  @Override
+  public String getChecksum() {
+    // IPFileShallow may have checksum in fileType if set externally
+    if (fileType != null && fileType.getCHECKSUM() != null) {
+      return fileType.getCHECKSUM();
+    }
+    return "";
+  }
+
+  @Override
+  public String getChecksumAlgorithm() {
+    // IPFileShallow may have checksum algorithm in fileType if set externally
+    if (fileType != null && fileType.getCHECKSUMTYPE() != null) {
+      return fileType.getCHECKSUMTYPE();
+    }
+    return "";
+  }
 }

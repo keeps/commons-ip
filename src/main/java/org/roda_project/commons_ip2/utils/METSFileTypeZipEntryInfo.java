@@ -15,13 +15,45 @@ import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
 public class METSFileTypeZipEntryInfo extends FileZipEntryInfo {
   private FileType metsFileType;
 
-  public METSFileTypeZipEntryInfo(String name, Path filePath) {
+  /**
+   * Constructor with name and file path.
+   *
+   * @param name the entry name
+   * @param filePath the file path
+   */
+  public METSFileTypeZipEntryInfo(final String name, final Path filePath) {
     super(name, filePath);
   }
 
-  public METSFileTypeZipEntryInfo(String name, Path filePath, FileType metsFileType) {
+  /**
+   * Constructor with name, file path, and METS file type.
+   *
+   * @param name the entry name
+   * @param filePath the file path
+   * @param metsFileType the METS file type
+   */
+  public METSFileTypeZipEntryInfo(final String name, final Path filePath, final FileType metsFileType) {
     super(name, filePath);
     this.setMetsFileType(metsFileType);
+  }
+
+  /**
+   * Constructor with name, file path, METS file type, and pre-calculated checksum.
+   *
+   * @param name the entry name
+   * @param filePath the file path
+   * @param metsFileType the METS file type
+   * @param preCalculatedChecksum the pre-calculated checksum value
+   * @param checksumAlgorithm the checksum algorithm used
+   */
+  public METSFileTypeZipEntryInfo(final String name, final Path filePath, final FileType metsFileType,
+    final String preCalculatedChecksum, final String checksumAlgorithm) {
+    super(name, filePath);
+    this.setMetsFileType(metsFileType);
+    if (preCalculatedChecksum != null && !preCalculatedChecksum.isEmpty()) {
+      this.setChecksum(preCalculatedChecksum);
+      this.setChecksumAlgorithm(checksumAlgorithm);
+    }
   }
 
   @Override

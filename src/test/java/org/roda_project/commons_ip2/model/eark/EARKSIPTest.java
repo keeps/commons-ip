@@ -67,6 +67,8 @@ import org.xml.sax.SAXException;
  */
 public class EARKSIPTest {
   private static final String REPRESENTATION_STATUS_NORMALIZED = "NORMALIZED";
+  private static final String SIP_CHECKSUM_TEST_ID = "SIP_CHECKSUM_TEST";
+  private static final String REPRESENTATION_WITH_CHECKSUM = "representation_with_checksum";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EARKSIPTest.class);
 
@@ -862,6 +864,101 @@ public class EARKSIPTest {
     Path zipSIP = sip.build(writeStrategy);
 
     return zipSIP;
+  }
+
+  /**
+   * Test that pre-calculated checksums are properly used during SIP generation.
+   * When a file has its checksum set before SIP creation, that checksum should be
+   * used instead of recalculating it, which is important for large files.
+   *
+   * <p>This test uses a FAKE checksum to prove the library uses the pre-calculated
+   * value rather than calculating it. If the library were to calculate the checksum,
+   * it would not match our fake value.</p>
+   *
+   * @throws IPException if an error occurs during SIP creation
+   * @throws InterruptedException if the thread is interrupted
+   * @throws IOException if an I/O error occurs
+   * @throws ParserConfigurationException if a parser configuration error occurs
+   * @throws SAXException if a SAX parsing error occurs
+   * @throws ParseException if a parsing error occurs
+   * @throws NoSuchAlgorithmException if the checksum algorithm is not available
+   */
+  @Test
+  public void testPreCalculatedChecksumSupport() throws IPException, InterruptedException, IOException,
+    ParserConfigurationException, SAXException, ParseException, NoSuchAlgorithmException {
+    LOGGER.info("Testing pre-calculated checksum support");
+
+    // 1) Create SIP with pre-calculated checksum
+    final SIP sip = new EARKSIP(SIP_CHECKSUM_TEST_ID, IPContentType.getMIXED(), IPContentInformationType.getMIXED(),
+      "2.1.0");
+    sip.addCreatorSoftwareAgent("RODA Commons IP", "2.0.0");
+    sip.setDescription("SIP with pre-calculated checksums");
+
+    // 2) Add descriptive metadata
+    final IPDescriptiveMetadata metadataDescriptiveDC = new IPDescriptiveMetadata(
+      new IPFile(Paths.get("src/test/resources/eark/metadata_descriptive_dc.xml")),
+      new MetadataType(MetadataTypeEnum.DC), null);
+    sip.addDescriptiveMetadata(metadataDescriptiveDC);
+
+    // 3) Create a representation with a file that has a pre-calculated checksum
+    final IPRepresentation representation = new IPRepresentation(REPRESENTATION_WITH_CHECKSUM);
+    sip.addRepresentation(representation);
+
+    // Use a FAKE checksum - this proves the library uses our value instead of calculating
+    // If the library calculated the checksum, it would NOT match this fake value
+    final String fakeChecksum = "AABBCCDD11223344556677889900AABBCCDD11223344556677889900AABBCCDD";
+
+    final Path testFilePath = Paths.get("src/test/resources/eark/documentation.pdf");
+    final IPFile representationFile = new IPFile(testFilePath);
+    representationFile.setRenameTo("data_with_checksum.pdf");
+    // Set the FAKE pre-calculated checksum
+    representationFile.setChecksum(fakeChecksum);
+    representationFile.setChecksumAlgorithm("SHA-256");
+    representation.addFile(representationFile);
+
+    // 4) Build SIP
+    final WriteStrategy writeStrategy = SIPBuilderUtils.getWriteStrategy(WriteStrategyEnum.ZIP, tempFolder);
+    final Path zipSIP = sip.build(writeStrategy);
+
+    LOGGER.info("SIP built successfully with pre-calculated checksum at: {}", zipSIP);
+
+    // 5) Extract and verify the fake checksum appears in the representation METS file
+    final Path extractDir = tempFolder.resolve("extracted_sip");
+    Files.createDirectories(extractDir);
+
+    // Extract the ZIP
+    try (java.util.zip.ZipInputStream zis = new java.util.zip.ZipInputStream(Files.newInputStream(zipSIP))) {
+      java.util.zip.ZipEntry entry;
+      while ((entry = zis.getNextEntry()) != null) {
+        final Path targetPath = extractDir.resolve(entry.getName());
+        if (entry.isDirectory()) {
+          Files.createDirectories(targetPath);
+        } else {
+          Files.createDirectories(targetPath.getParent());
+          Files.copy(zis, targetPath);
+        }
+        zis.closeEntry();
+      }
+    }
+
+    // Find and read the representation METS file
+    final Path representationMetsPath = extractDir.resolve(SIP_CHECKSUM_TEST_ID)
+      .resolve("representations")
+      .resolve(REPRESENTATION_WITH_CHECKSUM)
+      .resolve("METS.xml");
+
+    Assert.assertTrue("Representation METS file should exist", Files.exists(representationMetsPath));
+
+    final String metsContent = Files.readString(representationMetsPath);
+
+    // Verify our FAKE checksum appears in the METS file
+    Assert.assertTrue(
+      "The METS file should contain our pre-calculated fake checksum, proving it was used instead of being calculated",
+      metsContent.contains(fakeChecksum));
+
+    LOGGER.info(
+      "SUCCESS: The fake checksum '{}' was found in the METS file, proving pre-calculated checksums work correctly",
+      fakeChecksum);
   }
 
 }

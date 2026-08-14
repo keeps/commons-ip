@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HexFormat;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
@@ -19,13 +20,13 @@ import org.roda_project.commons_ip2.utils.METSMdRefZipEntryInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jakarta.xml.bind.DatatypeConverter;
 
 /**
  * @author Miguel Guimarães <mguimaraes@keep.pt>
  */
 public class FolderWriteStrategy implements WriteStrategy {
   private static final Logger LOGGER = LoggerFactory.getLogger(FolderWriteStrategy.class);
+  private static final int BUFFER_SIZE = 4096;
   private Path destinationPath;
 
   @Override
@@ -54,7 +55,7 @@ public class FolderWriteStrategy implements WriteStrategy {
     throw new UnsupportedOperationException("Method not implemented");
   }
 
-  private void writeToPath(final Map<String, ZipEntryInfo> entries, final Path path, String checksumAlgorithm)
+  private void writeToPath(final Map<String, ZipEntryInfo> entries, final Path path, final String checksumAlgorithm)
     throws IPException, InterruptedException {
     try {
       Files.createDirectories(path);
@@ -62,11 +63,15 @@ public class FolderWriteStrategy implements WriteStrategy {
         if (Thread.interrupted()) {
           throw new InterruptedException();
         }
+        // Save pre-calculated checksum BEFORE it gets overwritten
+        final String preCalculatedChecksum = zipEntryInfo.getChecksum();
+        final String preCalculatedAlgorithm = zipEntryInfo.getChecksumAlgorithm();
+
         zipEntryInfo.setChecksum(checksumAlgorithm);
         zipEntryInfo.prepareEntryForZipping();
         LOGGER.debug("Writing file {}", zipEntryInfo.getFilePath());
         final Path outputPath = Paths.get(path.toString(), zipEntryInfo.getName());
-        writeFileToPath(zipEntryInfo, outputPath, checksumAlgorithm);
+        writeFileToPath(zipEntryInfo, outputPath, checksumAlgorithm, preCalculatedChecksum, preCalculatedAlgorithm);
       }
     } catch (final IOException | NoSuchAlgorithmException e) {
       LOGGER.debug("Error in write method", e);
@@ -93,29 +98,50 @@ public class FolderWriteStrategy implements WriteStrategy {
     return path;
   }
 
-  private void writeFileToPath(final ZipEntryInfo zipEntryInfo, final Path outputPath, String checksumAlgorithm)
+  private void writeFileToPath(final ZipEntryInfo zipEntryInfo, final Path outputPath, final String checksumAlgorithm,
+    final String preCalculatedChecksum, final String preCalculatedAlgorithm)
     throws IOException, NoSuchAlgorithmException {
     InputStream is = null;
     OutputStream os = null;
     try {
-
       is = Files.newInputStream(zipEntryInfo.getFilePath());
 
       Files.createDirectories(outputPath.getParent());
       os = Files.newOutputStream(outputPath);
 
-      final byte[] buffer = new byte[4096];
-      final MessageDigest complete = MessageDigest.getInstance(checksumAlgorithm);
-      int numRead;
-      do {
-        numRead = is.read(buffer);
-        if (numRead > 0) {
-          complete.update(buffer, 0, numRead);
-          os.write(buffer, 0, numRead);
-        }
-      } while (numRead != -1);
+      // Check if file already has a pre-calculated checksum matching the requested algorithm
+      final boolean hasValidPreCalculatedChecksum = preCalculatedChecksum != null
+        && !preCalculatedChecksum.isEmpty()
+        && preCalculatedAlgorithm != null
+        && preCalculatedAlgorithm.equalsIgnoreCase(checksumAlgorithm);
 
-      setChecksum(zipEntryInfo, DatatypeConverter.printHexBinary(complete.digest()), checksumAlgorithm);
+      if (hasValidPreCalculatedChecksum) {
+        // File has pre-calculated checksum - just copy data without calculating
+        LOGGER.debug("Using pre-calculated checksum for file {}", zipEntryInfo.getFilePath());
+        final byte[] buffer = new byte[BUFFER_SIZE];
+        int numRead;
+        do {
+          numRead = is.read(buffer);
+          if (numRead > 0) {
+            os.write(buffer, 0, numRead);
+          }
+        } while (numRead != -1);
+        setChecksum(zipEntryInfo, preCalculatedChecksum, preCalculatedAlgorithm);
+      } else {
+        // Calculate checksum while copying
+        final byte[] buffer = new byte[BUFFER_SIZE];
+        final MessageDigest complete = MessageDigest.getInstance(checksumAlgorithm);
+        int numRead;
+        do {
+          numRead = is.read(buffer);
+          if (numRead > 0) {
+            complete.update(buffer, 0, numRead);
+            os.write(buffer, 0, numRead);
+          }
+        } while (numRead != -1);
+
+        setChecksum(zipEntryInfo, HexFormat.of().withUpperCase().formatHex(complete.digest()), checksumAlgorithm);
+      }
     } finally {
       IOUtils.closeQuietly(is);
       IOUtils.closeQuietly(os);
