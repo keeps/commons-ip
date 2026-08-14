@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -118,10 +120,19 @@ public abstract class FileSecValidator {
               for (FileType.FLocat flocat : fLocats) {
                 final String filePath = URLDecoder.decode(DecoderUtils.normalizePath(flocat.getHref()),
                   StandardCharsets.UTF_8);
-                if (!structureValidatorState.getFolderManager()
-                  .checkPathExists(Paths.get(metsValidatorState.getMetsPath()).resolve(filePath))) {
-                  message.append("mets/fileSec/fileGrp[@USE=’Documentation’] ")
-                    .append(Paths.get(metsValidatorState.getMetsPath()).resolve(filePath))
+                final Path resolvedPath;
+                try {
+                  resolvedPath = Paths.get(metsValidatorState.getMetsPath()).resolve(filePath);
+                } catch (InvalidPathException e) {
+                  return new ReporterDetails(getCSIPVersion(),
+                    Message.createErrorMessage(
+                      "mets/fileSec/fileGrp[@USE=’Documentation’] (" + filePath + ") is not a valid path: "
+                        + e.getReason(),
+                      metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                    false, false);
+                }
+                if (!structureValidatorState.getFolderManager().checkPathExists(resolvedPath)) {
+                  message.append("mets/fileSec/fileGrp[@USE=’Documentation’] ").append(resolvedPath)
                     .append(" doesn't exists (in %1$s)");
                   return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(message.toString(),
                     metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
@@ -171,10 +182,18 @@ public abstract class FileSecValidator {
           } else {
             for (FileType.FLocat flocat : fLocats) {
               final String filePath = URLDecoder.decode(DecoderUtils.normalizePath(flocat.getHref()), StandardCharsets.UTF_8);
-              if (!structureValidatorState.getFolderManager()
-                .checkPathExists(Paths.get(metsValidatorState.getMetsPath()).resolve(filePath))) {
-                message.append("mets/fileSec/fileGrp[@USE=’Schemas’] ")
-                  .append(Paths.get(metsValidatorState.getMetsPath()).resolve(filePath))
+              final Path resolvedPath;
+              try {
+                resolvedPath = Paths.get(metsValidatorState.getMetsPath()).resolve(filePath);
+              } catch (InvalidPathException e) {
+                return new ReporterDetails(getCSIPVersion(),
+                  Message.createErrorMessage(
+                    "mets/fileSec/fileGrp[@USE=’Schemas’] (" + filePath + ") is not a valid path: " + e.getReason(),
+                    metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                  false, false);
+              }
+              if (!structureValidatorState.getFolderManager().checkPathExists(resolvedPath)) {
+                message.append("mets/fileSec/fileGrp[@USE=’Schemas’] ").append(resolvedPath)
                   .append(" doesn't exists (%1$s)");
                 return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(message.toString(),
                   metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
@@ -222,10 +241,19 @@ public abstract class FileSecValidator {
           } else {
             for (FileType.FLocat flocat : fLocats) {
               final String filePath = URLDecoder.decode(DecoderUtils.normalizePath(flocat.getHref()), StandardCharsets.UTF_8);
-              if (!structureValidatorState.getFolderManager()
-                .checkPathExists(Paths.get(metsValidatorState.getMetsPath()).resolve(filePath))) {
-                message.append("mets/fileSec/fileGrp[@USE=’Representations’] ")
-                  .append(Paths.get(metsValidatorState.getMetsPath()).resolve(filePath))
+              final Path resolvedPath;
+              try {
+                resolvedPath = Paths.get(metsValidatorState.getMetsPath()).resolve(filePath);
+              } catch (InvalidPathException e) {
+                return new ReporterDetails(getCSIPVersion(),
+                  Message.createErrorMessage(
+                    "mets/fileSec/fileGrp[@USE=’Representations’] (" + filePath + ") is not a valid path: "
+                      + e.getReason(),
+                    metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                  false, false);
+              }
+              if (!structureValidatorState.getFolderManager().checkPathExists(resolvedPath)) {
+                message.append("mets/fileSec/fileGrp[@USE=’Representations’] ").append(resolvedPath)
                   .append(" doesn't exists (%1$s)");
                 return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(message.toString(),
                   metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
@@ -385,11 +413,20 @@ public abstract class FileSecValidator {
                   metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
               }
             } else {
-              if (!structureValidatorState.getFolderManager()
-                .checkDirectory(Paths.get(metsValidatorState.getMetsPath()).resolve(use.toLowerCase()))) {
+              final Path resolvedPath;
+              try {
+                resolvedPath = Paths.get(metsValidatorState.getMetsPath()).resolve(use.toLowerCase());
+              } catch (InvalidPathException e) {
+                return new ReporterDetails(getCSIPVersion(),
+                  Message.createErrorMessage(
+                    "Value " + use + " in %1$s for mets/fileSec/fileGrp/@USE is not a valid path: " + e.getReason(),
+                    metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                  false, false);
+              }
+              if (!structureValidatorState.getFolderManager().checkDirectory(resolvedPath)) {
                 message.append("Value ").append(use)
                   .append(" in %1$s for mets/fileSec/fileGrp/@USE " + "doesn't match with any directory in sip(")
-                  .append(Paths.get(metsValidatorState.getMetsPath()).resolve(use.toLowerCase())).append(")");
+                  .append(resolvedPath).append(")");
                 return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(message.toString(),
                   metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
               }
@@ -462,7 +499,16 @@ public abstract class FileSecValidator {
                   filePath.append(metsValidatorState.getMetsPath()).append(hrefDecoded);
                 }
               } else {
-                filePath.append(Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded));
+                try {
+                  filePath.append(Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded));
+                } catch (InvalidPathException e) {
+                  return new ReporterDetails(getCSIPVersion(),
+                    Message.createErrorMessage(
+                      "mets/fileSec/fileGrp/file/FLocat/@href (" + hrefDecoded
+                        + ") in %1$s is not a valid path: " + e.getReason(),
+                      metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                    false, false);
+                }
               }
               if (metsValidatorState.getMetsFiles().containsKey(filePath.toString())) {
                 metsValidatorState.getMetsFiles().replace(filePath.toString(), true);
@@ -576,26 +622,23 @@ public abstract class FileSecValidator {
                       metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
                   }
                 } else {
-                  if (metsValidatorState.isRootMets()) {
-                    if (!structureValidatorState.getFolderManager()
-                      .verifySize(structureValidatorState.getIpPath().resolve(href), size)) {
-                      message.append("mets/dmdSec/mdRef/@SIZE ").append(size).append(" in %1$s and size of file (")
-                        .append(structureValidatorState.getIpPath()
-                          .resolve(structureValidatorState.getIpPath().resolve(href)))
-                        .append(") isn't equal");
-                      return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(message.toString(),
-                        metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
-                    }
-                  } else {
-                    if (!structureValidatorState.getFolderManager()
-                      .verifySize(Paths.get(metsValidatorState.getMetsPath()).resolve(href), size)) {
-                      message.append("mets/dmdSec/mdRef/@SIZE ").append(size).append(" in %1$s and size of file (")
-                        .append(structureValidatorState.getIpPath()
-                          .resolve(Paths.get(metsValidatorState.getMetsPath()).resolve(href)))
-                        .append(") isn't equal");
-                      return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(message.toString(),
-                        metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
-                    }
+                  final Path resolvedHrefPath;
+                  try {
+                    resolvedHrefPath = metsValidatorState.isRootMets()
+                      ? structureValidatorState.getIpPath().resolve(href)
+                      : Paths.get(metsValidatorState.getMetsPath()).resolve(href);
+                  } catch (InvalidPathException e) {
+                    return new ReporterDetails(getCSIPVersion(),
+                      Message.createErrorMessage(
+                        "mets/dmdSec/mdRef/@href (" + href + ") in %1$s is not a valid path: " + e.getReason(),
+                        metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                      false, false);
+                  }
+                  if (!structureValidatorState.getFolderManager().verifySize(resolvedHrefPath, size)) {
+                    message.append("mets/dmdSec/mdRef/@SIZE ").append(size).append(" in %1$s and size of file (")
+                      .append(structureValidatorState.getIpPath().resolve(resolvedHrefPath)).append(") isn't equal");
+                    return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(message.toString(),
+                      metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
                   }
                 }
               } else {
@@ -715,11 +758,21 @@ public abstract class FileSecValidator {
                       metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
                   }
                 } else {
-                  if (!structureValidatorState.getFolderManager().verifyChecksum(
-                    Paths.get(metsValidatorState.getMetsPath()).resolve(filePath), checksumType, checksum)) {
+                  final Path resolvedPath;
+                  try {
+                    resolvedPath = Paths.get(metsValidatorState.getMetsPath()).resolve(filePath);
+                  } catch (InvalidPathException e) {
+                    return new ReporterDetails(getCSIPVersion(),
+                      Message.createErrorMessage(
+                        "mets/fileSec/fileGrp/file/flocat/@href (" + filePath + ") in %1$s is not a valid path: "
+                          + e.getReason(),
+                        metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                      false, false);
+                  }
+                  if (!structureValidatorState.getFolderManager().verifyChecksum(resolvedPath, checksumType,
+                    checksum)) {
                     message.append("mets/dmdSec/mdRef/@CHECKSUM ").append(checksum)
-                      .append(" in %1$s and checksum of file (")
-                      .append(Paths.get(metsValidatorState.getMetsPath()).resolve(filePath)).append(") isn't equal");
+                      .append(" in %1$s and checksum of file (").append(resolvedPath).append(") isn't equal");
                     return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(message.toString(),
                       metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
                   }
@@ -1047,10 +1100,19 @@ public abstract class FileSecValidator {
                     metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
                 }
               } else {
-                if (!structureValidatorState.getFolderManager()
-                  .checkPathExists(Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded))) {
-                  message.append("mets/fileSec/fileGrp/file/@xlink:href ")
-                    .append(Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded))
+                final Path resolvedPath;
+                try {
+                  resolvedPath = Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded);
+                } catch (InvalidPathException e) {
+                  return new ReporterDetails(getCSIPVersion(),
+                    Message.createErrorMessage(
+                      "mets/fileSec/fileGrp/file/@xlink:href (" + hrefDecoded + ") in %1$s is not a valid path: "
+                        + e.getReason(),
+                      metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                    false, false);
+                }
+                if (!structureValidatorState.getFolderManager().checkPathExists(resolvedPath)) {
+                  message.append("mets/fileSec/fileGrp/file/@xlink:href ").append(resolvedPath)
                     .append(" does not exist (%1$s)");
                   return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(message.toString(),
                     metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);

@@ -3,6 +3,8 @@ package org.roda_project.commons_ip2.validator.components.structuralMapComponent
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -164,7 +166,7 @@ public abstract class StructMapValidator {
     final List<StructMapType> structMap = metsValidatorState.getMets().getStructMap();
     if (structMap != null) {
       for (StructMapType struct : structMap) {
-        if (struct.getLABEL().equals("CSIP")) {
+        if (struct.getLABEL() != null && struct.getLABEL().equals("CSIP")) {
           final DivType div = struct.getDiv();
           if (div == null) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
@@ -222,7 +224,7 @@ public abstract class StructMapValidator {
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         final DivType div = struct.getDiv();
-        if (div != null && struct.getLABEL().equals("CSIP")) {
+        if (div != null && struct.getLABEL() != null && struct.getLABEL().equals("CSIP")) {
           final String label = div.getLABEL();
           if (label == null) {
             return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
@@ -284,7 +286,7 @@ public abstract class StructMapValidator {
           final List<DivType> divs = struct.getDiv().getDiv();
           int counter = 0;
           for (DivType d : divs) {
-            if (d.getLABEL().equals("Metadata")) {
+            if (d.getLABEL() != null && d.getLABEL().equals("Metadata")) {
               counter++;
             }
           }
@@ -1102,7 +1104,7 @@ public abstract class StructMapValidator {
     if (structMap != null) {
       if (fileGrps != null && !fileGrps.isEmpty()) {
         for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
-          if (fileGrp.getUSE().equals("Representations")) {
+          if ("Representations".equals(fileGrp.getUSE())) {
             fileGrpRepresentations++;
           }
         }
@@ -1166,7 +1168,7 @@ public abstract class StructMapValidator {
                 for (DivType.Fptr fptr : ftprs) {
                   final String fileid = ((MetsType.FileSec.FileGrp) fptr.getFILEID()).getID();
                   for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
-                    if (fileGrp.getUSE().equals("Representations")) {
+                    if ("Representations".equals(fileGrp.getUSE())) {
                       final String id = fileGrp.getID();
                       if (id.equals(fileid)) {
                         found = true;
@@ -1206,10 +1208,10 @@ public abstract class StructMapValidator {
       if (metsValidatorState.isRootMets()) {
         for (StructMapType struct : structMap) {
           final DivType firstDiv = struct.getDiv();
-          if (firstDiv != null && struct.getLABEL().equals("CSIP")) {
+          if (firstDiv != null && struct.getLABEL() != null && struct.getLABEL().equals("CSIP")) {
             final List<DivType> divs = firstDiv.getDiv();
             for (DivType div : divs) {
-              if (div.getLABEL().matches("Representations/.*/") && div.getMptr().isEmpty()) {
+              if (div.getLABEL() != null && div.getLABEL().matches("Representations/.*/") && div.getMptr().isEmpty()) {
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                   Message.createErrorMessage(
                     "When a package consists of multiple representations, "
@@ -1275,7 +1277,7 @@ public abstract class StructMapValidator {
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         final DivType div = struct.getDiv();
-        if (div != null && struct.getLABEL().equals("CSIP")) {
+        if (div != null && struct.getLABEL() != null && struct.getLABEL().equals("CSIP")) {
           final List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
             final String label = d.getLABEL();
@@ -1320,11 +1322,20 @@ public abstract class StructMapValidator {
                 } else {
                   normalizedLable = label.toLowerCase();
                 }
-                if (!structureValidatorState.getFolderManager()
-                  .checkDirectory(Paths.get(metsValidatorState.getMetsPath()).resolve(normalizedLable))) {
+                final Path resolvedPath;
+                try {
+                  resolvedPath = Paths.get(metsValidatorState.getMetsPath()).resolve(normalizedLable);
+                } catch (InvalidPathException e) {
+                  return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                    Message.createErrorMessage(
+                      "mets/structMap[@LABEL='CSIP']/div/div/@LABEL (" + label + ") in %1$s is not a valid path: "
+                        + e.getReason(),
+                      metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                    false, false);
+                }
+                if (!structureValidatorState.getFolderManager().checkDirectory(resolvedPath)) {
                   message.append("mets/structMap[@LABEL='CSIP']/div/div/@LABEL in %1$s ( ").append(label).append(" )")
-                    .append("does not lead to a directory ( ")
-                    .append(Paths.get(metsValidatorState.getMetsPath()).resolve(label.toLowerCase())).append(" )");
+                    .append("does not lead to a directory ( ").append(resolvedPath).append(" )");
                   return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                     Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
                       metsValidatorState.isRootMets()),
@@ -1352,7 +1363,7 @@ public abstract class StructMapValidator {
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         final DivType div = struct.getDiv();
-        if (div != null && struct.getLABEL().equals("CSIP")) {
+        if (div != null && struct.getLABEL() != null && struct.getLABEL().equals("CSIP")) {
           final List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
             if (d.getLABEL() != null && d.getLABEL().matches("Representations/.*")) {
@@ -1404,7 +1415,7 @@ public abstract class StructMapValidator {
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         final DivType div = struct.getDiv();
-        if (div != null && struct.getLABEL().equals("CSIP")) {
+        if (div != null && struct.getLABEL() != null && struct.getLABEL().equals("CSIP")) {
           final List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
             if (d.getLABEL() != null && d.getLABEL().matches("Representations/.*")) {
@@ -1437,10 +1448,10 @@ public abstract class StructMapValidator {
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         final DivType div = struct.getDiv();
-        if (div != null && struct.getLABEL().equals("CSIP")) {
+        if (div != null && struct.getLABEL() != null && struct.getLABEL().equals("CSIP")) {
           final List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL().matches("Representations/.*")) {
+            if (d.getLABEL() != null && d.getLABEL().matches("Representations/.*")) {
               final List<DivType.Mptr> mptrs = d.getMptr();
               if (!mptrs.isEmpty()) {
                 for (DivType.Mptr mptr : mptrs) {
@@ -1469,10 +1480,19 @@ public abstract class StructMapValidator {
                         false, false);
                     }
                   } else {
-                    if (!structureValidatorState.getFolderManager()
-                      .checkPathExists(Paths.get(metsValidatorState.getMetsPath()).resolve(href))) {
-                      message.append("mets/structMap/div/div/mptr/@xlink:href ")
-                        .append(Paths.get(metsValidatorState.getMetsPath()).resolve(href))
+                    final Path resolvedPath;
+                    try {
+                      resolvedPath = Paths.get(metsValidatorState.getMetsPath()).resolve(href);
+                    } catch (InvalidPathException e) {
+                      return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
+                        Message.createErrorMessage(
+                          "mets/structMap/div/div/mptr/@xlink:href (" + href + ") in %1$s is not a valid path: "
+                            + e.getReason(),
+                          metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                        false, false);
+                    }
+                    if (!structureValidatorState.getFolderManager().checkPathExists(resolvedPath)) {
+                      message.append("mets/structMap/div/div/mptr/@xlink:href ").append(resolvedPath)
                         .append(" doesn't exists (in %1$s)");
                       return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                         Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
@@ -1526,7 +1546,7 @@ public abstract class StructMapValidator {
     if (!structMap.isEmpty()) {
       for (StructMapType struct : structMap) {
         final DivType div = struct.getDiv();
-        if (div != null && struct.getLABEL().equals("CSIP")) {
+        if (div != null && struct.getLABEL() != null && struct.getLABEL().equals("CSIP")) {
           final List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
             if (d.getLABEL() != null && d.getLABEL().matches("Representations/")) {
@@ -1567,7 +1587,7 @@ public abstract class StructMapValidator {
     if (structMap != null) {
       for (StructMapType struct : structMap) {
         final DivType div = struct.getDiv();
-        if (div != null && struct.getLABEL().equals("CSIP")) {
+        if (div != null && struct.getLABEL() != null && struct.getLABEL().equals("CSIP")) {
           final List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
             if (d.getLABEL() != null && d.getLABEL().matches("Representations/")) {

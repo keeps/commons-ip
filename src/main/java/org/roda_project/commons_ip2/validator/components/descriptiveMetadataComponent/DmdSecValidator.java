@@ -3,6 +3,7 @@ package org.roda_project.commons_ip2.validator.components.descriptiveMetadataCom
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
@@ -92,8 +93,15 @@ public abstract class DmdSecValidator {
             if (mdRef != null && mdRef.getHref() != null) {
 
               String hrefDecoded = URLDecoder.decode(DecoderUtils.normalizePath(mdRef.getHref()), Constants.UTF_8);
-              Path path = Paths.get(hrefDecoded);
-              hrefDecoded = path.normalize().toString();
+              try {
+                hrefDecoded = Paths.get(hrefDecoded).normalize().toString();
+              } catch (InvalidPathException e) {
+                return new ReporterDetails(getCSIPVersion(),
+                  Message.createErrorMessage(
+                    "mets/dmdSec/mdRef/@href (" + hrefDecoded + ") in %1$s is not a valid path: " + e.getReason(),
+                    metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                  false, false);
+              }
               if (metsValidatorState.isRootMets()) {
                 if (metadataFiles.containsKey(mets.getOBJID() + Constants.SEPARATOR + hrefDecoded)) {
                   metadataFiles.replace(mets.getOBJID() + Constants.SEPARATOR + hrefDecoded, true);
@@ -183,9 +191,17 @@ public abstract class DmdSecValidator {
               final String hrefDecoded = URLDecoder.decode(DecoderUtils.normalizePath(mdRef.getHref()),
                 Constants.UTF_8);
               if (hrefDecoded != null) {
-                final String path = Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded).toString();
-                if (metadataFiles.containsKey(path)) {
-                  metadataFiles.replace(path, true);
+                try {
+                  final String path = Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded).toString();
+                  if (metadataFiles.containsKey(path)) {
+                    metadataFiles.replace(path, true);
+                  }
+                } catch (InvalidPathException e) {
+                  return new ReporterDetails(getCSIPVersion(),
+                    Message.createErrorMessage(
+                      "mets/dmdSec/mdRef/@href (" + hrefDecoded + ") in %1$s is not a valid path: " + e.getReason(),
+                      metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                    false, false);
                 }
               }
             }
@@ -198,9 +214,19 @@ public abstract class DmdSecValidator {
                   final String hrefDecoded = URLDecoder.decode(DecoderUtils.normalizePath(mdRef.getHref()),
                     Constants.UTF_8);
                   if (hrefDecoded != null) {
-                    final String path = Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded).toString();
-                    if (metadataFiles.containsKey(path)) {
-                      metadataFiles.replace(path, true);
+                    try {
+                      final String path = Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded)
+                        .toString();
+                      if (metadataFiles.containsKey(path)) {
+                        metadataFiles.replace(path, true);
+                      }
+                    } catch (InvalidPathException e) {
+                      return new ReporterDetails(getCSIPVersion(),
+                        Message.createErrorMessage(
+                          "mets/amdSec/*/mdRef/@href (" + hrefDecoded + ") in %1$s is not a valid path: "
+                            + e.getReason(),
+                          metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                        false, false);
                     }
                   }
                 }
@@ -444,22 +470,28 @@ public abstract class DmdSecValidator {
               metsValidatorState.isRootMets()));
           }
         } else {
-          if (StringUtils.isBlank(href)){
-            message.append("mets/dmdSec/mdRef/@xlink:href ")
-              .append(Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded))
-              .append(" in %1$s is empty");
+          Path resolvedPath = null;
+          try {
+            resolvedPath = Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded);
+          } catch (InvalidPathException e) {
             details.setValid(false);
-            details.addIssue(Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
-              metsValidatorState.isRootMets()));
+            details.addIssue(Message.createErrorMessage(
+              "mets/dmdSec/mdRef/@xlink:href (" + hrefDecoded + ") in %1$s is not a valid path: " + e.getReason(),
+              metsValidatorState.getMetsName(), metsValidatorState.isRootMets()));
           }
-          if (!structureValidatorState.getFolderManager()
-            .checkPathExists(Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded))) {
-            message.append("mets/dmdSec/mdRef/@xlink:href ")
-              .append(Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded))
-              .append(" in %1$s does not exist");
-            details.setValid(false);
-            details.addIssue(Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
-              metsValidatorState.isRootMets()));
+          if (resolvedPath != null) {
+            if (StringUtils.isBlank(href)) {
+              message.append("mets/dmdSec/mdRef/@xlink:href ").append(resolvedPath).append(" in %1$s is empty");
+              details.setValid(false);
+              details.addIssue(Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                metsValidatorState.isRootMets()));
+            }
+            if (!structureValidatorState.getFolderManager().checkPathExists(resolvedPath)) {
+              message.append("mets/dmdSec/mdRef/@xlink:href ").append(resolvedPath).append(" in %1$s does not exist");
+              details.setValid(false);
+              details.addIssue(Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
+                metsValidatorState.isRootMets()));
+            }
           }
         }
       } else {
@@ -567,22 +599,23 @@ public abstract class DmdSecValidator {
                   metsValidatorState.isRootMets()),false, false);
             }
           } else {
-            if (metsValidatorState.isRootMets()) {
-              if (!structureValidatorState.getFolderManager()
-                .verifySize(structureValidatorState.getIpPath().resolve(hrefDecoded), size)) {
-                message.append("mets/dmdSec/mdRef/@SIZE ").append(size).append(" in %1$s and size of file (")
-                  .append(structureValidatorState.getIpPath().resolve(hrefDecoded)).append(") isn't equal");
-                return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(
-                  message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
-              }
-            } else {
-              if (!structureValidatorState.getFolderManager()
-                .verifySize(Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded), size)) {
-                message.append("mets/dmdSec/mdRef/@SIZE ").append(size).append(" in %1$s and size of file (")
-                  .append(structureValidatorState.getIpPath().resolve(hrefDecoded).toString()).append(") isn't equal");
-                return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(
-                  message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
-              }
+            final Path resolvedHrefPath;
+            try {
+              resolvedHrefPath = metsValidatorState.isRootMets()
+                ? structureValidatorState.getIpPath().resolve(hrefDecoded)
+                : Paths.get(metsValidatorState.getMetsPath()).resolve(hrefDecoded);
+            } catch (InvalidPathException e) {
+              return new ReporterDetails(getCSIPVersion(),
+                Message.createErrorMessage(
+                  "mets/dmdSec/mdRef/@href (" + hrefDecoded + ") in %1$s is not a valid path: " + e.getReason(),
+                  metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                false, false);
+            }
+            if (!structureValidatorState.getFolderManager().verifySize(resolvedHrefPath, size)) {
+              message.append("mets/dmdSec/mdRef/@SIZE ").append(size).append(" in %1$s and size of file (")
+                .append(resolvedHrefPath).append(") isn't equal");
+              return new ReporterDetails(getCSIPVersion(), Message.createErrorMessage(message.toString(),
+                metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
             }
           }
         } else {
@@ -662,11 +695,20 @@ public abstract class DmdSecValidator {
                     false, false);
                 }
               } else {
-                if (!structureValidatorState.getFolderManager()
-                  .verifyChecksum(Paths.get(metsValidatorState.getMetsPath()).resolve(file), checksumType, checksum)) {
+                final Path resolvedPath;
+                try {
+                  resolvedPath = Paths.get(metsValidatorState.getMetsPath()).resolve(file);
+                } catch (InvalidPathException e) {
+                  return new ReporterDetails(getCSIPVersion(),
+                    Message.createErrorMessage(
+                      "mets/dmdSec/mdRef/@href (" + file + ") in %1$s is not a valid path: " + e.getReason(),
+                      metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
+                    false, false);
+                }
+                if (!structureValidatorState.getFolderManager().verifyChecksum(resolvedPath, checksumType,
+                  checksum)) {
                   message.append("mets/dmdSec/mdRef/@CHECKSUM ").append(checksum)
-                    .append(" in %1$s and checksum of file (")
-                    .append(Paths.get(metsValidatorState.getMetsPath()).resolve(file)).append(") isn't equal");
+                    .append(" in %1$s and checksum of file (").append(resolvedPath).append(") isn't equal");
                   return new ReporterDetails(getCSIPVersion(),
                     Message.createErrorMessage(message.toString(), metsValidatorState.getMetsName(),
                       metsValidatorState.isRootMets()),

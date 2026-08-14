@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.roda_project.commons_ip2.cli.model.exception.UnmarshallerException;
+import org.roda_project.commons_ip2.mets_v1_12.beans.MetsType;
 import org.roda_project.commons_ip2.validator.common.InstatiateMets;
 import org.roda_project.commons_ip2.validator.components.MetsValidator;
 import org.roda_project.commons_ip2.validator.components.StructureValidatorImpl;
@@ -264,7 +265,8 @@ public class EARKPyIPValidator {
     for (Map.Entry<String, InputStream> entry : subMets.entrySet()) {
       final InstatiateMets instatiateMets = new InstatiateMets(entry.getValue());
       metsValidatorState.setMets(instatiateMets.instatiateMetsFile(entry.getKey()));
-      metsValidatorState.setIpType(metsValidatorState.getMets().getMetsHdr().getOAISPACKAGETYPE());
+      final MetsType.MetsHdr subMetsHdr = metsValidatorState.getMets().getMetsHdr();
+      metsValidatorState.setIpType(subMetsHdr == null ? null : subMetsHdr.getOAISPACKAGETYPE());
       setupMetsValidatorState(entry.getKey(), isZip, false);
       validateComponents();
     }
