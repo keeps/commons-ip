@@ -1211,7 +1211,7 @@ public abstract class StructMapValidator {
           if (firstDiv != null && struct.getLABEL() != null && struct.getLABEL().equals("CSIP")) {
             final List<DivType> divs = firstDiv.getDiv();
             for (DivType div : divs) {
-              if (div.getLABEL() != null && div.getLABEL().matches("Representations/.*/") && div.getMptr().isEmpty()) {
+              if (div.getLABEL() != null && div.getLABEL().matches("Representations/.+") && div.getMptr().isEmpty()) {
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
                   Message.createErrorMessage(
                     "When a package consists of multiple representations, "
@@ -1220,12 +1220,42 @@ public abstract class StructMapValidator {
                     metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
                   false, false);
               }
+              final DivType nestedDiv = findNestedRepresentationDiv(div.getDiv());
+              if (nestedDiv != null) {
+                final StringBuilder message = new StringBuilder();
+                message.append("Representation division (").append(nestedDiv.getLABEL()).append(") in %1$s must be ")
+                  .append("a direct child of the package division (mets/structMap[@LABEL='CSIP']/div/div), ")
+                  .append("but it is nested inside the division (").append(div.getLABEL()).append(")");
+                return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION, Message.createErrorMessage(
+                  message.toString(), metsValidatorState.getMetsName(), metsValidatorState.isRootMets()), false, false);
+              }
             }
           }
         }
       }
     }
     return new ReporterDetails();
+  }
+
+  /*
+   * Searches below mets/structMap[@LABEL='CSIP']/div/div for a representation
+   * division (labelled Representations/... or holding a METS pointer), which is
+   * only allowed as a direct child of the package division.
+   */
+  private DivType findNestedRepresentationDiv(final List<DivType> divs) {
+    for (DivType div : divs) {
+      final String label = div.getLABEL();
+      if ((label != null && label.startsWith(
+        IPConstants.REPRESENTATIONS_WITH_FIRST_LETTER_CAPITAL + IPConstants.METS_PATH_SEPARATOR))
+        || !div.getMptr().isEmpty()) {
+        return div;
+      }
+      final DivType nested = findNestedRepresentationDiv(div.getDiv());
+      if (nested != null) {
+        return nested;
+      }
+    }
+    return null;
   }
 
   /*
@@ -1549,7 +1579,7 @@ public abstract class StructMapValidator {
         if (div != null && struct.getLABEL() != null && struct.getLABEL().equals("CSIP")) {
           final List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL() != null && d.getLABEL().matches("Representations/")) {
+            if (d.getLABEL() != null && d.getLABEL().matches("Representations/.+")) {
               final List<DivType.Mptr> mptrs = d.getMptr();
               if (!mptrs.isEmpty()) {
                 for (DivType.Mptr mptr : mptrs) {
@@ -1590,7 +1620,7 @@ public abstract class StructMapValidator {
         if (div != null && struct.getLABEL() != null && struct.getLABEL().equals("CSIP")) {
           final List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL() != null && d.getLABEL().matches("Representations/")) {
+            if (d.getLABEL() != null && d.getLABEL().matches("Representations/.+")) {
               final List<DivType.Mptr> mptrs = d.getMptr();
               for (DivType.Mptr mptr : mptrs) {
                 final String locType = mptr.getLOCTYPE();
