@@ -534,7 +534,7 @@ public abstract class EARKMETSCreator {
   }
 
   protected String escapeNCName(final String id) {
-    return id.replaceAll("[:@$%&/+,;\\s]", "_");
+    return id.replaceAll("[^A-Za-z0-9._-]", "_");
   }
 
   protected MdSecType.MdRef createMdRef(final String id, final String metadataPath) {
