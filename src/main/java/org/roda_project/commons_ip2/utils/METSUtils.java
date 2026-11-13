@@ -14,6 +14,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
@@ -248,28 +249,22 @@ public final class METSUtils {
 
   public static String escapeSpecialCharacters(String input) {
     StringBuilder resultStr = new StringBuilder();
-    for (char ch : input.toCharArray()) {
-      if (isSafeChar(ch)) {
-        resultStr.append(ch);
+    // Iterate over code points (not chars) so that characters outside the BMP,
+    // stored as surrogate pairs, are encoded as a single UTF-8 sequence instead
+    // of two invalid halves that URLEncoder would turn into "??".
+    input.codePoints().forEach(cp -> {
+      String s = new String(Character.toChars(cp));
+      if (cp < 0x80 && isSafeChar((char) cp)) {
+        resultStr.append(s);
       } else {
-        resultStr.append(encodeUnsafeChar(ch));
+        resultStr.append(URLEncoder.encode(s, StandardCharsets.UTF_8));
       }
-    }
+    });
     return resultStr.toString();
   }
 
   private static boolean isSafeChar(char ch) {
     return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')
       || ":/$-_.!*'(),".indexOf(ch) >= 0;
-  }
-
-  private static String encodeUnsafeChar(char ch) {
-    String ret = String.valueOf(ch);
-    try {
-      ret = URLEncoder.encode(ret, "UTF-8");
-    } catch (NullPointerException | UnsupportedEncodingException e) {
-      // do nothing & return original value
-    }
-    return ret;
   }
 }
