@@ -30,6 +30,9 @@ import org.roda_project.commons_ip2.validator.utils.Message;
  */
 public abstract class StructMapValidator {
 
+  /** The {@code @USE}/{@code @LABEL} value identifying the representations content. */
+  private static final String REPRESENTATIONS = "Representations";
+
   protected abstract String getCSIPVersion();
 
   /*
@@ -949,6 +952,22 @@ public abstract class StructMapValidator {
     return new ReporterDetails();
   }
 
+  /**
+   * Checks whether a {@code @USE} file group value or a {@code @LABEL} structural
+   * map division value identifies a representation. Per CSIP114 the representation
+   * file groups (and the matching structural map divisions) are named
+   * {@code Representations/<name>}; the plain value {@code Representations} is only
+   * used for the single, flat "no representations" case. Both spellings identify a
+   * representation here.
+   *
+   * @param value
+   *          the {@code @USE} or {@code @LABEL} value, may be {@code null}.
+   * @return {@code true} if the value identifies a representation.
+   */
+  protected static boolean isRepresentationValue(final String value) {
+    return value != null && (value.equals(REPRESENTATIONS) || value.startsWith("Representations/"));
+  }
+
   /*
    * mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations'] When no
    * representations are present the content referenced in the file section file
@@ -963,7 +982,7 @@ public abstract class StructMapValidator {
       final List<MetsType.FileSec.FileGrp> fileGrps = fileSec.getFileGrp();
       boolean existRepresentations = false;
       for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
-        if (fileGrp.getUSE() != null && fileGrp.getUSE().equals("Representations")) {
+        if (isRepresentationValue(fileGrp.getUSE())) {
           existRepresentations = true;
           break;
         }
@@ -973,7 +992,7 @@ public abstract class StructMapValidator {
         if (div != null) {
           final List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL() != null && d.getLABEL().equals("Representations")) {
+            if (isRepresentationValue(d.getLABEL())) {
               found = true;
               break;
             }
@@ -1010,7 +1029,7 @@ public abstract class StructMapValidator {
         if (div != null) {
           final List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL() != null && d.getLABEL().equals("Representations")) {
+            if (d.getLABEL() != null && d.getLABEL().equals(REPRESENTATIONS)) {
               final String id = d.getID();
               if (id == null) {
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
@@ -1065,7 +1084,7 @@ public abstract class StructMapValidator {
           if (div != null) {
             final List<DivType> divs = div.getDiv();
             for (DivType d : divs) {
-              if (d.getLABEL() != null && d.getLABEL().equals("Representations")) {
+              if (d.getLABEL() != null && d.getLABEL().equals(REPRESENTATIONS)) {
                 found = true;
                 break;
               }
@@ -1104,7 +1123,7 @@ public abstract class StructMapValidator {
     if (structMap != null) {
       if (fileGrps != null && !fileGrps.isEmpty()) {
         for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
-          if ("Representations".equals(fileGrp.getUSE())) {
+          if (isRepresentationValue(fileGrp.getUSE())) {
             fileGrpRepresentations++;
           }
         }
@@ -1114,7 +1133,7 @@ public abstract class StructMapValidator {
         if (div != null) {
           final List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL() != null && d.getLABEL().equals("Representations")) {
+            if (d.getLABEL() != null && d.getLABEL().equals(REPRESENTATIONS)) {
               final List<DivType.Fptr> ftprs = d.getFptr();
               if (!ftprs.isEmpty()) {
                 structRepresentations = ftprs.size();
@@ -1128,11 +1147,16 @@ public abstract class StructMapValidator {
         }
       }
 
-      if (fileGrpRepresentations != structRepresentations && !isMptr) {
+      // Only enforce the one-file-group-per-fptr rule when the "Representations"
+      // division actually references representations through fptr elements
+      // (structRepresentations > 0). Packages that reference each representation
+      // through a dedicated "Representations/<name>" division with an mptr (as
+      // commons-ip itself produces) have no such fptr elements and must not fail.
+      if (fileGrpRepresentations != structRepresentations && !isMptr && structRepresentations != 0) {
         return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
           Message.createErrorMessage(
             "In %1$s must be one file group reference per "
-              + "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Schemas']/fptr ",
+              + "mets/structMap[@LABEL='CSIP']/div/div[@LABEL='Representations']/fptr ",
             metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
           false, false);
       }
@@ -1162,15 +1186,22 @@ public abstract class StructMapValidator {
         if (div != null) {
           final List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL() != null && d.getLABEL().equals("Representations")) {
+            if (d.getLABEL() != null && d.getLABEL().equals(REPRESENTATIONS)) {
               final List<DivType.Fptr> ftprs = d.getFptr();
               if (ftprs != null && !ftprs.isEmpty()) {
                 for (DivType.Fptr fptr : ftprs) {
-                  final String fileid = ((MetsType.FileSec.FileGrp) fptr.getFILEID()).getID();
-                  for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
-                    if ("Representations".equals(fileGrp.getUSE())) {
-                      final String id = fileGrp.getID();
-                      if (id.equals(fileid)) {
+                  found = false;
+                  // The @FILEID IDREF resolves to a file group only when it points
+                  // at one; a dangling reference resolves to null and a reference
+                  // to a file resolves to another type. Either way it matches no
+                  // representation file group.
+                  final Object fileidRef = fptr.getFILEID();
+                  final String fileid = fileidRef instanceof MetsType.FileSec.FileGrp
+                    ? ((MetsType.FileSec.FileGrp) fileidRef).getID()
+                    : null;
+                  if (fileid != null) {
+                    for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
+                      if (isRepresentationValue(fileGrp.getUSE()) && fileid.equals(fileGrp.getID())) {
                         found = true;
                       }
                     }

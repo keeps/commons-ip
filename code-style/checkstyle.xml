@@ -110,4 +110,9 @@
     <module name="NewlineAtEndOfFile"/>
     <module name="Translation"/>
     <module name="SuppressWarningsFilter"/>
+    <!-- Test sources are not public API; do not require Javadoc on them. -->
+    <module name="SuppressionSingleFilter">
+        <property name="checks" value=".*Javadoc.*"/>
+        <property name="files" value="src[\\/]test[\\/]"/>
+    </module>
 </module>
