@@ -965,7 +965,7 @@ public abstract class StructMapValidator {
    * @return {@code true} if the value identifies a representation.
    */
   protected static boolean isRepresentationValue(final String value) {
-    return value != null && (value.equals(REPRESENTATIONS) || value.startsWith(REPRESENTATIONS + "/"));
+    return value != null && (value.equals(REPRESENTATIONS) || value.startsWith("Representations/"));
   }
 
   /*
