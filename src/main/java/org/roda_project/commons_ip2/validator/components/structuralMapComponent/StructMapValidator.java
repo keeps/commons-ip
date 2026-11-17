@@ -30,6 +30,9 @@ import org.roda_project.commons_ip2.validator.utils.Message;
  */
 public abstract class StructMapValidator {
 
+  /** The {@code @USE}/{@code @LABEL} value identifying the representations content. */
+  private static final String REPRESENTATIONS = "Representations";
+
   protected abstract String getCSIPVersion();
 
   /*
@@ -962,7 +965,7 @@ public abstract class StructMapValidator {
    * @return {@code true} if the value identifies a representation.
    */
   protected static boolean isRepresentationValue(final String value) {
-    return value != null && (value.equals("Representations") || value.startsWith("Representations/"));
+    return value != null && (value.equals(REPRESENTATIONS) || value.startsWith(REPRESENTATIONS + "/"));
   }
 
   /*
@@ -1026,7 +1029,7 @@ public abstract class StructMapValidator {
         if (div != null) {
           final List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL() != null && d.getLABEL().equals("Representations")) {
+            if (d.getLABEL() != null && d.getLABEL().equals(REPRESENTATIONS)) {
               final String id = d.getID();
               if (id == null) {
                 return new ReporterDetails(Constants.VALIDATION_REPORT_HEADER_CSIP_VERSION,
@@ -1081,7 +1084,7 @@ public abstract class StructMapValidator {
           if (div != null) {
             final List<DivType> divs = div.getDiv();
             for (DivType d : divs) {
-              if (d.getLABEL() != null && d.getLABEL().equals("Representations")) {
+              if (d.getLABEL() != null && d.getLABEL().equals(REPRESENTATIONS)) {
                 found = true;
                 break;
               }
@@ -1130,7 +1133,7 @@ public abstract class StructMapValidator {
         if (div != null) {
           final List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL() != null && d.getLABEL().equals("Representations")) {
+            if (d.getLABEL() != null && d.getLABEL().equals(REPRESENTATIONS)) {
               final List<DivType.Fptr> ftprs = d.getFptr();
               if (!ftprs.isEmpty()) {
                 structRepresentations = ftprs.size();
@@ -1183,7 +1186,7 @@ public abstract class StructMapValidator {
         if (div != null) {
           final List<DivType> divs = div.getDiv();
           for (DivType d : divs) {
-            if (d.getLABEL() != null && d.getLABEL().equals("Representations")) {
+            if (d.getLABEL() != null && d.getLABEL().equals(REPRESENTATIONS)) {
               final List<DivType.Fptr> ftprs = d.getFptr();
               if (ftprs != null && !ftprs.isEmpty()) {
                 for (DivType.Fptr fptr : ftprs) {
