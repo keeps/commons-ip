@@ -83,6 +83,7 @@ public class ReporterDetails {
    */
   public ReporterDetails(final ReporterDetails clone) {
     this(clone.getSpecification(), clone.getIssues(), clone.isValid(), clone.isSkipped());
+    this.detail = clone.getDetail();
   }
 
   /**

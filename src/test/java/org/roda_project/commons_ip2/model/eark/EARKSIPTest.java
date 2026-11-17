@@ -20,6 +20,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -57,6 +58,7 @@ import org.roda_project.commons_ip2.model.impl.eark.out.writers.strategy.WriteSt
 import org.roda_project.commons_ip2.utils.Utils;
 import org.roda_project.commons_ip2.validator.EARKSIPValidator;
 import org.roda_project.commons_ip2.validator.constants.Constants;
+import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.reporter.ValidationReportOutputJson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -146,6 +148,36 @@ public class EARKSIPTest {
     boolean validate = earksipValidator.validate("2.2.0");
     LOGGER.info("Done parsing (and validating) full E-ARK SIP");
     Assert.assertTrue(validate);
+  }
+
+  /**
+   * A commons-ip multi-representation SIP uses slashed "Representations/<name>"
+   * file groups referenced by per-representation divisions with an mptr (and no
+   * "Representations" wrapper division). These must not raise the CSIP101 false
+   * positive, nor fail CSIP104/CSIP119. {@code validate()} only reports MUST
+   * errors, so this test inspects the per-requirement results directly to also
+   * catch the SHOULD warnings (CSIP101, CSIP104) that {@code validate()} hides.
+   * See https://github.com/keeps/commons-ip/issues/390.
+   */
+  @Test
+  public void commonsIpMultiRepresentationSipHasNoRepresentationStructMapWarnings() throws IPException, ParseException,
+    InterruptedException, IOException, ParserConfigurationException, SAXException, NoSuchAlgorithmException {
+    Path zipSIP = createFullEARKSIP_For_Test_Compliance220();
+
+    Path reportPath = Files.createTempDirectory("reports").resolve("issue-390.json");
+    OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(reportPath.toFile()));
+    ValidationReportOutputJson reportOutputJson = new ValidationReportOutputJson(zipSIP, outputStream);
+    EARKSIPValidator earksipValidator = new EARKSIPValidator(reportOutputJson, "2.2.0");
+
+    earksipValidator.validate("2.2.0");
+
+    Map<String, ReporterDetails> results = reportOutputJson.getResults();
+    for (String requirement : Arrays.asList("CSIP101", "CSIP104", "CSIP119")) {
+      ReporterDetails details = results.get(requirement);
+      Assert.assertNotNull(requirement + " should be present in the report", details);
+      Assert.assertTrue(requirement + " must not be reported as invalid for a commons-ip SIP", details.isValid());
+      Assert.assertFalse(requirement + " must not be skipped for a commons-ip SIP", details.isSkipped());
+    }
   }
 
   @Test
