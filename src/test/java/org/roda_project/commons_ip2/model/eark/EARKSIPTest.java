@@ -162,18 +162,19 @@ public class EARKSIPTest {
   @Test
   public void commonsIpMultiRepresentationSipHasNoRepresentationStructMapWarnings() throws IPException, ParseException,
     InterruptedException, IOException, ParserConfigurationException, SAXException, NoSuchAlgorithmException {
-    Path zipSIP = createFullEARKSIP_For_Test_Compliance220();
+    final Path zipSIP = createFullEARKSIP_For_Test_Compliance220();
 
-    Path reportPath = Files.createTempDirectory("reports").resolve("issue-390.json");
-    OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(reportPath.toFile()));
-    ValidationReportOutputJson reportOutputJson = new ValidationReportOutputJson(zipSIP, outputStream);
-    EARKSIPValidator earksipValidator = new EARKSIPValidator(reportOutputJson, "2.2.0");
+    final Path reportPath = Files.createTempDirectory("reports").resolve("issue-390.json");
+    final OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(reportPath.toFile()));
+    final ValidationReportOutputJson reportOutputJson = new ValidationReportOutputJson(zipSIP, outputStream);
+    final String version = "2.2.0";
+    final EARKSIPValidator earksipValidator = new EARKSIPValidator(reportOutputJson, version);
 
-    earksipValidator.validate("2.2.0");
+    earksipValidator.validate(version);
 
-    Map<String, ReporterDetails> results = reportOutputJson.getResults();
-    for (String requirement : Arrays.asList("CSIP101", "CSIP104", "CSIP119")) {
-      ReporterDetails details = results.get(requirement);
+    final Map<String, ReporterDetails> results = reportOutputJson.getResults();
+    for (final String requirement : Arrays.asList("CSIP101", "CSIP104", "CSIP119")) {
+      final ReporterDetails details = results.get(requirement);
       Assert.assertNotNull(requirement + " should be present in the report", details);
       Assert.assertTrue(requirement + " must not be reported as invalid for a commons-ip SIP", details.isValid());
       Assert.assertFalse(requirement + " must not be skipped for a commons-ip SIP", details.isSkipped());

@@ -13,12 +13,12 @@ public class ResultsUtilsTest {
 
   @Test
   public void skippedIsAndMergedSoAnEvaluationClearsASkip() {
-    Map<String, ReporterDetails> results = new HashMap<>();
+    final Map<String, ReporterDetails> results = new HashMap<>();
     // Skipped in the root METS, evaluated (not skipped) in a representation METS.
     ResultsUtils.addResult(results, SPEC, new ReporterDetails(SPEC, "skipped at root", true, true));
     ResultsUtils.addResult(results, SPEC, new ReporterDetails(SPEC, "evaluated", true, false));
 
-    ReporterDetails merged = results.get(SPEC);
+    final ReporterDetails merged = results.get(SPEC);
     Assert.assertFalse("skipped must be AND-merged so gating is preserved", merged.isSkipped());
     Assert.assertTrue(merged.isValid());
     Assert.assertTrue(ResultsUtils.isResultValid(results, SPEC));
@@ -26,7 +26,7 @@ public class ResultsUtilsTest {
 
   @Test
   public void skippedEverywhereKeepsSkippedTrue() {
-    Map<String, ReporterDetails> results = new HashMap<>();
+    final Map<String, ReporterDetails> results = new HashMap<>();
     ResultsUtils.addResult(results, SPEC, new ReporterDetails(SPEC, "skipped root", true, true));
     ResultsUtils.addResult(results, SPEC, new ReporterDetails(SPEC, "skipped rep", true, true));
 
@@ -36,7 +36,7 @@ public class ResultsUtilsTest {
 
   @Test
   public void invalidEvaluationMakesTheRequirementInvalid() {
-    Map<String, ReporterDetails> results = new HashMap<>();
+    final Map<String, ReporterDetails> results = new HashMap<>();
     ResultsUtils.addResult(results, SPEC, new ReporterDetails(SPEC, "valid root", true, false));
     ResultsUtils.addResult(results, SPEC, new ReporterDetails(SPEC, "invalid rep", false, false));
 
@@ -46,11 +46,13 @@ public class ResultsUtilsTest {
 
   @Test
   public void issuesAreAccumulatedAcrossMerges() {
-    Map<String, ReporterDetails> results = new HashMap<>();
-    ResultsUtils.addResult(results, SPEC, new ReporterDetails(SPEC, "issue root", true, false));
-    ResultsUtils.addResult(results, SPEC, new ReporterDetails(SPEC, "issue rep", true, false));
+    final Map<String, ReporterDetails> results = new HashMap<>();
+    final String issueRoot = "issue root";
+    final String issueRep = "issue rep";
+    ResultsUtils.addResult(results, SPEC, new ReporterDetails(SPEC, issueRoot, true, false));
+    ResultsUtils.addResult(results, SPEC, new ReporterDetails(SPEC, issueRep, true, false));
 
-    Assert.assertTrue(results.get(SPEC).getIssues().contains("issue root"));
-    Assert.assertTrue(results.get(SPEC).getIssues().contains("issue rep"));
+    Assert.assertTrue(results.get(SPEC).getIssues().contains(issueRoot));
+    Assert.assertTrue(results.get(SPEC).getIssues().contains(issueRep));
   }
 }

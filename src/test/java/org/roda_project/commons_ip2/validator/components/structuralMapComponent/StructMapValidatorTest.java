@@ -10,11 +10,21 @@ import org.roda_project.commons_ip2.validator.state.MetsValidatorState;
 
 public class StructMapValidatorTest {
 
+  private static final String REPRESENTATIONS = "Representations";
+  private static final String REP_ONE_USE = "Representations/rep-001";
+  private static final String REP_TWO_USE = "Representations/rep-002";
+  private static final String FG_REP_ONE = "fg-rep-001";
+  private static final String FG_REP_TWO = "fg-rep-002";
+  private static final String REP_DIV_ID = "rep-div";
+  private static final String REP_ONE_DIV_ID = "rep-001-div";
+  private static final String PACKAGE_LABEL = "package";
+  private static final String PACKAGE_DIV_ID = "package-div";
+
   private final StructMapValidator220 validator = new StructMapValidator220();
 
   @Test
   public void csip105PassesWhenRepresentationDivIsDirectChildOfPackageDiv() {
-    DivType packageDiv = div("package-div", "package");
+    final DivType packageDiv = div(PACKAGE_DIV_ID, PACKAGE_LABEL);
     packageDiv.getDiv().add(representationDiv());
 
     Assert.assertTrue(validator.validateCSIP105(rootMetsState(packageDiv)).isValid());
@@ -22,9 +32,9 @@ public class StructMapValidatorTest {
 
   @Test
   public void csip105FailsWhenRepresentationDivIsNested() {
-    DivType wrapperDiv = div("representations-div", "Representations");
+    final DivType wrapperDiv = div(REP_DIV_ID, REPRESENTATIONS);
     wrapperDiv.getDiv().add(representationDiv());
-    DivType packageDiv = div("package-div", "package");
+    final DivType packageDiv = div(PACKAGE_DIV_ID, PACKAGE_LABEL);
     packageDiv.getDiv().add(wrapperDiv);
 
     Assert.assertFalse(validator.validateCSIP105(rootMetsState(packageDiv)).isValid());
@@ -41,7 +51,7 @@ public class StructMapValidatorTest {
     // Convention A: how commons-ip itself writes multi-representation SIPs.
     // Slashed file groups + per-representation divs with mptr, no "Representations"
     // wrapper division and no representation fptr elements.
-    MetsValidatorState state = multiRepresentationPerRepDivsState();
+    final MetsValidatorState state = multiRepresentationPerRepDivsState();
     Assert.assertTrue(validator.validateCSIP101(state).isValid());
   }
 
@@ -49,7 +59,7 @@ public class StructMapValidatorTest {
   public void csip101PassesForRepresentationsWrapperWithFptrs() {
     // Convention B (issue #390): a "Representations" wrapper division whose fptr
     // elements point to the slashed "Representations/<name>" file groups.
-    MetsValidatorState state = multiRepresentationWrapperState();
+    final MetsValidatorState state = multiRepresentationWrapperState();
     Assert.assertTrue(validator.validateCSIP101(state).isValid());
   }
 
@@ -57,10 +67,10 @@ public class StructMapValidatorTest {
   public void csip101PassesForFlatNoRepresentationCase() {
     // The case CSIP101 is actually about: a single plain "Representations" file
     // group described by a single "Representations" division.
-    MetsType.FileSec.FileGrp flat = fileGrp("fg-rep", "Representations");
-    DivType wrapper = div("rep-div", "Representations");
+    final MetsType.FileSec.FileGrp flat = fileGrp("fg-rep", REPRESENTATIONS);
+    final DivType wrapper = div(REP_DIV_ID, REPRESENTATIONS);
     wrapper.getFptr().add(fptr(flat));
-    DivType packageDiv = div("package-div", "package");
+    final DivType packageDiv = div(PACKAGE_DIV_ID, PACKAGE_LABEL);
     packageDiv.getDiv().add(wrapper);
 
     Assert.assertTrue(validator.validateCSIP101(stateWithFileGrps(packageDiv, flat)).isValid());
@@ -70,9 +80,9 @@ public class StructMapValidatorTest {
   public void csip101FailsWhenRepresentationFileGroupsHaveNoRepresentationDivision() {
     // Representation file groups exist but the structural map does not describe
     // them at all - this is the genuine inconsistency CSIP101 must still catch.
-    MetsType.FileSec.FileGrp rep1 = fileGrp("fg-rep-001", "Representations/rep-001");
-    DivType metadata = div("md-div", "Metadata");
-    DivType packageDiv = div("package-div", "package");
+    final MetsType.FileSec.FileGrp rep1 = fileGrp(FG_REP_ONE, REP_ONE_USE);
+    final DivType metadata = div("md-div", "Metadata");
+    final DivType packageDiv = div(PACKAGE_DIV_ID, PACKAGE_LABEL);
     packageDiv.getDiv().add(metadata);
 
     Assert.assertFalse(validator.validateCSIP101(stateWithFileGrps(packageDiv, rep1)).isValid());
@@ -94,12 +104,12 @@ public class StructMapValidatorTest {
 
   @Test
   public void csip104FailsWhenFptrCountDiffersFromRepresentationFileGroups() {
-    MetsType.FileSec.FileGrp rep1 = fileGrp("fg-rep-001", "Representations/rep-001");
-    MetsType.FileSec.FileGrp rep2 = fileGrp("fg-rep-002", "Representations/rep-002");
+    final MetsType.FileSec.FileGrp rep1 = fileGrp(FG_REP_ONE, REP_ONE_USE);
+    final MetsType.FileSec.FileGrp rep2 = fileGrp(FG_REP_TWO, REP_TWO_USE);
     // Two representation file groups but the wrapper references only one of them.
-    DivType wrapper = div("rep-div", "Representations");
+    final DivType wrapper = div(REP_DIV_ID, REPRESENTATIONS);
     wrapper.getFptr().add(fptr(rep1));
-    DivType packageDiv = div("package-div", "package");
+    final DivType packageDiv = div(PACKAGE_DIV_ID, PACKAGE_LABEL);
     packageDiv.getDiv().add(wrapper);
 
     Assert.assertFalse(validator.validateCSIP104(stateWithFileGrps(packageDiv, rep1, rep2)).isValid());
@@ -121,13 +131,13 @@ public class StructMapValidatorTest {
   public void csip119FailsWhenASecondFptrDoesNotResolve() {
     // Guards against the "found is not reset per fptr" bug: the first fptr resolves,
     // the second does not, and the requirement must fail.
-    MetsType.FileSec.FileGrp rep1 = fileGrp("fg-rep-001", "Representations/rep-001");
-    MetsType.FileSec.FileGrp rep2 = fileGrp("fg-rep-002", "Representations/rep-002");
-    MetsType.FileSec.FileGrp dangling = fileGrp("fg-rep-999", "Representations/rep-999");
-    DivType wrapper = div("rep-div", "Representations");
+    final MetsType.FileSec.FileGrp rep1 = fileGrp(FG_REP_ONE, REP_ONE_USE);
+    final MetsType.FileSec.FileGrp rep2 = fileGrp(FG_REP_TWO, REP_TWO_USE);
+    final MetsType.FileSec.FileGrp dangling = fileGrp("fg-rep-999", "Representations/rep-999");
+    final DivType wrapper = div(REP_DIV_ID, REPRESENTATIONS);
     wrapper.getFptr().add(fptr(rep1));
     wrapper.getFptr().add(fptr(dangling));
-    DivType packageDiv = div("package-div", "package");
+    final DivType packageDiv = div(PACKAGE_DIV_ID, PACKAGE_LABEL);
     packageDiv.getDiv().add(wrapper);
 
     // dangling is not part of the file section.
@@ -139,12 +149,12 @@ public class StructMapValidatorTest {
     // A dangling @FILEID IDREF deserializes to null (and a reference to the wrong
     // element type to another class); the validator must report FAILED rather than
     // throw a ClassCastException/NullPointerException.
-    MetsType.FileSec.FileGrp rep1 = fileGrp("fg-rep-001", "Representations/rep-001");
-    DivType wrapper = div("rep-div", "Representations");
-    DivType.Fptr dangling = new DivType.Fptr();
+    final MetsType.FileSec.FileGrp rep1 = fileGrp(FG_REP_ONE, REP_ONE_USE);
+    final DivType wrapper = div(REP_DIV_ID, REPRESENTATIONS);
+    final DivType.Fptr dangling = new DivType.Fptr();
     dangling.setFILEID(null);
     wrapper.getFptr().add(dangling);
-    DivType packageDiv = div("package-div", "package");
+    final DivType packageDiv = div(PACKAGE_DIV_ID, PACKAGE_LABEL);
     packageDiv.getDiv().add(wrapper);
 
     Assert.assertFalse(validator.validateCSIP119(stateWithFileGrps(packageDiv, rep1)).isValid());
@@ -153,21 +163,21 @@ public class StructMapValidatorTest {
   /* ---- builders for the two structural conventions ---- */
 
   private MetsValidatorState multiRepresentationPerRepDivsState() {
-    MetsType.FileSec.FileGrp rep1 = fileGrp("fg-rep-001", "Representations/rep-001");
-    MetsType.FileSec.FileGrp rep2 = fileGrp("fg-rep-002", "Representations/rep-002");
-    DivType packageDiv = div("package-div", "package");
-    packageDiv.getDiv().add(representationMptrDiv("rep-001-div", "Representations/rep-001"));
-    packageDiv.getDiv().add(representationMptrDiv("rep-002-div", "Representations/rep-002"));
+    final MetsType.FileSec.FileGrp rep1 = fileGrp(FG_REP_ONE, REP_ONE_USE);
+    final MetsType.FileSec.FileGrp rep2 = fileGrp(FG_REP_TWO, REP_TWO_USE);
+    final DivType packageDiv = div(PACKAGE_DIV_ID, PACKAGE_LABEL);
+    packageDiv.getDiv().add(representationMptrDiv(REP_ONE_DIV_ID, REP_ONE_USE));
+    packageDiv.getDiv().add(representationMptrDiv("rep-002-div", REP_TWO_USE));
     return stateWithFileGrps(packageDiv, rep1, rep2);
   }
 
   private MetsValidatorState multiRepresentationWrapperState() {
-    MetsType.FileSec.FileGrp rep1 = fileGrp("fg-rep-001", "Representations/rep-001");
-    MetsType.FileSec.FileGrp rep2 = fileGrp("fg-rep-002", "Representations/rep-002");
-    DivType wrapper = div("rep-div", "Representations");
+    final MetsType.FileSec.FileGrp rep1 = fileGrp(FG_REP_ONE, REP_ONE_USE);
+    final MetsType.FileSec.FileGrp rep2 = fileGrp(FG_REP_TWO, REP_TWO_USE);
+    final DivType wrapper = div(REP_DIV_ID, REPRESENTATIONS);
     wrapper.getFptr().add(fptr(rep1));
     wrapper.getFptr().add(fptr(rep2));
-    DivType packageDiv = div("package-div", "package");
+    final DivType packageDiv = div(PACKAGE_DIV_ID, PACKAGE_LABEL);
     packageDiv.getDiv().add(wrapper);
     return stateWithFileGrps(packageDiv, rep1, rep2);
   }
@@ -175,61 +185,62 @@ public class StructMapValidatorTest {
   /* ---- low level bean builders ---- */
 
   private static DivType representationDiv() {
-    return representationMptrDiv("rep-001-div", "Representations/rep-001");
+    return representationMptrDiv(REP_ONE_DIV_ID, REP_ONE_USE);
   }
 
-  private static DivType representationMptrDiv(String id, String label) {
-    DivType representationDiv = div(id, label);
-    DivType.Mptr mptr = new DivType.Mptr();
+  private static DivType representationMptrDiv(final String id, final String label) {
+    final DivType representationDiv = div(id, label);
+    final DivType.Mptr mptr = new DivType.Mptr();
     mptr.setLOCTYPE("URL");
     mptr.setHref("representations/" + id + "/METS.xml");
     representationDiv.getMptr().add(mptr);
     return representationDiv;
   }
 
-  private static DivType div(String id, String label) {
-    DivType div = new DivType();
+  private static DivType div(final String id, final String label) {
+    final DivType div = new DivType();
     div.setID(id);
     div.setLABEL(label);
     return div;
   }
 
-  private static MetsType.FileSec.FileGrp fileGrp(String id, String use) {
-    MetsType.FileSec.FileGrp fileGrp = new MetsType.FileSec.FileGrp();
+  private static MetsType.FileSec.FileGrp fileGrp(final String id, final String use) {
+    final MetsType.FileSec.FileGrp fileGrp = new MetsType.FileSec.FileGrp();
     fileGrp.setID(id);
     fileGrp.setUSE(use);
     return fileGrp;
   }
 
-  private static DivType.Fptr fptr(MetsType.FileSec.FileGrp target) {
-    DivType.Fptr fptr = new DivType.Fptr();
+  private static DivType.Fptr fptr(final MetsType.FileSec.FileGrp target) {
+    final DivType.Fptr fptr = new DivType.Fptr();
     fptr.setFILEID(target);
     return fptr;
   }
 
-  private static MetsValidatorState rootMetsState(DivType packageDiv) {
+  private static MetsValidatorState rootMetsState(final DivType packageDiv) {
     return buildState(packageDiv, null);
   }
 
-  private static MetsValidatorState stateWithFileGrps(DivType packageDiv, MetsType.FileSec.FileGrp... fileGrps) {
-    MetsType.FileSec fileSec = new MetsType.FileSec();
-    for (MetsType.FileSec.FileGrp fileGrp : fileGrps) {
+  private static MetsValidatorState stateWithFileGrps(final DivType packageDiv,
+    final MetsType.FileSec.FileGrp... fileGrps) {
+    final MetsType.FileSec fileSec = new MetsType.FileSec();
+    for (final MetsType.FileSec.FileGrp fileGrp : fileGrps) {
       fileSec.getFileGrp().add(fileGrp);
     }
     return buildState(packageDiv, fileSec);
   }
 
-  private static MetsValidatorState buildState(DivType packageDiv, MetsType.FileSec fileSec) {
-    StructMapType structMap = new StructMapType();
+  private static MetsValidatorState buildState(final DivType packageDiv, final MetsType.FileSec fileSec) {
+    final StructMapType structMap = new StructMapType();
     structMap.setLABEL("CSIP");
     structMap.setDiv(packageDiv);
-    Mets mets = new Mets();
+    final Mets mets = new Mets();
     mets.getStructMap().add(structMap);
     if (fileSec != null) {
       mets.setFileSec(fileSec);
     }
 
-    MetsValidatorState state = new MetsValidatorState();
+    final MetsValidatorState state = new MetsValidatorState();
     state.setMets(mets);
     state.setMetsName("METS.xml");
     state.setIsRootMets(true);

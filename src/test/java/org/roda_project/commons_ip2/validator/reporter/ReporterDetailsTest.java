@@ -5,25 +5,29 @@ import org.junit.Test;
 
 public class ReporterDetailsTest {
 
+  private static final String SPEC = "CSIP104";
+  private static final String ISSUE = "an issue";
+
   @Test
   public void cloningPreservesTheDetail() {
-    ReporterDetails original = new ReporterDetails("CSIP104", "an issue", true, false);
-    original.setDetail("a human readable detail");
+    final ReporterDetails original = new ReporterDetails(SPEC, ISSUE, true, false);
+    final String detail = "a human readable detail";
+    original.setDetail(detail);
 
-    ReporterDetails copy = original.clone();
+    final ReporterDetails copy = original.clone();
 
-    Assert.assertEquals("a human readable detail", copy.getDetail());
+    Assert.assertEquals(detail, copy.getDetail());
   }
 
   @Test
   public void cloningPreservesValidAndSkippedAndIssues() {
-    ReporterDetails original = new ReporterDetails("CSIP104", "an issue", false, true);
+    final ReporterDetails original = new ReporterDetails(SPEC, ISSUE, false, true);
 
-    ReporterDetails copy = original.clone();
+    final ReporterDetails copy = original.clone();
 
     Assert.assertFalse(copy.isValid());
     Assert.assertTrue(copy.isSkipped());
-    Assert.assertTrue(copy.getIssues().contains("an issue"));
-    Assert.assertEquals("CSIP104", copy.getSpecification());
+    Assert.assertTrue(copy.getIssues().contains(ISSUE));
+    Assert.assertEquals(SPEC, copy.getSpecification());
   }
 }
